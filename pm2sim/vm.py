@@ -148,7 +148,7 @@ class VM:
         self.stack = []; self.pc = (0, 0)
 
     # ---- tokenizer / line compiler -------------------------------------
-    IDENT = re.compile(rb'[A-Za-z_0-9]+')
+    IDENT = re.compile(rb'[A-Za-z_0-9$]+')
     NUM = re.compile(rb'-?[0-9]+')
 
     def _skip(self, b, i):
@@ -400,7 +400,7 @@ class VM:
                     self.pc = (self._target_after_block(li), 0); return
             elif k == 'call':
                 self._set_args(op[2])
-                self.pc = (li, oi)
+                self.pc = (li, oi); self.call_pc = (li, oi - 1)
                 fn = self.commands.get(op[1])
                 if fn is None: self.engine.unknown(self, op[1])
                 else: fn(self)

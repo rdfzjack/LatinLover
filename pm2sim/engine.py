@@ -5,6 +5,7 @@ Registers are DS words: AX=0226 BX=0228 CX=022A DX=022C SI=022E DI=0230.
 """
 from .vm import VM, LoadProgram, EndProgram, s16, LITBUF
 from .calendar import CalendarMixin
+from .items import ItemMixin
 
 AX, BX, CX, DX, SI, DI = 0x226, 0x228, 0x22A, 0x22C, 0x22E, 0x230
 GOLD = 0x422A            # 32-bit (lo, hi)
@@ -16,9 +17,9 @@ IRND, IRND2 = 0x6740, 0x6742
 NOOPS = '''PR PRES PRF PRV PRVH PRVB PRINT STR HEX BIN LLF CLS SLCTBAK SLCPOS FREE TXTSZ
 TXOPEN TXCLOSE TXT TXPAUSE TXCLR TXLF TXFACE TXGIRL TXGIRK TXSYU TXLC TXF
 GR_OPEN GR_CLOSE GR_F GRPOPEN GRPUPD GOLDOPEN GOLDUPD PROFILE PROPROPEN PROPRUPD STATUS PROLONG PRICON
-TIMER1 TIMER2 WAIT1 WAIT2 SCHD_OPEN SCHD_CLOSE SCHD_ICON PALET_SET PALET_SETONLY
+TIMER1 TIMER2 WAIT1 WAIT2 SCHD_CLOSE SCHD_ICON PALET_SET PALET_SETONLY
 WWFRAME WWGIRL WWANIME WWIVENT WWPROF WWTOUR P98F PTBK PTMD PTLD PTLA PTX PTM PTF PTMF PTMFX PTCLR PTGT PTPLT
-EFC PIC MUSIC PLAY GG_LINE XDBG GRPCLS ITEMPRN EDTX'''.split()
+EFC PIC MUSIC PLAY GG_LINE GRPCLS ITEMPRN EDTX'''.split()
 
 
 class Driver:
@@ -27,9 +28,10 @@ class Driver:
     def wait(self, eng, kind): pass
     def profile(self, eng): pass
     def disk(self, eng, func, arg): return 0
+    def adventure(self, eng, state, mode): return None
 
 
-class Engine(CalendarMixin):
+class Engine(CalendarMixin, ItemMixin):
     def __init__(self, assets, driver=None, reseed=None):
         self.assets = assets
         self.vm = VM(assets.exe, assets.script, self)
@@ -209,8 +211,9 @@ class Engine(CalendarMixin):
         elif f == 9: vm.ww(AX, 0); vm.ww(BX, 0)
         elif f == 11:             # PM2.CNF: AX=1 found, BX=MUSIC, CX=EMS (0389:1270)
             vm.ww(AX, 1); vm.ww(BX, 0); vm.ww(CX, 0)
-    part = None
+    part = 'MIMA.COM'
     def call_part(self, vm, part, func, arg):
+        if func >= 100: part = 'MIMA.COM'      # main-screen functions 101/102/201.. live in MIMA.COM
         h = getattr(self, 'part_' + part.split('.')[0], None)
         if h is None:
             raise NotImplementedError('part %s func %d' % (part, func))
@@ -239,3 +242,54 @@ class Engine(CalendarMixin):
     def part_ENDING(self, vm, func, arg): return 0
     def cmd_FFDISK(self, vm):     # 0389:0530 floppy-disk management; (4) -> AX=1 when running from HDD
         if vm.rw(AX) & 0xFF == 4: vm.ww(AX, 1)
+
+    def cmd_XDBG(self, vm):       # 0389:10D1 debug hooks; (5) -> AX=1 only in debug auto-play mode
+        if vm.rw(AX) & 0xFF == 5: vm.ww(AX, 0)
+    def cmd_TMCHK2(self, vm): vm.ww(DX, 1)        # 0389:0AE6 TIMER2 expired?
+    def cmd_BORTHDAYSTR(self, vm): pass
+    def _item_menu(self, vm, kind):               # ITEMSLCT 0389:06DA / ITEMST 0389:06E8 -> ISITM
+        self.flush_text()
+        if kind == 'ITEMST' and vm.rw(AX) == 99: vm.set('ISITM', 0); return
+        n = vm.rw(self.vm.addr('ITEMID_CNT'))
+        rows = [dict(index=i, name=vm.text(vm.ruw(vm.addr('ITEMID_TBL1') + 2*i)),
+                     cols=[vm.rw(vm.addr('ITEMID_TBL%d' % k) + 2*i) for k in range(2, 8)]) for i in range(n)]
+        vm.set('ISITM', self.driver.select(self, kind, rows))
+    def cmd_ITEMSLCT(self, vm): self._item_menu(vm, 'ITEMSLCT')
+    def cmd_ITEMST(self, vm): self._item_menu(vm, 'ITEMST')
+    def cmd_TXSLCT(self, vm):                     # 0389:0580 choose among the last N text lines -> ISLCT
+        self.flush_text()
+        vm.set('ISLCT', self.driver.select(self, 'TXSLCT', vm.rw(AX)))
+
+    def cmd_SCHD_OPEN(self, vm):  # 1037:397B  split [start..end] into up to 3 periods of 10 days
+        start, end = vm.ruw(AX), vm.ruw(CX)
+        st, en = vm.addr('SCH_STARTDAY'), vm.addr('SCH_ENDDAY')
+        n = 1; vm.ww(st, start)
+        for i in (0, 1):
+            a = vm.ruw(st + 2*i) + 12
+            if a >= end: vm.ww(en + 2*i, end); break
+            vm.ww(en + 2*i, a - 3); n += 1; vm.ww(st + 2*(i+1), a - 2)
+        else: vm.ww(en + 4, end)
+        vm.set('SCH_COUNT', n)
+
+    # ---- adventure map (WWMUSYA, 0389:0BA3 + MUSYAE.COM) -----------------------------
+    # The map-walking engine is native and real-time.  It is abstracted here: the driver
+    # decides where the girl is at the end of every time slice (see Driver.adventure).
+    adv = None
+    def cmd_WWMUSYA(self, vm):
+        f = vm.rw(AX) & 0xFF
+        if f == 1:      # enter map BX at cell (CX, DX)
+            self.adv = dict(map=vm.rw(BX), x=vm.rw(CX), y=vm.rw(DX), dir=0, slices=0)
+        elif f == 13 and self.adv:   # scripted move: (.., .., dx, dy, steps)
+            self.adv['x'] += vm.rw(DX) * vm.rw(DI); self.adv['y'] += vm.rw(SI) * vm.rw(DI)
+        elif f == 3:    # walk for one time slice -> AX event (0 none, 1 map event, 3 camp, 4 special)
+            self.flush_text()
+            a = self.adv or dict(map=0, x=0, y=0, dir=0, slices=0)
+            a['slices'] += 1
+            r = self.driver.adventure(self, a, vm.rw(BX)) or {}
+            a.update({k: r[k] for k in ('x', 'y', 'dir') if k in r})
+            vm.ww(AX, r.get('event', 0)); vm.ww(BX, a['x']); vm.ww(CX, a['y']); vm.ww(DX, a['dir'])
+            vm.ww(SI, r.get('ground', 0)); vm.ww(DI, 0); vm.ww(0x232, 0)
+        elif f == 15:   # in-map menu SI="a,b" -> BX
+            self.flush_text()
+            vm.ww(BX, self.driver.select(self, 'WWMUSYA', vm.text(vm.ruw(SI)).split(',')))
+        elif f == 23: vm.ww(BX, 0)    # time slice still running?
