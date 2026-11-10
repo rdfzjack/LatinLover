@@ -1,0 +1,413 @@
+{
+ "MAINEVNT": {
+  "EVENT001": [
+   "RET"
+  ],
+  "EVENT003": [
+   "IF ( E_HOT = 0 )",
+   "\tIF ( VAL_MONTH = 6 )( VAL_MONTH = 7 )",
+   "\t\tRANDAM(4)",
+   "RET"
+  ],
+  "EVENT004": [
+   "IF ( E_COOL = 0 )",
+   "\tIF ( VAL_MONTH = 11 )( VAL_MONTH = 1 )",
+   "\t\tRANDAM(4)",
+   "RET"
+  ],
+  "EVENT005": [
+   "RANDAM(12)",
+   "RET"
+  ],
+  "EVENT006": [
+   "GOLDCMP(1000)",
+   "IF ( RUN_MONTH[6]=0 AX=3 )",
+   "\tLOAD(\"EVNT006\")",
+   "GOLDCMP(2000)",
+   "IF ( RUN_MONTH[6]=1 AX=3 )",
+   "\tLOAD(\"EVNT006\")",
+   "GOLDCMP(5000)",
+   "IF ( RUN_MONTH[6]=2 AX=3 )",
+   "\tLOAD(\"EVNT006\")",
+   "RET"
+  ],
+  "EVENT007": [
+   "IF ( B_MORALS < B_TAIRYOKU) GOTO EVENT007N2",
+   "IF ( B_MORALS < B_KINRYOKU) GOTO EVENT007N2",
+   "IF ( B_MORALS < B_CHINOH) GOTO EVENT007N2",
+   "IF ( B_MORALS < B_KIHIN ) GOTO EVENT007N2",
+   "IF ( B_MORALS < B_IROKE ) GOTO EVENT007N2",
+   "IF ( B_MORALS < B_SHINKOH) GOTO EVENT007N2",
+   "IF ( B_MORALS < B_INGYO ) GOTO EVENT007N2",
+   "IF ( B_MORALS < B_KANJUSEI) GOTO EVENT007N2",
+   "IF ( B_MORALS = 0 ) GOTO EVENT007N2",
+   "RANDAM(8)"
+  ],
+  "EVENT007N2": [
+   "RET"
+  ],
+  "EVENT008": [
+   "IF ( RUN_OSHIRO[9]>=7 RUN_MONTH[8]=0 )",
+   "\tLOAD(\"EVNT008\")",
+   "IF ( RUN_OSHIRO[9]>=14 RUN_MONTH[8]=1 )",
+   "\tLOAD(\"EVNT008\")",
+   "IF ( RUN_OSHIRO[9]>=21 RUN_MONTH[8]=2 )",
+   "\tLOAD(\"EVNT008\")",
+   "RET"
+  ],
+  "EVENT009": [
+   "IF ( NOW_MONTH_ATR=1 )( NOW_MONTH_ATR=2 ) RET",
+   "IF ( NOW_MONTH_ATR=3 )( NOW_MONTH_ATR=4 )( NOW_MONTH_ATR=5 ) RET",
+   "IF ( S_BYOUKI>=90 ) RET",
+   "IF ( S_HIKOUKA >= 60 )",
+   "\tRANDAM(20)",
+   "\tIF ( IRND = 4 )",
+   "\t\tE_RWAY = 1",
+   "\t\tLOAD(\"MAINBORN\")",
+   "IF ( B_KANJUSEI < B_TAIRYOKU ) RET",
+   "IF ( B_KANJUSEI < B_KINRYOKU ) RET",
+   "IF ( B_KANJUSEI < B_CHINOH ) RET",
+   "IF ( B_KANJUSEI < B_KIHIN ) RET",
+   "IF ( B_KANJUSEI < B_IROKE ) RET",
+   "IF ( B_KANJUSEI < B_MORALS ) RET",
+   "IF ( B_KANJUSEI < B_SHINKOH ) RET",
+   "IF ( B_KANJUSEI < B_INGYO ) RET",
+   "IF ( B_KANJUSEI = 0 ) RET",
+   "RANDAM(4)",
+   "IF ( IRND = 4 )",
+   "\tE_RWAY = 1",
+   "\tLOAD(\"MAINBORN\")",
+   "RET"
+  ],
+  "EVENT010": [
+   "C1 = 0",
+   "C2 = SCH_COUNT",
+   "\tIF ( SCHED_SECTION[C1] ! 0 )",
+   "\t\tGOTO EVENT010_EXIT",
+   "\tIF ( SCHED_WORKS[C1] ! 6 )",
+   "\t\tGOTO EVENT010_EXIT",
+   "\tC1++",
+   "LOOP C2",
+   "IF ( RUN_MONTH[10]<2 )",
+   "\tLOAD(\"EVNT010\")"
+  ],
+  "EVENT010_EXIT": [
+   "RET"
+  ],
+  "EVENT011": [
+   "IF ( E_ETC[1] ! 0 )",
+   "\tC1 = VAL_YEAR * 12",
+   "\tC1 += VAL_MONTH",
+   "\tC2 = E_ETC[82] * 12",
+   "\tC2 += E_ETC[83]",
+   "\tC3 = C1 - C2",
+   "\tIF ( C3>=12 )",
+   "\t\tLOAD(\"EVNT011\")",
+   "RET"
+  ],
+  "EVENT013": [
+   "IF ( E_PROPOSAL ! 0 )",
+   "\tIF ( VAL_MONTH=6 )( VAL_MONTH=12 )",
+   "\t\tLOAD(\"EVNT013\")",
+   "RANDAM(6)",
+   "IF ( IRND=1 )",
+   "\tIF ( P_NENREI >= 15 )",
+   "\t\tIF ( B_IROKE >= 200 )",
+   "\t\t\tIF ( B_KIHIN >= 200 )",
+   "\t\t\t\tLOAD(\"EVNT013\")",
+   "RET"
+  ],
+  "EVENT015": [
+   "C1 = RUN_KITAERU[5] + RUN_KITAERU[6] + RUN_MUSYA[0]",
+   "C1 = RUN_KITAERU[7]",
+   "C1 = RUN_KITAERU[9] + RUN_KITAERU[10] + RUN_KITAERU[8]",
+   "C1 = RUN_ARBEIT[1] + RUN_ARBEIT[6] + RUN_ARBEIT[13]",
+   "RET"
+  ],
+  "EVENT016": [
+   "IF ( E_EAT_EGG ! 0 )",
+   "\tLOAD(\"EVNT016\")",
+   "RET"
+  ],
+  "EVENT017": [
+   "IF ( E_ETC[8] ! 0 )",
+   "\tE_ETC[8]=0",
+   "\tITEM_SRCH(1,34)",
+   "\tIF ( AX=1 )",
+   "\t\tLOAD(\"EVNT017\")",
+   "RET"
+  ],
+  "EVENT020": [
+   "IF ( P_NENREI >= 16 )",
+   "\tIF ( E_ETC[10] ! 0 )",
+   "\t\tIF ( E_ETC[80] >= 2 )",
+   "\t\t\tIF ( RUN_MONTH[20]=0 )",
+   "\t\t\t\tLOAD(\"EVNT020\")",
+   "RET"
+  ],
+  "EVENT045": [
+   "IF ( FLAG_BYOUKI=0 S_HIKOUKA >= 100 )",
+   "\tLOAD(\"EVNT045\")",
+   "RET"
+  ],
+  "EVENT046": [
+   "C1 = E_ETC[15] - E_ETC[16]",
+   "IF ( C1 >= 10 )",
+   "\tLOAD(\"EVNT046\")",
+   "RET"
+  ],
+  "EVENT052": [
+   "IF ( E_ETC[19]=1 )( E_ETC[20]=1 )( E_ETC[21]=1 )",
+   "\tLOAD(\"EVNT052\")",
+   "RET"
+  ]
+ },
+ "RUNNING": {
+  "EVENT021": [
+   "IF ( E_ETC[2] ! 0 ) RET",
+   "IF ( S_SECTION ! 1 ) RET",
+   "IF ( P_NENREI < 15 ) RET",
+   "IF ( B_IROKE < 3 ) RET",
+   "IF ( B_IROKE < B_TAIRYOKU ) GOTO EVENT021_EXIT",
+   "IF ( B_IROKE < B_KINRYOKU ) GOTO EVENT021_EXIT",
+   "IF ( B_IROKE < B_CHINOH ) GOTO EVENT021_EXIT",
+   "IF ( B_IROKE < B_KIHIN ) GOTO EVENT021_EXIT",
+   "IF ( B_IROKE < B_MORALS ) GOTO EVENT021_EXIT",
+   "IF ( B_IROKE < B_SHINKOH ) GOTO EVENT021_EXIT",
+   "IF ( B_IROKE < B_INGYO ) GOTO EVENT021_EXIT",
+   "IF ( B_IROKE < B_KANJUSEI ) GOTO EVENT021_EXIT",
+   "RANDAM(10)",
+   "IF( IRND=1 )",
+   "\tLOAD(\"EVNT021\")"
+  ],
+  "EVENT021_EXIT": [
+   "RET"
+  ],
+  "EVENT022": [
+   "IF ( FLAG_BYOUKI ! 0 ) RET",
+   "IF ( S_SECTION = 3 ) RET",
+   "IF ( H_SENSHI >= H_MAHO ) C2 = H_SENSHI",
+   "IF ( H_SENSHI < H_MAHO ) C2 = H_MAHO",
+   "IF ( C2 < 200 ) RET",
+   "IF ( C2 < 300 )",
+   "\tRANDAM(20)",
+   "\tIF ( IRND=2 )",
+   "\t\tC1 = 1",
+   "\t\tLOAD(\"EVNT022\")",
+   "\tRET",
+   "RANDAM(10)",
+   "IF ( IRND=2 )",
+   "\tC1 = 1",
+   "\tLOAD(\"EVNT022\")",
+   "RET"
+  ],
+  "EVENT025": [
+   "IF ( P_NENREI < 14 ) RET",
+   "IF ( FLAG_RENAI ! 0 ) RET",
+   "IF ( S_SECTION = 3 ) RET",
+   "IF ( B_IROKE < B_TAIRYOKU ) GOTO EVENT025_EXIT",
+   "IF ( B_IROKE < B_KINRYOKU ) GOTO EVENT025_EXIT",
+   "IF ( B_IROKE < B_CHINOH ) GOTO EVENT025_EXIT",
+   "IF ( B_IROKE < B_KIHIN ) GOTO EVENT025_EXIT",
+   "IF ( B_IROKE < B_MORALS ) GOTO EVENT025_EXIT",
+   "IF ( B_IROKE < B_SHINKOH ) GOTO EVENT025_EXIT",
+   "IF ( B_IROKE < B_INGYO ) GOTO EVENT025_EXIT",
+   "IF ( B_IROKE < B_KANJUSEI ) GOTO EVENT025_EXIT",
+   "RANDAM(10)",
+   "IF ( IRND = 1 )",
+   "\tLOAD(\"EVNT025\")"
+  ],
+  "EVENT025_EXIT": [
+   "RET"
+  ],
+  "EVENT026": [
+   "IF ( P_NENREI ! 14 ) RET",
+   "IF ( E_RIVAL ! 0 ) RET",
+   "IF ( S_SECTION ! 0 ) RET",
+   "C1 = 0",
+   "IF ( H_SENSHI > C1 ) C1 = H_SENSHI",
+   "IF ( H_MAHO > C1 ) C1 = H_MAHO",
+   "IF ( H_SYAKOH > C1 ) C1 = H_SYAKOH",
+   "IF ( H_KAJI > C1 ) C1 = H_KAJI",
+   "IF ( C1 >= 150 )",
+   "\tLOAD(\"EVNT026\")",
+   "RET"
+  ],
+  "BORTHCHECKX": [
+   "IF ( P_NENREI>E_ETC[18] )",
+   "\tIF ( P_NENREI[1]>E_ETC[14] )",
+   "\t\tE_ETC[14]=P_NENREI[1]",
+   "\t\tIF ( URA_FATHER >=60 )",
+   "\t\t\tE_EV_SKIP=1",
+   "\t\t\tLOAD(\"EVE4243S,EVNT042\")",
+   "IF ( P_NENREI>E_ETC[18] )",
+   "\tE_EV_SKIP=1",
+   "\tLOAD(\"EVNT042S,EVNT042\")",
+   "IF ( P_NENREI[1]>E_ETC[14] )",
+   "\tE_ETC[14]=P_NENREI[1]",
+   "\tIF ( URA_FATHER >=60 )",
+   "\t\tE_EV_SKIP=1",
+   "\t\tLOAD(\"EVNT043S,EVNT042\")",
+   "RET"
+  ]
+ },
+ "MAINBORN": {
+  "MAINBORN": [
+   "IF ( RUN_MONTH[0]=1 ) RET",
+   "E_ETC[35]=0",
+   "MONTH_BORNUP",
+   "STOP_THE_DIET",
+   "FRAME_GIRL",
+   "BRONING",
+   "GET_HOKYU",
+   "AGE_WORKS_ADD",
+   "CHK_SCNDEATH",
+   "IF ( GIRL_DAMEG=0 )",
+   "IF ( E_RWAY ! 0 )",
+   "\tFREAM_NO_GIRL",
+   "\tEVNT009",
+   "RET"
+  ],
+  "CHK_SCNDEATH": [
+   "IF ( IDBG[4]=1 ) RET",
+   "IF ( S_BYOUKI<100 )",
+   "\tE_ETC[108]=0",
+   "\tRET",
+   "E_ETC[108]++",
+   "IF (E_ETC[108]>=2 )",
+   "\tLOAD(\"SCNDEATH\")",
+   "RET"
+  ],
+  "EVNT009": [
+   "RUN_MONTH[9]++",
+   "RET"
+  ],
+  "EVENT014": [
+   "RUN_MONTH[14]++",
+   "EVNT014",
+   "RET"
+  ],
+  "EVNT014": [
+   "IF ( B_MORALS > B_IROKE ) GOTO YAMERU",
+   "IF ( B_SHINKOH > B_IROKE ) GOTO YAMERU",
+   "GOTO MEKAKE"
+  ]
+ },
+ "MAINLOOP": {
+  "EVENT002X1": [
+   "C1 = 0",
+   "C2 = 0",
+   "C3 = 0",
+   "C4 = SCHD_LINE",
+   "\tIF ( SCHED_SECTION[C1]=1 )",
+   "\t\tIF ( SCHED_WORKS[C1]=13 C2=0 )",
+   "\t\t\tC2++",
+   "\t\tIF ( SCHED_WORKS[C1]=14 C3=0 )",
+   "\t\t\tC3++",
+   "\tC1++",
+   "LOOP C4",
+   "RET"
+  ],
+  "EVENT002X2": [
+   "C1 = 0",
+   "C2 = 0",
+   "C4 = SCHD_LINE",
+   "\tIF ( SCHED_SECTION[C1]=3 )",
+   "\t\tC2++",
+   "\tC1++",
+   "LOOP C4",
+   "IF ( C2 = 0 )",
+   "RET"
+  ],
+  "EVENT002X3": [
+   "IF ( B_STRESS >= 10 )",
+   "\tC1 = B_TAIRYOKU - B_STRESS",
+   "RET"
+  ],
+  "EVENT002X4": [
+   "IF ( B_STRESS >= 10 )",
+   "\tC1 = B_SHINKOH",
+   "\tIF ( B_MORALS > C1 ) C1 = B_MORALS",
+   "\tC2 = C1 - B_STRESS",
+   "\tIF ( C2 < 20 )",
+   "RET"
+  ],
+  "EVENT002X5": [
+   "C1 = 0",
+   "C2 = 0",
+   "C4 = SCHD_LINE",
+   "\tIF ( SCHED_SECTION[C1]=2 )",
+   "\t\tC2++",
+   "\tC1++",
+   "LOOP C4",
+   "IF ( C2 > 0 )",
+   "RET"
+  ],
+  "EVENT002X6": [
+   "IF ( P_NENREI = 14 VAL_MONTH=P_BORTHMONTH )",
+   "RET"
+  ],
+  "EVENT002X7": [
+   "C1 = P_BORTHMONTH - 1",
+   "IF ( C1 < 1 ) C1 = 12",
+   "IF ( C1 = VAL_MONTH P_NENREI=17 )",
+   "RET"
+  ],
+  "EVENT002X8": [
+   "C1 = P_BORTHMONTH - 1",
+   "IF ( C1 < 1 ) C1 = 12",
+   "IF ( C1 = VAL_MONTH P_NENREI=17 )",
+   "RET"
+  ],
+  "EVENT002X9": [
+   "C1 = 0",
+   "C2 = 0",
+   "C4 = SCHD_LINE",
+   "\tIF ( SCHED_SECTION[C1]=1 )",
+   "\t\tC2++",
+   "\tC1++",
+   "LOOP C4",
+   "IF ( C2 > 0 )",
+   "RET"
+  ],
+  "EVENT002X10": [
+   "C1 = 0",
+   "C2 = 0",
+   "C4 = SCHD_LINE",
+   "\tIF ( SCHED_SECTION[C1]=3 )",
+   "\t\tC2++",
+   "\tC1++",
+   "LOOP C4",
+   "IF ( C2 = 0 )",
+   "RET"
+  ],
+  "FAT_GIRL_CHK": [
+   "BAK_GIRL_BODY = GIRL_BODY",
+   "CLENDER(10)",
+   "IF ( BAK_GIRL_BODY = GIRL_BODY ) RET",
+   "DRESS_CHECK",
+   "RET"
+  ],
+  "VACA_GOLD_CALC": [
+   "C1 = P_NENREI",
+   "IF ( C1 <=10 ) C2 = 100",
+   "IF ( C1 = 11 ) C2 = 110",
+   "IF ( C1 = 12 ) C2 = 120",
+   "IF ( C1 = 13 ) C2 = 130",
+   "IF ( C1 = 14 ) C2 = 140",
+   "IF ( C1 = 15 ) C2 = 150",
+   "IF ( C1 = 16 ) C2 = 160",
+   "IF ( C1 >=17 ) C2 = 170",
+   "E_ETC[81] = C2",
+   "RET"
+  ],
+  "CALC_SYOKUHI": [
+   "IF ( FLAG_KENKO=0 ) C1 = 30",
+   "IF ( FLAG_KENKO=1 ) C1 = 80",
+   "IF ( FLAG_KENKO=2 ) C1 = 10",
+   "IF ( FLAG_KENKO=3 ) C1 = 5",
+   "GOLDSUB2(C1)",
+   "RET"
+  ]
+ }
+}

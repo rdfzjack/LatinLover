@@ -33,7 +33,7 @@ class Pause(Exception):
 class PlanDriver(Driver):
     def __init__(self):
         self.plan = []; self.pending = None; self.answers = {}; self.profile_data = None
-        self.adventure_fn = None; self.started = False; self.main_queue = []; self.history = []
+        self.adventure_fn = None; self.started = False; self.last = None; self.asked = 0; self.main_queue = []; self.history = []
 
     def _pick(self, options, want):
         names = [o if isinstance(o, str) else o['name'] for o in options]
@@ -58,9 +58,12 @@ class PlanDriver(Driver):
             r = self.answers(kind, options)
             if r is not None: return r
         if kind == 'SLCT' and isinstance(options, list) and options[:1] == [SECTIONS[0]]:
-            if not self.plan:
-                raise KeyError('schedule needs %d entries this month; plan is too short' % eng.vm.get('SCH_COUNT'))
-            self.pending = self.plan.pop(0); self.started = True
+            self.asked += 1
+            if self.asked > 30:
+                raise RuntimeError('schedule entry %r keeps being rejected: %s' % (self.last, ' / '.join(eng.log[-3:])))
+            if self.plan: self.last = self.plan.pop(0)      # a short plan repeats its last entry
+            elif self.last is None: raise KeyError('empty schedule plan')
+            self.pending = self.last; self.started = True
             return self._pick(SECTIONS, self.pending[0])
         if kind == 'ITEMSLCT' and self.pending is not None:
             want = self.pending[1]; self.pending = None
@@ -94,6 +97,10 @@ class Game:
         # seed=None: every RNG reseed uses offset 0 (same as patching 0389:81E8 `call C06C` -> `mov ax,0`)
         self.eng = Engine(self.assets, self.driver, (lambda: 0) if seed is None else (lambda: self.rand.randrange(200)))
         self.vm = self.eng.vm
+        self.loaded = []                     # every script LOADed, in order (endings show up as EEWKnn / EEWEnn)
+        _load = self.vm.load
+        def load(names): self.loaded.append(names); _load(names)
+        self.vm.load = load
 
     # ---- state ----------------------------------------------------------------
     def state(self):
@@ -133,13 +140,12 @@ class Game:
         return self._run()
 
     def periods(self):
-        """Number of schedule periods the next play_month() will ask for (1037:397B)."""
-        vm = self.vm; d, end = vm.get('VAL_DAY'), self.eng.month_len(vm.get('VAL_YEAR'), vm.get('VAL_MONTH'))
-        start = 1 if d == end else d + 1
-        if d == end:
-            y, m = vm.get('VAL_YEAR'), vm.get('VAL_MONTH') + 1
-            if m > 12: y, m = y + 1, 1
-            end = self.eng.month_len(y, m)
+        """Number of schedule periods the next play_month() will ask for (1037:397B, MAINLOOP SCHEDULE*)."""
+        vm = self.vm; e = self.eng; d = vm.get('VAL_DAY'); attr = e.month_attr()
+        end = e.month_len(vm.get('VAL_YEAR'), vm.get('VAL_MONTH'))
+        if attr == 1 and d != end: start = d + 1          # very first month: tomorrow .. month end
+        elif attr == 3: start, end = 1, vm.get('P_BORTHDAY')   # last month: 1st .. 18th birthday
+        else: return 3
         return 1 if start + 12 >= end else 2 if start + 22 >= end else 3
 
     def save(self, path): open(path, 'wb').write(savefile.dump(self.vm))
@@ -152,11 +158,11 @@ class Game:
 
     def play_month(self, plan, answers=None):
         """plan: one (section, work) pair per schedule period of the coming month (normally 3; see
-        periods()), each a menu text or an index.  Runs until the main menu comes back."""
+        periods(); a shorter plan repeats its last entry), each a menu text or an index.  Runs until the main menu comes back."""
         if answers is not None: self.driver.answers = answers
-        before = self.state(); nlog = len(self.eng.log); self.driver.history.clear()
-        self.driver.plan = list(plan)
+        before = self.state(); nlog = len(self.eng.log); nprog = len(self.loaded); self.driver.history.clear()
+        self.driver.plan = list(plan); self.driver.asked = 0; self.driver.last = None
         status = self._run()
         after = self.state()
         return dict(status=status, delta={k: after[k] - before[k] for k in after if after[k] != before[k]},
-                    log=self.eng.log[nlog:], menus=list(self.driver.history), program=list(self.vm.program_names))
+                    log=self.eng.log[nlog:], menus=list(self.driver.history), programs=self.loaded[nprog:])

@@ -1,0 +1,870 @@
+[
+ {
+  "id": 0,
+  "file": "TRG000.TXT",
+  "name": "自然科學",
+  "cost_per_day_by_level": [
+   30,
+   40,
+   50,
+   60
+  ],
+  "level_thresholds": "times<=5:0, <=10:1, <=15:2, else 3 (CK_LVL 0000:03D6)",
+  "success_effects": [
+   {
+    "stat": "B_CHINOH",
+    "zh": "智力",
+    "sign": "+",
+    "range_by_level": [
+     [
+      1,
+      4
+     ],
+     [
+      2,
+      6
+     ],
+     [
+      3,
+      8
+     ],
+     [
+      4,
+      12
+     ]
+    ]
+   },
+   {
+    "stat": "B_SHINKOH",
+    "zh": "信仰",
+    "sign": "-",
+    "range_by_level": [
+     [
+      0,
+      0
+     ],
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      1,
+      3
+     ]
+    ]
+   },
+   {
+    "stat": "T_KOHMARYOKU",
+    "zh": "抗魔(訓練值)",
+    "sign": "-",
+    "range_by_level": [
+     [
+      0,
+      0
+     ],
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      1
+     ]
+    ]
+   }
+  ],
+  "daily_effects": [
+   "B_STRESS++"
+  ],
+  "success_check": [
+   "SUCCESS_FLAG = 0",
+   "IRAND999X(B_STRESS)",
+   "SUCCESS_LINE = IRND",
+   "C1 = B_TAIRYOKU / 2",
+   "IRAND999X(C1)",
+   "C2 = B_TAIRYOKU / 2 + IRND",
+   "IF ( C2 >= SUCCESS_LINE )",
+   "SUCCESS_FLAG = 1"
+  ]
+ },
+ {
+  "id": 1,
+  "file": "TRG001.TXT",
+  "name": "詩文",
+  "cost_per_day_by_level": [
+   40,
+   60,
+   80,
+   100
+  ],
+  "level_thresholds": "times<=5:0, <=10:1, <=15:2, else 3 (CK_LVL 0000:03D6)",
+  "success_effects": [
+   {
+    "stat": "B_KANJUSEI",
+    "zh": "感受",
+    "sign": "+",
+    "range_by_level": [
+     [
+      1,
+      1
+     ],
+     [
+      1,
+      2
+     ],
+     [
+      1,
+      4
+     ],
+     [
+      2,
+      5
+     ]
+    ]
+   },
+   {
+    "stat": "B_CHINOH",
+    "zh": "智力",
+    "sign": "+",
+    "range_by_level": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      0,
+      3
+     ],
+     [
+      0,
+      4
+     ]
+    ]
+   },
+   {
+    "stat": "T_GEIJYUTSU",
+    "zh": "藝術(訓練值)",
+    "sign": "+",
+    "range_by_level": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      1
+     ]
+    ]
+   },
+   {
+    "stat": "B_KIHIN",
+    "zh": "氣質",
+    "sign": "+",
+    "range_by_level": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      1
+     ]
+    ]
+   }
+  ],
+  "daily_effects": [
+   "B_STRESS++"
+  ],
+  "success_check": [
+   "SUCCESS_FLAG = 0",
+   "IRAND999X(B_STRESS)",
+   "SUCCESS_LINE = IRND",
+   "C1 = B_TAIRYOKU / 2",
+   "IRAND999X(C1)",
+   "C2 = B_TAIRYOKU / 2 + IRND",
+   "IF ( C2 >= SUCCESS_LINE )",
+   "SUCCESS_FLAG = 1"
+  ]
+ },
+ {
+  "id": 2,
+  "file": "TRG002.TXT",
+  "name": "神學",
+  "cost_per_day_by_level": [
+   40,
+   60,
+   80,
+   90
+  ],
+  "level_thresholds": "times<=5:0, <=10:1, <=15:2, else 3 (CK_LVL 0000:03D6)",
+  "success_effects": [
+   {
+    "stat": "B_CHINOH",
+    "zh": "智力",
+    "sign": "+",
+    "range_by_level": [
+     [
+      1,
+      1
+     ],
+     [
+      1,
+      1
+     ],
+     [
+      1,
+      2
+     ],
+     [
+      1,
+      3
+     ]
+    ]
+   },
+   {
+    "stat": "B_SHINKOH",
+    "zh": "信仰",
+    "sign": "+",
+    "range_by_level": [
+     [
+      1,
+      2
+     ],
+     [
+      1,
+      3
+     ],
+     [
+      1,
+      4
+     ],
+     [
+      1,
+      5
+     ]
+    ]
+   },
+   {
+    "stat": "T_KOHMARYOKU",
+    "zh": "抗魔(訓練值)",
+    "sign": "+",
+    "range_by_level": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      1
+     ]
+    ]
+   }
+  ],
+  "daily_effects": [
+   "B_STRESS++"
+  ],
+  "success_check": [
+   "SUCCESS_FLAG = 0",
+   "IRAND999X(B_STRESS)",
+   "SUCCESS_LINE = IRND",
+   "C1 = B_TAIRYOKU / 2",
+   "IRAND999X(C1)",
+   "C2 = B_TAIRYOKU / 2 + IRND",
+   "IF ( C2 >= SUCCESS_LINE )",
+   "SUCCESS_FLAG = 1"
+  ]
+ },
+ {
+  "id": 3,
+  "file": "TRG003.TXT",
+  "name": "軍事",
+  "cost_per_day_by_level": [
+   50,
+   70,
+   90,
+   110
+  ],
+  "level_thresholds": "times<=5:0, <=10:1, <=15:2, else 3 (CK_LVL 0000:03D6)",
+  "success_effects": [
+   {
+    "stat": "B_CHINOH",
+    "zh": "智力",
+    "sign": "+",
+    "range_by_level": [
+     [
+      1,
+      2
+     ],
+     [
+      2,
+      3
+     ],
+     [
+      3,
+      4
+     ],
+     [
+      4,
+      5
+     ]
+    ]
+   },
+   {
+    "stat": "T_SENTOH",
+    "zh": "戰鬥技術(訓練值)",
+    "sign": "+",
+    "range_by_level": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      1
+     ]
+    ]
+   },
+   {
+    "stat": "B_KANJUSEI",
+    "zh": "感受",
+    "sign": "-",
+    "range_by_level": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      1
+     ]
+    ]
+   }
+  ],
+  "daily_effects": [
+   "B_STRESS++"
+  ],
+  "success_check": [
+   "SUCCESS_FLAG = 0",
+   "IRAND999X(B_STRESS)",
+   "SUCCESS_LINE = IRND",
+   "C1 = B_TAIRYOKU / 2",
+   "IRAND999X(C1)",
+   "C2 = B_TAIRYOKU / 2 + IRND",
+   "IF ( C2 >= SUCCESS_LINE )",
+   "SUCCESS_FLAG = 1"
+  ]
+ },
+ {
+  "id": 4,
+  "file": "TRG004.TXT",
+  "name": "劍術",
+  "cost_per_day_by_level": [
+   40,
+   70,
+   130,
+   190
+  ],
+  "level_thresholds": "times<=5:0, <=10:1, <=15:2, else 3 (CK_LVL 0000:03D6)",
+  "success_effects": [
+   {
+    "stat": "T_SENTOH",
+    "zh": "戰鬥技術(訓練值)",
+    "sign": "+",
+    "range_by_level": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      1
+     ]
+    ]
+   },
+   {
+    "stat": "T_KOUGEKI",
+    "zh": "攻擊(訓練值,含腕力/10)",
+    "sign": "+",
+    "range_by_level": [
+     [
+      1,
+      1
+     ],
+     [
+      1,
+      2
+     ],
+     [
+      1,
+      3
+     ],
+     [
+      1,
+      4
+     ]
+    ]
+   }
+  ],
+  "daily_effects": [
+   "B_STRESS++"
+  ],
+  "success_check": [
+   "SUCCESS_FLAG = 0",
+   "IRAND999X(B_STRESS)",
+   "SUCCESS_LINE = IRND",
+   "C1 = B_TAIRYOKU / 2",
+   "IRAND999X(C1)",
+   "C2 = B_TAIRYOKU / 2 + IRND",
+   "IF ( C2 >= SUCCESS_LINE )",
+   "SUCCESS_FLAG = 1"
+  ]
+ },
+ {
+  "id": 5,
+  "file": "TRG005.TXT",
+  "name": "格鬥術",
+  "cost_per_day_by_level": [
+   30,
+   40,
+   50,
+   60
+  ],
+  "level_thresholds": "times<=5:0, <=10:1, <=15:2, else 3 (CK_LVL 0000:03D6)",
+  "success_effects": [
+   {
+    "stat": "T_SENTOH",
+    "zh": "戰鬥技術(訓練值)",
+    "sign": "+",
+    "range_by_level": [
+     [
+      1,
+      1
+     ],
+     [
+      1,
+      1
+     ],
+     [
+      1,
+      2
+     ],
+     [
+      1,
+      3
+     ]
+    ]
+   },
+   {
+    "stat": "T_BOUGYO",
+    "zh": "防禦(訓練值)",
+    "sign": "+",
+    "range_by_level": [
+     [
+      0,
+      0
+     ],
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      1
+     ]
+    ]
+   }
+  ],
+  "daily_effects": [
+   "B_STRESS++"
+  ],
+  "success_check": [
+   "SUCCESS_FLAG = 0",
+   "IRAND999X(B_STRESS)",
+   "SUCCESS_LINE = IRND",
+   "C1 = B_TAIRYOKU / 2",
+   "IRAND999X(C1)",
+   "C2 = B_TAIRYOKU / 2 + IRND",
+   "IF ( C2 >= SUCCESS_LINE )",
+   "SUCCESS_FLAG = 1"
+  ]
+ },
+ {
+  "id": 6,
+  "file": "TRG006.TXT",
+  "name": "魔法",
+  "cost_per_day_by_level": [
+   60,
+   70,
+   80,
+   90
+  ],
+  "level_thresholds": "times<=5:0, <=10:1, <=15:2, else 3 (CK_LVL 0000:03D6)",
+  "success_effects": [
+   {
+    "stat": "T_MAHOGIJUTSU",
+    "zh": "魔法技術(訓練值)",
+    "sign": "+",
+    "range_by_level": [
+     [
+      1,
+      1
+     ],
+     [
+      1,
+      2
+     ],
+     [
+      1,
+      3
+     ],
+     [
+      2,
+      4
+     ]
+    ]
+   },
+   {
+    "stat": "T_MARYOKU",
+    "zh": "魔力(訓練值)",
+    "sign": "+",
+    "range_by_level": [
+     [
+      0,
+      2
+     ],
+     [
+      0,
+      3
+     ],
+     [
+      0,
+      4
+     ],
+     [
+      0,
+      5
+     ]
+    ]
+   }
+  ],
+  "daily_effects": [
+   "B_STRESS++"
+  ],
+  "success_check": [
+   "SUCCESS_FLAG = 0",
+   "IRAND999X(B_STRESS)",
+   "SUCCESS_LINE = IRND",
+   "C1 = B_TAIRYOKU / 2",
+   "IRAND999X(C1)",
+   "C2 = B_TAIRYOKU / 2 + IRND",
+   "IF ( C2 >= SUCCESS_LINE )",
+   "SUCCESS_FLAG = 1"
+  ]
+ },
+ {
+  "id": 7,
+  "file": "TRG007.TXT",
+  "name": "禮儀",
+  "cost_per_day_by_level": [
+   40,
+   50,
+   60,
+   70
+  ],
+  "level_thresholds": "times<=5:0, <=10:1, <=15:2, else 3 (CK_LVL 0000:03D6)",
+  "success_effects": [
+   {
+    "stat": "T_REIGI",
+    "zh": "禮儀(訓練值)",
+    "sign": "+",
+    "range_by_level": [
+     [
+      1,
+      1
+     ],
+     [
+      1,
+      2
+     ],
+     [
+      1,
+      3
+     ],
+     [
+      2,
+      4
+     ]
+    ]
+   },
+   {
+    "stat": "B_KIHIN",
+    "zh": "氣質",
+    "sign": "+",
+    "range_by_level": [
+     [
+      1,
+      1
+     ],
+     [
+      1,
+      2
+     ],
+     [
+      1,
+      3
+     ],
+     [
+      1,
+      4
+     ]
+    ]
+   }
+  ],
+  "daily_effects": [
+   "B_STRESS++"
+  ],
+  "success_check": [
+   "SUCCESS_FLAG = 0",
+   "IRAND999X(B_STRESS)",
+   "SUCCESS_LINE = IRND",
+   "C1 = B_TAIRYOKU / 2",
+   "IRAND999X(C1)",
+   "C2 = B_TAIRYOKU / 2 + IRND",
+   "IF ( C2 >= SUCCESS_LINE )",
+   "SUCCESS_FLAG = 1"
+  ]
+ },
+ {
+  "id": 8,
+  "file": "TRG008.TXT",
+  "name": "繪畫",
+  "cost_per_day_by_level": [
+   40,
+   50,
+   60,
+   80
+  ],
+  "level_thresholds": "times<=5:0, <=10:1, <=15:2, else 3 (CK_LVL 0000:03D6)",
+  "success_effects": [
+   {
+    "stat": "T_GEIJYUTSU",
+    "zh": "藝術(訓練值)",
+    "sign": "+",
+    "range_by_level": [
+     [
+      1,
+      1
+     ],
+     [
+      1,
+      2
+     ],
+     [
+      1,
+      3
+     ],
+     [
+      2,
+      4
+     ]
+    ]
+   },
+   {
+    "stat": "B_KANJUSEI",
+    "zh": "感受",
+    "sign": "+",
+    "range_by_level": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      1
+     ]
+    ]
+   }
+  ],
+  "daily_effects": [
+   "B_STRESS++"
+  ],
+  "success_check": [
+   "SUCCESS_FLAG = 0",
+   "IRAND999X(B_STRESS)",
+   "SUCCESS_LINE = IRND",
+   "C1 = B_TAIRYOKU / 2",
+   "IRAND999X(C1)",
+   "C2 = B_TAIRYOKU / 2 + IRND",
+   "IF ( C2 >= SUCCESS_LINE )",
+   "SUCCESS_FLAG = 1"
+  ]
+ },
+ {
+  "id": 9,
+  "file": "TRG009.TXT",
+  "name": "舞蹈",
+  "cost_per_day_by_level": [
+   50,
+   70,
+   90,
+   110
+  ],
+  "level_thresholds": "times<=5:0, <=10:1, <=15:2, else 3 (CK_LVL 0000:03D6)",
+  "success_effects": [
+   {
+    "stat": "T_GEIJYUTSU",
+    "zh": "藝術(訓練值)",
+    "sign": "+",
+    "range_by_level": [
+     [
+      0,
+      1
+     ],
+     [
+      1,
+      1
+     ],
+     [
+      1,
+      2
+     ],
+     [
+      1,
+      3
+     ]
+    ]
+   },
+   {
+    "stat": "B_IROKE",
+    "zh": "魅力",
+    "sign": "+",
+    "range_by_level": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      1,
+      2
+     ]
+    ]
+   },
+   {
+    "stat": "B_TAIRYOKU",
+    "zh": "體力",
+    "sign": "+",
+    "range_by_level": [
+     [
+      1,
+      1
+     ],
+     [
+      1,
+      1
+     ],
+     [
+      1,
+      1
+     ],
+     [
+      1,
+      1
+     ]
+    ]
+   }
+  ],
+  "daily_effects": [
+   "B_STRESS++"
+  ],
+  "success_check": [
+   "SUCCESS_FLAG = 0",
+   "IRAND999X(B_STRESS)",
+   "SUCCESS_LINE = IRND",
+   "C1 = B_TAIRYOKU / 2",
+   "IRAND999X(C1)",
+   "C2 = B_TAIRYOKU / 2 + IRND",
+   "IF ( C2 >= SUCCESS_LINE )",
+   "SUCCESS_FLAG = 1"
+  ]
+ }
+]

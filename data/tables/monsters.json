@@ -1,0 +1,1315 @@
+[
+ {
+  "file": "RPY01N.TXT",
+  "kind": "person",
+  "R_FACE": "F121",
+  "R_NAME": "警備兵",
+  "R_CHINOH": 10,
+  "R_SENTOH": [
+   55,
+   65
+  ],
+  "R_KOUGEKI": [
+   50,
+   60
+  ],
+  "R_BOUGYO": 45,
+  "R_SOUKOU": 40,
+  "R_SKNAME": "皮甲",
+  "R_MAHOGIJUTSU": 0,
+  "R_MARYOKU": 0,
+  "R_KOHMARYOKU": 5,
+  "R_SENI": 200,
+  "R_DASSYUTU": 50,
+  "R_TSUKON": 10,
+  "R_MAX_HP": [
+   240,
+   350
+  ],
+  "R_MAX_MP": 0,
+  "R_GOLD": [
+   50,
+   100
+  ],
+  "R_SE_ATTACK": 1
+ },
+ {
+  "file": "RPY02N.TXT",
+  "kind": "person",
+  "R_FACE": "F122",
+  "R_NAME": "旅人",
+  "R_CHINOH": 10,
+  "R_SENTOH": 45,
+  "R_KOUGEKI": 30,
+  "R_BOUGYO": 40,
+  "R_SOUKOU": 20,
+  "R_SKNAME": "皮衣",
+  "R_MAHOGIJUTSU": 0,
+  "R_MARYOKU": 0,
+  "R_KOHMARYOKU": 15,
+  "R_SENI": 100,
+  "R_DASSYUTU": 100,
+  "R_TSUKON": 0,
+  "R_MAX_HP": [
+   240,
+   300
+  ],
+  "R_MAX_MP": 0,
+  "R_GOLD": [
+   150,
+   250
+  ],
+  "R_SE_ATTACK": 3
+ },
+ {
+  "file": "RPY03N.TXT",
+  "kind": "person",
+  "R_FACE": "F123",
+  "R_NAME": "村女",
+  "R_CHINOH": 10,
+  "R_SENTOH": 30,
+  "R_KOUGEKI": 30,
+  "R_BOUGYO": 10,
+  "R_SOUKOU": 0,
+  "R_SKNAME": "",
+  "R_MAHOGIJUTSU": 0,
+  "R_MARYOKU": 0,
+  "R_KOHMARYOKU": 25,
+  "R_SENI": 40,
+  "R_DASSYUTU": 100,
+  "R_TSUKON": 0,
+  "R_MAX_HP": [
+   40,
+   120
+  ],
+  "R_MAX_MP": 0,
+  "R_GOLD": [
+   20,
+   50
+  ],
+  "R_SE_ATTACK": 3
+ },
+ {
+  "file": "RPY04N.TXT",
+  "kind": "person",
+  "R_FACE": "F124",
+  "R_NAME": "年輕人",
+  "R_CHINOH": 10,
+  "R_SENTOH": 40,
+  "R_KOUGEKI": 45,
+  "R_BOUGYO": 25,
+  "R_SOUKOU": 0,
+  "R_SKNAME": "",
+  "R_MAHOGIJUTSU": 0,
+  "R_MARYOKU": 0,
+  "R_KOHMARYOKU": 5,
+  "R_SENI": [
+   100,
+   150
+  ],
+  "R_DASSYUTU": 100,
+  "R_TSUKON": 0,
+  "R_MAX_HP": [
+   90,
+   250
+  ],
+  "R_MAX_MP": 0,
+  "R_GOLD": [
+   20,
+   100
+  ],
+  "R_SE_ATTACK": 3
+ },
+ {
+  "file": "RPY05N.TXT",
+  "kind": "person",
+  "R_FACE": "F125",
+  "R_NAME": "商人",
+  "R_CHINOH": 10,
+  "R_SENTOH": 40,
+  "R_KOUGEKI": 40,
+  "R_BOUGYO": 40,
+  "R_SOUKOU": 25,
+  "R_SKNAME": "皮衣",
+  "R_MAHOGIJUTSU": 0,
+  "R_MARYOKU": 0,
+  "R_KOHMARYOKU": 5,
+  "R_SENI": 50,
+  "R_DASSYUTU": 100,
+  "R_TSUKON": 0,
+  "R_MAX_HP": [
+   75,
+   190
+  ],
+  "R_MAX_MP": 0,
+  "R_GOLD": [
+   500,
+   1500
+  ],
+  "R_SE_ATTACK": 3,
+  "R_ITEM_NAME": "茶杯",
+  "R_ITEM_ICON": 19,
+  "R_ITEM_GOLD": 500,
+  "R_ITEM_ATTR": 4000,
+  "R_ITEM_PROG": "B_KIHIN+10",
+  "R_ITEM_HELP": "氣質+10",
+  "R_ITEM_PROPA": 25
+ },
+ {
+  "file": "RPY06N.TXT",
+  "kind": "person",
+  "R_FACE": "F126",
+  "R_NAME": "老人",
+  "R_CHINOH": 10,
+  "R_SENTOH": 40,
+  "R_KOUGEKI": 30,
+  "R_BOUGYO": 15,
+  "R_SOUKOU": 0,
+  "R_SKNAME": "",
+  "R_MAHOGIJUTSU": 30,
+  "R_MARYOKU": 0,
+  "R_KOHMARYOKU": 30,
+  "R_SENI": 55,
+  "R_DASSYUTU": 100,
+  "R_TSUKON": 10,
+  "R_MAX_HP": [
+   40,
+   150
+  ],
+  "R_MAX_MP": 0,
+  "R_GOLD": [
+   50,
+   100
+  ],
+  "R_SE_ATTACK": 3
+ },
+ {
+  "file": "RPY07N.TXT",
+  "kind": "person",
+  "R_FACE": "F127",
+  "R_NAME": "伐木工",
+  "R_CHINOH": 10,
+  "R_SENTOH": [
+   55,
+   65
+  ],
+  "R_KOUGEKI": 75,
+  "R_BOUGYO": 30,
+  "R_SOUKOU": 5,
+  "R_SKNAME": "毛皮的背心",
+  "R_MAHOGIJUTSU": 0,
+  "R_MARYOKU": 0,
+  "R_KOHMARYOKU": 0,
+  "R_SENI": [
+   300,
+   400
+  ],
+  "R_DASSYUTU": 100,
+  "R_TSUKON": 0,
+  "R_MAX_HP": [
+   350,
+   400
+  ],
+  "R_MAX_MP": 0,
+  "R_GOLD": [
+   50,
+   100
+  ],
+  "R_SE_ATTACK": 3
+ },
+ {
+  "file": "RPY08N.TXT",
+  "kind": "person",
+  "R_FACE": "F128",
+  "R_NAME": "農夫",
+  "R_CHINOH": 10,
+  "R_SENTOH": 40,
+  "R_KOUGEKI": [
+   45,
+   60
+  ],
+  "R_BOUGYO": 25,
+  "R_SOUKOU": 0,
+  "R_SKNAME": "",
+  "R_MAHOGIJUTSU": 0,
+  "R_MARYOKU": 0,
+  "R_KOHMARYOKU": 10,
+  "R_SENI": 180,
+  "R_DASSYUTU": 100,
+  "R_TSUKON": 0,
+  "R_MAX_HP": [
+   180,
+   280
+  ],
+  "R_MAX_MP": 0,
+  "R_GOLD": [
+   50,
+   100
+  ],
+  "R_SE_ATTACK": 3
+ },
+ {
+  "file": "RPY09N.TXT",
+  "kind": "person",
+  "R_FACE": "F129",
+  "R_NAME": "獵人",
+  "R_CHINOH": 10,
+  "R_SENTOH": 80,
+  "R_KOUGEKI": [
+   55,
+   65
+  ],
+  "R_BOUGYO": 35,
+  "R_SOUKOU": 25,
+  "R_SKNAME": "毛皮",
+  "R_MAHOGIJUTSU": 0,
+  "R_MARYOKU": 0,
+  "R_KOHMARYOKU": 40,
+  "R_SENI": [
+   140,
+   200
+  ],
+  "R_DASSYUTU": 60,
+  "R_TSUKON": 15,
+  "R_MAX_HP": [
+   200,
+   250
+  ],
+  "R_MAX_MP": 0,
+  "R_GOLD": [
+   50,
+   100
+  ],
+  "R_SE_ATTACK": 3,
+  "R_ITEM_NAME": "雷火彈",
+  "R_ITEM_ICON": 17,
+  "R_ITEM_GOLD": 100,
+  "R_ITEM_ATTR": 0,
+  "R_ITEM_PROG": "",
+  "R_ITEM_HELP": "攻擊用",
+  "R_ITEM_PROPA": 25
+ },
+ {
+  "file": "RPZ01N.TXT",
+  "kind": "monster",
+  "R_MS_NUMBER": 1,
+  "R_FACE": "F161",
+  "R_MONSTOR": "M001",
+  "R_NAME": "誘拐小孩的人",
+  "R_CHINOH": 50,
+  "R_SENTOH": 35,
+  "R_KOUGEKI": [
+   40,
+   65
+  ],
+  "R_BOUGYO": 28,
+  "R_SOUKOU": 20,
+  "R_SKNAME": "皮衣",
+  "R_MAHOGIJUTSU": 0,
+  "R_MARYOKU": 0,
+  "R_KOHMARYOKU": [
+   10,
+   15
+  ],
+  "R_SENI": 30,
+  "R_DASSYUTU": 70,
+  "R_TSUKON": 0,
+  "R_MAX_HP": [
+   60,
+   120
+  ],
+  "R_MAX_MP": 0,
+  "R_GOLD": [
+   10,
+   150
+  ],
+  "R_SE_ATTACK": 3,
+  "R_ITEM_NAME": "快癒丸",
+  "R_ITEM_ICON": 16,
+  "R_ITEM_GOLD": 30,
+  "R_ITEM_ATTR": 0,
+  "R_ITEM_PROG": "",
+  "R_ITEM_HELP": "ＨＰ恢復",
+  "R_ITEM_PROPA": 15
+ },
+ {
+  "file": "RPZ02N.TXT",
+  "kind": "monster",
+  "R_MS_NUMBER": 2,
+  "R_FACE": "F162",
+  "R_MONSTOR": "M002",
+  "R_NAME": "阿米巴",
+  "R_CHINOH": 10,
+  "R_SENTOH": [
+   25,
+   45
+  ],
+  "R_KOUGEKI": 30,
+  "R_BOUGYO": 18,
+  "R_SOUKOU": 18,
+  "R_SKNAME": "光滑的表皮",
+  "R_MAHOGIJUTSU": 0,
+  "R_MARYOKU": 0,
+  "R_KOHMARYOKU": 0,
+  "R_SENI": 100,
+  "R_DASSYUTU": 80,
+  "R_TSUKON": 30,
+  "R_MAX_HP": [
+   20,
+   100
+  ],
+  "R_MAX_MP": 0,
+  "R_GOLD": 0,
+  "R_SE_ATTACK": 3
+ },
+ {
+  "file": "RPZ03N.TXT",
+  "kind": "monster",
+  "R_MS_NUMBER": 3,
+  "R_FACE": "F163",
+  "R_MONSTOR": "M003",
+  "R_NAME": "雪怪",
+  "R_CHINOH": 50,
+  "R_SENTOH": [
+   30,
+   55
+  ],
+  "R_KOUGEKI": [
+   50,
+   65
+  ],
+  "R_BOUGYO": 40,
+  "R_SOUKOU": 30,
+  "R_SKNAME": "厚的毛皮",
+  "R_MAHOGIJUTSU": 0,
+  "R_MARYOKU": 0,
+  "R_KOHMARYOKU": [
+   0,
+   5
+  ],
+  "R_SENI": [
+   40,
+   100
+  ],
+  "R_DASSYUTU": 70,
+  "R_TSUKON": 5,
+  "R_MAX_HP": [
+   80,
+   200
+  ],
+  "R_MAX_MP": 0,
+  "R_GOLD": [
+   1,
+   25
+  ],
+  "R_SE_ATTACK": 3
+ },
+ {
+  "file": "RPZ04N.TXT",
+  "kind": "monster",
+  "R_MS_NUMBER": 4,
+  "R_FACE": "F164",
+  "R_MONSTOR": "M004",
+  "R_NAME": "狼",
+  "R_CHINOH": 50,
+  "R_SENTOH": [
+   55,
+   65
+  ],
+  "R_KOUGEKI": [
+   55,
+   80
+  ],
+  "R_BOUGYO": 18,
+  "R_SOUKOU": 15,
+  "R_SKNAME": "柔軟的毛皮",
+  "R_MAHOGIJUTSU": 0,
+  "R_MARYOKU": 0,
+  "R_KOHMARYOKU": [
+   30,
+   50
+  ],
+  "R_SENI": [
+   25,
+   60
+  ],
+  "R_DASSYUTU": 50,
+  "R_TSUKON": 20,
+  "R_MAX_HP": [
+   60,
+   120
+  ],
+  "R_MAX_MP": 0,
+  "R_GOLD": 0,
+  "R_SE_ATTACK": 3
+ },
+ {
+  "file": "RPZ05N.TXT",
+  "kind": "monster",
+  "R_MS_NUMBER": 5,
+  "R_FACE": "F165",
+  "R_MONSTOR": "M005",
+  "R_NAME": "冰球",
+  "R_CHINOH": 1,
+  "R_SENTOH": 45,
+  "R_KOUGEKI": 40,
+  "R_BOUGYO": 10,
+  "R_SOUKOU": 10,
+  "R_SKNAME": "冰的身體",
+  "R_MAHOGIJUTSU": 45,
+  "R_MARYOKU": 45,
+  "R_KOHMARYOKU": 80,
+  "R_SENI": 100,
+  "R_DASSYUTU": 80,
+  "R_TSUKON": 0,
+  "R_MAX_HP": [
+   30,
+   50
+  ],
+  "R_MAX_MP": [
+   25,
+   35
+  ],
+  "R_GOLD": 0,
+  "R_SE_ATTACK": 4,
+  "R_ITEM_NAME": "冰魂",
+  "R_ITEM_ICON": 36,
+  "R_ITEM_GOLD": 600,
+  "R_ITEM_ATTR": 4000,
+  "R_ITEM_PROG": "B_TAIRYOKU+10 B_STRESS-10",
+  "R_ITEM_HELP": "體力+10 疲勞-10",
+  "R_ITEM_PROPA": 15
+ },
+ {
+  "file": "RPZ06N.TXT",
+  "kind": "monster",
+  "R_MS_NUMBER": 6,
+  "R_FACE": "F166",
+  "R_MONSTOR": "M006",
+  "R_NAME": "銀狼",
+  "R_CHINOH": 100,
+  "R_SENTOH": [
+   75,
+   85
+  ],
+  "R_KOUGEKI": 75,
+  "R_BOUGYO": 45,
+  "R_SOUKOU": 30,
+  "R_SKNAME": "銀狼皮",
+  "R_MAHOGIJUTSU": 0,
+  "R_MARYOKU": 0,
+  "R_KOHMARYOKU": [
+   75,
+   80
+  ],
+  "R_SENI": 70,
+  "R_DASSYUTU": 65,
+  "R_TSUKON": 25,
+  "R_MAX_HP": [
+   180,
+   220
+  ],
+  "R_MAX_MP": 0,
+  "R_GOLD": 0,
+  "R_SE_ATTACK": 3,
+  "R_ITEM_NAME": "銀狼皮",
+  "R_ITEM_ICON": 30,
+  "R_ITEM_GOLD": 800,
+  "R_ITEM_ATTR": 4000,
+  "R_ITEM_PROG": "V_KOHMARYOKU+5",
+  "R_ITEM_HELP": "抗魔+5",
+  "R_ITEM_PROPA": 30
+ },
+ {
+  "file": "RPZ07N.TXT",
+  "kind": "monster",
+  "R_MS_NUMBER": 7,
+  "R_FACE": "F167",
+  "R_MONSTOR": "M007",
+  "R_NAME": "武神",
+  "R_CHINOH": 999,
+  "R_SENTOH": 120,
+  "R_KOUGEKI": 120,
+  "R_BOUGYO": 80,
+  "R_SOUKOU": 55,
+  "R_SKNAME": "不可思議之光",
+  "R_MAHOGIJUTSU": 0,
+  "R_MARYOKU": 0,
+  "R_KOHMARYOKU": 65,
+  "R_SENI": 999,
+  "R_DASSYUTU": 100,
+  "R_TSUKON": 10,
+  "R_MAX_HP": 780,
+  "R_MAX_MP": 0,
+  "R_GOLD": 0,
+  "R_SE_ATTACK": 5,
+  "R_ITEM_NAME": "武神之劍",
+  "R_ITEM_ICON": 9,
+  "R_ITEM_GOLD": 5000,
+  "R_ITEM_ATTR": 2000,
+  "R_ITEM_PROG": "V_KOUGEKI+30 V_SENTOH+20",
+  "R_ITEM_HELP": "攻擊+30 戰技+20",
+  "R_ITEM_PROPA": 100
+ },
+ {
+  "file": "RPZ08N.TXT",
+  "kind": "monster",
+  "R_MS_NUMBER": 8,
+  "R_FACE": "F168",
+  "R_MONSTOR": "M008",
+  "R_NAME": "山怪",
+  "R_CHINOH": 30,
+  "R_SENTOH": [
+   40,
+   55
+  ],
+  "R_KOUGEKI": 50,
+  "R_BOUGYO": 8,
+  "R_SOUKOU": 8,
+  "R_SKNAME": "固體",
+  "R_MAHOGIJUTSU": 0,
+  "R_MARYOKU": 0,
+  "R_KOHMARYOKU": 0,
+  "R_SENI": [
+   40,
+   50
+  ],
+  "R_DASSYUTU": 30,
+  "R_TSUKON": 15,
+  "R_MAX_HP": [
+   45,
+   120
+  ],
+  "R_MAX_MP": 0,
+  "R_GOLD": 0,
+  "R_SE_ATTACK": 4
+ },
+ {
+  "file": "RPZ09N.TXT",
+  "kind": "monster",
+  "R_MS_NUMBER": 9,
+  "R_FACE": "F169",
+  "R_MONSTOR": "M009",
+  "R_NAME": "巨獵鷹",
+  "R_CHINOH": 40,
+  "R_SENTOH": [
+   20,
+   55
+  ],
+  "R_KOUGEKI": [
+   35,
+   65
+  ],
+  "R_BOUGYO": 20,
+  "R_SOUKOU": 0,
+  "R_SKNAME": "沒有",
+  "R_MAHOGIJUTSU": 0,
+  "R_MARYOKU": 0,
+  "R_KOHMARYOKU": [
+   1,
+   10
+  ],
+  "R_SENI": [
+   5,
+   30
+  ],
+  "R_DASSYUTU": 25,
+  "R_TSUKON": 25,
+  "R_MAX_HP": [
+   20,
+   90
+  ],
+  "R_MAX_MP": 0,
+  "R_GOLD": 0,
+  "R_SE_ATTACK": 3
+ },
+ {
+  "file": "RPZ10N.TXT",
+  "kind": "monster",
+  "R_MS_NUMBER": 10,
+  "R_FACE": "F170",
+  "R_MONSTOR": "M010",
+  "R_NAME": "蝙蝠魔",
+  "R_CHINOH": 50,
+  "R_SENTOH": [
+   45,
+   60
+  ],
+  "R_KOUGEKI": [
+   45,
+   60
+  ],
+  "R_BOUGYO": 30,
+  "R_SOUKOU": 15,
+  "R_SKNAME": "皮鎧",
+  "R_MAHOGIJUTSU": 0,
+  "R_MARYOKU": 0,
+  "R_KOHMARYOKU": [
+   1,
+   15
+  ],
+  "R_SENI": [
+   90,
+   300
+  ],
+  "R_DASSYUTU": 50,
+  "R_TSUKON": 5,
+  "R_MAX_HP": [
+   100,
+   240
+  ],
+  "R_MAX_MP": 0,
+  "R_GOLD": [
+   1,
+   50
+  ],
+  "R_SE_ATTACK": 1,
+  "R_ITEM_NAME": "快癒丸",
+  "R_ITEM_ICON": 16,
+  "R_ITEM_GOLD": 30,
+  "R_ITEM_ATTR": 0,
+  "R_ITEM_PROG": "",
+  "R_ITEM_HELP": "ＨＰ恢復",
+  "R_ITEM_PROPA": 15
+ },
+ {
+  "file": "RPZ11N.TXT",
+  "kind": "monster",
+  "R_MS_NUMBER": 11,
+  "R_FACE": "F171",
+  "R_MONSTOR": "M011",
+  "R_NAME": "山貓",
+  "R_CHINOH": 50,
+  "R_SENTOH": [
+   40,
+   50
+  ],
+  "R_KOUGEKI": 40,
+  "R_BOUGYO": 25,
+  "R_SOUKOU": 0,
+  "R_SKNAME": "皮毛",
+  "R_MAHOGIJUTSU": 0,
+  "R_MARYOKU": 0,
+  "R_KOHMARYOKU": 20,
+  "R_SENI": [
+   40,
+   60
+  ],
+  "R_DASSYUTU": 100,
+  "R_TSUKON": 30,
+  "R_MAX_HP": [
+   55,
+   120
+  ],
+  "R_MAX_MP": 0,
+  "R_GOLD": [
+   1,
+   15
+  ],
+  "R_SE_ATTACK": 3,
+  "R_ITEM_NAME": "貓眼石",
+  "R_ITEM_ICON": 27,
+  "R_ITEM_GOLD": 600,
+  "R_ITEM_ATTR": 4000,
+  "R_ITEM_PROG": "E_CAT!",
+  "R_ITEM_HELP": "",
+  "R_ITEM_PROPA": 10
+ },
+ {
+  "file": "RPZ12N.TXT",
+  "kind": "monster",
+  "R_MS_NUMBER": 12,
+  "R_FACE": "F172",
+  "R_MONSTOR": "M012",
+  "R_NAME": "食人草",
+  "R_CHINOH": 35,
+  "R_SENTOH": [
+   25,
+   40
+  ],
+  "R_KOUGEKI": 70,
+  "R_BOUGYO": 65,
+  "R_SOUKOU": 50,
+  "R_SKNAME": "堅硬的表皮",
+  "R_MAHOGIJUTSU": 0,
+  "R_MARYOKU": 0,
+  "R_KOHMARYOKU": 0,
+  "R_SENI": 125,
+  "R_DASSYUTU": 70,
+  "R_TSUKON": 0,
+  "R_MAX_HP": [
+   85,
+   125
+  ],
+  "R_MAX_MP": 0,
+  "R_GOLD": 0,
+  "R_SE_ATTACK": 4
+ },
+ {
+  "file": "RPZ13N.TXT",
+  "kind": "monster",
+  "R_MS_NUMBER": 13,
+  "R_FACE": "F173",
+  "R_MONSTOR": "M013",
+  "R_NAME": "龍頭蟲",
+  "R_CHINOH": 30,
+  "R_SENTOH": [
+   40,
+   55
+  ],
+  "R_KOUGEKI": [
+   50,
+   65
+  ],
+  "R_BOUGYO": 60,
+  "R_SOUKOU": 60,
+  "R_SKNAME": "堅固的皮甲",
+  "R_MAHOGIJUTSU": 0,
+  "R_MARYOKU": 0,
+  "R_KOHMARYOKU": 0,
+  "R_SENI": 30,
+  "R_DASSYUTU": 100,
+  "R_TSUKON": 25,
+  "R_MAX_HP": [
+   280,
+   400
+  ],
+  "R_MAX_MP": 0,
+  "R_GOLD": 0,
+  "R_SE_ATTACK": 1,
+  "R_ITEM_NAME": "妖精之蜜",
+  "R_ITEM_ICON": 42,
+  "R_ITEM_GOLD": 200,
+  "R_ITEM_ATTR": 4000,
+  "R_ITEM_PROG": "B_IROKE+10",
+  "R_ITEM_HELP": "魅力+10",
+  "R_ITEM_PROPA": 10
+ },
+ {
+  "file": "RPZ14N.TXT",
+  "kind": "monster",
+  "R_MS_NUMBER": 14,
+  "R_FACE": "F174",
+  "R_MONSTOR": "M014",
+  "R_NAME": "巨蠍",
+  "R_CHINOH": 50,
+  "R_SENTOH": [
+   35,
+   55
+  ],
+  "R_KOUGEKI": 50,
+  "R_BOUGYO": 45,
+  "R_SOUKOU": 45,
+  "R_SKNAME": "堅硬的表皮",
+  "R_MAHOGIJUTSU": 0,
+  "R_MARYOKU": 0,
+  "R_KOHMARYOKU": 0,
+  "R_SENI": [
+   80,
+   200
+  ],
+  "R_DASSYUTU": 50,
+  "R_TSUKON": 10,
+  "R_MAX_HP": [
+   100,
+   185
+  ],
+  "R_MAX_MP": 0,
+  "R_GOLD": 0,
+  "R_SE_ATTACK": 4
+ },
+ {
+  "file": "RPZ15N.TXT",
+  "kind": "monster",
+  "R_MS_NUMBER": 15,
+  "R_FACE": "F175",
+  "R_MONSTOR": "M015",
+  "R_NAME": "妖精",
+  "R_CHINOH": 40,
+  "R_SENTOH": [
+   35,
+   50
+  ],
+  "R_KOUGEKI": [
+   50,
+   65
+  ],
+  "R_BOUGYO": 20,
+  "R_SOUKOU": 15,
+  "R_SKNAME": "皮甲",
+  "R_MAHOGIJUTSU": 0,
+  "R_MARYOKU": 0,
+  "R_KOHMARYOKU": 15,
+  "R_SENI": [
+   40,
+   50
+  ],
+  "R_DASSYUTU": 60,
+  "R_TSUKON": 5,
+  "R_MAX_HP": [
+   180,
+   260
+  ],
+  "R_MAX_MP": 0,
+  "R_GOLD": [
+   10,
+   99
+  ],
+  "R_SE_ATTACK": 1,
+  "R_ITEM_NAME": "快癒丸",
+  "R_ITEM_ICON": 16,
+  "R_ITEM_GOLD": 30,
+  "R_ITEM_ATTR": 0,
+  "R_ITEM_PROG": "",
+  "R_ITEM_HELP": "ＨＰ恢復",
+  "R_ITEM_PROPA": 20
+ },
+ {
+  "file": "RPZ16N.TXT",
+  "kind": "monster",
+  "R_MS_NUMBER": 16,
+  "R_FACE": "F176",
+  "R_MONSTOR": "M016",
+  "R_NAME": "沙蟲",
+  "R_CHINOH": 999,
+  "R_SENTOH": [
+   55,
+   65
+  ],
+  "R_KOUGEKI": [
+   75,
+   85
+  ],
+  "R_BOUGYO": 50,
+  "R_SOUKOU": 40,
+  "R_SKNAME": "粗糙的表皮",
+  "R_MAHOGIJUTSU": 0,
+  "R_MARYOKU": 0,
+  "R_KOHMARYOKU": [
+   25,
+   30
+  ],
+  "R_SENI": 250,
+  "R_DASSYUTU": 20,
+  "R_TSUKON": 0,
+  "R_MAX_HP": [
+   240,
+   360
+  ],
+  "R_MAX_MP": 0,
+  "R_GOLD": [
+   100,
+   300
+  ],
+  "R_SE_ATTACK": 4
+ },
+ {
+  "file": "RPZ17N.TXT",
+  "kind": "monster",
+  "R_MS_NUMBER": 17,
+  "R_FACE": "F177",
+  "R_MONSTOR": "M017",
+  "R_NAME": "骷髏",
+  "R_CHINOH": 80,
+  "R_SENTOH": [
+   75,
+   80
+  ],
+  "R_KOUGEKI": [
+   75,
+   85
+  ],
+  "R_BOUGYO": 45,
+  "R_SOUKOU": 35,
+  "R_SKNAME": "甲冑",
+  "R_MAHOGIJUTSU": 0,
+  "R_MARYOKU": 0,
+  "R_KOHMARYOKU": [
+   38,
+   48
+  ],
+  "R_SENI": 200,
+  "R_DASSYUTU": 45,
+  "R_TSUKON": 15,
+  "R_MAX_HP": [
+   200,
+   250
+  ],
+  "R_MAX_MP": 0,
+  "R_GOLD": [
+   250,
+   500
+  ],
+  "R_SE_ATTACK": 2,
+  "R_ITEM_NAME": "鐵長劍",
+  "R_ITEM_ICON": 4,
+  "R_ITEM_GOLD": 250,
+  "R_ITEM_ATTR": 2000,
+  "R_ITEM_PROG": "V_KOUGEKI+12 V_SENTOH-2",
+  "R_ITEM_HELP": "攻擊+12 戰技-2",
+  "R_ITEM_PROPA": 10
+ },
+ {
+  "file": "RPZ18N.TXT",
+  "kind": "monster",
+  "R_MS_NUMBER": 18,
+  "R_FACE": "F178",
+  "R_MONSTOR": "M018",
+  "R_NAME": "地獄鳥",
+  "R_CHINOH": 90,
+  "R_SENTOH": [
+   55,
+   60
+  ],
+  "R_KOUGEKI": [
+   55,
+   60
+  ],
+  "R_BOUGYO": 55,
+  "R_SOUKOU": 30,
+  "R_SKNAME": "厚羽毛",
+  "R_MAHOGIJUTSU": [
+   40,
+   50
+  ],
+  "R_MARYOKU": 50,
+  "R_KOHMARYOKU": 80,
+  "R_SENI": [
+   55,
+   65
+  ],
+  "R_DASSYUTU": 50,
+  "R_TSUKON": 0,
+  "R_MAX_HP": [
+   60,
+   80
+  ],
+  "R_MAX_MP": [
+   320,
+   450
+  ],
+  "R_GOLD": [
+   200,
+   250
+  ],
+  "R_SE_ATTACK": 3,
+  "R_ITEM_NAME": "妖精之蜜",
+  "R_ITEM_ICON": 42,
+  "R_ITEM_GOLD": 200,
+  "R_ITEM_ATTR": 4000,
+  "R_ITEM_PROG": "B_IROKE+10",
+  "R_ITEM_HELP": "魅力+10",
+  "R_ITEM_PROPA": 5
+ },
+ {
+  "file": "RPZ19N.TXT",
+  "kind": "monster",
+  "R_MS_NUMBER": 19,
+  "R_FACE": "F179",
+  "R_MONSTOR": "M019",
+  "R_NAME": "長頸鳥",
+  "R_CHINOH": 60,
+  "R_SENTOH": [
+   50,
+   55
+  ],
+  "R_KOUGEKI": [
+   55,
+   60
+  ],
+  "R_BOUGYO": 35,
+  "R_SOUKOU": 30,
+  "R_SKNAME": "厚的羽毛",
+  "R_MAHOGIJUTSU": 0,
+  "R_MARYOKU": 0,
+  "R_KOHMARYOKU": [
+   20,
+   25
+  ],
+  "R_SENI": [
+   40,
+   60
+  ],
+  "R_DASSYUTU": 40,
+  "R_TSUKON": 10,
+  "R_MAX_HP": [
+   245,
+   300
+  ],
+  "R_MAX_MP": 0,
+  "R_GOLD": 0,
+  "R_SE_ATTACK": 3,
+  "R_ITEM_NAME": "古代的牛奶",
+  "R_ITEM_ICON": 106,
+  "R_ITEM_GOLD": 500,
+  "R_ITEM_ATTR": 5000,
+  "R_ITEM_PROG": "P_TAIJYU-100",
+  "R_ITEM_HELP": "使用說明",
+  "R_ITEM_PROPA": 10
+ },
+ {
+  "file": "RPZ20N.TXT",
+  "kind": "monster",
+  "R_MS_NUMBER": 20,
+  "R_FACE": "F180",
+  "R_MONSTOR": "M020",
+  "R_NAME": "惡魔",
+  "R_CHINOH": 100,
+  "R_SENTOH": [
+   45,
+   50
+  ],
+  "R_KOUGEKI": [
+   40,
+   60
+  ],
+  "R_BOUGYO": 65,
+  "R_SOUKOU": 55,
+  "R_SKNAME": "魔法的面紗",
+  "R_MAHOGIJUTSU": [
+   60,
+   65
+  ],
+  "R_MARYOKU": [
+   60,
+   65
+  ],
+  "R_KOHMARYOKU": 60,
+  "R_SENI": 50,
+  "R_DASSYUTU": 40,
+  "R_TSUKON": 15,
+  "R_MAX_HP": [
+   260,
+   370
+  ],
+  "R_MAX_MP": [
+   500,
+   800
+  ],
+  "R_GOLD": [
+   250,
+   400
+  ],
+  "R_SE_ATTACK": 3,
+  "R_ITEM_NAME": "惡魔的服裝",
+  "R_ITEM_ICON": 52,
+  "R_ITEM_GOLD": 3000,
+  "R_ITEM_ATTR": 3000,
+  "R_ITEM_PROG": "B_IROKE+45 B_MORALS-100",
+  "R_ITEM_HELP": "魅力+45 道德-100",
+  "R_ITEM_PROPA": 5
+ },
+ {
+  "file": "RPZ21N.TXT",
+  "kind": "monster",
+  "R_MS_NUMBER": 21,
+  "R_FACE": "F181",
+  "R_MONSTOR": "M021",
+  "R_NAME": "龍族",
+  "R_CHINOH": 100,
+  "R_SENTOH": [
+   80,
+   90
+  ],
+  "R_KOUGEKI": 85,
+  "R_BOUGYO": 75,
+  "R_SOUKOU": 60,
+  "R_SKNAME": "堅硬的鱗甲",
+  "R_MAHOGIJUTSU": 45,
+  "R_MARYOKU": [
+   40,
+   50
+  ],
+  "R_KOHMARYOKU": 50,
+  "R_SENI": 150,
+  "R_DASSYUTU": 80,
+  "R_TSUKON": 10,
+  "R_MAX_HP": [
+   250,
+   500
+  ],
+  "R_MAX_MP": [
+   120,
+   150
+  ],
+  "R_GOLD": [
+   1,
+   500
+  ],
+  "R_SE_ATTACK": 4,
+  "R_ITEM_NAME": "龍之牙",
+  "R_ITEM_ICON": 28,
+  "R_ITEM_GOLD": 2200,
+  "R_ITEM_ATTR": 4000,
+  "R_ITEM_PROG": "H_SENSHI+20",
+  "R_ITEM_HELP": "戰士評價+20",
+  "R_ITEM_PROPA": 5
+ },
+ {
+  "file": "RPZ22N.TXT",
+  "kind": "monster",
+  "R_MS_NUMBER": 22,
+  "R_FACE": "F182",
+  "R_MONSTOR": "M022",
+  "R_NAME": "蛇身女",
+  "R_CHINOH": 60,
+  "R_SENTOH": [
+   40,
+   50
+  ],
+  "R_KOUGEKI": 45,
+  "R_BOUGYO": 20,
+  "R_SOUKOU": 15,
+  "R_SKNAME": "鱗片",
+  "R_MAHOGIJUTSU": [
+   30,
+   35
+  ],
+  "R_MARYOKU": 40,
+  "R_KOHMARYOKU": 25,
+  "R_SENI": 30,
+  "R_DASSYUTU": 70,
+  "R_TSUKON": 30,
+  "R_MAX_HP": [
+   95,
+   150
+  ],
+  "R_MAX_MP": [
+   35,
+   40
+  ],
+  "R_GOLD": [
+   1,
+   50
+  ],
+  "R_SE_ATTACK": 4
+ },
+ {
+  "file": "RPZ23N.TXT",
+  "kind": "monster",
+  "R_MS_NUMBER": 23,
+  "R_FACE": "F183",
+  "R_MONSTOR": "M023",
+  "R_NAME": "魚人",
+  "R_CHINOH": 75,
+  "R_SENTOH": 60,
+  "R_KOUGEKI": [
+   45,
+   50
+  ],
+  "R_BOUGYO": 35,
+  "R_SOUKOU": 25,
+  "R_SKNAME": "鱗片",
+  "R_MAHOGIJUTSU": 0,
+  "R_MARYOKU": 0,
+  "R_KOHMARYOKU": 0,
+  "R_SENI": 100,
+  "R_DASSYUTU": 25,
+  "R_TSUKON": 10,
+  "R_MAX_HP": [
+   150,
+   220
+  ],
+  "R_MAX_MP": 0,
+  "R_GOLD": [
+   10,
+   80
+  ],
+  "R_SE_ATTACK": 4,
+  "R_ITEM_NAME": "人魚之淚",
+  "R_ITEM_ICON": 29,
+  "R_ITEM_GOLD": 950,
+  "R_ITEM_ATTR": 4000,
+  "R_ITEM_PROG": "E_MERMAID!",
+  "R_ITEM_HELP": "",
+  "R_ITEM_PROPA": 20
+ },
+ {
+  "file": "RPZ24N.TXT",
+  "kind": "monster",
+  "R_MS_NUMBER": 24,
+  "R_FACE": "F184",
+  "R_MONSTOR": "M024",
+  "R_NAME": "狂人魚",
+  "R_CHINOH": 45,
+  "R_SENTOH": [
+   30,
+   40
+  ],
+  "R_KOUGEKI": [
+   45,
+   50
+  ],
+  "R_BOUGYO": 55,
+  "R_SOUKOU": 40,
+  "R_SKNAME": "鱗片",
+  "R_MAHOGIJUTSU": 0,
+  "R_MARYOKU": 0,
+  "R_KOHMARYOKU": [
+   45,
+   60
+  ],
+  "R_SENI": 45,
+  "R_DASSYUTU": 100,
+  "R_TSUKON": 15,
+  "R_MAX_HP": [
+   60,
+   120
+  ],
+  "R_MAX_MP": [
+   1,
+   20
+  ],
+  "R_GOLD": [
+   45,
+   125
+  ],
+  "R_SE_ATTACK": 4,
+  "R_ITEM_NAME": "漆黑的鱗片",
+  "R_ITEM_ICON": 26,
+  "R_ITEM_GOLD": 500,
+  "R_ITEM_ATTR": 4000,
+  "R_ITEM_PROG": "V_BOUGYO+3",
+  "R_ITEM_HELP": "防禦+3",
+  "R_ITEM_PROPA": 20
+ },
+ {
+  "file": "RPZ25N.TXT",
+  "kind": "monster",
+  "R_MS_NUMBER": 25,
+  "R_FACE": "F185",
+  "R_MONSTOR": "M025",
+  "R_NAME": "巨人",
+  "R_CHINOH": 60,
+  "R_SENTOH": [
+   40,
+   55
+  ],
+  "R_KOUGEKI": [
+   60,
+   70
+  ],
+  "R_BOUGYO": 50,
+  "R_SOUKOU": 40,
+  "R_SKNAME": "強硬的肌肉",
+  "R_MAHOGIJUTSU": 0,
+  "R_MARYOKU": 0,
+  "R_KOHMARYOKU": [
+   30,
+   35
+  ],
+  "R_SENI": 50,
+  "R_DASSYUTU": 90,
+  "R_TSUKON": 50,
+  "R_MAX_HP": [
+   90,
+   200
+  ],
+  "R_MAX_MP": 0,
+  "R_GOLD": [
+   120,
+   200
+  ],
+  "R_SE_ATTACK": 4
+ }
+]

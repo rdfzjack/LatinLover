@@ -112,8 +112,8 @@ class Engine(CalendarMixin, ItemMixin):
         vm.put_cstr(vm.ruw(AX), vm.cstr(vm.ruw(SI)))
     def cmd_STRLEN(self, vm):     # 0000:03AF
         vm.ww(AX, len(vm.cstr(vm.ruw(AX))))
-    def cmd_VALSTR(self, vm):     # 0389:0AF2 number -> string (display only)
-        vm.ww(AX, vm.push_string(b'%d' % vm.rw(AX)))
+    def cmd_VALSTR(self, vm):     # 0389:0AF2 number -> ASCII decimal string in ds:1D7C, SI = pointer
+        vm.put_cstr(0x1D7C, b'%d' % vm.rw(AX)); vm.ww(SI, 0x1D7C)
 
     # ---- program control -------------------------------------------------------
     def cmd_LOAD(self, vm):       # 0000:03BF

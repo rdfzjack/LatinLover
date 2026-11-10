@@ -1,0 +1,1834 @@
+[
+ {
+  "name": "AX",
+  "kind": "variable",
+  "address": "15E3:0226"
+ },
+ {
+  "name": "BX",
+  "kind": "variable",
+  "address": "15E3:0228"
+ },
+ {
+  "name": "CX",
+  "kind": "variable",
+  "address": "15E3:022A"
+ },
+ {
+  "name": "DX",
+  "kind": "variable",
+  "address": "15E3:022C"
+ },
+ {
+  "name": "SI",
+  "kind": "variable",
+  "address": "15E3:022E"
+ },
+ {
+  "name": "DI",
+  "kind": "variable",
+  "address": "15E3:0230"
+ },
+ {
+  "name": "BP",
+  "kind": "variable",
+  "address": "15E3:0232"
+ },
+ {
+  "name": "ES",
+  "kind": "variable",
+  "address": "15E3:0234"
+ },
+ {
+  "name": "C1",
+  "kind": "variable",
+  "address": "15E3:0236"
+ },
+ {
+  "name": "C2",
+  "kind": "variable",
+  "address": "15E3:0238"
+ },
+ {
+  "name": "C3",
+  "kind": "variable",
+  "address": "15E3:023A"
+ },
+ {
+  "name": "C4",
+  "kind": "variable",
+  "address": "15E3:023C"
+ },
+ {
+  "name": "C5",
+  "kind": "variable",
+  "address": "15E3:023E"
+ },
+ {
+  "name": "C6",
+  "kind": "variable",
+  "address": "15E3:0240"
+ },
+ {
+  "name": "C7",
+  "kind": "variable",
+  "address": "15E3:0242"
+ },
+ {
+  "name": "C8",
+  "kind": "variable",
+  "address": "15E3:0244"
+ },
+ {
+  "name": "ISLCT",
+  "kind": "variable",
+  "address": "15E3:0246"
+ },
+ {
+  "name": "ISITM",
+  "kind": "variable",
+  "address": "15E3:0248"
+ },
+ {
+  "name": "PR",
+  "kind": "command",
+  "address": "0000:0050"
+ },
+ {
+  "name": "PRES",
+  "kind": "command",
+  "address": "0000:0058"
+ },
+ {
+  "name": "PRF",
+  "kind": "command",
+  "address": "0000:0068"
+ },
+ {
+  "name": "PRV",
+  "kind": "command",
+  "address": "0000:0073"
+ },
+ {
+  "name": "PRVH",
+  "kind": "command",
+  "address": "0000:008C"
+ },
+ {
+  "name": "PRVB",
+  "kind": "command",
+  "address": "0000:00A4"
+ },
+ {
+  "name": "PRINT",
+  "kind": "command",
+  "address": "0000:00BC"
+ },
+ {
+  "name": "STR",
+  "kind": "command",
+  "address": "0000:00C4"
+ },
+ {
+  "name": "HEX",
+  "kind": "command",
+  "address": "0000:00DF"
+ },
+ {
+  "name": "BIN",
+  "kind": "command",
+  "address": "0000:00F4"
+ },
+ {
+  "name": "LLF",
+  "kind": "command",
+  "address": "0000:0109"
+ },
+ {
+  "name": "CLS",
+  "kind": "command",
+  "address": "0000:010D"
+ },
+ {
+  "name": "ABS",
+  "kind": "command",
+  "address": "0000:0111"
+ },
+ {
+  "name": "MOD",
+  "kind": "command",
+  "address": "0000:011F"
+ },
+ {
+  "name": "P1X100",
+  "kind": "command",
+  "address": "0000:013A"
+ },
+ {
+  "name": "P100PAR",
+  "kind": "command",
+  "address": "0000:014A"
+ },
+ {
+  "name": "SLCT",
+  "kind": "command",
+  "address": "0000:016F"
+ },
+ {
+  "name": "SLCTX",
+  "kind": "command",
+  "address": "0000:0187"
+ },
+ {
+  "name": "SLCTBAK",
+  "kind": "command",
+  "address": "0000:0197"
+ },
+ {
+  "name": "SLCPOS",
+  "kind": "command",
+  "address": "0000:019E"
+ },
+ {
+  "name": "FREE",
+  "kind": "command",
+  "address": "0000:023E"
+ },
+ {
+  "name": "END",
+  "kind": "command",
+  "address": "0000:02C7"
+ },
+ {
+  "name": "STRSCLEAR",
+  "kind": "command",
+  "address": "0000:02CE"
+ },
+ {
+  "name": "STRSTACK",
+  "kind": "command",
+  "address": "0000:02D5"
+ },
+ {
+  "name": "PROGADRS",
+  "kind": "command",
+  "address": "0000:032B"
+ },
+ {
+  "name": "PROGCOPY",
+  "kind": "command",
+  "address": "0000:0361"
+ },
+ {
+  "name": "STRCOPY",
+  "kind": "command",
+  "address": "0000:0391"
+ },
+ {
+  "name": "STRLEN",
+  "kind": "command",
+  "address": "0000:03AF"
+ },
+ {
+  "name": "LOAD",
+  "kind": "command",
+  "address": "0000:03BF"
+ },
+ {
+  "name": "CK_LVL",
+  "kind": "command",
+  "address": "0000:03D6"
+ },
+ {
+  "name": "CK_GUARA",
+  "kind": "command",
+  "address": "0000:0429"
+ },
+ {
+  "name": "TXTSZ",
+  "kind": "command",
+  "address": "0000:04EE"
+ },
+ {
+  "name": "GOLDADD",
+  "kind": "command",
+  "address": "0000:04FC"
+ },
+ {
+  "name": "GOLDSUB",
+  "kind": "command",
+  "address": "0000:0507"
+ },
+ {
+  "name": "GOLDSUB2",
+  "kind": "command",
+  "address": "0000:0512"
+ },
+ {
+  "name": "GOLDCMP",
+  "kind": "command",
+  "address": "0000:051D"
+ },
+ {
+  "name": "EDTX",
+  "kind": "command",
+  "address": "0000:052B"
+ },
+ {
+  "name": "TXOPEN",
+  "kind": "command",
+  "address": "0389:0570"
+ },
+ {
+  "name": "TXCLOSE",
+  "kind": "command",
+  "address": "0389:0578"
+ },
+ {
+  "name": "TXSLCT",
+  "kind": "command",
+  "address": "0389:0580"
+ },
+ {
+  "name": "TXT",
+  "kind": "command",
+  "address": "0389:0588"
+ },
+ {
+  "name": "TXA",
+  "kind": "command",
+  "address": "0389:0590"
+ },
+ {
+  "name": "TXGOLD",
+  "kind": "command",
+  "address": "0389:0598"
+ },
+ {
+  "name": "TXPOINT",
+  "kind": "command",
+  "address": "0389:05A6"
+ },
+ {
+  "name": "TXS2KETA",
+  "kind": "command",
+  "address": "0389:05B4"
+ },
+ {
+  "name": "TXPAUSE",
+  "kind": "command",
+  "address": "0389:05C2"
+ },
+ {
+  "name": "TXCLR",
+  "kind": "command",
+  "address": "0389:05C6"
+ },
+ {
+  "name": "TXLF",
+  "kind": "command",
+  "address": "0389:05CA"
+ },
+ {
+  "name": "TXFACE",
+  "kind": "command",
+  "address": "0389:05CE"
+ },
+ {
+  "name": "TXGIRL",
+  "kind": "command",
+  "address": "0389:05DA"
+ },
+ {
+  "name": "TXGIRK",
+  "kind": "command",
+  "address": "0389:05DA"
+ },
+ {
+  "name": "TXSYU",
+  "kind": "command",
+  "address": "0389:05E6"
+ },
+ {
+  "name": "TXLC",
+  "kind": "command",
+  "address": "0389:05F2"
+ },
+ {
+  "name": "TXF",
+  "kind": "command",
+  "address": "0389:0613"
+ },
+ {
+  "name": "ITEMSLCT",
+  "kind": "command",
+  "address": "0389:06DA"
+ },
+ {
+  "name": "ITEMST",
+  "kind": "command",
+  "address": "0389:06E8"
+ },
+ {
+  "name": "ITEMPRN",
+  "kind": "command",
+  "address": "0389:0705"
+ },
+ {
+  "name": "GR_OPEN",
+  "kind": "command",
+  "address": "0389:074D"
+ },
+ {
+  "name": "GR_CLOSE",
+  "kind": "command",
+  "address": "0389:0751"
+ },
+ {
+  "name": "GR_F",
+  "kind": "command",
+  "address": "0389:0755"
+ },
+ {
+  "name": "GRPOPEN",
+  "kind": "command",
+  "address": "0389:07C9"
+ },
+ {
+  "name": "GRPUPD",
+  "kind": "command",
+  "address": "0389:07F1"
+ },
+ {
+  "name": "GOLDOPEN",
+  "kind": "command",
+  "address": "0389:0800"
+ },
+ {
+  "name": "GOLDUPD",
+  "kind": "command",
+  "address": "0389:0828"
+ },
+ {
+  "name": "PROFILE",
+  "kind": "command",
+  "address": "0389:0837"
+ },
+ {
+  "name": "PROPROPEN",
+  "kind": "command",
+  "address": "0389:085F"
+ },
+ {
+  "name": "PROPRUPD",
+  "kind": "command",
+  "address": "0389:0887"
+ },
+ {
+  "name": "STATUS",
+  "kind": "command",
+  "address": "0389:0896"
+ },
+ {
+  "name": "PROLONG",
+  "kind": "command",
+  "address": "0389:08B6"
+ },
+ {
+  "name": "PRICON",
+  "kind": "command",
+  "address": "0389:08D6"
+ },
+ {
+  "name": "CLENDER",
+  "kind": "command",
+  "address": "0389:08F6"
+ },
+ {
+  "name": "RANDAM",
+  "kind": "command",
+  "address": "0389:0A76"
+ },
+ {
+  "name": "IRAND2",
+  "kind": "command",
+  "address": "0389:0A80"
+ },
+ {
+  "name": "IRAND999X",
+  "kind": "command",
+  "address": "0389:0A91"
+ },
+ {
+  "name": "IRNDPAR",
+  "kind": "command",
+  "address": "0389:0A9B"
+ },
+ {
+  "name": "TIMER1",
+  "kind": "command",
+  "address": "0389:0AC6"
+ },
+ {
+  "name": "TIMER2",
+  "kind": "command",
+  "address": "0389:0ACD"
+ },
+ {
+  "name": "WAIT1",
+  "kind": "command",
+  "address": "0389:0AD4"
+ },
+ {
+  "name": "WAIT2",
+  "kind": "command",
+  "address": "0389:0ADD"
+ },
+ {
+  "name": "TMCHK2",
+  "kind": "command",
+  "address": "0389:0AE6"
+ },
+ {
+  "name": "WAITU",
+  "kind": "command",
+  "address": "0389:0AEE"
+ },
+ {
+  "name": "VALSTR",
+  "kind": "command",
+  "address": "0389:0AF2"
+ },
+ {
+  "name": "BORTHDAYSTR",
+  "kind": "command",
+  "address": "0389:0B04"
+ },
+ {
+  "name": "ITEM_KILL",
+  "kind": "command",
+  "address": "0389:0B19"
+ },
+ {
+  "name": "ITEM_INST",
+  "kind": "command",
+  "address": "0389:0B21"
+ },
+ {
+  "name": "ITEM_SRCH",
+  "kind": "command",
+  "address": "0389:0B43"
+ },
+ {
+  "name": "SCHD_OPEN",
+  "kind": "command",
+  "address": "0389:0B55"
+ },
+ {
+  "name": "SCHD_CLOSE",
+  "kind": "command",
+  "address": "0389:0B6C"
+ },
+ {
+  "name": "SCHD_ICON",
+  "kind": "command",
+  "address": "0389:0B70"
+ },
+ {
+  "name": "PALET_SET",
+  "kind": "command",
+  "address": "0389:0B7F"
+ },
+ {
+  "name": "PALET_SETONLY",
+  "kind": "command",
+  "address": "0389:0B86"
+ },
+ {
+  "name": "WWFRAME",
+  "kind": "command",
+  "address": "0389:0B91"
+ },
+ {
+  "name": "WWMUSYA",
+  "kind": "command",
+  "address": "0389:0BA3"
+ },
+ {
+  "name": "WWGIRL",
+  "kind": "command",
+  "address": "0389:0BDD"
+ },
+ {
+  "name": "WWANIME",
+  "kind": "command",
+  "address": "0389:0C5F"
+ },
+ {
+  "name": "WWIVENT",
+  "kind": "command",
+  "address": "0389:0C8F"
+ },
+ {
+  "name": "WWPROF",
+  "kind": "command",
+  "address": "0389:0CB3"
+ },
+ {
+  "name": "WWTOUR",
+  "kind": "command",
+  "address": "0389:0CC4"
+ },
+ {
+  "name": "P98F",
+  "kind": "command",
+  "address": "0389:0CFE"
+ },
+ {
+  "name": "PTBK",
+  "kind": "command",
+  "address": "0389:0CFF"
+ },
+ {
+  "name": "PTMD",
+  "kind": "command",
+  "address": "0389:0D06"
+ },
+ {
+  "name": "PTLD",
+  "kind": "command",
+  "address": "0389:0D0D"
+ },
+ {
+  "name": "PTLA",
+  "kind": "command",
+  "address": "0389:0D1F"
+ },
+ {
+  "name": "PTX",
+  "kind": "command",
+  "address": "0389:0D2E"
+ },
+ {
+  "name": "PTM",
+  "kind": "command",
+  "address": "0389:0D4D"
+ },
+ {
+  "name": "PTF",
+  "kind": "command",
+  "address": "0389:0D65"
+ },
+ {
+  "name": "PTMF",
+  "kind": "command",
+  "address": "0389:0D84"
+ },
+ {
+  "name": "PTMFX",
+  "kind": "command",
+  "address": "0389:0D9C"
+ },
+ {
+  "name": "PTCLR",
+  "kind": "command",
+  "address": "0389:0DD2"
+ },
+ {
+  "name": "PTGT",
+  "kind": "command",
+  "address": "0389:0DDC"
+ },
+ {
+  "name": "PTPLT",
+  "kind": "command",
+  "address": "0389:0E06"
+ },
+ {
+  "name": "EFC",
+  "kind": "command",
+  "address": "0389:0E18"
+ },
+ {
+  "name": "PIC",
+  "kind": "command",
+  "address": "0389:0E33"
+ },
+ {
+  "name": "MUSIC",
+  "kind": "command",
+  "address": "0389:0EC7"
+ },
+ {
+  "name": "PLAY",
+  "kind": "command",
+  "address": "0389:0EDE"
+ },
+ {
+  "name": "GG_LINE",
+  "kind": "command",
+  "address": "0389:1047"
+ },
+ {
+  "name": "PARC",
+  "kind": "command",
+  "address": "0389:0EEA"
+ },
+ {
+  "name": "XDBG",
+  "kind": "command",
+  "address": "0389:10D1"
+ },
+ {
+  "name": "GRPCLS",
+  "kind": "command",
+  "address": "0389:109C"
+ },
+ {
+  "name": "FFDISK",
+  "kind": "command",
+  "address": "0389:0530"
+ },
+ {
+  "name": "ITEMID_TBL1",
+  "kind": "variable",
+  "address": "15E3:1A38"
+ },
+ {
+  "name": "ITEMID_TBL2",
+  "kind": "variable",
+  "address": "15E3:1A9C"
+ },
+ {
+  "name": "ITEMID_TBL3",
+  "kind": "variable",
+  "address": "15E3:1B00"
+ },
+ {
+  "name": "ITEMID_TBL4",
+  "kind": "variable",
+  "address": "15E3:1B64"
+ },
+ {
+  "name": "ITEMID_TBL5",
+  "kind": "variable",
+  "address": "15E3:1BC8"
+ },
+ {
+  "name": "ITEMID_TBL6",
+  "kind": "variable",
+  "address": "15E3:1C2C"
+ },
+ {
+  "name": "ITEMID_TBL7",
+  "kind": "variable",
+  "address": "15E3:1C90"
+ },
+ {
+  "name": "ITEMID_CNT",
+  "kind": "variable",
+  "address": "15E3:1CF4"
+ },
+ {
+  "name": "ITEMID_DIM",
+  "kind": "variable",
+  "address": "15E3:1CF6"
+ },
+ {
+  "name": "IGRP_TBL1",
+  "kind": "variable",
+  "address": "15E3:1D10"
+ },
+ {
+  "name": "IGRP_TBL2",
+  "kind": "variable",
+  "address": "15E3:1D24"
+ },
+ {
+  "name": "IGRP_TBL3",
+  "kind": "variable",
+  "address": "15E3:1D38"
+ },
+ {
+  "name": "IGRP_TBL4",
+  "kind": "variable",
+  "address": "15E3:1D4C"
+ },
+ {
+  "name": "IGRP_TBL5",
+  "kind": "variable",
+  "address": "15E3:1D60"
+ },
+ {
+  "name": "IGRP_CNT",
+  "kind": "variable",
+  "address": "15E3:1D74"
+ },
+ {
+  "name": "IGRP_DIM",
+  "kind": "variable",
+  "address": "15E3:1D76"
+ },
+ {
+  "name": "IGRP_X",
+  "kind": "variable",
+  "address": "15E3:1D78"
+ },
+ {
+  "name": "IGRP_Y",
+  "kind": "variable",
+  "address": "15E3:1D7A"
+ },
+ {
+  "name": "VAL_YEAR",
+  "kind": "variable",
+  "address": "15E3:5C76",
+  "zh": "年",
+  "save_offset": 916
+ },
+ {
+  "name": "VAL_MONTH",
+  "kind": "variable",
+  "address": "15E3:5C78",
+  "zh": "月",
+  "save_offset": 918
+ },
+ {
+  "name": "VAL_WEEK",
+  "kind": "variable",
+  "address": "15E3:5C7A",
+  "zh": "星期(0=日)",
+  "save_offset": 920
+ },
+ {
+  "name": "VAL_DAY",
+  "kind": "variable",
+  "address": "15E3:5C7C",
+  "zh": "日",
+  "save_offset": 922
+ },
+ {
+  "name": "VAL_A_DAY",
+  "kind": "variable",
+  "address": "15E3:5C7E",
+  "save_offset": 924
+ },
+ {
+  "name": "VAL_M_END",
+  "kind": "variable",
+  "address": "15E3:5C80",
+  "save_offset": 926
+ },
+ {
+  "name": "TM_SEASON",
+  "kind": "variable",
+  "address": "15E3:5C82",
+  "zh": "季節(1春2夏3秋4冬)",
+  "save_offset": 928
+ },
+ {
+  "name": "FLG_SHOGATSU",
+  "kind": "variable",
+  "address": "15E3:5C84",
+  "save_offset": 930
+ },
+ {
+  "name": "FLG_URUBI",
+  "kind": "variable",
+  "address": "15E3:5C86",
+  "save_offset": 932
+ },
+ {
+  "name": "FLG_CHRISTMAS_EVE",
+  "kind": "variable",
+  "address": "15E3:5C88",
+  "save_offset": 934
+ },
+ {
+  "name": "FLG_G_BORTH",
+  "kind": "variable",
+  "address": "15E3:5C8A",
+  "save_offset": 936
+ },
+ {
+  "name": "FLG_M_BORTH",
+  "kind": "variable",
+  "address": "15E3:5C8C",
+  "save_offset": 938
+ },
+ {
+  "name": "FLG_HOLIDAY",
+  "kind": "variable",
+  "address": "15E3:5C8E",
+  "save_offset": 940
+ },
+ {
+  "name": "FLG_SYUKAKU",
+  "kind": "variable",
+  "address": "15E3:5C90",
+  "save_offset": 942
+ },
+ {
+  "name": "SCHED_SECTION",
+  "kind": "variable",
+  "address": "15E3:5CB2"
+ },
+ {
+  "name": "SCHED_WORKS",
+  "kind": "variable",
+  "address": "15E3:5CB8"
+ },
+ {
+  "name": "DEF_STR_BROOD",
+  "kind": "variable",
+  "address": "15E3:2070"
+ },
+ {
+  "name": "DEF_STR_SIKYU",
+  "kind": "variable",
+  "address": "15E3:2086"
+ },
+ {
+  "name": "DEF_STR_STAR",
+  "kind": "variable",
+  "address": "15E3:20F2"
+ },
+ {
+  "name": "DEF_STR_LEVEL",
+  "kind": "variable",
+  "address": "15E3:219A"
+ },
+ {
+  "name": "SCH_STARTDAY",
+  "kind": "variable",
+  "address": "15E3:5CBE"
+ },
+ {
+  "name": "SCH_ENDDAY",
+  "kind": "variable",
+  "address": "15E3:5CC4"
+ },
+ {
+  "name": "SCH_COUNT",
+  "kind": "variable",
+  "address": "15E3:5CCA"
+ },
+ {
+  "name": "SCH_NOW",
+  "kind": "variable",
+  "address": "15E3:5CCC"
+ },
+ {
+  "name": "SCH_SYUKAKUSAI",
+  "kind": "variable",
+  "address": "15E3:5CCE"
+ },
+ {
+  "name": "FLG_TAKARA",
+  "kind": "variable",
+  "address": "15E3:5C5A",
+  "save_offset": 886
+ },
+ {
+  "name": "ENDNM",
+  "kind": "variable",
+  "address": "15E3:5CD0"
+ },
+ {
+  "name": "IDBG",
+  "kind": "variable",
+  "address": "15E3:5CF8"
+ },
+ {
+  "name": "IRND",
+  "kind": "variable",
+  "address": "15E3:6740"
+ },
+ {
+  "name": "DBGFLAG_CONSOLE",
+  "kind": "variable",
+  "address": "15E3:5EE0"
+ },
+ {
+  "name": "INLINECOMPDBG",
+  "kind": "variable",
+  "address": "15E3:109A"
+ },
+ {
+  "name": "DBGFLAG_FILE",
+  "kind": "variable",
+  "address": "15E3:2E16"
+ },
+ {
+  "name": "DBGFLAG_ERROR",
+  "kind": "variable",
+  "address": "15E3:2E14"
+ },
+ {
+  "name": "B_TAIRYOKU",
+  "kind": "variable",
+  "address": "15E3:41BC",
+  "zh": "體力",
+  "save_offset": 62
+ },
+ {
+  "name": "B_KINRYOKU",
+  "kind": "variable",
+  "address": "15E3:41BE",
+  "zh": "腕力",
+  "save_offset": 64
+ },
+ {
+  "name": "B_CHINOH",
+  "kind": "variable",
+  "address": "15E3:41C0",
+  "zh": "智力",
+  "save_offset": 66
+ },
+ {
+  "name": "B_KIHIN",
+  "kind": "variable",
+  "address": "15E3:41C2",
+  "zh": "氣質",
+  "save_offset": 68
+ },
+ {
+  "name": "B_IROKE",
+  "kind": "variable",
+  "address": "15E3:41C4",
+  "zh": "魅力",
+  "save_offset": 70
+ },
+ {
+  "name": "B_MORALS",
+  "kind": "variable",
+  "address": "15E3:41C6",
+  "zh": "道德",
+  "save_offset": 72
+ },
+ {
+  "name": "B_SHINKOH",
+  "kind": "variable",
+  "address": "15E3:41C8",
+  "zh": "信仰",
+  "save_offset": 74
+ },
+ {
+  "name": "B_INGYO",
+  "kind": "variable",
+  "address": "15E3:41CA",
+  "zh": "罪孽",
+  "save_offset": 76
+ },
+ {
+  "name": "B_KANJUSEI",
+  "kind": "variable",
+  "address": "15E3:41CC",
+  "zh": "感受",
+  "save_offset": 78
+ },
+ {
+  "name": "B_STRESS",
+  "kind": "variable",
+  "address": "15E3:41CE",
+  "zh": "疲勞",
+  "save_offset": 80
+ },
+ {
+  "name": "H_SENSHI",
+  "kind": "variable",
+  "address": "15E3:41D0",
+  "zh": "戰士評價",
+  "save_offset": 84
+ },
+ {
+  "name": "H_MAHO",
+  "kind": "variable",
+  "address": "15E3:41D2",
+  "zh": "魔法評價",
+  "save_offset": 86
+ },
+ {
+  "name": "H_SYAKOH",
+  "kind": "variable",
+  "address": "15E3:41D4",
+  "zh": "社交評價",
+  "save_offset": 88
+ },
+ {
+  "name": "H_KAJI",
+  "kind": "variable",
+  "address": "15E3:41D6",
+  "zh": "家事評價",
+  "save_offset": 90
+ },
+ {
+  "name": "V_SENTOH",
+  "kind": "variable",
+  "address": "15E3:41D8",
+  "zh": "戰鬥技術",
+  "save_offset": 92
+ },
+ {
+  "name": "V_KOUGEKI",
+  "kind": "variable",
+  "address": "15E3:41DA",
+  "zh": "攻擊能力",
+  "save_offset": 94
+ },
+ {
+  "name": "V_BOUGYO",
+  "kind": "variable",
+  "address": "15E3:41DC",
+  "zh": "防禦能力",
+  "save_offset": 96
+ },
+ {
+  "name": "V_MAHOGIJUTSU",
+  "kind": "variable",
+  "address": "15E3:41DE",
+  "zh": "魔法技術",
+  "save_offset": 98
+ },
+ {
+  "name": "V_MARYOKU",
+  "kind": "variable",
+  "address": "15E3:41E0",
+  "zh": "魔法能力",
+  "save_offset": 100
+ },
+ {
+  "name": "V_KOHMARYOKU",
+  "kind": "variable",
+  "address": "15E3:41E2",
+  "zh": "抗魔能力",
+  "save_offset": 102
+ },
+ {
+  "name": "V_REIGI",
+  "kind": "variable",
+  "address": "15E3:41E4",
+  "zh": "禮儀表現",
+  "save_offset": 104
+ },
+ {
+  "name": "V_GEIJYUTSU",
+  "kind": "variable",
+  "address": "15E3:41E6",
+  "zh": "藝術修養",
+  "save_offset": 106
+ },
+ {
+  "name": "V_WAJYUTU",
+  "kind": "variable",
+  "address": "15E3:41E8",
+  "zh": "談話技巧",
+  "save_offset": 108
+ },
+ {
+  "name": "V_RYOURI",
+  "kind": "variable",
+  "address": "15E3:41EA",
+  "zh": "烹飪技術",
+  "save_offset": 110
+ },
+ {
+  "name": "V_SOUJISENTAKU",
+  "kind": "variable",
+  "address": "15E3:41EC",
+  "zh": "掃除洗衣",
+  "save_offset": 112
+ },
+ {
+  "name": "V_KIDATE",
+  "kind": "variable",
+  "address": "15E3:41EE",
+  "zh": "待人接物",
+  "save_offset": 114
+ },
+ {
+  "name": "T_SENTOH",
+  "kind": "variable",
+  "address": "15E3:41F2",
+  "zh": "戰鬥技術(訓練值)",
+  "save_offset": 118
+ },
+ {
+  "name": "T_KOUGEKI",
+  "kind": "variable",
+  "address": "15E3:41F4",
+  "zh": "攻擊(訓練值,含腕力/10)",
+  "save_offset": 120
+ },
+ {
+  "name": "T_BOUGYO",
+  "kind": "variable",
+  "address": "15E3:41F6",
+  "zh": "防禦(訓練值)",
+  "save_offset": 122
+ },
+ {
+  "name": "T_MAHOGIJUTSU",
+  "kind": "variable",
+  "address": "15E3:41F8",
+  "zh": "魔法技術(訓練值)",
+  "save_offset": 124
+ },
+ {
+  "name": "T_MARYOKU",
+  "kind": "variable",
+  "address": "15E3:41FA",
+  "zh": "魔力(訓練值)",
+  "save_offset": 126
+ },
+ {
+  "name": "T_KOHMARYOKU",
+  "kind": "variable",
+  "address": "15E3:41FC",
+  "zh": "抗魔(訓練值)",
+  "save_offset": 128
+ },
+ {
+  "name": "T_REIGI",
+  "kind": "variable",
+  "address": "15E3:41FE",
+  "zh": "禮儀(訓練值)",
+  "save_offset": 130
+ },
+ {
+  "name": "T_GEIJYUTSU",
+  "kind": "variable",
+  "address": "15E3:4200",
+  "zh": "藝術(訓練值)",
+  "save_offset": 132
+ },
+ {
+  "name": "T_WAJYUTU",
+  "kind": "variable",
+  "address": "15E3:4202",
+  "zh": "談話(訓練值)",
+  "save_offset": 134
+ },
+ {
+  "name": "T_RYOURI",
+  "kind": "variable",
+  "address": "15E3:4204",
+  "zh": "烹飪(訓練值)",
+  "save_offset": 136
+ },
+ {
+  "name": "T_SOUJISENTAKU",
+  "kind": "variable",
+  "address": "15E3:4206",
+  "zh": "掃除洗衣(訓練值)",
+  "save_offset": 138
+ },
+ {
+  "name": "T_KIDATE",
+  "kind": "variable",
+  "address": "15E3:4208",
+  "zh": "待人接物(訓練值)",
+  "save_offset": 140
+ },
+ {
+  "name": "GOLD_GIRL",
+  "kind": "variable",
+  "address": "15E3:422A",
+  "zh": "金錢(32位)",
+  "save_offset": 176
+ },
+ {
+  "name": "NAME_FIRST",
+  "kind": "variable",
+  "address": "15E3:4232",
+  "zh": "女兒名(指標)"
+ },
+ {
+  "name": "NAME_FAMILY",
+  "kind": "variable",
+  "address": "15E3:4236",
+  "zh": "姓氏(指標)"
+ },
+ {
+  "name": "P_BLOOD",
+  "kind": "variable",
+  "address": "15E3:423A",
+  "zh": "血型",
+  "save_offset": 182
+ },
+ {
+  "name": "P_NENREI",
+  "kind": "variable",
+  "address": "15E3:423E",
+  "zh": "年齡([1]=父親)",
+  "save_offset": 186
+ },
+ {
+  "name": "P_BORTHDAY",
+  "kind": "variable",
+  "address": "15E3:4242",
+  "zh": "生日-日",
+  "save_offset": 190
+ },
+ {
+  "name": "P_BORTHMONTH",
+  "kind": "variable",
+  "address": "15E3:4246",
+  "zh": "生日-月",
+  "save_offset": 194
+ },
+ {
+  "name": "P_BORTHYEAR",
+  "kind": "variable",
+  "address": "15E3:424A",
+  "zh": "生日-年",
+  "save_offset": 198
+ },
+ {
+  "name": "P_SHIKYU",
+  "kind": "variable",
+  "address": "15E3:424E",
+  "zh": "星座",
+  "save_offset": 202
+ },
+ {
+  "name": "P_SYUGOSEI",
+  "kind": "variable",
+  "address": "15E3:4252",
+  "zh": "守護星",
+  "save_offset": 206
+ },
+ {
+  "name": "P_SHINCHO",
+  "kind": "variable",
+  "address": "15E3:4256",
+  "zh": "身高x100",
+  "save_offset": 210
+ },
+ {
+  "name": "P_TAIJYU",
+  "kind": "variable",
+  "address": "15E3:4258",
+  "zh": "體重x100",
+  "save_offset": 212
+ },
+ {
+  "name": "P_BUST",
+  "kind": "variable",
+  "address": "15E3:425A",
+  "zh": "胸圍x100",
+  "save_offset": 214
+ },
+ {
+  "name": "P_WAIST",
+  "kind": "variable",
+  "address": "15E3:425C",
+  "zh": "腰圍x100",
+  "save_offset": 216
+ },
+ {
+  "name": "P_HIP",
+  "kind": "variable",
+  "address": "15E3:425E",
+  "zh": "臀圍x100",
+  "save_offset": 218
+ },
+ {
+  "name": "W_HP_MAX",
+  "kind": "variable",
+  "address": "15E3:42FC",
+  "zh": "HP上限",
+  "save_offset": 222
+ },
+ {
+  "name": "W_MP_MAX",
+  "kind": "variable",
+  "address": "15E3:42FE",
+  "zh": "MP上限",
+  "save_offset": 224
+ },
+ {
+  "name": "W_HP",
+  "kind": "variable",
+  "address": "15E3:4300",
+  "zh": "HP",
+  "save_offset": 226
+ },
+ {
+  "name": "W_MP",
+  "kind": "variable",
+  "address": "15E3:4302",
+  "zh": "MP",
+  "save_offset": 228
+ },
+ {
+  "name": "W_SENI",
+  "kind": "variable",
+  "address": "15E3:4304",
+  "zh": "戰意",
+  "save_offset": 230
+ },
+ {
+  "name": "S_BYOUKI",
+  "kind": "variable",
+  "address": "15E3:4306",
+  "zh": "疾病指數",
+  "save_offset": 234
+ },
+ {
+  "name": "S_HIKOUKA",
+  "kind": "variable",
+  "address": "15E3:4308",
+  "zh": "不良指數",
+  "save_offset": 236
+ },
+ {
+  "name": "S_JINMYAKU",
+  "kind": "variable",
+  "address": "15E3:430A",
+  "zh": "人脈",
+  "save_offset": 238
+ },
+ {
+  "name": "FLAG_BYOUKI",
+  "kind": "variable",
+  "address": "15E3:4322",
+  "zh": "生病旗標",
+  "save_offset": 262
+ },
+ {
+  "name": "FLAG_HIKOUKA",
+  "kind": "variable",
+  "address": "15E3:4324",
+  "zh": "不良旗標",
+  "save_offset": 264
+ },
+ {
+  "name": "FLAG_RENAI",
+  "kind": "variable",
+  "address": "15E3:4326",
+  "zh": "戀愛旗標",
+  "save_offset": 266
+ },
+ {
+  "name": "FLAG_KENKO",
+  "kind": "variable",
+  "address": "15E3:4328",
+  "zh": "飲食方針",
+  "save_offset": 268
+ },
+ {
+  "name": "GIRL_BODY",
+  "kind": "variable",
+  "address": "15E3:432A",
+  "zh": "體型(2=肥胖)",
+  "save_offset": 270
+ },
+ {
+  "name": "GIRL_FACE",
+  "kind": "variable",
+  "address": "15E3:432C",
+  "zh": "表情",
+  "save_offset": 272
+ },
+ {
+  "name": "GIRL_BREAST",
+  "kind": "variable",
+  "address": "15E3:432E",
+  "zh": "胸型圖",
+  "save_offset": 274
+ },
+ {
+  "name": "GIRL_DAMEG",
+  "kind": "variable",
+  "address": "15E3:4330",
+  "zh": "重病",
+  "save_offset": 276
+ },
+ {
+  "name": "ROOM_PIC",
+  "kind": "variable",
+  "address": "15E3:4338",
+  "zh": "房間圖"
+ },
+ {
+  "name": "DRESS_NUM",
+  "kind": "variable",
+  "address": "15E3:433A",
+  "zh": "服裝編號"
+ },
+ {
+  "name": "DRESS_ICON",
+  "kind": "variable",
+  "address": "15E3:433C"
+ },
+ {
+  "name": "DRESS_GOLD",
+  "kind": "variable",
+  "address": "15E3:433E"
+ },
+ {
+  "name": "DRESS_NAME",
+  "kind": "variable",
+  "address": "15E3:4340"
+ },
+ {
+  "name": "DRESS_PROG",
+  "kind": "variable",
+  "address": "15E3:4342"
+ },
+ {
+  "name": "EQUIP_ICON",
+  "kind": "variable",
+  "address": "15E3:4346"
+ },
+ {
+  "name": "EQUIP_GOLD",
+  "kind": "variable",
+  "address": "15E3:4348"
+ },
+ {
+  "name": "EQUIP_NAME",
+  "kind": "variable",
+  "address": "15E3:434A"
+ },
+ {
+  "name": "EQUIP_PROG",
+  "kind": "variable",
+  "address": "15E3:434C"
+ },
+ {
+  "name": "EQUIP_HELP",
+  "kind": "variable",
+  "address": "15E3:434E"
+ },
+ {
+  "name": "ARMS_ICON",
+  "kind": "variable",
+  "address": "15E3:4350"
+ },
+ {
+  "name": "ARMS_GOLD",
+  "kind": "variable",
+  "address": "15E3:4352"
+ },
+ {
+  "name": "ARMS_NAME",
+  "kind": "variable",
+  "address": "15E3:4354"
+ },
+ {
+  "name": "ARMS_PROG",
+  "kind": "variable",
+  "address": "15E3:4356"
+ },
+ {
+  "name": "ARMS_HELP",
+  "kind": "variable",
+  "address": "15E3:4358"
+ },
+ {
+  "name": "ITEM_MAX",
+  "kind": "variable",
+  "address": "15E3:435A",
+  "zh": "持有物數量"
+ },
+ {
+  "name": "ITEM_DIM",
+  "kind": "variable",
+  "address": "15E3:435C"
+ },
+ {
+  "name": "ITEM_ICON",
+  "kind": "variable",
+  "address": "15E3:435E"
+ },
+ {
+  "name": "ITEM_GOLD",
+  "kind": "variable",
+  "address": "15E3:43C2"
+ },
+ {
+  "name": "ITEM_ATTR",
+  "kind": "variable",
+  "address": "15E3:4426"
+ },
+ {
+  "name": "ITEM_NAME",
+  "kind": "variable",
+  "address": "15E3:448A"
+ },
+ {
+  "name": "ITEM_PROG",
+  "kind": "variable",
+  "address": "15E3:44EE"
+ },
+ {
+  "name": "ITEM_HELP",
+  "kind": "variable",
+  "address": "15E3:4552"
+ },
+ {
+  "name": "RUN_OSHIRO",
+  "kind": "variable",
+  "address": "15E3:5A00",
+  "zh": "王城拜訪次數[]",
+  "save_offset": 280
+ },
+ {
+  "name": "RUN_MACHI",
+  "kind": "variable",
+  "address": "15E3:5A14",
+  "zh": "街道次數[]",
+  "save_offset": 300
+ },
+ {
+  "name": "RUN_TALK",
+  "kind": "variable",
+  "address": "15E3:5A20",
+  "zh": "談話次數[]",
+  "save_offset": 312
+ },
+ {
+  "name": "RUN_KENKOH",
+  "kind": "variable",
+  "address": "15E3:5A28",
+  "zh": "健康次數[]",
+  "save_offset": 320
+ },
+ {
+  "name": "RUN_SYUGOSEI",
+  "kind": "variable",
+  "address": "15E3:5A32",
+  "zh": "守護神次數[]",
+  "save_offset": 330
+ },
+ {
+  "name": "RUN_KITAERU",
+  "kind": "variable",
+  "address": "15E3:5A3A",
+  "zh": "上課次數[]",
+  "save_offset": 338
+ },
+ {
+  "name": "RUN_ARBEIT",
+  "kind": "variable",
+  "address": "15E3:5A50",
+  "zh": "打工次數[]",
+  "save_offset": 360
+ },
+ {
+  "name": "GRA_ARBEIT",
+  "kind": "variable",
+  "address": "15E3:5A90",
+  "zh": "打工薪資等級[]",
+  "save_offset": 424
+ },
+ {
+  "name": "RUN_MUSYA",
+  "kind": "variable",
+  "address": "15E3:5AB0",
+  "zh": "武者修行次數[]",
+  "save_offset": 456
+ },
+ {
+  "name": "RUN_BACANCE",
+  "kind": "variable",
+  "address": "15E3:5ABA",
+  "zh": "度假次數[]",
+  "save_offset": 466
+ },
+ {
+  "name": "RUN_SYUKAKUSAI",
+  "kind": "variable",
+  "address": "15E3:5AC0",
+  "zh": "收穫祭紀錄[]",
+  "save_offset": 472
+ },
+ {
+  "name": "RUN_MONTH",
+  "kind": "variable",
+  "address": "15E3:5ACA",
+  "zh": "月份/事件計數[]",
+  "save_offset": 482
+ },
+ {
+  "name": "URA_BREAST_TYPE",
+  "kind": "variable",
+  "address": "15E3:5B42",
+  "zh": "隱藏:胸型",
+  "save_offset": 604
+ },
+ {
+  "name": "URA_HIP_TYPE",
+  "kind": "variable",
+  "address": "15E3:5B44",
+  "zh": "隱藏:臀型",
+  "save_offset": 606
+ },
+ {
+  "name": "URA_PRINCE",
+  "kind": "variable",
+  "address": "15E3:5B46",
+  "zh": "隱藏:王子好感",
+  "save_offset": 608
+ },
+ {
+  "name": "URA_FATHER",
+  "kind": "variable",
+  "address": "15E3:5B48",
+  "zh": "隱藏:父女關係",
+  "save_offset": 610
+ },
+ {
+  "name": "URA_STEWARD",
+  "kind": "variable",
+  "address": "15E3:5B4A",
+  "zh": "隱藏:管家好感",
+  "save_offset": 612
+ },
+ {
+  "name": "URA_MOTHER_LOVE",
+  "kind": "variable",
+  "address": "15E3:5B4C",
+  "zh": "隱藏:母性",
+  "save_offset": 614
+ },
+ {
+  "name": "URA_KILL_MONSTR",
+  "kind": "variable",
+  "address": "15E3:5B4E",
+  "zh": "隱藏:殺怪數",
+  "save_offset": 616
+ },
+ {
+  "name": "E_RIVAL",
+  "kind": "variable",
+  "address": "15E3:5B50",
+  "zh": "事件:對手",
+  "save_offset": 620
+ },
+ {
+  "name": "E_KAISIN",
+  "kind": "variable",
+  "address": "15E3:5B52",
+  "zh": "會心一擊武器",
+  "save_offset": 622
+ },
+ {
+  "name": "E_KEN",
+  "kind": "variable",
+  "address": "15E3:5B54",
+  "save_offset": 624
+ },
+ {
+  "name": "E_COOL",
+  "kind": "variable",
+  "address": "15E3:5B56",
+  "save_offset": 626
+ },
+ {
+  "name": "E_HOT",
+  "kind": "variable",
+  "address": "15E3:5B58",
+  "save_offset": 628
+ },
+ {
+  "name": "E_COLX",
+  "kind": "variable",
+  "address": "15E3:5B5A",
+  "save_offset": 630
+ },
+ {
+  "name": "E_HOTX",
+  "kind": "variable",
+  "address": "15E3:5B5C",
+  "save_offset": 632
+ },
+ {
+  "name": "E_SEIREI",
+  "kind": "variable",
+  "address": "15E3:5B5E",
+  "save_offset": 634
+ },
+ {
+  "name": "E_UNICOON",
+  "kind": "variable",
+  "address": "15E3:5B60",
+  "save_offset": 636
+ },
+ {
+  "name": "E_DEVIL",
+  "kind": "variable",
+  "address": "15E3:5B62",
+  "save_offset": 638
+ },
+ {
+  "name": "E_BENUS",
+  "kind": "variable",
+  "address": "15E3:5B64",
+  "save_offset": 640
+ },
+ {
+  "name": "E_CAT",
+  "kind": "variable",
+  "address": "15E3:5B66",
+  "save_offset": 642
+ },
+ {
+  "name": "E_MERMAID",
+  "kind": "variable",
+  "address": "15E3:5B68",
+  "save_offset": 644
+ },
+ {
+  "name": "E_PROPOSAL",
+  "kind": "variable",
+  "address": "15E3:5B6A",
+  "zh": "事件:求婚",
+  "save_offset": 646
+ },
+ {
+  "name": "E_COOK_WIN",
+  "kind": "variable",
+  "address": "15E3:5B6C",
+  "save_offset": 648
+ },
+ {
+  "name": "E_EAT_EGG",
+  "kind": "variable",
+  "address": "15E3:5B6E",
+  "save_offset": 650
+ },
+ {
+  "name": "E_MAX_MP",
+  "kind": "variable",
+  "address": "15E3:5B70",
+  "save_offset": 652
+ },
+ {
+  "name": "E_RWAY",
+  "kind": "variable",
+  "address": "15E3:5B72",
+  "zh": "離家出走中",
+  "save_offset": 654
+ },
+ {
+  "name": "E_EV_SKIP",
+  "kind": "variable",
+  "address": "15E3:5B74",
+  "save_offset": 656
+ },
+ {
+  "name": "E_ETC",
+  "kind": "variable",
+  "address": "15E3:5B76",
+  "zh": "雜項事件旗標[]",
+  "save_offset": 658
+ },
+ {
+  "name": "S_HEALTH_CARE",
+  "kind": "variable",
+  "address": "15E3:5C94"
+ }
+]
