@@ -1,0 +1,54 @@
+
+
+
+
+
+*CHECK_MEN
+MAN08N
+RET
+
+*MAN08N
+R_FACE			="F128"
+R_NAME			="農夫"
+R_CHINOH		=10
+R_SENTOH		=40
+RDM(45,60)
+R_KOUGEKI=AX
+R_BOUGYO		=25
+R_SOUKOU		=0
+R_SKNAME		=""
+R_MAHOGIJUTSU	=0
+R_MARYOKU		=0
+R_KOHMARYOKU	=10
+R_SENI			=180
+R_DASSYUTU		=100
+R_TSUKON		=0
+RDM(180,280)
+R_MAX_HP		=AX
+R_MAX_MP		=0
+RDM(50,100)
+R_GOLD			=AX
+R_SE_ATTACK	=3
+
+MENMES[0]="啊﹐妳好。"
+MENMES[1]="啊﹐晚安﹗"
+RANDAM(3)
+IF(AX=1)MENMES[2]="參加過妖精的宴會了嗎﹖當然了﹐我是他們的常客哪。"
+IF(AX=2)MENMES[2]="有不少怪物專門搶奪小孩子來吃．．．．．．"
+IF(AX=3)MENMES[2]="商人很有錢﹐大部份的強盜都要找他們下手﹐這一點﹐倒使我非常安心。"
+RANDAM(3)
+IF(AX=1)MENMES[3]="嘿﹐很驕傲嘛。"
+IF(AX=2)MENMES[3]="呀﹐失禮的小孩。"
+IF(AX=3)MENMES[3]="最近有不少壞傢伙在這附近走動﹐好像也有女孩子．．．．．．"
+MENMES[4]="喂﹗做什麼﹗"
+MENMES[5]="啊﹗請原諒﹐我認輸﹗"
+MENMES[6]="這個該懲罰﹐一定做了不少可惡的事情﹗"
+RANDAM(3)
+IF(AX=1)MENMES[7]="怎麼．．．看來很溫柔的小姐．．．．．．"
+IF(AX=2)MENMES[7]="神啊．．．為什麼我會遭遇到這種事﹖"
+IF(AX=3)MENMES[7]="．．．痛．．．醫生﹐醫生在那裡．．．．．．"
+RET
+
+
+
+

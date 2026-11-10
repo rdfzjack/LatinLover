@@ -1,0 +1,148 @@
+TTL$("酒家工作")
+
+START
+
+OPEN(2)
+TXFACE("F072")
+「啊﹐GN$。真是好久不見了﹐大家都很懷念妳。現在妳在做些什麼﹖」
+@T
+OPEN(3)
+TXGIRL(10)
+「嗯．．．我還沒有找到工作．．．．．．」
+@T
+SS$(2)
+@C
+
+「嗯嗯．．．這樣正符合我的需要。」
+@T
+SS$(3)
+@C
+TXGIRL(9)
+「．．．．．．﹖」
+@T
+SS$(2)
+@C
+
+「我的店裡生意很好﹐女孩子的數量一直都不夠。」
+@T
+SS$(3)
+@C
+TXGIRL(0)
+「啊﹐那．．．那．．．」
+@T
+SS$(2)
+@C
+
+「像GN$這樣美麗可愛的女孩子﹐每天無所事事真是浪費呀﹗」
+@T
+SS$(3)
+@C
+TXGIRL(10)
+「別這樣說嘛．．．．．．」
+@T
+SS$(2)
+@C
+
+「如何﹖要不要再到我的店裡來工作﹐薪水是打工時的兩倍。反正是年輕人嘛﹐賺錢很快唷。」
+@T
+SS$(3)
+@C
+TXGIRL(18)
+「嗯．．．該不該答應呢﹖」
+@T
+SS$(2)
+@C
+
+「反正沒有工作嘛﹐來我那做總比沒事做的好。妳已經是大人了﹐就快點決定吧﹗」
+@T
+SS$(3)
+@C
+TXGIRL(13)
+「是的﹐我已經是大人了．．．就拜託你了。」
+@T
+SS$(2)
+@C
+
+「好﹗決定了。是GN$的話﹐一定可以賺大錢的。」
+@T
+CLOSE(2)
+CLOSE(3)
+PICWORKING("Z021")
+OPEN(1)
+就這樣﹐GN$•FN$開始在薩巴的酒家中開始工作．．．．．．
+@T
+CLOSE(1)
+
+FINAL
+
+*GN$
+TXA(NAME_FIRST)
+RET
+
+*FN$
+TXA(NAME_FAMILY)
+RET
+
+*OPEN
+IF(AX=1)TXOPEN(10) RET
+IF(AX=2)TXOPEN(13) RET
+IF(AX=3)TXOPEN(15) RET
+IF(AX=4)TXOPEN(14) RET
+RET
+
+*CLOSE
+IF(AX=1)TXCLOSE(10) RET
+IF(AX=2)TXCLOSE(13) RET
+IF(AX=3)TXCLOSE(15) RET
+IF(AX=4)TXCLOSE(14) RET
+RET
+
+*SS$
+IF(AX=1)TXSLCT(10) RET
+IF(AX=2)TXSLCT(13) RET
+IF(AX=3)TXSLCT(15) RET
+IF(AX=4)TXSLCT(14) RET
+RET
+
+*TTL$
+RET
+
+*START
+TXLC(10,21,220,0)
+TXLC(13,32,146,1)
+TXLC(14,32,20,1)
+TXLC(15,17,270,2)
+RET
+
+*FINAL
+LOAD("EEWEDD")
+RET
+
+*PICWORKING
+
+STRSTACK
+C5 = BX
+PTBK(2)
+PTLD("ENDWFRML")
+PTLA("ENDWFRMR")
+PTLA("ENDWFRMU")
+PTLA("ENDWFRMD")
+PTBK(0)
+PTLD("ENDWFRMM")
+PTX(20,0,0)
+PTBK(2)
+PTM(12,0,0)
+PTM(60,0,2)
+PTM(18,-40,4)
+PTM(18,400,6)
+PIC(11)
+PTBK(0)
+PTX(0,0,0)
+SI = C5
+PTLD
+PTMF(0,0,0)
+PIC(12)
+PIC(13,0,0,20,0,40,400)
+TIMER1(120)WAIT1
+RET
+

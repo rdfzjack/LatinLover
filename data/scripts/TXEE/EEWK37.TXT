@@ -1,0 +1,118 @@
+TTL$("大夜總會的兼差")
+
+START
+
+OPEN(2)
+TXFACE("F073")
+「啊﹐這不是GN$嗎﹖好久不見了。妳已經長得這麼大了﹐現在在做什麼呢﹖」
+@T
+OPEN(3)
+TXGIRL(11)
+「這個嘛．．．我還沒有決定．．．．．．」
+@T
+SS$(2)
+@C
+
+「什麼﹐沒有工作﹖那麼再到我的夜總會來打工怎麼樣﹖」
+@T
+SS$(3)
+@C
+TXGIRL(10)
+「啊﹐但是．．．晚上的工作實在是有點．．．．．．」
+@T
+SS$(2)
+@C
+
+「好好的年輕人若是不工作的話也是國家的損失﹐快點決定吧﹗」
+@T
+SS$(3)
+@C
+TXGIRL(18)
+「我知道了﹐那就再次麻煩你了。」
+@T
+SS$(2)
+@C
+
+「嗯﹐這可是相當不錯的工作﹐好好的表現呀﹗」
+@T
+CLOSE(2)
+CLOSE(3)
+PICWORKING("Z022")
+OPEN(1)
+就這樣﹐GN$•FN$就回到夜總會裡打工．．．．．．
+@T
+CLOSE(1)
+
+FINAL
+
+*GN$
+TXA(NAME_FIRST)
+RET
+
+*FN$
+TXA(NAME_FAMILY)
+RET
+
+*OPEN
+IF(AX=1)TXOPEN(10) RET
+IF(AX=2)TXOPEN(13) RET
+IF(AX=3)TXOPEN(15) RET
+IF(AX=4)TXOPEN(14) RET
+RET
+
+*CLOSE
+IF(AX=1)TXCLOSE(10) RET
+IF(AX=2)TXCLOSE(13) RET
+IF(AX=3)TXCLOSE(15) RET
+IF(AX=4)TXCLOSE(14) RET
+RET
+
+*SS$
+IF(AX=1)TXSLCT(10) RET
+IF(AX=2)TXSLCT(13) RET
+IF(AX=3)TXSLCT(15) RET
+IF(AX=4)TXSLCT(14) RET
+RET
+
+*TTL$
+RET
+
+*START
+TXLC(10,21,220,0)
+TXLC(13,32,146,1)
+TXLC(14,32,20,1)
+TXLC(15,17,270,2)
+RET
+
+*FINAL
+LOAD("EEWEDD")
+RET
+
+*PICWORKING
+
+STRSTACK
+C5 = BX
+PTBK(2)
+PTLD("ENDWFRML")
+PTLA("ENDWFRMR")
+PTLA("ENDWFRMU")
+PTLA("ENDWFRMD")
+PTBK(0)
+PTLD("ENDWFRMM")
+PTX(20,0,0)
+PTBK(2)
+PTM(12,0,0)
+PTM(60,0,2)
+PTM(18,-40,4)
+PTM(18,400,6)
+PIC(11)
+PTBK(0)
+PTX(0,0,0)
+SI = C5
+PTLD
+PTMF(0,0,0)
+PIC(12)
+PIC(13,0,0,20,0,40,400)
+TIMER1(120)WAIT1
+RET
+

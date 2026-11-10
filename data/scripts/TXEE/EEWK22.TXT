@@ -1,0 +1,138 @@
+TTL$("大夜總會工作")
+
+START
+
+OPEN(2)
+TXFACE("F073")
+「喔﹗是GN$呀﹐真是好久不見了。現在你在做什麼﹖」
+@T
+OPEN(3)
+TXGIRL(10)
+「這個．．．我還沒有找到工作．．．．．．」
+@T
+SS$(2)
+@C
+
+「什麼﹖沒有工作﹖那怎麼行．．．年輕人應該要工作才對．．．好﹗讓我幫妳一個忙。」
+@T
+SS$(3)
+@C
+TXGIRL(9)
+「．．．．．．﹖」
+@T
+SS$(2)
+@C
+
+「在紳士淑女們社交場合．．．大夜總會隨時都招收有氣質､有魅力的女性﹐所以GN$妳可以到我那裡去工作。」
+@T
+SS$(3)
+@C
+TXGIRL(18)
+「咦﹐但是．．．夜總會的工作有點．．．．．．」
+@T
+SS$(2)
+@C
+
+「那是什麼話﹗夜總會可是一個健全的社交場合﹐可不要把我們和那邊的夜間行業相比﹗被我看上是妳的榮幸。」
+@T
+SS$(3)
+@C
+TXGIRL(10)
+「實在還是有點．．．．．．」
+@T
+SS$(2)
+@C
+
+「那麼美麗的GN$小姐﹐以妳這樣的條件﹐你想要做什麼呢﹖總不會想當個普通的人吧﹖」
+@T
+SS$(3)
+@C
+TXGIRL(1)
+「我知道了﹗男爵先生﹐我願意到夜總會去工作。」
+@T
+SS$(2)
+@C
+
+「好極了﹐妳就像是坐在我的船上﹐安心好了。」
+@T
+CLOSE(2)
+CLOSE(3)
+PICWORKING("Z022")
+OPEN(1)
+就這樣﹐GN$•FN$在大夜總會裡開始了她的社交生涯．．．．．．
+@T
+CLOSE(1)
+
+FINAL
+
+*GN$
+TXA(NAME_FIRST)
+RET
+
+*FN$
+TXA(NAME_FAMILY)
+RET
+
+*OPEN
+IF(AX=1)TXOPEN(10) RET
+IF(AX=2)TXOPEN(13) RET
+IF(AX=3)TXOPEN(15) RET
+IF(AX=4)TXOPEN(14) RET
+RET
+
+*CLOSE
+IF(AX=1)TXCLOSE(10) RET
+IF(AX=2)TXCLOSE(13) RET
+IF(AX=3)TXCLOSE(15) RET
+IF(AX=4)TXCLOSE(14) RET
+RET
+
+*SS$
+IF(AX=1)TXSLCT(10) RET
+IF(AX=2)TXSLCT(13) RET
+IF(AX=3)TXSLCT(15) RET
+IF(AX=4)TXSLCT(14) RET
+RET
+
+*TTL$
+RET
+
+*START
+TXLC(10,21,220,0)
+TXLC(13,32,146,1)
+TXLC(14,32,20,1)
+TXLC(15,17,270,2)
+RET
+
+*FINAL
+LOAD("EEWEDD")
+RET
+
+*PICWORKING
+
+STRSTACK
+C5 = BX
+PTBK(2)
+PTLD("ENDWFRML")
+PTLA("ENDWFRMR")
+PTLA("ENDWFRMU")
+PTLA("ENDWFRMD")
+PTBK(0)
+PTLD("ENDWFRMM")
+PTX(20,0,0)
+PTBK(2)
+PTM(12,0,0)
+PTM(60,0,2)
+PTM(18,-40,4)
+PTM(18,400,6)
+PIC(11)
+PTBK(0)
+PTX(0,0,0)
+SI = C5
+PTLD
+PTMF(0,0,0)
+PIC(12)
+PIC(13,0,0,20,0,40,400)
+TIMER1(120)WAIT1
+RET
+

@@ -1,0 +1,531 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.SLC_RIVAL
+.TOP_POINT
+
+
+.MSG_FITER[10]
+
+RUN_MONTH[26]++
+
+STRSCLEAR
+
+TXLC(1,4,290,0)
+TXLC(10,20,220,0)
+TXLC(2,17,148,1)
+TXLC(3,31,270,2)
+TXLC(9,48,148,2)
+WWIVENT(5,1,21,40)
+
+EVNT026
+
+E_EV_SKIP = 1
+
+LOAD("RUNNING")
+
+
+
+
+
+*EVNT026
+
+C1 = 0
+IF ( H_SENSHI > C1 )
+	C1 = H_SENSHI
+	SLC_RIVAL=1
+
+IF ( H_MAHO   > C1 )
+	C1 = H_MAHO
+	SLC_RIVAL=2
+
+IF ( H_SYAKOH > C1 )
+	C1 = H_SYAKOH
+	SLC_RIVAL=3
+
+IF ( H_KAJI   > C1 )
+	C1 = H_KAJI
+	SLC_RIVAL=4
+
+C1 = 0
+IF ( B_TAIRYOKU > C1 )
+	C1 = B_TAIRYOKU
+	TOP_POINT=0
+
+IF ( B_KINRYOKU > C1 )
+	C1 = B_KINRYOKU
+	TOP_POINT=1
+
+IF ( B_CHINOH	> C1 )
+	C1 = B_CHINOH
+	TOP_POINT=2
+
+IF ( B_KIHIN	> C1 )
+	C1 = B_KIHIN
+	TOP_POINT=3
+
+IF ( B_IROKE	> C1 )
+	C1 = B_IROKE
+	TOP_POINT=4
+
+IF ( B_SHINKOH	> C1 )
+	C1 = B_SHINKOH
+	TOP_POINT=5
+
+IF ( B_KANJUSEI > C1 )
+	C1 = B_KANJUSEI
+	TOP_POINT=6
+
+
+IF ( SLC_RIVAL=1 )
+	E_RIVAL=1
+	GOTO EV_FITER
+
+IF ( SLC_RIVAL=2 )
+	E_RIVAL=2
+	GOTO EV_MAGIC
+
+IF ( SLC_RIVAL=3 )
+	E_RIVAL=3
+	GOTO EV_SOCIAL
+
+IF ( SLC_RIVAL=4 )
+	E_RIVAL=4
+	GOTO EV_KEEPER
+
+RET
+
+
+*EV_FITER
+
+TXOPEN(1)
+正趕著回家的TXA(NAME_FIRST)﹐被一名少女叫住．．．．．．
+@P
+TXCLOSE(1)
+
+TXOPEN(2)
+TXFACE("F098")
+「妳就是TXA(NAME_FIRST)小姐嗎﹖」
+@P
+
+TXOPEN(3)
+TXGIRL(0)
+「是的﹐請問妳是．．．﹖」
+@P
+@2
+MSG_FITER[0]="只有體力"
+MSG_FITER[1]="只有蠻力"
+MSG_FITER[2]="頭腦還好"
+MSG_FITER[3]="驕傲自滿"
+MSG_FITER[4]="空有魅力"
+MSG_FITER[5]="一點幽默感都沒有"
+MSG_FITER[6]="軟弱"
+@C
+「哼哼哼﹐我以為是什麼樣的小子﹐原來是個TXA(MSG_FITER[TOP_POINT])的小姑娘﹗」
+@P
+@3
+@C
+TXGIRL(15)
+「什．．．什麼話﹗」
+@P
+@2
+@C
+「我是安妮塔•卡山多拉﹐和妳一樣都是１４歲﹐將來打算成為世界上最強的女劍客。」
+@P
+@3
+@C
+TXGIRL(9)
+「．．．．．．﹖」
+@P
+@2
+@C
+「哼﹗聽說妳是一個厲害的對手﹐現在看來是我白操心了。下次的武鬥大會不要出來吧﹗看到妳這樣子都會替妳覺得不好意思。」
+@P
+@3
+@C
+TXGIRL(12)
+「說什麼話﹖真是無禮的人。」
+@P
+@2
+@C
+「啊﹐啊﹐啊﹐還在裝模作樣。妳可能是因為父親太有名﹐被大家奉承慣了吧﹗」
+@P
+@3
+@C
+TXGIRL(2)
+「．．．．．．﹗」
+@P
+@2
+@C
+「哈哈哈﹐所以才自認為自己真的很強吧﹐真好笑。」
+@P
+@3
+@C
+
+「什麼嘛﹗就讓妳耍嘴皮子好了﹗我絕對不會輸給妳這樣的貨色。下次武鬥大會上我會將妳打得落花流水﹐等著看吧﹗」
+@P
+@2
+@C
+「好﹐就這麼說定了﹗下次的武鬥會中絕對要分出勝負﹐逃走的人一輩子都會被人視為笑柄﹗」
+@P
+TXOPEN(10)
+命運的接觸。此時TXA(NAME_FIRST)和安妮塔成為宿命的對手﹗﹗﹗
+@P
+GR_OPEN
+IGRP_TBL1[0]="疲勞"
+IGRP_TBL3[0]=B_STRESS
+IGRP_CNT=1
+IGRP_X=50
+IGRP_Y=180
+GRPOPEN(1,1)
+B_STRESS = 0
+@C
+TXA(NAME_FIRST)鬥爭的心像火焰般燃燒﹐疲勞點數恢復為零﹗
+GRPUPD(1,0,B_STRESS)
+@P
+GR_CLOSE
+TXCLOSE(10)
+TXCLOSE(3)
+TXCLOSE(2)
+RET
+
+
+*EV_MAGIC
+
+TXOPEN(1)
+TXA(NAME_FIRST)正趕著回家時﹐被一名少女叫住。
+@P
+TXCLOSE(1)
+
+TXOPEN(2)
+TXFACE("F099")
+「妳或許就是我所擔心的對手TXA(NAME_FIRST)小姐吧﹗」
+@P
+TXOPEN(3)
+TXGIRL(9)
+「是的﹐妳是那位﹖」
+@P
+@2
+@C
+「果然﹐一眼就可以看出來妳是有名的勇士TXA(NAME_FAMILY)的養女﹐時下出名的魔法少女。」
+@P
+@3
+@C
+TXGIRL(10)
+「魔法少女﹖」
+@P
+@2
+@C
+「好了﹐不要害羞。妳會有這個稱呼是因為我還沒有出現的緣故。」
+@P
+@3
+@C
+TXGIRL(9)
+「咦﹖這是什麼意思﹖」
+@P
+@2
+@C
+「哼﹐自我介紹。我的名字是溫蒂﹐和妳同樣都是１４歲的魔法少女。」
+@P
+@3
+@C
+TXGIRL(10)
+「那個．．．請不要叫我魔法少女好嗎﹖總覺得不好意思。」
+@P
+@2
+@C
+「我的目標就是打倒妳﹐成為第一把交椅的魔法少女。因此﹐最後我將成為本國第一的大魔法師﹐看妳這麼悠哉悠哉的﹐怎麼迎接我的挑戰﹗」
+@P
+@3
+@C
+TXGIRL(9)
+「我不懂妳所謂的大目標、小目標的。」
+@P
+@2
+MSG_FITER[0]="只會鍛鍊身體"
+MSG_FITER[1]="只會發展肌肉"
+MSG_FITER[2]="只是會做學問"
+MSG_FITER[3]="只懂禮儀作法"
+MSG_FITER[4]="愛打扮"
+MSG_FITER[5]="常去教堂磨菇"
+MSG_FITER[6]="廢物般"
+@C
+「妳既然說了那些話﹐看樣子也不過是個TXA(MSG_FITER[TOP_POINT])的女孩﹐下次的武鬥會絕對要來﹐我等妳。」
+@P
+@3
+@C
+TXGIRL(14)
+「好﹐我明白﹐我們互相切磋切磋﹐以成為出色的魔法師為目標﹗」
+@P
+@2
+@C
+「是『魔☆法★少☆女』﹗」
+@P
+@3
+@C
+TXGIRL(10)
+「．．．．．．．．．」
+@P
+
+TXOPEN(10)
+於是﹐TXA(NAME_FIRST)遇見了溫蒂這樣個敵人﹐這是命運的相會呢﹐還是一場鬧劇﹖
+@P
+GR_OPEN
+IGRP_TBL1[0]="疲勞"
+IGRP_TBL3[0]=B_STRESS
+IGRP_CNT=1
+IGRP_X=50
+IGRP_Y=180
+GRPOPEN(1,1)
+B_STRESS = 0
+@C
+無論如何﹐TXA(NAME_FIRST)的疲勞度恢復到零。
+GRPUPD(1,0,B_STRESS)
+@P
+GR_CLOSE
+TXCLOSE(10)
+TXCLOSE(3)
+TXCLOSE(2)
+RET
+
+
+*EV_SOCIAL
+
+TXOPEN(1)
+在趕著回家的路上﹐TXA(NAME_FIRST)被一名少女阻住去路。
+@P
+TXCLOSE(1)
+
+TXOPEN(2)
+TXFACE("F100")
+「喂﹐妳是TXA(NAME_FAMILY)家的TXA(NAME_FIRST)小姐吧﹖」
+@P
+TXOPEN(3)
+TXGIRL(9)
+「是的．．．妳是﹖」
+@P
+@2
+@C
+「呼﹐果然．．．．．哈哈哈哈哈哈．．．．哈哈哈哈哈﹗」
+@P
+@3
+@C
+TXGIRL(11)
+「什．．．什麼嘛﹗妳這個人．．．還好吧﹖」
+@P
+@2
+MSG_FITER[0]="健康"
+MSG_FITER[1]="肌肉型"
+MSG_FITER[2]="埋頭苦學"
+MSG_FITER[3]="有著不自然高雅"
+MSG_FITER[4]="有魅力"
+MSG_FITER[5]="彬彬有禮"
+MSG_FITER[6]="多愁善感"
+@C
+「呼∼呼呼呼．．．咳﹐好痛苦．．．嘻嘻嘻﹐原來不過是個TXA(MSG_FITER[TOP_POINT])的女孩而已﹐比我想像的要差得多了﹗」
+@P
+@3
+@C
+TXGIRL(2)
+「對不起﹐有什麼事嗎﹖」
+@P
+@2
+@C
+「啊﹐那些事情﹐對於參加舞會並沒有太大的關係。」
+@P
+@3
+@C
+TXGIRL(9)
+「舞會﹖」
+@P
+@2
+@C
+「對了﹐忘了自我介紹。我是帕多雷西亞•韓﹐和妳同樣是１４歲。現在社交界話題中的美少女﹐就是指妳我二人。」
+@P
+@3
+@C
+TXGIRL(15)
+「妳也是１４歲﹖（奇怪﹗看起來比我老得多了）」
+@P
+@2
+@C
+「我想過﹐社交界中不能有二個第一名﹐所以來一較高下吧﹗在收獲祭的舞會上讓我們分勝負﹗」
+@P
+@3
+@C
+TXGIRL(14)
+「這是下挑戰書嗎﹖」
+@P
+@2
+@C
+「哈哈哈﹐妳要是這樣想我也不在意。誰才是社交界的第一美女呢﹖堂堂正正分個勝負吧﹗」
+@P
+@3
+@C
+TXGIRL(10)
+「這個．．．所謂『第一美女』﹐我覺得有點不太好意思．．．．．．」
+@P
+@2
+@C
+「妳連那樣的事情都會覺得不好意思﹐真是乳臭未乾的傢伙。喂﹐好好享受下次的舞會吧﹗哦∼哈哈哈哈哈哈．．．．．．」
+@P
+TXCLOSE(2)
+TXCLOSE(3)
+
+TXOPEN(1)
+帕多雷西亞留下了刺耳的笑聲後離去．．．．．．
+@P
+TXCLOSE(1)
+
+TXOPEN(3)
+TXGIRL(14)
+「帕多雷西亞．．．雖然不知道她是什麼樣的人物﹐但我已經忍不住要生氣了﹐我絕對不會輸給那樣的人。」
+@P
+TXOPEN(1)
+GR_OPEN
+IGRP_TBL1[0]="疲勞"
+IGRP_TBL3[0]=B_STRESS
+IGRP_CNT=1
+IGRP_X=50
+IGRP_Y=180
+GRPOPEN(1,1)
+B_STRESS = 0
+@C
+意想不到的對手出現﹐使得TXA(NAME_FIRST)心中燃起了鬥志﹐疲勞一掃而空。
+GRPUPD(1,0,B_STRESS)
+@P
+GR_CLOSE
+TXCLOSE(1)
+TXCLOSE(3)
+RET
+
+
+*EV_KEEPER
+
+TXOPEN(1)
+在趕著回家的路上﹐一名少女叫住了TXA(NAME_FIRST)。
+@P
+TXCLOSE(1)
+
+TXOPEN(2)
+TXFACE("F101")
+「請問﹐妳是TXA(NAME_FIRST)小姐嗎﹖」
+@P
+TXOPEN(3)
+TXGIRL(0)
+「是的﹐請問妳是．．．」
+@P
+@2
+@C
+「啊﹐果然。我的名字叫做瑪魯西亞。」
+@P
+@3
+@C
+TXGIRL(9)
+「是的．．．．．．」
+@P
+@2
+@C
+「我啊﹐比較愚笨﹐沒有什麼優點．．．
+@P
+@2
+@C
+但是﹐就是對家事有自信。聽說TXA(NAME_FIRST)小姐對家事和打掃也十分有心得．．．．．．」
+@P
+@3
+@C
+TXGIRL(10)
+「不﹐還沒有到那樣的程度．．．．．．」
+@P
+@2
+@C
+「我跟妳都同樣是１４歲﹐因此我不想輸給妳﹐TXA(NAME_FIRST)小姐。」
+@P
+@3
+@C
+TXGIRL(9)
+「．．．．．．﹖」
+@P
+@2
+@C
+「請和我在料理比賽中一決勝負吧﹗」
+@P
+MSG_FITER[0]="體力好"
+MSG_FITER[1]="大力士般"
+MSG_FITER[2]="頭腦好"
+MSG_FITER[3]="氣質良好"
+MSG_FITER[4]="成熟"
+MSG_FITER[5]="在教會努力"
+MSG_FITER[6]="其他能力也很出色"
+@C
+我因為沒有其他的優點﹐所以不想在料理上輸給TXA(MSG_FITER[TOP_POINT])的TXA(NAME_FIRST)小姐。
+@P
+@C
+我有贏TXA(NAME_FIRST)小姐的自信﹗」
+@P
+@3
+@C
+TXGIRL(14)
+「我明白了。我也只是在家事上比較拿手﹐和我同歲的．．．．．．」
+@P
+@2
+@C
+「．．．∼瑪魯西亞﹗」
+@P
+@3
+@C
+TXGIRL(0)
+「．．．我也不想輸給瑪魯西亞小姐。」
+@P
+@2
+@C
+「真的嗎∼﹖」
+@P
+@3
+@C
+TXGIRL(1)
+「那就一起努力吧﹗」
+@P
+@2
+@C
+「好的﹐加油吧∼﹗」
+@P
+
+
+TXOPEN(10)
+GR_OPEN
+IGRP_TBL1[0]="疲勞"
+IGRP_TBL3[0]=B_STRESS
+IGRP_CNT=1
+IGRP_X=50
+IGRP_Y=180
+GRPOPEN(1,1)
+B_STRESS = 0
+@C
+
+長處是家事的和藹少女TXA(NAME_FIRST)意外遇到了強勁對手。由於烹飪比賽燃起新的鬥志﹐TXA(NAME_FIRST)的疲勞完全消失﹗
+
+GRPUPD(1,0,B_STRESS)
+@P
+GR_CLOSE
+TXCLOSE(10)
+TXCLOSE(3)
+TXCLOSE(2)
+RET
+
+
+
+
+

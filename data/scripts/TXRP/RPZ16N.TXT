@@ -1,0 +1,63 @@
+
+
+
+
+
+*CHECK_MONSTOR
+MSR16N
+RET
+
+*KAIWA_OK
+KWA16N
+RET
+
+*MSR16N
+R_MS_NUMBER		=16
+R_FACE			="F176"
+R_MONSTOR		="M016"
+R_NAME			="沙蟲"
+R_CHINOH		=999
+RDM(55,65)
+R_SENTOH=AX
+RDM(75,85)
+R_KOUGEKI=AX
+R_BOUGYO		=50
+R_SOUKOU		=40
+R_SKNAME		="粗糙的表皮"
+R_MAHOGIJUTSU	=0
+R_MARYOKU		=0
+RDM(25,30)
+R_KOHMARYOKU=AX
+R_SENI			=250
+R_DASSYUTU		=20
+R_TSUKON		=0
+RDM(240,360)
+R_MAX_HP=AX
+R_MAX_MP		=0
+RDM(100,300)
+R_GOLD=AX
+R_SE_ATTACK	=4
+
+MONSTR[0]="嘻嘻．．．好久沒看過這麼好的獵物了．．．"
+MONSTR[1]="雖然沒有什麼肉﹐快點過來吧．．．．．．"
+RANDAM(3)
+IF(AX=1)MONSTR[2]="龍族有很多﹐很多的錢．．．"
+IF(AX=2)MONSTR[2]="巨蠍是古時沙漠的居民．．．"
+IF(AX=3)MONSTR[2]="對魅力有自信的話﹐與老龍見面會有好事．．．"
+MONSTR[3]="妳還有靈魂吧﹖"
+MONSTR[4]="唧唧唧﹐好像是很好吃的靈魂．．．"
+MONSTR[5]="咻∼．．．"
+RET
+
+
+
+
+
+*KWA16N
+AX = 0
+IF ( B_KANJUSEI >= 200 )	AX=1
+RET
+
+
+
+

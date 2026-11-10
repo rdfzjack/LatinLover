@@ -1,0 +1,133 @@
+TTL$("修女")
+
+START
+
+OPEN(4)
+TXFACE("F041")
+「小姐﹐從教堂來的麗修女想要見妳．．．．．．」
+@T
+CLOSE(4)
+OPEN(2)
+TXFACE("F053")
+「午安﹐GN$。恭喜妳長大成人了。」
+@T
+OPEN(3)
+TXGIRL(1)
+「修女﹐謝謝妳。」
+@T
+SS$(2)
+@C
+
+「妳決定要做什麼樣的工作了嗎﹖」
+@T
+SS$(3)
+@C
+TXGIRL(0)
+「不﹐還沒有。因為煩惱太多了．．．．．．」
+@T
+SS$(2)
+@C
+
+「如果可以的話﹐我歡迎妳來教堂。有像妳這樣具有謙虛､誠心的女孩子﹐對教會是很有幫助的。」
+@T
+SS$(3)
+@C
+TXGIRL(1)
+「修女﹐能夠被妳誇獎真是一件光榮的事。」
+@T
+SS$(2)
+@C
+
+「如果我是GN$妳的話﹐一定會想要成為一名好的修女。這樣的話﹐城裡大家也會很高興的。」
+@T
+SS$(3)
+@C
+
+「我懂了﹐如果得到父親的許可﹐我會馬上去教會受洗的。」
+@T
+SS$(2)
+@C
+
+「真是令人高興﹐我很期待GN$修女的活動喔﹗」
+@T
+CLOSE(2)
+CLOSE(3)
+PICWORKING("Z006")
+OPEN(1)
+就這樣﹐GN$•FN$步上了聖職者的人生．．．．．．
+@T
+CLOSE(1)
+
+FINAL
+
+*GN$
+TXA(NAME_FIRST)
+RET
+
+*FN$
+TXA(NAME_FAMILY)
+RET
+
+*OPEN
+IF(AX=1)TXOPEN(10) RET
+IF(AX=2)TXOPEN(13) RET
+IF(AX=3)TXOPEN(15) RET
+IF(AX=4)TXOPEN(14) RET
+RET
+
+*CLOSE
+IF(AX=1)TXCLOSE(10) RET
+IF(AX=2)TXCLOSE(13) RET
+IF(AX=3)TXCLOSE(15) RET
+IF(AX=4)TXCLOSE(14) RET
+RET
+
+*SS$
+IF(AX=1)TXSLCT(10) RET
+IF(AX=2)TXSLCT(13) RET
+IF(AX=3)TXSLCT(15) RET
+IF(AX=4)TXSLCT(14) RET
+RET
+
+*TTL$
+RET
+
+*START
+TXLC(10,21,220,0)
+TXLC(13,32,146,1)
+TXLC(14,32,20,1)
+TXLC(15,17,270,2)
+RET
+
+*FINAL
+LOAD("EEWEDD")
+RET
+
+*PICWORKING
+
+STRSTACK
+C5 = BX
+PTBK(2)
+PTLD("ENDWFRML")
+PTLA("ENDWFRMR")
+PTLA("ENDWFRMU")
+PTLA("ENDWFRMD")
+PTBK(0)
+PTLD("ENDWFRMM")
+PTX(20,0,0)
+PTBK(2)
+PTM(12,0,0)
+PTM(60,0,2)
+PTM(18,-40,4)
+PTM(18,400,6)
+PIC(11)
+PTBK(0)
+PTX(0,0,0)
+SI = C5
+PTLD
+PTMF(0,0,0)
+PIC(12)
+PIC(13,0,0,20,0,40,400)
+TIMER1(120)WAIT1
+RET
+

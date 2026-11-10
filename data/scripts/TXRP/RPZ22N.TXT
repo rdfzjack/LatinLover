@@ -1,0 +1,62 @@
+
+
+
+
+
+*CHECK_MONSTOR
+MSR22N
+RET
+
+*KAIWA_OK
+KWA22N
+RET
+
+*MSR22N
+R_MS_NUMBER		=22
+R_FACE			="F182"
+R_MONSTOR		="M022"
+R_NAME			="蛇身女"
+R_CHINOH		=60
+RDM(40,50)
+R_SENTOH=AX
+R_KOUGEKI		=45
+R_BOUGYO		=20
+R_SOUKOU		=15
+R_SKNAME		="鱗片"
+RDM(30,35)
+R_MAHOGIJUTSU=AX
+R_MARYOKU		=40
+R_KOHMARYOKU	=25
+R_SENI			=30
+R_DASSYUTU		=70
+R_TSUKON		=30
+RDM(95,150)
+R_MAX_HP=AX
+RDM(35,40)
+R_MAX_MP=AX
+RDM(1,50)
+R_GOLD=AX
+R_SE_ATTACK	=4
+
+MONSTR[0]="咻∼﹗"
+RANDAM(3)
+IF(AX=1)MONSTR[1]="哈咦﹐好可愛的小姐。"
+IF(AX=2)MONSTR[1]="人類的皮膚好光滑﹐好好喔．．．"
+IF(AX=3)MONSTR[1]="水邊是很好的居住地方．．．"
+RANDAM(3)
+IF(AX=1)MONSTR[2]="狂人魚是被魚人利用之後的下場．．．"
+IF(AX=2)MONSTR[2]="河裡看不到路﹐會走錯．．．"
+IF(AX=3)MONSTR[2]="這附近有很好的東西﹐也能看到妖精．．．"
+MONSTR[3]="滋呀﹗﹗"
+MONSTR[4]="咕咕咕．．．"
+MONSTR[5]="嘰∼．．．"
+RET
+
+*KWA22N
+AX = 0
+IF ( B_KANJUSEI >= 200 )	AX=1
+RET
+
+
+
+

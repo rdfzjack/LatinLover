@@ -1,0 +1,124 @@
+TTL$("女官")
+
+START
+
+OPEN(2)
+TXFACE("F039")
+「小姐､小姐﹐起床啦﹗今天妳要到城裡去工作﹐可不要第一天就遲到了。」
+@T
+OPEN(3)
+TXGIRL(0)
+「啊﹗吉普先生﹐我已經準備好了。」
+@T
+SS$(2)
+@C
+
+「沒想到小姐會成為王宮裡的女官．．．請加油啊。」
+@T
+SS$(3)
+@C
+
+「是呀﹗不好好做的話就會被人家說『都是父親的關係』的．．．．．．」
+@T
+SS$(2)
+@C
+TXFACE("F043")
+「沒有人會那樣說的﹐能到城裡去做女官是小姐自己的實力。」
+@T
+SS$(3)
+@C
+TXGIRL(11)
+「是嗎﹖．．．我經常被人家說是『勇者FN$的女兒』呢．．．．．．」
+@T
+SS$(2)
+@C
+TXFACE("F042")
+「怎麼能這樣說﹗不管別人怎麼說﹐小姐就是小姐﹐只要好好的工作就能夠被人認同的。」
+@T
+SS$(3)
+@C
+TXGIRL(0)
+「是的．．．謝謝你﹐吉普先生。我會好好的做給他們瞧的。」
+@T
+SS$(2)
+@C
+TXFACE("F040")
+「就是這樣﹐小姐請好好的加油。」
+@T
+CLOSE(2)
+CLOSE(3)
+PICWORKING("Z023")
+
+FINAL
+
+*GN$
+TXA(NAME_FIRST)
+RET
+
+*FN$
+TXA(NAME_FAMILY)
+RET
+
+*OPEN
+IF(AX=1)TXOPEN(10) RET
+IF(AX=2)TXOPEN(13) RET
+IF(AX=3)TXOPEN(15) RET
+IF(AX=4)TXOPEN(14) RET
+RET
+
+*CLOSE
+IF(AX=1)TXCLOSE(10) RET
+IF(AX=2)TXCLOSE(13) RET
+IF(AX=3)TXCLOSE(15) RET
+IF(AX=4)TXCLOSE(14) RET
+RET
+
+*SS$
+IF(AX=1)TXSLCT(10) RET
+IF(AX=2)TXSLCT(13) RET
+IF(AX=3)TXSLCT(15) RET
+IF(AX=4)TXSLCT(14) RET
+RET
+
+*TTL$
+RET
+
+*START
+TXLC(10,21,220,0)
+TXLC(13,32,146,1)
+TXLC(14,32,20,1)
+TXLC(15,17,270,2)
+RET
+
+*FINAL
+LOAD("EEWEDD")
+RET
+
+*PICWORKING
+
+STRSTACK
+C5 = BX
+PTBK(2)
+PTLD("ENDWFRML")
+PTLA("ENDWFRMR")
+PTLA("ENDWFRMU")
+PTLA("ENDWFRMD")
+PTBK(0)
+PTLD("ENDWFRMM")
+PTX(20,0,0)
+PTBK(2)
+PTM(12,0,0)
+PTM(60,0,2)
+PTM(18,-40,4)
+PTM(18,400,6)
+PIC(11)
+PTBK(0)
+PTX(0,0,0)
+SI = C5
+PTLD
+PTMF(0,0,0)
+PIC(12)
+PIC(13,0,0,20,0,40,400)
+TIMER1(120)WAIT1
+RET
+

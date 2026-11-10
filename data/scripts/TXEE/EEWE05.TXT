@@ -1,0 +1,138 @@
+
+.UNLUCKY_MAN	= 0
+UNLUCKY_MAN	=	ENDNM[7]
+
+TTL$("和龍族青年結婚")
+
+START
+
+OPEN(2)
+TXFACE("F144")
+「GN$小姐﹐我依照約定來迎接妳了。」
+@T
+OPEN(3)
+TXGIRL(18)
+「啊．．．真的來了嗎﹖」
+@T
+SS$(2)
+@C
+TXFACE("F146")
+「咦．．．還是討厭和我結婚嗎﹖」
+@T
+SS$(3)
+@C
+TXGIRL(11)
+「．．．不是．．．我不是這個意思。」
+@T
+SS$(2)
+@C
+
+「一定是討厭我的．．．我的年紀比妳小﹐顯得比較懦弱．．．．．．」
+@T
+SS$(3)
+@C
+TXGIRL(12)
+「．．．．．．．．．．．．．．．」
+@T
+SS$(2)
+@C
+TXFACE("F147")
+「再見吧．．．忘了我的存在﹐去找尋世上可以帶給你幸福的男人吧．．．．．．」
+@T
+SS$(3)
+@C
+TXGIRL(2)
+「站住﹗身為男人﹐怎麼這樣的猶豫不決﹗﹗﹗」
+@T
+SS$(2)
+@C
+TXFACE("F146")
+「但﹐但是．．．．．．」
+@T
+SS$(3)
+@C
+
+「不喜歡我嗎﹖不想和我結婚嗎﹖」
+@T
+SS$(2)
+@C
+
+「喜喜喜．．．喜歡﹗想和妳結婚﹗」
+@T
+SS$(3)
+@C
+TXGIRL(8)
+「那麼﹐請問你還在等什麼﹖」
+@T
+SS$(2)
+@C
+
+「咦﹖那．．．那麼．．．．．．」
+@T
+SS$(3)
+@C
+TXGIRL(10)
+「你是有點軟弱．．．但是我一定會很幸福的﹐因為我也是個愛撒嬌的人．．．．．．」
+@T
+CLOSE(3)
+CLOSE(2)
+PICWEDDING("Z071")      TIMER1(60)WAIT1
+OPEN(1)
+就這樣﹐GN$和龍族的青年結婚了．．．．．．
+@T
+CLOSE(1)
+WWIVENT(2,1)
+
+FINAL
+
+*GN$
+TXA(NAME_FIRST)
+RET
+
+*FN$
+TXA(NAME_FAMILY)
+RET
+
+*OPEN
+IF(AX=1)TXOPEN(10) RET
+IF(AX=2)TXOPEN(13) RET
+IF(AX=3)TXOPEN(15) RET
+IF(AX=4)TXOPEN(14) RET
+RET
+
+*CLOSE
+IF(AX=1)TXCLOSE(10) RET
+IF(AX=2)TXCLOSE(13) RET
+IF(AX=3)TXCLOSE(15) RET
+IF(AX=4)TXCLOSE(14) RET
+RET
+
+*SS$
+IF(AX=1)TXSLCT(10) RET
+IF(AX=2)TXSLCT(13) RET
+IF(AX=3)TXSLCT(15) RET
+IF(AX=4)TXSLCT(14) RET
+RET
+
+*TTL$
+RET
+
+*START
+TXLC(10,21,220,0)
+TXLC(13,32,146,1)
+TXLC(14,32,20,1)
+TXLC(15,17,270,2)
+RET
+
+*PICWEDDING
+WWIVENT(5,1,21,30)
+WWIVENT(1,1)
+
+
+
+RET
+
+*FINAL
+LOAD("EEALLE")
+RET
+

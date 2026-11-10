@@ -1,0 +1,307 @@
+
+
+
+
+
+
+
+
+
+STRSCLEAR
+
+.HEAVY_TRANING
+.HEAVY_T_COUNT
+.RANK_TRANING
+.HEAVY_WORKING
+.HEAVY_W_COUNT
+.RANK_WORKING
+
+HEAVY_TRANING	=	ENDNM[10]
+HEAVY_T_COUNT	=	ENDNM[11]
+RANK_TRANING	=	ENDNM[12]
+HEAVY_WORKING	=	ENDNM[13]
+HEAVY_W_COUNT	=	ENDNM[14]
+RANK_WORKING	=	ENDNM[15]
+
+.TBLNAMESTR[18]
+.TBLGIRLSTR[18]
+
+NARRATION
+
+PLAY(30)
+
+KANSOU_GIRL
+
+TIMER1(180)
+
+LOAD("EEWORK")
+
+
+
+
+
+
+
+
+*NARRATION
+MUSIC(2)
+EFC(23)
+TIMER1(60)
+PTBK(0)
+PTLD("ENDGIRLL")
+WAIT1
+TIMER1(60)
+PTX(0,0,0)
+PTLD("ENDGIRLR")
+PTLA("ENDGIRLU")
+PTLA("ENDGIRLD")
+PTX(40,0,0)
+PTX(0,-40,1)
+PTX(0,400,2)
+
+EDTX(1)
+@G
+八年的時間像夢一般的過去．．．．．．
+
+@F的女兒﹐@R也十八歲了﹐已經長大成人。
+@@
+
+PARC(2,6,70)
+PARC(2,11, 22)
+PARC(2,5,  5,152)
+PARC(2,4)
+
+WAIT1
+EFC(22)
+RET
+
+
+
+
+
+
+*KANSOU_GIRL
+TIMER1(180)
+PTBK(0)
+PTLD("ENDMAILL")
+PTLA("ENDMAILR")
+PTLA("ENDMAILU")
+PTLA("ENDMAILD")
+PTLA("ENDMAINW")
+
+PIC(14,P_NENREI,13)
+PTLA
+PTLA("ENDPALET")
+WAIT1
+
+EFC(1)
+
+TIMER1(60)
+PTBK(0)
+PTX(0,0,0)
+PTX(40,0,1)
+PTX(0,-40,2)
+PTX(0,400,3)
+PTMF(0,0,4)
+PTX(66,54,6)
+PTPLT(8,0)
+WAIT1
+
+EFC(16)
+
+TEXT_EDIT_KANSOU
+
+PARC(2,8,  52)
+
+EDTX(5)
+C2 = DX
+C1 = DX * 23 / 2
+
+
+
+
+
+
+PARC(2,19,C2)
+PARC(2,11, 23)
+PARC(2,5,  0,0)
+PARC(2,9,  4,C1,2)
+PARC(2,10, 10,78,54,284)
+PARC(2,18)
+RET
+
+
+
+
+
+
+
+
+
+
+
+*TEXT_EDIT_KANSOU
+EDTX(1)
+@G
+　父親大人﹐我已經健康的長大了。@@
+IF ( S_BYOUKI>=0  S_BYOUKI=<9 )
+	@G
+	現在的健康情況很好﹐沒有什麼好擔心的。
+	@@
+IF ( S_BYOUKI>=10  S_BYOUKI=<49 )
+	@G
+	現在的健康情況雖然不好﹐但是只要看看醫生就可以了。
+	@@
+IF ( S_BYOUKI>=50 )
+	@G
+	現在的健康情況不太好﹐需要有醫生的治療才行。
+	@@
+@G
+如果能夠重回少女時代。@@
+
+STRSCLEAR
+TBLNAMESTR[1]="自然科學的學習"
+TBLNAMESTR[2]="詩詞的學習"
+TBLNAMESTR[3]="神學的學習"
+TBLNAMESTR[4]="軍事的學習"
+TBLNAMESTR[5]="劍術的學習"
+TBLNAMESTR[6]="格鬥術的學習"
+TBLNAMESTR[7]="魔法的學習"
+TBLNAMESTR[8]="禮儀的學習"
+TBLNAMESTR[9]="繪畫的學習"
+TBLNAMESTR[10]="舞蹈的學習"
+TBLNAMESTR[11]="武者修行"
+
+TBLGIRLSTR[1]="鍊金術士"
+TBLGIRLSTR[2]="詩人"
+TBLGIRLSTR[3]="修女"
+TBLGIRLSTR[4]="軍事家"
+TBLGIRLSTR[5]="優秀的劍士"
+TBLGIRLSTR[6]="優秀的格鬥家"
+TBLGIRLSTR[7]="優秀的魔法師"
+TBLGIRLSTR[8]="貴婦"
+TBLGIRLSTR[9]="藝術家"
+TBLGIRLSTR[10]="舞蹈家"
+TBLGIRLSTR[11]="傳說的勇者"
+
+IF ( RANK_TRANING=1 )
+	@G
+	我想一心一意投注於@@
+	EDTX(3,TBLNAMESTR[HEAVY_TRANING])
+	@G
+	上並沒有什麼不好。@@
+	@G
+	如果做得很好的話﹐我將來會是個@@
+	EDTX(3,TBLGIRLSTR[HEAVY_TRANING])
+	@G
+	吧﹗應該這樣想嗎﹖@@
+	@G
+	嗯嗯嗯．．．但是﹐爸爸總是讓我依自己的想法去進行．．．．．．
+	@@
+IF ( RANK_TRANING=2 )
+	@G
+	經常專注於@@
+	EDTX(3,TBLNAMESTR[HEAVY_TRANING])
+	@G
+	上。總被大家聯想到﹐我會成為一個@@
+	EDTX(3,TBLGIRLSTR[HEAVY_TRANING])
+	@G
+	﹐但是我自已也是這樣的想嗎﹖
+	嗯嗯嗯．．．我要對父親的話唯命是從嗎﹖．．．我要好好想想．．．
+	@@
+IF ( RANK_TRANING=3 )
+	EDTX(3,TBLNAMESTR[HEAVY_TRANING])
+	@G
+	是我在人們腦海中第一個形象。
+	嗯嗯嗯．．．我以前到底在做什麼呢﹖我到底在想什麼呢﹖
+	@@
+IF ( RANK_TRANING=4 )
+	EDTX(3,TBLNAMESTR[HEAVY_TRANING])
+	@G
+	是其他人對我的唯一記憶。
+	嗯嗯嗯．．．我到底做了些什麼呢﹖
+	@@
+IF ( RANK_TRANING=5 )
+	@G
+	再也不要訓練了﹐到底為了什麼目標﹖
+	這實在是太浪費錢了．．．．．．
+	@@
+
+STRSCLEAR
+TBLNAMESTR[2]="照顧小孩"
+TBLNAMESTR[3]="旅店"
+TBLNAMESTR[4]="農業"
+TBLNAMESTR[5]="公職"
+TBLNAMESTR[6]="廚師"
+TBLNAMESTR[7]="伐木"
+TBLNAMESTR[8]="美髮"
+TBLNAMESTR[9]="泥水匠"
+TBLNAMESTR[10]="打獵"
+TBLNAMESTR[11]="守墓"
+TBLNAMESTR[12]="家庭教師"
+TBLNAMESTR[13]="酒店服務生"
+TBLNAMESTR[14]="夜晚"
+TBLNAMESTR[15]="跳舞"
+
+TBLGIRLSTR[2]="托兒所的阿姨"
+TBLGIRLSTR[3]="旅館的伯伯"
+TBLGIRLSTR[4]="農場的叔叔"
+TBLGIRLSTR[5]="教會的修女"
+TBLGIRLSTR[6]="餐廳的叔叔"
+TBLGIRLSTR[7]="伐木的師父"
+TBLGIRLSTR[8]="美髮的師傅"
+TBLGIRLSTR[9]="泥水匠的師傅"
+TBLGIRLSTR[10]="獵人叔叔"
+TBLGIRLSTR[11]="守墓的老爹"
+TBLGIRLSTR[12]="伯母"
+TBLGIRLSTR[13]="酒店的伯伯"
+TBLGIRLSTR[14]="酒家的老闆"
+TBLGIRLSTR[15]="男爵"
+
+IF ( RANK_WORKING=1 )
+	@G
+	打工的事做得太多了．．．@@
+	EDTX(3,TBLGIRLSTR[HEAVY_WORKING])
+	@G
+	﹐長時間來受到您的照顧．．．讓我在@@
+	EDTX(3,TBLNAMESTR[HEAVY_WORKING])
+	@G
+	的工作上稍微有了些自信．．．．．．雖然不知道有什麼用．．．．．．
+	@@
+IF ( RANK_WORKING=2 )
+	@G
+	打工的次數很多了﹐@@
+	EDTX(3,TBLGIRLSTR[HEAVY_WORKING])
+	@G
+	受到您長時間的照顧真是謝謝了。總算能好好的休息了．．．．．．@@
+	EDTX(3,TBLNAMESTR[HEAVY_WORKING])
+	@G
+	的工作雖然讓我學了很多事．．．但是不知道有什麼用．．．．．．
+	@@
+IF ( RANK_WORKING=3 )
+	@G
+	打工的次數很多了．．．在@@
+	EDTX(3,TBLGIRLSTR[HEAVY_WORKING])
+	@G
+	的工作時真是受到大家長時間的照顧了．．．．．．多謝了。@@
+	EDTX(3,TBLNAMESTR[HEAVY_WORKING])
+	@G
+	的工作有些順利了﹐但還是不知道能做什麼．．．．．．
+	@@
+IF ( RANK_WORKING=4 )
+	@G
+	在那個時候偶爾也試試﹐@@
+	EDTX(3,TBLGIRLSTR[HEAVY_WORKING])
+	@G
+	時常受到您的照顧﹐現在我也長大了．．．．．．
+	@@
+IF ( RANK_WORKING=5 )
+	@G
+	　不用打工的話就好了﹐老是沒有時間．．．．．．
+	@@
+RET
+
+
+
+
+

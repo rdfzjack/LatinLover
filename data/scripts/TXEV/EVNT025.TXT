@@ -1,0 +1,105 @@
+
+
+
+
+
+
+
+RUN_MONTH[25]++
+
+STRSCLEAR
+
+TXLC(1,4,290,0)
+TXLC(2,17,148,1)
+TXLC(3,31,270,2)
+TXLC(9,48,148,2)
+WWIVENT(5,1,21,40)
+
+EVNT025
+
+E_EV_SKIP = 1
+
+LOAD("RUNNING")
+
+
+
+
+
+*EVNT025
+
+TXOPEN(1)
+TXA(NAME_FIRST)被一名年輕男子叫住。
+@P
+TXCLOSE(1)
+
+TXOPEN(2)
+TXFACE("F143")
+「喂﹗喂﹗姑娘﹐要去那裡呀﹖」
+@P
+TXOPEN(3)
+TXGIRL(9)
+「要回家．．．．．．」
+@P
+@2
+@C
+「一起吃頓飯如何﹖我請客。」
+@P
+@3
+@C
+TXGIRL(11)
+「嗯∼怎麼辦才好﹖」
+@P
+@C
+TXA(NAME_FIRST)考慮了一陣子．．．．．．
+@P
+C1 = B_MORALS + B_SHINKOH
+P100PAR(C1,B_IROKE)
+C2 = AX
+RANDAM(100)
+IF ( IRND <= C2 )
+
+
+	@3
+	@C
+	「對不起﹐若不早一點回去父親會生氣的﹐所以．．．．．．」
+	@P
+	@2
+	@C
+	「啊﹗父親嗎．．．．．．」
+	@P
+	TXCLOSE(2)
+	TXOPEN(1)
+	男子邊發牢騷邊走開了．．．．．．
+	@P
+	TXCLOSE(1)
+	TXCLOSE(3)
+	RET
+
+@3
+@C
+TXGIRL(0)
+「若只是吃頓飯．．．．．．」
+@P
+@2
+@C
+「太幸運了（太好了﹐太好了）。」
+@P
+TXCLOSE(2)
+TXCLOSE(3)
+
+TXOPEN(1)
+TXA(NAME_FIRST)和男子在鬧街的人潮中消失．．．．．．
+@P
+TXCLOSE(1)
+
+E_ETC[76] = VAL_YEAR
+E_ETC[77] = VAL_MONTH
+E_ETC[78] = VAL_DAY
+FLAG_RENAI=1
+WWPROF(1)
+RET
+
+
+
+
+

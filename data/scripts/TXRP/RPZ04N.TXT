@@ -1,0 +1,65 @@
+
+
+
+
+
+*CHECK_MONSTOR
+MSR04N
+RET
+
+*KAIWA_OK
+KWA04N
+RET
+
+*MSR04N
+R_MS_NUMBER		=4
+R_FACE			="F164"
+R_MONSTOR		="M004"
+R_NAME			="狼"
+R_CHINOH		=50
+RDM(55,65)
+R_SENTOH=AX
+RDM(55,80)
+R_KOUGEKI=AX
+R_BOUGYO		=18
+R_SOUKOU		=15
+R_SKNAME		="柔軟的毛皮"
+R_MAHOGIJUTSU	=0
+R_MARYOKU		=0
+RDM(30,50)
+R_KOHMARYOKU=AX
+RDM(25,60)
+R_SENI=AX
+R_DASSYUTU		=50
+R_TSUKON		=20
+RDM(60,120)
+R_MAX_HP=AX
+R_MAX_MP		=0
+R_GOLD			=0
+R_SE_ATTACK	=3
+
+MONSTR[0]="ＧＡＲＲＲＲＲＲ！"
+RANDAM(3)
+IF(AX=1)MONSTR[1]="吼∼"
+IF(AX=2)MONSTR[1]="吼吼吼．．．．．．"
+IF(AX=3)MONSTR[1]="呼∼呼∼呼∼．．．．．．"
+RANDAM(3)
+IF(AX=1)MONSTR[2]="銀色的　狼　是我們　頭目．．．．．．"
+IF(AX=2)MONSTR[2]="山是　神的山　通往　天上的山．．．．．．"
+IF(AX=3)MONSTR[2]="保衛山　是我們　狼的　任務．．．．．．"
+RANDAM(3)
+IF(AX=1)MONSTR[3]="ＧＡｈｈｈ﹗﹗"
+IF(AX=2)MONSTR[3]="ＢＡＷ﹗"
+IF(AX=3)MONSTR[3]="ＧＡＷ﹗﹗"
+MONSTR[4]="ＷＯｈｈｈ∼﹗"
+MONSTR[5]="嗚啊﹗嗚啊﹗"
+RET
+
+*KWA04N
+AX = 0
+IF ( B_KANJUSEI >= 200 )	AX=1
+RET
+
+
+
+

@@ -1,0 +1,68 @@
+
+
+
+
+
+*CHECK_MONSTOR
+MSR07N
+RET
+
+*KAIWA_OK
+KWA07N
+RET
+
+*MSR07N
+R_MS_NUMBER		=7
+R_FACE			="F167"
+R_MONSTOR		="M007"
+R_NAME			="武神"
+R_CHINOH		=999
+R_SENTOH		=120
+R_KOUGEKI		=120
+R_BOUGYO		=80
+R_SOUKOU		=55
+R_SKNAME		="不可思議之光"
+R_MAHOGIJUTSU	=0
+R_MARYOKU		=0
+R_KOHMARYOKU	=65
+R_SENI			=999
+R_DASSYUTU		=100
+R_TSUKON		=10
+R_MAX_HP		=780
+R_MAX_MP		=0
+R_GOLD			=0
+R_SE_ATTACK	=5
+
+R_ITEM_NAME	="武神之劍"
+R_ITEM_ICON	=9
+R_ITEM_GOLD	=5000
+R_ITEM_ATTR	=2000
+R_ITEM_PROG	="V_KOUGEKI+30 V_SENTOH+20"
+R_ITEM_HELP	="攻擊+30 戰技+20"
+R_ITEM_PROPA=100
+
+RANDAM(3)
+IF(AX=1)MONSTR[0]="愚笨的人﹐竟敢向我挑戰﹗"
+IF(AX=2)MONSTR[0]="小姑娘﹐不後悔嗎﹗"
+IF(AX=3)MONSTR[0]="雖然有趣﹐但是不能原諒妳﹗"
+RANDAM(3)
+IF(AX=1)MONSTR[1]="這不是人類該來的地方﹐早一點離開吧﹗"
+IF(AX=2)MONSTR[1]="我是武神﹐奉天命鎮守這個通往地面的通道"
+IF(AX=3)MONSTR[1]="這裡是比人更早創造的地方﹐快一點離去吧﹗"
+RANDAM(3)
+IF(AX=1)MONSTR[2]="我是太古的戰士﹐天空之星的守護者．．．"
+IF(AX=2)MONSTR[2]="勇者的女兒啊﹐可以看出妳常常仰望著守護妳的星星．．．"
+IF(AX=3)MONSTR[2]="是否忘了與生俱來的善心．．．"
+MONSTR[3]="笨蛋所說的話真是愚蠢﹗"
+MONSTR[4]="想以人之力戰勝武神．．．"
+MONSTR[5]="哦哦．．．一定要通過這裡嗎﹖．．．"
+RET
+
+*KWA07N
+AX = 0
+IF ( B_CHINOH >= 1 )	AX=1
+RET
+
+
+
+

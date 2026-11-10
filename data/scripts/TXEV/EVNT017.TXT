@@ -1,0 +1,124 @@
+
+
+
+
+
+
+RUN_MONTH[17]++
+
+STRSCLEAR
+
+TXLC(1,4,290,0)
+TXLC(2,17,148,1)
+TXLC(3,31,270,2)
+WWIVENT(5,0,6,40)
+
+EVNT017
+
+E_ETC[8]=0
+
+IF ( GIRL_DAMEG!0 )
+	PLAY(8)
+IF ( GIRL_DAMEG=0 )
+	IF ( TM_SEASON =1 ) PLAY(4)
+	IF ( TM_SEASON =2 ) PLAY(5)
+	IF ( TM_SEASON =3 ) PLAY(6)
+	IF ( TM_SEASON =4 ) PLAY(7)
+
+LOAD("MAINBORN")
+
+
+
+
+
+*EVNT017
+
+MUSIC(2)
+
+TXOPEN(1)
+TXA(NAME_FIRST)在烹飪比賽中得到了『天堂鳥的蛋』的獎品。
+一直放著不去吃它﹐結果經過一個月之後．．．．．．
+
+@P
+
+PLAY(27)
+
+WWIVENT(1,0,"E007")
+MUSIC(6,3)
+@P
+TXCLOSE(1)
+
+TXOPEN(2)
+TXFACE("F140")
+「TXA(NAME_FIRST)小姐﹐TXA(NAME_FIRST)小姐﹗」
+@P
+TXOPEN(3)
+TXGIRL(15)
+「啊﹐你是．．．﹖剛剛從蛋裡孵出來的嗎﹖」
+@P
+@2
+@C
+「非常感謝沒有將我吃掉﹗我們天堂鳥有千年的壽命﹐但是人類為了滿足口腹之慾﹐不顧我們的死活﹐把我們的蛋偷走﹐享受蛋的美味﹐真是不道德﹗」
+@P
+@3
+@C
+TXGIRL(9)
+「原來如此．．．（還好沒將它吃掉）」
+@P
+@2
+@C
+「我將回到我的故鄉﹐南方的國度。TXA(NAME_FIRST)小姐﹐請保重﹐祝妳有一顆美麗的心。」
+@P
+@3
+@C
+
+「那﹐再見了．．．一路上保重﹐不要再被人類抓走了。」
+@P
+@2
+@C
+「謝謝妳﹐妳放心好了﹗人類只要我們的蛋而已。」
+@P
+TXCLOSE(2)
+WWIVENT(2,0)
+
+
+TXOPEN(1)
+天堂鳥朝著南方飛去．．．．．．
+@P
+TXCLOSE(1)
+@3
+@C
+TXGIRL(1)
+「昨天只是一顆蛋﹐卻有著千年的壽命．．．生命真是不可思議．．．．．．」
+@P
+
+MUSIC(2)
+
+TXOPEN(1)
+GR_OPEN
+STRSCLEAR
+IGRP_TBL1[0]="感受"   IGRP_TBL3[0]=B_KANJUSEI
+IGRP_CNT=1
+IGRP_X=54
+IGRP_Y=200
+GRPOPEN(1,1)
+B_KANJUSEI += 100
+GRPUPD(1,0,B_KANJUSEI)
+因為了解了生命的奧秘﹐TXA(NAME_FIRST)的感受上昇了１００點﹗
+@P
+GR_CLOSE
+TXCLOSE(1)
+TXCLOSE(3)
+
+C2 = 0
+C1=ITEM_MAX
+	IF ( ITEM_ICON[C2] = 34 )
+		ITEM_KILL(C2)
+		C1 = 0
+	C2++
+LOOP C1
+RET
+
+
+
+

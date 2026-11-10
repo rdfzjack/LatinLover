@@ -1,0 +1,79 @@
+
+
+
+
+
+*CHECK_MONSTOR
+MSR01N
+RET
+
+*KAIWA_OK
+KWA01N
+RET
+
+*MSR01N
+R_MS_NUMBER		=1
+R_FACE			="F161"
+R_MONSTOR		="M001"
+R_NAME			="誘拐小孩的人"
+R_CHINOH		=50
+R_SENTOH		=35
+RDM(40,65)
+R_KOUGEKI=AX
+R_BOUGYO		=28
+R_SOUKOU		=20
+R_SKNAME		="皮衣"
+R_MAHOGIJUTSU	=0
+R_MARYOKU		=0
+RDM(10,15)
+R_KOHMARYOKU=AX
+R_SENI			=30
+R_DASSYUTU		=70
+R_TSUKON		=0
+RDM(60,120)
+R_MAX_HP=AX
+R_MAX_MP		=0
+RDM(10,150)
+R_GOLD=AX
+R_SE_ATTACK	=3
+
+R_ITEM_NAME	="快癒丸"
+R_ITEM_ICON	=16
+R_ITEM_GOLD	=30
+R_ITEM_ATTR	=0
+R_ITEM_PROG	=""
+R_ITEM_HELP	="ＨＰ恢復"
+R_ITEM_PROPA=15
+
+RANDAM(3)
+IF(AX=1)MONSTR[0]="咦﹗好傲慢。"
+IF(AX=2)MONSTR[0]="嘻嘻嘻﹐飛蛾撲火。"
+IF(AX=3)MONSTR[0]="小鬼﹐我要把妳殺掉﹗"
+RANDAM(3)
+IF(AX=1)MONSTR[1]="女孩子一個人旅行危險啊。"
+IF(AX=2)MONSTR[1]="我是專門誘拐小孩的人﹐小心哦．．．．．．"
+IF(AX=3)MONSTR[1]="哈哈哈．．．我好喜歡小孩．．．．．．"
+RANDAM(3)
+
+
+
+IF(AX=1)MONSTR[2]="西方沙漠中似乎有魔王的別墅。"
+IF(AX=2)MONSTR[2]="北方的銀狼對氣質高雅的人很有好感．．．．．．"
+IF(AX=3)MONSTR[2]="雖然龍很可怕﹐但是龍頭蟲卻是虛有其表"
+RANDAM(3)
+IF(AX=1)MONSTR[3]="哈哈哈﹐小姐﹐跟我來吧．．．．．．"
+IF(AX=2)MONSTR[3]="噢﹐可愛的小姐．．．．．．"
+IF(AX=3)MONSTR[3]="嘻嘻嘻﹐妳的樣子好像我正在找的女孩子．．．．．．"
+
+MONSTR[4]="嘻嘻嘻．．．好像可以賣個好價錢"
+MONSTR[5]="呼呼呼．．．．．．"
+RET
+
+*KWA01N
+AX = 0
+IF ( B_CHINOH >= 200 )	AX=1
+RET
+
+
+
+

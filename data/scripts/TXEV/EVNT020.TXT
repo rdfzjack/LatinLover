@@ -1,0 +1,332 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+RUN_MONTH[20]++
+
+STRSCLEAR
+
+TXLC(1,4,290,0)
+TXLC(2,17,148,1)
+TXLC(3,31,270,2)
+TXLC(9,48,148,2)
+WWIVENT(5,1,21,40)
+
+EVNT020
+
+LOAD("MAINBORN")
+
+
+
+
+
+*EVNT020
+
+TXOPEN(1)
+MUSIC(6,1)
+不知是誰在敲著TXA(NAME_FAMILY)家的大門．．．．．．
+@P
+TXCLOSE(1)
+TXOPEN(3)
+TXFACE("F039")
+「來了∼﹐是那位﹖」
+WWIVENT(1,1,"E008")
+@P
+TXOPEN(2)
+TXFACE("F144")
+「午午午午．．午安﹗請．．．請．．．請問這裡是TXA(NAME_FIRST)的府上嗎﹖」
+@P
+@3
+@C
+TXFACE("F041")
+「你是小姐的朋友嗎﹖」
+@P
+@2
+@C
+「不．．不是﹐呃．．．是的﹐我是．．．是．．．．．．」
+@P
+@3
+@C
+
+「對不起﹐我不能讓不認識的人進來。」
+@P
+TXCLOSE(2)
+
+SHORTWAIT
+
+TXOPEN(2)
+TXFACE("F148")
+「對不起﹐管家先生﹐我們並不是亳不認識﹐我和妳家小姐是朋友。請告訴她『遺跡的老龍』﹐她就知道了。」
+@P
+@3
+@C
+TXFACE("F047")
+「咦﹗遺跡龍族﹖難道您是老龍．．．．．．」
+@P
+@2
+@C
+
+「呵﹐呵﹐呵﹐你也知道我嗎﹖我和小姐的父親是老朋友了。」
+@P
+TXCLOSE(3)
+
+SHORTWAIT
+
+TXOPEN(3)
+TXGIRL(0)
+「管家先生﹐有客人嗎﹖」
+@P
+TXCLOSE(2)
+
+SHORTWAIT
+
+TXOPEN(2)
+TXFACE("F144")
+「啊﹐喔﹐喔喔喔喔喔．．．．．．喔喔喔．．．」
+@P
+@3
+@C
+TXGIRL(9)
+「咦﹐是那一位呢﹖」
+@P
+@2
+@C
+
+「哦哦哦．．．真美麗啊﹗﹗請．．．請妳答應當我的妻．．．妻子吧﹗﹗」
+@P
+@3
+@C
+TXGIRL(16)
+「．．．．．．咦﹖」
+@P
+
+TXOPEN(9)
+TXFACE("F047")
+「喂喂喂﹐你在說什麼﹖」
+@P
+TXCLOSE(9)
+
+TXCLOSE(2)
+SHORTWAIT
+TXOPEN(2)
+
+TXFACE("F148")
+「呵呵呵﹐小姐。我們是居住在龍族遺跡的龍。
+@P
+@C
+今天我們龍族青年想要娶小姐做妻子﹐所以我們今天是來提親的。」
+@P
+@3
+@C
+TXGIRL(15)
+「咦﹗﹖是遺跡的．．．那麼﹐年紀不是一大把了﹗」
+@P
+@2
+@C
+TXFACE("F144")
+「祖父﹖你和TXA(NAME_FIRST)小姐在說些什麼﹖」
+@P
+@C
+TXFACE("F148")
+「沒什麼．．．只是隨便聊聊而已﹐不用擔心。」
+@P
+@3
+@C
+TXGIRL(12)
+「這．．．你覺得我有什麼優點﹐想要娶我呢﹖」
+@P
+@2
+@C
+TXFACE("F144")
+「啊．．．好久不見﹐上次真是失禮了。我就是妳在龍族遺跡入口見過的那一隻龍。」
+@P
+@3
+@C
+TXGIRL(16)
+「咦﹖﹗你就是．．．那個是驕傲的『男子』嗎﹖﹗」
+@P
+@2
+@C
+
+「上次真是對不起﹗讓小姐您生氣之後﹐我無時無刻不在反省著﹐但對妳仍舊念念不忘．．．．．．」
+@P
+@3
+@C
+
+「．．．．．．．．．」
+@P
+@2
+@C
+
+「我是真心真意的﹗請嫁給我吧﹗」
+@P
+@3
+@C
+TXGIRL(11)
+「但﹐但是你是龍族吧﹖人類和龍族結婚﹐並不太好吧﹗」
+@P
+@2
+@C
+
+「不會的﹗愛是沒有種族之分的﹗請妳嫁給我﹗我將用我一生一世來愛妳﹗」
+@P
+TXCLOSE(3)
+TXCLOSE(2)
+SHORTWAIT
+TXOPEN(3)
+TXFACE("F046")
+「啊﹐不好了﹗老爺。住在遺跡的龍族青年來向小姐提親了﹗」
+@P
+TXCLOSE(3)
+
+SHORTWAIT
+
+TXLC(2,30,238,1)
+TXOPEN(2)
+TXFACE("F148")
+「呀﹐好久不見了﹐勇者TXA(NAME_FAMILY)。可否將妳的女兒嫁給我們龍族的年輕人﹖我們打算下１００００Ｇ的聘金．．．．．．」
+
+SLCTX("答　　應,拒　　絕")
+
+IF ( ISLCT = 0 )
+	E_ETC[86]=1
+	TXCLOSE(2)
+	TXLC(2,17,148,1)
+	TXOPEN(3)
+	TXGIRL(16)
+	「爸爸﹗﹗﹗」
+	@P
+	TXOPEN(2)
+	TXFACE("F144")
+	「謝謝您﹗岳父大人﹗我會好好的照顧她的﹗」
+	@P
+	TXCLOSE(2)
+	SHORTWAIT
+	TXOPEN(2)
+	TXFACE("F148")
+	「呵﹐呵﹐呵﹗就這樣決定了﹐真是一椿大喜事﹗」
+	@P
+	@3
+	@C
+	TXGIRL(8)
+	「真是過份﹗竟然自己決定將我嫁給她．．．．．．」
+	@P
+	TXCLOSE(2)
+	TXOPEN(1)
+
+	GR_OPEN
+	IGRP_TBL3[0]=B_MORALS	IGRP_TBL1[0]="道德"
+	IGRP_CNT=1	IGRP_X=50	IGRP_Y=194
+	GRPOPEN(1,1)
+	IGRP_TBL3[0]=10000		IGRP_TBL1[0]="聘金"
+	IGRP_CNT=1	IGRP_X=50	IGRP_Y=228
+	GOLDOPEN(1,2)
+
+	從老龍手上得到了聘金１００００Ｇ﹗
+	TXA(NAME_FIRST)的道德下降了３０點﹗
+
+	GOLDADD(10000)
+	B_MORALS -= 30
+	IF ( B_MORALS < 0 ) B_MORALS = 0
+	GRPUPD(1,0,B_MORALS)
+	WWPROF(3)
+	URA_FATHER -= 20
+	IF ( URA_FATHER<0 ) URA_FATHER=0
+	@P
+	GR_CLOSE
+	WWIVENT(2,1)
+	TXCLOSE(1)
+	TXCLOSE(3)
+	RET
+
+IF ( ISLCT = 1 )
+	TXCLOSE(2)
+	TXLC(2,17,148,1)
+	TXLC(9,17,270,1)
+	TXOPEN(9)
+	TXFACE("F146")
+	「．．．．．．．．．」
+	@P
+	TXOPEN(2)
+	TXFACE("F148")
+	「還是失敗了．．．金錢依舊無法打動他們的心。哎﹗算了吧﹐回家去﹗」
+	@P
+	TXCLOSE(9)
+	TXCLOSE(2)
+	SHORTWAIT
+	TXOPEN(2)
+	TXFACE("F146")
+	「小姐﹗妳的心意如何呢﹗﹖」
+	@P
+	TXOPEN(3)
+	TXGIRL(3)
+	「．．．．．．很抱歉﹗」
+	@P
+	@2
+	@C
+	TXFACE("F147")
+	「．．．．．．我明白了。我也是男人﹐以後不會再來打擾妳。」
+	@P
+	@3
+	@C
+	TXGIRL(17)
+	「．．．．．．．．．」
+	@P
+	@2
+	@C
+
+	「希望妳的人生永遠閃耀著幸福的光輝。」
+	@P
+	@3
+	@C
+
+	「．．．．．．．．．
+	謝謝你。」
+	@P
+	TXCLOSE(3)
+	TXCLOSE(2)
+	SHORTWAIT
+	TXLC(2,30,238,1)
+	TXOPEN(2)
+	TXFACE("F148")
+	「那麼﹐告辭了。TXA(NAME_FAMILY)小姐﹐有空請到龍的遺跡來玩玩。」
+	@P
+	TXCLOSE(2)
+	WWIVENT(2,1)
+
+	TXOPEN(1)
+
+	GR_OPEN
+	IGRP_TBL3[0]=B_KIHIN	IGRP_TBL1[0]="氣質"
+	IGRP_CNT=1	IGRP_X=50	IGRP_Y=228
+	GRPOPEN(1,1)
+
+	二位龍族就這樣的離去了．．．．．．
+	TXA(NAME_FIRST)的氣質上昇了５點。
+	B_KIHIN += 5
+	GRPUPD(1,0,B_KIHIN)
+	URA_FATHER += 10
+	IF ( URA_FATHER >100 ) URA_FATHER = 100
+	@P
+	GR_CLOSE
+	TXCLOSE(1)
+	RET
+RET
+
+*SHORTWAIT
+TIMER1(50)WAIT1
+RET
+
+
+
+

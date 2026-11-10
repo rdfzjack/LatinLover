@@ -1,0 +1,153 @@
+TTL$("將軍")
+
+START
+
+OPEN(2)
+TXFACE("F047")
+「老爺﹐從城裡來了一輛馬車﹐好像是來迎接小姐的．．．．．．」
+@T
+OPEN(3)
+TXGIRL(9)
+「我﹖到底是什麼事．．．．．．」
+@T
+SS$(2)
+@C
+TXFACE("F078")
+「請GN$小姐無論如何都要和我走一趟王宮﹐這是國王的命令．．．．．．」
+@T
+CLOSE(2)
+CLOSE(3)
+OPEN(1)
+GN$坐上王城的馬車﹐朝著城裡去。
+@T
+CLOSE(1)
+
+OPEN(2)
+TXFACE("F086")
+「喔﹗GN$來的好﹐已經長得這麼大了。從前FN$帶妳來的時候﹐妳還是個小女孩﹐沒想到現在已經這麼大了。」
+@T
+OPEN(3)
+TXGIRL(0)
+「國王陛下﹐您好．．．」
+@T
+SS$(2)
+@C
+
+「嗯﹐我實在是很高興﹐沒想到勇者FN$的孩子已經長得這麼出色了﹐若不是我親眼看到還不相信呢。」
+@T
+SS$(3)
+@C
+
+「父親也託我問候您。」
+@T
+SS$(2)
+@C
+
+「今天找妳來是有重要的事。事實上﹐我們想請GN$妳擔任王國的將軍。」
+@T
+SS$(3)
+@C
+TXGIRL(15)
+「我．．．．．．﹖﹗」
+@T
+SS$(2)
+@C
+TXFACE("F054")
+「不用驚訝﹐妳從少女時代就有著光輝的武功勳績。我也快要退休了﹐像妳這麼了不起的年輕人﹐正是成為將軍的好人才。」
+@T
+SS$(3)
+@C
+TXGIRL(0)
+「但是我只是個十八歲的少女﹐恐怕無法承擔這麼大的責任。」
+@T
+SS$(2)
+@C
+
+「妳真的和妳的父親一樣的謙虛。不過﹐除了妳沒有其它適合的人選﹐妳應該要有自信一點。」
+@T
+OPEN(4)
+TXFACE("F086")
+「GN$呀﹐若是不安的話妳可以先在將軍那裡學習一切需要知道的事﹐等到差不多的時候再正式就職也可以﹐我和將軍都期待著妳的表現。」
+@T
+CLOSE(2)
+CLOSE(4)
+CLOSE(3)
+PICWORKING("Z026")
+OPEN(1)
+就這樣﹐GN$•FN$就開始擔任王國的將軍﹐在城裡學習各種軍務．．．．．．
+@T
+CLOSE(1)
+
+FINAL
+
+*GN$
+TXA(NAME_FIRST)
+RET
+
+*FN$
+TXA(NAME_FAMILY)
+RET
+
+*OPEN
+IF(AX=1)TXOPEN(10) RET
+IF(AX=2)TXOPEN(13) RET
+IF(AX=3)TXOPEN(15) RET
+IF(AX=4)TXOPEN(14) RET
+RET
+
+*CLOSE
+IF(AX=1)TXCLOSE(10) RET
+IF(AX=2)TXCLOSE(13) RET
+IF(AX=3)TXCLOSE(15) RET
+IF(AX=4)TXCLOSE(14) RET
+RET
+
+*SS$
+IF(AX=1)TXSLCT(10) RET
+IF(AX=2)TXSLCT(13) RET
+IF(AX=3)TXSLCT(15) RET
+IF(AX=4)TXSLCT(14) RET
+RET
+
+*TTL$
+RET
+
+*START
+TXLC(10,21,220,0)
+TXLC(13,32,146,1)
+TXLC(14,32,20,1)
+TXLC(15,17,270,2)
+RET
+
+*FINAL
+LOAD("EEWEDD")
+RET
+
+*PICWORKING
+
+STRSTACK
+C5 = BX
+PTBK(2)
+PTLD("ENDWFRML")
+PTLA("ENDWFRMR")
+PTLA("ENDWFRMU")
+PTLA("ENDWFRMD")
+PTBK(0)
+PTLD("ENDWFRMM")
+PTX(20,0,0)
+PTBK(2)
+PTM(12,0,0)
+PTM(60,0,2)
+PTM(18,-40,4)
+PTM(18,400,6)
+PIC(11)
+PTBK(0)
+PTX(0,0,0)
+SI = C5
+PTLD
+PTMF(0,0,0)
+PIC(12)
+PIC(13,0,0,20,0,40,400)
+TIMER1(120)WAIT1
+RET
+

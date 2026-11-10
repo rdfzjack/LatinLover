@@ -1,0 +1,311 @@
+
+
+
+
+
+
+
+
+
+STRSCLEAR
+
+.HEAVY_TRANING
+.HEAVY_T_COUNT
+.RANK_TRANING
+.HEAVY_WORKING
+.HEAVY_W_COUNT
+.RANK_WORKING
+
+HEAVY_TRANING	=	ENDNM[10]
+HEAVY_T_COUNT	=	ENDNM[11]
+RANK_TRANING	=	ENDNM[12]
+HEAVY_WORKING	=	ENDNM[13]
+HEAVY_W_COUNT	=	ENDNM[14]
+RANK_WORKING	=	ENDNM[15]
+
+.TBLNAMESTR[18]
+.TBLGIRLSTR[18]
+
+NARRATION
+
+PLAY(30)
+
+KANSOU_GIRL
+
+TIMER1(180)
+
+LOAD("EEWORK")
+
+
+
+
+
+
+
+
+*NARRATION
+MUSIC(2)
+EFC(23)
+TIMER1(120)
+PTBK(0)
+PTLD("ENDGIRLL")
+WAIT1
+TIMER1(60)
+PTX(0,0,0)
+PTLD("ENDGIRLR")
+PTLA("ENDGIRLU")
+PTLA("ENDGIRLD")
+PTX(40,0,0)
+PTX(0,-40,1)
+PTX(0,400,2)
+
+EDTX(1)
+@G
+八年的時間像夢一般的過去．．．．．．
+
+@F的女兒@R也十八歲﹐已經長大成人了。
+@@
+
+PARC(2,6,70)
+PARC(2,11, 22)
+PARC(2,5,  5,152)
+PARC(2,4)
+
+WAIT1
+EFC(22)
+RET
+
+
+
+
+
+
+*KANSOU_GIRL
+TIMER1(180)
+PTBK(0)
+PTLD("ENDMAILL")
+PTLA("ENDMAILR")
+PTLA("ENDMAILU")
+PTLA("ENDMAILD")
+PTLA("ENDMAINW")
+
+PIC(14,P_NENREI,0)
+PTLA
+PTLA("ENDPALET")
+WAIT1
+
+EFC(1)
+
+TIMER1(60)
+PTBK(0)
+PTX(0,0,0)
+PTX(40,0,1)
+PTX(0,-40,2)
+PTX(0,400,3)
+PTMF(0,0,4)
+PTX(66,54,6)
+PTPLT(8,0)
+WAIT1
+
+EFC(16)
+
+TEXT_EDIT_KANSOU
+
+PARC(2,8,  52)
+
+EDTX(5)
+C2 = DX
+C1 = DX * 23 / 2
+
+
+
+
+
+
+PARC(2,19,C2)
+PARC(2,11, 23)
+PARC(2,5,  0,0)
+PARC(2,9,  4,C1,2)
+PARC(2,10, 10,78,54,284)
+PARC(2,18)
+RET
+
+
+
+
+
+
+
+
+
+
+
+*TEXT_EDIT_KANSOU
+EDTX(1)
+@G
+　爸爸﹐謝謝您長久以來對我的照顧．．．也謝謝您的教導。@@
+IF ( S_BYOUKI>=0  S_BYOUKI=<9 )
+	@G
+	讓我的一生﹐總是很健康的成長著。
+	@@
+IF ( S_BYOUKI>=10  S_BYOUKI=<49 )
+	@G
+	如今已經長大成人了。
+	現在雖然身體有些小毛病﹐但沒有太大的關係。
+	@@
+IF ( S_BYOUKI>=50 )
+	@G
+	現在已經長大成人了。
+	只不過身體很虛弱容易生病．．．．．．
+	@@
+@G
+如果能夠再一次的回到少女時代。@@
+
+STRSCLEAR
+TBLNAMESTR[1]="自然科學的學習"
+TBLNAMESTR[2]="詩詞的學習"
+TBLNAMESTR[3]="神學的學習"
+TBLNAMESTR[4]="軍事的學習"
+TBLNAMESTR[5]="劍術的學習"
+TBLNAMESTR[6]="格鬥術的學習"
+TBLNAMESTR[7]="魔法的學習"
+TBLNAMESTR[8]="禮儀的學習"
+TBLNAMESTR[9]="繪畫的學習"
+TBLNAMESTR[10]="舞蹈的學習"
+TBLNAMESTR[11]="武者修行"
+
+TBLGIRLSTR[1]="鍊金術士"
+TBLGIRLSTR[2]="詩人"
+TBLGIRLSTR[3]="修女"
+TBLGIRLSTR[4]="軍事家"
+TBLGIRLSTR[5]="優秀的劍士"
+TBLGIRLSTR[6]="優秀的格鬥家"
+TBLGIRLSTR[7]="優秀的魔法師"
+TBLGIRLSTR[8]="貴婦"
+TBLGIRLSTR[9]="藝術家"
+TBLGIRLSTR[10]="舞蹈家"
+TBLGIRLSTR[11]="傳說的勇者"
+
+IF ( RANK_TRANING=1 )
+	@G
+	把時間都花在@@
+	EDTX(3,TBLNAMESTR[HEAVY_TRANING])
+	@G
+	上﹐想做的事卻又那麼多．．．@@
+	EDTX(3,TBLNAMESTR[HEAVY_TRANING])
+	@G
+	時的我只不過是一個小女孩﹐我一定要成為一個@@
+	EDTX(3,TBLGIRLSTR[HEAVY_TRANING])
+	@G
+	讓父親高興。@@
+	@G
+	老實的說﹐我也像一般的孩子一樣喜歡到處去玩。@@
+	@G
+	但是﹐我還是相當的感謝您﹐因為能為一件事情努力是一件了不起的事。
+	@@
+IF ( RANK_TRANING=2 )
+	@G
+	非常專心在@@
+	EDTX(3,TBLNAMESTR[HEAVY_TRANING])
+	@G
+	時的我﹐還是想做其他的事．．．一定是我在成為@@
+	EDTX(3,TBLGIRLSTR[HEAVY_TRANING])
+	@G
+	的努力不足才讓爸爸擔心。雖然這樣子是做父母應該的﹐但我知道是相當的辛苦﹐非常的感謝你。
+	@@
+IF ( RANK_TRANING=3 )
+	EDTX(3,TBLNAMESTR[HEAVY_TRANING])
+	@G
+	嗎﹖在做這些事的時候﹐雖然是相當的辛苦﹐但是現在想起來還是非常的愉快。
+	@@
+IF ( RANK_TRANING=4 )
+	EDTX(3,TBLNAMESTR[HEAVY_TRANING])
+	@G
+	呀．．．回想起來﹐這件事實在是很有趣﹐對我來說是不錯的經驗。
+	@@
+IF ( RANK_TRANING=5 )
+	@G
+	想起很多的事﹐有快樂的事､憂傷的事．．．遺憾的是﹐學過的事一點都不明白﹐所以沒有什麼幫助．．．．．．
+	@@
+
+STRSCLEAR
+TBLNAMESTR[2]="照顧小孩"
+TBLNAMESTR[3]="旅館"
+TBLNAMESTR[4]="農業"
+TBLNAMESTR[5]="公職"
+TBLNAMESTR[6]="廚師"
+TBLNAMESTR[7]="伐木"
+TBLNAMESTR[8]="美髮"
+TBLNAMESTR[9]="泥水匠"
+TBLNAMESTR[10]="打獵"
+TBLNAMESTR[11]="墓園"
+TBLNAMESTR[12]="家庭教師"
+TBLNAMESTR[13]="酒店服務生"
+TBLNAMESTR[14]="夜晚"
+TBLNAMESTR[15]="跳舞"
+
+TBLGIRLSTR[2]="托兒所的阿姨"
+TBLGIRLSTR[3]="旅館的伯伯"
+TBLGIRLSTR[4]="農場的叔叔"
+TBLGIRLSTR[5]="教會的修女"
+TBLGIRLSTR[6]="餐廳的叔叔"
+TBLGIRLSTR[7]="伐木的師父"
+TBLGIRLSTR[8]="美髮的師傅"
+TBLGIRLSTR[9]="泥水匠的師傅"
+TBLGIRLSTR[10]="獵人叔叔"
+TBLGIRLSTR[11]="墓園的老爹"
+TBLGIRLSTR[12]="伯母"
+TBLGIRLSTR[13]="酒店的伯伯"
+TBLGIRLSTR[14]="酒家的老闆"
+TBLGIRLSTR[15]="男爵"
+
+IF ( RANK_WORKING=1 )
+	@G
+	想起打工實在是花掉很多的心力﹐像我一樣的女孩子應該是絕無僅有的吧﹗@@
+	EDTX(3,TBLGIRLSTR[HEAVY_WORKING])
+	@G
+	好像把一切的事都託付給我﹐在打工的地方也一直都沒有把我開除﹐真是謝謝您了。
+	EDTX(3,TBLNAMESTR[HEAVY_WORKING])
+	@G
+	的工作上有著不想要輸給別人的個性﹐也都是託父親的福．．．．．．
+	@@
+IF ( RANK_WORKING=2 )
+	@G
+	現在想起來﹐打工一定會消耗相當的精力﹐而@@
+	EDTX(3,TBLGIRLSTR[HEAVY_WORKING])
+	@G
+	卻好像完全感覺不到般的﹐做了比我還多的事﹐這都是託您的福我才有今天．．．．．．@@
+	EDTX(3,TBLNAMESTR[HEAVY_WORKING])
+	@G
+	的工作上﹐好像有學到些什麼．．．．．．
+	@@
+IF ( RANK_WORKING=3 )
+	@G
+	想起打工這件事﹐就覺得要花費相當的精力。@@
+	EDTX(3,TBLGIRLSTR[HEAVY_WORKING])
+	@G
+	卻十分的照顧我。雖然從小開始就辛苦的工作著﹐但總是不錯的經驗﹐真是謝謝了。@@
+	EDTX(3,TBLNAMESTR[HEAVY_WORKING])
+	@G
+	的工作一切都很順利了．．．．．．
+	@@
+IF ( RANK_WORKING=4 )
+	@G
+	想起打工的事也不錯﹐
+	@@
+	EDTX(3,TBLGIRLSTR[HEAVY_WORKING])
+	@G
+	對於我做過的事總是相當的清楚．．．．．．
+	@@
+IF ( RANK_WORKING=5 )
+	@G
+	我想像我一樣沒有工作經驗的小孩子應該很少吧﹐
+	父親呀﹐真是謝謝你了。
+	但是老實說﹐我真的很想去打工．．．．．．
+	@@
+RET
+
+
+
+
+

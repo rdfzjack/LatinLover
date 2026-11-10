@@ -1,0 +1,133 @@
+TTL$("魔法老師")
+
+START
+
+OPEN(2)
+TXFACE("F057")
+「GN$呀﹐你已經十八歲了﹐該決定你的工作．．．．．．」
+@T
+OPEN(3)
+TXGIRL(0)
+「這個嘛．．．我還沒有決定．．．．．．」
+@T
+SS$(2)
+@C
+TXFACE("F042")
+「聽說小姐對於各方來的邀請都一一的拒絕了．．．．．．」
+@T
+SS$(3)
+@C
+TXGIRL(10)
+「城裡的工作不但辛苦﹐而且使用普通的魔法對我來說也是一種浪費．．．我是這樣覺得的。」
+@T
+SS$(2)
+@C
+TXFACE("F057")
+「哈哈哈．．．我雖然是使用著普通的魔法﹐但是我可不覺得呀。怎麼樣﹐想成為老師嗎﹖」
+@T
+SS$(3)
+@C
+TXGIRL(9)
+「咦﹖我可以當老師﹖」
+@T
+SS$(2)
+@C
+
+「想學魔法的人越來越多了﹐像妳這樣能力的人成為老師是最好不過了。怎麼樣﹐我也會幫助妳的。」
+@T
+SS$(3)
+@C
+TXGIRL(1)
+「謝謝你﹐師父。我也一直想和老師做一樣的工作呢。」
+@T
+SS$(2)
+@C
+
+「別太努力而讓我失業喔﹗」
+@T
+OPEN(4)
+TXFACE("F040")
+「太好了﹐小姐。祝妳成功。」
+@T
+CLOSE(4)
+CLOSE(2)
+CLOSE(3)
+PICWORKING("Z035")
+OPEN(1)
+就這樣﹐GN$•FN$在街上開了一家新的魔法教室﹐開始傳授魔法．．．．．．
+@T
+CLOSE(1)
+
+FINAL
+
+*GN$
+TXA(NAME_FIRST)
+RET
+
+*FN$
+TXA(NAME_FAMILY)
+RET
+
+*OPEN
+IF(AX=1)TXOPEN(10) RET
+IF(AX=2)TXOPEN(13) RET
+IF(AX=3)TXOPEN(15) RET
+IF(AX=4)TXOPEN(14) RET
+RET
+
+*CLOSE
+IF(AX=1)TXCLOSE(10) RET
+IF(AX=2)TXCLOSE(13) RET
+IF(AX=3)TXCLOSE(15) RET
+IF(AX=4)TXCLOSE(14) RET
+RET
+
+*SS$
+IF(AX=1)TXSLCT(10) RET
+IF(AX=2)TXSLCT(13) RET
+IF(AX=3)TXSLCT(15) RET
+IF(AX=4)TXSLCT(14) RET
+RET
+
+*TTL$
+RET
+
+*START
+TXLC(10,21,220,0)
+TXLC(13,32,146,1)
+TXLC(14,32,20,1)
+TXLC(15,17,270,2)
+RET
+
+*FINAL
+LOAD("EEWEDD")
+RET
+
+*PICWORKING
+
+STRSTACK
+C5 = BX
+PTBK(2)
+PTLD("ENDWFRML")
+PTLA("ENDWFRMR")
+PTLA("ENDWFRMU")
+PTLA("ENDWFRMD")
+PTBK(0)
+PTLD("ENDWFRMM")
+PTX(20,0,0)
+PTBK(2)
+PTM(12,0,0)
+PTM(60,0,2)
+PTM(18,-40,4)
+PTM(18,400,6)
+PIC(11)
+PTBK(0)
+PTX(0,0,0)
+SI = C5
+PTLD
+PTMF(0,0,0)
+PIC(12)
+PIC(13,0,0,20,0,40,400)
+TIMER1(120)WAIT1
+RET
+

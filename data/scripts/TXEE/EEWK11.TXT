@@ -1,0 +1,128 @@
+TTL$("農場工作")
+
+START
+
+OPEN(2)
+TXFACE("F063")
+「咦﹗這不是FN$的女兒GN$嗎﹐真是好久不見了﹐以前妳經常到我那裡去打工嘛。現在在做些什麼﹖」
+@T
+OPEN(3)
+TXGIRL(10)
+「這個嘛．．．我還沒有找到工作．．．．．．」
+@T
+SS$(2)
+@C
+
+「呵呵呵．．．．．．原來如此﹐真是巧遇。」
+@T
+SS$(3)
+@C
+TXGIRL(9)
+「．．．．．．﹖」
+@T
+SS$(2)
+@C
+
+「我的農場中的佃農都不幹了﹐照這樣下去的話﹐今年的麥子都要報廢了﹐真是傷腦筋。怎麼樣﹖到我那裡去工做如何﹖」
+@T
+SS$(3)
+@C
+TXGIRL(0)
+「還是打工嗎﹖」
+@T
+SS$(2)
+@C
+
+「並不是什麼正式的工作﹐不過．．．是不是勇者的女兒不能從事這些工作﹖」
+@T
+SS$(3)
+@C
+TXGIRL(1)
+「不是的﹐我很喜歡農業﹐請雇用我吧﹗」
+@T
+SS$(2)
+@C
+
+「好﹐就這樣決定了。我的農場待遇不錯﹐所以妳也不用擔心﹐我可不是壓榨勞工的人。」
+@T
+CLOSE(2)
+CLOSE(3)
+PICWORKING("Z011")
+OPEN(1)
+就這樣﹐GN$•FN$開始到農場裡過著耕作的日子．．．．．．
+@T
+CLOSE(1)
+
+FINAL
+
+*GN$
+TXA(NAME_FIRST)
+RET
+
+*FN$
+TXA(NAME_FAMILY)
+RET
+
+*OPEN
+IF(AX=1)TXOPEN(10) RET
+IF(AX=2)TXOPEN(13) RET
+IF(AX=3)TXOPEN(15) RET
+IF(AX=4)TXOPEN(14) RET
+RET
+
+*CLOSE
+IF(AX=1)TXCLOSE(10) RET
+IF(AX=2)TXCLOSE(13) RET
+IF(AX=3)TXCLOSE(15) RET
+IF(AX=4)TXCLOSE(14) RET
+RET
+
+*SS$
+IF(AX=1)TXSLCT(10) RET
+IF(AX=2)TXSLCT(13) RET
+IF(AX=3)TXSLCT(15) RET
+IF(AX=4)TXSLCT(14) RET
+RET
+
+*TTL$
+RET
+
+*START
+TXLC(10,21,220,0)
+TXLC(13,32,146,1)
+TXLC(14,32,20,1)
+TXLC(15,17,270,2)
+RET
+
+*FINAL
+LOAD("EEWEDD")
+RET
+
+*PICWORKING
+
+STRSTACK
+C5 = BX
+PTBK(2)
+PTLD("ENDWFRML")
+PTLA("ENDWFRMR")
+PTLA("ENDWFRMU")
+PTLA("ENDWFRMD")
+PTBK(0)
+PTLD("ENDWFRMM")
+PTX(20,0,0)
+PTBK(2)
+PTM(12,0,0)
+PTM(60,0,2)
+PTM(18,-40,4)
+PTM(18,400,6)
+PIC(11)
+PTBK(0)
+PTX(0,0,0)
+SI = C5
+PTLD
+PTMF(0,0,0)
+PIC(12)
+PIC(13,0,0,20,0,40,400)
+TIMER1(120)WAIT1
+RET
+

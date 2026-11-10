@@ -1,0 +1,114 @@
+TTL$("士兵")
+
+START
+
+OPEN(2)
+TXFACE("F039")
+「小姐﹐起床了。今天是妳要到城裡執勤的第一天﹐總不能第一天上班就遲到吧。」
+@T
+OPEN(3)
+TXGIRL(0)
+「不會的﹐吉普。我早就準備好了。」
+@T
+SS$(2)
+@C
+TXFACE("F042")
+「但是怎麼樣也想不到小姐會成為城裡的士兵．．．請加油吧﹗」
+@T
+SS$(3)
+@C
+
+「是呀﹐若是不好好的工作﹐就會被人說『繼承父親的職志』．．．．．．」
+@T
+SS$(2)
+@C
+
+「這是什麼話﹐不要管別人怎麼想﹐小姐就是小姐﹗好好的工作讓別人知道妳的實力﹐讓大家刮目相看。」
+@T
+SS$(3)
+@C
+
+「說的也是．．．謝謝你﹐吉普。我會做一個最棒的士兵讓大家瞧瞧。而且以後也要成為近衛隊長或是將軍才行﹗」
+@T
+SS$(2)
+@C
+TXFACE("F040")
+「就是這種氣魄。小姐﹐請加油﹗」
+@T
+CLOSE(2)
+CLOSE(3)
+PICWORKING("Z030")
+
+FINAL
+
+*GN$
+TXA(NAME_FIRST)
+RET
+
+*FN$
+TXA(NAME_FAMILY)
+RET
+
+*OPEN
+IF(AX=1)TXOPEN(10) RET
+IF(AX=2)TXOPEN(13) RET
+IF(AX=3)TXOPEN(15) RET
+IF(AX=4)TXOPEN(14) RET
+RET
+
+*CLOSE
+IF(AX=1)TXCLOSE(10) RET
+IF(AX=2)TXCLOSE(13) RET
+IF(AX=3)TXCLOSE(15) RET
+IF(AX=4)TXCLOSE(14) RET
+RET
+
+*SS$
+IF(AX=1)TXSLCT(10) RET
+IF(AX=2)TXSLCT(13) RET
+IF(AX=3)TXSLCT(15) RET
+IF(AX=4)TXSLCT(14) RET
+RET
+
+*TTL$
+RET
+
+*START
+TXLC(10,21,220,0)
+TXLC(13,32,146,1)
+TXLC(14,32,20,1)
+TXLC(15,17,270,2)
+RET
+
+*FINAL
+LOAD("EEWEDD")
+RET
+
+*PICWORKING
+
+STRSTACK
+C5 = BX
+PTBK(2)
+PTLD("ENDWFRML")
+PTLA("ENDWFRMR")
+PTLA("ENDWFRMU")
+PTLA("ENDWFRMD")
+PTBK(0)
+PTLD("ENDWFRMM")
+PTX(20,0,0)
+PTBK(2)
+PTM(12,0,0)
+PTM(60,0,2)
+PTM(18,-40,4)
+PTM(18,400,6)
+PIC(11)
+PTBK(0)
+PTX(0,0,0)
+SI = C5
+PTLD
+PTMF(0,0,0)
+PIC(12)
+PIC(13,0,0,20,0,40,400)
+TIMER1(120)WAIT1
+RET
+

@@ -1,0 +1,1054 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.GIVE_GOLD = 0
+
+TXLC(1,20,250,0)
+TXLC(3,20,250,2)
+
+SCNGIRL
+
+LOAD("MAINLOOP")
+
+
+
+
+
+*SCNGIRL
+
+E_ETC[91]=VAL_DAY
+E_ETC[38]=VAL_MONTH
+E_ETC[39]=VAL_YEAR
+
+RUN_TALK[0]++
+
+IF ( C1 = 0 )
+	RUN_TALK[1]++
+	SLC_TALK
+	RET
+IF ( C1 = 1 )
+	RUN_TALK[2]++
+	SLC_MONEY
+	RET
+IF ( C1 = 2 )
+	RUN_TALK[3]++
+	SLC_SERMON
+	RET
+
+
+
+RET
+
+
+
+
+
+
+
+
+*SLC_TALK
+IF ( C2 = 0 )	SAIKIN_CHO		RET
+IF ( C2 = 1 )	SAIKIN_STUDY	RET
+IF ( C2 = 2 )	SAIKIN_SONOTA	RET
+RET
+
+
+
+
+
+
+
+
+
+
+*SAIKIN_CHO
+
+IF ( FLAG_BYOUKI ! 0 )	CHO_BYOUKI	RET
+IF ( FLAG_HIKOUKA ! 0 ) CHO_HIKOUKA	RET
+
+
+
+
+URA_FATHER += 1
+IF ( URA_FATHER >100 ) URA_FATHER = 100
+
+RANDAM(7)
+IF ( IRND=1 )	CHO_FATHER		RET
+IF ( IRND=2 )	CHO_STEWARD		RET
+IF ( IRND=3 )	CHO_MOTHER_LOVE RET
+IF ( IRND=4 )	CHO_KILL_MONSTR RET
+IF ( IRND=5 )	CHO_SHINKOH		RET
+IF ( IRND=6 )	CHO_KANJUSEI	RET
+IF ( IRND=7 )	CHO_STRESS		RET
+RET
+
+
+
+
+
+*CHO_BYOUKI
+URA_FATHER += 5
+IF ( URA_FATHER >100 ) URA_FATHER = 100
+
+TXOPEN(3)
+IF ( S_BYOUKI < 20 )
+	TXGIRL(7)
+	「我只是有一點發燒﹐請不要擔心．．．．．．」
+	GOTO KAIWA_RET
+IF ( S_BYOUKI < 50 )
+	TXGIRL(7)
+	「這點的感冒一直沒有好﹐讓您擔心真是對不起。」
+	GOTO KAIWA_RET
+IF ( S_BYOUKI < 80 )
+	TXGIRL(7)
+	「嗯．．．嗯．．．胸口疼､頭好痛．．．．．．」
+	GOTO KAIWA_RET
+IF ( S_BYOUKI >= 80 )
+	TXGIRL(7)
+	「我已經不行了﹐父親你不要難過﹐要好好照顧自己．．．．．．」
+GOTO KAIWA_RET
+
+
+
+
+
+*CHO_HIKOUKA
+URA_FATHER += 3
+IF ( URA_FATHER >100 ) URA_FATHER = 100
+
+TXOPEN(3)
+IF ( S_HIKOUKA < 20 )
+	TXGIRL(8)
+	「有什麼事好說的。」
+	GOTO KAIWA_RET
+IF ( S_HIKOUKA < 50 )
+	TXGIRL(12)
+	「我不想做個百依百順的乖孩子﹐請不要管我。」
+	GOTO KAIWA_RET
+IF ( S_HIKOUKA < 80 )
+	TXGIRL(12)
+	「說什麼﹖」
+	GOTO KAIWA_RET
+IF ( S_HIKOUKA >= 80 )
+	TXGIRL(8)
+	「我的事情不用你管﹗﹗﹗」
+GOTO KAIWA_RET
+
+
+
+
+
+*CHO_FATHER
+
+TXOPEN(3)
+IF ( URA_FATHER < 20 )
+	TXGIRL(0)
+	「什麼﹖我只不過想和爸爸談談而已．．．．．．」
+	GOTO KAIWA_RET
+IF ( URA_FATHER < 50 )
+	TXGIRL(0)
+	「今天天氣不錯﹐我們出去玩好嗎﹖」
+	GOTO KAIWA_RET
+IF ( URA_FATHER < 80 )
+	TXGIRL(0)
+	「咦﹖爸爸是怎麼想的﹖一切都是為我好吧﹗」
+	GOTO KAIWA_RET
+IF ( URA_FATHER >= 80 )
+	TXGIRL(1)
+	「我最喜歡爸爸了﹐希望您永遠健康。」
+GOTO KAIWA_RET
+
+
+
+
+
+*CHO_STEWARD
+
+TXOPEN(3)
+IF ( URA_STEWARD < 20 )
+	TXGIRL(0)
+	「父親的故鄉好像是很遠的地方吧﹖真想去一次看看。」
+	GOTO KAIWA_RET
+IF ( URA_STEWARD < 50 )
+	TXGIRL(9)
+	「爸﹐管家先生不是魔族嗎﹖怎麼會家裡幫忙家事呢﹖」
+	GOTO KAIWA_RET
+IF ( URA_STEWARD < 80 )
+	TXGIRL(1)
+	「管家先生的眼睛好漂亮﹗﹗﹗」
+	GOTO KAIWA_RET
+IF ( URA_STEWARD >= 80 )
+	TXGIRL(9)
+	「爸﹐管家先生的年紀到底是幾歲﹖在來這裡之前是做什麼的﹖」
+GOTO KAIWA_RET
+
+
+
+
+
+*CHO_MOTHER_LOVE
+
+TXOPEN(3)
+IF ( URA_MOTHER_LOVE < 20 )
+	TXGIRL(3)
+	「死去的媽媽是個怎麼樣的人﹖」
+	GOTO KAIWA_RET
+IF ( URA_MOTHER_LOVE < 50 )
+	TXGIRL(0)
+	「做過保姆的工作之後﹐才知道父母的辛勞．．．．．．」
+	GOTO KAIWA_RET
+IF ( URA_MOTHER_LOVE < 80 )
+	TXGIRL(0)
+	「小孩子真是可愛﹐我好喜歡保姆這個工作。」
+	GOTO KAIWA_RET
+IF ( URA_MOTHER_LOVE >= 80 )
+	TXGIRL(0)
+	「我的夢想是生許多可愛的寶寶﹐做一個盡責的母親。」
+GOTO KAIWA_RET
+
+
+
+
+
+*CHO_KILL_MONSTR
+
+TXOPEN(3)
+IF ( URA_KILL_MONSTR = 0 )
+	TXGIRL(0)
+	「對於一般的女孩子來說﹐想要戰勝城外的怪獸是相當困難的。」
+	GOTO KAIWA_RET
+IF ( URA_KILL_MONSTR >=1  URA_KILL_MONSTR < 10 )
+	TXGIRL(0)
+	「城外的怪獸果然很恐怖﹐在碰到的時候害我的心跳的好快。」
+	GOTO KAIWA_RET
+IF ( URA_KILL_MONSTR >=10 URA_KILL_MONSTR < 50 )
+	TXGIRL(0)
+	「這些城外的怪獸就算是馴服了﹐還是相當可怕．．．．．．」
+	GOTO KAIWA_RET
+IF ( URA_KILL_MONSTR >=50 )
+	TXGIRL(0)
+	「雖然在武者修行中殺了許多的怪獸﹐但是這些怪獸實在是好可憐。」
+GOTO KAIWA_RET
+
+
+
+
+
+*CHO_SHINKOH
+
+TXOPEN(3)
+IF ( B_SHINKOH < 30 )
+	TXGIRL(9)
+	「爸﹐真的有神的存在嗎﹖」
+	GOTO KAIWA_RET
+IF ( B_SHINKOH < 80 )
+	TXGIRL(0)
+	「教會的人手一直不足﹐所以忙的不得了。」
+	GOTO KAIWA_RET
+IF ( B_SHINKOH < 200 )
+	TXGIRL(1)
+	「我認為教會的修女都是很好的人﹐我很嚮往這項工作。」
+	GOTO KAIWA_RET
+IF ( B_SHINKOH >= 200 )
+	TXGIRL(0)
+	「有神的相伴﹐不論是怎麼樣的生活都可以活得相當的愉快。」
+GOTO KAIWA_RET
+
+
+
+
+
+*CHO_KANJUSEI
+
+TXOPEN(3)
+IF ( B_KANJUSEI < 30 )
+	TXGIRL(8)
+	「我對於繪畫､音樂這些東西一點辦法都沒有﹐大概是沒有才能吧﹖」
+	GOTO KAIWA_RET
+IF ( B_KANJUSEI < 80 )
+	TXGIRL(0)
+	「為什麼那些有能力的人可以畫出這麼美的畫﹖」
+	GOTO KAIWA_RET
+IF ( B_KANJUSEI < 200 )
+	TXGIRL(1)
+	「早上聽到小鳥的歌聲或是風的樂曲心情就很好。」
+	GOTO KAIWA_RET
+IF ( B_KANJUSEI >= 200 )
+	TXGIRL(0)
+	「爸﹐您不覺得風聲就好像歌聲一樣嗎﹖一定是風的精靈在唱歌。」
+GOTO KAIWA_RET
+
+
+
+
+
+*CHO_STRESS
+
+TXOPEN(3)
+IF ( B_STRESS < 30 )
+	TXGIRL(0)
+	「又是一天的開始﹐我要好好的做。」
+	GOTO KAIWA_RET
+IF ( B_STRESS < 60 )
+	TXGIRL(0)
+	「總是希望有時間和父親一起到那裡去玩玩。」
+	GOTO KAIWA_RET
+IF ( B_STRESS < 100 )
+	TXGIRL(0)
+	「我總覺得有著好大的壓力﹐實在是好累．．．．．．」
+	GOTO KAIWA_RET
+IF ( B_STRESS >= 100 )
+	TXGIRL(0)
+	「好累．．．我想休息．．．．．．」
+GOTO KAIWA_RET
+
+
+
+
+
+
+
+
+
+
+*SAIKIN_STUDY
+
+URA_FATHER += 1
+IF ( URA_FATHER >100 ) URA_FATHER = 100
+
+CHK_MAX4(H_SENSHI,H_MAHO,H_SYAKOH,H_KAJI)
+IF ( SI = 1 )	STUDY_SENSHI	RET
+IF ( SI = 2 )	STUDY_MAHO		RET
+IF ( SI = 3 )	STUDY_SYAKOH	RET
+IF ( SI = 4 )	STUDY_KAJI		RET
+RET
+
+
+
+
+
+*STUDY_SENSHI
+RANDAM(3)
+IF ( IRND=1 )	SENSHI_SENTOH	RET
+IF ( IRND=2 )	SENSHI_KOUGEKI	RET
+IF ( IRND=3 )	SENSHI_BOUGYO	RET
+RET
+
+
+
+
+
+*SENSHI_SENTOH
+TXOPEN(3)
+IF ( V_SENTOH < 30 )
+	TXGIRL(11)
+	「劍的使用方式我總是搞不清楚．．．．．．」
+	GOTO KAIWA_RET
+IF ( V_SENTOH < 60 )
+	TXGIRL(1)
+	「最近好不容易才慢慢學到如何使用武器。」
+	GOTO KAIWA_RET
+IF ( V_SENTOH < 90 )
+	TXGIRL(0)
+	「在這個世界上還有許多比我更強的人﹐想要進步就要再多多磨練。」
+	GOTO KAIWA_RET
+IF ( V_SENTOH >= 90 )
+	TXGIRL(14)
+	「關於使用劍的技巧﹐我有信心不會輸給任何人。」
+GOTO KAIWA_RET
+
+
+
+
+
+*SENSHI_KOUGEKI
+TXOPEN(3)
+IF ( V_KOUGEKI < 30 )
+	TXGIRL(11)
+	「我沒有什麼力量﹐是不是應該多多鍛練肌肉﹖」
+	GOTO KAIWA_RET
+IF ( V_KOUGEKI < 60 )
+	TXGIRL(9)
+	「除了多多鍛練外﹐強力的武器也可以增加攻擊的能力不是嗎﹖」
+	GOTO KAIWA_RET
+IF ( V_KOUGEKI < 90 )
+	TXGIRL(11)
+	「攻擊力提高是不錯﹐但是一身肌肉看起來總是挺不好意思的。」
+	GOTO KAIWA_RET
+IF ( V_KOUGEKI >= 90 )
+	TXGIRL(1)
+	「我的力量已經相當強盛﹐不再需要什麼鎧甲了。」
+GOTO KAIWA_RET
+
+
+
+
+
+*SENSHI_BOUGYO
+TXOPEN(3)
+IF ( V_BOUGYO < 30 )
+	TXGIRL(0)
+	「防禦力可以靠鎧甲而上升吧﹖我想要好一點的裝備．．．．．．」
+	GOTO KAIWA_RET
+IF ( V_BOUGYO < 60 )
+	TXGIRL(0)
+	「連鎧甲都沒有﹐難道說我以一身的細皮可以阻擋攻擊嗎﹖」
+	GOTO KAIWA_RET
+IF ( V_BOUGYO < 90 )
+	TXGIRL(1)
+	「有了父親買來的鎧甲﹐我想我不會在戰鬥中受傷了。」
+	GOTO KAIWA_RET
+IF ( V_BOUGYO >= 90 )
+	TXGIRL(14)
+	「有了這樣的防禦力﹐我幾乎可以說是無敵的了。」
+GOTO KAIWA_RET
+
+
+
+
+
+*STUDY_MAHO
+RANDAM(3)
+IF ( IRND=1 )	MAHO_MAHOGI		RET
+IF ( IRND=2 )	MAHO_MARYOKU	RET
+IF ( IRND=3 )	MAHO_KOHMAR		RET
+RET
+
+
+
+
+
+*MAHO_MAHOGI
+TXOPEN(3)
+IF ( V_MAHOGIJUTSU < 30 )
+	TXGIRL(11)
+	「魔法實在是很難．．．．．．．我沒什麼自信。」
+	GOTO KAIWA_RET
+IF ( V_MAHOGIJUTSU < 60 )
+	TXGIRL(1)
+	「總近總算開始了解什麼是魔法了．．．．．．」
+	GOTO KAIWA_RET
+IF ( V_MAHOGIJUTSU < 90 )
+	TXGIRL(11)
+	「我的魔法能力好像變得更厲害了﹖」
+	GOTO KAIWA_RET
+IF ( V_MAHOGIJUTSU >= 90 )
+	TXGIRL(1)
+	「我對於魔法的技術方面﹐已經有自信了。」
+GOTO KAIWA_RET
+
+
+
+
+
+*MAHO_MARYOKU
+TXOPEN(3)
+IF ( V_MARYOKU < 30 )
+	TXGIRL(11)
+	「魔法能力低的話﹐就算是知道魔法怎麼使用也是沒用的．．．．．．」
+	GOTO KAIWA_RET
+IF ( V_MARYOKU < 60 )
+	TXGIRL(0)
+	「魔法能力再不上升的話﹐戰鬥就不會勝利了。」
+	GOTO KAIWA_RET
+IF ( V_MARYOKU < 90 )
+	TXGIRL(0)
+	「魔法能力的提高﹐以及魔法技巧的提升﹐對於戰鬥時使用魔法都是很有幫助的。」
+	GOTO KAIWA_RET
+IF ( V_MARYOKU >= 90 )
+	TXGIRL(0)
+	「我認為我已經有充份的魔法能力了。」
+GOTO KAIWA_RET
+
+
+
+
+
+*MAHO_KOHMAR
+TXOPEN(3)
+IF ( V_KOHMARYOKU < 30 )
+	TXGIRL(0)
+	「對於使用魔法的對手﹐只有鎧甲是沒有用的。還是好好訓練抗魔能力吧﹗」
+	GOTO KAIWA_RET
+IF ( V_KOHMARYOKU < 60 )
+	TXGIRL(0)
+	「對付抗魔能力高的敵人﹐只是使用魔法是不夠的。」
+	GOTO KAIWA_RET
+IF ( V_KOHMARYOKU < 90 )
+	TXGIRL(14)
+	「抗魔能力可以破解強大的攻擊魔法﹐所以會使用魔法的敵人就沒有那麼恐怖了。」
+	GOTO KAIWA_RET
+IF ( V_KOHMARYOKU >= 90 )
+	TXGIRL(14)
+	「我有自信﹐敵人的魔法已經對我發生不了什麼作用了。」
+GOTO KAIWA_RET
+
+
+
+
+
+*STUDY_SYAKOH
+RANDAM(3)
+IF ( IRND=1 )	SYAKOH_REIGI	RET
+IF ( IRND=2 )	SYAKOH_GEIJ		RET
+IF ( IRND=3 )	SYAKOH_WAJYU	RET
+RET
+
+
+
+
+
+*SYAKOH_REIGI
+TXOPEN(3)
+IF ( V_REIGI < 30 )
+	TXGIRL(11)
+	「禮儀實在是很難學習．．．．．．」
+	GOTO KAIWA_RET
+IF ( V_REIGI < 60 )
+	TXGIRL(11)
+	「就算是多麼的用功﹐我還是搞不清楚什麼是禮儀．．．．．．」
+	GOTO KAIWA_RET
+IF ( V_REIGI < 90 )
+	TXGIRL(1)
+	「我終於知道了﹐禮儀並不是一種技巧﹐而是待人處事的常識。」
+	GOTO KAIWA_RET
+IF ( V_REIGI >= 90 )
+	TXGIRL(0)
+	「果然﹐禮儀之道是相當漫長的．．．．．．」
+GOTO KAIWA_RET
+
+
+
+
+
+*SYAKOH_GEIJ
+TXOPEN(3)
+IF ( V_GEIJYUTSU < 30 )
+	TXGIRL(11)
+	「繪畫和音樂都不是我能夠瞭解的事．．．．．．」
+	GOTO KAIWA_RET
+IF ( V_GEIJYUTSU < 60 )
+	TXGIRL(1)
+	「繪畫是很有趣的東西﹐但是我總是學不好。」
+	GOTO KAIWA_RET
+IF ( V_GEIJYUTSU < 90 )
+	TXGIRL(9)
+	「爸﹐藝術是為了什麼而生的﹖」
+	GOTO KAIWA_RET
+IF ( V_GEIJYUTSU >= 90 )
+	TXGIRL(1)
+	「藝術可以豐富人的心靈﹐可以陶冶人的性情。」
+GOTO KAIWA_RET
+
+
+
+
+
+
+*SYAKOH_WAJYU
+TXOPEN(3)
+IF ( V_WAJYUTU < 30 )
+	TXGIRL(11)
+	「我總覺得這些社交界的人都是可怕的傢伙。」
+	GOTO KAIWA_RET
+IF ( V_WAJYUTU < 60 )
+	TXGIRL(9)
+	「為什麼大家都穿著豪華的衣服跳著奇怪的舞步﹖」
+	GOTO KAIWA_RET
+IF ( V_WAJYUTU < 90 )
+	TXGIRL(0)
+	「在城裡的舞會可以遇到各種人﹐真高興．．．．．．」
+	GOTO KAIWA_RET
+IF ( V_WAJYUTU >= 90 )
+	TXGIRL(1)
+	「我好喜歡城裡的人。」
+GOTO KAIWA_RET
+
+
+
+
+
+
+*STUDY_KAJI
+RANDAM(3)
+IF ( IRND = 1 ) 	KAJI_RYOURI		RET
+IF ( IRND = 2 ) 	KAJI_SOUJISE	RET
+IF ( IRND = 3 ) 	KAJI_KIDATE		RET
+RET
+
+
+
+
+
+*KAJI_RYOURI
+TXOPEN(3)
+IF ( V_RYOURI < 30 )
+	TXGIRL(11)
+	「雖然是女孩子﹐但是我只會做煎蛋､沙拉這種簡單的東西．．．．．．」
+	GOTO KAIWA_RET
+IF ( V_RYOURI < 60 )
+	TXGIRL(1)
+	「現在我最拿手的菜是法式煎蛋了唷﹖」
+	GOTO KAIWA_RET
+IF ( V_RYOURI < 90 )
+	TXGIRL(0)
+	「爸﹐今天的晚餐都是我做的唷﹐好吃嗎﹖」
+	GOTO KAIWA_RET
+IF ( V_RYOURI >= 90 )
+	TXGIRL(14)
+	「我做的食物很好吃﹐街上的人都想要吃到我做的菜。」
+GOTO KAIWA_RET
+
+
+
+
+
+*KAJI_SOUJISE
+TXOPEN(3)
+IF ( V_SOUJISENTAKU < 30 )
+	TXGIRL(0)
+	「掃地､洗衣對我來說都不拿手．．．．．．」
+	GOTO KAIWA_RET
+IF ( V_SOUJISENTAKU < 60 )
+	TXGIRL(0)
+	「洗衣這件事﹐不仔細的做是不行的。」
+	GOTO KAIWA_RET
+IF ( V_SOUJISENTAKU < 90 )
+	TXGIRL(1)
+	「掃地是我最拿手的事。」
+	GOTO KAIWA_RET
+IF ( V_SOUJISENTAKU >= 90 )
+	TXGIRL(0)
+	「掃地也好﹐洗衣也好﹐只要能夠好好的做都會做得好。」
+GOTO KAIWA_RET
+
+
+
+
+
+*KAJI_KIDATE
+TXOPEN(3)
+IF ( V_KIDATE < 30 )
+	TXGIRL(11)
+	「我的個性．．．這該怎麼說﹖」
+	GOTO KAIWA_RET
+IF ( V_KIDATE < 60 )
+	TXGIRL(0)
+	「爸﹐謝謝你總是擔心著我的事。」
+	GOTO KAIWA_RET
+IF ( V_KIDATE < 90 )
+	TXGIRL(0)
+	「這塊蛋糕請分給附近的鄰居吧。」
+	GOTO KAIWA_RET
+IF ( V_KIDATE >= 90 )
+	TXGIRL(1)
+	「我想要成為可愛的新娘﹐啦∼啦∼啦∼」
+GOTO KAIWA_RET
+
+
+
+
+
+
+*SAIKIN_SONOTA
+
+URA_FATHER += 1
+IF ( URA_FATHER >100 ) URA_FATHER = 100
+
+RANDAM(13)
+*SAIKIN_SONOTA_TEST
+TXOPEN(3)
+IF ( IRND = 1 )
+	TXGIRL(0)
+	「TXA(NAME_FIRST)是個好名字﹐我喜歡。」
+	GOTO KAIWA_RET
+
+IF ( IRND = 2 )
+	IF ( P_BLOOD = 0 )
+		TXGIRL(1)
+		「我的血型是Ａ型唷﹗」
+	IF ( P_BLOOD = 1 )
+		TXGIRL(1)
+		「我生來就是是Ｂ型血型的。」
+	IF ( P_BLOOD = 2 )
+		TXGIRL(0)
+		「我是典型的Ｏ型血型。」
+	IF ( P_BLOOD = 3 )
+		TXGIRL(1)
+		「ＡＢ型的人都像我一樣唷。」
+	GOTO KAIWA_RET
+
+IF ( IRND = 3 )
+	TXGIRL(0)
+	「TXPOINT(P_BORTHMONTH)月TXPOINT(P_BORTHDAY)日是什麼日子﹐記得嗎﹖」
+	GOTO KAIWA_RET
+
+IF ( IRND = 4 )
+	TXGIRL(0)
+	IF ( P_SHIKYU = 0 )
+		「白羊座的女孩子是相當活潑的。」
+	IF ( P_SHIKYU = 1 )
+		「金牛座的女孩子是相當內向的。」
+	IF ( P_SHIKYU = 2 )
+		「雙子座的女孩子是相當有個性的。」
+	IF ( P_SHIKYU = 3 )
+		「巨蟹座的女孩子是富有羅曼蒂克氣息的。」
+	IF ( P_SHIKYU = 4 )
+		「獅子座的女孩子可以成為不錯的領導人物。」
+	IF ( P_SHIKYU = 5 )
+		「處女座的女孩子有著纖細的思考能力。」
+	IF ( P_SHIKYU = 6 )
+		「天秤座的女孩子頭腦很好。」
+	IF ( P_SHIKYU = 7 )
+		「天蠍座的女孩子具有神秘的魅力。」
+	IF ( P_SHIKYU = 8 )
+		「人馬座的女孩子在做什麼事的時候都非常的慎重。」
+	IF ( P_SHIKYU = 9 )
+		「摩蠍座的女孩子大多有著沉著的性格。」
+	IF ( P_SHIKYU = 10 )
+		「寶瓶座的女孩子大多是聰明伶俐的人。」
+	IF ( P_SHIKYU = 11 )
+		「雙魚座的女孩子有著強烈的第六感。」
+	GOTO KAIWA_RET
+
+IF ( IRND = 5 )
+	IF ( P_SHINCHO < 15000 )
+		TXGIRL(0)
+		「我想要再長高一點。」
+	IF ( P_SHINCHO >=15000 P_SHINCHO<16300)
+		TXGIRL(9)
+		「我的身高和一般人差不多嘛。」
+	IF ( P_SHINCHO >=16300 P_SHINCHO<17000)
+		TXGIRL(0)
+		「我這樣的女孩子是不是高了一點。」
+	IF ( P_SHINCHO >=17000 )
+		TXGIRL(10)
+		「我太高了﹐真是不好意思．．．．．．」
+	GOTO KAIWA_RET
+
+IF ( IRND = 6 )
+	IF ( P_TAIJYU < 4500 )
+		TXGIRL(11)
+		「吃太多食物的話﹐是會發胖的．．．．．．」
+	IF ( P_TAIJYU >=4500 P_TAIJYU<5200 )
+		TXGIRL(0)
+		「想要再瘦一點．．．．．．」
+	IF ( P_TAIJYU >=5200 )
+		TXGIRL(11)
+		「哎呀﹐好像還是太胖了．．．．．．」
+	GOTO KAIWA_RET
+
+IF ( IRND = 7 )
+	TXGIRL(0)
+	「這件衣服很合身吧﹖」
+	GOTO KAIWA_RET
+
+IF ( IRND = 8 )
+	IF ( URA_BREAST_TYPE = 3 )
+		IF ( B_IROKE >= 120 )
+			TXGIRL(1)
+			「怎麼樣﹐我的胸圍很大吧﹗」
+		IF ( B_IROKE < 120 )
+			TXGIRL(11)
+			「胸圍太大也是一種煩惱．．．．．．」
+		GOTO KAIWA_RET
+	IF ( URA_BREAST_TYPE = 2 )
+		IF ( B_IROKE >= 120 )
+			TXGIRL(1)
+			「我的胸圍和一般人差不多嘛。」
+		IF ( B_IROKE < 120 )
+			TXGIRL(10)
+			「我的胸圍比起一般人要差一點．．．．．．」
+		GOTO KAIWA_RET
+	IF ( URA_BREAST_TYPE = 1 )
+		IF ( B_IROKE >= 120 )
+			TXGIRL(11)
+			「爸﹐男人為什麼都喜歡胸部大的女人﹖」
+		IF ( B_IROKE < 120 )
+			TXGIRL(1)
+			「胸部小活動起來比較方便唷﹗」
+		GOTO KAIWA_RET
+
+IF ( IRND = 9 )
+	IF ( URA_HIP_TYPE = 3 )
+		TXGIRL(0)
+		「我的臀圍太大了﹐實在是不高興。」
+	IF ( URA_HIP_TYPE = 2 )
+		TXGIRL(11)
+		「爸﹐你覺得我的身材如何﹖」
+	IF ( URA_HIP_TYPE = 1 )
+		TXGIRL(0)
+		「我總覺得自己的臀部太小了。」
+	GOTO KAIWA_RET
+
+IF ( IRND = 10 )
+	IF ( URA_FATHER < 30 )
+		TXGIRL(0)
+		「爸﹐我現在很忙﹐以後再說吧﹗」
+		GOTO KAIWA_RET
+	IF ( URA_FATHER>=30 URA_FATHER<60 )
+		TXGIRL(0)
+		「父親﹐和我談話愉快嗎﹖」
+		GOTO KAIWA_RET
+	IF ( URA_FATHER>=60 URA_FATHER<90 )
+		TXGIRL(1)
+		「我最喜歡的人就是爸爸了．．．．．．」
+		GOTO KAIWA_RET
+	IF ( URA_FATHER >= 90 )
+		TXGIRL(1)
+		「我將來想要成為父親的新娘。」
+		GOTO KAIWA_RET
+
+IF ( IRND = 11 )
+	IF ( URA_STEWARD < 50 )
+		TXGIRL(0)
+		「管家吉普總是忙個不停。」
+		GOTO KAIWA_RET
+	IF ( URA_STEWARD >=50  URA_STEWARD<80 )
+		TXGIRL(0)
+		「這麼說的話﹐吉普先生的生日是那一天﹖」
+		GOTO KAIWA_RET
+	IF ( URA_STEWARD >=80 )
+		TXGIRL(10)
+		「吉普先生﹐真棒．．．．．．」
+		GOTO KAIWA_RET
+
+IF ( IRND =12 )
+	IF ( URA_MOTHER_LOVE < 30 )
+		TXGIRL(0)
+		「我一直都很喜歡小孩子．．．．．．」
+		GOTO KAIWA_RET
+	IF ( URA_MOTHER_LOVE>=30  URA_MOTHER_LOVE <80 )
+		TXGIRL(0)
+		「不知道何時我才能成為母親．．．．．．」
+		GOTO KAIWA_RET
+	IF ( URA_MOTHER_LOVE >=80 )
+		TXGIRL(1)
+		「我最喜歡小孩子了﹐希望能早一天成為一名母親。」
+		GOTO KAIWA_RET
+
+IF ( IRND =13 )
+	IF ( URA_KILL_MONSTR = 0 )
+		TXGIRL(11)
+		「和怪獸戰鬥真是太恐怖了．．．．．．」
+		GOTO KAIWA_RET
+	IF ( URA_KILL_MONSTR>=1 URA_KILL_MONSTR<10 )
+		TXGIRL(1)
+		「第一次打敗怪獸的時候﹐我真是相當的興奮﹗﹗﹗」
+		GOTO KAIWA_RET
+	IF ( URA_KILL_MONSTR>=10 URA_KILL_MONSTR<50 )
+		TXGIRL(9)
+		「爸爸﹐這些怪獸是從那裡來的﹖」
+		GOTO KAIWA_RET
+	IF ( URA_KILL_MONSTR >= 50 )
+		TXGIRL(17)
+		「不管我有多好的技術﹐怪獸也不會完全消失的。」
+		GOTO KAIWA_RET
+GOTO KAIWA_RET
+
+*KAIWA_RET
+@P
+TXCLOSE(3)
+RET
+
+
+
+
+
+*SLC_MONEY
+
+C1 = P_NENREI - 10
+C1 = C1 * 10
+GIVE_GOLD = 20 + C1
+
+IF ( FLAG_HIKOUKA ! 0 )
+	TXOPEN(3)
+	TXGIRL(8)
+	「．．．咦﹖只有這些﹖再多給一點吧。」
+	@P
+	TXCLOSE(3)
+
+	TXOPEN(1)
+	TXA(NAME_FIRST)得到TXGOLD(GIVE_GOLD)的金錢。
+	GOLDSUB(GIVE_GOLD)
+	WWPROF(3)
+	@P
+	TXCLOSE(1)
+	E_ETC[35]=1
+
+	RET
+
+IF ( FLAG_BYOUKI ! 0 )
+	TXOPEN(3)
+	TXGIRL(7)
+	「我都病成這樣了﹐就算是有零用錢又有什麼用．．．．．．」
+
+	@P
+	TXCLOSE(3)
+	RET
+
+
+TXOPEN(3)
+TXGIRL(0)
+「謝謝爸爸﹐我會好好的使用的。」
+@P
+TXCLOSE(3)
+
+TXOPEN(1)
+TXA(NAME_FIRST)得到TXGOLD(GIVE_GOLD)的金錢。
+GOLDSUB(GIVE_GOLD)
+WWPROF(3)
+
+IF ( B_STRESS > 0 )
+	GR_OPEN
+	IGRP_TBL1[0] = "疲勞"
+	IGRP_TBL3[0] = B_STRESS
+	IGRP_CNT=1
+	IGRP_X=35
+	IGRP_Y=192
+	GRPOPEN(1,1)
+
+	IF ( B_STRESS < 20 )
+		疲勞下降TXPOINT(B_STRESS)點．．．．．．
+		B_STRESS = 0
+	IF ( B_STRESS >= 20 )
+		疲勞下降２０點．．．．．．
+		B_STRESS -= 20
+	GRPUPD(1,0,B_STRESS)
+	@P
+	GR_CLOSE
+	TXCLOSE(1)
+	RET
+@P
+TXCLOSE(1)
+RET
+
+
+
+
+
+*SLC_SERMON
+TXOPEN(1)
+TXA(NAME_FAMILY)對TXA(NAME_FIRST)說教。
+@P
+TXCLOSE(1)
+
+IF ( FLAG_HIKOUKA ! 0 )
+	TXOPEN(3)
+	TXGIRL(3)
+	「．．．．．．．．．．．．．．．．．．．．．．．．．．．對不起。」
+	@P
+	TXCLOSE(3)
+
+
+
+	IF ( B_STRESS > 0 )
+		TXOPEN(1)
+		GR_OPEN
+		IGRP_TBL1[0] = "疲勞"
+		IGRP_TBL3[0] = B_STRESS
+		IGRP_CNT=1
+		IGRP_X=35
+		IGRP_Y=192
+		GRPOPEN(1,1)
+		IF ( B_STRESS < URA_FATHER )
+			疲勞下降TXPOINT(B_STRESS)點．．．．．．
+			B_STRESS = 0
+		IF ( B_STRESS >= URA_FATHER )
+			C1 = URA_FATHER
+			IF ( C1 = 0 ) C1 = 1
+			疲勞下降TXPOINT(C1)點．．．．．．
+			B_STRESS -= C1
+		GRPUPD(1,0,B_STRESS)
+		@P
+		GR_CLOSE
+		TXCLOSE(1)
+	URA_FATHER += 5
+	IF ( URA_FATHER >100 ) URA_FATHER = 100
+	RET
+
+IF ( FLAG_BYOUKI ! 0 )
+	TXOPEN(3)
+	TXGIRL(3)
+	「．．．我﹐我做了什麼事嗎﹖」
+	@P
+	TXCLOSE(3)
+
+
+
+	TXOPEN(1)
+	GR_OPEN
+	IGRP_TBL1[0] = "疲勞"
+	IGRP_TBL3[0] = B_STRESS
+	IGRP_CNT=1
+	IGRP_X=35
+	IGRP_Y=192
+	GRPOPEN(1,1)
+	疲勞上升５點．．．．．．
+	B_STRESS += 5
+	GRPUPD(1,0,B_STRESS)
+	@P
+	GR_CLOSE
+	TXCLOSE(1)
+	URA_FATHER -= 5
+	IF ( URA_FATHER < 0 ) URA_FATHER = 0
+	RET
+
+
+TXOPEN(3)
+TXGIRL(11)
+「．．．．．．．．．」
+@P
+TXCLOSE(3)
+TXOPEN(1)
+TXA(NAME_FIRST)並不釋然的樣子．．．．．．
+@P
+TXCLOSE(1)
+
+URA_FATHER -= 2
+IF ( URA_FATHER < 0 ) URA_FATHER = 0
+RET
+
+
+
+
+
+*CHK_MAX4
+IF ( AX >= BX )
+	IF ( AX >= CX )
+		IF ( AX >= DX )
+			SI = 1
+			RET
+		SI = 4
+		RET
+	IF ( CX >= DX )
+		SI = 3
+		RET
+	SI = 4
+	RET
+IF ( BX >= CX )
+	IF ( BX >= DX )
+		SI = 2
+		RET
+	SI = 4
+	RET
+IF ( CX >= DX )
+	SI = 3
+	RET
+SI = 4
+RET
+
+
+
+

@@ -1,0 +1,170 @@
+
+
+
+
+
+
+
+
+
+
+
+STRSCLEAR
+
+RUN_MONTH[41]++
+
+EVNT041
+
+IF ( GIRL_DAMEG!0 )
+	PLAY(8)
+IF ( GIRL_DAMEG=0 )
+	IF ( TM_SEASON =1 ) PLAY(4)
+	IF ( TM_SEASON =2 ) PLAY(5)
+	IF ( TM_SEASON =3 ) PLAY(6)
+	IF ( TM_SEASON =4 ) PLAY(7)
+
+LOAD("MAINBORN")
+
+
+
+
+
+*EVNT041
+
+MUSIC(2)
+
+TXLC(3,17,270,1)
+TXOPEN(3)
+TXFACE("F078")
+「等一下﹐現在在賣的劍﹐不是恩賜之劍嗎﹖」
+@P
+
+PLAY(29)
+
+
+
+
+
+@2
+@C
+「哎呀﹗法官大人﹐我可什麼都不知道﹗」
+@P
+TXCLOSE(2)
+@3
+@C
+
+「嗯﹗這的確是恩賜之劍﹐太可惡了﹗竟然將國王賞賜的獎品賣掉﹗﹗
+@P
+@C
+TXA(NAME_FIRST)和其父親TXA(NAME_FAMILY)﹗我必須好好盤問盤問﹗」
+@P
+TXCLOSE(3)
+WWIVENT(2,0)
+
+SHORTWAIT
+
+TXLC(3,31,270,2)
+
+WWIVENT(5,0,50,40)
+WWIVENT(1,0,"E010")
+
+TXOPEN(2)
+TXFACE("F086")
+「TXA(NAME_FIRST)﹐竟然把我特意賜與的劍賣掉﹖難道不珍惜TXA(NAME_FAMILY)辛苦教育妳﹐讓妳得到武鬥會冠軍的情份嗎﹖」
+@P
+TXOPEN(3)
+TXGIRL(3)
+「很抱歉﹗國王。」
+@P
+
+GR_OPEN
+STRSCLEAR
+IGRP_TBL1[0]="社交評價"
+IGRP_TBL3[0]=H_SYAKOH
+IGRP_CNT=1
+IGRP_X=54
+IGRP_Y=200
+GRPOPEN(1,1)
+TXOPEN(10)
+社交評價下降３０點﹗
+H_SYAKOH -= 30
+IF ( H_SYAKOH < 0 ) H_SYAKOH=0
+GRPUPD(1,0,H_SYAKOH)
+@P
+TXCLOSE(10)
+GR_CLOSE
+
+@2
+@C
+TXFACE("F054")
+「雖然說是小孩子﹐只要是參加了武鬥會的比賽﹐就應該了解劍是武人的心。
+@P
+@C
+把那賣給卑賤商人之類的事﹐可說是荒謬絕倫的。」
+@P
+@3
+@C
+
+「．．．．．．．．．．．．」
+@P
+
+MUSIC(2)
+
+GR_OPEN
+STRSCLEAR
+IGRP_TBL1[0]="戰士評價"
+IGRP_TBL3[0]=H_SENSHI
+IGRP_CNT=1
+IGRP_X=54
+IGRP_Y=200
+GRPOPEN(1,1)
+TXOPEN(10)
+戰士評價下降了３０點﹗
+H_SENSHI -= 30
+IF ( H_SENSHI < 0 ) H_SENSHI=0
+GRPUPD(1,0,H_SENSHI)
+@P
+TXCLOSE(10)
+GR_CLOSE
+
+
+
+C1 = S_JINMYAKU[3] / 2
+C2 = S_JINMYAKU[8] / 2
+
+S_JINMYAKU[3] -= C1
+S_JINMYAKU[8] -= C2
+
+C3 = C1 + C2
+IF ( S_JINMYAKU[0] < C3 )	C3 = S_JINMYAKU[0]
+IF ( C3 > 0 )
+	GR_OPEN
+	STRSCLEAR
+	IGRP_TBL1[0]="人際關係"
+	IGRP_TBL3[0]=S_JINMYAKU[0]
+	IGRP_CNT=1
+	IGRP_X=54
+	IGRP_Y=200
+	GRPOPEN(1,1)
+	TXOPEN(10)
+	人際關係下降了TXPOINT(C3)點﹗
+	S_JINMYAKU[0] -= C3
+	IF ( S_JINMYAKU[0] < 0 ) S_JINMYAKU[0]=0
+	GRPUPD(1,0,S_JINMYAKU[0])
+	@P
+	TXCLOSE(10)
+	GR_CLOSE
+
+TXCLOSE(2)
+TXCLOSE(3)
+WWIVENT(2,0)
+
+RET
+
+*SHORTWAIT
+TIMER1(30)WAIT1
+RET
+
+
+
+

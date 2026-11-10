@@ -1,0 +1,56 @@
+
+
+
+
+
+*CHECK_MEN
+MAN01N
+RET
+
+*MAN01N
+R_FACE			="F121"
+R_NAME			="警備兵"
+R_CHINOH		=10
+RDM(55,65)
+R_SENTOH=AX
+RDM(50,60)
+R_KOUGEKI=AX
+R_BOUGYO		=45
+R_SOUKOU		=40
+R_SKNAME		="皮甲"
+R_MAHOGIJUTSU	=0
+R_MARYOKU		=0
+R_KOHMARYOKU	=5
+R_SENI			=200
+R_DASSYUTU		=50
+R_TSUKON		=10
+RDM(240,350)
+R_MAX_HP		=AX
+R_MAX_MP		=0
+RDM(50,100)
+R_GOLD			=AX
+R_SE_ATTACK	=1
+
+MENMES[0]="小姐午安﹐要去什麼地方﹖"
+MENMES[1]="晚安﹐這樣的晚上﹐一個人在野外是很危險的。"
+RANDAM(3)
+IF(AX=1)MENMES[2]="離開城裡那麼遠﹐可能會有危險的怪物出現。"
+IF(AX=2)MENMES[2]="我們警備兵的任務就是確保城鎮四週的安全。"
+IF(AX=3)MENMES[2]="一個女孩子敢在這種地方旅行﹐真是令人佩服﹗"
+RANDAM(3)
+IF(AX=1)MENMES[3]="哎呀哎呀﹐真是自以為是的人．．．．．．"
+IF(AX=2)MENMES[3]="這個時候的女孩子都這樣說話的嗎﹖．．．．．．"
+IF(AX=3)MENMES[3]="就算被怪物吃掉了也還不自覺吧﹗"
+MENMES[4]="哦﹐小姑娘﹗想幹什麼﹗﹗"
+MENMES[5]="哦哦．．．真像個怪物﹐誰來幫幫我啊．．．．．．"
+MENMES[6]="混蛋﹐居然敢反抗王國的士兵﹗"
+RANDAM(3)
+IF(AX=1)MENMES[7]="喔喔．．．這樣的女孩．．．．．．"
+IF(AX=2)MENMES[7]="咳咳咳．．．殘酷的女孩．．．．．．"
+IF(AX=3)MENMES[7]="喔喔喔．．．這樣的事﹐報應何時才到．．．．．．"
+
+RET
+
+
+
+

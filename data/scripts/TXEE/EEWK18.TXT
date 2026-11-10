@@ -1,0 +1,128 @@
+TTL$("墓園工作")
+
+START
+
+OPEN(2)
+TXFACE("F069")
+「哎呀﹐是GN$小姐呀﹐最近在做些什麼呀﹖」
+@T
+OPEN(3)
+TXGIRL(10)
+「這個嘛．．．我還不知道要做什麼．．．．．．」
+@T
+SS$(2)
+@C
+
+「咦﹖那麼妳來做做看好了。」
+@T
+SS$(3)
+@C
+TXGIRL(9)
+「．．．．．．﹖」
+@T
+SS$(2)
+@C
+
+「墓園工作是一件很辛苦的事﹐妳既然沒有事情的話﹐就來試試看好了．．．．．．」
+@T
+SS$(3)
+@C
+TXGIRL(18)
+「哇哇哇．．．年紀輕輕的就叫我去墓園．．．」
+@T
+SS$(2)
+@C
+
+「的確墓園不是很好的工作﹐但是這個工作卻相當的重要﹐每個職業都有它嚴肅的一面﹐妳可不能忽視。」
+@T
+SS$(3)
+@C
+TXGIRL(0)
+「這樣的話．．．請雇用我吧﹗」
+@T
+SS$(2)
+@C
+
+「能夠了解就好﹐和我一起來守護死者的靈魂﹐守著靈魂的安息地吧．．．．．．」
+@T
+CLOSE(2)
+CLOSE(3)
+PICWORKING("Z018")
+OPEN(1)
+就這樣﹐GN$•FN$開始在墓地工作．．．．．．
+@T
+CLOSE(1)
+
+FINAL
+
+*GN$
+TXA(NAME_FIRST)
+RET
+
+*FN$
+TXA(NAME_FAMILY)
+RET
+
+*OPEN
+IF(AX=1)TXOPEN(10) RET
+IF(AX=2)TXOPEN(13) RET
+IF(AX=3)TXOPEN(15) RET
+IF(AX=4)TXOPEN(14) RET
+RET
+
+*CLOSE
+IF(AX=1)TXCLOSE(10) RET
+IF(AX=2)TXCLOSE(13) RET
+IF(AX=3)TXCLOSE(15) RET
+IF(AX=4)TXCLOSE(14) RET
+RET
+
+*SS$
+IF(AX=1)TXSLCT(10) RET
+IF(AX=2)TXSLCT(13) RET
+IF(AX=3)TXSLCT(15) RET
+IF(AX=4)TXSLCT(14) RET
+RET
+
+*TTL$
+RET
+
+*START
+TXLC(10,21,220,0)
+TXLC(13,32,146,1)
+TXLC(14,32,20,1)
+TXLC(15,17,270,2)
+RET
+
+*FINAL
+LOAD("EEWEDD")
+RET
+
+*PICWORKING
+
+STRSTACK
+C5 = BX
+PTBK(2)
+PTLD("ENDWFRML")
+PTLA("ENDWFRMR")
+PTLA("ENDWFRMU")
+PTLA("ENDWFRMD")
+PTBK(0)
+PTLD("ENDWFRMM")
+PTX(20,0,0)
+PTBK(2)
+PTM(12,0,0)
+PTM(60,0,2)
+PTM(18,-40,4)
+PTM(18,400,6)
+PIC(11)
+PTBK(0)
+PTX(0,0,0)
+SI = C5
+PTLD
+PTMF(0,0,0)
+PIC(12)
+PIC(13,0,0,20,0,40,400)
+TIMER1(120)WAIT1
+RET
+

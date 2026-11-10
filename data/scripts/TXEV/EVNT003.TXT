@@ -1,0 +1,119 @@
+
+
+
+
+
+.SOUBI_REC
+
+RUN_MONTH[3]++
+E_HOT	=	1
+
+STRSCLEAR
+
+TXLC(1,4,290,0)
+TXLC(2,1,260,2)
+TXLC(3,31,270,2)
+WWIVENT(5,0,6,40)
+
+WWIVENT(1,0,"E001")
+
+EVNT003
+
+WWIVENT(2,0)
+
+LOAD("MAINBORN")
+
+
+
+
+
+*EVNT003
+TXOPEN(2)
+TXFACE("F042")
+「今年的夏天真是罕見的酷暑﹐我非常擔心小姐的身子．．．．．．．」
+@P
+
+ITEM_SRCH(1,44)
+SOUBI_REC=DX
+
+IF ( AX = 1  DRESS_ICON ! 44 )
+	TXFACE("F043")
+	「要不要馬上換穿夏服呢﹖」
+	SLCTX("換穿衣服,這樣就好")
+
+	IF ( ISLCT = 0 )
+		TXCLOSE(2)
+		ITEM_SRCH(6,SOUBI_REC)
+		WWIVENT(2,0)
+		WWGIRL(2)
+		WWIVENT(1,0,"E001")
+		TXOPEN(9)
+		TXGIRL(1)
+		GR_OPEN
+		STRSCLEAR
+		IGRP_TBL1[0]="疲勞" IGRP_TBL3[0]=B_STRESS
+		IGRP_CNT=1
+		IGRP_X=54
+		IGRP_Y=200
+		GRPOPEN(1,1)
+		B_STRESS -= 5
+		IF ( B_STRESS < 0 ) B_STRESS=0
+		「夏天還是穿夏天的衣服比較好。」
+		GRPUPD(1,0,	B_STRESS)
+		@P
+		GR_CLOSE
+		TXCLOSE(9)
+	IF ( ISLCT = 1 )
+		TXFACE("F044")
+		「不行啦﹗這樣的話﹐對身體不好．．．．．．」
+		@P
+		TXOPEN(9)
+		TXGIRL(4)
+		「熱死人了．．．．．．」
+		@P
+		TXCLOSE(9)
+		TXCLOSE(2)
+		WWIVENT(2,0)
+	RET
+
+IF ( DRESS_ICON = 44 )
+	TXFACE("F043")
+	「不過﹐小姐已經換上夏服﹐沒有什麼好擔心的了。」
+	@P
+	TXOPEN(9)
+	TXGIRL(0)
+	「好涼快呀﹗」
+	@P
+	TXCLOSE(9)
+	TXCLOSE(2)
+	WWIVENT(2,0)
+	RET
+
+TXOPEN(9)
+TXGIRL(4)
+GR_OPEN
+STRSCLEAR
+IGRP_TBL1[0]="體力"     IGRP_TBL3[0]=B_TAIRYOKU
+IGRP_CNT=1
+IGRP_X=54
+IGRP_Y=200
+GRPOPEN(1,1)
+C1 = B_TAIRYOKU / 3
+B_TAIRYOKU -= C1
+「啊∼熱死了。」
+GRPUPD(1,0,B_TAIRYOKU)
+@P
+@2
+TXFACE("F046")
+@C
+「早知道就去買夏天的服裝給妳．．．．．．」
+@P
+GR_CLOSE
+TXCLOSE(9)
+TXCLOSE(2)
+WWIVENT(2,0)
+RET
+
+
+
+

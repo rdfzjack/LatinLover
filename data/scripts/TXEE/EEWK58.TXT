@@ -1,0 +1,139 @@
+TTL$("富豪之妻")
+
+START
+
+OPEN(4)
+TXFACE("F042")
+「小姐﹐有一位先生登門拜訪﹐想要向妳求婚．．．．．．」
+@T
+CLOSE(4)
+OPEN(2)
+TXFACE("F142")
+「GN$小姐﹐我是普克比奇大富豪﹐請答應我的求婚。」
+@T
+OPEN(3)
+TXGIRL(9)
+「啊．．．請問你基於什麼原因﹐決定向我求婚呢﹖」
+@T
+SS$(2)
+@C
+
+「我對妳的美貌一見鍾情﹗我活到現在見過無數的美女﹐但是沒有一位具有及上妳萬分之一的魅力。」
+@T
+SS$(3)
+@C
+TXGIRL(10)
+「這．．．．．．」
+@T
+SS$(2)
+@C
+
+「那麼我先告辭﹐等待妳的好消息了．．．．．．」
+@T
+CLOSE(2)
+SS$(3)
+@T
+OPEN(2)
+TXFACE("F048")
+「總算回去了．．．小姐﹐該怎麼辦呢﹖」
+@T
+SS$(3)
+@C
+
+「迷戀於我的美貌嗎．．．吉普先生﹐我決定要嫁給那個人。」
+SS$(2)
+@C
+TXFACE("F047")
+「耶∼不是今天才認識的﹐當真嗎﹗﹖」
+@T
+SS$(3)
+@C
+
+「嗯﹐愛是一種突然而來的感覺嘛﹐難道你不明白嗎﹖」
+@T
+SS$(2)
+@C
+TXFACE("F046")
+「我是不太清楚．．．．．．」
+@T
+CLOSE(2)
+CLOSE(3)
+PICWORKING("Z046")
+OPEN(1)
+就這樣﹐GN$•FN$答應了富豪的求婚﹐決定結婚了．．．．．．
+@T
+CLOSE(1)
+
+FINAL
+
+*GN$
+TXA(NAME_FIRST)
+RET
+
+*FN$
+TXA(NAME_FAMILY)
+RET
+
+*OPEN
+IF(AX=1)TXOPEN(10) RET
+IF(AX=2)TXOPEN(13) RET
+IF(AX=3)TXOPEN(15) RET
+IF(AX=4)TXOPEN(14) RET
+RET
+
+*CLOSE
+IF(AX=1)TXCLOSE(10) RET
+IF(AX=2)TXCLOSE(13) RET
+IF(AX=3)TXCLOSE(15) RET
+IF(AX=4)TXCLOSE(14) RET
+RET
+
+*SS$
+IF(AX=1)TXSLCT(10) RET
+IF(AX=2)TXSLCT(13) RET
+IF(AX=3)TXSLCT(15) RET
+IF(AX=4)TXSLCT(14) RET
+RET
+
+*TTL$
+RET
+
+*START
+TXLC(10,21,220,0)
+TXLC(13,32,146,1)
+TXLC(14,32,20,1)
+TXLC(15,17,270,2)
+RET
+
+*FINAL
+LOAD("EETNMT")
+RET
+
+*PICWORKING
+
+STRSTACK
+C5 = BX
+PTBK(2)
+PTLD("ENDWFRML")
+PTLA("ENDWFRMR")
+PTLA("ENDWFRMU")
+PTLA("ENDWFRMD")
+PTBK(0)
+PTLD("ENDWFRMM")
+PTX(20,0,0)
+PTBK(2)
+PTM(12,0,0)
+PTM(60,0,2)
+PTM(18,-40,4)
+PTM(18,400,6)
+PIC(11)
+PTBK(0)
+PTX(0,0,0)
+SI = C5
+PTLD
+PTMF(0,0,0)
+PIC(12)
+PIC(13,0,0,20,0,40,400)
+TIMER1(120)WAIT1
+RET
+

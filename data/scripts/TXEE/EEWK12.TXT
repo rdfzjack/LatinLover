@@ -1,0 +1,128 @@
+TTL$("教堂工作")
+
+START
+
+OPEN(2)
+TXFACE("F053")
+「哎呀﹗這不是GN$小姐嗎﹖以前常常到教堂來打工﹐現在在做些什麼﹖」
+@T
+OPEN(3)
+TXGIRL(10)
+「這個嘛．．．我現在還不知道要做什麼．．．．．．」
+@T
+SS$(2)
+@C
+
+「啊．．．這樣啊﹐這是神的指引吧﹗」
+@T
+SS$(3)
+@C
+TXGIRL(9)
+「．．．．．．﹖」
+@T
+SS$(2)
+@C
+
+「怎麼說呢﹖最近教堂也人手不足﹐本來想雇用一些助手﹐但是沒有合適的人．．．．．．GN$小姐﹐妳有沒有興趣試試看﹖」
+@T
+SS$(3)
+@C
+TXGIRL(0)
+「是怎麼樣的工作﹖」
+@T
+SS$(2)
+@C
+
+「主要的工作也是打掃之類的工作﹐不過也有機會進行修女的修行﹐再怎麼說都是為神服務的工作。」
+@T
+SS$(3)
+@C
+TXGIRL(1)
+「這樣呀﹐我也很喜歡教堂的工作﹐就拜託妳了。」
+@T
+SS$(2)
+@C
+
+「得救了﹐GN$小姐請加油吧。」
+@T
+CLOSE(2)
+CLOSE(3)
+PICWORKING("Z012")
+OPEN(1)
+就這樣﹐GN$•FN$開始在教堂中做著一般的工作．．．．．．
+@T
+CLOSE(1)
+
+FINAL
+
+*GN$
+TXA(NAME_FIRST)
+RET
+
+*FN$
+TXA(NAME_FAMILY)
+RET
+
+*OPEN
+IF(AX=1)TXOPEN(10) RET
+IF(AX=2)TXOPEN(13) RET
+IF(AX=3)TXOPEN(15) RET
+IF(AX=4)TXOPEN(14) RET
+RET
+
+*CLOSE
+IF(AX=1)TXCLOSE(10) RET
+IF(AX=2)TXCLOSE(13) RET
+IF(AX=3)TXCLOSE(15) RET
+IF(AX=4)TXCLOSE(14) RET
+RET
+
+*SS$
+IF(AX=1)TXSLCT(10) RET
+IF(AX=2)TXSLCT(13) RET
+IF(AX=3)TXSLCT(15) RET
+IF(AX=4)TXSLCT(14) RET
+RET
+
+*TTL$
+RET
+
+*START
+TXLC(10,21,220,0)
+TXLC(13,32,146,1)
+TXLC(14,32,20,1)
+TXLC(15,17,270,2)
+RET
+
+*FINAL
+LOAD("EEWEDD")
+RET
+
+*PICWORKING
+
+STRSTACK
+C5 = BX
+PTBK(2)
+PTLD("ENDWFRML")
+PTLA("ENDWFRMR")
+PTLA("ENDWFRMU")
+PTLA("ENDWFRMD")
+PTBK(0)
+PTLD("ENDWFRMM")
+PTX(20,0,0)
+PTBK(2)
+PTM(12,0,0)
+PTM(60,0,2)
+PTM(18,-40,4)
+PTM(18,400,6)
+PIC(11)
+PTBK(0)
+PTX(0,0,0)
+SI = C5
+PTLD
+PTMF(0,0,0)
+PIC(12)
+PIC(13,0,0,20,0,40,400)
+TIMER1(120)WAIT1
+RET
+

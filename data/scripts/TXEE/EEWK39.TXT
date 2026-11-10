@@ -1,0 +1,133 @@
+TTL$("勇者（戰士型）")
+
+START
+
+OPEN(4)
+TXFACE("F042")
+「小姐．．．真的要外出去旅行嗎﹖危險唷．．．．．．」
+@T
+OPEN(2)
+TXFACE("F054")
+「GN$小姐﹐國王陛下想要任命妳為將軍﹐為什麼要拒絕呢﹖」
+@T
+CLOSE(4)
+OPEN(3)
+TXGIRL(0)
+「將軍﹐我非常感謝國王陛下的心意。但是﹐我也想要在廣大的世界裡試試自己的能力﹐昨晚我已經取得父親的許可了．．．．．．」
+@T
+SS$(2)
+@C
+TXFACE("F049")
+「小姐．．．小姐也選擇了和老爺一樣的道路嗎﹖」
+@T
+SS$(3)
+@C
+TXGIRL(17)
+「．．．我也不知道﹐只不過沒有親眼看看這個廣大的世界﹐總覺得無法滿足．．．．．．」
+@T
+SS$(2)
+@C
+TXFACE("F054")
+「嗯﹐果然是血脈相傳。妳是勇者FN$的女兒﹐誰也無法阻擋妳的冒險心﹐但是有一個約定。」
+@T
+SS$(3)
+@C
+TXGIRL(0)
+「是什麼﹖」
+@T
+SS$(2)
+@C
+
+「多少年都可以﹐當你結束冒險之後﹐一定要再回到這個國家。然後就可以告訴大家妳的冒險事蹟﹐妳的父親也是這樣的希望吧。」
+@T
+SS$(3)
+@C
+
+「我知道了﹐我一定會回來。請各位保重自己的身體﹐吉普你也要保重唷。」
+@T
+SS$(2)
+@C
+TXFACE("F046")
+「嗯嗯嗯．．．小姐也要保重．．．．．．」
+@T
+CLOSE(3)
+CLOSE(2)
+PICWORKING("Z025")
+OPEN(1)
+就這樣﹐GN$•FN$踏上了冒險的旅程．．．默默目送的父親FN$在女兒的眼神中似乎看到自己年輕時的神情。」
+@T
+CLOSE(1)
+
+FINAL
+
+*GN$
+TXA(NAME_FIRST)
+RET
+
+*FN$
+TXA(NAME_FAMILY)
+RET
+
+*OPEN
+IF(AX=1)TXOPEN(10) RET
+IF(AX=2)TXOPEN(13) RET
+IF(AX=3)TXOPEN(15) RET
+IF(AX=4)TXOPEN(14) RET
+RET
+
+*CLOSE
+IF(AX=1)TXCLOSE(10) RET
+IF(AX=2)TXCLOSE(13) RET
+IF(AX=3)TXCLOSE(15) RET
+IF(AX=4)TXCLOSE(14) RET
+RET
+
+*SS$
+IF(AX=1)TXSLCT(10) RET
+IF(AX=2)TXSLCT(13) RET
+IF(AX=3)TXSLCT(15) RET
+IF(AX=4)TXSLCT(14) RET
+RET
+
+*TTL$
+RET
+
+*START
+TXLC(10,21,220,0)
+TXLC(13,32,146,1)
+TXLC(14,32,20,1)
+TXLC(15,17,270,2)
+RET
+
+*FINAL
+LOAD("EEWEDD")
+RET
+
+*PICWORKING
+
+STRSTACK
+C5 = BX
+PTBK(2)
+PTLD("ENDWFRML")
+PTLA("ENDWFRMR")
+PTLA("ENDWFRMU")
+PTLA("ENDWFRMD")
+PTBK(0)
+PTLD("ENDWFRMM")
+PTX(20,0,0)
+PTBK(2)
+PTM(12,0,0)
+PTM(60,0,2)
+PTM(18,-40,4)
+PTM(18,400,6)
+PIC(11)
+PTBK(0)
+PTX(0,0,0)
+SI = C5
+PTLD
+PTMF(0,0,0)
+PIC(12)
+PIC(13,0,0,20,0,40,400)
+TIMER1(120)WAIT1
+RET
+

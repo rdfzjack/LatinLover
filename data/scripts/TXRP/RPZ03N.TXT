@@ -1,0 +1,73 @@
+
+
+
+
+
+*CHECK_MONSTOR
+MSR03N
+RET
+
+*KAIWA_OK
+KWA03N
+RET
+
+*MSR03N
+R_MS_NUMBER		=3
+R_FACE			="F163"
+R_MONSTOR		="M003"
+R_NAME			="雪怪"
+R_CHINOH		=50
+RDM(30,55)
+R_SENTOH=AX
+RDM(50,65)
+R_KOUGEKI=AX
+R_BOUGYO		=40
+R_SOUKOU		=30
+R_SKNAME		="厚的毛皮"
+R_MAHOGIJUTSU	=0
+R_MARYOKU		=0
+RDM(0,5)
+R_KOHMARYOKU=AX
+RDM(40,100)
+R_SENI=AX
+R_DASSYUTU		=70
+R_TSUKON		=5
+RDM(80,200)
+R_MAX_HP=AX
+R_MAX_MP		=0
+RDM(1,25)
+R_GOLD=AX
+R_SE_ATTACK	=3
+
+RANDAM(3)
+IF(AX=1)MONSTR[0]="唔啊啊啊﹗"
+IF(AX=2)MONSTR[0]="唔啊啊哦﹗﹗"
+IF(AX=3)MONSTR[0]="吼吼吼﹗﹗"
+RANDAM(3)
+IF(AX=1)MONSTR[1]="今天也很寒冷．．．唔唔唔．．．．．．"
+IF(AX=2)MONSTR[1]="好像很好吃的女孩﹐但是我今天已經很飽了．．．．．．"
+IF(AX=3)MONSTR[1]="卜依卜依．．．．．．"
+RANDAM(3)
+IF(AX=1)MONSTR[2]="小心銀色的狼﹐那傢伙很強。"
+IF(AX=2)MONSTR[2]="山頂上有一個非常恐怖的神．．．．．．"
+IF(AX=3)MONSTR[2]="在雪山滑倒的話很糟糕．．．．．．"
+RANDAM(3)
+IF(AX=1)MONSTR[3]="嘿嘿嘿﹐今天到底要吃什麼好呢∼﹗"
+IF(AX=2)MONSTR[3]="好像是個很好吃的女孩∼﹗"
+IF(AX=3)MONSTR[3]="呼呼呼﹐大餐走過來了。"
+MONSTR[4]="呼呼呼﹐哈哈哈﹗開動∼．．．．．．"
+MONSTR[5]="真是不容易吃到．．．．．．"
+RET
+
+
+
+
+
+*KWA03N
+AX = 0
+IF ( B_KANJUSEI >= 200 )	AX=1
+RET
+
+
+
+

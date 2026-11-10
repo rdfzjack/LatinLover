@@ -1,0 +1,131 @@
+
+
+
+
+
+
+
+
+RUN_MONTH[16]++
+
+STRSCLEAR
+
+TXLC(1,4,290,0)
+TXLC(2,17,148,1)
+TXLC(3,31,270,2)
+WWIVENT(5,0,50,80)
+
+EVNT016
+
+E_EAT_EGG=0
+
+LOAD("MAINBORN")
+
+
+
+
+
+
+*EVNT016
+
+TXOPEN(2)
+TXFACE("F040")
+「老爺﹐小姐在烹飪比賽中得到第一名﹐這也是老爺平日辛苦教育的成果。」
+@P
+TXOPEN(3)
+TXGIRL(1)
+「嘻∼管家先生﹐其實這也沒什麼大不了的。」
+@P
+@2
+@C
+
+「這個『天堂鳥的蛋』就是獎品吧﹗老爺﹐要不要馬上煮來吃﹖」
+@P
+@3
+@C
+TXGIRL(15)
+「咦﹖就這樣把它吃掉﹖」
+@P
+@2
+@C
+TXFACE("F046")
+「對呀﹗一般來說都是把『天堂鳥之蛋』給吃掉的．．．．．．」
+@P
+@3
+@C
+TXGIRL(18)
+「但是﹐但是﹐這麼可愛的蛋．．．．．．」
+
+SLCTX("吃　　掉,不　　吃")
+
+IF ( ISLCT=0 )
+	@2
+	@C
+	TXFACE("F040")
+	「是﹐是﹐請稍等一下．．．．．．」
+	@P
+	WWIVENT(1,0,"E006")
+	@P
+	@3
+	@C
+	TXGIRL(3)
+	「就這樣．．．吃掉了嗎﹖．．．可憐．．．可是﹐真是好吃。」
+	@P
+	@2
+	@C
+
+	「這是吉祥物﹐對身體有很大的幫助。」
+	@P
+	GR_OPEN
+	STRSCLEAR
+	IGRP_TBL1[0]="體力"     IGRP_TBL3[0]=B_TAIRYOKU
+	IGRP_CNT=1
+	IGRP_X=50
+	IGRP_Y=230
+	GRPOPEN(1,1)
+	B_TAIRYOKU += 50
+	GRPUPD(1,0,B_TAIRYOKU)
+	@3
+	@C
+	TXA(NAME_FIRST)的體力上昇了５０點﹗
+	@P
+
+	GR_CLOSE
+	WWIVENT(2,0)
+	TXCLOSE(3)
+	TXCLOSE(2)
+
+	C2 = 0
+	C1=ITEM_MAX
+		IF ( ITEM_ICON[C2] = 34 )
+			ITEM_KILL(C2)
+			C1 = 0
+		C2++
+	LOOP C1
+	RET
+
+
+
+@2
+@C
+TXFACE("F048")
+「什麼﹗不煮來吃嗎﹖這不是很浪費食物﹖」
+@P
+@3
+@C
+TXGIRL(1)
+「啊﹐太好了﹗．．．」
+@P
+TXCLOSE(3)
+TXCLOSE(2)
+
+E_ETC[8]=1
+
+RET
+
+*SHORTWAIT
+TIMER1(30)WAIT1
+RET
+
+
+

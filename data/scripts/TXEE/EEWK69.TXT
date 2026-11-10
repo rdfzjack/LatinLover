@@ -1,0 +1,142 @@
+TTL$("黑街的老大")
+
+START
+
+OPEN(2)
+TXFACE("F046")
+「真是擔心呀．．．小姐一直沒有決定將來要作什麼工作．．．最近好像結交了一些壞朋友．．．．．．」
+@T
+OPEN(3)
+TXGIRL(13)
+「對我而言﹐普通的工作是無法滿足我的。有沒有可以讓人狂熱的工作呢．．．．．．」
+@T
+SS$(2)
+@C
+TXFACE("F130")
+「呵﹐呵﹐呵﹐．．．在妳的心中滋長出邪惡的念頭．．．危險呀﹐危險．．．．．．」
+@T
+SS$(3)
+@C
+TXGIRL(8)
+「邪惡經常和我打招呼．．．請直接告訴我最適合的工作吧﹗」
+@T
+SS$(2)
+@C
+
+「妳似乎不能從事正當的工作．．．當流氓或是妓女這類的工作似乎比較合妳的喜好．．．．．．」
+@T
+SS$(3)
+@C
+
+「怎麼這樣說．．．．．．」
+@T
+SS$(2)
+@C
+
+「妳具有優於常人的武藝﹐如果能夠善用這些技巧的話．．．．．．」
+@T
+SS$(3)
+@C
+TXGIRL(9)
+「武藝能力．．．對了﹗或許盡力管束小巷中的流氓是件不錯的事情。」
+@T
+SS$(2)
+@C
+TXFACE("F044")
+「小姐﹗請不要說那種亳無道理的話﹗」
+@T
+SS$(3)
+@C
+TXGIRL(13)
+「不要擔心嘛﹗吉普先生。能夠痛打小巷中的流氓﹐既可為社會做一些事﹐又可以賺錢﹐何樂而不為呢﹗」
+@T
+SS$(2)
+@C
+TXFACE("F130")
+「哎呀哎呀．．．沒想到勇者FN$竟養出這麼難纏的女兒．．．．．．」
+@T
+SS$(3)
+@C
+
+「這樣不是很好嗎﹖先要找件具有迫力的服裝﹐人見人怕。呼呼呼﹐太痛快了﹗」
+CLOSE(3)
+CLOSE(2)
+PICWORKING("Z056")
+OPEN(1)
+之後﹐GN$•FN$用家中的錢買了一些怪異的服裝﹐開始在黑街中過日子．．．．．．
+@T
+CLOSE(1)
+
+FINAL
+
+*GN$
+TXA(NAME_FIRST)
+RET
+
+*FN$
+TXA(NAME_FAMILY)
+RET
+
+*OPEN
+IF(AX=1)TXOPEN(10) RET
+IF(AX=2)TXOPEN(13) RET
+IF(AX=3)TXOPEN(15) RET
+IF(AX=4)TXOPEN(14) RET
+RET
+
+*CLOSE
+IF(AX=1)TXCLOSE(10) RET
+IF(AX=2)TXCLOSE(13) RET
+IF(AX=3)TXCLOSE(15) RET
+IF(AX=4)TXCLOSE(14) RET
+RET
+
+*SS$
+IF(AX=1)TXSLCT(10) RET
+IF(AX=2)TXSLCT(13) RET
+IF(AX=3)TXSLCT(15) RET
+IF(AX=4)TXSLCT(14) RET
+RET
+
+*TTL$
+RET
+
+*START
+TXLC(10,21,220,0)
+TXLC(13,32,146,1)
+TXLC(14,32,20,1)
+TXLC(15,17,270,2)
+RET
+
+*FINAL
+LOAD("EEWEDD")
+RET
+
+*PICWORKING
+
+STRSTACK
+C5 = BX
+PTBK(2)
+PTLD("ENDWFRML")
+PTLA("ENDWFRMR")
+PTLA("ENDWFRMU")
+PTLA("ENDWFRMD")
+PTBK(0)
+PTLD("ENDWFRMM")
+PTX(20,0,0)
+PTBK(2)
+PTM(12,0,0)
+PTM(60,0,2)
+PTM(18,-40,4)
+PTM(18,400,6)
+PIC(11)
+PTBK(0)
+PTX(0,0,0)
+SI = C5
+PTLD
+PTMF(0,0,0)
+PIC(12)
+PIC(13,0,0,20,0,40,400)
+TIMER1(120)WAIT1
+RET
+

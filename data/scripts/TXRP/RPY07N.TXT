@@ -1,0 +1,55 @@
+"PRY07N.TXT"
+
+
+
+
+*CHECK_MEN
+MAN07N
+RET
+
+*MAN07N
+R_FACE			="F127"
+R_NAME			="伐木工"
+R_CHINOH		=10
+RDM(55,65)
+R_SENTOH=AX
+R_KOUGEKI		=75
+R_BOUGYO		=30
+R_SOUKOU		=5
+R_SKNAME		="毛皮的背心"
+R_MAHOGIJUTSU	=0
+R_MARYOKU		=0
+R_KOHMARYOKU	=0
+RDM(300,400)
+R_SENI=AX
+R_DASSYUTU		=100
+R_TSUKON		=0
+RDM(350,400)
+R_MAX_HP=AX
+R_MAX_MP		=0
+RDM(50,100)
+R_GOLD			=AX
+R_SE_ATTACK	=3
+
+MENMES[0]="呀﹐要去那裡﹐小姑娘﹖"
+MENMES[1]="在這樣的深夜﹐一個人走路是很危險的"
+RANDAM(3)
+IF(AX=1)MENMES[2]="打倒怪物的話﹐隨時都有可能得到寶物"
+IF(AX=2)MENMES[2]="在道路上撿到寶物的心情真好．．．"
+IF(AX=3)MENMES[2]="聽說古時有人在這附近遺失了寶箱．．．妳見到了嗎﹖"
+RANDAM(3)
+IF(AX=1)MENMES[3]="喂．．．臭屁的人﹐可曾聽說過那裡有硬木﹖"
+IF(AX=2)MENMES[3]="哦﹐視我於無物﹖"
+IF(AX=3)MENMES[3]="喲∼﹖完全不理我．．．．．．"
+MENMES[4]="嘿﹗妳想做什麼﹗﹗"
+MENMES[5]="．．．哦哦．．．這．．．錢都給妳﹐請原諒我吧﹗"
+MENMES[6]="哼哼哼．．．不要小看我喔﹗﹗"
+RANDAM(3)
+IF(AX=1)MENMES[7]="唔唔．．．好痛．．．．．．"
+IF(AX=2)MENMES[7]="嗚嗚．．．居然輸給一個小姑娘．．．真令人氣憤．．．．．．"
+IF(AX=3)MENMES[7]="畜生﹗．．．沒想到是我掉落地獄．．．啊啊啊∼"
+RET
+
+
+
+

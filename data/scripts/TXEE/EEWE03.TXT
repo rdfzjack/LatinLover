@@ -1,0 +1,150 @@
+
+.UNLUCKY_MAN	= 0
+UNLUCKY_MAN	=	ENDNM[7]
+
+TTL$("和管家結婚")
+
+START
+
+OPEN(1)
+已經長得十分美麗的GN$成年之後﹐求婚者絡繹不絕﹐但是女孩不管是對誰﹐所有的回答都是相同的。
+@T
+CLOSE(1)
+OPEN(3)
+TXGIRL(0)
+「對不起．．．我已經有了心許的人．．．．．．」
+@T
+CLOSE(3)
+OPEN(1)
+但是﹐卻看不到GN$和任何人交往。覺得奇怪的管家就直接詢問GN$究竟中意何人。
+@T
+CLOSE(1)
+OPEN(2)
+TXFACE("F042")
+「小姐﹐妳決定的對象究竟是誰﹖不才的我﹐一定會盡全力幫忙的。」
+@T
+OPEN(3)
+TXGIRL(3)
+「那個人是．．．．．．」
+@T
+SS$(2)
+@C
+TXFACE("F039")
+「不用考慮我的感覺﹐說吧﹗」
+@T
+SS$(3)
+@C
+
+「管家先生﹐你總是為了我的事情在擔心．．．．．．」
+@T
+SS$(2)
+@C
+TXFACE("F050")
+「沒有﹐那裡．．．這是我應該做的事。」
+@T
+SS$(3)
+@C
+TXFACE("F199")
+「．．．我在武者修行太逞強而受傷時﹐一直照顧我的也是你．．@T
+．．．．吉普先生﹐在我的心中﹐你一直佔有特別的份量﹗」
+@T
+SS$(2)
+@C
+TXFACE("F203")
+「．．．呃﹐我﹗﹗﹗」
+@T
+CLOSE(2)
+CLOSE(3)
+PICWEDDING("Z070")      TIMER1(60)WAIT1
+
+OPEN(1)
+就這樣﹐GN$和管家吉普先生二人情意相投﹐舉行了結婚儀式。
+@T
+CLOSE(1)
+OPEN(3)
+TXGIRL(1)
+「我．．．很幸福．．．親•愛•的﹗」
+@T
+OPEN(2)
+TXFACE("F204")
+「老爺﹐對不起．．．但是我十分幸福．．．．．．」
+@T
+CLOSE(2)
+CLOSE(3)
+WWIVENT(2,1)
+UNLUCKY_CALL
+
+FINAL
+
+*UNLUCKY_CALL
+
+
+
+IF ( UNLUCKY_MAN = 4 )
+	OPEN(2)
+	TXFACE("F198")
+	「唉唉唉．．．幸福還是離我而去．．．算了﹐這樣也好。」
+	@T
+	CLOSE(2)
+	RET
+
+IF ( UNLUCKY_MAN = 5 )
+	OPEN(2)
+	TXFACE("F147")
+	「果然結婚的約定是個謊言﹗我一輩子都不會再相信女人了．．．．．．」
+	@T
+	CLOSE(2)
+	RET
+RET
+
+*GN$
+TXA(NAME_FIRST)
+RET
+
+*FN$
+TXA(NAME_FAMILY)
+RET
+
+*OPEN
+IF(AX=1)TXOPEN(10) RET
+IF(AX=2)TXOPEN(13) RET
+IF(AX=3)TXOPEN(15) RET
+IF(AX=4)TXOPEN(14) RET
+RET
+
+*CLOSE
+IF(AX=1)TXCLOSE(10) RET
+IF(AX=2)TXCLOSE(13) RET
+IF(AX=3)TXCLOSE(15) RET
+IF(AX=4)TXCLOSE(14) RET
+RET
+
+*SS$
+IF(AX=1)TXSLCT(10) RET
+IF(AX=2)TXSLCT(13) RET
+IF(AX=3)TXSLCT(15) RET
+IF(AX=4)TXSLCT(14) RET
+RET
+
+*TTL$
+RET
+
+*START
+TXLC(10,21,220,0)
+TXLC(13,32,146,1)
+TXLC(14,32,20,1)
+TXLC(15,17,270,2)
+RET
+
+*PICWEDDING
+WWIVENT(5,1,21,30)
+WWIVENT(1,1)
+
+
+
+RET
+
+*FINAL
+LOAD("EEALLE")
+RET
+

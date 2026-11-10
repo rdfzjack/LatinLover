@@ -1,0 +1,523 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.ITEM_KOUKA[1]
+.ITEM_ATTRBUTE[1]
+
+.S_WORKS
+.S_COUNTER
+.S_STARTDAY
+.S_ENDDAY
+.TODAY_COUNT
+.DAYLIGHT
+.SOUBI_FLG
+.SOUBI_REC
+.SOUBI_DAY
+
+S_WORKS 	=	BX
+S_COUNTER	=	CX
+S_STARTDAY	=	C1
+S_ENDDAY	=	C2
+TODAY_COUNT	=	C3
+DAYLIGHT	=	C4
+SOUBI_FLG	=	C5
+SOUBI_REC	=	C6
+SOUBI_DAY	=	C7
+
+STRSCLEAR
+
+TXLC(1,17,280,0)
+TXLC(2,28,130,1)
+TXLC(3,13,260,2)
+TXLC(10,19,280,0)
+WWIVENT(5,1,19,40)
+
+WWIVENT(5,0,24,60)
+
+EVNT032
+
+WWMUSYA(9)
+WWMUSYA(8,1)
+
+WWMUSYA(13,0,0,0,-1,6)
+
+BX = S_WORKS
+CX = S_COUNTER
+C1 = S_STARTDAY
+C2 = S_ENDDAY
+C3 = TODAY_COUNT
+C4 = DAYLIGHT
+C5 = SOUBI_FLG
+C6 = SOUBI_REC
+C7 = SOUBI_DAY
+
+IF ( S_WORKS = 0 )	LOAD("RPGLOP,RPG000")
+IF ( S_WORKS = 1 )	LOAD("RPGLOP,RPG001")
+IF ( S_WORKS = 2 )	LOAD("RPGLOP,RPG002")
+IF ( S_WORKS = 3 )	LOAD("RPGLOP,RPG003")
+
+TXOPEN(1)致命的錯誤WAITU
+
+
+
+
+
+*EVNT032
+
+RUN_MONTH[32]++
+E_ETC[96]=1
+
+
+
+IF ( RUN_MONTH[32] = 1 )
+	TXOPEN(1)
+	TXA(NAME_FIRST)一踏入石室﹐便看到面前佇立著一頭年老的龍．．．．．．
+	WWMUSYA(7)
+	TXF(2)
+	@P
+	TXCLOSE(1)
+
+	WWIVENT(3,1,"E027")
+
+	TXOPEN(3)
+	TXGIRL(15)
+	「啊﹗龍﹗﹗」
+	@P
+	TXCLOSE(3)
+	TXOPEN(1)
+	老龍平靜的擺出備戰的狀況﹐向TXA(NAME_FIRST)打招呼。
+	@P
+	TXCLOSE(1)
+	TXOPEN(2)
+	TXFACE("F159")
+	「人類的小姐．．．不需要恐懼﹐我已經年老而在此隱居﹐已經沒有戰鬥力量了。」
+	@P
+	TXOPEN(3)
+	TXGIRL(9)
+	「真的嗎﹖」
+	@P
+	@2
+	@C
+	「是真的﹐我們和人類不同的地方﹐是龍族絕不說謊。」
+	@P
+	@3
+	@C
+	TXGIRL(0)
+	「真對不起。好﹐我相信你。」
+	@P
+	IF ( P_NENREI < 15 )
+		@2
+		@C
+		「呵呵呵﹗好孩子﹐這裡不是小孩子能來的地方﹐太危險了﹐趕快回去吧﹗」
+		@P
+		TXCLOSE(2)
+		TXCLOSE(3)
+		RET
+	IF ( P_NENREI >=15 )
+		@2
+		@C
+		「呵﹗呵﹗呵﹗仔細一看﹐還真是個可愛的姑娘呢。」
+		老龍一直盯著TXA(NAME_FIRST)的容貌．．．．．．
+		@P
+		@3
+		TXGIRL(10)
+		@C
+		「．．．﹖（這是想做什麼﹐這種眼光﹖）」
+		@P
+		TXCLOSE(2)
+		TXCLOSE(3)
+		E_ETC[80]++
+		RET
+
+
+
+TXOPEN(1)
+TXA(NAME_FIRST)再次踏入老龍的石室。
+WWMUSYA(7)
+TXF(2)
+@P
+TXCLOSE(1)
+
+WWIVENT(3,1,"E027")
+
+IF ( P_NENREI < 15 )
+	TXOPEN(2)
+	TXFACE("F159")
+	「呵呵呵﹗好孩子﹐這裡不是小孩子能來的地方﹐太危險了﹐趕快回去吧﹗」
+	@P
+	TXCLOSE(2)
+	RET
+
+E_ETC[80]++
+
+TXOPEN(2)
+TXFACE("F159")
+「啊﹐終於來了﹐我已經盼望好久了．．．．．．」
+@P
+IF ( B_IROKE < 100 )
+	EVNT032_100UND
+	RET
+IF ( B_IROKE >= 100 )
+	ITEM_SRCH(1,53)
+	IF ( AX=0 )
+		EVNT032_100UP
+		RET
+	EVNT032_100UP_REO
+	RET
+
+
+
+
+
+*EVNT032_100UND
+@C
+「嗯﹐嗯﹐相當可愛。喂﹐老爺爺給妳零用錢吧﹗」
+@P
+C1 = B_IROKE
+IF ( C1 < 2 ) C1 = 2
+TXOPEN(10)
+老龍從石室內的隱藏的箱子中﹐取出TXGOLD(C1)交給TXA(NAME_FIRST)。
+@P
+TXCLOSE(10)
+GOLDADD(C1)
+WWPROF(5)
+TXOPEN(3)
+TXGIRL(1)
+「哇啊﹗謝謝﹗」
+@P
+@2
+@C
+「沒什麼﹐錢我有很多。下次來之前請先增加自己的魅力吧﹗人類啊﹐沒有比魅力更重要的了。」
+@P
+@3
+@C
+TXGIRL(9)
+「啊﹐是那樣嗎．．．﹖」
+@P
+TXCLOSE(3)
+TXCLOSE(2)
+RET
+
+
+
+
+
+
+*EVNT032_100UP
+@C
+「呵﹗呵﹗呵﹗．．．嗯﹐相當出色的女孩子。喂﹐老爺爺給妳零用錢吧﹗」
+@P
+C1 = B_IROKE
+IF ( C1 < 2 ) C1 = 2
+TXOPEN(10)
+老龍從石室內的箱子中﹐取出TXGOLD(C1)交給TXA(NAME_FIRST)。
+@P
+TXCLOSE(10)
+GOLDADD(C1)
+WWPROF(5)
+TXOPEN(3)
+TXGIRL(0)
+「哇啊﹗謝謝﹗」
+@P
+@2
+@C
+「嗯﹐妳長得很有魅力嗎﹗喂﹐請過來一下。」
+
+IF ( ITEM_MAX >= ITEM_DIM )
+	@P
+	GOTO EVNT032_SKIP
+
+SLCPOS(1)SLCTX("接　　近,不要接近")
+
+IF ( ISLCT=0 )
+	TXCLOSE(3)
+	TXCLOSE(2)
+	TXOPEN(1)
+	TXA(NAME_FIRST)說話中靠近老龍的身邊﹐說時遲那時快．．．．．．
+	@P
+	WWIVENT(1,0,"E028")
+	@C
+	舌舔貌．．．．．．
+	@P
+	TXCLOSE(1)
+	TXOPEN(3)
+	TXGIRL(7)
+	「啊﹗好討厭﹗」
+	@P
+	WWIVENT(2,0)
+	TXOPEN(2)
+	TXFACE("F159")
+	「呵﹗呵﹗呵﹗抱歉抱歉﹐妳長得太妖豔動人了﹐我一時忍耐不住。」
+	@P
+	@3
+	@C
+	TXGIRL(2)
+	「．．．．．．」
+	@P
+	IF ( URA_BREAST_TYPE = 1 )
+		@2
+		@C
+		「不要那麼生氣﹐這只是風燭殘年老年人一個天真浪漫的玩笑﹐但是心情變得相當舒暢了。假如胸部變得再大點﹐我就不會這麼說了。」
+		@P
+		@3
+		@C
+		TXGIRL(2)
+		「．．．．．．混帳﹗」
+		@P
+		@2
+		@C
+		「好了好了﹐看在妳可愛的胸部上﹐特別給妳我珍藏的寶物吧﹗這玩意可是很難得到的哦﹗」
+		@P
+		GOTO DRAGON_PRES
+	IF ( URA_BREAST_TYPE = 2 )
+		@2
+		@C
+		「不要那麼生氣﹐這只是一位風燭殘年老人一個天真浪漫的玩笑。嗯﹗發育的相當好﹐我很高興﹐呵呵呵﹗」
+		@P
+		@3
+		@C
+		TXGIRL(2)
+		「．．．．．．哼﹗」
+		@P
+		@2
+		@C
+		「好了好了﹐看在妳那出色胸部上﹐特別給妳我所珍藏寶物﹐這玩意可是稀世珍寶哦﹗」
+		@P
+		GOTO DRAGON_PRES
+	IF ( URA_BREAST_TYPE = 3 )
+		@2
+		@C
+		「對我生氣不是很不合情理﹖妳用那麼大的胸部誘惑我﹐我也沒辦法．．．．．．」
+		@P
+		@3
+		TXGIRL(2)
+		@C
+		「．．．．．．你說什麼﹗﹗﹗」
+		@P
+		@2
+		@C
+		「呵﹗呵﹗呵﹗．．．不開玩笑了。儘管如此﹐妳已經變成熟了﹐想必妳的父親也會心滿意足吧﹗」
+		@P
+		@3
+		TXGIRL(9)
+		@C
+		「你認識我的父親﹖」
+		@P
+		@2
+		@C
+		「嗯﹐想當年．．．．．．妳的父親也曾經是個色鬼啊．．．．．．」
+		@P
+		@3
+		TXGIRL(16)
+		@C
+		「．．．．．．．．．．．．﹗」
+		@P
+		@2
+		@C
+		「呵呵呵﹗這也是開玩笑﹐調戲年輕的少女真的相當有意思呢﹗」
+		@P
+		@3
+		TXGIRL(8)
+		@C
+		「太過份了．．．．．．」
+		@P
+		@2
+		@C
+		「那麼﹐為了向妳的波霸表示敬意﹐給妳一個好東西﹐是難以獲得的貴重物品哦﹗」
+		@P
+	*DRAGON_PRES
+	TXCLOSE(3)
+
+	TXOPEN(10)
+	老龍從石室隱藏的箱子中取出一小塊布。
+	@P
+	TXCLOSE(10)
+	@2
+	@C
+	SHOW_ITEMS
+	「這件是相當有名氣的『龍的緊身衣』﹐一定很適合妳﹐不要客氣﹐帶走吧﹗」
+	@P
+	TXOPEN(3)
+	TXGIRL(9)
+	「這是內衣嗎﹖」
+	@P
+	@2
+	@C
+	「不∼是﹐是高貴的衣服。」
+	@P
+	@3
+	TXGIRL(10)
+	@C
+	「咦∼﹖就這麼一小塊布∼﹖」
+	@P
+	@2
+	@C
+	「若是覺得被騙﹐不妨試穿看看。
+	@P
+	它能充份的顯露出少女舒展肢體的魅力。這種新穎、不曾見過的款式及鮮豔的色彩必定會使每個人看得目瞪口呆。」
+	@P
+	@3
+	@C
+	TXGIRL(11)
+	「我還是不太了解這是什麼．．．．．．」
+	@P
+	TXCLOSE(3)
+	TXCLOSE(2)
+	TXOPEN(1)
+	TXA(NAME_FIRST)得到了『龍的緊身衣』。
+	TAKE_ITEM
+	@P
+	ITEMPRN(2)
+	TXCLOSE(1)
+	RET
+
+
+*EVNT032_SKIP
+@3
+TXGIRL(11)
+@C
+「不﹐不必了。」
+@P
+@2
+@C
+「以我和妳的關係﹐太見外了吧﹗算了﹐也好﹐我今天很疲倦﹐想睡了。」
+
+@P
+TXCLOSE(3)
+TXCLOSE(2)
+RET
+
+
+
+
+
+*EVNT032_100UP_REO
+IF ( URA_BREAST_TYPE = 1 )
+	@C
+	「唔．．．依然很有魅力﹐雖然胸部出乎意料的小。」
+	@P
+	TXOPEN(3)
+	TXGIRL(2)
+	「不用你多管閒事﹗」
+	@P
+	@2
+	@C
+	「別那付怒氣衝衝的樣子﹐來﹐零用錢給妳﹗」
+	@P
+	@3
+	TXCLOSE(3)
+	TXCLOSE(2)
+	C1 = B_IROKE
+	IF ( C1 < 2 ) C1 = 2
+	TXOPEN(1)
+	TXA(NAME_FIRST)從老龍手中得到TXGOLD(C1)的金錢。
+	@P
+	TXCLOSE(1)
+	GOLDADD(C1)
+	WWPROF(5)
+	RET
+IF ( URA_BREAST_TYPE = 2 )
+	@C
+	「唔．．．長得真是嫵媚動人。來﹐零用錢給妳。」
+	@P
+	TXOPEN(3)
+	TXGIRL(1)
+	「哇∼﹐謝謝﹗」
+	@P
+	TXCLOSE(3)
+	TXCLOSE(2)
+	C1 = B_IROKE
+	IF ( C1 < 2 ) C1 = 2
+	TXOPEN(1)
+	TXA(NAME_FIRST)從老龍手中得到TXGOLD(C1)的金錢。
+	@P
+	TXCLOSE(1)
+	GOLDADD(C1)
+	WWPROF(5)
+	RET
+IF ( URA_BREAST_TYPE = 3 )
+	@C
+	「唔．．．依然嫵媚動人。來﹐零用錢給妳。」
+	@P
+	TXOPEN(3)
+	TXGIRL(1)
+	「謝謝。」
+	@P
+	@2
+	@C
+	「嗯﹐好大的胸部啊﹐今後可不可以叫妳『奶媽』呢﹖」
+	@P
+	@3
+	TXGIRL(2)
+	@C
+	「請住口﹗」
+	@P
+	@2
+	@C
+	「在意啊﹖．．．．．．那真可惜﹐我想這很相稱的﹐不是嗎﹖」
+	@P
+	@3
+	@C
+	「才不會﹗」
+	@P
+	TXCLOSE(3)
+	TXCLOSE(2)
+	C1 = B_IROKE
+	IF ( C1 < 2 ) C1 = 2
+	TXOPEN(1)
+	TXA(NAME_FIRST)從老龍手中得到TXGOLD(C1)的金錢。
+	@P
+	TXCLOSE(1)
+	GOLDADD(C1)
+	WWPROF(5)
+	RET
+
+
+
+
+
+*SHOW_ITEMS
+ITEMID_TBL1[0]="龍的緊身衣"
+ITEMID_TBL2[0]=53
+ITEMID_TBL3[0]=1200
+ITEMID_TBL4[0]="魅力+28 抗魔+12"
+ITEMID_TBL5[0]=0
+ITEMID_TBL6[0]=""
+ITEMID_TBL7[0]=0
+ITEM_KOUKA[0]="B_IROKE+28 V_KOHMARYOKU+12"
+ITEM_ATTRBUTE[0]=3000
+ITEMID_CNT=1
+ITEMPRN(3,60,200)
+ITEMPRN(1,5)
+RET
+
+
+
+
+
+*TAKE_ITEM
+BX=ITEMID_TBL2[0]
+CX=ITEMID_TBL3[0]
+DX=ITEM_ATTRBUTE[0]
+SI=ITEMID_TBL1[0]
+DI=ITEM_KOUKA[0]
+BP=ITEMID_TBL4[0]
+ITEM_INST(1)
+RET
+
+
+
+

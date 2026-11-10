@@ -1,0 +1,667 @@
+
+
+
+
+
+
+
+
+
+
+.IT_EQUIP[50]
+.REC_TBL[50]
+.FLAG_NON_DRESS=0
+.FLAG_NON_PICTURE=0
+.FLAG_GO_SCHEDULE=0
+
+
+TXLC(18,24,276,0)
+TXLC(16,32,170,1)
+TXLC(17,17,30,2)
+
+RUN_SYUKAKUSAI[0]++
+
+CLENDER(3)
+CLENDER(2)
+SYUKAKU_TITLE
+
+*SLCT_LOOP
+
+TXOPEN(18)
+*SLCT_LOOP_2
+@C
+要參加那一項呢﹖
+SLCTX("「武鬥大會」,「藝術大展」,「皇家舞會」,「烹飪大賽」")
+MSG_PLAN
+IF ( FLAG_GO_SCHEDULE = 0 ) GOTO SLCT_LOOP_2
+TXCLOSE(18)
+
+EVENT019
+
+IF ( SCH_SYUKAKUSAI = 0 ) SSBATL
+IF ( SCH_SYUKAKUSAI = 1 ) SSARTS
+IF ( SCH_SYUKAKUSAI = 2 ) SSDANC
+IF ( SCH_SYUKAKUSAI = 3 ) SSCOOK
+
+GOTO SLCT_LOOP
+
+
+
+
+
+*MSG_PLAN
+FLAG_GO_SCHEDULE = 0
+@C
+IF ( ISLCT=0 )
+	武者們在淘汰賽中互相競爭奪取優勝。
+	SCH_SYUKAKUSAI=0
+IF ( ISLCT=1 )
+	用繪畫教室中畫出的作品﹐爭取藝術的得分。
+	SCH_SYUKAKUSAI=1
+IF ( ISLCT=2 )
+	以舞蹈決勝負﹐在藝術､體力､以及魅力上爭取評審委員的認同。
+	SCH_SYUKAKUSAI=2
+IF ( ISLCT=3 )
+	依食物的美味以及藝術性﹐爭取烹飪大賽的冠軍。
+	SCH_SYUKAKUSAI=3
+
+IF ( SCH_SYUKAKUSAI=1 )
+	IF ( FLAG_NON_PICTURE = 1 )
+		@P
+		TXCLOSE(18)
+		TXOPEN(16)
+		TXFACE("F046")
+		「如果再多努力一點﹐也許會有更好的成績。」
+		@P
+		TXCLOSE(16)
+		TXOPEN(18)
+		RET
+	IF ( ROOM_PIC >= 5 )
+		@P
+		TXCLOSE(18)
+		TXOPEN(16)
+		TXFACE("F046")
+		「唉．．．並沒有畫出理想中的作品．．．．．．」
+		@P
+		TXCLOSE(16)
+		TXOPEN(18)
+		FLAG_NON_PICTURE=1
+		RET
+
+IF ( SCH_SYUKAKUSAI=2 )
+	IF ( FLAG_NON_DRESS >= 2 )
+		@P
+		TXCLOSE(18)
+		TXOPEN(16)
+		TXGIRL(3)
+		．．．．．．
+		@P
+		TXCLOSE(16)
+		TXOPEN(18)
+		RET
+	IF ( FLAG_NON_DRESS = 1 )
+		@P
+		FLAG_NON_DRESS = 2
+		TXCLOSE(18)
+		TXOPEN(16)
+		TXFACE("F046")
+		「如果事先買下參加舞會的服裝就好了。」
+		@P
+		TXCLOSE(16)
+		TXOPEN(18)
+		RET
+	DRESS_ALL_COUNT
+	IF ( C3 = 0 )
+		@P
+		TXCLOSE(18)
+		TXOPEN(16)
+		TXFACE("F046")
+		「就算是想要參加﹐沒有適當的服裝也沒辦法．．．．．．」
+		@P
+		TXCLOSE(16)
+		TXOPEN(18)
+		FLAG_NON_DRESS = 1
+		RET
+
+SLCT("實　　施,取　　消")
+IF ( ISLCT ! 0 ) RET
+FLAG_GO_SCHEDULE = 1
+RET
+
+
+*DRESS_ALL_COUNT
+C3 = 0
+C2 = 0
+C1 = ITEM_MAX
+	ITEM_SRCH(3,C2)
+	IF ( AX = 3 )
+		DRESS_CHK(ITEM_ICON[C2])
+		IF ( BX = 1 )
+			C3++
+	C2++
+LOOP C1
+RET
+
+
+
+
+
+*SYUKAKU_TITLE
+PTBK(0)
+PTLD("FRMSYUKL")
+MUSIC(2)
+EFC(1)
+PLAY(1007)
+MUSIC(8,450)
+GRPCLS
+PTX(0,0,0)
+PTLD("FRMSYUKR")
+PTX(40,0,0)
+PTLD("FRMSYUKU")
+PTLA("FRMSYUKD")
+PTX(0,-40,0)
+PTX(0,400,1)
+AREA_BACK
+PTLD("E19SYU")
+EFC(16)
+PTX(23,126,0)
+WAIT1
+PLAY(6)
+RET
+
+*AREA_BACK
+PTBK(6)
+PTCLR
+PTGT(23,126,35,128)
+PTBK(0)
+RET
+
+*AREA_RESTORE
+PTBK(6)
+PIC(11)
+PTX(0,0,0)
+PIC(12)
+PIC(13,0,0,23,126,35,128)
+PTBK(0)
+RET
+
+*AREA_BACK2
+PTBK(6)
+PTCLR
+PTGT(23,40,35,128)
+PTBK(0)
+RET
+
+*AREA_RESTORE2
+PTBK(6)
+PIC(11)
+PTX(0,0,0)
+PIC(12)
+PIC(13,0,0,23,40,35,128)
+PTBK(0)
+RET
+
+
+
+
+
+*SSBATL
+
+RUN_SYUKAKUSAI[1]++
+
+E_ETC[59]=0
+
+TXOPEN(18)
+TXA(NAME_FIRST)在管家的陪同下﹐前往城裡的中央競技場。
+@P
+TXCLOSE(18)
+
+MUSIC(2)
+PTLD("E19BATL")
+
+AREA_RESTORE
+PLAY(22)
+
+AREA_BACK2
+PTM(23,40,0)
+
+TXLC(1,21,168,0)
+
+IF ( RUN_SYUKAKUSAI[1]=1 )
+	TXOPEN(18)
+	在會場中已經聚集了許多的戰士﹐每一個人都認為自己將是最強壯､最勇猛的一個。
+	@P
+	TXCLOSE(18)
+	TXOPEN(16)
+	TXFACE("F054")
+	「各位﹐為了決定王國第一勇士的人選﹐請踴躍的參加武鬥大會。」
+	@P
+	@C
+	「武鬥大會採取的是單淘汰制﹐所以各位的分組將以抽籤的方式來決定。」
+	@P
+	@C
+	「請各位到正門的告示板上看看自己的賽程﹐預祝各位獲勝。」
+	@P
+	TXCLOSE(16)
+IF ( RUN_SYUKAKUSAI[1]>1 )
+	TXOPEN(18)
+	TXA(NAME_FIRST)和各地來的戰士們﹐
+	一起看著告示板上的賽程．．．．．．
+	@P
+	TXCLOSE(18)
+
+AREA_RESTORE2
+C1 = 1
+C2 = 0
+C3 = 0
+C4 = 0
+LOAD("SSTOUR")
+RET
+
+
+
+
+
+*SSARTS
+RUN_SYUKAKUSAI[3]++
+
+MUSIC(2)
+PTLD("E19ARTS")
+
+AREA_RESTORE
+PLAY(21)
+
+AREA_BACK2
+PTM(23,40,0)
+
+TXOPEN(16)
+TXFACE("F078")
+IF ( RUN_SYUKAKUSAI[3]=1 )
+	「由於國王陛下對藝術有著深刻的研究﹐所以每一次的藝術大展都是盛況空前﹐就連鄰近數國的新進藝術家也都為了獲得這項殊榮而前來參賽。」
+	@P
+	@C
+	「國王陛下正在欣賞各位所送來的作品。」
+	@P
+IF ( RUN_SYUKAKUSAI[3]>1 )
+	「今年的藝術大展可以說是近年來最盛大的一次﹐國王陛下希望能夠看到更具有藝術性的作品。」
+	@P
+TXCLOSE(16)
+LOAD("SSARTS")
+
+
+
+
+
+
+*SSDANC
+
+
+CHANGE_DRESS
+IF ( AX = 0 )
+	TXOPEN(16)
+	TXFACE("F046")
+	「沒有可以參加舞會的服裝耶．．．．．．」
+	TXOPEN(17)
+	TXGIRL(3)
+	「．．．．．．」
+	@P
+	TXCLOSE(17)
+	TXCLOSE(16)
+	RET
+IF ( AX = 2 ) RET
+
+TXCLOSE(18)
+
+RUN_SYUKAKUSAI[2]++
+
+
+
+TXOPEN(18)
+TXA(NAME_FIRST)在管家的陪同下﹐前往皇家舞會的會場。
+@P
+TXCLOSE(18)
+
+MUSIC(2)
+PTLD("E19DANC")
+
+AREA_RESTORE
+PLAY(24)
+
+AREA_BACK2
+PTM(23,40,0)
+
+TXOPEN(16)
+TXFACE("F079")
+「各位來賓﹐歡迎各位來到由王室所主辦的皇家舞會。」
+@P
+@C
+「讓大家久等了﹐依照皇家舞會的慣例﹐在舞蹈表演過後﹐成績優異的人將可以獲得豐富的獎賞。」
+@P
+TXCLOSE(16)
+
+AREA_RESTORE2
+
+C1 = 0
+LOAD("SSDANC")
+RET
+
+
+
+
+
+
+
+
+
+
+*CHANGE_DRESS
+STRSCLEAR
+C3 = 0
+C2 = 0
+C1=ITEM_MAX
+	ITEM_SRCH(3,C2)
+	IF ( AX=3 )
+		DRESS_CHK(ITEM_ICON[C2])
+		IF ( BX = 1 )
+			IT_EQUIP[C3]=DX
+			ITEMID_TBL1[C3]=ITEM_NAME[C2]
+			ITEMID_TBL2[C3]=ITEM_ICON[C2]
+			ITEMID_TBL3[C3]=ITEM_GOLD[C2]
+			ITEMID_TBL4[C3]=ITEM_HELP[C2]
+			ITEMID_TBL5[C3]=0
+			ITEMID_TBL6[C3]=""
+			ITEMID_TBL7[C3]=0
+			REC_TBL[C3]=C2
+			C3++
+	C2++
+LOOP C1
+IF ( C3 = 0 )
+	AX = 0
+	RET
+ITEMID_CNT=C3
+
+TXOPEN(16)
+TXFACE("F039")
+*CHANGE_DR_LOOP
+@C
+「嘩﹗這些參加舞會的服裝﹐應該要穿那一件好呢﹖」
+ITEMSLCT(1)
+IF ( ISITM = -1 )
+	TXCLOSE(16)
+	AX = 2
+	RET
+@C
+
+DRESS_AGE_CHECK(ITEMID_TBL2[ISITM])
+IF ( CX = 1 )
+	C1 = SI
+	「TXA(ITEMID_TBL1[ISITM])要TXPOINT(C1)歲以上才可以穿著耶。」
+	@P
+	GOTO CHANGE_DR_LOOP
+IF ( DX = 1 )
+	「TXA(ITEMID_TBL1[ISITM])好像不太合身唷。」
+	@P
+	GOTO CHANGE_DR_LOOP
+IF ( IT_EQUIP[ISITM]=1 )
+	現在不正是穿著它嗎﹖
+換上TXA(ITEMID_TBL1[ISITM])好嗎﹖
+SLCTX("好　　的,不　　好")
+IF ( ISLCT=1 ) GOTO CHANGE_DR_LOOP
+TXCLOSE(16)
+ITEM_SRCH(6,REC_TBL[ISITM])
+RET
+
+
+
+
+*DRESS_CHK
+BX = 0
+IF ( AX = 46 )	BX=1	RET
+IF ( AX = 47 )	BX=1	RET
+IF ( AX = 48 )	BX=1	RET
+IF ( AX = 49 )	BX=1	RET
+IF ( AX = 50 )	BX=1	RET
+IF ( AX = 51 )	BX=1	RET
+IF ( AX = 52 )	BX=1	RET
+IF ( AX = 53 )	BX=1	RET
+RET
+
+
+*DRESS_AGE_CHECK
+
+
+
+C1 = AX
+CX = 0
+DX = 0
+SI = 0
+IF ( C1=47 )
+	IF ( P_NENREI<13 )
+		CX = 1
+		SI = 13
+IF ( C1=48 )
+	IF ( P_NENREI<14 )
+		CX = 1
+		SI = 14
+IF ( C1=49 )
+	IF ( P_NENREI<13 )
+		CX = 1
+		SI = 13
+IF ( C1=50 )
+	IF ( P_NENREI<15 )
+		CX = 1
+		SI = 15
+IF ( C1=52 )
+	IF ( P_NENREI<14 )
+		CX = 1
+		SI = 14
+IF ( C1=53 )
+	IF ( P_NENREI<15 )
+		CX = 1
+		SI = 15
+IF ( GIRL_BODY = 2 )
+	IF ( C1=47 )	DX=1
+	IF ( C1=48 )	DX=1
+	IF ( C1=49 )	DX=1
+	IF ( C1=52 )	DX=1
+	IF ( C1=53 )	DX=1
+RET
+
+
+
+
+
+*SSCOOK
+
+RUN_SYUKAKUSAI[4]++
+
+TXOPEN(18)
+在廣場的一角﹐按照慣例開始舉行烹飪大賽．．．．．．
+@P
+TXCLOSE(18)
+
+MUSIC(2)
+PTLD("E19COOK")
+
+AREA_RESTORE
+PLAY(25)
+
+AREA_BACK2
+PTM(23,40,0)
+
+TXOPEN(16)
+TXFACE("F117")
+「緊張緊張﹐決定誰才是全國烹飪技巧最好的人的時間就要到了。」
+@P
+TXCLOSE(16)
+
+AREA_RESTORE2
+LOAD("SSCOOK")
+RET
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*EVENT019
+STRSCLEAR
+
+
+
+
+IF ( E_RIVAL = 1 )
+	IF ( SCH_SYUKAKUSAI ! 0 )
+		EVNT019
+
+IF ( E_RIVAL = 2 )
+	IF ( SCH_SYUKAKUSAI ! 0 )
+		EVNT019
+
+IF ( E_RIVAL = 3 )
+	IF ( SCH_SYUKAKUSAI ! 2 )
+		EVNT019
+
+IF ( E_RIVAL = 4 )
+	IF ( SCH_SYUKAKUSAI ! 3 )
+		EVNT019
+RET
+
+*EVNT019
+RUN_MONTH[19]++
+EVNT019MAIN
+RET
+
+
+
+
+
+*EVNT019MAIN
+
+IF ( E_RIVAL = 0 ) RET
+
+
+IF ( E_RIVAL = 1 )
+	IF ( SCH_SYUKAKUSAI ! 0 )
+		GOTO RIVAL_1_TYPE
+IF ( E_RIVAL = 2 )
+	IF ( SCH_SYUKAKUSAI ! 0 )
+		GOTO RIVAL_2_TYPE
+IF ( E_RIVAL = 3 )
+	IF ( SCH_SYUKAKUSAI ! 2 )
+		GOTO RIVAL_3_TYPE
+IF ( E_RIVAL = 4 )
+	IF ( SCH_SYUKAKUSAI ! 3 )
+		GOTO RIVAL_4_TYPE
+RET
+
+
+*RIVAL_1_TYPE
+TXOPEN(17)
+TXGIRL(12)
+「我想參加武鬥大會﹐因為我和安妮塔約好要在大會中決戰。」
+@P
+TXOPEN(16)
+TXFACE("F042")
+「小姐想要參加武鬥大會﹐是不是要變更原本的預定行程﹖」
+@P
+
+C2 = 0
+GOTO SCHD_SELECTX
+
+
+*RIVAL_2_TYPE
+TXOPEN(17)
+TXGIRL(12)
+「我要參加武鬥大會﹐因為我已經和溫蒂約好在大會中決鬥了．．．．．．」
+@P
+TXOPEN(16)
+TXFACE("F042")
+「小姐想要參加武鬥大會﹐是不是要變更原本的預定行程﹖」
+@P
+
+C2 = 0
+GOTO SCHD_SELECTX
+
+
+*RIVAL_3_TYPE
+TXOPEN(17)
+TXGIRL(3)
+「我想參加皇家舞會．．．．．．不然會被帕多雷西亞嘲笑的。」
+@P
+TXOPEN(16)
+TXFACE("F042")
+「小姐想要參加皇家舞會﹐是不是要變更原本的預定行程﹖」
+@P
+DRESS_ALL_COUNT
+IF ( C3 = 0 )
+	SLCTX("變更行程,維持原來")
+	IF ( ISLCT = 1 ) GOTO SCHD_NO_CHANGE
+	TXFACE("F046")
+	@C
+	「就算是想要參加舞會﹐也沒有衣服可以穿呀﹗」
+	@P
+	GOTO SCHD_NO_CHANGE
+C2 = 2
+GOTO SCHD_SELECTX
+
+
+*RIVAL_4_TYPE
+TXOPEN(17)
+TXGIRL(3)
+「我想參加烹飪大賽﹐因為我和瑪魯西亞約好要在烹飪手藝上比個高下．．．．．．」
+@P
+TXOPEN(16)
+TXFACE("F042")
+「小姐想要參加烹飪大賽﹐是不是要變更原本的預定行程﹖」
+@P
+
+C2 = 3
+GOTO SCHD_SELECTX
+
+*SCHD_SELECTX
+
+SLCTX("變更行程,維持原來")
+IF ( ISLCT = 0 ) GOTO SCHD_CHANGE
+IF ( ISLCT = 1 ) GOTO SCHD_NO_CHANGE
+
+*SCHD_CHANGE
+SCH_SYUKAKUSAI=C2
+URA_FATHER += 5
+IF ( URA_FATHER >100 ) URA_FATHER = 100
+TXCLOSE(16)
+TXCLOSE(17)
+TXOPEN(18)
+變更了原本預定的行程。
+@P
+TXCLOSE(18)
+RET
+
+*SCHD_NO_CHANGE
+URA_FATHER -= 10
+IF ( URA_FATHER < 0 ) URA_FATHER = 0
+TXSLCT(17)
+@C
+TXGIRL(3)
+「真是失望．．．．．．」
+@P
+TXA(NAME_FIRST)的疲勞上升了１０點．．．．．．
+B_STRESS += 10
+@P
+TXCLOSE(17)
+TXCLOSE(16)
+RET
+
+
+
+

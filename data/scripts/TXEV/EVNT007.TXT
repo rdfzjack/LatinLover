@@ -1,0 +1,157 @@
+
+
+
+
+
+
+.GIVE_GOLD
+
+RUN_MONTH[7]++
+
+STRSCLEAR
+
+TXLC(1,16,290,0)
+
+TXLC(2,17,148,1)
+TXLC(3,31,270,2)
+
+EVNT007
+
+LOAD("MAINBORN")
+
+
+
+
+
+
+*EVNT007
+
+TXOPEN(1)
+MUSIC(6,1)
+不知是誰在敲TXA(NAME_FAMILY)家的大門．．．．．．
+@P
+TXCLOSE(1)
+
+IF ( RUN_MONTH[7] = 1 )
+	TXOPEN(2)
+	TXFACE("F132")
+	「打擾了．．．．．．」
+	@P
+	TXOPEN(3)
+	TXFACE("F039")
+	「是誰﹐誰在大門﹖．．．」
+	@P
+	@C
+	TXFACE("F047")
+	「啊﹗您是﹖」
+	@P
+	@2
+	@C
+	「哼﹗同族之人﹐居然不認識我﹗」
+	@P
+	@3
+	@C
+	TXFACE("F042")
+	「老爺﹐這位是魔族的巴•度•卡魯四世﹐不是什麼好東西。」
+	@P
+	TXCLOSE(3)
+	@2
+	@C
+	「呵呵呵﹐您是這家的主人嗎﹖事實上﹐我有些話想和您私下談談。」
+	@P
+	GOTO EV_MAIN
+
+
+
+TXOPEN(2)
+TXFACE("F132")
+「又再度見面了﹐您好﹗」
+@P
+TXOPEN(3)
+TXFACE("F046")
+「怎麼又來了．．．老爺﹐最好不要和那種人時常來往。」
+@P
+TXCLOSE(3)
+
+
+
+*EV_MAIN
+
+GIVE_GOLD =  B_MORALS * 10
+
+@2
+@C
+「您的女兒心地非常善良﹐有崇高的道德﹐遵守著社會上的規律﹐一心一意的為他人祈福。因此﹐我非常的喜歡她。」
+@P
+@C
+「我想和您商量一下﹐將她的道德賣給我好嗎﹖我打算出TXGOLD(GIVE_GOLD)的金錢哦。」
+
+SLCTX("賣　　出,回　　絕")
+
+IF ( ISLCT = 0 )
+	@2
+	@C
+	「那麼﹐就這樣說定了﹗」
+	@P
+	TXCLOSE(2)
+	TXOPEN(1)
+	魔族的男子口中唸出咒文﹐一瞬間光芒四射﹐照亮了屋內。
+	@P
+	TXCLOSE(1)
+	TXOPEN(3)
+	TXGIRL(7)
+	「啊∼﹗﹗」
+	TIMER1(30)WAIT1
+	MUSIC(6,6)
+	EFC(4)
+	TXCLOSE(3)
+	TXCLOSE(2)
+	TIMER1(30)WAIT1
+	EFC(3)
+	EFC(16)
+
+	GR_OPEN
+	IGRP_TBL3[0]=B_MORALS
+	IGRP_TBL1[0]="道德"
+	IGRP_CNT=1
+	IGRP_X=16
+	IGRP_Y=250
+	GRPOPEN(1,1)
+	TXOPEN(1)
+	TXA(NAME_FIRST)的道德下降了TXPOINT(B_MORALS)點﹐但是金錢增加了TXGOLD(GIVE_GOLD)﹗
+	B_MORALS=0
+	GRPUPD(1,0,B_MORALS)
+	GOLDADD(GIVE_GOLD)
+	WWPROF(3)
+	@P
+	TXCLOSE(1)
+	GR_CLOSE
+
+	TXOPEN(2)
+	TXFACE("F132")
+	「呵呵呵﹐若是世界上的父母親都像你這樣﹐我們一族不知道有多快樂。」
+	@P
+	TXCLOSE(2)
+
+	TXOPEN(1)
+	魔族男子哈哈大笑著離去了．．．．．．
+	@P
+	TXCLOSE(1)
+	RET
+
+
+@2
+@C
+「哈哈哈﹐對不起﹐我只是開開玩笑罷了﹐千萬別生氣．．．．．．」
+@P
+TXCLOSE(2)
+
+TXOPEN(1)
+魔族的男子匆匆忙忙的離開了．．．．．．
+@P
+TXCLOSE(1)
+RET
+
+
+
+

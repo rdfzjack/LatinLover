@@ -1,0 +1,63 @@
+
+
+
+
+
+*CHECK_MEN
+MAN09N
+RET
+
+*MAN09N
+R_FACE			="F129"
+R_NAME			="獵人"
+R_CHINOH		=10
+R_SENTOH		=80
+RDM(55,65)
+R_KOUGEKI=AX
+R_BOUGYO		=35
+R_SOUKOU		=25
+R_SKNAME		="毛皮"
+R_MAHOGIJUTSU	=0
+R_MARYOKU		=0
+R_KOHMARYOKU	=40
+RDM(140,200)
+R_SENI=AX
+R_DASSYUTU		=60
+R_TSUKON		=15
+RDM(200,250)
+R_MAX_HP		=AX
+R_MAX_MP		=0
+RDM(50,100)
+R_GOLD			=AX
+R_SE_ATTACK	=3
+
+R_ITEM_NAME ="雷火彈"
+R_ITEM_ICON	=17
+R_ITEM_GOLD	=100
+R_ITEM_ATTR	=0
+R_ITEM_PROG	=""
+R_ITEM_HELP	="攻擊用"
+R_ITEM_PROPA=25
+
+MENMES[0]="噢﹐離開城堡﹐是很危險的唷。"
+MENMES[1]="這樣的深夜﹐要做什麼﹖"
+RANDAM(3)
+IF(AX=1)MENMES[2]="我發現妖精之蜜放在什麼地點．．．．．．"
+IF(AX=2)MENMES[2]="近來捕獲的獵物越來越少了．．．．．．"
+IF(AX=3)MENMES[2]="最近﹐捕獲的動物越來越多了．．．．．．"
+RANDAM(3)
+IF(AX=1)MENMES[3]="嗯．．．最近年輕人都不懂得禮儀．．．．．．"
+IF(AX=2)MENMES[3]="啐！"
+IF(AX=3)MENMES[3]="妳這個傢伙．．．．．．"
+MENMES[4]="哦﹗想要做什麼﹗﹗"
+MENMES[5]="不要這樣﹐我認輸了．．．．．．"
+MENMES[6]="笨蛋﹐我要懲罰妳的話﹐妳有幾條命都不夠用﹗"
+RANDAM(3)
+IF(AX=1)MENMES[7]="唔唔．．．像惡魔一般的小姑娘．．．．．．"
+IF(AX=2)MENMES[7]="．．．喔喔∼．．．警備兵在做什麼．．．．．．"
+IF(AX=3)MENMES[7]="．．．．．．唔唔唔．．．一定是妖怪變的．．．．．．"
+RET
+
+
+
+

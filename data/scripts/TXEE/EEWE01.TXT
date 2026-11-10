@@ -1,0 +1,183 @@
+
+
+
+
+.UNLUCKY_MAN	= 0
+UNLUCKY_MAN	=	ENDNM[7]
+
+TTL$("和王子結婚")
+
+START
+
+OPEN(1)
+已經長得十分美麗的GN$成年之後﹐求婚者絡繹不絕﹐但是不管對象是誰﹐所有的回答都是相同的。
+@T
+CLOSE(1)
+OPEN(3)
+TXGIRL(0)
+「對不起．．．我已經有了心許的人．．．．．．」
+@T
+CLOSE(3)
+OPEN(1)
+但是﹐卻看不到GN$和任何人交往。覺得奇怪的父親FN$就直接詢問女兒意中人究竟是何人。
+@T
+@C
+「GN$啊﹐妳心中的對象究竟是誰呢﹖」
+@T
+CLOSE(1)
+OPEN(3)
+TXFACE("F199")
+「嗯．．．那是一個我也不知道名字的人．．．．．．」
+@T
+CLOSE(3)
+OPEN(1)
+喜歡的男人卻連名字都不清楚．．．FN$對女兒的回答十分困惑﹐沒有再追問下去。
+@T
+@C
+數日後．．．．．．
+@T
+CLOSE(1)
+
+OPEN(4)
+TXFACE("F039")
+「老爺﹐又有人想要來向小姐求婚﹐要不要請他回去﹖」
+@T
+CLOSE(4)
+OPEN(3)
+TXGIRL(15)
+「啊﹖你是．．．．．．」
+@T
+OPEN(2)
+TXFACE("F088")
+「GN$．．．我是來迎接妳的。」
+@T
+CLOSE(2)
+CLOSE(3)
+OPEN(1)
+GN$在城中遇到的青年武官﹐事實上就是這個國家的王子。
+@T
+@C
+王子一直隱暪著自己的身分四處修行﹐直到成年為止。
+@T
+CLOSE(1)
+OPEN(2)
+TXFACE("F091")
+「GN$﹐我喜歡妳﹐請嫁給我吧﹗」
+@T
+OPEN(3)
+TXFACE("F200")
+「．．．是的．．．王子殿下。」
+@T
+CLOSE(3)
+CLOSE(2)
+PICWEDDING("Z068")      TIMER1(60)WAIT1
+OPEN(1)
+就這樣﹐勇士FN$的女兒GN$在城中和王子結婚﹐舉行盛大的結婚儀式。
+@T
+@C
+全國的人們祝福著這一對年輕的夫婦﹐慶祝酒會不分晝夜的持續了十天。
+@T
+@C
+GN$現在﹐成為公主了．．．．．．
+@T
+CLOSE(1)
+OPEN(3)
+TXFACE("F200")
+「爸爸．．．我覺得好幸福。」
+@T
+CLOSE(3)
+WWIVENT(2,1)
+UNLUCKY_CALL
+
+FINAL
+
+*UNLUCKY_CALL
+
+
+
+IF ( UNLUCKY_MAN = 2 )
+	OPEN(1)
+	目送著兩人坐著搖動馬車離去的FN$﹐心中正如潮水般的不平。
+	@T
+	@C
+	「GN$．．．恭喜了。但是我心中產生這股不平的心情是什麼呢﹖該不會是我不知不覺中把GN$當做女性來看待吧．．．．．．」
+	@T
+	CLOSE(1)
+	RET
+
+IF ( UNLUCKY_MAN = 3 )
+	OPEN(2)
+	TXFACE("F046")
+	「．．．小姐﹐恭禧恭禧﹗但是總有一種說不出的感覺．．．．．．」
+	@T
+	CLOSE(2)
+	RET
+
+IF ( UNLUCKY_MAN = 4 )
+	OPEN(2)
+	TXFACE("F198")
+	「唉唉唉．．．幸福還是離我而去．．．．．．算了﹐這樣也好。」
+	@T
+	CLOSE(2)
+	RET
+
+IF ( UNLUCKY_MAN = 5 )
+	OPEN(2)
+	TXFACE("F147")
+	「果然結婚的約定是個謊言﹗我一輩子都不會再相信女人了．．．．．．」
+	@T
+	CLOSE(2)
+	RET
+RET
+
+*GN$
+TXA(NAME_FIRST)
+RET
+
+*FN$
+TXA(NAME_FAMILY)
+RET
+
+*OPEN
+IF(AX=1)TXOPEN(10) RET
+IF(AX=2)TXOPEN(13) RET
+IF(AX=3)TXOPEN(15) RET
+IF(AX=4)TXOPEN(14) RET
+RET
+
+*CLOSE
+IF(AX=1)TXCLOSE(10) RET
+IF(AX=2)TXCLOSE(13) RET
+IF(AX=3)TXCLOSE(15) RET
+IF(AX=4)TXCLOSE(14) RET
+RET
+
+*SS$
+IF(AX=1)TXSLCT(10) RET
+IF(AX=2)TXSLCT(13) RET
+IF(AX=3)TXSLCT(15) RET
+IF(AX=4)TXSLCT(14) RET
+RET
+
+*TTL$
+RET
+
+*START
+TXLC(10,21,220,0)
+TXLC(13,32,146,1)
+TXLC(14,32,20,1)
+TXLC(15,17,270,2)
+RET
+
+*PICWEDDING
+WWIVENT(5,1,21,30)
+WWIVENT(1,1)
+
+
+
+RET
+
+*FINAL
+LOAD("EEALLE")
+RET
+

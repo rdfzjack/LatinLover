@@ -1,0 +1,170 @@
+
+
+
+
+
+
+
+
+RUN_MONTH[13]++
+
+STRSCLEAR
+
+TXLC(1,4,290,0)
+TXLC(2,17,148,1)
+TXLC(3,31,270,2)
+WWIVENT(5,0,50,180)
+
+EVNT013
+
+IF ( GIRL_DAMEG!0 )
+	PLAY(8)
+IF ( GIRL_DAMEG=0 )
+	IF ( TM_SEASON =1 ) PLAY(4)
+	IF ( TM_SEASON =2 ) PLAY(5)
+	IF ( TM_SEASON =3 ) PLAY(6)
+	IF ( TM_SEASON =4 ) PLAY(7)
+
+LOAD("MAINBORN")
+
+
+
+
+
+*EVNT013
+
+MUSIC(2)
+
+TXOPEN(1)
+MUSIC(6,1)
+不知是誰在敲著TXA(NAME_FIRST)家中的大門．．．．．．
+@P
+TXCLOSE(1)
+
+PLAY(28)
+
+TXOPEN(3)
+TXFACE("F042")
+「老爺﹐是要來向小姐求婚的人。」
+@P
+TXCLOSE(3)
+
+TXOPEN(2)
+TXFACE("F142")
+「伯父﹐這是我的一點小心意﹐請將女兒嫁給我吧﹗」
+WWIVENT(1,0,"E005")
+
+SLCPOS(5)
+SLCTX("允　　許,拒　　絕")
+IF ( ISLCT = 0 )	GOTO OK_YOOON
+GOTO DAME_YOOON
+
+
+
+
+
+*OK_YOOON
+@2
+@C
+「是真的嗎﹗伯父﹐我會盡我一生所能來照顧她的﹗」
+@P
+
+TXOPEN(3)
+TXGIRL(2)
+「真過份﹐請不要隨便決定這件事﹗」
+@P
+TXGIRL(0)
+@C
+「父親﹗非常抱歉﹐我不能和陌生人結婚。」
+@P
+@2
+「啊．．．我被甩了﹗但是無論如何請收下我的禮物。」
+@P
+TXCLOSE(3)
+TXCLOSE(2)
+
+URA_FATHER -= 20
+IF ( URA_FATHER < 0 ) URA_FATHER=0
+
+IRAND2(5,10)
+C1 = AX * 100
+
+GR_OPEN
+IGRP_TBL3[0]=C1
+IGRP_TBL1[0]="金錢"
+IGRP_CNT=1
+IGRP_X=50
+IGRP_Y=110
+GOLDOPEN(1,1)
+
+TXOPEN(1)
+求婚者放下了禮物﹐沮喪的回家去了．．．．．．
+金錢增加上TXGOLD(C1)﹗
+GOLDADD(C1)
+WWPROF(3)
+@P
+TXCLOSE(1)
+
+GR_CLOSE
+WWIVENT(2,0)
+
+TXOPEN(3)
+TXFACE("F040")
+「哇哈哈﹗雖然不認識﹐禮物還是到手了。」
+@P
+TXCLOSE(3)
+RET
+
+
+
+
+
+
+*DAME_YOOON
+@2
+@C
+「啊∼哈哈哈﹐非常抱歉﹗我想您是想找個真正適合您女兒的男人吧﹖」
+@P
+TXCLOSE(2)
+
+URA_FATHER += 10
+IF ( URA_FATHER >100 ) URA_FATHER = 100
+
+IRAND2(5,10)
+C1 = AX * 100
+
+GR_OPEN
+IGRP_TBL3[0]=C1
+IGRP_TBL1[0]="金錢"
+IGRP_CNT=1
+IGRP_X=50
+IGRP_Y=110
+GOLDOPEN(1,1)
+
+TXOPEN(1)
+求婚者將禮物放下﹐失望的回去了。
+金錢增加了TXGOLD(C1)﹗
+GOLDADD(C1)
+WWPROF(3)
+@P
+TXCLOSE(1)
+
+GR_CLOSE
+WWIVENT(2,0)
+
+TXOPEN(3)
+TXFACE("F048")
+「真好﹐這樣一來﹐小姐一定會非常高興的。」
+@P
+TXCLOSE(3)
+RET
+
+
+*SHORTWAIT
+TIMER1(30)WAIT1
+RET
+
+
+
+
+

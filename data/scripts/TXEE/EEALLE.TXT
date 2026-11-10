@@ -1,0 +1,878 @@
+
+
+
+
+
+
+
+
+
+.RANK_INGO
+.WORK_RANK
+.WORK_KIND
+.WORKS_NUM
+.WORKS_CLASS
+.LUCKY_MAN
+.UNLUCKY_MAN
+.WEDD_PATTN
+.WEDD_RANK
+.HEAVY_TRANING
+.HEAVY_T_COUNT
+.RANK_TRANING
+.HEAVY_WORKING
+.HEAVY_W_COUNT
+.RANK_WORKING
+.TENSU_KIHON
+.TENSU_WORKS
+.TENSU_SOGO
+
+RANK_INGO	=ENDNM[1]
+WORK_RANK	=ENDNM[2]
+WORK_KIND	=ENDNM[3]
+WORKS_NUM	=ENDNM[4]
+WORKS_CLASS	=ENDNM[5]
+LUCKY_MAN	=ENDNM[6]
+UNLUCKY_MAN	=ENDNM[7]
+WEDD_PATTN	=ENDNM[8]
+WEDD_RANK	=ENDNM[9]
+HEAVY_TRANING	=ENDNM[10]
+HEAVY_T_COUNT	=ENDNM[11]
+RANK_TRANING	=ENDNM[12]
+HEAVY_WORKING	=ENDNM[13]
+HEAVY_W_COUNT	=ENDNM[14]
+RANK_WORKING	=ENDNM[15]
+TENSU_KIHON	=ENDNM[16]
+TENSU_WORKS	=ENDNM[17]
+TENSU_SOGO	=ENDNM[18]
+
+.SYUGOTYPE
+
+
+
+PTBK(0)
+PTLD("ENDSYUGL")
+PTLA("ENDSYUGR")
+PTLA("ENDSYUGU")
+PTLA("ENDSYUGD")
+EFC(4)
+PTX(0,0,0)
+PTX(40,0,1)
+PTX(0,-40,2)
+PTX(0,400,3)
+
+PALET_SETONLY(0,0)
+EFC(3)
+
+TXF(8,P_SYUGOSEI,60,120)
+
+START
+TXLC(19,10,124,0)
+TXOPEN(19)
+
+ENDHYOUKA
+
+
+FINAL
+
+
+LOAD("EESTAF")
+
+
+
+
+
+*ENDHYOUKA
+
+IF ( P_SYUGOSEI = 0 )SYUGOTYPE = 1
+IF ( P_SYUGOSEI = 1 )SYUGOTYPE = 2
+IF ( P_SYUGOSEI = 2 )SYUGOTYPE = 3
+IF ( P_SYUGOSEI = 3 )SYUGOTYPE = 2
+IF ( P_SYUGOSEI = 4 )SYUGOTYPE = 3
+IF ( P_SYUGOSEI = 5 )SYUGOTYPE = 2
+IF ( P_SYUGOSEI = 6 )SYUGOTYPE = 1
+IF ( P_SYUGOSEI = 7 )SYUGOTYPE = 2
+IF ( P_SYUGOSEI = 8 )SYUGOTYPE = 1
+IF ( P_SYUGOSEI = 9 )SYUGOTYPE = 1
+
+
+
+
+IF ( SYUGOTYPE = 1 )
+	「FN$呀．．．讓我仔細的看看你是個怎麼樣的父親吧．．．
+	@T
+IF ( SYUGOTYPE = 2 )
+	「FN$啊．．．你是個怎麼樣的父親呢﹐讓我仔細的看看吧．．．
+	@T
+IF ( SYUGOTYPE = 3 )
+	「FN$喔．．．我要仔細的看看是怎麼當一個父親的．．．
+	@T
+
+
+IF ( TENSU_KIHON >= 500 )
+	IF ( SYUGOTYPE = 1 )
+		．．．GN$是天帝為了要看看地上的人是不是還有希望而派來的神之子﹐你居然能夠引出GN$的最大能力﹐實在是令人驚訝﹗」
+		@T
+
+	IF ( SYUGOTYPE = 2 )
+		．．．GN$是天帝為了要看看人間的人類是不是還有救而派來的神之子﹐你居然能夠引出GN$的最大能力﹐真是好極了。」
+		@T
+
+	IF ( SYUGOTYPE = 3 )
+		．．．GN$是天帝為了知道陸地上的人類的能力而派來的神之子﹐你居然能夠讓GN$發揮出最大的能力﹐真是驚人﹗」
+		@T
+
+
+IF ( TENSU_KIHON >= 300 TENSU_KIHON <= 499 )
+	IF ( SYUGOTYPE = 1 )
+		．．．GN$學習到非常不錯的能力﹐你的教育相當成功。」
+		@T
+
+	IF( SYUGOTYPE = 2 )
+		．．．GN$的表現相當的出眾﹐這都是你教育成功的結果。」
+		@T
+
+	IF ( SYUGOTYPE = 3 )
+		．．．GN$能夠擁有到這麼出色的能力﹐都是你的教育成果。」
+		@T
+
+
+IF ( TENSU_KIHON >= 200 TENSU_KIHON <= 299 )
+	IF ( SYUGOTYPE = 1 )
+		．．．GN$在人間學習到了相當不錯的技巧﹐你的教育成果令人滿意。」
+		@T
+
+	IF ( SYUGOTYPE = 2 )
+		．．．GN$在人間有了卓越的能力﹐你真不愧為一名優秀的父親。」
+		@T
+
+	IF( SYUGOTYPE = 3 )
+		．．．GN$在人間學習到卓越的能力﹐這都是你的教育成功。」
+		@T
+
+
+IF ( TENSU_KIHON >= 100 TENSU_KIHON <= 199 )
+	IF ( SYUGOTYPE = 1 )
+		．．．GN$已經長大成人了﹐有著不會令自己感到羞恥的技能﹐教育還算成功。」
+		@T
+
+	IF ( SYUGOTYPE = 2 )
+		．．．GN$已經長大成人了﹐也有著不錯的技能﹐你的教育還是令人滿意的。」
+		@T
+
+	IF( SYUGOTYPE = 3 )
+		．．．GN$已經是一個大人了﹐也有著不錯的能力﹐教育的結果總算差強人意。」
+		@T
+
+
+IF ( TENSU_KIHON >= 30 TENSU_KIHON <= 99 )
+	IF ( SYUGOTYPE = 1 )
+		．．．GN$的能力似乎不太夠．．．希望能夠再多盡點力．．．．．」
+		@T
+
+	IF ( SYUGOTYPE = 2 )
+		．．．GN$的能力似乎稍嫌不足．．．是不是應該多盡一些心力呢．．．．．．」
+		@T
+
+	IF( SYUGOTYPE = 3 )
+		．．．GN$的能力不太夠唷．．．應該多盡力栽培她的．．．．．．」
+		@T
+
+
+IF ( TENSU_KIHON < 30 )
+	IF ( SYUGOTYPE = 1 )
+		．．．GN$已經是這樣的大人了﹐卻只有這麼丟臉的能力．．．你沒有盡到父親的責任唷。」
+		@T
+
+	IF ( SYUGOTYPE = 2 )
+		．．．GN$都這麼大了﹐卻只有這麼丟臉的能力．．．這都是父親沒有好好教誨的關係。」
+		@T
+
+	IF( SYUGOTYPE = 3 )
+		．．．GN$已經長大了﹐卻沒有什麼能力．．．你是怎麼擔任她的家長的。」
+		@T
+
+
+
+
+IF ( RANK_INGO=2 )( RANK_INGO=3 )
+
+	IF ( SYUGOTYPE = 1 )
+		@C
+		「GN$本身並不是罪孽之子﹐但是GN$背負著這些罪孽而生活．．．這都是你的責任。」
+		@T
+
+	IF ( SYUGOTYPE = 2 )
+		@C
+		「GN$本身是無罪的．．．但是GN$卻背負著這些罪孽而生活﹐這都是你所造成的。」
+		@T
+
+	IF( SYUGOTYPE = 3 )
+		@C
+		「GN$本身是無罪的．．．但現在GN$的身上卻有著極重的罪孽﹐這可以說完全是你的原因。」
+		@T
+
+
+IF ( RANK_INGO=1 )
+
+	IF ( SYUGOTYPE = 1 )
+		@C
+		「．．．．．．．．．．．．其次．．．」
+		@T
+
+	IF ( SYUGOTYPE = 2 )
+		@C
+		「．．．．．．．．．．．．其次．．．」
+		@T
+
+	IF( SYUGOTYPE = 3 )
+		@C
+		「．．．．．．．．．．．．其次．．．」
+		@T
+
+
+
+
+IF ( SYUGOTYPE = 1 )
+	@C
+	「成為WORKS_NAME這樣的結果﹐@@
+
+IF ( SYUGOTYPE = 2 )
+	@C
+	「成為WORKS_NAME這樣的結果﹐@@
+
+IF ( SYUGOTYPE = 3 )
+	@C
+	「成為WORKS_NAME這樣的結果﹐@@
+
+
+IF ( TENSU_WORKS >= 400 )
+	IF ( SYUGOTYPE = 1 )
+		相當的驚人﹐不是隨隨便便可以得到的。」
+		@T
+	IF ( SYUGOTYPE = 2 )
+		真可怕．．．這不是輕輕鬆鬆可以達成的。」
+		@T
+
+	IF ( SYUGOTYPE = 3 )
+		相當的驚人﹐這可不是那麼簡單的。」
+		@T
+
+
+IF ( TENSU_WORKS >= 300 TENSU_WORKS <= 399 )
+	IF ( SYUGOTYPE = 1 )
+		不是很了不起嗎﹖你應該覺得很得意吧。」
+		@T
+
+	IF ( SYUGOTYPE = 2 )
+		了不起啊﹐你也覺得與有榮焉吧﹗」
+		@T
+
+	IF ( SYUGOTYPE = 3 )
+		了不起﹗你應該覺得相當自豪才是。」
+		@T
+
+
+IF ( TENSU_WORKS >= 200 TENSU_WORKS <= 299 )
+	IF ( SYUGOTYPE = 1 )
+		相當的出色﹗」
+		@T
+
+	IF ( SYUGOTYPE = 2 )
+		出色極了﹗」
+		@T
+
+	IF ( SYUGOTYPE = 3 )
+		真是出色﹗」
+		@T
+
+
+IF ( TENSU_WORKS >= 100 TENSU_WORKS <= 199 )
+	IF ( SYUGOTYPE = 1 )
+		並不是怎麼樣．．．各有各的路．．．」
+		@T
+
+	IF ( SYUGOTYPE = 2 )
+		還算不錯啦．．．總是有自己的發展．．．」
+		@T
+
+	IF ( SYUGOTYPE = 3 )
+		算了﹐也過得去啦．．．這是個人的路．．．」
+		@T
+
+
+IF ( TENSU_WORKS >= 50 TENSU_WORKS <= 99 )
+	IF ( SYUGOTYPE = 1 )
+		沒辦法呀．．．這樣的路也是人生．．．」
+		@T
+
+	IF ( SYUGOTYPE = 2 )
+		唉﹐沒辦法了．．．這就是人生．．．」
+		@T
+
+	IF ( SYUGOTYPE = 3 )
+		沒有辦法．．．這也算是人生．．．」
+		@T
+
+
+IF ( TENSU_WORKS < 49 )
+	IF ( SYUGOTYPE = 1 )
+		可憐呀．．．如果好好的努力﹐就不會落得這樣的下場了．．．」
+		@T
+
+	IF ( SYUGOTYPE = 2 )
+		真是令人同情．．．要是你好好的努力﹐或許就會改變這個事實了．．．」
+		@T
+
+	IF ( SYUGOTYPE = 3 )
+		真是遺憾．．．你如果好好的努力﹐就會有一個全新的局面．．．」
+		@T
+
+
+
+
+IF ( WORKS_CLASS = 1 )
+	IF ( SYUGOTYPE = 1 )
+		@C
+		「在這之後﹐GN$似乎是在工作上十分的順利．．．」
+		@T
+
+	IF ( SYUGOTYPE = 2 )
+		@C
+		「在這之後﹐GN$在工作上並沒有遭到什麼阻礙．．．」
+		@T
+
+	IF ( SYUGOTYPE = 3 )
+		@C
+		「在這之後﹐GN$工作上一帆風順．．．」
+		@T
+
+
+IF ( WORKS_CLASS = 2 )
+	IF ( SYUGOTYPE = 1 )
+		@C
+		「在這之後﹐GN$的工作看起來還算過得去．．．」
+		@T
+
+	IF ( SYUGOTYPE = 2 )
+		@C
+		「之後﹐GN$的工作還算差強人意．．．」
+		@T
+
+	IF ( SYUGOTYPE = 3 )
+		@C
+		「之後﹐GN$的工作還不算太糟．．．」
+		@T
+
+
+IF ( WORKS_CLASS = 3 )
+	IF ( SYUGOTYPE = 1 )
+		@C
+		「在這之後﹐GN$在目前的職位上並不是十分順利．．．」
+		@T
+
+	IF ( SYUGOTYPE = 2 )
+		@C
+		「之後﹐GN$工作上並非十分順心．．．」
+		@T
+
+	IF ( SYUGOTYPE = 3 )
+		@C
+		「在這之後﹐GN$的工作並不是十分順利．．．」
+		@T
+
+IF ( WORK_KIND = 6 ) GOTO KEKKON_SKIP
+
+
+
+
+IF ( LUCKY_MAN = 1 )
+	IF ( SYUGOTYPE = 1 )
+		@C
+		「即使是這樣﹐和王子結婚仍然是可喜可賀的事﹐王子是個傑出的青年﹐兩人一起攜手建立強大的國家﹐我在這裡由衷的祝福。」
+		@T
+
+	IF ( SYUGOTYPE = 2 )
+		@C
+		「即使是這樣﹐和王子結婚仍然是一件令人高興的事﹐GN$那時幸福快樂的笑容﹐至今我都還記得．．．．．．」
+		@T
+
+	IF ( SYUGOTYPE = 3 )
+		@C
+		「就算是這樣﹐和王子的結婚也算是一件令人高興的事﹐王子是一位有為的青年﹐可以給GN$永遠的幸福﹐我在這裡祝福他們。」
+		@T
+
+
+IF ( LUCKY_MAN = 2 )
+	IF ( SYUGOTYPE = 1 )
+		@C
+		「雖然這樣﹐和自己的女兒的結婚來說還是難以用言語來形容．．．不過﹐沒有血緣的關係﹐只要彼此相愛就可以了。」
+		@T
+
+	IF ( SYUGOTYPE = 2 )
+		@C
+		「雖然這樣﹐和自己的女兒結婚仍然還是一件驚人的事．．．不過﹐沒有血緣的關係﹐只要兩個人相愛的話﹐這些都不成問題的．．．」
+		@T
+
+	IF ( SYUGOTYPE = 3 )
+		@C
+		「雖然這樣﹐和自己的女兒結婚也算是件驚世駭俗的事．．．幸好﹐彼此之間並沒有什麼血緣關係﹐只要相愛就可以了．．．」
+		@T
+
+
+IF ( LUCKY_MAN = 3 )
+	IF ( SYUGOTYPE = 1 )
+		@C
+		「雖然這樣﹐和管家結婚也不是什麼大不了的事﹐雖然他是魔族．．．但是只要相愛的話也沒有問題﹐只不過做父親的心情有些複雜．．．」
+		@T
+
+	IF ( SYUGOTYPE = 2 )
+		@C
+		「雖然這樣﹐和管家結婚是件令人吃驚的事。雖然他是魔族﹐但是愛是可以跨過種族的界限的。」
+		@T
+
+	IF ( SYUGOTYPE = 3 )
+		@C
+		「雖然這樣﹐和魔族的人結婚也不是不被允許的。天界的女兒和魔族的青年只要有愛就沒有關係。」
+		@T
+
+
+IF ( LUCKY_MAN = 4 )
+	IF ( SYUGOTYPE = 1 )
+		@C
+		「雖然這樣﹐女兒和魔王結婚仍然是無法想像的。畢竟GN$是天界授與的女兒．．．FN$﹐人間果然沒有什麼希望了．．．．．．」
+		@T
+
+	IF ( SYUGOTYPE = 2 )
+		@C
+		「雖然這樣﹐和魔王結婚還是．．．GN$畢竟是上天所賜的女兒﹐會變成現在這個樣子都是因為你的緣故﹐畢竟人類是不值得被拯救的一群．．．．．．」
+		@T
+
+	IF ( SYUGOTYPE = 3 )
+		@C
+		「雖然這樣﹐和魔王結婚總是令人不敢相信﹐再怎麼說GN$總是天上下凡的女孩﹐變成這樣的結果都是FN$的罪呀﹗你們這些人類已經毫無希望了．．．．．．」
+		@T
+
+
+IF ( LUCKY_MAN = 5 )
+	IF ( SYUGOTYPE = 1 )
+		@C
+		「雖然這樣﹐和龍族結婚還是相當令人難以想像。或許有著超越種族的愛吧．．．．．．」
+		@T
+
+	IF ( SYUGOTYPE = 2 )
+		@C
+		「就算是這樣﹐和龍族結婚還是相當令人吃驚﹐雖然是異族結婚﹐但是希望能夠幸福．．．．．．」
+		@T
+
+	IF ( SYUGOTYPE = 3 )
+		@C
+		「即使是這樣﹐和龍族結婚還是相當的驚世駭俗﹐不過也許有著超越種族的愛吧．．．．．．」
+		@T
+
+
+
+
+IF ( WEDD_PATTN = 1 WEDD_RANK = 1 )
+	IF ( SYUGOTYPE = 1 )
+		@C
+		「即使這樣﹐能夠得到伴侶不是女人最幸福的事情嗎﹖女人的幸福﹐就是取決於婚姻之上．．．．．．」
+		@T
+
+	IF ( SYUGOTYPE = 2 )
+		@C
+		「就算是這樣﹐和傑出的男性結婚還是幸福的．．．．．．」
+		@T
+
+	IF ( SYUGOTYPE = 3 )
+		@C
+		「雖然這樣﹐得到好的伴侶還是幸福的﹐女人的幸福還是決定於婚姻。」
+		@T
+
+
+IF ( WEDD_PATTN = 1 WEDD_RANK = 2 )
+	IF ( SYUGOTYPE = 1 )
+		@C
+		「雖然這樣﹐能夠安安心心的結婚還是一件安心的事．．．」
+		@T
+
+	IF ( SYUGOTYPE = 2 )
+		@C
+		「即使這樣﹐能夠平安的結婚﹐我也感到安心．．．」
+		@T
+
+	IF ( SYUGOTYPE = 3 )
+		@C
+		「就算是這樣﹐迎接平安的婚禮﹐也是件可喜的事．．．」
+		@T
+
+
+
+
+IF ( WEDD_PATTN = 1 URA_MOTHER_LOVE >= 79 )
+	IF ( SYUGOTYPE = 1 )
+		@C
+		「GN$有著相當豐富的母性﹐想必可以成為一個不錯的母親﹗」
+		@T
+
+	IF ( SYUGOTYPE = 2 )
+		@C
+		「GN$母性的本能很強﹐一定會成為不錯的母親。」
+		@T
+
+	IF ( SYUGOTYPE = 3 )
+		@C
+		「GN$有著母性的本能﹐在成為母親時會有很好的表現的。」
+		@T
+
+
+IF ( WEDD_PATTN = 1 URA_MOTHER_LOVE >=30 URA_MOTHER_LOVE < 79 )
+	IF ( SYUGOTYPE = 1 )
+		@C
+		「GN$能夠成為很好的母親．．．」
+		@T
+
+	IF ( SYUGOTYPE = 2 )
+		@C
+		「GN$呀﹐希望妳能夠做個好母親．．．」
+		@T
+
+	IF ( SYUGOTYPE = 3 )
+		@C
+		「GN$會成為一個很好的母親．．．」
+		@T
+
+
+IF ( WEDD_PATTN = 1 URA_MOTHER_LOVE < 30 )
+	IF ( SYUGOTYPE = 1 )
+		@C
+		「GN$可以成為一位好母親．．．．．．」
+		@T
+
+	IF ( SYUGOTYPE = 2 )
+		@C
+		「如果能成為一位好母親的話﹐那是再好也不過．．．．．．」
+		@T
+
+	IF ( SYUGOTYPE = 3 )
+		@C
+		「如果成為一位好母親的話﹐那是最好的．．．．．．」
+		@T
+
+
+
+
+IF ( WEDD_PATTN = 2 )
+	IF ( SYUGOTYPE = 1 )
+		@C
+		「雖然這樣﹐不能成為一位母親算是相當可憐．．．不管是怎樣的美人﹐道德太差的話也沒人要。」
+		@T
+
+	IF ( SYUGOTYPE = 2 )
+		@C
+		「就算是這樣﹐如果不能和男性認識也是不幸的．．．．這是有關道德方面的問題吧﹗」
+		@T
+
+	IF ( SYUGOTYPE = 3 )
+		@C
+		「即使這樣﹐不能迎接婚禮也是可憐的．．．就算是怎麼樣的美女﹐道德太低也是不行的。」
+		@T
+
+
+IF ( WEDD_PATTN = 3 )
+	IF ( SYUGOTYPE = 1 )
+		@C
+		「即使這樣﹐不能迎接婚禮也是遺憾的．．．就算是再怎麼的高貴﹐道德太低也是不行的。」
+		@T
+
+	IF ( SYUGOTYPE = 2 )
+		@C
+		「雖然這樣﹐不能和好的男性認識也是不好的．．．．這都是道德方面的問題吧．．．．．．」
+		@T
+
+	IF ( SYUGOTYPE = 3 )
+		@C
+		「就算是這樣﹐不能迎接婚禮也是不幸的．．．不論氣質有多好﹐道德太低就是不對了。」
+		@T
+
+IF ( WEDD_PATTN = 1 )( LUCKY_MAN ! 0 ) GOTO KEKKON_SKIP
+
+
+
+
+IF (WEDD_PATTN = 2 URA_MOTHER_LOVE >= 80)(WEDD_PATTN = 3 URA_MOTHER_LOVE >= 80)
+	IF ( SYUGOTYPE = 1 )
+		@C
+		「GN$是喜歡小孩的﹐可惜的是．．．」
+		@T
+
+	IF ( SYUGOTYPE = 2 )
+		@C
+		「GN$雖然喜歡小孩﹐但是．．．」
+		@T
+
+	IF ( SYUGOTYPE = 3 )
+		@C
+		「GN$雖然喜歡小孩﹐遺憾的是．．．」
+		@T
+
+
+IF (WEDD_PATTN = 2 URA_MOTHER_LOVE < 80)(WEDD_PATTN = 3 URA_MOTHER_LOVE < 80)
+	IF ( SYUGOTYPE = 1 )
+		@C
+		「就這樣沒有孩子的過了一生．．．．．．」
+		@T
+
+	IF ( SYUGOTYPE = 2 )
+		@C
+		「就這樣的過了一生．．．．．．」
+		@T
+
+	IF ( SYUGOTYPE = 3 )
+		@C
+		「沒有孩子的過了一生．．．．．．」
+		@T
+
+*KEKKON_SKIP
+
+
+
+
+IF ( TENSU_SOGO >= 1000 )
+	IF ( SYUGOTYPE = 1 )
+		@C
+		「FN$呀．．．你這個父親表現得很好﹐能夠好好的教養孩子。雖然GN$是個上天授與的孩子﹐但是你卻能讓她有著非凡的表現﹐獲得在天上重生的資格。當你再度被天界召喚的時候﹐就可以再見面了。」
+		@T
+		RET
+
+	IF ( SYUGOTYPE = 2 )
+		@C
+		「FN$啊．．．你是個很好的父親﹐養育的孩子果然是虎父無犬女。GN$原本就是個天上下凡的孩子﹐在死後也會回到天上。那時你將會被再次的召喚﹐而有再次見面的機會。」
+		@T
+		RET
+
+	IF ( SYUGOTYPE = 3 )
+		@C
+		「FN$唷．．．你是個好父親﹐你所撫養的孩子也是個英雄。原本GN$就是個天界下凡的孩子﹐在她死後就會回到天上﹐那時你將被再次的召喚﹐就可以再見面了。」
+		@T
+		RET
+
+
+IF ( TENSU_SOGO >= 500 TENSU_SOGO <= 999 )
+	IF ( SYUGOTYPE = 1 )
+		@C
+		「FN$呀．．．你的女兒是個很優秀的大人﹐GN$原本就是一名天界之子﹐現於人間壽終正寢。你是一位好父親。」
+		@T
+		RET
+
+	IF ( SYUGOTYPE = 2 )
+		@C
+		「FN$啊．．．你的女兒是個優秀的人物﹐GN$原本就是一名天界之子﹐現於人間壽終正寢。你是一位好父親。」
+		@T
+		RET
+
+	IF ( SYUGOTYPE = 3 )
+		@C
+		「FN$唷．．．你的女兒是個很優秀的人物﹐GN$原本就是一名天界之子﹐現於人間壽終正寢。你是一位好父親。」
+		@T
+		RET
+
+
+IF ( TENSU_SOGO >= 200 TENSU_SOGO <= 499 )
+	IF ( SYUGOTYPE = 1 )
+		@C
+		「FN$呀．．．你的女兒GN$原本是一名天界之子﹐原來我們打算在她長大成人後將她召回天界﹐現在因為你教養的成果太差而取消了。」
+		@T
+		RET
+
+	IF ( SYUGOTYPE = 2 )
+		@C
+		「FN$啊．．．你的女兒GN$原本是一名天界之子﹐原來我們打算在她長大成人後將她召回天界﹐現在因為你教養的成果太差而取消了。」
+		@T
+		RET
+
+	IF ( SYUGOTYPE = 3 )
+		@C
+		「FN$唷．．．你的女兒GN$原本是一名天界之子﹐原來我們打算在她長大成人後將她召回天界﹐現在因為你教養的成果太差而取消了。」
+		@T
+		RET
+
+
+IF ( TENSU_SOGO < 200 )
+	IF ( SYUGOTYPE = 1 )
+		@C
+		「FN$啊．．．你的女兒GN$原本是一名天界之子﹐現在卻變得污穢不堪﹐這都是你的錯。把她交給你實在是一項錯誤呀．．．．．．」
+		@T
+		RET
+
+	IF ( SYUGOTYPE = 2 )
+		@C
+		「FN$呀．．．你的女兒GN$原本是天界之子﹐結果現在卻有著這樣的下場．．．這都是命運﹐我們不該把她交給你的．．．．．．」
+		@T
+		RET
+
+	IF ( SYUGOTYPE = 3 )
+		@C
+		「FN$唷．．．這個女孩GN$是個天界之子﹐但是現在卻落到這樣的下場．．．這也只能說是命運﹐我們居然會將她交給你．．．唉．．．．．．」
+		@T
+		RET
+RET
+
+
+
+
+*WORKS_NAME
+C1 = WORKS_NUM
+IF ( C1=01 ) 女王@@
+IF ( C1=02 ) 宰相@@
+IF ( C1=03 ) 大主教@@
+IF ( C1=04 ) 大臣@@
+IF ( C1=05 ) 博士@@
+IF ( C1=06 ) 修女@@
+IF ( C1=07 ) 法官@@
+IF ( C1=08 ) 學者@@
+IF ( C1=09 ) 育幼院工作@@
+IF ( C1=10 ) 旅館工作@@
+IF ( C1=11 ) 農場工作@@
+IF ( C1=12 ) 教堂工作@@
+IF ( C1=13 ) 餐廳工作@@
+IF ( C1=14 ) 伐木場工作@@
+IF ( C1=15 ) 美容院工作@@
+IF ( C1=16 ) 工地工作@@
+IF ( C1=17 ) 狩獵區工作@@
+IF ( C1=18 ) 墓園工作@@
+IF ( C1=19 ) 家庭教師工作@@
+IF ( C1=20 ) 酒店工作@@
+IF ( C1=21 ) 酒家工作@@
+IF ( C1=22 ) 大夜總會工作@@
+IF ( C1=23 ) 女官@@
+IF ( C1=24 ) 育幼院兼差@@
+IF ( C1=25 ) 旅館兼差@@
+IF ( C1=26 ) 農場兼差@@
+IF ( C1=27 ) 教會兼差@@
+IF ( C1=28 ) 餐廳兼差@@
+IF ( C1=29 ) 伐木場兼差@@
+IF ( C1=30 ) 美容院兼差@@
+IF ( C1=31 ) 工地兼差@@
+IF ( C1=32 ) 狩獵區兼差@@
+IF ( C1=33 ) 墓園兼差@@
+IF ( C1=34 ) 家庭教師兼差@@
+IF ( C1=35 ) 酒店兼差@@
+IF ( C1=36 ) 酒家兼差@@
+IF ( C1=37 ) 大夜總會兼差@@
+IF ( C1=38 ) 家中幫忙@@
+IF ( C1=39 ) 勇者@@
+IF ( C1=40 ) 將軍@@
+IF ( C1=41 ) 近衛隊長@@
+IF ( C1=42 ) 武術老師@@
+IF ( C1=43 ) 騎士@@
+IF ( C1=44 ) 士兵@@
+IF ( C1=45 ) 獎金獵人@@
+IF ( C1=46 ) 傭兵@@
+IF ( C1=47 ) 勇者@@
+IF ( C1=48 ) 王宮魔法師@@
+IF ( C1=49 ) 魔法老師@@
+IF ( C1=50 ) 魔道士@@
+IF ( C1=51 ) 魔法師@@
+IF ( C1=52 ) 占卜師@@
+IF ( C1=53 ) 魔術師@@
+IF ( C1=54 ) 街頭藝人@@
+IF ( C1=55 ) 國王的寵妃@@
+IF ( C1=56 ) 王妃@@
+IF ( C1=57 ) 伯爵夫人@@
+IF ( C1=58 ) 富豪的妻子@@
+IF ( C1=59 ) 商人的妻子@@
+IF ( C1=60 ) 農人的妻子@@
+IF ( C1=61 ) 地主的情婦@@
+IF ( C1=62 ) 離婚的女人@@
+IF ( C1=63 ) 新娘修行@@
+IF ( C1=64 ) 小丑@@
+IF ( C1=65 ) 作家@@
+IF ( C1=66 ) 畫家@@
+IF ( C1=67 ) 舞蹈家@@
+IF ( C1=68 ) ＳＭ女王@@
+IF ( C1=69 ) 黑街老大@@
+IF ( C1=70 ) 流氓@@
+IF ( C1=71 ) 高級娼婦@@
+IF ( C1=72 ) 詐欺師@@
+IF ( C1=73 ) 流鶯@@
+IF ( C1=74 ) 魔王@@
+RET
+
+*WORKS_POSITION
+IF ( WORKS_CLASS=1 )	松@@
+IF ( WORKS_CLASS=2 )	竹@@
+IF ( WORKS_CLASS=3 )	梅@@
+RET
+
+*LUCKY_NAME
+IF ( LUCKY_MAN = 1 )	結婚•王子　@@
+IF ( LUCKY_MAN = 2 )	結婚•父親　@@
+IF ( LUCKY_MAN = 3 )	結婚•管家　@@
+IF ( LUCKY_MAN = 4 )	結婚•魔王　@@
+IF ( LUCKY_MAN = 5 )	結婚•龍族青年　@@
+
+IF ( LUCKY_MAN!0 )
+	特殊的結婚是@@
+	C1=LUCKY_MAN
+	IF ( C1=1 )	王子@@
+	IF ( C1=2 )	父親@@
+	IF ( C1=3 )	管家@@
+	IF ( C1=4 )	魔王@@
+	IF ( C1=5 )	龍族青年@@
+	IF ( UNLUCKY_MAN!0 )
+		﹐失敗者是@@
+		C1=UNLUCKY_MAN
+		IF ( C1=1 )	王子@@
+		IF ( C1=2 )	父親@@
+		IF ( C1=3 )	管事@@
+		IF ( C1=4 )	魔王@@
+		IF ( C1=5 )	龍族青年@@
+IF ( LUCKY_MAN=0 )
+	結婚的形式是@@
+	IF ( WEDD_PATTN=1 )	「通常型」@@
+	IF ( WEDD_PATTN=2 )	「未婚魅力型」@@
+	IF ( WEDD_PATTN=3 )	「未婚氣質型」@@
+	．@@
+	IF ( WEDD_RANK=1 )	Ａ級@@
+	IF ( WEDD_RANK=2 )	Ｂ級@@
+RET
+
+*GN$
+TXA(NAME_FIRST)
+RET
+
+*FN$
+TXA(NAME_FAMILY)
+RET
+
+*OPEN
+IF(AX=1)TXOPEN(10) RET
+IF(AX=2)TXOPEN(13) RET
+IF(AX=3)TXOPEN(15) RET
+IF(AX=4)TXOPEN(14) RET
+RET
+
+*CLOSE
+IF(AX=1)TXCLOSE(10) RET
+IF(AX=2)TXCLOSE(13) RET
+IF(AX=3)TXCLOSE(15) RET
+IF(AX=4)TXCLOSE(14) RET
+RET
+
+*START
+TXLC(10,17,220,0)
+TXLC(13,28,146,1)
+TXLC(14,28,20,1)
+TXLC(15,13,270,2)
+RET
+
+*FINAL
+LOAD("EESTAF")
+RET
+
+RET
+
+
+
+
+

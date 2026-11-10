@@ -1,0 +1,176 @@
+
+
+
+
+
+
+
+
+
+
+
+.PIC_TITLE
+.PIC_SCORE
+.PIC_NUMBER
+
+.PICXX=48
+.PICYY=100
+.XXX
+.YYY
+
+RUN_MONTH[39]++
+
+STRSCLEAR
+
+TXLC(1,4,290,0)
+TXLC(2,17,156,1)
+TXLC(3,31,270,2)
+TXLC(9,48,148,2)
+TXLC(10,4,290,0)
+WWIVENT(5,0,6,40)
+
+EVNT039
+
+LOAD("RUNNING")
+
+
+
+
+
+*EVNT039
+TXOPEN(2)
+TXFACE("F059")
+「哎呀﹗TXA(NAME_FIRST)小姐﹐這次的成績還算不錯﹐怎麼樣﹖要不要試著在此畫出一件作品呢﹖」
+@P
+
+TXOPEN(10)
+「只要花１００Ｇ﹐如何﹖」
+SLCTX("畫幅作品,放　　棄")
+TXCLOSE(10)
+
+IF ( ISLCT = 1 )
+	TXOPEN(3)
+	TXGIRL(11)
+	「很抱歉﹗我不想畫。」
+	@P
+	@2
+	@C
+	「真可惜﹗下次有機會再試試看好了。」
+	@P
+	TXCLOSE(3)
+	TXCLOSE(2)
+	RET
+
+
+
+GOLDCMP(100)
+IF ( AX=2 )
+	@2
+	@C
+	「TXA(NAME_FIRST)﹐錢好像帶得不夠多。」
+	@P
+	TXOPEN(3)
+	TXGIRL(11)
+	「這樣的話﹐很抱歉﹐我不畫了﹗」
+	@P
+	@2
+	@C
+	「真可惜﹗下次有機會再畫吧﹗」
+	@P
+	TXCLOSE(3)
+	TXCLOSE(2)
+	RET
+
+TXCLOSE(2)
+
+GOLDSUB(100)
+WWPROF(3)
+
+WWIVENT(1,0,"E016")
+
+SHORTWAIT
+
+TXOPEN(1)
+TXA(NAME_FIRST)一口氣將畫完成了。
+@P
+TXCLOSE(1)
+
+TXOPEN(3)
+TXGIRL(1)
+「老師﹐畫好了﹗」
+@P
+
+PIC_SCORE = V_GEIJYUTSU
+
+IF ( PIC_SCORE <= 50 )
+	PIC_TITLE = "插有花束的陶壺"
+	PIC_NUMBER = 0
+
+IF ( PIC_SCORE >= 51  PIC_SCORE <= 64 )
+	PIC_TITLE = "有酒瓶和蘋果的靜物畫"
+	PIC_NUMBER = 1
+
+IF ( PIC_SCORE >= 65  PIC_SCORE <= 78 )
+	PIC_TITLE = "帶點蒼白的山脈"
+	PIC_NUMBER = 2
+
+IF ( PIC_SCORE >= 79  PIC_SCORE <= 92 )
+	PIC_TITLE = "自畫像"
+	PIC_NUMBER = 3
+
+IF ( PIC_SCORE >= 93 )
+	PIC_TITLE = "降臨的天使"
+	PIC_NUMBER = 4
+
+ROOM_PIC = PIC_NUMBER
+
+SHOW_PICTURE
+
+SHORTWAIT
+
+E_ETC[60]=PIC_SCORE
+
+TXOPEN(2)
+TXFACE("F059")
+「噢﹐畫得很好﹐勉強打個分數的話﹐可以得到TXPOINT(PIC_SCORE)分﹐畫名就叫『TXA(PIC_TITLE)』吧﹗」
+@P
+TXCLOSE(2)
+TXCLOSE(3)
+WWIVENT(2,0)
+CLOSE_GIRL_PIC
+WWGIRL(2)
+RET
+
+*SHORTWAIT
+TIMER1(50)WAIT1
+RET
+
+
+
+*SHOW_PICTURE
+PTBK(4)
+PTCLR
+PTGT(PICXX,PICYY,19,154)
+PTBK(5)
+PTLD("SSGAKU")
+IF ( ROOM_PIC=0 )	PTLA("P001")
+IF ( ROOM_PIC=1 )	PTLA("P002")
+IF ( ROOM_PIC=2 )	PTLA("P003")
+IF ( ROOM_PIC=3 )	PTLA("P004")
+IF ( ROOM_PIC=4 )	PTLA("P005")
+XXX = PICXX + 3
+YYY = PICYY + 26
+PTM(PICXX,PICYY,0)
+PTX(XXX,YYY,2)
+PTBK(0)
+RET
+
+*CLOSE_GIRL_PIC
+PTBK(4)
+PTX(PICXX,PICYY,0)
+PTBK(0)
+RET
+
+
+
+

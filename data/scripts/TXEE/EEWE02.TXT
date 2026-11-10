@@ -1,0 +1,160 @@
+
+.UNLUCKY_MAN	= 0
+UNLUCKY_MAN	=	ENDNM[7]
+
+TTL$("和父親結婚")
+
+START
+
+OPEN(1)
+已經長得十分美麗的GN$成年之後﹐求婚者絡繹不絕﹐但是女孩不管是對誰﹐所有的回答都是相同的。
+@T
+OPEN(3)
+TXGIRL(0)
+「對不起．．．我已經有了心許的人．．．．．．」
+@T
+SS$(1)
+@C
+但是﹐卻看不到GN$和任何人交往。覺得奇怪的父親FN$就直接詢問女兒意中人究竟是何人。
+@T
+@C
+「GN$啊﹐妳心中的人究竟是誰呢﹖」
+@T
+SS$(3)
+@C
+TXFACE("F199")
+「那是．．．．．．」
+@T
+SS$(1)
+@C
+「不要顧慮父親﹐妳倒是說說看。」
+@T
+SS$(3)
+@C
+
+「明日是父親的生日．．．我會告訴父親我喜歡的人是誰．．．．．．」
+@T
+CLOSE(3)
+CLOSE(1)
+
+OPEN(1)
+第二天﹐GN$穿著美麗的洋裝出現在FN$面前。
+@T
+@C
+那件洋裝﹐是以前FN$買給女兒穿的．．．．．．
+@T
+OPEN(3)
+TXFACE("F201")
+「父親．．．我最喜歡的人是．．．．．．父親﹐是你。GN$最喜歡的人是爸爸﹗」
+@T
+SS$(1)
+@C
+GN$含著淚水﹐將心中所想的全部說了出來。
+@T
+@C
+FN$頓時感到茫然﹐但是也察覺到自己的心裡也有同樣的想法。
+@T
+@C
+「GN$．．．我也喜歡妳。今後妳不再是我女兒﹐而是我所愛的女人．．．．．．」
+@T
+SS$(3)
+@C
+
+「啊啊．．．．．．﹗」
+@T
+CLOSE(3)
+CLOSE(1)
+PICWEDDING("Z069")      TIMER1(60)WAIT1
+@T
+OPEN(1)
+於是FN$與GN$兩人結為夫婦。
+@T
+@C
+對於這個婚姻﹐周圍的人都感到相當的吃驚。但是由於二人愛情十分堅定﹐仍給予這對新人由衷的祝福．．．．．．
+@T
+CLOSE(1)
+WWIVENT(2,1)
+UNLUCKY_CALL
+
+FINAL
+
+*UNLUCKY_CALL
+
+
+
+IF ( UNLUCKY_MAN = 3 )
+	OPEN(2)
+	TXFACE("F046")
+	「小姐﹐恭禧﹗但是總有一種說不出的感覺．．．．．．」
+	@T
+	CLOSE(2)
+	RET
+
+IF ( UNLUCKY_MAN = 4 )
+	OPEN(2)
+	TXFACE("F198")
+	「唉唉唉．．．幸福還是離我而去．．．算了﹐這樣也好。」
+	@T
+	CLOSE(2)
+	RET
+
+IF ( UNLUCKY_MAN = 5 )
+	OPEN(2)
+	TXFACE("F147")
+	「果然結婚的約定是個謊言﹗我一輩子都不會再相信女人了．．．．．．」
+	@T
+	CLOSE(2)
+	RET
+RET
+
+*GN$
+TXA(NAME_FIRST)
+RET
+
+*FN$
+TXA(NAME_FAMILY)
+RET
+
+*OPEN
+IF(AX=1)TXOPEN(10) RET
+IF(AX=2)TXOPEN(13) RET
+IF(AX=3)TXOPEN(15) RET
+IF(AX=4)TXOPEN(14) RET
+RET
+
+*CLOSE
+IF(AX=1)TXCLOSE(10) RET
+IF(AX=2)TXCLOSE(13) RET
+IF(AX=3)TXCLOSE(15) RET
+IF(AX=4)TXCLOSE(14) RET
+RET
+
+*SS$
+IF(AX=1)TXSLCT(10) RET
+IF(AX=2)TXSLCT(13) RET
+IF(AX=3)TXSLCT(15) RET
+IF(AX=4)TXSLCT(14) RET
+RET
+
+*TTL$
+RET
+
+*START
+TXLC(10,21,250,0)
+TXLC(13,32,146,1)
+TXLC(14,32,20,1)
+TXLC(15,17,126,2)
+RET
+
+*PICWEDDING
+WWIVENT(5,1,21,30)
+WWIVENT(1,1)
+
+
+
+RET
+
+*FINAL
+LOAD("EEALLE")
+RET
+

@@ -1,0 +1,146 @@
+
+.UNLUCKY_MAN	= 0
+UNLUCKY_MAN	=	ENDNM[7]
+
+TTL$("和魔王結婚")
+
+START
+
+OPEN(1)
+在一個新月的夜晚﹐突然有一個黑影落到GN$的房間．．．．．．
+@T
+CLOSE(1)
+OPEN(2)
+TXFACE("F198")
+「GN$啊．．．妳已經和我期望的一樣﹐成為美麗動人的女子了．．．今晚我是為了得到妳而來的。」
+@T
+OPEN(3)
+TXGIRL(9)
+「魔王路西弗．．．．．．」
+@T
+SS$(2)
+@C
+
+「只有氣質高雅﹐美麗動人的妳﹐才有資格做我的妻子。」
+@T
+SS$(3)
+@C
+TXFACE("F202")
+「我．．．當你的妻子﹖」
+@T
+SS$(2)
+@C
+
+「妳原本是天界之女﹐但現在妳的罪孽深重﹐思念天界的心靈淡薄﹐而散發出魔性的姿色。只有在地上才能找到妳真正的幸福。」
+@T
+SS$(3)
+@C
+TXGIRL(17)
+「．．．．．．．．．．．．」
+@T
+SS$(2)
+@C
+
+「能夠給妳幸福的男人﹐只有地下的魔王路西弗．．．來吧﹗」
+@T
+SS$(3)
+@C
+TXFACE("F202")
+「．．．我知道了．．．GN$要做魔王路西弗的妻子。」
+@T
+SS$(2)
+@C
+
+「哦﹗﹗地下的世界也不壞﹐無盡的寶物和強大的軍力全是妳的﹐我們可以共享榮華富貴．．．．．．」
+@T
+SS$(3)
+@C
+TXGIRL(17)
+「等一下﹐在這之前我要和父親告別．．．．．．」
+@T
+SS$(2)
+@C
+
+「．．．最好靜靜的離去吧﹗打算怎麼和FN$說呢﹖」
+@T
+SS$(3)
+@C
+
+「這個．．．．．．」
+@T
+CLOSE(3)
+CLOSE(2)
+PICWEDDING("Z072")      TIMER1(60)WAIT1
+OPEN(1)
+就這樣﹐GN$成為魔王的妻子﹐在FN$的面前消失了．．．．．．
+@T
+CLOSE(1)
+WWIVENT(2,1)
+UNLUCKY_CALL
+
+FINAL
+
+*UNLUCKY_CALL
+
+
+
+IF ( UNLUCKY_MAN = 5 )
+	OPEN(2)
+	TXFACE("F147")
+	「果然結婚的約定是個謊言﹗我一輩子都不會再相信女人了．．．．．．」
+	@T
+	CLOSE(2)
+	RET
+RET
+
+*GN$
+TXA(NAME_FIRST)
+RET
+
+*FN$
+TXA(NAME_FAMILY)
+RET
+
+*OPEN
+IF(AX=1)TXOPEN(10) RET
+IF(AX=2)TXOPEN(13) RET
+IF(AX=3)TXOPEN(15) RET
+IF(AX=4)TXOPEN(14) RET
+RET
+
+*CLOSE
+IF(AX=1)TXCLOSE(10) RET
+IF(AX=2)TXCLOSE(13) RET
+IF(AX=3)TXCLOSE(15) RET
+IF(AX=4)TXCLOSE(14) RET
+RET
+
+*SS$
+IF(AX=1)TXSLCT(10) RET
+IF(AX=2)TXSLCT(13) RET
+IF(AX=3)TXSLCT(15) RET
+IF(AX=4)TXSLCT(14) RET
+RET
+
+*TTL$
+RET
+
+*START
+TXLC(10,21,220,0)
+TXLC(13,32,146,1)
+TXLC(14,32,20,1)
+TXLC(15,17,270,2)
+RET
+
+*PICWEDDING
+WWIVENT(5,1,21,30)
+WWIVENT(1,1)
+
+
+
+RET
+
+*FINAL
+LOAD("EEALLE")
+RET
+

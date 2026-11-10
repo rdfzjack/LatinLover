@@ -1,0 +1,821 @@
+
+
+
+
+
+
+
+.UP_JINMYAKU=0
+.MAX_UP_JINMYAKU=0
+
+TXLC(2,28,146,1)
+TXLC(3,13,270,2)
+TXLC(1,17,220,0)
+TXLC(10,17,220,0)
+
+WWIVENT(5,0,6,40)
+WWIVENT(1,0,"E012")
+
+
+
+PLAY(9)
+
+SCNCASTL
+
+WWIVENT(2,0)
+
+IF ( GIRL_DAMEG!0 )
+	PLAY(8)
+IF ( GIRL_DAMEG=0 )
+	IF ( TM_SEASON =1 ) PLAY(4)
+	IF ( TM_SEASON =2 ) PLAY(5)
+	IF ( TM_SEASON =3 ) PLAY(6)
+	IF ( TM_SEASON =4 ) PLAY(7)
+
+LOAD("MAINLOOP")
+
+
+
+
+
+*SCNCASTL
+
+RUN_OSHIRO[0]++
+
+E_ETC[90]=VAL_DAY
+E_ETC[36]=VAL_MONTH
+E_ETC[37]=VAL_YEAR
+
+TXOPEN(1)
+來到城裡．．．．．．
+@P
+TXCLOSE(1)
+
+
+
+IF ( RUN_OSHIRO[0] = 1 )
+	TXOPEN(2)
+	TXFACE("F080")
+	「小女孩﹐你來到王城有什麼事﹖」
+	@P
+	TXOPEN(3)
+	TXGIRL(11)
+	「我到城裡來各位見面。」
+	@P
+	@2
+	@C
+	「呵呵呵．．．想要建立自己的人際關係嗎﹖ 最近的女孩子真是積極．．．．．．」
+	@P
+	@C
+	「給妳一個忠告﹐你所面對的人都是偉人﹐對提昇人際關係有很好的效果唷﹗」
+	@P
+	@C
+	「但是﹐偉大的人不是這麼簡單就能見到的。」
+	@P
+	@3
+	@C
+	「那要怎麼做才好呢﹖」
+	@P
+	@2
+	@C
+	「在面對偉人的時候千萬要有著端正的禮儀﹐不然這些人是不會和你交談的。」
+	TXCLOSE(3)
+
+IF ( RUN_OSHIRO[0] >= 2 )
+	TXOPEN(2)
+	TXFACE("F080")
+	「喔﹐這一次想要見誰﹖」
+
+SLCPOS(4)
+IF ( VAL_MONTH ! 1 )( VAL_DAY ! 31 )
+	IF ( RUN_MONTH[8]< 3 )
+		SLCTX("守衛,近衛騎士,將軍,大臣,主教,寵妃,王妃,國王,小丑")
+
+	IF ( RUN_MONTH[8]>=3 )
+		SLCTX("守衛,近衛騎士,將軍,大臣,主教,寵妃,王妃,國王")
+
+IF ( VAL_MONTH = 1   VAL_DAY = 31 )
+	IF ( RUN_MONTH[8]< 3 )
+		SLCTX("守衛,近衛騎士,將軍,大臣,主教,寵妃,王妃,國王,小丑,青年武官")
+
+	IF ( RUN_MONTH[8]>=3 )
+		SLCTX("守衛,近衛騎士,將軍,大臣,主教,寵妃,王妃,國王,青年武官")
+		IF (ISLCT=8) ISLCT=9
+
+IF ( ISLCT=0 )	SLC_MONBAN		RET
+IF ( ISLCT=8 )	SLC_DOUKESI		RET
+TXCLOSE(2)
+IF ( ISLCT=1 )	SLC_KONOEKISI		RET
+IF ( ISLCT=2 )	SLC_SHOGUN		RET
+IF ( ISLCT=3 )	SLC_DAIJIN		RET
+IF ( ISLCT=4 )	SLC_SHISAI		RET
+IF ( ISLCT=5 )	SLC_HIME		RET
+IF ( ISLCT=6 )	SLC_OHUHI		RET
+IF ( ISLCT=7 )	SLC_KOKUOH		RET
+IF ( ISLCT=9 )	SLC_BUKAN		RET
+RET
+
+
+
+
+
+*SLC_MONBAN
+@2
+@C
+「我對什麼人都是很親切的。」
+@P
+
+IF ( V_REIGI < 10 )
+	@2
+	@C
+	「看樣子你這個小女孩不怎麼懂禮儀﹐我不想和妳交談。」
+	@P
+	TXCLOSE(2)
+	TXOPEN(1)
+	守衛拒絕和小女孩交談．．．．．．
+	@P
+	TXCLOSE(1)
+	RET
+
+RUN_OSHIRO[1]++
+
+
+
+MAX_UP_JINMYAKU = 30 - S_JINMYAKU[1]
+UP_JINMYAKU = B_KIHIN / 5
+
+IF ( UP_JINMYAKU > MAX_UP_JINMYAKU )
+	UP_JINMYAKU = MAX_UP_JINMYAKU
+
+IF ( UP_JINMYAKU > 15 ) UP_JINMYAKU = 15
+
+IF ( MAX_UP_JINMYAKU <= 0 )
+	@2
+	@C
+	「我居然和比我還要偉大的人交談﹖」
+	@P
+	TXCLOSE(2)
+	RET
+
+
+PLAY(1003)
+MUSIC(8,60)
+TXOPEN(10)
+TXA(NAME_FIRST)與守衛愉快的交談著．．．．．．
+WAIT1
+@P
+TXCLOSE(10)
+PLAY(9)
+@2
+@C
+「我認為女性最重要的就是氣質了。」
+@P
+TXCLOSE(2)
+
+IF ( UP_JINMYAKU = 0 )
+	RET
+
+JINMYAKU_UP(1)
+RET
+
+*JINMYAKU_UP
+S_JINMYAKU[AX]	+= UP_JINMYAKU
+TXOPEN(1)
+GR_OPEN
+IGRP_TBL1[0] = "人際關係"
+IGRP_TBL3[0] =	S_JINMYAKU[0]
+IGRP_CNT=1
+IGRP_X=32
+IGRP_Y=186
+GRPOPEN(1,1)
+人際關係提升TXPOINT(UP_JINMYAKU)點。
+S_JINMYAKU[0] += UP_JINMYAKU
+GRPUPD(1,0,S_JINMYAKU)
+@P
+GR_CLOSE
+TXCLOSE(1)
+RET
+
+
+
+
+
+*SLC_KONOEKISI
+TXOPEN(2)
+TXFACE("F081")
+「嗯﹖是誰想和我見面﹖」
+@P
+
+IF ( V_REIGI < 30 )
+	TXOPEN(3)
+	TXGIRL(0)
+	「騎士先生﹐早安。我想要和你談談。」
+	@P
+	@2
+	@C
+	「嗯．．．．．．非常的可惜﹐我不和妳這種不懂禮貌的小女孩交談。」
+	@P
+	TXCLOSE(2)
+	TXCLOSE(3)
+	TXOPEN(1)
+	近衛騎士與TXA(NAME_FIRST)的交談結束了。
+	@P
+	TXCLOSE(1)
+	RET
+
+RUN_OSHIRO[2]++
+
+
+
+MAX_UP_JINMYAKU = 50 - S_JINMYAKU[2]
+UP_JINMYAKU = B_KIHIN / 8
+
+IF ( UP_JINMYAKU > MAX_UP_JINMYAKU )
+	UP_JINMYAKU = MAX_UP_JINMYAKU
+
+IF ( UP_JINMYAKU > 25 ) UP_JINMYAKU = 25
+
+IF ( MAX_UP_JINMYAKU <= 0 )
+	@2
+	@C
+	「和比我還要偉大的人見面是相當幫助的。」
+	@P
+	TXCLOSE(2)
+	RET
+
+
+@2
+@C
+「哈哈哈﹐像你這樣的高貴小姐﹐我是一直都是相當歡迎的。」
+@P
+PLAY(1003)
+MUSIC(8,60)
+TXOPEN(10)
+TXA(NAME_FIRST)與近衛騎士談得相當的愉快．．．．．．
+WAIT1
+@P
+TXCLOSE(10)
+PLAY(9)
+@2
+@C
+「想要在王城中占有一席之地的女子﹐一定要有淑女的自覺。」
+@P
+TXCLOSE(2)
+
+IF ( UP_JINMYAKU = 0 )
+	RET
+
+JINMYAKU_UP(2)
+RET
+
+
+
+
+
+*SLC_SHOGUN
+TXOPEN(2)
+TXFACE("F054")
+「嗯．．．﹖做什麼。」
+@P
+
+IF ( V_REIGI < 50 )
+	TXOPEN(3)
+	TXGIRL(0)
+	「將軍先生﹐午安。」
+	@P
+	@2
+	@C
+	「你在做什麼﹖這裡可是國王陛下的王城。」
+	@P
+	TXCLOSE(2)
+	TXCLOSE(3)
+	RET
+
+RUN_OSHIRO[3]++
+
+
+
+MAX_UP_JINMYAKU = 100 - S_JINMYAKU[3]
+UP_JINMYAKU = B_IROKE / 5
+
+IF ( UP_JINMYAKU > MAX_UP_JINMYAKU )
+	UP_JINMYAKU = MAX_UP_JINMYAKU
+
+IF ( UP_JINMYAKU > 50 ) UP_JINMYAKU = 50
+
+IF ( MAX_UP_JINMYAKU <= 0 )
+	@2
+	@C
+	「哈哈哈．．．看來和我交談已經幫不上妳了。」
+	@P
+	TXCLOSE(2)
+	RET
+
+
+@2
+@C
+「哈哈哈．．．．．．我雖然喜歡和英雄人物交談﹐但是和美女交談也是不錯的。」
+@P
+PLAY(1003)
+MUSIC(8,60)
+TXOPEN(10)
+TXA(NAME_FIRST)與將軍愉快的交談著．．．．．．
+WAIT1
+@P
+TXCLOSE(10)
+PLAY(9)
+@2
+@C
+「越是有氣質的女孩子﹐男人就越喜歡追求。」
+@P
+TXCLOSE(2)
+
+IF ( UP_JINMYAKU = 0 )
+	RET
+
+JINMYAKU_UP(3)
+RET
+
+
+
+
+
+*SLC_DAIJIN
+TXOPEN(2)
+TXFACE("F082")
+「我是這個國家的政務大臣。」
+@P
+
+IF ( V_REIGI < 70 )
+	TXOPEN(3)
+	TXGIRL(0)
+	「大臣﹐午安。您能和我談談嗎﹖」
+	@P
+	@2
+	@C
+	「我是很忙的﹐沒有時間和妳在這裡聊天。」
+	@P
+	TXCLOSE(2)
+	TXCLOSE(3)
+	RET
+
+RUN_OSHIRO[4]++
+
+
+
+MAX_UP_JINMYAKU = 120 - S_JINMYAKU[4]
+UP_JINMYAKU = B_CHINOH / 10
+
+IF ( UP_JINMYAKU > MAX_UP_JINMYAKU )
+	UP_JINMYAKU = MAX_UP_JINMYAKU
+
+IF ( UP_JINMYAKU > 60 ) UP_JINMYAKU = 60
+
+IF ( MAX_UP_JINMYAKU <= 0 )
+	@2
+	@C
+	「唷．．．妳好﹐美麗的小姐。人生的時間是相當寶貴的﹐不要浪費在聊天上了。」
+	@P
+	TXCLOSE(2)
+	RET
+
+
+TXOPEN(3)
+TXGIRL(0)
+「閣下﹐你有時間聽聽我的話嗎﹖」
+@P
+@2
+@C
+「唷．．．真是好聽的聲音﹐聆聽民間的心聲也是我的責任。」
+@P
+PLAY(1003)
+MUSIC(8,60)
+TXOPEN(10)
+TXA(NAME_FIRST)與大臣的談話相當的愉快．．．．．．
+WAIT1
+@P
+TXCLOSE(10)
+PLAY(9)
+@2
+@C
+「我喜歡和聰明的人交談﹐所以我建議婦女在教養子女的時候要在知識上好好的培養。」
+@P
+TXCLOSE(2)
+TXCLOSE(3)
+
+IF ( UP_JINMYAKU = 0 )
+	RET
+
+JINMYAKU_UP(4)
+RET
+
+
+
+
+
+*SLC_SHISAI
+IF ( V_REIGI < 80 )
+	TXOPEN(3)
+	TXGIRL(0)
+	「大主教﹐午安。您願意和我談談嗎﹖」
+	@P
+	TXOPEN(2)
+	TXFACE("F083")
+	「喔﹐對不起。禮拜的時間就要到了。」
+	@P
+	TXCLOSE(3)
+	TXCLOSE(2)
+	TXOPEN(1)
+	主教不理會TXA(NAME_FIRST)而離去．．．．．．
+	@P
+	TXCLOSE(1)
+	RET
+
+RUN_OSHIRO[5]++
+
+
+
+MAX_UP_JINMYAKU = 120 - S_JINMYAKU[5]
+UP_JINMYAKU = B_SHINKOH / 10
+
+IF ( UP_JINMYAKU > MAX_UP_JINMYAKU )
+	UP_JINMYAKU = MAX_UP_JINMYAKU
+
+IF ( UP_JINMYAKU > 60 ) UP_JINMYAKU = 60
+
+IF ( MAX_UP_JINMYAKU <= 0 )
+	TXOPEN(2)
+	TXFACE("F083")
+	「現在的妳﹐應該和我以外的人多多的交往。」
+	@P
+	TXCLOSE(2)
+	RET
+
+
+
+TXOPEN(3)
+TXGIRL(0)
+「大主教﹐請給我一點時間。」
+@P
+TXOPEN(2)
+TXFACE("F083")
+「這個嘛．．．關於神與眾人的事．．．．．．」
+@P
+PLAY(1003)
+MUSIC(8,60)
+TXOPEN(10)
+TXA(NAME_FIRST)與大主教愉快的談論神的事．．．．．．
+WAIT1
+@P
+TXCLOSE(10)
+PLAY(9)
+@2
+@C
+「不要忘了信仰的事．．．．．．」
+@P
+TXCLOSE(2)
+TXCLOSE(3)
+
+IF ( UP_JINMYAKU = 0 )
+	RET
+
+JINMYAKU_UP(5)
+RET
+
+
+
+
+
+*SLC_HIME
+TXOPEN(2)
+TXFACE("F084")
+「啊．．．是誰﹖」
+@P
+
+IF ( V_REIGI < 85 )
+	TXOPEN(3)
+	TXGIRL(0)
+	「午安﹐妳．．．妳就是國王的二號夫人﹖」
+	@P
+	@2
+	@C
+	「真是失禮﹐妳這個沒有禮貌小女孩﹐回去回去﹗」
+	@P
+	TXCLOSE(3)
+	TXCLOSE(2)
+	RET
+
+RUN_OSHIRO[6]++
+
+
+
+MAX_UP_JINMYAKU = 120 - S_JINMYAKU[6]
+UP_JINMYAKU = V_WAJYUTU / 10
+
+IF ( UP_JINMYAKU > MAX_UP_JINMYAKU )
+	UP_JINMYAKU = MAX_UP_JINMYAKU
+
+IF ( UP_JINMYAKU > 60 ) UP_JINMYAKU = 60
+
+IF ( MAX_UP_JINMYAKU <= 0 )
+	@2
+	@C
+	「啊．．．是TXA(NAME_FIRST)呀﹗．．．嗯．．．我喜歡妳這個小女孩﹐不要忘了多和其他人談談唷。」
+	@P
+	TXCLOSE(2)
+	RET
+
+
+
+TXOPEN(3)
+TXGIRL(0)
+「嘩∼好美麗的夫人呀﹐真是漂亮極了．．．．．．」
+@P
+@2
+@C
+「啊．．．可愛的孩子．．．．．．妳住在那裡﹖」
+@P
+PLAY(1003)
+MUSIC(8,60)
+TXOPEN(10)
+TXA(NAME_FIRST)與國王的寵妃愉快的聊著天．．．．．．
+WAIT1
+@P
+TXCLOSE(10)
+PLAY(9)
+@2
+@C
+「國王每天都相當的忙碌﹐沒有時間來陪我．．．若是有人來陪我聊天就好了．．．．．．」
+@P
+TXCLOSE(2)
+TXCLOSE(3)
+
+IF ( UP_JINMYAKU = 0 )
+	RET
+
+JINMYAKU_UP(6)
+RET
+
+
+
+
+
+*SLC_OHUHI
+TXOPEN(2)
+TXFACE("F085")
+「咦﹐是誰﹖」
+@P
+
+IF ( V_REIGI < 90 )
+	TXOPEN(3)
+	TXGIRL(0)
+	「王妃殿下﹐午安．．．．．．」
+	@P
+	TXCLOSE(2)
+	TIMER1(30)WAIT1
+	TXOPEN(2)
+	TXFACE("F081")
+	「想要與王妃見面﹐必需要有相當程度的禮貌才行。去好好的學習禮儀吧。」
+	@P
+	TXCLOSE(3)
+	TXCLOSE(2)
+	RET
+
+RUN_OSHIRO[7]++
+
+
+
+MAX_UP_JINMYAKU = 160 - S_JINMYAKU[7]
+UP_JINMYAKU = V_KIDATE / 10
+
+IF ( UP_JINMYAKU > MAX_UP_JINMYAKU )
+	UP_JINMYAKU = MAX_UP_JINMYAKU
+
+IF ( UP_JINMYAKU > 80 ) UP_JINMYAKU = 80
+
+IF ( MAX_UP_JINMYAKU <= 0 )
+	@2
+	@C
+	「妳又來了﹐不要花太多時間在這裡﹐到別的地方建立妳的人際關係吧。」
+	@P
+	TXCLOSE(2)
+	RET
+
+
+
+TXOPEN(3)
+TXGIRL(0)
+「王妃殿下﹐能夠見到妳真是令我感到相當的惶恐。」
+@P
+@2
+@C
+「別擔心﹐像妳這樣可愛的小女孩我一直都很喜歡的。」
+@P
+PLAY(1003)
+MUSIC(8,60)
+TXOPEN(10)
+TXA(NAME_FIRST)與王妃愉快的喝著茶聊天．．．．．．
+WAIT1
+@P
+TXCLOSE(10)
+PLAY(9)
+@2
+@C
+「TXA(NAME_FIRST)呀﹐再怎麼強、再怎麼美總是會有消失的一天的﹐女孩子最重要的就是個性唷。」
+@P
+TXCLOSE(2)
+TXCLOSE(3)
+
+IF ( UP_JINMYAKU = 0 )
+	RET
+
+JINMYAKU_UP(7)
+RET
+
+
+
+
+
+*SLC_KOKUOH
+TXOPEN(2)
+TXFACE("F086")
+「我就是國王。」
+@P
+
+IF ( V_REIGI < 95 )
+	TXOPEN(3)
+	TXGIRL(0)
+	「國王陛下﹐午安．．．．．．」
+	@P
+	TXCLOSE(2)
+	TIMER1(30)WAIT1
+	TXOPEN(2)
+	TXFACE("F081")
+	「你的禮儀氣質都不是相當良好﹐我認為你不能會見國王﹐所以還是先去學習學習
+	禮儀作法比較好。」
+	@P
+	TXCLOSE(2)
+	TXCLOSE(3)
+	RET
+
+RUN_OSHIRO[8]++
+
+
+
+MAX_UP_JINMYAKU = 300 - S_JINMYAKU[8]
+UP_JINMYAKU = H_SENSHI / 10
+
+IF ( UP_JINMYAKU > MAX_UP_JINMYAKU )
+	UP_JINMYAKU = MAX_UP_JINMYAKU
+
+IF ( UP_JINMYAKU > 150 ) UP_JINMYAKU = 150
+
+IF ( MAX_UP_JINMYAKU <= 0 )
+	@2
+	@C
+	「喔﹐TXA(NAME_FIRST)妳來了。城裡的人們可都還好﹖」
+	@P
+	TXCLOSE(2)
+	RET
+
+
+
+TXOPEN(3)
+TXGIRL(0)
+「國王陛下﹐能夠見到你實在是相當的惶恐。」
+@P
+@2
+@C
+「喔﹐妳就是TXA(NAME_FAMILY)的養女呀﹐長得這麼大了。」
+@P
+PLAY(1003)
+MUSIC(8,60)
+TXOPEN(10)
+TXA(NAME_FIRST)與國王愉快的交談．．．．．．
+WAIT1
+@P
+TXCLOSE(10)
+PLAY(9)
+@2
+@C
+「妳的父親是很好的戰士﹐妳可不要丟了他的臉。」
+@P
+TXCLOSE(2)
+TXCLOSE(3)
+
+IF ( UP_JINMYAKU = 0 )
+	RET
+
+JINMYAKU_UP(8)
+RET
+
+
+
+
+
+*SLC_DOUKESI
+@2
+@C
+「大小姐﹐小丑可以說是王城歡樂的來源﹐是不是要和他談談呢﹖」
+@P
+TXCLOSE(2)
+
+IF ( V_WAJYUTU < 40 )
+	TXOPEN(2)
+	TXFACE("F087")
+	「哼﹗和妳這樣的人談話真是無趣﹗﹗﹗」
+	@P
+	TXCLOSE(2)
+	RET
+
+RUN_OSHIRO[9]++
+
+
+
+TXOPEN(3)
+TXGIRL(0)
+「午安﹐小丑先生。」
+@P
+TXOPEN(2)
+TXFACE("F087")
+「謝謝﹐妳並不把我當做卑下的小丑﹐真是謝謝妳了。」
+@P
+PLAY(1003)
+MUSIC(8,60)
+TXOPEN(10)
+TXA(NAME_FIRST)與小丑愉快的談話．．．．．．
+WAIT1
+@P
+TXCLOSE(10)
+PLAY(9)
+@2
+@C
+「小姐﹐只有擁有高度感受力的人才能擁有豐富的人生﹐請好好的培養吧。」
+@P
+TXCLOSE(2)
+TXCLOSE(3)
+
+
+
+
+TXOPEN(1)
+GR_OPEN
+IGRP_TBL1[0] = "感受"
+IGRP_TBL3[0] =	B_KANJUSEI
+IGRP_CNT=1
+IF ( H_SYAKOH > 0 )
+	IGRP_TBL1[1] = "社交評價"
+	IGRP_TBL3[1] =	H_SYAKOH
+	IGRP_CNT=2
+IGRP_X=32
+IGRP_Y=172
+GRPOPEN(1,1)
+
+IF ( H_SYAKOH > 0 )
+	感受上升１５點﹗
+	B_KANJUSEI += 15
+	IF ( H_SYAKOH > 15 )
+		社交評價下降１５點﹗
+		C2 = 15
+	IF ( H_SYAKOH <= 15 )
+		社交評價下降TXPOINT(H_SYAKOH)點﹗
+		C2 = H_SYAKOH
+	H_SYAKOH -= C2
+
+	GRPUPD(1,0,B_KANJUSEI)
+	GRPUPD(1,1,H_SYAKOH)
+	@P
+	GR_CLOSE
+	TXCLOSE(1)
+	RET
+
+感受上升１５點﹗
+B_KANJUSEI += 15
+GRPUPD(1,0,B_KANJUSEI)
+@P
+GR_CLOSE
+TXCLOSE(1)
+RET
+
+
+
+
+
+
+
+
+
+
+
+
+
+*SLC_BUKAN
+
+PLAY(1003)
+MUSIC(8,60)
+
+LOAD("EVNT044")
+
+
+
+

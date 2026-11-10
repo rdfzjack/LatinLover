@@ -1,0 +1,106 @@
+
+
+
+
+
+
+
+
+
+.GOLD_MEKAKE
+
+RUN_MONTH[21]++
+
+STRSCLEAR
+
+TXLC(1,4,290,0)
+TXLC(2,17,148,1)
+TXLC(3,31,270,2)
+TXLC(9,48,148,2)
+WWIVENT(5,1,21,40)
+
+E_ETC[2]=0
+E_ETC[3]=0
+
+EVNT021
+
+E_EV_SKIP = 1
+
+LOAD("RUNNING")
+
+
+
+
+
+
+
+*EVNT021
+GOLD_MEKAKE=B_IROKE/3
+IF ( GOLD_MEKAKE=0 ) RET
+
+TXOPEN(1)
+趕著回家的路上﹐一名男子叫住了TXA(NAME_FIRST)。
+@P
+TXCLOSE(1)
+
+TXOPEN(2)
+TXFACE("F141")
+「姑娘﹐請留步好嗎﹖」
+@P
+TXOPEN(3)
+TXGIRL(0)
+「是的﹐有什麼事嗎﹖」
+@P
+@2
+@C
+「姑娘﹐想不想要零用錢﹖叔叔我是有錢人。」
+@P
+@3
+@C
+TXGIRL(9)
+「什麼．．．﹖」
+@P
+@2
+@C
+「恕我開門見山的說﹐想做我的小老婆嗎﹖每個月都有TXGOLD(GOLD_MEKAKE)的津貼。」
+@P
+@3
+@C
+
+「小老婆．．．．．．」
+@P
+TXA(NAME_FIRST)短暫考慮之後﹐回答
+@P
+C1 = B_MORALS*100 / GOLD_MEKAKE
+RANDAM(100)
+IF ( IRND < C1 )
+	@3
+	TXGIRL(2)
+	@C
+	「我不是那樣的女孩子﹐絕對不是﹗」
+	@P
+	TXA(NAME_FIRST)乾脆的拒絕了中年男子提出的要求。
+	@P
+	TXCLOSE(2)
+	TXCLOSE(3)
+	RET
+
+
+@3
+TXGIRL(13)
+@C
+「嗯﹐好吧﹗請多指教。」
+@P
+TXA(NAME_FIRST)成為中年男子的小妾．．．．．．
+@P
+TXCLOSE(2)
+TXCLOSE(3)
+
+E_ETC[2]=1
+E_ETC[3]=GOLD_MEKAKE
+
+RET
+
+
+
+

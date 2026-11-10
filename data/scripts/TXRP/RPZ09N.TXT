@@ -1,0 +1,59 @@
+
+
+
+
+
+*CHECK_MONSTOR
+MSR09N
+RET
+
+*KAIWA_OK
+KWA09N
+RET
+
+*MSR09N
+R_MS_NUMBER		=9
+R_FACE			="F169"
+R_MONSTOR		="M009"
+R_NAME			="巨獵鷹"
+R_CHINOH		=40
+RDM(20,55)
+R_SENTOH=AX
+RDM(35,65)
+R_KOUGEKI=AX
+R_BOUGYO		=20
+R_SOUKOU		=0
+R_SKNAME		="沒有"
+R_MAHOGIJUTSU	=0
+R_MARYOKU		=0
+RDM(1,10)
+R_KOHMARYOKU=AX
+RDM(5,30)
+R_SENI=AX
+R_DASSYUTU		=25
+R_TSUKON		=25
+RDM(20,90)
+R_MAX_HP=AX
+R_MAX_MP		=0
+R_GOLD			=0
+R_SE_ATTACK	=3
+
+RANDAM(3)
+IF(AX=1)MONSTR[0]="咕噫∼！"
+IF(AX=2)MONSTR[0]="咕耶∼﹗咕耶∼﹗咕耶∼﹗"
+IF(AX=3)MONSTR[0]="唧哇哇哇∼﹗﹗"
+MONSTR[1]="咕嚕嚕．．．．．．"
+MONSTR[2]="森林的妖精討厭鐵．．．．．．"
+MONSTR[3]="咕喔喔喔∼﹗"
+MONSTR[4]="咕耶∼﹗咕耶∼﹗咕耶∼﹗"
+MONSTR[5]="唧∼．．．．．．"
+RET
+
+*KWA09N
+AX = 0
+IF ( B_KANJUSEI >= 200 )	AX=1
+RET
+
+
+
+

@@ -1,0 +1,143 @@
+
+
+
+
+
+.SELECT_FLAG=0
+
+.STR_HEALTH
+
+TXLC(2,1,260,2)
+TXLC(5,1,170,0)
+TXLC(11,31,220,2)
+
+SYUKENKO
+
+LOAD("MAINLOOP")
+
+
+
+
+
+*SYUKENKO
+TXOPEN(2)
+TXFACE("F039")
+「老爺﹐TXA(NAME_FIRST)小姐的健康管理要採用那一種方法呢﹖」
+
+SLCPOS(4)
+SLCT("普通飲食,增強體力,節約飲食,減肥節食")
+@C
+IF ( ISLCT=0 )
+	SL_MIRI_WA_SA
+	TXCLOSE(2)
+	WWPROF(2)
+	RET
+IF ( ISLCT=1 )
+	SL_TONIKAKU_J
+	TXCLOSE(2)
+	WWPROF(2)
+	RET
+IF ( ISLCT=2 )
+	SL_OSHITOYAKA
+	TXCLOSE(2)
+	WWPROF(2)
+	RET
+IF ( ISLCT=3 )
+	SL_DIET
+	TXCLOSE(2)
+	WWPROF(2)
+	RET
+TXCLOSE(2)
+RET
+
+*SL_MIRI_WA_SA
+	SELECT_FLAG=0
+	TXOPEN(5)
+	STR_HEALTH="普通飲食"
+	TXA(STR_HEALTH)
+	@2
+	TXFACE("F039")
+	「實施這個方法的伙食費是每個月３０Ｇ﹐應該不會有問題吧。」
+	@P
+	HOUSHIN_CHECK
+	TXCLOSE(5)
+	RET
+
+*SL_TONIKAKU_J
+	SELECT_FLAG=1
+	TXOPEN(5)
+	STR_HEALTH="增強體力"
+	TXA(STR_HEALTH)
+	STR_HEALTH="增強體力"
+	@2
+	TXFACE("F039")
+	「實施這個方法每個月的伙食費是８０Ｇ﹐多吃一點體力應該會比較好吧。」
+	@P
+	HOUSHIN_CHECK
+	TXCLOSE(5)
+	RET
+
+*SL_OSHITOYAKA
+	SELECT_FLAG=2
+	TXOPEN(5)
+	STR_HEALTH="節約飲食"
+	TXA(STR_HEALTH)
+	@2
+	TXFACE("F039")
+	「這樣的話每個月的伙食費只要１０Ｇ就好﹐不過吃得麼這麼少﹐是不是會影響健康呢﹖」
+	@P
+	HOUSHIN_CHECK
+	TXCLOSE(5)
+	RET
+
+*SL_DIET
+	SELECT_FLAG=3
+	TXOPEN(5)
+	STR_HEALTH="減肥節食"
+	TXA(STR_HEALTH)
+	@2
+
+
+	C1=P_SHINCHO * 9 / 10 -105
+
+	IF ( P_TAIJYU >= C1 )
+		TXFACE("F039")
+		「雖然這種方法的伙食費每個月只要５Ｇ﹐也可以讓小姐的體重減輕﹐但是體力會消耗的很厲害唷。」
+		@P
+
+	IF ( P_TAIJYU < C1 )
+
+		TXFACE("F046")
+		「老爺﹐小姐已經夠瘦了﹐不需要用這種飲食方式吧。是不是應該換一種飲食方法﹖」
+		@P
+	HOUSHIN_CHECK
+	TXCLOSE(5)
+	RET
+
+
+*HOUSHIN_CHECK
+SLCTX("照此方針實施,延用舊方法")
+
+IF ( ISLCT=1 ) RET
+
+
+IF ( FLAG_KENKO ! SELECT_FLAG )
+
+	TXFACE("F041")
+	「是的﹐下個月開始照這個新的方法實施。」
+	@P
+
+	SI = STR_HEALTH
+	STRCOPY(S_HEALTH_CARE)
+
+	FLAG_KENKO = SELECT_FLAG
+	RET
+
+TXFACE("F040")
+「好的﹐老爺﹐我們還是按照上個月的方法。」
+@P
+RET
+
+
+
+

@@ -1,0 +1,4753 @@
+{
+"TXEE/EEALLE.TXT": {
+"lines": 661,
+"labels": [
+"ENDHYOUKA",
+"KEKKON_SKIP",
+"WORKS_NAME",
+"WORKS_POSITION",
+"LUCKY_NAME",
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"START",
+"FINAL"
+],
+"first_text": "「FN$呀．．．讓我仔細的看看你是個怎麼樣的父親吧．．．"
+},
+"TXEE/EECALC.TXT": {
+"lines": 860,
+"labels": [
+"CALC_INGO",
+"CALC_SET",
+"WORKING_SLCT",
+"WORKING_BANNO",
+"WORKING_FIGHTER",
+"WORKING_MAGIC",
+"WORKING_SOCIAL",
+"WORKING_HOMEWORK",
+"WORKING_ARTIST",
+"WORKING_DARKSIDE",
+"MINMAX_V_PARA",
+"MINMAX_H_PARA",
+"WORK_RANK_CHECK",
+"MAX3NN",
+"WORK_AND_TRANING",
+"CALC_WORKS_CLASS",
+"CHK_CLASS",
+"CALC_SPECIAL_WEDD",
+"CALC_LUCKY_CHK",
+"CALC_WEDDING",
+"DEBUGWWW",
+"TOKUTEN_KEISAN",
+"KIHON_HYOKA",
+"WORKS_HYOKA",
+"TENMATSU_HYOKA",
+"KEKKON_HYOKA",
+"TOKUWEDD_HYOKA",
+"SOGO_HYOKA",
+"DEBUGWW2"
+],
+"first_text": "最高技能＝@@"
+},
+"TXEE/EEGIRB.TXT": {
+"lines": 237,
+"labels": [
+"NARRATION",
+"KANSOU_GIRL",
+"TEXT_EDIT_KANSOU"
+],
+"first_text": "八年的時間像夢一樣的過去了．．．．．．"
+},
+"TXEE/EEGIRC.TXT": {
+"lines": 237,
+"labels": [
+"NARRATION",
+"KANSOU_GIRL",
+"TEXT_EDIT_KANSOU"
+],
+"first_text": "八年的時間像夢一般的過去．．．．．．"
+},
+"TXEE/EEGIRL.TXT": {
+"lines": 241,
+"labels": [
+"NARRATION",
+"KANSOU_GIRL",
+"TEXT_EDIT_KANSOU"
+],
+"first_text": "八年的時間像夢一般的過去．．．．．．"
+},
+"TXEE/EESTAF.TXT": {
+"lines": 382,
+"labels": [
+"PARAM_ROLL",
+"STAFF_ROLL",
+"ROLL_DATA_PARAM",
+"ROLL_DATA_ONCE",
+"PUT_EFCSTR",
+"ROLL_DATA00",
+"ROLL_DATA11"
+],
+"first_text": "身高 @@EDTX(6,P_SHINCHO)"
+},
+"TXEE/EETN01.TXT": {
+"lines": 490,
+"labels": [
+"TENMATSU",
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"START",
+"FINAL"
+],
+"first_text": "對一個在上位的統治者來說﹐最重要的事情就是要有高尚的道德。"
+},
+"TXEE/EETN02.TXT": {
+"lines": 742,
+"labels": [
+"TENMATSU",
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"START",
+"FINAL"
+],
+"first_text": "成為保姆的GN$﹐工作態度十分優良。"
+},
+"TXEE/EETN03.TXT": {
+"lines": 775,
+"labels": [
+"TENMATSU",
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"START",
+"FINAL"
+],
+"first_text": "在托兒所打工的GN$．．．"
+},
+"TXEE/EETN04.TXT": {
+"lines": 567,
+"labels": [
+"TENMATSU",
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"START",
+"FINAL"
+],
+"first_text": "武藝高超的GN$雖然受到許多邪惡的誘惑﹐但由於繼承了父親的正義感﹐在旅途中仍能安然無事。"
+},
+"TXEE/EETN05.TXT": {
+"lines": 522,
+"labels": [
+"TENMATSU",
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"START",
+"FINAL"
+],
+"first_text": "胸懷青雲壯志﹐GN$踏上了出外磨鍊的旅途。"
+},
+"TXEE/EETN06.TXT": {
+"lines": 528,
+"labels": [
+"TENMATSU",
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"START",
+"FINAL"
+],
+"first_text": "寵妃﹐就是國王的小老婆。而當國王的寵妃也不是一件簡單的事情﹐光憑美色及容貌是無法勝任的。"
+},
+"TXEE/EETN07.TXT": {
+"lines": 104,
+"labels": [
+"TENMATSU",
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"START",
+"FINAL"
+],
+"first_text": "勇者之子過著平凡的人生也不必嘆息﹐因為和平的人生才是無法言喻的珍寶。"
+},
+"TXEE/EETN08.TXT": {
+"lines": 308,
+"labels": [
+"TENMATSU",
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"START",
+"FINAL"
+],
+"first_text": "雖然GN$能言善道﹐但是要成為小丑﹐還是不夠的。"
+},
+"TXEE/EETN09.TXT": {
+"lines": 425,
+"labels": [
+"TENMATSU",
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"START",
+"FINAL"
+],
+"first_text": "在秘密俱樂部中﹐GN$擔任了扮演女王的工作。"
+},
+"TXEE/EETNMT.TXT": {
+"lines": 34,
+"labels": [],
+"first_text": ""
+},
+"TXEE/EEWE01.TXT": {
+"lines": 154,
+"labels": [
+"UNLUCKY_CALL",
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"PICWEDDING",
+"FINAL"
+],
+"first_text": "已經長得十分美麗的GN$成年之後﹐求婚者絡繹不絕﹐但是不管對象是誰﹐所有的回答都是相同的。"
+},
+"TXEE/EEWE02.TXT": {
+"lines": 133,
+"labels": [
+"UNLUCKY_CALL",
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"PICWEDDING",
+"FINAL"
+],
+"first_text": "已經長得十分美麗的GN$成年之後﹐求婚者絡繹不絕﹐但是女孩不管是對誰﹐所有的回答都是相同的。"
+},
+"TXEE/EEWE03.TXT": {
+"lines": 125,
+"labels": [
+"UNLUCKY_CALL",
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"PICWEDDING",
+"FINAL"
+],
+"first_text": "已經長得十分美麗的GN$成年之後﹐求婚者絡繹不絕﹐但是女孩不管是對誰﹐所有的回答都是相同的。"
+},
+"TXEE/EEWE04.TXT": {
+"lines": 118,
+"labels": [
+"UNLUCKY_CALL",
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"PICWEDDING",
+"FINAL"
+],
+"first_text": "在一個新月的夜晚﹐突然有一個黑影落到GN$的房間．．．．．．"
+},
+"TXEE/EEWE05.TXT": {
+"lines": 116,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"PICWEDDING",
+"FINAL"
+],
+"first_text": "「GN$小姐﹐我依照約定來迎接妳了。」"
+},
+"TXEE/EEWEDD.TXT": {
+"lines": 190,
+"labels": [
+"SPECAL_WEDDING",
+"WEDDING_SET",
+"NORMAL_WEDDING",
+"NORMAL_WEDD_A",
+"NORMAL_WEDD_B",
+"SINGLES_IROKE",
+"SINGLE_IROKE_A",
+"SINGLE_IROKE_B",
+"SINGLES_KIHIN",
+"SINGLE_KIHIN_A",
+"SINGLE_KIHIN_B",
+"MAX3NN",
+"WEDDMAN",
+"PICWEDDING",
+"OPEN",
+"CLOSE",
+"START",
+"WAITGIRL"
+],
+"first_text": "美麗動人的女性TXA(NAME_FIRST)終於到了適婚的年齡了。不知有多少男性為了想獲得她的青睬而來回奔走。"
+},
+"TXEE/EEWK01.TXT": {
+"lines": 148,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「老爺老爺﹐從城裡來了一輛馬車﹐大概是來迎接小姐的．．．．．．」"
+},
+"TXEE/EEWK02.TXT": {
+"lines": 151,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「老爺﹐從城裡來了一輛馬車﹐大概是來接小姐進城的吧．．．．．．」"
+},
+"TXEE/EEWK03.TXT": {
+"lines": 146,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「老爺老爺﹐城裡來了一輛馬車﹐大概是來迎接小姐的吧．．．．．．」"
+},
+"TXEE/EEWK04.TXT": {
+"lines": 147,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「老爺﹐從城裡來了一輛馬車﹐好像是來迎接小姐的．．．．．．」"
+},
+"TXEE/EEWK05.TXT": {
+"lines": 149,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「老爺﹐從城裡來了一輛馬車﹐好像是來接小姐的．．．．．．」"
+},
+"TXEE/EEWK06.TXT": {
+"lines": 114,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「小姐﹐從教堂來的麗修女想要見妳．．．．．．」"
+},
+"TXEE/EEWK07.TXT": {
+"lines": 138,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「啊﹖庫魯卡將軍﹐您大駕光臨真是難得呀﹗」"
+},
+"TXEE/EEWK08.TXT": {
+"lines": 124,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「小姐﹐巴克雷歐先生想見你。」"
+},
+"TXEE/EEWK09.TXT": {
+"lines": 110,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「啊﹐妳不是GN$嗎﹖好久不見了﹐以前妳不是常常在育幼院中為我工作嗎﹖現在呢﹖」"
+},
+"TXEE/EEWK10.TXT": {
+"lines": 110,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「啊﹐這不是FN$的孩子GN$嗎﹖以前曾經在我這裡工作過嘛。現在妳在做什麼呢﹖」"
+},
+"TXEE/EEWK11.TXT": {
+"lines": 110,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「咦﹗這不是FN$的女兒GN$嗎﹐真是好久不見了﹐以前妳經常到我那裡去打工嘛。現在在做些什麼﹖」"
+},
+"TXEE/EEWK12.TXT": {
+"lines": 110,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「哎呀﹗這不是GN$小姐嗎﹖以前常常到教堂來打工﹐現在在做些什麼﹖」"
+},
+"TXEE/EEWK13.TXT": {
+"lines": 110,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「咦﹗咦﹗這不是GN$小姐嗎﹖真是好久不見了﹐好懷念妳在店裡打工的時候。現在做著什麼工作﹖」"
+},
+"TXEE/EEWK14.TXT": {
+"lines": 115,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「噢﹗這不是GN$小姐嗎﹖好久不見了﹐以前妳經常在我們那裡打工﹐現在在做什麼﹖」"
+},
+"TXEE/EEWK15.TXT": {
+"lines": 106,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「哎呀﹐這不是GN$小姐嗎﹖好久不見了﹐以前妳在我那裡工作的時候表現不錯﹐現在做些什麼﹖」"
+},
+"TXEE/EEWK16.TXT": {
+"lines": 110,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「唷唷唷﹐不是GN$嗎﹖好久不見了。以前在我那裡打工的日子可好﹐現在在做什麼﹖」"
+},
+"TXEE/EEWK17.TXT": {
+"lines": 110,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「啊﹗這不是GN$嗎﹖真是好久不見了。怎麼啦﹐現在在做些什麼﹖」"
+},
+"TXEE/EEWK18.TXT": {
+"lines": 110,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「哎呀﹐是GN$小姐呀﹐最近在做些什麼呀﹖」"
+},
+"TXEE/EEWK19.TXT": {
+"lines": 110,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「哎呀﹐這不是GN$小姐嗎﹖真是好久不見了。以前我的孩子真是多承蒙妳照顧了﹐現在在做什麼﹖」"
+},
+"TXEE/EEWK20.TXT": {
+"lines": 110,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「噢﹐是GN$小姐呀﹗好久不見了。以前妳還經常在我那裡打工﹐現在妳在做什麼﹖」"
+},
+"TXEE/EEWK21.TXT": {
+"lines": 128,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「啊﹐GN$。真是好久不見了﹐大家都很懷念妳。現在妳在做些什麼﹖」"
+},
+"TXEE/EEWK22.TXT": {
+"lines": 119,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「喔﹗是GN$呀﹐真是好久不見了。現在你在做什麼﹖」"
+},
+"TXEE/EEWK23.TXT": {
+"lines": 108,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「小姐､小姐﹐起床啦﹗今天妳要到城裡去工作﹐可不要第一天就遲到了。」"
+},
+"TXEE/EEWK24.TXT": {
+"lines": 101,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「啊﹐是GN$呀﹐真是好久不見了。現在妳在那裡工作呀﹖」"
+},
+"TXEE/EEWK25.TXT": {
+"lines": 101,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「咦﹖這不是FN$先生的女兒GN$嗎﹖真是好久不見了﹐現在在做什麼﹖」"
+},
+"TXEE/EEWK26.TXT": {
+"lines": 101,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「咦﹐這不是FN$的女兒GN$嗎﹖真是好久不見了。怎麼樣﹐現在做些什麼﹖」"
+},
+"TXEE/EEWK27.TXT": {
+"lines": 101,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「哎呀﹐這不是GN$嗎﹖自從妳不來打工以後﹐好久沒有見面了。現在在做什麼﹖」"
+},
+"TXEE/EEWK28.TXT": {
+"lines": 101,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「哎呀呀﹐這不是GN$小姐嗎﹐好久不見了。以前妳還常到我的店裡打工呢﹐現在做什麼工作呀﹖」"
+},
+"TXEE/EEWK29.TXT": {
+"lines": 101,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「啊﹐這不是GN$嗎﹖好久不見了。以前妳來打工的日子我還記得呢﹐現在在做什麼﹖」"
+},
+"TXEE/EEWK30.TXT": {
+"lines": 97,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「哎呀﹐是GN$小姐呀﹐自從妳來店裡打工之後已經好久不見了。現在在那一家店裡工作呀﹖」"
+},
+"TXEE/EEWK31.TXT": {
+"lines": 101,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「哎呀哎呀﹐這不是GN$小姐嗎﹖好久不見了。怎麼樣﹐現在在什麼地方工作呀﹖」"
+},
+"TXEE/EEWK32.TXT": {
+"lines": 101,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「喂﹐妳不是GN$嗎﹖真是好久不見了。沒想到妳已經長得這麼大了﹐現在在做什麼﹖」"
+},
+"TXEE/EEWK33.TXT": {
+"lines": 100,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「啊﹐GN$嗎﹖好久不見了。現在妳在做什麼事﹖」"
+},
+"TXEE/EEWK34.TXT": {
+"lines": 101,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「啊﹐是GN$小姐呀﹐以前真是多承蒙妳的照顧。現在妳在做什麼呢﹖」"
+},
+"TXEE/EEWK35.TXT": {
+"lines": 100,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「咦﹐這不是GN$嗎﹖好久沒有看到妳了﹐都長的這麼大了。在做什麼工作呀﹖」"
+},
+"TXEE/EEWK36.TXT": {
+"lines": 101,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「喂﹐這不是GN$嗎﹖好久不見了。以前妳在我這裡打工時我還記得呢。現在做些什麼﹖」"
+},
+"TXEE/EEWK37.TXT": {
+"lines": 101,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「啊﹐這不是GN$嗎﹖好久不見了。妳已經長得這麼大了﹐現在在做什麼呢﹖」"
+},
+"TXEE/EEWK38.TXT": {
+"lines": 101,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「早安﹐小姐。」"
+},
+"TXEE/EEWK39.TXT": {
+"lines": 117,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「小姐．．．真的要外出去旅行嗎﹖危險唷．．．．．．」"
+},
+"TXEE/EEWK40.TXT": {
+"lines": 134,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「老爺﹐從城裡來了一輛馬車﹐好像是來迎接小姐的．．．．．．」"
+},
+"TXEE/EEWK41.TXT": {
+"lines": 139,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「老爺﹐城裡來了一輛馬車﹐好像是來迎接小姐的．．．．．．」"
+},
+"TXEE/EEWK42.TXT": {
+"lines": 122,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「喂﹗GN$妳都已經十八歲了﹐有沒有決定要做什麼工作呀﹖」"
+},
+"TXEE/EEWK43.TXT": {
+"lines": 109,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「小姐﹐城裡的騎士先生要見妳。」"
+},
+"TXEE/EEWK44.TXT": {
+"lines": 97,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「小姐﹐起床了。今天是妳要到城裡執勤的第一天﹐總不能第一天上班就遲到吧。」"
+},
+"TXEE/EEWK45.TXT": {
+"lines": 102,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「呼．．．逃到這裡應該沒有問題了．．．．．．」"
+},
+"TXEE/EEWK46.TXT": {
+"lines": 102,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「傷腦筋呀．．．一直都找不到好差事。雖然我有這麼高的戰士評價﹐但是接下來該如何是好．．．．．．」"
+},
+"TXEE/EEWK47.TXT": {
+"lines": 118,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「小姐．．．真的要出去旅行嗎﹖很危險耶．．．．．．」"
+},
+"TXEE/EEWK48.TXT": {
+"lines": 138,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「老爺﹐城裡的馬車來了﹐好像是來接小姐的．．．．．．」"
+},
+"TXEE/EEWK49.TXT": {
+"lines": 117,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「GN$呀﹐你已經十八歲了﹐該決定你的工作．．．．．．」"
+},
+"TXEE/EEWK50.TXT": {
+"lines": 106,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「GN$呀﹐妳已經十八歲了﹐準備要做什麼事呀．．．．．．」"
+},
+"TXEE/EEWK51.TXT": {
+"lines": 105,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「GN$小姐﹐妳現在已經十八歲﹐該是決定日後工作的時候了．．．．．．」"
+},
+"TXEE/EEWK52.TXT": {
+"lines": 106,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「傷腦筋呀．．．一直找不到好工作﹐雖然我在魔法上的評價相當高．．．．．．」"
+},
+"TXEE/EEWK53.TXT": {
+"lines": 106,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「傷腦筋呀．．．一直找不到好工作﹐雖然我在魔法中的評價相當高．．．．．．」"
+},
+"TXEE/EEWK54.TXT": {
+"lines": 106,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「傷腦筋呀．．．一直找不到好工作﹐雖然我在魔法的評價上相當高．．．．．．」"
+},
+"TXEE/EEWK55.TXT": {
+"lines": 174,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「老爺﹐城裡的馬車來了﹐好像是來迎接小姐．．．．．．」"
+},
+"TXEE/EEWK56.TXT": {
+"lines": 154,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「老爺﹐城裡的馬車來了﹐好像是來迎接小姐．．．．．．」"
+},
+"TXEE/EEWK57.TXT": {
+"lines": 122,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「小姐﹐有一位先生登門拜訪﹐想要向妳求婚．．．．．．」"
+},
+"TXEE/EEWK58.TXT": {
+"lines": 121,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「小姐﹐有一位先生登門拜訪﹐想要向妳求婚．．．．．．」"
+},
+"TXEE/EEWK59.TXT": {
+"lines": 122,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「小姐﹐有一位先生登門拜訪﹐想要向妳求婚．．．．．．」"
+},
+"TXEE/EEWK60.TXT": {
+"lines": 122,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「小姐﹐有一位先生登門拜訪﹐想要向妳求婚．．．．．．」"
+},
+"TXEE/EEWK61.TXT": {
+"lines": 137,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「小姐﹐有客人．．．．．．」"
+},
+"TXEE/EEWK62.TXT": {
+"lines": 122,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「小姐﹐有人登門向妳求婚．．．．．．」"
+},
+"TXEE/EEWK63.TXT": {
+"lines": 94,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「小姐﹐妳今後想要作什麼呢﹖」"
+},
+"TXEE/EEWK64.TXT": {
+"lines": 108,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「啊﹐好久不見﹗沒想到妳長得那麼大了。現在作什麼工作呢﹖」"
+},
+"TXEE/EEWK65.TXT": {
+"lines": 92,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「哦﹐GN$小姐。妳以前寫的詩集在市面上大受好評﹐怎麼樣﹐試著幫我出版作品好嗎﹖」"
+},
+"TXEE/EEWK66.TXT": {
+"lines": 92,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「哦﹐GN$小姐。妳以前的畫在市面上得到非常不錯的評價。這次試著開一次個人展好嗎﹖」"
+},
+"TXEE/EEWK67.TXT": {
+"lines": 97,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「哦﹐GN$小姐。妳已經決定了日後要從事的工作嗎﹖」"
+},
+"TXEE/EEWK68.TXT": {
+"lines": 119,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「真是擔心呀．．．小姐怎麼一直沒法子決定工作呢﹖．．．像小姐這樣的美人﹐又有相當高的戰士評價﹐應該不會沒有工作吧﹗」"
+},
+"TXEE/EEWK69.TXT": {
+"lines": 124,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「真是擔心呀．．．小姐一直沒有決定將來要作什麼工作．．．最近好像結交了一些壞朋友．．．．．．」"
+},
+"TXEE/EEWK70.TXT": {
+"lines": 119,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「真是擔心呀．．．小姐怎麼一直沒法子決定工作呢﹖．．．像小姐這樣具備高度戰士評價的人﹐應該不會沒有工作吧﹗」"
+},
+"TXEE/EEWK71.TXT": {
+"lines": 163,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「真是令人擔心啊．．．小姐的工作總是無法安定下來．．．小姐是個美人﹐口才佳、脾氣又好．．．不該找不到工作才對。」"
+},
+"TXEE/EEWK72.TXT": {
+"lines": 119,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「真是令人擔心啊﹗．．．小姐的工作總是無法安定下來．．．最近好像一直惡運連連．．．．．．」"
+},
+"TXEE/EEWK73.TXT": {
+"lines": 163,
+"labels": [
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"PICWORKING"
+],
+"first_text": "「真是令人擔心啊﹗小姐的工作總是無法安定下來．．．最近好像一直惡運連連．．．．．．」"
+},
+"TXEE/EEWK74.TXT": {
+"lines": 291,
+"labels": [
+"ENDHYOUKA",
+"GN$",
+"FN$",
+"OPEN",
+"CLOSE",
+"SS$",
+"TTL$",
+"START",
+"FINAL",
+"FRAME_BACK",
+"PICWORKING"
+],
+"first_text": "「最近小姐很奇怪﹖都在半夜時出門．．．可是她又沒有男朋友呀﹖今晚我就跟著她後頭去看看吧．．．．．．」"
+},
+"TXEE/EEWORK.TXT": {
+"lines": 77,
+"labels": [
+"NARRATION",
+"FRAME_BACK",
+"LOADENDWORK"
+],
+"first_text": "十八歲了．．．她離開父母﹐獨自在社會上求生存．．．．．．"
+},
+"TXEV/EVE4243S.TXT": {
+"lines": 2,
+"labels": [],
+"first_text": ""
+},
+"TXEV/EVNT003.TXT": {
+"lines": 93,
+"labels": [
+"EVNT003"
+],
+"first_text": "「今年的夏天真是罕見的酷暑﹐我非常擔心小姐的身子．．．．．．．」"
+},
+"TXEV/EVNT004.TXT": {
+"lines": 94,
+"labels": [
+"EVNT004"
+],
+"first_text": "「低溫的寒流來襲﹐真擔心小姐的身體．．．．．．」"
+},
+"TXEV/EVNT005.TXT": {
+"lines": 192,
+"labels": [
+"LOAD_UNMEI",
+"EVNT005",
+"UNMEI_KEKKA",
+"NAME_SHIGOTO"
+],
+"first_text": "不知是誰在敲著TXA(NAME_FAMILY)家的大門．．．．．．"
+},
+"TXEV/EVNT006.TXT": {
+"lines": 190,
+"labels": [
+"EVNT006",
+"ITEMS_SELECT",
+"ITEMS_BUY",
+"NOT_BUY",
+"ITEMS_SETSUMEI",
+"ITEMSALL_SET",
+"ITEM_FULL"
+],
+"first_text": "不知是誰在敲著TXA(NAME_FAMILY)家的大門．．．．．．"
+},
+"TXEV/EVNT007.TXT": {
+"lines": 117,
+"labels": [
+"EVNT007",
+"EV_MAIN"
+],
+"first_text": "不知是誰在敲TXA(NAME_FAMILY)家的大門．．．．．．"
+},
+"TXEV/EVNT008.TXT": {
+"lines": 203,
+"labels": [
+"EVNT008",
+"START1ST",
+"START2ND",
+"START3RD",
+"SHORTWAIT",
+"SHOW_ITEMS",
+"TAKE_ITEM"
+],
+"first_text": "不知是誰在敲著TXA(NAME_FAMILY)家的大門．．．．．．"
+},
+"TXEV/EVNT009.TXT": {
+"lines": 0,
+"labels": [],
+"first_text": ""
+},
+"TXEV/EVNT010.TXT": {
+"lines": 154,
+"labels": [
+"EVNT010",
+"START1ST",
+"START2ND",
+"POWER_UP",
+"SHORTWAIT"
+],
+"first_text": "不知是誰在敲著TXA(NAME_FAMILY)家的大門．．．．．．"
+},
+"TXEV/EVNT011.TXT": {
+"lines": 132,
+"labels": [
+"EVNT011",
+"SHORTWAIT"
+],
+"first_text": "不知是誰在敲TXA(NAME_FIRST)家大門．．．．．．"
+},
+"TXEV/EVNT013.TXT": {
+"lines": 115,
+"labels": [
+"EVNT013",
+"OK_YOOON",
+"DAME_YOOON",
+"SHORTWAIT"
+],
+"first_text": "不知是誰在敲著TXA(NAME_FIRST)家中的大門．．．．．．"
+},
+"TXEV/EVNT014.TXT": {
+"lines": 0,
+"labels": [],
+"first_text": ""
+},
+"TXEV/EVNT015.TXT": {
+"lines": 818,
+"labels": [
+"EVNT015",
+"FITER_1ST",
+"FITER_2ND",
+"FITER_3RD",
+"FITER_4TH",
+"MAGIC_1ST",
+"MAGIC_2ND",
+"MAGIC_3RD",
+"MAGIC_4TH",
+"SOCIAL_1ST",
+"SOCIAL_2ND",
+"SOCIAL_3RD",
+"SOCIAL_4TH",
+"KEEPER_1ST",
+"KEEPER_2ND",
+"KEEPER_3RD",
+"KEEPER_4TH"
+],
+"first_text": "「妳是勇者TXA(NAME_FAMILY)的女兒﹐TXA(NAME_FIRST)小姐嗎﹖．．．．．．」"
+},
+"TXEV/EVNT016.TXT": {
+"lines": 96,
+"labels": [
+"EVNT016",
+"SHORTWAIT"
+],
+"first_text": "「老爺﹐小姐在烹飪比賽中得到第一名﹐這也是老爺平日辛苦教育的成果。」"
+},
+"TXEV/EVNT017.TXT": {
+"lines": 91,
+"labels": [
+"EVNT017"
+],
+"first_text": "一直放著不去吃它﹐結果經過一個月之後．．．．．．"
+},
+"TXEV/EVNT020.TXT": {
+"lines": 274,
+"labels": [
+"EVNT020",
+"SHORTWAIT"
+],
+"first_text": "不知是誰在敲著TXA(NAME_FAMILY)家的大門．．．．．．"
+},
+"TXEV/EVNT021.TXT": {
+"lines": 72,
+"labels": [
+"EVNT021"
+],
+"first_text": "趕著回家的路上﹐一名男子叫住了TXA(NAME_FIRST)。"
+},
+"TXEV/EVNT022.TXT": {
+"lines": 59,
+"labels": [
+"BATLE_LOAD",
+"EVNT022",
+"BUGE_SELECT",
+"BUGESET"
+],
+"first_text": ""
+},
+"TXEV/EVNT023.TXT": {
+"lines": 39,
+"labels": [
+"BATLE_LOAD",
+"EVNT023",
+"BUGE_SELECT",
+"BUGESET"
+],
+"first_text": ""
+},
+"TXEV/EVNT025.TXT": {
+"lines": 76,
+"labels": [
+"EVNT025"
+],
+"first_text": "「喂﹗喂﹗姑娘﹐要去那裡呀﹖」"
+},
+"TXEV/EVNT026.TXT": {
+"lines": 456,
+"labels": [
+"EVNT026",
+"EV_FITER",
+"EV_MAGIC",
+"EV_SOCIAL",
+"EV_KEEPER"
+],
+"first_text": "正趕著回家的TXA(NAME_FIRST)﹐被一名少女叫住．．．．．．"
+},
+"TXEV/EVNT028.TXT": {
+"lines": 257,
+"labels": [
+"EVNT028",
+"EVNT028_HAVE",
+"EVNT028_NONE",
+"KARETAYO",
+"SHOW_ITEMS"
+],
+"first_text": "不久波浪化為一道煙霧﹐幻化成美麗的泉水精靈．．．．．．"
+},
+"TXEV/EVNT029.TXT": {
+"lines": 957,
+"labels": [
+"BACK_TO_HOME",
+"EVNT029",
+"BATLE_MODE",
+"GIRL_DOWN_CHK",
+"GIRL_DOWN",
+"GIRL_DOWN_2",
+"GIRL_VICTORY_CHK",
+"GRAPSHOW",
+"DISP_HP",
+"BTL_LOOP",
+"ATTAKE_GIRL",
+"ATTAKE_MONSTOR",
+"GIRL_ATTAKE",
+"GIRL_MAGIC",
+"TEKI_ATTAKE",
+"TEKI_MAGIC",
+"TEKI_KAISHIN_DMG",
+"TEKI_DAMEG",
+"TEKI_DAMEG_NONE",
+"TEKI_DAMEG_CHK",
+"GIRL_TSUKON_DMG",
+"GIRL_DAMEG",
+"GIRL_DAMEG_NONE",
+"GIRL_DAMEG_CHK",
+"USE_TOOL",
+"SLCT_TOOLS",
+"CALC_ATTACK",
+"CALC_DEFENS",
+"CALC_DAMEG",
+"PPP1",
+"PPP2",
+"SE_TK_DEFENS",
+"SE_GR_DEFENS",
+"SE_MAGIC",
+"SE_TK_DAMEG",
+"SE_GR_DAMEG",
+"SE_KAISHIN",
+"SE_TSUKON",
+"SE_HOUROKU",
+"CHECK_GIRL",
+"OTAZUNEMONO",
+"ATTACK_MAN_A",
+"ATTACK_MAN_B",
+"ATTACK_MAN_C",
+"EVNT053",
+"EVNT053_END"
+],
+"first_text": "「咦﹖是誰在那邊．．．．．．」"
+},
+"TXEV/EVNT030.TXT": {
+"lines": 213,
+"labels": [
+"EVNT030",
+"SHOW_ITEMS"
+],
+"first_text": "「獨角獸﹗﹖」"
+},
+"TXEV/EVNT031.TXT": {
+"lines": 265,
+"labels": [
+"EVNT031",
+"KOTOWARU",
+"EVNT_END",
+"CHECK_IRON",
+"CHECK_IRON_ICON"
+],
+"first_text": "「這就是出名的精靈神木。」"
+},
+"TXEV/EVNT032.TXT": {
+"lines": 441,
+"labels": [
+"EVNT032",
+"EVNT032_100UND",
+"EVNT032_100UP",
+"EVNT032_SKIP",
+"EVNT032_100UP_REO",
+"SHOW_ITEMS",
+"TAKE_ITEM"
+],
+"first_text": "「啊﹗龍﹗﹗」"
+},
+"TXEV/EVNT033.TXT": {
+"lines": 856,
+"labels": [
+"BACK_TO_HOME",
+"EVNT033",
+"EVNT033_NONE",
+"EVNT033_PENDANT",
+"BATLE_MODE",
+"GIRL_DOWN_CHK",
+"GRAPSHOW",
+"DISP_HP",
+"BTL_LOOP",
+"ATTAKE_GIRL",
+"ATTAKE_MONSTOR",
+"GIRL_ATTAKE",
+"GIRL_MAGIC",
+"TEKI_ATTAKE",
+"TEKI_MAGIC",
+"TEKI_KAISHIN_DMG",
+"TEKI_DAMEG",
+"TEKI_DAMEG_NONE",
+"TEKI_DAMEG_CHK",
+"GIRL_TSUKON_DMG",
+"GIRL_DAMEG",
+"GIRL_DAMEG_NONE",
+"GIRL_DAMEG_CHK",
+"USE_TOOL",
+"SLCT_TOOLS",
+"CALC_ATTACK",
+"CALC_DEFENS",
+"CALC_DAMEG",
+"PPP1",
+"PPP2",
+"SE_TK_DEFENS",
+"SE_GR_DEFENS",
+"SE_MAGIC",
+"SE_TK_DAMEG",
+"SE_GR_DAMEG",
+"SE_KAISHIN",
+"SE_TSUKON",
+"SE_HOUROKU",
+"CHECK_GIRL",
+"AKUMA_DATA",
+"RDM",
+"SHOW_ITEMS"
+],
+"first_text": "洞窟的深處﹐有一位全身漆黑的惡魔正在沈思中．．．．．．"
+},
+"TXEV/EVNT034.TXT": {
+"lines": 880,
+"labels": [
+"BACK_TO_HOME",
+"EVNT034",
+"EVNT034_ONCE",
+"EVNT034_NEXT",
+"EVNT034_SLCT",
+"BATLE_MODE",
+"GIRL_DOWN",
+"GIRL_VICTORY_CHK",
+"GRAPSHOW",
+"DISP_HP",
+"BTL_LOOP",
+"ATTAKE_GIRL",
+"ATTAKE_MONSTOR",
+"GIRL_ATTAKE",
+"GIRL_MAGIC",
+"TEKI_ATTAKE",
+"TEKI_MAGIC",
+"TEKI_KAISHIN_DMG",
+"TEKI_DAMEG",
+"TEKI_DAMEG_NONE",
+"TEKI_DAMEG_CHK",
+"GIRL_TSUKON_DMG",
+"GIRL_DAMEG",
+"GIRL_DAMEG_NONE",
+"GIRL_DAMEG_CHK",
+"USE_TOOL",
+"SLCT_TOOLS",
+"CALC_ATTACK",
+"CALC_DEFENS",
+"CALC_DAMEG",
+"PPP1",
+"PPP2",
+"SE_TK_DEFENS",
+"SE_GR_DEFENS",
+"SE_MAGIC",
+"SE_TK_DAMEG",
+"SE_GR_DAMEG",
+"SE_KAISHIN",
+"SE_TSUKON",
+"SE_HOUROKU",
+"CHECK_GIRL",
+"DRAGON_DATA"
+],
+"first_text": "「小姐﹗這裡是龍族遺跡的入口﹐不是人類應該來的地方。」"
+},
+"TXEV/EVNT035.TXT": {
+"lines": 286,
+"labels": [
+"EVNT035",
+"STN_ALLCLEAR",
+"SHOW_ITEMS"
+],
+"first_text": "「喂﹖有人在嗎﹖」"
+},
+"TXEV/EVNT036.TXT": {
+"lines": 90,
+"labels": [
+"EVNT036",
+"SHORTWAIT",
+"NAMIDA_ALLCLEAR"
+],
+"first_text": "「啊﹗爸爸快來看﹐是人魚耶﹗」"
+},
+"TXEV/EVNT039.TXT": {
+"lines": 123,
+"labels": [
+"EVNT039",
+"SHORTWAIT",
+"SHOW_PICTURE",
+"CLOSE_GIRL_PIC"
+],
+"first_text": "「哎呀﹗TXA(NAME_FIRST)小姐﹐這次的成績還算不錯﹐怎麼樣﹖要不要試著在此畫出一件作品呢﹖」"
+},
+"TXEV/EVNT041.TXT": {
+"lines": 120,
+"labels": [
+"EVNT041",
+"SHORTWAIT"
+],
+"first_text": "「等一下﹐現在在賣的劍﹐不是恩賜之劍嗎﹖」"
+},
+"TXEV/EVNT042.TXT": {
+"lines": 403,
+"labels": [
+"EVE4243",
+"EVENT042",
+"EVENT042_INTER",
+"MUSIC_RETURN",
+"EVNT042",
+"YAPPA_YAMERU",
+"QUICK_BORTHDAY",
+"KAIMONO_ZAKKA",
+"ZAKKA_SELECT",
+"ZAKKA_SETSUMEI",
+"ZAKKA_SET",
+"ITEM_FULL",
+"TAKE_PRESENT",
+"SHOW_PRESENT",
+"EVENT043",
+"EVENT043_INTER",
+"EVNT043",
+"EVENT037",
+"EVNT037",
+"SHORTWAIT",
+"PRICE_DOWN"
+],
+"first_text": "「老爺﹐今天是TXA(NAME_FIRST)小姐的TXPOINT(P_NENREI)歲生日﹗要買禮物嗎﹖」"
+},
+"TXEV/EVNT042S.TXT": {
+"lines": 33,
+"labels": [],
+"first_text": ""
+},
+"TXEV/EVNT043S.TXT": {
+"lines": 2,
+"labels": [],
+"first_text": ""
+},
+"TXEV/EVNT044.TXT": {
+"lines": 158,
+"labels": [
+"EVNT044",
+"EVNT044_1ST",
+"EVNT044_2ND"
+],
+"first_text": "「呀﹗小姐﹐新年快樂﹗」"
+},
+"TXEV/EVNT045.TXT": {
+"lines": 99,
+"labels": [
+"EVNT045",
+"SHORTWAIT"
+],
+"first_text": "「大事不好了﹗小姐被官員逮捕了﹐多半是交了壞朋友的緣故．．．．．．」"
+},
+"TXEV/EVNT046.TXT": {
+"lines": 110,
+"labels": [
+"EVNT046",
+"SHORTWAIT"
+],
+"first_text": "「大事不好了﹗小姐被官員逮捕了﹐聽說是在武者修行中犯了打劫之罪．．．．．．」"
+},
+"TXEV/EVNT047.TXT": {
+"lines": 126,
+"labels": [
+"EVNT047"
+],
+"first_text": "「嗯﹖．．．．．．是誰的聲音﹖加上這迷人淡雅的清香．．．．．．」"
+},
+"TXEV/EVNT048.TXT": {
+"lines": 183,
+"labels": [
+"BACK_TO_HOME",
+"EVNT048",
+"SHOWDATE",
+"RPG_END"
+],
+"first_text": "「在這種地方會有音樂．．．﹖」"
+},
+"TXEV/EVNT049.TXT": {
+"lines": 200,
+"labels": [
+"EVNT049"
+],
+"first_text": "「怎麼了．．．﹖」"
+},
+"TXEV/EVNT051.TXT": {
+"lines": 630,
+"labels": [
+"JOB010",
+"EVNT051",
+"BLACK_DOWN",
+"MONSTOR_OPEN",
+"MONSTOR_CLOSE",
+"GRAPSHOW",
+"DISP_HP",
+"RDM",
+"BATLE_MODE",
+"GIRL_VICTORY_CHK",
+"BTL_LOOP",
+"ATTAKE_GIRL",
+"ATTAKE_MONSTOR",
+"GIRL_ATTAKE",
+"GIRL_MAGIC",
+"TEKI_ATTAKE",
+"TEKI_MAGIC",
+"TEKI_KAISHIN_DMG",
+"TEKI_DAMEG",
+"TEKI_DAMEG_NONE",
+"TEKI_DAMEG_CHK",
+"GIRL_TSUKON_DMG",
+"GIRL_DAMEG",
+"GIRL_DAMEG_NONE",
+"GIRL_DAMEG_CHK",
+"USE_TOOL",
+"SLCT_TOOLS",
+"CALC_ATTACK",
+"CALC_DEFENS",
+"CALC_DAMEG",
+"PPP1",
+"PPP2",
+"SE_TK_DEFENS",
+"SE_GR_DEFENS",
+"SE_MAGIC",
+"SE_TK_DAMEG",
+"SE_GR_DAMEG",
+"SE_KAISHIN",
+"SE_TSUKON",
+"SE_HOUROKU",
+"CHECK_GIRL",
+"STARTINIT",
+"NIGHT_DATA"
+],
+"first_text": "「太厲害了﹗妳可說是天才的守墓者﹗」"
+},
+"TXEV/EVNT052.TXT": {
+"lines": 93,
+"labels": [
+"EVNT052",
+"MEN_NAME",
+"SHORTWAIT"
+],
+"first_text": "「老爺﹐從城裡來的官員光臨了﹗」"
+},
+"TXEV/EVNTBSIN.TXT": {
+"lines": 131,
+"labels": [
+"EVNTBSIN"
+],
+"first_text": ""
+},
+"TXEV/EVNTBSN2.TXT": {
+"lines": 265,
+"labels": [
+"EVNTBSN2",
+"STAR_OPEN",
+"STAR_CLOSE",
+"SYUGO_00N",
+"SYUGO_01N",
+"SYUGO_02N",
+"SYUGO_03N",
+"SYUGO_04N",
+"SYUGO_05N",
+"SYUGO_06N",
+"SYUGO_07N",
+"SYUGO_08N",
+"SYUGO_09N",
+"PARA_OPEN",
+"PARA_CLOSE"
+],
+"first_text": "「這可真是出乎意料﹗了不起的姑娘﹐竟然能來到這裡。血脈的相承是不爭的事實啊．．．．．．」"
+},
+"TXEV/EVNTBSN3.TXT": {
+"lines": 121,
+"labels": [
+"EVENT55"
+],
+"first_text": "「我應該是不會輸給凡人．．．除了天上諸神以外我應該是沒有敵手的．．．．．．」"
+},
+"TXJO/JOB000.TXT": {
+"lines": 373,
+"labels": [
+"R_HOMEWORK",
+"ALL_OPEN",
+"ALL_CLOSE",
+"GXXSTART",
+"GXXD",
+"ANIME_INIT",
+"ANIME_OPEN",
+"ANIME_CLOSE",
+"ANIME_WIDW",
+"ANIME_WIDW_SHOW",
+"ANMT001",
+"ANMTSUNDAY",
+"ANIM_NUM",
+"APUT",
+"BORTH_CHECK",
+"CHK_RENAI",
+"CHK_HIKOUKA"
+],
+"first_text": "在自己家裡幫忙做家事。"
+},
+"TXJO/JOB001.TXT": {
+"lines": 437,
+"labels": [
+"R_BABYSITTER",
+"ALL_OPEN",
+"ALL_CLOSE",
+"GXXSTART",
+"GXXD",
+"GXXDGOLD",
+"ANIME_INIT",
+"ANIME_OPEN",
+"ANIME_CLOSE",
+"ANIME_WIDW",
+"ANIME_WIDW_SHOW",
+"ANMT001",
+"ANMTSUNDAY",
+"ANIM_NUM",
+"APUT",
+"BORTH_CHECK",
+"CHK_RENAI",
+"CHK_HIKOUKA"
+],
+"first_text": "在街上的育幼院擔任褓姆的工作。"
+},
+"TXJO/JOB002.TXT": {
+"lines": 448,
+"labels": [
+"R_INN",
+"ALL_OPEN",
+"ALL_CLOSE",
+"GXXSTART",
+"GXXD",
+"GXXDGOLD",
+"ANIME_INIT",
+"TORI_RIGHT",
+"TORI_LEFT",
+"ANIME_OPEN",
+"ANIME_CLOSE",
+"ANIME_WIDW",
+"ANIME_WIDW_SHOW",
+"ANMT001",
+"ANMTSUNDAY",
+"ANIM_NUM",
+"APUT",
+"BORTH_CHECK",
+"CHK_RENAI",
+"CHK_HIKOUKA"
+],
+"first_text": "在街上的旅館打工。"
+},
+"TXJO/JOB003.TXT": {
+"lines": 443,
+"labels": [
+"R_FARM",
+"ALL_OPEN",
+"ALL_CLOSE",
+"GXXSTART",
+"GXXD",
+"GXXDGOLD",
+"ANIME_INIT",
+"ANIME_OPEN",
+"ANIME_CLOSE",
+"ANIME_WIDW",
+"ANIME_WIDW_SHOW",
+"ANMT001",
+"ANMTSUNDAY",
+"ANIM_NUM",
+"APUT",
+"BORTH_CHECK",
+"CHK_RENAI",
+"CHK_HIKOUKA"
+],
+"first_text": "到郊外的農場打工。"
+},
+"TXJO/JOB004.TXT": {
+"lines": 462,
+"labels": [
+"R_CHURCH",
+"ALL_OPEN",
+"ALL_CLOSE",
+"GXXSTART",
+"GXXD",
+"GXXDGOLD",
+"ANIME_INIT",
+"WORKS1_RIGHT",
+"WORKS1_LEFT",
+"WORKS2_RIGHT",
+"WORKS2_LEFT",
+"ANIME_OPEN",
+"ANIME_CLOSE",
+"ANIME_WIDW",
+"ANIME_WIDW_SHOW",
+"ANMT001",
+"ANMTSUNDAY",
+"ANIM_NUM",
+"APUT",
+"BORTH_CHECK",
+"CHK_RENAI",
+"CHK_HIKOUKA"
+],
+"first_text": "在街上的教堂做服務性的工作。"
+},
+"TXJO/JOB005.TXT": {
+"lines": 449,
+"labels": [
+"R_DAINER",
+"R_DAINER_005",
+"ALL_OPEN",
+"ALL_CLOSE",
+"GXXSTART",
+"GXXD",
+"GXXDGOLD",
+"ANIME_INIT",
+"WORKS1_RIGHT",
+"WORKS1_LEFT",
+"ANIME_OPEN",
+"ANIME_CLOSE",
+"ANIME_WIDW",
+"ANIME_WIDW_SHOW",
+"ANMT001",
+"ANMTSUNDAY",
+"ANIM_NUM",
+"APUT",
+"BORTH_CHECK",
+"CHK_RENAI",
+"CHK_HIKOUKA"
+],
+"first_text": "到街上的餐廳打工。"
+},
+"TXJO/JOB006.TXT": {
+"lines": 376,
+"labels": [
+"R_WOODCUTTER",
+"ALL_OPEN",
+"ALL_CLOSE",
+"GXXSTART",
+"GXXD",
+"GXXDGOLD",
+"ANIME_INIT",
+"ANIME_OPEN",
+"ANIME_CLOSE",
+"ANIME_WIDW",
+"ANIME_WIDW_SHOW",
+"ANMT001",
+"ANMTSUNDAY",
+"ANIM_NUM",
+"APUT",
+"BORTH_CHECK",
+"CHK_RENAI",
+"CHK_HIKOUKA"
+],
+"first_text": "在森林做伐木的工作。"
+},
+"TXJO/JOB007.TXT": {
+"lines": 384,
+"labels": [
+"R_BARBER",
+"ALL_OPEN",
+"ALL_CLOSE",
+"GXXSTART",
+"GXXD",
+"GXXDGOLD",
+"ANIME_INIT",
+"ANIME_OPEN",
+"ANIME_CLOSE",
+"ANIME_WIDW",
+"ANIME_WIDW_SHOW",
+"ANMT001",
+"ANMTSUNDAY",
+"ANIM_NUM",
+"APUT",
+"BORTH_CHECK",
+"CHK_RENAI",
+"CHK_HIKOUKA"
+],
+"first_text": "在美容院打工。"
+},
+"TXJO/JOB008.TXT": {
+"lines": 462,
+"labels": [
+"R_PLASTERER",
+"ALL_OPEN",
+"ALL_CLOSE",
+"GXXSTART",
+"GXXD",
+"GXXDGOLD",
+"ANIME_INIT",
+"WORKS2_RIGHT",
+"WORKS2_LEFT",
+"DOG_1N",
+"DOG_2N",
+"ANIME_OPEN",
+"ANIME_CLOSE",
+"ANIME_WIDW",
+"ANIME_WIDW_SHOW",
+"ANMT001",
+"ANMTSUNDAY",
+"ANIM_NUM",
+"APUT",
+"BORTH_CHECK",
+"CHK_RENAI",
+"CHK_HIKOUKA"
+],
+"first_text": "到工地做泥水工。"
+},
+"TXJO/JOB009.TXT": {
+"lines": 580,
+"labels": [
+"R_HUNTER",
+"ALL_OPEN",
+"ALL_CLOSE",
+"GXXSTART",
+"GXXD",
+"GXXDGOLD",
+"ANIME_INIT",
+"WORKS1_RIGHT",
+"WORKS1_LEFT",
+"WORKS2_RIGHT",
+"WORKS2_LEFT",
+"HANTER_RIGHT",
+"HANTER_LEFT",
+"ANIME_OPEN",
+"ANIME_CLOSE",
+"ANIME_WIDW",
+"ANIME_WIDW_SHOW",
+"ANMT001",
+"ANMT_INTRO",
+"ANMTSUNDAY",
+"ANIM_NUM",
+"APUT",
+"BORTH_CHECK",
+"CHK_RENAI",
+"CHK_HIKOUKA"
+],
+"first_text": "為森林的獵人打工。"
+},
+"TXJO/JOB010.TXT": {
+"lines": 608,
+"labels": [
+"R_CEMETERY",
+"ALL_OPEN",
+"ALL_CLOSE",
+"GXXSTART",
+"GXXD",
+"GXXDGOLD",
+"ANIME_INIT",
+"WORKS1_RIGHT",
+"WORKS1_LEFT",
+"HITODAMA_RIGHT",
+"HITODAMA_LEFT",
+"ANIME_OPEN",
+"ANIME_CLOSE",
+"ANIME_WIDW",
+"ANIME_WIDW_SHOW",
+"ANMT001",
+"FIRE_ANM",
+"ANMT_MOOOON",
+"ANMTSUNDAY",
+"ANIM_NUM",
+"APUT",
+"BORTH_CHECK",
+"EVENT051_GO",
+"EVENT051_START",
+"SHORTWAIT",
+"CHK_RENAI",
+"CHK_HIKOUKA"
+],
+"first_text": "到墓園中做守墓的工作。"
+},
+"TXJO/JOB011.TXT": {
+"lines": 369,
+"labels": [
+"R_GOVERNESS",
+"ALL_OPEN",
+"ALL_CLOSE",
+"GXXSTART",
+"GXXD",
+"GXXDGOLD",
+"ANIME_INIT",
+"ANIME_OPEN",
+"ANIME_CLOSE",
+"ANIME_WIDW",
+"ANIME_WIDW_SHOW",
+"ANMT001",
+"ANMTSUNDAY",
+"ANIM_NUM",
+"APUT",
+"BORTH_CHECK",
+"CHK_RENAI",
+"CHK_HIKOUKA"
+],
+"first_text": "從事家庭教師的打工工作。"
+},
+"TXJO/JOB012.TXT": {
+"lines": 503,
+"labels": [
+"R_BAR",
+"ALL_OPEN",
+"ALL_CLOSE",
+"GXXSTART",
+"GXXD",
+"GXXDGOLD",
+"ANIME_INIT",
+"WORKS1_UP_RIGHT",
+"WORKS1_UP_LEFT",
+"WORKS1_DN_RIGHT",
+"WORKS1_DN_LEFT",
+"WORKS1_TURN",
+"ANIME_OPEN",
+"ANIME_CLOSE",
+"ANIME_WIDW",
+"ANIME_WIDW_SHOW",
+"ANMT001",
+"ANMTSUNDAY",
+"ANIM_NUM",
+"APUT",
+"BORTH_CHECK",
+"CHK_RENAI",
+"CHK_HIKOUKA"
+],
+"first_text": "在街上的酒店打工。"
+},
+"TXJO/JOB013.TXT": {
+"lines": 408,
+"labels": [
+"R_DARKBAR",
+"ALL_OPEN",
+"ALL_CLOSE",
+"GXXSTART",
+"GXXD",
+"GXXDGOLD",
+"ANIME_INIT",
+"ANIME_OPEN",
+"ANIME_CLOSE",
+"ANIME_WIDW",
+"ANIME_WIDW_SHOW",
+"ANMT001",
+"ANMTSUNDAY",
+"ANIM_NUM",
+"APUT",
+"BORTH_CHECK",
+"CHK_RENAI",
+"CHK_HIKOUKA"
+],
+"first_text": "在紅燈街的酒家打工。"
+},
+"TXJO/JOB014.TXT": {
+"lines": 474,
+"labels": [
+"R_PROSTITUTION",
+"ALL_OPEN",
+"ALL_CLOSE",
+"GXXSTART",
+"GXXD",
+"GXXDGOLD",
+"ANIME_INIT",
+"WORKS1_RIGHT",
+"WORKS1_LEFT",
+"WORKS1_TURN",
+"ANIME_OPEN",
+"ANIME_CLOSE",
+"ANIME_WIDW",
+"ANIME_WIDW_SHOW",
+"ANMT001",
+"ANMTSUNDAY",
+"ANIM_NUM",
+"APUT",
+"BORTH_CHECK",
+"CHK_RENAI",
+"CHK_HIKOUKA"
+],
+"first_text": "在大夜總會中打工。"
+},
+"TXOP/OPENING.TXT": {
+"lines": 627,
+"labels": [
+"OPENING",
+"OPENING_SKIP",
+"OPENING_TELOP",
+"OPENING_01N",
+"OPENING_02N",
+"OPENING_03N",
+"OPENING_04_OKOKU_LD",
+"OPENING_04_OKOKU",
+"OPN4_NUMBER",
+"OPN4_NUMS",
+"OPN4_NUM10S",
+"OPN4_NUM20S",
+"OPN4_NUM30S",
+"OPENING_04N",
+"OPENING_05N",
+"OPENING_06N",
+"OPENING_07N",
+"SYUGO_TYPECHK",
+"SYUGO_FACE",
+"SHOWTEXT",
+"BACK_SAVE",
+"BACK_LOAD",
+"WAIT1XX"
+],
+"first_text": "那是個單方面的戰爭．．．．．．"
+},
+"TXRP/RPG000.TXT": {
+"lines": 363,
+"labels": [
+"PLACE_IVENT",
+"HOLE_SKIP1N",
+"HOLE_SKIP2N",
+"HOLE_SKIP3N",
+"HOLE_SKIP4N",
+"HOLE_SKIP5N",
+"MARSH_SKIP",
+"MARSH_SKIP1N",
+"MARSH_SKIP2N",
+"EVENT_RET",
+"CHK_KANBAN",
+"KANBAN_READ",
+"CHK_TAKARA",
+"TAKARABAKO",
+"TAKARA_RET",
+"GOLD_CATCH",
+"TAKE_ITEM",
+"MAN_CHECK",
+"MAN_CHECK_1LV",
+"MAN_CHECK_2LV",
+"MAN_CHECK_3LV",
+"MONSTOR_CHECK",
+"MNS_CHK01",
+"MNS_CHK02",
+"MNS_CHK03",
+"MNS_CHK04",
+"MNS_CHK05",
+"MNS_CHK06",
+"MNS_CHK07",
+"MNSSET",
+"EVENT_CHECK"
+],
+"first_text": "雖然得到了「TXA(ITEMID_TBL1[0])」﹐但是因為身上的物品太多而無法拿取。"
+},
+"TXRP/RPG001.TXT": {
+"lines": 351,
+"labels": [
+"PLACE_IVENT",
+"MSN_SANDR",
+"JUNIER_DRG",
+"GRANPA_DRG",
+"SPRING_STAR",
+"CATMAN",
+"DEVIL",
+"EVENT_RET",
+"MSG_INAI",
+"CHK_KANBAN",
+"KANBAN_READ",
+"CHK_TAKARA",
+"TAKARABAKO",
+"TAKARA_RET",
+"GOLD_CATCH",
+"TAKE_ITEM",
+"MAN_CHECK",
+"MAN_CHECK_1LV",
+"MAN_CHECK_2LV",
+"MAN_CHECK_3LV",
+"MONSTOR_CHECK",
+"MNS_CHK01",
+"MNS_CHK02",
+"MNS_CHK03",
+"MNS_CHK04",
+"MNS_CHK05",
+"MNS_CHK06",
+"MNS_CHK07",
+"MNS_CHK08",
+"MNSSET",
+"EVENT_CHECK"
+],
+"first_text": "看到了「TXA(ITEMID_TBL1[0])」﹐但是因為身上的物品太多﹐無法拿取。"
+},
+"TXRP/RPG002.TXT": {
+"lines": 305,
+"labels": [
+"PLACE_IVENT",
+"FALLS01N",
+"FALLS02N",
+"EVENT_RET",
+"CHK_KANBAN",
+"KANBAN_READ",
+"CHK_TAKARA",
+"TAKARABAKO",
+"TAKARA_RET",
+"GOLD_CATCH",
+"TAKE_ITEM",
+"MAN_CHECK",
+"MAN_CHECK_1LV",
+"MAN_CHECK_2LV",
+"MAN_CHECK_3LV",
+"MONSTOR_CHECK",
+"MNS_CHK01",
+"MNS_CHK02",
+"MNS_CHK03",
+"MNS_CHK04",
+"MNS_CHK05",
+"MNS_CHK06",
+"MNS_CHK07",
+"MNSSET",
+"EVENT_CHECK"
+],
+"first_text": "看到了「TXA(ITEMID_TBL1[0])」﹐但是因為身上的物品太多﹐無法拿取。"
+},
+"TXRP/RPG003.TXT": {
+"lines": 546,
+"labels": [
+"PLACE_IVENT",
+"NEXT_MAP11N",
+"NEXT_MAP12N",
+"NEXT_MAP13N",
+"NEXT_MAP21N",
+"NEXT_MAP22N",
+"NEXT_MAP23N",
+"NEXT_MAP24N",
+"MAP2_FALL1",
+"MAP2_FALL2",
+"MAP2_FALL3",
+"NEXT_MAP31N",
+"TOP_STAGE",
+"TOP_STAGE_OFF",
+"TOP_DOWN_STEP",
+"BISHIN_STEP_CLS",
+"MAP3_CLOSED",
+"CATMAN",
+"EVENT_RET",
+"MSG_INAI",
+"CHK_KANBAN",
+"KANBAN_READ",
+"DOUKUTU_READ",
+"CHK_TAKARA",
+"TAKARABAKO",
+"TAKARA_RET",
+"GOLD_CATCH",
+"TAKE_ITEM",
+"MAN_CHECK",
+"MAN_CHECK_1LV",
+"MAN_CHECK_2LV",
+"MAN_CHECK_3LV",
+"MONSTOR_CHECK",
+"MNS_CHK01",
+"MNS_CHK02",
+"MNS_CHK03",
+"MNS_CHK04",
+"MNS_CHK05",
+"MNS_CHK06",
+"MNSSET",
+"EVENT_CHECK"
+],
+"first_text": "快點回去吧．．．"
+},
+"TXRP/RPGCMP.TXT": {
+"lines": 555,
+"labels": [
+"EVENT_INTER",
+"BACK_TO_HOME",
+"CAMP_MAIN",
+"CAMPMODE_LOOP",
+"CAMPMODE_INTER",
+"CAMP_RET",
+"CAMP_TOOL",
+"CAMP_TOOL_NKAIYU",
+"CAMP_TOOL_NONE",
+"USE_UP_ONCE",
+"SHOW_ITEMS",
+"MOCHIMONO",
+"CAMP_REST",
+"AFTERDAY",
+"SHOWDATE",
+"KAIUGAN",
+"CAMP_CLOSE",
+"CAMP_EQUIP",
+"GETSOUBI",
+"CAMP_STATUS",
+"SSTATUS",
+"CHECK_DANCE",
+"CMAP_EVENT_CHECK",
+"CMAP_EVENT_CHK_EAST",
+"CMAP_EVENT_CHK_WEST",
+"CMAP_EVENT_CHK_SOUTH",
+"CMAP_EVENT_CHK_NORTH",
+"RPG_END"
+],
+"first_text": "「啊∼．．．真舒暢．．．」"
+},
+"TXRP/RPGDWN.TXT": {
+"lines": 130,
+"labels": [
+"BACK_TO_MAIN",
+"SHOWDATE",
+"MAIN_FRAME",
+"MUSYA_QUICK"
+],
+"first_text": "「歡迎回來﹐比預定TXPOINT(AMARI_DAYS)天的旅程還提早了不少。」"
+},
+"TXRP/RPGLOP.TXT": {
+"lines": 470,
+"labels": [
+"CAMPMODE_INTER",
+"MONSTOR_INTER",
+"MAN_INTER",
+"EVENT_INTER",
+"BACK_TO_HOME",
+"RPG_MAIN",
+"RPG_MAIN_LOOP",
+"RPG_MAIN_LOOP2",
+"RPG_MAIN_LOOP3",
+"RPG_MAIN_CHK",
+"LOOP_END",
+"RPG_MAIN_NEXT",
+"SHOWDATE",
+"CAMPMODE",
+"CHK_SOUBI_TAKE",
+"KAIUGAN",
+"RPG_END",
+"EVNT050",
+"GIRLACTION_GOLD",
+"GIRLACTION",
+"TK_KAIYU",
+"TK_HOUROKU",
+"TK_HONEY",
+"TK_UROKO",
+"SHOW_PRESENT"
+],
+"first_text": "冒險日子的最後一天。"
+},
+"TXRP/RPGMEN.TXT": {
+"lines": 805,
+"labels": [
+"BACK_TO_HOME",
+"BTLE_MAIN",
+"GIRL_DOWN_CHK",
+"ENCOUNT_MAN",
+"GRAPSHOW",
+"DISP_HP",
+"RDM",
+"BATLE_MODE",
+"GIRL_VICTORY_CHK",
+"BTL_LOOP",
+"ATTAKE_GIRL",
+"ATTAKE_MONSTOR",
+"GIRL_ATTAKE",
+"GIRL_MAGIC",
+"TEKI_ATTAKE",
+"TEKI_MAGIC",
+"TEKI_KAISHIN_DMG",
+"TEKI_DAMEG",
+"TEKI_DAMEG_NONE",
+"TEKI_DAMEG_CHK",
+"GIRL_TSUKON_DMG",
+"GIRL_DAMEG",
+"GIRL_DAMEG_NONE",
+"GIRL_DAMEG_CHK",
+"USE_TOOL",
+"SLCT_TOOLS",
+"CALC_ATTACK",
+"CALC_DEFENS",
+"CALC_DAMEG",
+"PPP1",
+"PPP2",
+"SE_TK_DEFENS",
+"SE_GR_DEFENS",
+"SE_MAGIC",
+"SE_TK_DAMEG",
+"SE_GR_DAMEG",
+"SE_KAISHIN",
+"SE_TSUKON",
+"SE_HOUROKU",
+"CHECK_GIRL"
+],
+"first_text": "「啊∼啊﹐小姐真沒辦法﹐太逞強了嗎．．．．．．」"
+},
+"TXRP/RPGMNS.TXT": {
+"lines": 872,
+"labels": [
+"BACK_TO_HOME",
+"BTLE_MAIN",
+"GIRL_DOWN_CHK",
+"ENCOUNT_MONSTOR",
+"ENCOUNT_RETRY",
+"GRAPSHOW",
+"DISP_HP",
+"RDM",
+"BATLE_MODE",
+"GIRL_VICTORY_CHK",
+"BTL_LOOP",
+"ATTAKE_GIRL",
+"ATTAKE_MONSTOR",
+"GIRL_ATTAKE",
+"GIRL_MAGIC",
+"TEKI_ATTAKE",
+"TEKI_MAGIC",
+"TEKI_KAISHIN_DMG",
+"TEKI_DAMEG",
+"TEKI_DAMEG_NONE",
+"TEKI_DAMEG_CHK",
+"GIRL_TSUKON_DMG",
+"GIRL_DAMEG",
+"GIRL_DAMEG_NONE",
+"GIRL_DAMEG_CHK",
+"USE_TOOL",
+"SLCT_TOOLS",
+"CALC_ATTACK",
+"CALC_DEFENS",
+"CALC_DAMEG",
+"PPP1",
+"PPP2",
+"SE_TK_DEFENS",
+"SE_GR_DEFENS",
+"SE_MAGIC",
+"SE_TK_DAMEG",
+"SE_GR_DAMEG",
+"SE_KAISHIN",
+"SE_TSUKON",
+"SE_HOUROKU",
+"CHECK_GIRL"
+],
+"first_text": "「啊∼啊﹐小姐真是沒本事。」"
+},
+"TXRP/RPGRUN.TXT": {
+"lines": 130,
+"labels": [
+"STARTINIT"
+],
+"first_text": ""
+},
+"TXRP/RPY01N.TXT": {
+"lines": 44,
+"labels": [
+"CHECK_MEN",
+"MAN01N"
+],
+"first_text": ""
+},
+"TXRP/RPY02N.TXT": {
+"lines": 39,
+"labels": [
+"CHECK_MEN",
+"MAN02N"
+],
+"first_text": ""
+},
+"TXRP/RPY03N.TXT": {
+"lines": 42,
+"labels": [
+"CHECK_MEN",
+"MAN03N"
+],
+"first_text": ""
+},
+"TXRP/RPY04N.TXT": {
+"lines": 43,
+"labels": [
+"CHECK_MEN",
+"MAN04N"
+],
+"first_text": ""
+},
+"TXRP/RPY05N.TXT": {
+"lines": 49,
+"labels": [
+"CHECK_MEN",
+"MAN05N"
+],
+"first_text": ""
+},
+"TXRP/RPY06N.TXT": {
+"lines": 42,
+"labels": [
+"CHECK_MEN",
+"MAN06N"
+],
+"first_text": ""
+},
+"TXRP/RPY07N.TXT": {
+"lines": 45,
+"labels": [
+"CHECK_MEN",
+"MAN07N"
+],
+"first_text": ""
+},
+"TXRP/RPY08N.TXT": {
+"lines": 43,
+"labels": [
+"CHECK_MEN",
+"MAN08N"
+],
+"first_text": ""
+},
+"TXRP/RPY09N.TXT": {
+"lines": 51,
+"labels": [
+"CHECK_MEN",
+"MAN09N"
+],
+"first_text": ""
+},
+"TXRP/RPZ01N.TXT": {
+"lines": 61,
+"labels": [
+"CHECK_MONSTOR",
+"KAIWA_OK",
+"MSR01N",
+"KWA01N"
+],
+"first_text": ""
+},
+"TXRP/RPZ02N.TXT": {
+"lines": 40,
+"labels": [
+"CHECK_MONSTOR",
+"KAIWA_OK",
+"MSR02N",
+"KWA02N"
+],
+"first_text": ""
+},
+"TXRP/RPZ03N.TXT": {
+"lines": 56,
+"labels": [
+"CHECK_MONSTOR",
+"KAIWA_OK",
+"MSR03N",
+"KWA03N"
+],
+"first_text": ""
+},
+"TXRP/RPZ04N.TXT": {
+"lines": 52,
+"labels": [
+"CHECK_MONSTOR",
+"KAIWA_OK",
+"MSR04N",
+"KWA04N"
+],
+"first_text": ""
+},
+"TXRP/RPZ05N.TXT": {
+"lines": 59,
+"labels": [
+"CHECK_MONSTOR",
+"KAIWA_OK",
+"MSR05N",
+"KWA05N"
+],
+"first_text": ""
+},
+"TXRP/RPZ06N.TXT": {
+"lines": 58,
+"labels": [
+"CHECK_MONSTOR",
+"KAIWA_OK",
+"MSR06N",
+"KWA06N"
+],
+"first_text": ""
+},
+"TXRP/RPZ07N.TXT": {
+"lines": 54,
+"labels": [
+"CHECK_MONSTOR",
+"KAIWA_OK",
+"MSR07N",
+"KWA07N"
+],
+"first_text": ""
+},
+"TXRP/RPZ08N.TXT": {
+"lines": 50,
+"labels": [
+"CHECK_MONSTOR",
+"KAIWA_OK",
+"MSR08N",
+"KWA08N"
+],
+"first_text": ""
+},
+"TXRP/RPZ09N.TXT": {
+"lines": 46,
+"labels": [
+"CHECK_MONSTOR",
+"KAIWA_OK",
+"MSR09N",
+"KWA09N"
+],
+"first_text": ""
+},
+"TXRP/RPZ10N.TXT": {
+"lines": 63,
+"labels": [
+"CHECK_MONSTOR",
+"KAIWA_OK",
+"MSR10N",
+"KWA10N"
+],
+"first_text": ""
+},
+"TXRP/RPZ11N.TXT": {
+"lines": 61,
+"labels": [
+"CHECK_MONSTOR",
+"KAIWA_OK",
+"MSR11N",
+"KWA11N"
+],
+"first_text": ""
+},
+"TXRP/RPZ12N.TXT": {
+"lines": 40,
+"labels": [
+"CHECK_MONSTOR",
+"KAIWA_OK",
+"MSR12N",
+"KWA12N"
+],
+"first_text": ""
+},
+"TXRP/RPZ13N.TXT": {
+"lines": 54,
+"labels": [
+"CHECK_MONSTOR",
+"KAIWA_OK",
+"MSR13N",
+"KWA13N"
+],
+"first_text": ""
+},
+"TXRP/RPZ14N.TXT": {
+"lines": 50,
+"labels": [
+"CHECK_MONSTOR",
+"KAIWA_OK",
+"MSR14N",
+"KWA14N"
+],
+"first_text": ""
+},
+"TXRP/RPZ15N.TXT": {
+"lines": 61,
+"labels": [
+"CHECK_MONSTOR",
+"KAIWA_OK",
+"MSR15N",
+"KWA15N"
+],
+"first_text": ""
+},
+"TXRP/RPZ16N.TXT": {
+"lines": 46,
+"labels": [
+"CHECK_MONSTOR",
+"KAIWA_OK",
+"MSR16N",
+"KWA16N"
+],
+"first_text": ""
+},
+"TXRP/RPZ17N.TXT": {
+"lines": 59,
+"labels": [
+"CHECK_MONSTOR",
+"KAIWA_OK",
+"MSR17N",
+"KWA17N"
+],
+"first_text": ""
+},
+"TXRP/RPZ18N.TXT": {
+"lines": 61,
+"labels": [
+"CHECK_MONSTOR",
+"KAIWA_OK",
+"MSR18N",
+"KWA18N"
+],
+"first_text": ""
+},
+"TXRP/RPZ19N.TXT": {
+"lines": 53,
+"labels": [
+"CHECK_MONSTOR",
+"KAIWA_OK",
+"MSR19N",
+"KWA19N"
+],
+"first_text": ""
+},
+"TXRP/RPZ20N.TXT": {
+"lines": 61,
+"labels": [
+"CHECK_MONSTOR",
+"KAIWA_OK",
+"MSR20N",
+"KWA20N"
+],
+"first_text": ""
+},
+"TXRP/RPZ21N.TXT": {
+"lines": 56,
+"labels": [
+"CHECK_MONSTOR",
+"KAIWA_OK",
+"MSR21N",
+"KWA21N"
+],
+"first_text": ""
+},
+"TXRP/RPZ22N.TXT": {
+"lines": 49,
+"labels": [
+"CHECK_MONSTOR",
+"KAIWA_OK",
+"MSR22N",
+"KWA22N"
+],
+"first_text": ""
+},
+"TXRP/RPZ23N.TXT": {
+"lines": 53,
+"labels": [
+"CHECK_MONSTOR",
+"KAIWA_OK",
+"MSR23N",
+"KWA23N"
+],
+"first_text": ""
+},
+"TXRP/RPZ24N.TXT": {
+"lines": 51,
+"labels": [
+"CHECK_MONSTOR",
+"KAIWA_OK",
+"MSR24N",
+"KWA24N"
+],
+"first_text": ""
+},
+"TXRP/RPZ25N.TXT": {
+"lines": 43,
+"labels": [
+"CHECK_MONSTOR",
+"KAIWA_OK",
+"MSR25N",
+"KWA25N"
+],
+"first_text": ""
+},
+"TXRT/KAIMONO.TXT": {
+"lines": 1094,
+"labels": [
+"START",
+"START2",
+"MAIN_NEXT",
+"MAIN_NEXT2",
+"KAIMONO_BUKI",
+"BUKI_SELECT",
+"BUKI_BUY",
+"PRICE_DOWN",
+"BUKI_SETSUMEI",
+"BUKI_SET",
+"KAIMONO_RYOURI",
+"RYOURI_RETRY",
+"RYOURI_SETSUMEI",
+"RYOURI_SET",
+"KAIMONO_SHITATE",
+"DRESS_SELECT",
+"DRESS_BUY",
+"DRESS_SETSUMEI",
+"DRESS_SET",
+"KAIMONO_ZAKKA",
+"KAIMO_ZAK_LOOP",
+"ZAKKA_SELECT",
+"ZAKKA_BUY",
+"ZAKKA_SELL",
+"MOCHIMONO",
+"ZAKKA_SETSUMEI",
+"ZAKKA_SET",
+"ITEM_FULL",
+"KAIMONO_KYOUKAI",
+"KAIMONO_BYOUIN",
+"EVENT018",
+"MUDA_SHITATE",
+"MUDA_SHITATE_LOOP",
+"MUDA_ZAKKA",
+"MUDA_RYOURI",
+"BEST_BUY",
+"EVENT022",
+"ITEM_WRITE",
+"TBLSET4S"
+],
+"first_text": "「歡迎光臨﹗這裡擁有齊全的武器及防具。」"
+},
+"TXRT/KRYORIYA.TXT": {
+"lines": 165,
+"labels": [
+"KAIMONO_RYOURI",
+"LETS_EAT",
+"EVENT040",
+"PRICE_DOWN"
+],
+"first_text": "「好的﹗請妳慢慢地享用。」"
+},
+"TXRT/MAINBORN.TXT": {
+"lines": 487,
+"labels": [
+"MAINBORN",
+"FREAM_NO_GIRL",
+"FRAME_GIRL",
+"DRESS_CHECK",
+"DRESS_CHENGE",
+"MESS_FAT_CHG",
+"MESS_MONTH_CHG",
+"MONTH_BORNUP",
+"CHK_SCNDEATH",
+"STOP_THE_DIET",
+"KENKO_CHENGE",
+"GET_HOKYU",
+"GET_HOKYU_1",
+"GET_HOKYU_2",
+"AGE_WORKS_ADD",
+"AGE_WORKS_MES",
+"BRONING",
+"EVNT009",
+"EVENT014",
+"EVNT014",
+"YAMERU",
+"MEKAKE",
+"SEKKYOU_SURU",
+"HOHTTE_OKU"
+],
+"first_text": "「小姐太常穿TXA(DRESS_NAME)了﹐換上一般的服裝吧﹗」"
+},
+"TXRT/MAINEVNT.TXT": {
+"lines": 236,
+"labels": [
+"NEXT_LOAD",
+"EVENT001",
+"EVENT003",
+"EVENT004",
+"EVENT005",
+"EVENT006",
+"EVENT007",
+"EVENT007N2",
+"EVENT008",
+"EVENT009",
+"EVENT010",
+"EVENT010_EXIT",
+"EVENT011",
+"EVENT013",
+"EVENT015",
+"EVENT016",
+"EVENT017",
+"EVENT020",
+"EVENT045",
+"EVENT046",
+"EVENT052",
+"MAIN_FRAME"
+],
+"first_text": "「老爺﹐早安。管家有事想請教老爺．．．．．．」"
+},
+"TXRT/MAINLOOP.TXT": {
+"lines": 1319,
+"labels": [
+"MAINSTART",
+"MAIN_SLCT",
+"LOAD_ENDING",
+"TALKGIRL",
+"SCNGIRL_LOOP",
+"RUNAWAY",
+"RUNAWAY_LOOP",
+"GO_RUNAWAY",
+"SSTATUS",
+"PROFILES",
+"MOCHIMONO",
+"MOCHIMONO_33",
+"MOCHIMONO_LOOP",
+"MOCHIMONO_EXIT",
+"DRESS_CHG",
+"SOUBI_CHG",
+"SHOW_EQUIP",
+"USE_UP_ONCE",
+"SHOW_ITEMS",
+"SLEEP",
+"SHOWFREE",
+"SCHEDULE_SYU",
+"SCHEDULE_1ST",
+"SCHED_RETRY_1ST",
+"SCHEDULE_FIN",
+"SCHED_RETRY_FIN",
+"SCHEDULE",
+"SCHED_LIST_RETRY",
+"SCHED_ICONSET",
+"SCHED_CLEAR",
+"SCHED_MAIN",
+"SCHED_MAIN_LOOP",
+"SCHED_MAIN_LOOP2",
+"SCHED_MAIN_OK",
+"SCHED_KITAERU",
+"SCHED_HATARAKU",
+"GARA_CHECK",
+"SCHED_MUSYA",
+"SCHED_YASUMI",
+"PRN_SCD",
+"TBLSET2",
+"TBLSET2S",
+"TBLSET3",
+"TBLSET4S",
+"TBLSET4",
+"EVENT002X1",
+"EVENT002X2",
+"EVENT002X3",
+"EVENT002X4",
+"EVENT002X5",
+"EVENT002X6",
+"EVENT002X7",
+"EVENT002X8",
+"EVENT002X9",
+"EVENT002X10",
+"FREAM_BACKHOME_GIRL",
+"FAT_GIRL_CHK",
+"DRESS_CHECK",
+"DRESS_CHENGE",
+"DRESS_AGE_CHECK",
+"VACA_GOLD_CALC",
+"SCHD_IT_SLCT",
+"CALC_SYOKUHI"
+],
+"first_text": "要談論有關什麼的話題﹖"
+},
+"TXRT/PARAINIT.TXT": {
+"lines": 284,
+"labels": [
+"RESTART",
+"SEIZA_END"
+],
+"first_text": "回到ＭＳ－ＤＯＳ下嗎﹖"
+},
+"TXRT/RUNNING.TXT": {
+"lines": 186,
+"labels": [
+"START",
+"LOADXX",
+"EVENT021",
+"EVENT021_EXIT",
+"EVENT022",
+"EVENT025",
+"EVENT025_EXIT",
+"EVENT026",
+"BORTHCHECKX"
+],
+"first_text": ""
+},
+"TXRT/SCNCASTL.TXT": {
+"lines": 612,
+"labels": [
+"SCNCASTL",
+"SLC_MONBAN",
+"JINMYAKU_UP",
+"SLC_KONOEKISI",
+"SLC_SHOGUN",
+"SLC_DAIJIN",
+"SLC_SHISAI",
+"SLC_HIME",
+"SLC_OHUHI",
+"SLC_KOKUOH",
+"SLC_DOUKESI",
+"SLC_BUKAN"
+],
+"first_text": "來到城裡．．．．．．"
+},
+"TXRT/SCNDEATH.TXT": {
+"lines": 111,
+"labels": [
+"MAIN",
+"OPEN_SYUGO",
+"CLOSE_SYUGO"
+],
+"first_text": "「老爺﹐不好了﹗小姐的樣子不太對勁．．．．．．」"
+},
+"TXRT/SCNGIRL.TXT": {
+"lines": 792,
+"labels": [
+"SCNGIRL",
+"SLC_TALK",
+"SAIKIN_CHO",
+"CHO_BYOUKI",
+"CHO_HIKOUKA",
+"CHO_FATHER",
+"CHO_STEWARD",
+"CHO_MOTHER_LOVE",
+"CHO_KILL_MONSTR",
+"CHO_SHINKOH",
+"CHO_KANJUSEI",
+"CHO_STRESS",
+"SAIKIN_STUDY",
+"STUDY_SENSHI",
+"SENSHI_SENTOH",
+"SENSHI_KOUGEKI",
+"SENSHI_BOUGYO",
+"STUDY_MAHO",
+"MAHO_MAHOGI",
+"MAHO_MARYOKU",
+"MAHO_KOHMAR",
+"STUDY_SYAKOH",
+"SYAKOH_REIGI",
+"SYAKOH_GEIJ",
+"SYAKOH_WAJYU",
+"STUDY_KAJI",
+"KAJI_RYOURI",
+"KAJI_SOUJISE",
+"KAJI_KIDATE",
+"SAIKIN_SONOTA",
+"SAIKIN_SONOTA_TEST",
+"KAIWA_RET",
+"SLC_MONEY",
+"SLC_SERMON",
+"CHK_MAX4"
+],
+"first_text": "「我只是有一點發燒﹐請不要擔心．．．．．．」"
+},
+"TXRT/SCNKENKO.TXT": {
+"lines": 106,
+"labels": [
+"SYUKENKO",
+"SL_MIRI_WA_SA",
+"SL_TONIKAKU_J",
+"SL_OSHITOYAKA",
+"SL_DIET",
+"HOUSHIN_CHECK"
+],
+"first_text": "「老爺﹐TXA(NAME_FIRST)小姐的健康管理要採用那一種方法呢﹖」"
+},
+"TXRT/SCNKYUSO.TXT": {
+"lines": 473,
+"labels": [
+"R_FREE",
+"KYUSOKU_SRT",
+"R_OBSERVE",
+"R_RESTCURE",
+"R_REST_SRT",
+"R_SANATORIUM",
+"R_SANATO_END",
+"ALL_OPEN",
+"ALL_CLOSE",
+"EVENT018",
+"EVENT018X2ND",
+"EV18X2ND",
+"BORTH_CHECK"
+],
+"first_text": "要給零用錢嗎﹖"
+},
+"TXRT/SCNSYUGO.TXT": {
+"lines": 639,
+"labels": [
+"START_SYUGOSEI",
+"SYUGOSEI",
+"OPEN_SYUGO",
+"CLOSE_SYUGO",
+"FREAM_GIRL",
+"TIME_STORE",
+"BACK_TO_FUTURE",
+"QUIT_OF_GAME",
+"QUIT_MESSAGE",
+"DDISK_SAVE",
+"DDISK_SAVE_RETRY",
+"DDISK_LOAD",
+"DDISK_LOAD_RETRY",
+"MSG_READ_ERR",
+"DSKTOOLREAD",
+"DSKTOOLOPEN",
+"DSKTOOL_1_RD",
+"INST_USER_DISK",
+"INST_NEW_DISK",
+"USER_DISK_MAKE"
+],
+"first_text": "要讀取那一個記錄檔。"
+},
+"TXRT/SCNVACAN.TXT": {
+"lines": 281,
+"labels": [
+"R_VACANCES",
+"VACAN_START",
+"VACA_OPEN",
+"VACA_CLOSE",
+"WIDVACA",
+"SEASON_NAME",
+"EVENT036",
+"MERGE_FILE_JUMP"
+],
+"first_text": "想去渡假但是沒有錢。"
+},
+"TXRT/SSKYUSO.TXT": {
+"lines": 74,
+"labels": [
+"SYU_KYUSOKU",
+"ALL_OPEN",
+"ALL_CLOSE",
+"BORTH_CHECK"
+],
+"first_text": ""
+},
+"TXRT/START.TXT": {
+"lines": 104,
+"labels": [
+"SETUP_MENU",
+"WIDONGEN",
+"WIDEMS"
+],
+"first_text": ""
+},
+"TXS/SSALEND.TXT": {
+"lines": 46,
+"labels": [
+"SYUKAKU_AFTER",
+"MAIN_FRAME",
+"BORTHCHECKX"
+],
+"first_text": "收獲祭結束了。"
+},
+"TXS/SSBATL.TXT": {
+"lines": 1452,
+"labels": [
+"X_FINALE",
+"ANIME_BATL",
+"SSBATL_TAIKI",
+"SSBATL_TK_ATTACK",
+"SSBATL_TK_MAGIC",
+"SSBATL_GR_ATTACK",
+"SSBATL_GR_MAGIC",
+"SSBATL_GR_VICTORY",
+"SSBATL_TK_VICTORY",
+"START_TEXT",
+"GIRL_DOWN_TEXT",
+"TEKI_DOWN_TEXT",
+"TEKI_DOWN_TXT2",
+"GIRL_VIC_TEXT",
+"GIRL_VIC_TXT2",
+"TEKI_DEFEAT_MES",
+"TEKI_VICT_MES",
+"TEKI_VIC_TEXT",
+"GOLD_CHATCH_TEXT",
+"SE_TIME_GR_CHK",
+"ANIME_INIT",
+"ANIME_OPEN",
+"ANIME_ANM_LD",
+"ANIME_FIRST_PUT",
+"BG_ANIME_INIT",
+"BG_RND_SEQSET",
+"BG_ANIME_LOCSET",
+"ANIME_BG_CHAR",
+"ANIME_BG_CHAR_LOOP",
+"ANIME_BG_CHAR_LOOP_E",
+"ANIME_BG_CHAR_OH",
+"ANIME_BG_CHAR_L",
+"ANIME_BG_CHAR_R",
+"APUTSBG",
+"BG_ANIM_NUM",
+"APUTBG",
+"CHECK_GIRL_DATA",
+"ANIME_PLAY",
+"NOW_SE_SET",
+"GIRL_BATLE",
+"APUTS_XY",
+"APUTS_XY_WRT",
+"APUTS",
+"ANIM_NUM",
+"APUT",
+"FRAME_OPEN",
+"FACEOPEN",
+"FACECLOSE",
+"STR_GIRL_NAMEX",
+"STR_N_SHORT",
+"BATLE_MODE",
+"GRAPSHOW",
+"DISP_HP",
+"RDM",
+"BTL_LOOP",
+"ATTAKE_GIRL",
+"ATTAKE_MONSTOR",
+"GIRL_ATTAKE",
+"GIRL_MAGIC",
+"TEKI_ATTAKE",
+"TEKI_MAGIC",
+"TEKI_KAISHIN_DMG",
+"TEKI_DAMEG",
+"TEKI_DAMEG_NONE",
+"TEKI_DAMEG_CHK",
+"GIRL_TSUKON_DMG",
+"GIRL_DAMEG",
+"GIRL_DAMEG_NONE",
+"GIRL_DAMEG_CHK",
+"CALC_ATTACK",
+"CALC_DEFENS",
+"CALC_DAMEG",
+"PPP1",
+"PPP2",
+"SE_TK_DEFENS",
+"SE_GR_DEFENS",
+"SE_MAGIC",
+"SE_TK_DAMEG",
+"SE_GR_DAMEG",
+"SE_KAISHIN",
+"SE_TSUKON",
+"SE_HOUROKU",
+"VICTORY_SET"
+],
+"first_text": "「到此為止﹗時間到了。經過判定由TXA(NAME_FIRST)獲得優勝。」"
+},
+"TXS/SSBFIN.TXT": {
+"lines": 343,
+"labels": [
+"FINALE_MAIN",
+"FRAME_MAIN",
+"FRAME_SHO",
+"SHO_NAME",
+"CENTERING",
+"ENTRY_NAME_SET",
+"ENTRY_FACE_FLN_SET",
+"MONSTAR_MESSAGE",
+"SHOW_ITEMS",
+"TAKE_ITEM",
+"PRN_ENTRY_N_SHORT",
+"HYOUKA_UP"
+],
+"first_text": "「各位﹐今年的比賽相當的精彩﹐下面要進行頒獎儀式﹐恭請國王陛下。」"
+},
+"TXS/SSBT02.TXT": {
+"lines": 119,
+"labels": [
+"SE_TIME_TK_CHK",
+"BATLE_SET",
+"BATLE_LOAD",
+"BATLE_PLAY_INIT",
+"BATLE_PLAY",
+"APUTK_XY",
+"APUTK_XY_WRT",
+"APUTK",
+"BATLE_ANIM_NUM",
+"CHECK_BATLER",
+"MSR02N"
+],
+"first_text": ""
+},
+"TXS/SSBT03.TXT": {
+"lines": 107,
+"labels": [
+"SE_TIME_TK_CHK",
+"BATLE_SET",
+"BATLE_LOAD",
+"BATLE_PLAY_INIT",
+"BATLE_PLAY",
+"APUTK_XY",
+"APUTK_XY_WRT",
+"APUTK",
+"BATLE_ANIM_NUM",
+"CHECK_BATLER",
+"MSR03N"
+],
+"first_text": ""
+},
+"TXS/SSBT04.TXT": {
+"lines": 128,
+"labels": [
+"SE_TIME_TK_CHK",
+"BATLE_SET",
+"BATLE_LOAD",
+"BATLE_PLAY_INIT",
+"BATLE_PLAY",
+"APUTK_XY",
+"APUTK_XY_WRT",
+"APUTK",
+"BATLE_ANIM_NUM",
+"CHECK_BATLER",
+"MSR04N"
+],
+"first_text": ""
+},
+"TXS/SSBT05.TXT": {
+"lines": 122,
+"labels": [
+"SE_TIME_TK_CHK",
+"BATLE_SET",
+"BATLE_LOAD",
+"BATLE_PLAY_INIT",
+"BATLE_PLAY",
+"APUTK_XY",
+"APUTK_XY_WRT",
+"APUTK",
+"BATLE_ANIM_NUM",
+"CHECK_BATLER",
+"MSR05N"
+],
+"first_text": ""
+},
+"TXS/SSBT06.TXT": {
+"lines": 166,
+"labels": [
+"SE_TIME_TK_CHK",
+"BATLE_SET",
+"BATLE_LOAD",
+"BATLE_PLAY_INIT",
+"BATLE_PLAY",
+"APUTK_XY",
+"APUTK_XY_WRT",
+"APUTK",
+"BATLE_ANIM_NUM",
+"CHECK_BATLER",
+"MSR06N"
+],
+"first_text": ""
+},
+"TXS/SSBT07.TXT": {
+"lines": 109,
+"labels": [
+"SE_TIME_TK_CHK",
+"BATLE_SET",
+"BATLE_LOAD",
+"BATLE_PLAY_INIT",
+"BATLE_PLAY",
+"APUTK_XY",
+"APUTK_XY_WRT",
+"APUTK",
+"BATLE_ANIM_NUM",
+"CHECK_BATLER",
+"MSR07N"
+],
+"first_text": ""
+},
+"TXS/SSBT08.TXT": {
+"lines": 124,
+"labels": [
+"SE_TIME_TK_CHK",
+"BATLE_SET",
+"BATLE_LOAD",
+"BATLE_PLAY_INIT",
+"BATLE_PLAY",
+"APUTK_XY",
+"APUTK_XY_WRT",
+"APUTK",
+"BATLE_ANIM_NUM",
+"CHECK_BATLER",
+"MSR08N"
+],
+"first_text": ""
+},
+"TXS/SSBT09.TXT": {
+"lines": 148,
+"labels": [
+"SE_TIME_TK_CHK",
+"BATLE_SET",
+"BATLE_LOAD",
+"BATLE_PLAY_INIT",
+"BATLE_PLAY",
+"APUTK_XY",
+"APUTK_XY_WRT",
+"APUTK",
+"BATLE_ANIM_NUM",
+"CHECK_BATLER",
+"MSR09N"
+],
+"first_text": ""
+},
+"TXS/SSBT10.TXT": {
+"lines": 122,
+"labels": [
+"SE_TIME_TK_CHK",
+"BATLE_SET",
+"BATLE_LOAD",
+"BATLE_PLAY_INIT",
+"BATLE_PLAY",
+"APUTK_XY",
+"APUTK_XY_WRT",
+"APUTK",
+"BATLE_ANIM_NUM",
+"CHECK_BATLER",
+"MSR10N"
+],
+"first_text": ""
+},
+"TXS/SSBT11.TXT": {
+"lines": 124,
+"labels": [
+"SE_TIME_TK_CHK",
+"BATLE_SET",
+"BATLE_LOAD",
+"BATLE_PLAY_INIT",
+"BATLE_PLAY",
+"APUTK_XY",
+"APUTK_XY_WRT",
+"APUTK",
+"BATLE_ANIM_NUM",
+"CHECK_BATLER",
+"MSR11N"
+],
+"first_text": ""
+},
+"TXS/SSBT12.TXT": {
+"lines": 158,
+"labels": [
+"SE_TIME_TK_CHK",
+"BATLE_SET",
+"BATLE_LOAD",
+"BATLE_PLAY_INIT",
+"BATLE_PLAY",
+"APUTK_XY",
+"APUTK_XY_WRT",
+"APUTK",
+"BATLE_ANIM_NUM",
+"CHECK_BATLER",
+"MSR12N"
+],
+"first_text": ""
+},
+"TXS/SSBT13.TXT": {
+"lines": 122,
+"labels": [
+"SE_TIME_TK_CHK",
+"BATLE_SET",
+"BATLE_LOAD",
+"BATLE_PLAY_INIT",
+"BATLE_PLAY",
+"APUTK_XY",
+"APUTK_XY_WRT",
+"APUTK",
+"BATLE_ANIM_NUM",
+"CHECK_BATLER",
+"MSR13N"
+],
+"first_text": ""
+},
+"TXS/SSBT14.TXT": {
+"lines": 123,
+"labels": [
+"SE_TIME_TK_CHK",
+"BATLE_SET",
+"BATLE_LOAD",
+"BATLE_PLAY_INIT",
+"BATLE_PLAY",
+"APUTK_XY",
+"APUTK_XY_WRT",
+"APUTK",
+"BATLE_ANIM_NUM",
+"CHECK_BATLER",
+"MSR14N"
+],
+"first_text": ""
+},
+"TXS/SSBT15.TXT": {
+"lines": 127,
+"labels": [
+"SE_TIME_TK_CHK",
+"BATLE_SET",
+"BATLE_LOAD",
+"BATLE_PLAY_INIT",
+"BATLE_PLAY",
+"APUTK_XY",
+"APUTK_XY_WRT",
+"APUTK",
+"BATLE_ANIM_NUM",
+"CHECK_BATLER",
+"MSR15N"
+],
+"first_text": ""
+},
+"TXS/SSBT16.TXT": {
+"lines": 109,
+"labels": [
+"SE_TIME_TK_CHK",
+"BATLE_SET",
+"BATLE_LOAD",
+"BATLE_PLAY_INIT",
+"BATLE_PLAY",
+"APUTK_XY",
+"APUTK_XY_WRT",
+"APUTK",
+"BATLE_ANIM_NUM",
+"CHECK_BATLER",
+"MSR16N"
+],
+"first_text": ""
+},
+"TXS/SSBT17.TXT": {
+"lines": 122,
+"labels": [
+"SE_TIME_TK_CHK",
+"BATLE_SET",
+"BATLE_LOAD",
+"BATLE_PLAY_INIT",
+"BATLE_PLAY",
+"APUTK_XY",
+"APUTK_XY_WRT",
+"APUTK",
+"BATLE_ANIM_NUM",
+"CHECK_BATLER",
+"MSR17N"
+],
+"first_text": ""
+},
+"TXS/SSBT18.TXT": {
+"lines": 152,
+"labels": [
+"SE_TIME_TK_CHK",
+"BATLE_SET",
+"BATLE_LOAD",
+"BATLE_PLAY_INIT",
+"BATLE_PLAY",
+"APUTK_XY",
+"APUTK_XY_WRT",
+"APUTK",
+"BATLE_ANIM_NUM",
+"CHECK_BATLER",
+"MSR18N"
+],
+"first_text": ""
+},
+"TXS/SSDANC.TXT": {
+"lines": 1137,
+"labels": [
+"DANCE_STARTMAIN",
+"DANCE_MAIN",
+"SKIP1",
+"SLCT_MEMBER",
+"DANCE_FINMAIN",
+"POINT_SHOW",
+"POINT_CALC",
+"SHO_ENTRY_CALC",
+"SHO_ENTRY_CALC",
+"MSG_DAIJIN",
+"MSG_HYOSHO",
+"XGRP_OPEN",
+"FRM_SHO_ENTRY",
+"GRAPOPEN",
+"GRAPCLOSE",
+"FACEOPEN",
+"FACECLOSE",
+"POINT_GRAPH",
+"STRVALSETS",
+"CHALNG_PARA_SET",
+"CHALNG_MESS_SET",
+"CHLG_PARA_SET_01",
+"CHLG_MESS_SET_01",
+"CHLG_PARA_SET_02",
+"CHLG_MESS_SET_02",
+"CHLG_PARA_SET_03",
+"CHLG_MESS_SET_03",
+"CHLG_PARA_SET_04",
+"CHLG_MESS_SET_04",
+"CHLG_PARA_SET_05",
+"CHLG_MESS_SET_05",
+"CHLG_PARA_SET_06",
+"CHLG_MESS_SET_06",
+"CHLG_PARA_SET_07",
+"CHLG_MESS_SET_07",
+"CHLG_PARA_SET_08",
+"CHLG_MESS_SET_08",
+"CHLG_PARA_SET_09",
+"CHLG_MESS_SET_09",
+"CHLG_PARA_SET_10",
+"CHLG_MESS_SET_10",
+"CHLG_PARA_SET_11",
+"CHLG_MESS_SET_11",
+"FRAME_OPEN",
+"FRAME_HYOSHO",
+"SSDNCIN",
+"ANIME_OPEN",
+"ANIME_DATA_SET",
+"AN_DATA_GIRL",
+"ICON_TO_DRS",
+"ANIME_SETS",
+"ANM_SET_01",
+"ANM_SET_03",
+"ANM_SET_06",
+"ANM_SET_07",
+"ANM_SET_09",
+"ANM_SET_10",
+"SETDCXY",
+"SETFL0",
+"SETFL0B",
+"SETFL1",
+"SETFL2",
+"APUTS",
+"ANIM_NUM",
+"APUT",
+"ANIME_CHAR_PUT",
+"ANIME_MAIN",
+"ANM_CHAR_CLEAR",
+"ANIME_MAIN06",
+"ANIME_MAIN07",
+"ANIME_MAIN_06_07",
+"ANIME_MAIN09",
+"ANIME_MAIN10",
+"SHOW_ITEMS",
+"TAKE_ITEM"
+],
+"first_text": "「哼哼哼．．．還挺有勇氣的嘛﹐趁還沒有丟臉之前﹐快一點回家去吧﹗」"
+},
+"TXS/SSEV022.TXT": {
+"lines": 1261,
+"labels": [
+"X_FINALE",
+"TEXT_BATLE",
+"BATLE_WINDOW",
+"ANIME_BATL",
+"SSBATL_TAIKI",
+"SSBATL_TK_ATTACK",
+"SSBATL_TK_MAGIC",
+"SSBATL_GR_ATTACK",
+"SSBATL_GR_MAGIC",
+"SSBATL_GR_VICTORY",
+"SSBATL_TK_VICTORY",
+"GIRL_DOWN_TEXT",
+"TEKI_DOWN_TEXT",
+"GIRL_VIC_TEXT",
+"TEKI_VIC_TEXT",
+"HIKIWAKE_TEXT",
+"FACEOPEN",
+"FACECLOSE",
+"GIRL_VIC_TALK",
+"GIRL_DOWN_TALK",
+"SE_TIME_GR_CHK",
+"ANIME_INIT",
+"ANIME_OPEN",
+"BG_ANIME_INIT",
+"BG_RND_SEQSET",
+"SEQSETS",
+"BG_ANIME_LOCSET",
+"BG_STORE",
+"BG_RESTORE",
+"ANIME_BG_CHAR",
+"ANIME_BG_CHAR_LOOP",
+"ANIME_BG_CHAR_LOOP_E",
+"ANIME_BG_START",
+"ANIME_BG_CHAR_S",
+"APUTSBG",
+"BG_ANIM_NUM",
+"APUTBG",
+"CHECK_GIRL_DATA",
+"ANIME_PLAY",
+"NOW_SE_SET",
+"GIRL_BATLE",
+"APUTS_XY",
+"APUTS_XY_WRT",
+"APUTS",
+"ANIM_NUM",
+"APUT",
+"STR_GIRL_NAMEX",
+"STR_N_SHORT",
+"BATLE_MODE",
+"GRAPSHOW",
+"DISP_HP",
+"RDM",
+"BTL_LOOP",
+"ATTAKE_GIRL",
+"ATTAKE_MONSTOR",
+"GIRL_ATTAKE",
+"GIRL_MAGIC",
+"TEKI_ATTAKE",
+"TEKI_MAGIC",
+"TEKI_KAISHIN_DMG",
+"TEKI_DAMEG",
+"TEKI_DAMEG_NONE",
+"TEKI_DAMEG_CHK",
+"GIRL_TSUKON_DMG",
+"GIRL_DAMEG",
+"GIRL_DAMEG_NONE",
+"GIRL_DAMEG_CHK",
+"CALC_ATTACK",
+"CALC_DEFENS",
+"CALC_DAMEG",
+"PPP1",
+"PPP2",
+"SE_TK_DEFENS",
+"SE_GR_DEFENS",
+"SE_MAGIC",
+"SE_TK_DAMEG",
+"SE_GR_DAMEG",
+"SE_KAISHIN",
+"SE_TSUKON",
+"SE_HOUROKU",
+"VICTORY_SET",
+"FREAM_GIRL",
+"APUTSBG"
+],
+"first_text": "「喂﹗女人。我就是有名的武鬥家TXA(R_NAME)﹐我想要和你一決生死﹗﹗﹗」"
+},
+"TXS/SSEV023.TXT": {
+"lines": 966,
+"labels": [
+"X_FINALE",
+"TEXT_BATLE",
+"BATLE_WINDOW",
+"ANIME_BATL",
+"SSBATL_TAIKI",
+"SSBATL_TK_ATTACK",
+"SSBATL_TK_MAGIC",
+"SSBATL_GR_ATTACK",
+"SSBATL_GR_MAGIC",
+"SSBATL_GR_VICTORY",
+"SSBATL_TK_VICTORY",
+"GIRL_DOWN_TEXT",
+"TEKI_DOWN_TEXT",
+"GIRL_VIC_TEXT",
+"TEKI_VIC_TEXT",
+"HIKIWAKE_TEXT",
+"HIKIWAKE_TEXT",
+"FACEOPEN",
+"FACECLOSE",
+"GIRL_VIC_TALK",
+"GIRL_DOWN_TALK",
+"KANBAN_CLEAR",
+"SE_TIME_GR_CHK",
+"ANIME_INIT",
+"ANIME_OPEN",
+"CHECK_GIRL_DATA",
+"ANIME_PLAY",
+"NOW_SE_SET",
+"GIRL_BATLE",
+"APUTS_XY",
+"APUTS_XY_WRT",
+"APUTS",
+"ANIM_NUM",
+"APUT",
+"STR_GIRL_NAMEX",
+"STR_N_SHORT",
+"BATLE_MODE",
+"GRAPSHOW",
+"DISP_HP",
+"RDM",
+"BTL_LOOP",
+"ATTAKE_GIRL",
+"ATTAKE_MONSTOR",
+"GIRL_ATTAKE",
+"GIRL_MAGIC",
+"TEKI_ATTAKE",
+"TEKI_MAGIC",
+"TEKI_KAISHIN_DMG",
+"TEKI_DAMEG",
+"TEKI_DAMEG_NONE",
+"TEKI_DAMEG_CHK",
+"GIRL_TSUKON_DMG",
+"GIRL_DAMEG",
+"GIRL_DAMEG_NONE",
+"GIRL_DAMEG_CHK",
+"CALC_ATTACK",
+"CALC_DEFENS",
+"CALC_DAMEG",
+"PPP1",
+"PPP2",
+"SE_TK_DEFENS",
+"SE_GR_DEFENS",
+"SE_MAGIC",
+"SE_TK_DAMEG",
+"SE_GR_DAMEG",
+"SE_KAISHIN",
+"SE_TSUKON",
+"SE_HOUROKU",
+"VICTORY_SET",
+"FREAM_GIRL",
+"APUTSBG"
+],
+"first_text": "「我的名字叫TXA(R_NAME)﹗這個道場的招牌是我的囊中物了﹗」"
+},
+"TXS/SSRUNS.TXT": {
+"lines": 503,
+"labels": [
+"SLCT_LOOP",
+"SLCT_LOOP_2",
+"MSG_PLAN",
+"DRESS_ALL_COUNT",
+"SYUKAKU_TITLE",
+"AREA_BACK",
+"AREA_RESTORE",
+"AREA_BACK2",
+"AREA_RESTORE2",
+"SSBATL",
+"SSARTS",
+"SSDANC",
+"CHANGE_DRESS",
+"CHANGE_DR_LOOP",
+"DRESS_CHK",
+"DRESS_AGE_CHECK",
+"SSCOOK",
+"EVENT019",
+"EVNT019",
+"EVNT019MAIN",
+"RIVAL_1_TYPE",
+"RIVAL_2_TYPE",
+"RIVAL_3_TYPE",
+"RIVAL_4_TYPE",
+"SCHD_SELECTX",
+"SCHD_CHANGE",
+"SCHD_NO_CHANGE"
+],
+"first_text": "要參加那一項呢﹖"
+},
+"TXS/SSTOUR.TXT": {
+"lines": 931,
+"labels": [
+"FINALE_LOAD",
+"BATLE_LOAD",
+"FRAME_OPEN",
+"TOUR_MAIN",
+"VICTORY_SET",
+"ALL_INSTANT_BATLE",
+"INSTANT_BATLE",
+"INS_BATLE_FIRST",
+"INS_BATLE_AFTER",
+"TOUR_BATLE_GIRL",
+"TOUR_TALK",
+"STEWARD_CHECK",
+"TOUR_START",
+"CHARA_NAME_SHOW",
+"CHARA_SET",
+"CHARA_SELECT",
+"GIRL_RIVAL_SET",
+"ENTRY_NAME_SET",
+"STR_ENTRY_N_SHORT",
+"INSTANT_BTL",
+"BTL_SETTING",
+"BTL_LOOP",
+"ATTAKE_GIRL",
+"ATTAKE_MONSTOR",
+"GIRL_ATTAKE",
+"GIRL_MAGIC",
+"TEKI_ATTAKE",
+"TEKI_MAGIC",
+"TEKI_KAISHIN_DMG",
+"TEKI_DAMEG",
+"TEKI_DAMEG_NONE",
+"TEKI_DAMEG_CHK",
+"GIRL_TSUKON_DMG",
+"GIRL_DAMEG",
+"GIRL_DAMEG_NONE",
+"GIRL_DAMEG_CHK",
+"CALC_ATTACK",
+"CALC_DEFENS",
+"CALC_DAMEG",
+"CHAR_DATA_SET",
+"MNS_DATA02",
+"MNS_DATA03",
+"MNS_DATA04",
+"MNS_DATA05",
+"MNS_DATA06",
+"MNS_DATA07",
+"MNS_DATA08",
+"MNS_DATA09",
+"MNS_DATA10",
+"MNS_DATA11",
+"MNS_DATA12",
+"MNS_DATA13",
+"MNS_DATA14",
+"MNS_DATA15",
+"MNS_DATA16",
+"MNS_DATA17",
+"MNS_DATA18",
+"GRAPOPEN",
+"GRAPCLOSE",
+"DISP_HP",
+"RDM"
+],
+"first_text": "「我的對手是．．．．．．嗯∼是．．．TXA(STR_ENTRY_NAME[BATL_TEKI])．．．」"
+},
+"TXS2/SSALEND.TXT": {
+"lines": 46,
+"labels": [
+"SYUKAKU_AFTER",
+"MAIN_FRAME",
+"BORTHCHECKX"
+],
+"first_text": "收獲祭結束了。"
+},
+"TXS2/SSARTS.TXT": {
+"lines": 753,
+"labels": [
+"ARTS_MAIN",
+"ARTS_MAIN_33",
+"ARTS_MAIN_44",
+"CHLNG_TBL_SET",
+"CHLNG_TBL_SET_LOP",
+"DBG_LIST",
+"CHLNG_CHECK",
+"SCORE_CHK",
+"CHALNG_PARA_SET",
+"CHLG_PARA_SET_01",
+"CHLG_PARA_SET_02",
+"CHLG_PARA_SET_03",
+"CHLG_PARA_SET_04",
+"CHLG_PARA_SET_05",
+"CHLG_PARA_SET_06",
+"CHLG_PARA_SET_07",
+"OPEN_GIRL_PIC",
+"CLOSE_GIRL_PIC",
+"FRM_SHO_ENTRY",
+"ANIME_START",
+"ANIME_ARTS",
+"ANIME_ARTS_LOOP",
+"ANIME_ARTS_LOP_E",
+"ANIME_INIT",
+"ANIME_LOCSET",
+"APUTS",
+"ANIM_NUM",
+"APUT",
+"ANM_PTN_LOAD",
+"XGRP_OPEN",
+"FRAME_OPEN",
+"FRAME_HYOSHO",
+"SHOW_ITEMS",
+"TAKE_ITEM"
+],
+"first_text": "很多的作品都放在一起﹐TXA(NAME_FIRST)的作品也是其中一幅。"
+},
+"TXS2/SSCOOK.TXT": {
+"lines": 824,
+"labels": [
+"COOK_MAIN",
+"CHLNG_TBL_SET",
+"CHLNG_TBL_SET_LOP",
+"CHLNG_CHECK",
+"SCORE_CHK",
+"CHALNG_PARA_SET",
+"CHALNG_MESS_SET",
+"CHLG_PARA_SET_01",
+"CHLG_MESS_SET_01",
+"CHLG_PARA_SET_02",
+"CHLG_MESS_SET_02",
+"CHLG_PARA_SET_03",
+"CHLG_MESS_SET_03",
+"CHLG_PARA_SET_04",
+"CHLG_MESS_SET_04",
+"CHLG_PARA_SET_05",
+"CHLG_MESS_SET_05",
+"CHLG_PARA_SET_06",
+"CHLG_MESS_SET_06",
+"SINSACYU",
+"SINSACYU_CLOSE",
+"SINSA_NAME",
+"SLCT_SINSAIN",
+"FRM_ALL_SHO",
+"FRM_SHO_ENTRY",
+"ANIME_INIT",
+"ANIME_EATS_INIT",
+"APUTSMEN",
+"APUTSNABE",
+"APUTS",
+"ANIM_NUM",
+"APUT",
+"BPUTS",
+"BANIM_NUM",
+"BAPUT",
+"ANIME_START",
+"ANIME_COOK",
+"ANIME_COOK_LOOP",
+"ANIME_COOK_LOP_E",
+"ANIME_COOK_END",
+"ANIME_EATS",
+"ANIME_EATS_LOOP",
+"ANIME_EATS_LOP_E",
+"XGRP_OPEN",
+"FRAME_OPEN",
+"ANM_PTN_LOAD",
+"ANM_PTN_LOAD_NABE",
+"ANM_PTN_LOAD2N",
+"FRAME_HYOSHO",
+"SHOW_ITEMS",
+"TAKE_ITEM"
+],
+"first_text": "「彼此加油吧﹗」"
+},
+"TXS2/SSRUNS.TXT": {
+"lines": 503,
+"labels": [
+"SLCT_LOOP",
+"SLCT_LOOP_2",
+"MSG_PLAN",
+"DRESS_ALL_COUNT",
+"SYUKAKU_TITLE",
+"AREA_BACK",
+"AREA_RESTORE",
+"AREA_BACK2",
+"AREA_RESTORE2",
+"SSBATL",
+"SSARTS",
+"SSDANC",
+"CHANGE_DRESS",
+"CHANGE_DR_LOOP",
+"DRESS_CHK",
+"DRESS_AGE_CHECK",
+"SSCOOK",
+"EVENT019",
+"EVNT019",
+"EVNT019MAIN",
+"RIVAL_1_TYPE",
+"RIVAL_2_TYPE",
+"RIVAL_3_TYPE",
+"RIVAL_4_TYPE",
+"SCHD_SELECTX",
+"SCHD_CHANGE",
+"SCHD_NO_CHANGE"
+],
+"first_text": "要參加那一項呢﹖"
+},
+"TXTR/TRG000.TXT": {
+"lines": 398,
+"labels": [
+"R_KAGAKU",
+"ALL_OPEN",
+"ALL_OPEN2ND",
+"ALL_OPEN2",
+"ALL_CLOSE",
+"GXXSTART",
+"GXXD",
+"GXXDGOLD",
+"SUCCESS_CHK",
+"ANIME_INIT",
+"ANIME_OPEN",
+"ANIME_CLOSE",
+"ANIME_WIDW",
+"ANIME_WIDW_SHOW",
+"ANMT001",
+"ANMTSUNDAY",
+"ANIM_NUM",
+"APUT",
+"BORTH_CHECK",
+"CHK_RENAI"
+],
+"first_text": "鍊金術師巴克雷歐"
+},
+"TXTR/TRG001.TXT": {
+"lines": 441,
+"labels": [
+"R_SHIBUN",
+"ALL_OPEN",
+"ALL_OPEN2ND",
+"ALL_OPEN2",
+"ALL_CLOSE",
+"GXXSTART",
+"GXXD",
+"GXXDGOLD",
+"SUCCESS_CHK",
+"ANIME_INIT",
+"ANIME_OPEN",
+"ANIME_CLOSE",
+"ANIME_WIDW",
+"ANIME_WIDW_SHOW",
+"ANMT001",
+"ANMTSUNDAY",
+"ANIM_NUM",
+"APUT",
+"BORTH_CHECK",
+"CHK_RENAI"
+],
+"first_text": "詩人卡姆斯多古"
+},
+"TXTR/TRG002.TXT": {
+"lines": 416,
+"labels": [
+"R_SHINGAKU",
+"ALL_OPEN",
+"ALL_OPEN2ND",
+"ALL_OPEN2",
+"ALL_CLOSE",
+"GXXSTART",
+"GXXD",
+"GXXDGOLD",
+"SUCCESS_CHK",
+"ANIME_INIT",
+"ANIME_OPEN",
+"ANIME_CLOSE",
+"ANIME_WIDW",
+"ANIME_WIDW_SHOW",
+"ANMT001",
+"ANMTSUNDAY",
+"ANIM_NUM",
+"APUT",
+"BORTH_CHECK",
+"CHK_RENAI"
+],
+"first_text": "「各位﹐我是教會的麗修女。」"
+},
+"TXTR/TRG003.TXT": {
+"lines": 402,
+"labels": [
+"R_GUNGAKU",
+"ALL_OPEN",
+"ALL_OPEN2ND",
+"ALL_OPEN2",
+"ALL_CLOSE",
+"GXXSTART",
+"GXXD",
+"GXXDGOLD",
+"SUCCESS_CHK",
+"ANIME_INIT",
+"ANIME_OPEN",
+"ANIME_CLOSE",
+"ANIME_WIDW",
+"ANIME_WIDW_SHOW",
+"ANMT001",
+"ANMTSUNDAY",
+"ANIM_NUM",
+"APUT",
+"BORTH_CHECK",
+"CHK_RENAI"
+],
+"first_text": "「各位﹐我是本國的上將﹐俗稱『百勝將軍』的艾爾溫•尤哈尼斯•歐亦肯•庫魯卡。」"
+},
+"TXTR/TRG004.TXT": {
+"lines": 431,
+"labels": [
+"R_KENJYUTSU",
+"CLOSED_DOJO",
+"ALL_OPEN",
+"ALL_OPEN_BG",
+"ALL_OPEN2ND",
+"ALL_OPEN2",
+"ALL_CLOSE",
+"GXXSTART",
+"GXXD",
+"GXXDGOLD",
+"SUCCESS_CHK",
+"ANIME_INIT",
+"ANIME_OPEN",
+"ANIME_OPEN_BGONLY",
+"ANIME_CLOSE",
+"ANIME_WIDW",
+"ANIME_WIDW_SHOW",
+"ANMT001",
+"ANMTSUNDAY",
+"ANIM_NUM",
+"APUT",
+"BORTH_CHECK",
+"EVENT023",
+"CHK_RENAI"
+],
+"first_text": "「哦﹐我是這個道場的老師。名雷夫；姓德魯﹐叫我雷夫德魯就好啦﹗我的指導是少了些﹐不過實戰中很有用的。」"
+},
+"TXTR/TRG005.TXT": {
+"lines": 424,
+"labels": [
+"R_KAKUTO",
+"ALL_OPEN",
+"ALL_OPEN2ND",
+"ALL_OPEN2",
+"ALL_CLOSE",
+"GXXSTART",
+"GXXD",
+"GXXDGOLD",
+"SUCCESS_CHK",
+"ANIME_INIT",
+"ANIME_OPEN",
+"ANIME_CLOSE",
+"ANIME_WIDW",
+"ANIME_WIDW_SHOW",
+"ANMT001",
+"ANMTSUNDAY",
+"ANIM_NUM",
+"APUT",
+"BORTH_CHECK",
+"CHK_RENAI"
+],
+"first_text": "格鬥家卡爾霍克斯"
+},
+"TXTR/TRG006.TXT": {
+"lines": 407,
+"labels": [
+"R_MAGIC",
+"ALL_OPEN",
+"ALL_OPEN2ND",
+"ALL_OPEN2",
+"ALL_CLOSE",
+"GXXSTART",
+"GXXD",
+"GXXDGOLD",
+"SUCCESS_CHK",
+"ANIME_INIT",
+"ANIME_OPEN",
+"ANIME_CLOSE",
+"ANIME_WIDW",
+"ANIME_WIDW_SHOW",
+"ANMT001",
+"ANMTSUNDAY",
+"ANIM_NUM",
+"APUT",
+"BORTH_CHECK",
+"CHK_RENAI"
+],
+"first_text": "魔法師巴托拿姆"
+},
+"TXTR/TRG007.TXT": {
+"lines": 396,
+"labels": [
+"R_REIHO",
+"ALL_OPEN",
+"ALL_OPEN2ND",
+"ALL_OPEN2",
+"ALL_CLOSE",
+"GXXSTART",
+"GXXD",
+"GXXDGOLD",
+"SUCCESS_CHK",
+"ANIME_INIT",
+"ANIME_OPEN",
+"ANIME_CLOSE",
+"ANIME_WIDW",
+"ANIME_WIDW_SHOW",
+"ANMT001",
+"ANMTSUNDAY",
+"ANIM_NUM",
+"APUT",
+"BORTH_CHECK",
+"CHK_RENAI"
+],
+"first_text": "「我已經是個年老的人﹐畢生採取古代方式﹐傳授宮中禮儀作法、典禮的教學者。」"
+},
+"TXTR/TRG008.TXT": {
+"lines": 429,
+"labels": [
+"R_KAIGA",
+"ALL_OPEN",
+"ALL_OPEN2ND",
+"ALL_OPEN2",
+"ALL_CLOSE",
+"GXXSTART",
+"GXXD",
+"GXXDGOLD",
+"SUCCESS_CHK",
+"ANIME_INIT",
+"ANIME_OPEN",
+"ANIME_CLOSE",
+"ANIME_WIDW",
+"ANIME_WIDW_SHOW",
+"ANMT001",
+"ANMTSUNDAY",
+"ANIM_NUM",
+"APUT",
+"EVENT039",
+"BORTH_CHECK",
+"CHK_RENAI"
+],
+"first_text": "王宮畫師斐魯金斯"
+},
+"TXTR/TRG009.TXT": {
+"lines": 405,
+"labels": [
+"R_BUYOH",
+"ALL_OPEN",
+"ALL_OPEN2ND",
+"ALL_OPEN2",
+"ALL_CLOSE",
+"GXXSTART",
+"GXXD",
+"GXXDGOLD",
+"SUCCESS_CHK",
+"ANIME_INIT",
+"ANIME_OPEN",
+"ANIME_CLOSE",
+"ANIME_WIDW",
+"ANIME_WIDW_SHOW",
+"ANMT001",
+"ANMTSUNDAY",
+"ANIM_NUM",
+"APUT",
+"BORTH_CHECK",
+"CHK_RENAI"
+],
+"first_text": "「對於首度出現在社交界﹐想要引起眾人注意的女孩而言﹐舞蹈的本事是最大的武器。為了自已好﹐努力學習吧﹗」"
+},
+"TXTX/TEST.TXT": {
+"lines": 179,
+"labels": [
+"START",
+"TEXTTEST",
+"ADVFREAM",
+"XGIRL",
+"XREDRAW10A",
+"XREDRAW11A",
+"XREDRAW12A",
+"XREDRAW13A",
+"XREDRAW14A",
+"XREDRAW15A",
+"XREDRAW16A",
+"XREDRAW17A",
+"GIRLFACE",
+"FACETEST",
+"ROOMPICTURE",
+"RANDAM_TEST"
+],
+"first_text": "戰士評價上昇一百點。"
+},
+"TXTX/TEST02.TXT": {
+"lines": 1025,
+"labels": [
+"ALL_EXIT",
+"KAIMONO_NANDEMO",
+"NANDEMO_LOOP",
+"SONOTA_MENU",
+"SONOTA_MEN2",
+"FF_YEAR",
+"FF_MONTH",
+"NANDEMO_NEXT",
+"NANDEMO_SHOP",
+"NANDEMO_SELECT",
+"NANDEMO_BUY",
+"NANDEMO_SETSUMEI",
+"NANDEMO_SETSUMEI_2",
+"NANDEMO_SET",
+"NANDEMO_SET_2",
+"GIVE1000G",
+"GIVE100000G",
+"PRICE_DOWN",
+"URAURA_OPEN",
+"URAURA_2_OPEN",
+"URAURA_25_OPEN",
+"URAURA_25_OPEN2",
+"URAURA_3_OPEN",
+"URAURA_4_OPEN",
+"EVENT_SWITCH",
+"PLAYER_SOUND",
+"PLAYER_SOUND01N",
+"PLAYER_SOUND02N",
+"PLAYER_ONGAKU",
+"SLCT_MUSIC01N",
+"SLCT_MUSIC02N",
+"SLCT_MUSIC03N",
+"SLCT_MUSIC04N",
+"SLCT_MUSIC05N",
+"MUSYA_SLCT_BATL",
+"BUGE_SLCT_BATL",
+"DOJO_SLCT_BATL",
+"MOPIII",
+"ITEM_FULL"
+],
+"first_text": "神秘商店•摩比星人"
+},
+"TXTX/TEST03.TXT": {
+"lines": 134,
+"labels": [
+"MAIN",
+"BANNOGATA01",
+"BANNOGATA02",
+"BANNOGATA03",
+"BANNOGATA04",
+"SENSHIGATA01",
+"MAHOGATA01",
+"SYAKOHGATA01",
+"KAJIGATA01",
+"GEIJYUTSUGATA01",
+"ANKOKUGATA01",
+"LOADXX"
+],
+"first_text": "十八歲．．．她離開了親人﹐獨自踏入了這個社會中．．．．．．"
+},
+"TXTX/TEST04.TXT": {
+"lines": 648,
+"labels": [
+"MAIN",
+"BANNOGATA01",
+"BANNOGATA02",
+"BANNOGATA03",
+"BANNOGATA04",
+"SENSHIGATA01",
+"MAHOGATA01",
+"SYAKOHGATA01",
+"KAJIGATA01",
+"GEIJYUTSUGATA01",
+"ANKOKUGATA01",
+"ALL_CLEAR"
+],
+"first_text": ""
+},
+"TXTX/TEST05.TXT": {
+"lines": 105,
+"labels": [
+"MAIN",
+"TOKUSYUGATA",
+"TSUUJYOGATA",
+"MIKONGATA",
+"ALL_CLEAR"
+],
+"first_text": ""
+},
+"TXTX/TEST99.TXT": {
+"lines": 1194,
+"labels": [
+"TESTLD"
+],
+"first_text": "檔案載入測試中"
+}
+}

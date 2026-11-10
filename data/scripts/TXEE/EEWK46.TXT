@@ -1,0 +1,118 @@
+TTL$("傭兵")
+
+START
+
+OPEN(3)
+TXGIRL(0)
+「傷腦筋呀．．．一直都找不到好差事。雖然我有這麼高的戰士評價﹐但是接下來該如何是好．．．．．．」
+@T
+OPEN(2)
+TXFACE("F130")
+「嘻嘻嘻．．．不過是很平常的煩惱嘛．．．妳找不到差事的理由很簡單﹐是因為品行不好吧。」
+@T
+SS$(3)
+@C
+TXGIRL(12)
+「哼﹐我又沒有做什麼壞事。」
+@T
+SS$(2)
+@C
+
+「只是妳不知道罷了．．．好吧﹐以妳的程度可以試著成為一名士兵﹐不過城裡恐怕不會雇用妳．．．所以除了到其它國家當傭兵外沒有別的辦法了。」
+@T
+SS$(3)
+@C
+TXGIRL(0)
+「傭兵﹖總覺得很不起眼的樣子．．．．．．」
+@T
+SS$(2)
+@C
+
+「這是個危險的工作﹐不過像妳這樣的人．．．也只有考慮看看了．．．．．．」
+@T
+SS$(3)
+@C
+TXGIRL(17)
+「傭兵嗎．．．說不定能比一直待在家裡要好．．．好﹗我決定了﹐就離家去當傭兵吧﹗」
+@T
+CLOSE(3)
+CLOSE(2)
+PICWORKING("Z032")
+OPEN(1)
+就這樣﹐GN$•FN$決定到其它國家當傭兵．．．．．．
+@T
+CLOSE(1)
+
+FINAL
+
+*GN$
+TXA(NAME_FIRST)
+RET
+
+*FN$
+TXA(NAME_FAMILY)
+RET
+
+*OPEN
+IF(AX=1)TXOPEN(10) RET
+IF(AX=2)TXOPEN(13) RET
+IF(AX=3)TXOPEN(15) RET
+IF(AX=4)TXOPEN(14) RET
+RET
+
+*CLOSE
+IF(AX=1)TXCLOSE(10) RET
+IF(AX=2)TXCLOSE(13) RET
+IF(AX=3)TXCLOSE(15) RET
+IF(AX=4)TXCLOSE(14) RET
+RET
+
+*SS$
+IF(AX=1)TXSLCT(10) RET
+IF(AX=2)TXSLCT(13) RET
+IF(AX=3)TXSLCT(15) RET
+IF(AX=4)TXSLCT(14) RET
+RET
+
+*TTL$
+RET
+
+*START
+TXLC(10,21,220,0)
+TXLC(13,32,146,1)
+TXLC(14,32,20,1)
+TXLC(15,17,270,2)
+RET
+
+*FINAL
+LOAD("EEWEDD")
+RET
+
+*PICWORKING
+
+STRSTACK
+C5 = BX
+PTBK(2)
+PTLD("ENDWFRML")
+PTLA("ENDWFRMR")
+PTLA("ENDWFRMU")
+PTLA("ENDWFRMD")
+PTBK(0)
+PTLD("ENDWFRMM")
+PTX(20,0,0)
+PTBK(2)
+PTM(12,0,0)
+PTM(60,0,2)
+PTM(18,-40,4)
+PTM(18,400,6)
+PIC(11)
+PTBK(0)
+PTX(0,0,0)
+SI = C5
+PTLD
+PTMF(0,0,0)
+PIC(12)
+PIC(13,0,0,20,0,40,400)
+TIMER1(120)WAIT1
+RET
+
