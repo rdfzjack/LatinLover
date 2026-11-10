@@ -1,0 +1,118 @@
+TTL$("獎金獵人")
+
+START
+
+OPEN(2)
+TXFACE("F107")
+「呼．．．逃到這裡應該沒有問題了．．．．．．」
+@T
+OPEN(3)
+TXGIRL(17)
+「不要逃﹗你這個該死的逃犯﹗」
+@T
+SS$(2)
+@C
+
+「什麼﹗﹖那裡來的小女孩﹐要命的話就快點把衣服脫掉﹐我還可以饒妳不死。」
+@T
+SS$(3)
+@C
+TXGIRL(14)
+「哼．．．這裡可沒有人能救你了﹐認命吧﹗」
+@T
+CLOSE(3)
+CLOSE(2)
+OPEN(1)
+說時遲那時快﹐GN$一劍斬殺了逃犯．．．．．．
+@T
+CLOSE(1)
+
+OPEN(2)
+TXFACE("F121")
+「啊﹐這不是逃犯唐＝雷歐•強納生嗎﹖他的頭值２０００Ｇ。」
+@T
+OPEN(3)
+TXGIRL(0)
+「哼．．．這種程度只有２０００Ｇ呀．．．一直都找不到什麼事做﹐不如就來賺獎金好了。」
+@T
+CLOSE(3)
+CLOSE(2)
+PICWORKING("Z031")
+OPEN(1)
+就這樣﹐GN$•FN$開始在王國中成為一名獎金獵人．．．．．．
+@T
+CLOSE(1)
+
+FINAL
+
+*GN$
+TXA(NAME_FIRST)
+RET
+
+*FN$
+TXA(NAME_FAMILY)
+RET
+
+*OPEN
+IF(AX=1)TXOPEN(10) RET
+IF(AX=2)TXOPEN(13) RET
+IF(AX=3)TXOPEN(15) RET
+IF(AX=4)TXOPEN(14) RET
+RET
+
+*CLOSE
+IF(AX=1)TXCLOSE(10) RET
+IF(AX=2)TXCLOSE(13) RET
+IF(AX=3)TXCLOSE(15) RET
+IF(AX=4)TXCLOSE(14) RET
+RET
+
+*SS$
+IF(AX=1)TXSLCT(10) RET
+IF(AX=2)TXSLCT(13) RET
+IF(AX=3)TXSLCT(15) RET
+IF(AX=4)TXSLCT(14) RET
+RET
+
+*TTL$
+RET
+
+*START
+TXLC(10,21,220,0)
+TXLC(13,32,146,1)
+TXLC(14,32,20,1)
+TXLC(15,17,270,2)
+RET
+
+*FINAL
+LOAD("EEWEDD")
+RET
+
+*PICWORKING
+
+STRSTACK
+C5 = BX
+PTBK(2)
+PTLD("ENDWFRML")
+PTLA("ENDWFRMR")
+PTLA("ENDWFRMU")
+PTLA("ENDWFRMD")
+PTBK(0)
+PTLD("ENDWFRMM")
+PTX(20,0,0)
+PTBK(2)
+PTM(12,0,0)
+PTM(60,0,2)
+PTM(18,-40,4)
+PTM(18,400,6)
+PIC(11)
+PTBK(0)
+PTX(0,0,0)
+SI = C5
+PTLD
+PTMF(0,0,0)
+PIC(12)
+PIC(13,0,0,20,0,40,400)
+TIMER1(120)WAIT1
+RET
+

@@ -1,0 +1,131 @@
+
+
+
+
+
+
+
+.WORKS_NUM
+.WORKS_CLASS
+
+WORKS_NUM	=	ENDNM[4]
+WORKS_CLASS	=	ENDNM[5]
+
+START
+OPEN(1)
+
+TENMATSU
+
+TIMER1(60)
+PTLD("ENDPALET")
+PALET_SETONLY(0,1)
+PTPLT(2,0)
+EFC(14,1,0)
+PTPLT(0,0)
+EFC(16)
+WAIT1
+@T
+
+CLOSE(3)
+FINAL
+
+LOAD("EEALLE")
+
+
+*TENMATSU
+
+IF(WORKS_NUM = 63)
+	IF(WORKS_CLASS = 1)
+		GN$的後半輩子就在家庭中渡過﹐和波瀾萬丈的父親比較起來﹐可真是太謹慎了。
+		@T
+		@C
+		勇者之子過著平凡的人生也不必嘆息﹐因為和平的人生才是無法言喻的珍寶。
+		@T
+		@C
+		再怎麼說﹐GN$也是一個魅力十足的女性﹐在人生的旅途中也增長了不少見識﹐
+		@T
+		@C
+		自古就有人常說：「贏得美人心」這句話。
+		@T
+		CLOSE(1)
+		OPEN(3)
+		TXGIRL(0)
+		「常有人這麼說：『父親是個正直的人』．．．．．．」
+		RET
+
+	IF(WORKS_CLASS = 2)
+		接受家庭教育的GN$後半輩子﹐和波瀾萬丈的父親比較起來﹐可說是彬彬有禮的女子。
+		@T
+		@C
+		勇者之子過著平凡的人生也不必嘆息﹐因為和平的人生才是無法言喻的珍寶。
+		@T
+		@C
+		再怎麼說﹐GN$也是一個魅力十足的女性﹐在人生的旅途中也增長了不少見識﹐
+		@T
+		@C
+		自古就有人常說：「贏得美人心」這句話。
+		@T
+		@C
+		但是﹐若稍微減肥一下會更好．．．．．．
+		@T
+		CLOSE(1)
+		OPEN(3)
+		TXGIRL(18)
+		「哎呀﹐我的衣服尺寸不合﹐都不能穿了．．．．．．」
+		RET
+
+	IF(WORKS_CLASS = 3)
+		GN$的下半輩子就在家庭中渡過了﹐和波瀾萬丈的父親比較起來﹐可真是謹慎的多了。
+		@T
+		@C
+		勇者之子過著平凡的人生也不必嘆息﹐因為和平的人生才是無法言喻的珍寶。
+		@T
+		@C
+		父親建造了這個國家的和平﹐只要這個國家能夠持續著和平的狀態﹐人們就不會忘記勇者FN$的名字﹐也會將勇者的感激回饋到其女兒GN$的身上。
+		@T
+		@C
+		平平凡凡﹐也是一種幸福吧．．．．．．
+		@T
+		CLOSE(1)
+		OPEN(3)
+		TXGIRL(0)
+		「父親﹐永遠都是很有精神的．．．．．．」
+		RET
+
+RET
+
+*GN$
+TXA(NAME_FIRST)
+RET
+
+*FN$
+TXA(NAME_FAMILY)
+RET
+
+*OPEN
+IF(AX=1)TXOPEN(10) RET
+IF(AX=2)TXOPEN(13) RET
+IF(AX=3)TXOPEN(15) RET
+IF(AX=4)TXOPEN(14) RET
+RET
+
+*CLOSE
+IF(AX=1)TXCLOSE(10) RET
+IF(AX=2)TXCLOSE(13) RET
+IF(AX=3)TXCLOSE(15) RET
+IF(AX=4)TXCLOSE(14) RET
+RET
+
+*START
+TXLC(10,21,220,0)
+TXLC(13,32,146,1)
+TXLC(14,32,20,1)
+TXLC(15,17,270,2)
+RET
+
+*FINAL
+LOAD("EEALLE")
+RET
+
+RET
+

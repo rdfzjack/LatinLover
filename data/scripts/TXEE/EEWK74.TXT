@@ -1,0 +1,345 @@
+TTL$("魔王")
+
+
+
+
+
+PLAY(2)
+
+FRAME_BACK
+
+START
+
+OPEN(2)
+TXFACE("F042")
+「最近小姐很奇怪﹖都在半夜時出門．．．可是她又沒有男朋友呀﹖今晚我就跟著她後頭去看看吧．．．．．．」
+@T
+CLOSE(2)
+OPEN(1)
+那晚﹐管家偷偷地跟在GN$的後頭﹐GN$越過了沙漠﹐走入了被傳為地獄之門的溶岩地帶．．．．．．
+@T
+CLOSE(1)
+OPEN(4)
+TXFACE("F046")
+「又不是在武者修行﹐到底想在這裡做什麼呢﹖」
+@T
+CLOSE(4)
+OPEN(3)
+TXGIRL(14)
+「喂﹗該死的魔王﹐你趕快給我滾出來﹗」
+@T
+OPEN(2)
+TXFACE("F198")
+「喔喝．．．怎麼又來了呢﹖真是好了瘡疤忘了疼﹗」
+@T
+OPEN(4)
+TXFACE("F044")
+「啊啊啊．．．那不是地下界的魔王嗎﹖」
+@T
+CLOSE(4)
+SS$(3)
+@C
+
+「今天我特地來取你性命﹗」
+@T
+SS$(2)
+@C
+
+「呵呵呵．．．沒有用的﹗即使妳殺了我﹐也沒有什麼好處吧﹖」
+@T
+SS$(3)
+@C
+
+「少廢話﹗」
+@T
+CLOSE(3)
+CLOSE(2)
+OPEN(1)
+GN$與魔王的戰鬥﹐持續了好幾個小時。
+@T
+@C
+一開始佔於優勢的魔王﹐經過GN$激烈的攻打之後﹐變得只有防衛而無還擊的能力了。
+@T
+CLOSE(1)
+OPEN(3)
+TXGIRL(2)
+「看我致命的一擊﹗」
+@T
+OPEN(2)
+TXFACE("F198")
+「嗚．．．居然被打敗了﹗沒想到還有人跟我一樣強．．．．．．」
+@T
+CLOSE(2)
+SS$(3)
+@C
+TXGIRL(17)
+「成功了﹗終於打敗魔王了．．．@@
+@T
+TXGIRL(7)
+啊啊啊啊啊啊﹗」
+@T
+OPEN(2)
+TXFACE("F047")
+「小姐﹗發生什麼事情了﹖」
+@T
+SS$(3)
+@C
+TXGIRL(7)
+「喔喔．．．好．好痛唷．．．．．．」
+@T
+OPEN(4)
+TXFACE("F198")
+「呵呵呵．．．怎麼樣﹖我說妳還是打不贏我吧．．．．．．」
+@T
+SS$(2)
+@C
+TXFACE("F045")
+「可惡的魔王﹗你把小姐怎麼了﹖」
+@T
+SS$(4)
+@C
+
+「嗯．．．你是管家吧﹖我什麼也沒做．．．這全是她自己的緣故．．．．．．」
+@T
+SS$(2)
+@C
+
+「你說什麼﹗﹖」
+@T
+SS$(4)
+@C
+
+「你如果是魔界的人﹐就應該知道．．．在地下魔王死的時候﹐會把王位讓給和他最相稱的人．．．．．．」
+@T
+SS$(2)
+@C
+TXFACE("F044")
+「咦﹖你是說．．．小姐嗎﹖」
+@T
+SS$(4)
+@C
+
+「沒錯．．．如果我過於偏袒與自己親近的人﹐那會矇蔽了智慧的眼睛。而這女孩有股邪惡之氣﹐正好是治理魔界之國最好的人選．．．．．．」
+@T
+SS$(2)
+@C
+
+「呃．．．但．但是這．．．．．．」
+@T
+SS$(4)
+@C
+
+「這樣一來﹐我才能安心地死．．．再見了﹗未來魔界之王的管家．．．．．．」
+@T
+CLOSE(4)
+SS$(3)
+@C
+
+「啊啊等等．．．．．．」
+@T
+SS$(2)
+@C
+TXFACE("F042")
+「小姐的意識變的薄弱了．．．如果照魔王所言﹐恐怕很難再清醒了．．．．．．」
+@T
+CLOSE(2)
+CLOSE(3)
+OPEN(1)
+第二天﹐GN$突然消失了蹤影﹐不再回家了．．．．．．TIMER1(30)WAIT1
+GN$仍然一直下落不明。
+@T
+@C
+不過﹐傳說有一位流浪的劍士﹐曾在溶岩地帶的洞窟中﹐偷看到魔王的慶祝宴會。而那個魔王﹐是個年輕的女子．．．．．．
+@T
+EFC(1)
+
+CLOSE(1)
+PICWORKING("Z060")
+TXF(7,ENDNM[19])
+
+
+
+OPEN(1)
+GN$在地獄的世界中﹐當上了魔王﹐君臨天下。
+@T
+@C
+所謂的魔王﹐就是地獄之王﹐也就是地下魔王。
+@T
+@C
+天帝是天神中的領導者﹐他為了要統治地獄世界中的妖魔﹐而冊封最有力的人為地下魔王。
+@T
+@C
+制序之國是天堂﹐混沌之國是地獄﹐而同時擁有制序與混沌的是人間。這三界就是整個世界的全部。
+@T
+@C
+地下魔王的任務就是統制地獄中狂暴的魔鬼﹐以及征服動不動就墮落的人類。
+@T
+@C
+現在﹐被天庭賦與生命的GN$﹐在人間被撫育成人後﹐而下降到地獄世界去。
+@T
+@C
+在得到永�琲漸糽R後﹐地獄的妖魔們也將受到統治。
+@T
+@C
+就這樣﹐如果人們建設了良好的世界﹐可能就不會再看到GN$了吧﹗
+@T
+@C
+不過﹐如果再次墮落﹐只沉溺於享樂之中﹐那麼就會被魔王GN$所征服．．．．．．
+@T
+CLOSE(1)
+
+.SYUGOTYPE
+
+TIMER1(60)
+PTBK(0)
+PTLD("ENDSYUGL")
+PTLA("ENDSYUGR")
+PTLA("ENDSYUGU")
+PTLA("ENDSYUGD")
+WAIT1
+
+EFC(4)
+TIMER1(60)
+PTX(0,0,0)
+PTX(40,0,1)
+PTX(0,-40,2)
+PTX(0,400,3)
+
+PALET_SETONLY(0,0)
+WAIT1
+EFC(3)
+
+TXF(8,P_SYUGOSEI,60,120)
+
+TXLC(19,10,124,0)
+
+*ENDHYOUKA
+
+IF ( P_SYUGOSEI = 0 )SYUGOTYPE = 1
+IF ( P_SYUGOSEI = 1 )SYUGOTYPE = 2
+IF ( P_SYUGOSEI = 2 )SYUGOTYPE = 3
+IF ( P_SYUGOSEI = 3 )SYUGOTYPE = 2
+IF ( P_SYUGOSEI = 4 )SYUGOTYPE = 3
+IF ( P_SYUGOSEI = 5 )SYUGOTYPE = 2
+IF ( P_SYUGOSEI = 6 )SYUGOTYPE = 1
+IF ( P_SYUGOSEI = 7 )SYUGOTYPE = 2
+IF ( P_SYUGOSEI = 8 )SYUGOTYPE = 1
+IF ( P_SYUGOSEI = 9 )SYUGOTYPE = 1
+
+
+
+IF ( SYUGOTYPE = 1 )
+	TXOPEN(19)
+	「．．．GN$的命運會變成這樣是我所料想不到的．．．GN$原本是個擁有聖潔靈魂的人﹐如今或許是人間的污穢﹐給她深遠的影響所造成的吧﹗．．．」
+	@T
+	@C
+	「GN$今後將成為地獄之王而君臨天下﹐不知那是幸運或是不幸﹖反正﹐這將永遠地持續下去﹐直到有替代者出現．．．．．．」
+
+
+IF ( SYUGOTYPE = 2 )
+	TXOPEN(19)
+	「．．．GN$的命運會變成如此﹐是我所預料不到的．．．GN$是個擁有聖潔靈魂的人﹐如今受到人間污穢所給她的影響﹐竟然會是如此的結果．．．」
+	@T
+	@C
+	「GN$如今將成為地獄之王而君臨天下吧﹖不管這是不是幸運﹐都得永久地持續下去﹐直到有替代者出現為止．．．．．．」
+
+
+IF ( SYUGOTYPE = 3 )
+	TXOPEN(19)
+	「真沒想到GN$的命運會變成這個樣子﹗．．．．．．原本GN$是個擁有聖潔靈魂的人﹐而如今受到人間污穢所給她的影響﹐下場竟然會是如此．．．」
+	@T
+	@C
+	「GN$如今成為地獄之王而君臨天下﹐希望這是幸運的選擇﹖否則她就得痛苦地持續下去﹐直到有替代者出現為止．．．．．．」
+
+
+FINAL
+
+
+
+
+*GN$
+TXA(NAME_FIRST)
+RET
+
+*FN$
+TXA(NAME_FAMILY)
+RET
+
+*OPEN
+IF(AX=1)TXOPEN(10) RET
+IF(AX=2)TXOPEN(13) RET
+IF(AX=3)TXOPEN(15) RET
+IF(AX=4)TXOPEN(14) RET
+RET
+
+*CLOSE
+IF(AX=1)TXCLOSE(10) RET
+IF(AX=2)TXCLOSE(13) RET
+IF(AX=3)TXCLOSE(15) RET
+IF(AX=4)TXCLOSE(14) RET
+RET
+
+*SS$
+IF(AX=1)TXSLCT(10) RET
+IF(AX=2)TXSLCT(13) RET
+IF(AX=3)TXSLCT(15) RET
+IF(AX=4)TXSLCT(14) RET
+RET
+
+*TTL$
+RET
+
+*START
+TXLC(10,21,220,0)
+TXLC(13,32,146,1)
+TXLC(14,32,20,1)
+TXLC(15,17,270,2)
+RET
+
+*FINAL
+LOAD("EESTAF")
+RET
+
+*FRAME_BACK
+PTBK(0)
+PTLD("ENDWORKL")
+PTLA("ENDWORKU")
+EFC(1)
+PTX(0,0,0)
+PTX(0,-40,1)
+PTLD("ENDWORKR")
+PTLA("ENDWORKD")
+PTX(40,0,0)
+PTX(0,400,1)
+EFC(0)
+RET
+
+*PICWORKING
+
+STRSTACK
+C5 = BX
+PTBK(2)
+PTLD("ENDWFRML")
+PTLA("ENDWFRMR")
+PTLA("ENDWFRMU")
+PTLA("ENDWFRMD")
+PTBK(0)
+PTLD("ENDWFRMM")
+PTX(20,0,0)
+PTBK(2)
+PTM(12,0,0)
+PTM(60,0,2)
+PTM(18,-40,4)
+PTM(18,400,6)
+EFC(0)
+PIC(11)
+PTBK(0)
+PTX(0,0,0)
+SI = C5
+PTLD
+PTMF(0,0,0)
+PIC(12)
+PIC(13,0,0,20,0,40,400)
+TIMER1(120)WAIT1
+RET
+

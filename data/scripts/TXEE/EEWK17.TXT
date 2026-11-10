@@ -1,0 +1,128 @@
+TTL$("狩獵區工作")
+
+START
+
+OPEN(2)
+TXFACE("F068")
+「啊﹗這不是GN$嗎﹖真是好久不見了。怎麼啦﹐現在在做些什麼﹖」
+@T
+OPEN(3)
+TXGIRL(10)
+「這個嘛．．．我還沒有決定要做什麼．．．．．．」
+@T
+SS$(2)
+@C
+
+「呵呵呵．．．原來妳還沒有決定工作呀﹗」
+@T
+SS$(3)
+@C
+TXGIRL(9)
+「．．．．．．﹖」
+@T
+SS$(2)
+@C
+
+「不如來做獵人吧﹗我一直找不到繼承者呢。」
+@T
+SS$(3)
+@C
+TXGIRL(0)
+「要我繼承﹖」
+@T
+SS$(2)
+@C
+
+「嗯﹐獵人的工作是相當辛苦的﹐一般沒有經驗的人也做不來。妳以前不是有做過嗎﹖想不想試試﹖」
+@T
+SS$(3)
+@C
+TXGIRL(1)
+「我懂了﹐我願意試試看。」
+@T
+SS$(2)
+@C
+
+「好﹗就這麼決定了。」
+@T
+CLOSE(2)
+CLOSE(3)
+PICWORKING("Z017")
+OPEN(1)
+就這樣﹐GN$•FN$開始成為一名獵人．．．．．．
+@T
+CLOSE(1)
+
+FINAL
+
+*GN$
+TXA(NAME_FIRST)
+RET
+
+*FN$
+TXA(NAME_FAMILY)
+RET
+
+*OPEN
+IF(AX=1)TXOPEN(10) RET
+IF(AX=2)TXOPEN(13) RET
+IF(AX=3)TXOPEN(15) RET
+IF(AX=4)TXOPEN(14) RET
+RET
+
+*CLOSE
+IF(AX=1)TXCLOSE(10) RET
+IF(AX=2)TXCLOSE(13) RET
+IF(AX=3)TXCLOSE(15) RET
+IF(AX=4)TXCLOSE(14) RET
+RET
+
+*SS$
+IF(AX=1)TXSLCT(10) RET
+IF(AX=2)TXSLCT(13) RET
+IF(AX=3)TXSLCT(15) RET
+IF(AX=4)TXSLCT(14) RET
+RET
+
+*TTL$
+RET
+
+*START
+TXLC(10,21,220,0)
+TXLC(13,32,146,1)
+TXLC(14,32,20,1)
+TXLC(15,17,270,2)
+RET
+
+*FINAL
+LOAD("EEWEDD")
+RET
+
+*PICWORKING
+
+STRSTACK
+C5 = BX
+PTBK(2)
+PTLD("ENDWFRML")
+PTLA("ENDWFRMR")
+PTLA("ENDWFRMU")
+PTLA("ENDWFRMD")
+PTBK(0)
+PTLD("ENDWFRMM")
+PTX(20,0,0)
+PTBK(2)
+PTM(12,0,0)
+PTM(60,0,2)
+PTM(18,-40,4)
+PTM(18,400,6)
+PIC(11)
+PTBK(0)
+PTX(0,0,0)
+SI = C5
+PTLD
+PTMF(0,0,0)
+PIC(12)
+PIC(13,0,0,20,0,40,400)
+TIMER1(120)WAIT1
+RET
+

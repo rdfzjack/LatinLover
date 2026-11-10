@@ -1,0 +1,128 @@
+TTL$("家庭教師工作")
+
+START
+
+OPEN(2)
+TXFACE("F070")
+「哎呀﹐這不是GN$小姐嗎﹖真是好久不見了。以前我的孩子真是多承蒙妳照顧了﹐現在在做什麼﹖」
+@T
+OPEN(3)
+TXGIRL(10)
+「這個嘛．．．我還沒有決定要做什麼．．．．．．」
+@T
+SS$(2)
+@C
+
+「啊﹗這可真是得救了。」
+@T
+SS$(3)
+@C
+TXGIRL(9)
+「．．．．．．﹖」
+@T
+SS$(2)
+@C
+
+「我向朋友說到你的事﹐他就說一定要妳來擔任他孩子的家庭教師．．．除此之外也有其它人在找家庭教師哩。現在家庭教師大家都搶著要呢。」
+@T
+SS$(3)
+@C
+TXGIRL(0)
+「哦﹐原來是這樣。」
+@T
+SS$(2)
+@C
+
+「不如做個專業的家庭教師吧﹖我來幫妳介紹工作地點好了。」
+@T
+SS$(3)
+@C
+TXGIRL(1)
+「謝謝﹗我想自己應該也很適合做一個家庭老師吧。」
+@T
+SS$(2)
+@C
+
+「那我立刻和朋友聯絡﹐他一定會很高興的﹐就拜託了。」
+@T
+CLOSE(2)
+CLOSE(3)
+PICWORKING("Z019")
+OPEN(1)
+就這樣﹐GN$•FN$就在伯爵夫人的忠告下成為家庭教師．．．．．．
+@T
+CLOSE(1)
+
+FINAL
+
+*GN$
+TXA(NAME_FIRST)
+RET
+
+*FN$
+TXA(NAME_FAMILY)
+RET
+
+*OPEN
+IF(AX=1)TXOPEN(10) RET
+IF(AX=2)TXOPEN(13) RET
+IF(AX=3)TXOPEN(15) RET
+IF(AX=4)TXOPEN(14) RET
+RET
+
+*CLOSE
+IF(AX=1)TXCLOSE(10) RET
+IF(AX=2)TXCLOSE(13) RET
+IF(AX=3)TXCLOSE(15) RET
+IF(AX=4)TXCLOSE(14) RET
+RET
+
+*SS$
+IF(AX=1)TXSLCT(10) RET
+IF(AX=2)TXSLCT(13) RET
+IF(AX=3)TXSLCT(15) RET
+IF(AX=4)TXSLCT(14) RET
+RET
+
+*TTL$
+RET
+
+*START
+TXLC(10,21,220,0)
+TXLC(13,32,146,1)
+TXLC(14,32,20,1)
+TXLC(15,17,270,2)
+RET
+
+*FINAL
+LOAD("EEWEDD")
+RET
+
+*PICWORKING
+
+STRSTACK
+C5 = BX
+PTBK(2)
+PTLD("ENDWFRML")
+PTLA("ENDWFRMR")
+PTLA("ENDWFRMU")
+PTLA("ENDWFRMD")
+PTBK(0)
+PTLD("ENDWFRMM")
+PTX(20,0,0)
+PTBK(2)
+PTM(12,0,0)
+PTM(60,0,2)
+PTM(18,-40,4)
+PTM(18,400,6)
+PIC(11)
+PTBK(0)
+PTX(0,0,0)
+SI = C5
+PTLD
+PTMF(0,0,0)
+PIC(12)
+PIC(13,0,0,20,0,40,400)
+TIMER1(120)WAIT1
+RET
+

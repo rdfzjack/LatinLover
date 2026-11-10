@@ -1,0 +1,133 @@
+TTL$("勇者（魔法型）")
+
+START
+
+OPEN(4)
+TXFACE("F042")
+「小姐．．．真的要出去旅行嗎﹖很危險耶．．．．．．」
+@T
+OPEN(2)
+TXFACE("F057")
+「GN$小姐唷﹐國王陛下想要任命妳為王國的魔法師﹐請妳一定要答應。」
+@T
+CLOSE(4)
+OPEN(3)
+TXGIRL(0)
+「老師﹐我非常感謝國王的心意﹐但是我還是想要到廣大的世界裡試試我的能力﹐昨晚已經取得父親的許可了．．．．．．」
+@T
+SS$(2)
+@C
+TXFACE("F049")
+「小姐．．．小姐呀﹐妳也選擇了和老爺一樣的路嗎﹖」
+@T
+SS$(3)
+@C
+TXGIRL(17)
+「不知道﹐但是這個世界這麼的廣大﹐沒有自己親眼看看總覺得有些可惜。」
+@T
+SS$(2)
+@C
+TXFACE("F057")
+「唉﹐果然是血脈相傳﹐不愧是勇者FN$的女兒。誰也無法阻擋妳的冒險心﹐那麼能不能和我約定一件事﹖」
+@T
+SS$(3)
+@C
+TXGIRL(0)
+「什麼事﹖」
+@T
+SS$(2)
+@C
+
+「不論多少年後﹐一定要再回到這裡來﹐讓我們聽聽妳的冒險事蹟。同時也讓我們再次的報答妳。」
+@T
+SS$(3)
+@C
+TXGIRL(1)
+「我知道了﹐老師。我一定會回來的﹐大家要多保重呀。」
+@T
+SS$(2)
+@C
+TXFACE("F046")
+「嗯嗯．．．小姐也要保重．．．．．．」
+@T
+CLOSE(3)
+CLOSE(2)
+PICWORKING("Z033")
+OPEN(1)
+就這樣﹐GN$•FN$踏上了冒險之行．．．在女兒的臉上﹐勇者FN$似乎看到了自己當年的神情．．．．．．
+@T
+CLOSE(1)
+
+FINAL
+
+*GN$
+TXA(NAME_FIRST)
+RET
+
+*FN$
+TXA(NAME_FAMILY)
+RET
+
+*OPEN
+IF(AX=1)TXOPEN(10) RET
+IF(AX=2)TXOPEN(13) RET
+IF(AX=3)TXOPEN(15) RET
+IF(AX=4)TXOPEN(14) RET
+RET
+
+*CLOSE
+IF(AX=1)TXCLOSE(10) RET
+IF(AX=2)TXCLOSE(13) RET
+IF(AX=3)TXCLOSE(15) RET
+IF(AX=4)TXCLOSE(14) RET
+RET
+
+*SS$
+IF(AX=1)TXSLCT(10) RET
+IF(AX=2)TXSLCT(13) RET
+IF(AX=3)TXSLCT(15) RET
+IF(AX=4)TXSLCT(14) RET
+RET
+
+*TTL$
+RET
+
+*START
+TXLC(10,21,220,0)
+TXLC(13,32,146,1)
+TXLC(14,32,20,1)
+TXLC(15,17,270,2)
+RET
+
+*FINAL
+LOAD("EEWEDD")
+RET
+
+*PICWORKING
+
+STRSTACK
+C5 = BX
+PTBK(2)
+PTLD("ENDWFRML")
+PTLA("ENDWFRMR")
+PTLA("ENDWFRMU")
+PTLA("ENDWFRMD")
+PTBK(0)
+PTLD("ENDWFRMM")
+PTX(20,0,0)
+PTBK(2)
+PTM(12,0,0)
+PTM(60,0,2)
+PTM(18,-40,4)
+PTM(18,400,6)
+PIC(11)
+PTBK(0)
+PTX(0,0,0)
+SI = C5
+PTLD
+PTMF(0,0,0)
+PIC(12)
+PIC(13,0,0,20,0,40,400)
+TIMER1(120)WAIT1
+RET
+

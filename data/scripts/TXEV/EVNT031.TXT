@@ -1,0 +1,334 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.S_WORKS
+.S_COUNTER
+.S_STARTDAY
+.S_ENDDAY
+.TODAY_COUNT
+.DAYLIGHT
+.SOUBI_FLG
+.SOUBI_REC
+.SOUBI_DAY
+
+S_WORKS 	=	BX
+S_COUNTER	=	CX
+S_STARTDAY	=	C1
+S_ENDDAY	=	C2
+TODAY_COUNT	=	C3
+DAYLIGHT	=	C4
+SOUBI_FLG	=	C5
+SOUBI_REC	=	C6
+SOUBI_DAY	=	C7
+
+.FLAG_IRON_ICON=0
+
+STRSCLEAR
+
+TXLC(1,17,280,0)
+TXLC(2,28,130,1)
+TXLC(3,13,260,2)
+WWIVENT(5,1,19,40)
+
+EVNT031
+
+WWMUSYA(9)
+WWMUSYA(8,1)
+
+BX = S_WORKS
+CX = S_COUNTER
+C1 = S_STARTDAY
+C2 = S_ENDDAY
+C3 = TODAY_COUNT
+C4 = DAYLIGHT
+C5 = SOUBI_FLG
+C6 = SOUBI_REC
+C7 = SOUBI_DAY
+
+IF ( S_WORKS = 0 )	LOAD("RPGLOP,RPG000")
+IF ( S_WORKS = 1 )	LOAD("RPGLOP,RPG001")
+IF ( S_WORKS = 2 )	LOAD("RPGLOP,RPG002")
+IF ( S_WORKS = 3 )	LOAD("RPGLOP,RPG003")
+
+TXOPEN(1)致命的錯誤WAITU
+
+
+
+
+
+*EVNT031
+
+WWMUSYA(12,3)
+WWMUSYA(8,1)
+
+IF ( B_KANJUSEI < 200 )
+	TXOPEN(1)
+	TXA(NAME_FIRST)的眼前﹐聳立著一棵樹齡數千年﹐巨大的老樹。
+	WWMUSYA(7)
+	TXF(2)
+	@P
+	TXCLOSE(1)
+	TXOPEN(3)
+	TXGIRL(0)
+	「這就是出名的精靈神木。」
+	@P
+	TXCLOSE(3)
+	RET
+
+RUN_MONTH[31]++
+
+E_ETC[26]=1
+
+
+
+PLAY(27)
+
+IF ( RUN_MONTH[31]=1 )
+	TXOPEN(1)
+	TXA(NAME_FIRST)站在樹齡達數千年的精靈神木前﹐忽然看到神木旁邊站了一位身材高挑的精靈。
+	WWIVENT(3,1,"L003")
+	WWMUSYA(7)
+	TXF(2)
+	@P
+	TXCLOSE(1)
+	TXOPEN(3)
+	TXGIRL(0)
+	「啊﹐午安。好壯觀的樹哦﹗」
+	@P
+	TXOPEN(2)
+	TXFACE("F154")
+	「哎呀﹐好驚訝﹗妳能看得到我﹖」
+	@P
+	@3
+	TXGIRL(9)
+	@C
+	「咦﹖．．．．．．是啊﹐很清楚。」
+	@P
+	@2
+	@C
+	「我是看守這棵神木的精靈。普通人無法看到我的面貌﹐只有感受力高的人才能見到我。」
+	@P
+	@3
+	@C
+
+	「我也是第一次看到精靈。」
+	@P
+
+
+
+IF ( RUN_MONTH[31]>=2 )
+	TXOPEN(1)
+	TXA(NAME_FIRST)一到精靈神木前面﹐那個高個子的精靈還是站在那兒。
+	WWIVENT(3,1,"L003")
+	WWMUSYA(7)
+	TXF(2)
+	@P
+	TXCLOSE(1)
+	TXOPEN(3)
+	TXGIRL(0)
+	「午安﹐精靈先生。」
+	@P
+	TXOPEN(2)
+	TXFACE("F154")
+
+CHECK_IRON
+IF ( FLAG_IRON_ICON=1 )
+	@2
+	@C
+	「喂﹐妳身邊配有鐵的裝備﹐我很討厭鐵製的用品﹐不要靠近我。」
+	@P
+	@3
+	TXGIRL(15)
+	@C
+	「啊﹐請等一下．．．．．．」
+	@P
+	TXCLOSE(2)
+	MUSIC(2)
+	TXLC(1,17,110,0)
+	TXOPEN(1)
+	精靈消失於森林中。
+	@P
+	TXCLOSE(1)
+	TXCLOSE(3)
+	GOTO EVNT_END
+
+
+
+
+@2
+@C
+「妳是戰士吧﹗我有一事相求。我雖然負責看守這棵精靈神木﹐但是龍頭蟲都會來吸取樹液﹐令我十分苦惱。
+@P
+@C
+若妳能給我一些戰鬥的技術﹐我將以增強妳的魔法力量做為回報。」
+IF ( V_SENTOH < 5 )
+	@P
+	GOTO KOTOWARU
+SLCPOS(1)
+SLCTX("答　　應,拒　　絕")
+IF ( ISLCT = 0 )
+	@3
+	TXGIRL(0)
+	@C
+	「可以﹐沒有問題。」
+	@P
+	@2
+	@C
+	「好﹐我幫你。」
+	@P
+	TXCLOSE(2)
+	TXCLOSE(3)
+
+
+	TXOPEN(1)
+	精靈開始吟唱不知名的咒文．．．．．．
+	TXA(NAME_FIRST)身體內的戰鬥力消失了一部份．．．．．．
+	@P
+	@1
+	GR_OPEN
+	STRSCLEAR
+	IGRP_TBL1[0]="戰鬥技術"
+	IGRP_TBL3[0]=V_SENTOH
+	IGRP_TBL5[0]=2
+	IGRP_CNT=1
+	IGRP_X=25
+	IGRP_Y=236
+	GRPOPEN(1,1)
+	戰鬥技術下降５點﹗
+	V_SENTOH -= 5
+	IF ( V_SENTOH < 0 ) V_SENTOH = 0
+	CLENDER(13)
+	GRPUPD(1,0,V_SENTOH)
+	@P
+	GR_CLOSE
+	TXCLOSE(1)
+
+	TXOPEN(2)
+	TXFACE("F154")
+	「好了．．．妳的力量已經流入我的身體了。」
+	@P
+	TXCLOSE(2)
+
+	TXOPEN(1)
+	精靈再度吟唱著咒文。
+	這次一股魔法的力量流入TXA(NAME_FIRST)的身體中。
+	@P
+	TXCLOSE(1)
+
+	TXOPEN(3)
+	TXGIRL(7)
+	「啊啊．．．﹗」
+	@P
+	TXLC(1,17,110,0)
+	TXOPEN(1)
+	GR_OPEN
+	STRSCLEAR
+	IGRP_TBL1[0]="魔法技術"
+	IGRP_TBL3[0]=V_MAHOGIJUTSU
+	IGRP_TBL5[0]=2
+	IGRP_TBL1[1]="魔法能力"
+	IGRP_TBL3[1]=V_MARYOKU
+	IGRP_TBL5[1]=2
+	IGRP_TBL1[2]="抗魔能力"
+	IGRP_TBL3[2]=V_KOHMARYOKU
+	IGRP_TBL5[2]=2
+	IGRP_CNT=3
+	IGRP_X=25
+	IGRP_Y=236
+	GRPOPEN(1,1)
+	魔法技術上昇５點﹗
+	魔法能力上昇５點﹗
+	抗魔力上昇５點﹗
+	V_MAHOGIJUTSU += 5
+	V_MARYOKU += 5
+	V_KOHMARYOKU += 5
+	CLENDER(13)
+	GRPUPD(1,0,V_MAHOGIJUTSU)
+	GRPUPD(1,1,V_MARYOKU)
+	GRPUPD(1,2,V_KOHMARYOKU)
+	@P
+	GR_CLOSE
+	TXCLOSE(1)
+	TXCLOSE(3)
+
+	TXLC(2,28,230,1)
+	TXOPEN(2)
+	TXFACE("F154")
+	「得救了﹐那麼﹐再會吧．．．．．．」
+	@P
+	TXCLOSE(2)
+	MUSIC(2)
+	TXLC(1,17,280,0)
+	TXOPEN(1)
+	精靈一個跳躍後﹐身影從神木上消失了．．．．．．
+	@P
+	TXCLOSE(1)
+	GOTO EVNT_END
+
+*KOTOWARU
+
+@3
+TXGIRL(11)
+@C
+「真對不起﹐若是給你戰鬥技術﹐我也會很傷腦筋﹐因此．．．．．．」
+@P
+@2
+@C
+「是這樣嗎﹖或許我的要求也有點過份吧．．．．．．」
+@P
+TXCLOSE(2)
+TXCLOSE(3)
+MUSIC(2)
+TXOPEN(1)
+精靈一個跳躍後﹐身影從神木上消失了．．．．．．
+@P
+TXCLOSE(1)
+GOTO EVNT_END
+
+*EVNT_END
+PLAY(14)
+RET
+
+
+
+
+
+
+*CHECK_IRON
+DX = ARMS_ICON
+CHECK_IRON_ICON
+FLAG_IRON_ICON=AX
+IF ( AX ! 0 ) RET
+
+DX = EQUIP_ICON
+CHECK_IRON_ICON
+FLAG_IRON_ICON=AX
+RET
+
+*CHECK_IRON_ICON
+AX = 0
+IF ( DX = 3 )	AX = 1
+IF ( DX = 4 )	AX = 1
+IF ( DX = 5 )	AX = 1
+IF ( DX = 7 )	AX = 1
+IF ( DX = 12 )	AX = 1
+IF ( DX = 13 )	AX = 1
+RET
+
+
+
+

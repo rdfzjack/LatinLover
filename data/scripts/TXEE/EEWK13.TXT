@@ -1,0 +1,128 @@
+TTL$("餐廳工作")
+
+START
+
+OPEN(2)
+TXFACE("F064")
+「咦﹗咦﹗這不是GN$小姐嗎﹖真是好久不見了﹐好懷念妳在店裡打工的時候。現在做著什麼工作﹖」
+@T
+OPEN(3)
+TXGIRL(10)
+「這個嘛．．．還沒有決定耶．．．．．．」
+@T
+SS$(2)
+@C
+
+「嗯嗯．．．原來如此﹐那我有件事想拜托妳。」
+@T
+SS$(3)
+@C
+TXGIRL(9)
+「．．．．．．﹖」
+@T
+SS$(2)
+@C
+
+「最近景氣復甦﹐我的店裡生意突然變得很好﹐既然妳現在沒有工作的話﹐就到我那裡工作吧﹖」
+@T
+SS$(3)
+@C
+TXGIRL(0)
+「我並不是無所事事的．．．．．．」
+@T
+SS$(2)
+@C
+
+「哈哈哈．．．我真是太失禮了﹐這都是開玩笑的。關於工作的事﹐是很認真的。妳的個性我已經很瞭解了﹐才會要妳來做的。」
+@T
+SS$(3)
+@C
+TXGIRL(1)
+「我知道了﹐那麼就麻煩你照顧了。要記得教我做菜唷﹗」
+@T
+SS$(2)
+@C
+
+「當然可以﹗我本來就是城裡最棒的﹐妳會學到最好的技術。」
+@T
+CLOSE(2)
+CLOSE(3)
+PICWORKING("Z013")
+OPEN(1)
+就這樣﹐GN$•FN$就在餐廳裡工作﹐學習著做菜的技巧．．．．．．
+@T
+CLOSE(1)
+
+FINAL
+
+*GN$
+TXA(NAME_FIRST)
+RET
+
+*FN$
+TXA(NAME_FAMILY)
+RET
+
+*OPEN
+IF(AX=1)TXOPEN(10) RET
+IF(AX=2)TXOPEN(13) RET
+IF(AX=3)TXOPEN(15) RET
+IF(AX=4)TXOPEN(14) RET
+RET
+
+*CLOSE
+IF(AX=1)TXCLOSE(10) RET
+IF(AX=2)TXCLOSE(13) RET
+IF(AX=3)TXCLOSE(15) RET
+IF(AX=4)TXCLOSE(14) RET
+RET
+
+*SS$
+IF(AX=1)TXSLCT(10) RET
+IF(AX=2)TXSLCT(13) RET
+IF(AX=3)TXSLCT(15) RET
+IF(AX=4)TXSLCT(14) RET
+RET
+
+*TTL$
+RET
+
+*START
+TXLC(10,21,220,0)
+TXLC(13,32,146,1)
+TXLC(14,32,20,1)
+TXLC(15,17,270,2)
+RET
+
+*FINAL
+LOAD("EEWEDD")
+RET
+
+*PICWORKING
+
+STRSTACK
+C5 = BX
+PTBK(2)
+PTLD("ENDWFRML")
+PTLA("ENDWFRMR")
+PTLA("ENDWFRMU")
+PTLA("ENDWFRMD")
+PTBK(0)
+PTLD("ENDWFRMM")
+PTX(20,0,0)
+PTBK(2)
+PTM(12,0,0)
+PTM(60,0,2)
+PTM(18,-40,4)
+PTM(18,400,6)
+PIC(11)
+PTBK(0)
+PTX(0,0,0)
+SI = C5
+PTLD
+PTMF(0,0,0)
+PIC(12)
+PIC(13,0,0,20,0,40,400)
+TIMER1(120)WAIT1
+RET
+

@@ -1,0 +1,138 @@
+TTL$("詐欺師")
+
+START
+
+OPEN(2)
+TXFACE("F046")
+「真是令人擔心啊﹗．．．小姐的工作總是無法安定下來．．．最近好像一直惡運連連．．．．．．」
+@T
+OPEN(3)
+TXGIRL(13)
+「對我來說﹐普通工作是不能令我滿足的。有沒有可以令我狂熱的工作呢﹖」
+@T
+SS$(2)
+@C
+TXFACE("F130")
+「唉呀呀．．．在妳心中滋長出邪惡的念頭．．．危險啊﹗危險．．．．．．」
+@T
+SS$(3)
+@C
+TXGIRL(8)
+「那又怎麼樣﹗算命先生﹐你就算出適合我的工作吧﹗」
+@T
+SS$(2)
+@C
+
+「妳似乎不能從事正當的工作．．．既沒有施展暴力的自信﹐又沒有可以下海的美色．．．．．．」
+@T
+SS$(3)
+@C
+
+「反正我是個武藝、美色都平凡的人．．．．．．」
+@T
+SS$(2)
+@C
+
+「妳有好口才．．．能夠運用口才的工作會很適合妳．．．但是妳卻無法將這個特殊技能用在正途上﹐真是造孽呀．．．．．．」
+@T
+SS$(3)
+@C
+TXGIRL(9)
+「口才嗎．．．我的口才的確很棒﹐即使說的天花亂墜﹐我也有自信使別人相信．．．．．．」
+@T
+SS$(2)
+@C
+
+「可是說謊的話﹐是很造孽的呀﹗而且這將無法自泥沼中掙脫出來喔．．．．．．」
+@T
+SS$(3)
+@C
+TXGIRL(13)
+「放心啦﹗我不會那麼笨地使謊話暴露出來．．．而且﹐只靠說話來渡過一生是很驚險的呀﹗」
+@T
+SS$(2)
+@C
+
+「唉呀呀．．．勇者FN$竟然養育出這麼難以對付的女兒．．．．．．」
+@T
+CLOSE(2)
+CLOSE(3)
+PICWORKING("Z062")
+OPEN(1)
+之後﹐GN$．FN$走上了詐欺師這一條路。唉．．．．．．
+@T
+CLOSE(1)
+
+FINAL
+
+*GN$
+TXA(NAME_FIRST)
+RET
+
+*FN$
+TXA(NAME_FAMILY)
+RET
+
+*OPEN
+IF(AX=1)TXOPEN(10) RET
+IF(AX=2)TXOPEN(13) RET
+IF(AX=3)TXOPEN(15) RET
+IF(AX=4)TXOPEN(14) RET
+RET
+
+*CLOSE
+IF(AX=1)TXCLOSE(10) RET
+IF(AX=2)TXCLOSE(13) RET
+IF(AX=3)TXCLOSE(15) RET
+IF(AX=4)TXCLOSE(14) RET
+RET
+
+*SS$
+IF(AX=1)TXSLCT(10) RET
+IF(AX=2)TXSLCT(13) RET
+IF(AX=3)TXSLCT(15) RET
+IF(AX=4)TXSLCT(14) RET
+RET
+
+*TTL$
+RET
+
+*START
+TXLC(10,21,220,0)
+TXLC(13,32,146,1)
+TXLC(14,32,20,1)
+TXLC(15,17,270,2)
+RET
+
+*FINAL
+LOAD("EEWEDD")
+RET
+
+*PICWORKING
+
+STRSTACK
+C5 = BX
+PTBK(2)
+PTLD("ENDWFRML")
+PTLA("ENDWFRMR")
+PTLA("ENDWFRMU")
+PTLA("ENDWFRMD")
+PTBK(0)
+PTLD("ENDWFRMM")
+PTX(20,0,0)
+PTBK(2)
+PTM(12,0,0)
+PTM(60,0,2)
+PTM(18,-40,4)
+PTM(18,400,6)
+PIC(11)
+PTBK(0)
+PTX(0,0,0)
+SI = C5
+PTLD
+PTMF(0,0,0)
+PIC(12)
+PIC(13,0,0,20,0,40,400)
+TIMER1(120)WAIT1
+RET
+

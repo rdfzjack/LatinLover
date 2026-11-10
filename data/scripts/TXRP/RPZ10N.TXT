@@ -1,0 +1,77 @@
+
+
+
+
+
+*CHECK_MONSTOR
+MSR10N
+RET
+
+*KAIWA_OK
+KWA10N
+RET
+
+*MSR10N
+R_MS_NUMBER		=10
+R_FACE			="F170"
+R_MONSTOR		="M010"
+R_NAME			="蝙蝠魔"
+R_CHINOH		=50
+RDM(45,60)
+R_SENTOH=AX
+RDM(45,60)
+R_KOUGEKI=AX
+R_BOUGYO		=30
+R_SOUKOU		=15
+R_SKNAME		="皮鎧"
+R_MAHOGIJUTSU		=0
+R_MARYOKU		=0
+RDM(1,15)
+R_KOHMARYOKU=AX
+RDM(90,300)
+R_SENI=AX
+R_DASSYUTU		=50
+R_TSUKON		=5
+RDM(100,240)
+R_MAX_HP=AX
+R_MAX_MP		=0
+RDM(1,50)
+R_GOLD=AX
+R_SE_ATTACK		=1
+
+R_ITEM_NAME	="快癒丸"
+R_ITEM_ICON	=16
+R_ITEM_GOLD	=30
+R_ITEM_ATTR	=0
+R_ITEM_PROG	=""
+R_ITEM_HELP	="ＨＰ恢復"
+R_ITEM_PROPA=15
+
+RANDAM(3)
+IF(AX=1)MONSTR[0]="笨蛋﹗自找麻煩﹗"
+IF(AX=2)MONSTR[0]="小姑娘﹗妳真是美味的餌食啊﹗﹗"
+IF(AX=3)MONSTR[0]="呼呼呼．．．好像是很好吃的小姑娘．．．"
+RANDAM(3)
+IF(AX=1)MONSTR[1]="森林是我的故鄉。"
+IF(AX=2)MONSTR[1]="一個人在森林走路是很危險的．．．"
+IF(AX=3)MONSTR[1]="蝙蝠魔是森林中的紳士．．．"
+RANDAM(3)
+IF(AX=1)MONSTR[2]="龍頭蟲會吸乾森林中樹木的汁液．．．"
+IF(AX=2)MONSTR[2]="妖精是使用魔法的名人．．．"
+IF(AX=3)MONSTR[2]="有找到殺人的逃犯嗎﹖"
+RANDAM(3)
+IF(AX=1)MONSTR[3]="囉嗦﹗"
+IF(AX=2)MONSTR[3]="擋路﹗"
+IF(AX=3)MONSTR[3]="哼﹗﹗將妳割成二半哦﹗"
+MONSTR[4]="看到了嗎﹗我的力氣﹗"
+MONSTR[5]="喔喔喔．．．領教了．．．．．．"
+RET
+
+*KWA10N
+AX = 0
+IF ( B_KANJUSEI >= 200 )	AX=1
+RET
+
+
+
+

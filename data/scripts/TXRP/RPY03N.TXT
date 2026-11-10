@@ -1,0 +1,53 @@
+
+
+
+
+
+*CHECK_MEN
+MAN03N
+RET
+
+*MAN03N
+R_FACE			="F123"
+R_NAME			="村女"
+R_CHINOH		=10
+R_SENTOH		=30
+R_KOUGEKI		=30
+R_BOUGYO		=10
+R_SOUKOU		=0
+R_SKNAME		=""
+R_MAHOGIJUTSU	=0
+R_MARYOKU		=0
+R_KOHMARYOKU	=25
+R_SENI			=40
+R_DASSYUTU		=100
+R_TSUKON		=0
+RDM(40,120)
+R_MAX_HP		=AX
+R_MAX_MP		=0
+RDM(20,50)
+R_GOLD			=AX
+R_SE_ATTACK	=3
+
+MENMES[0]="午安﹗"
+MENMES[1]="啊﹐晚安﹗"
+RANDAM(3)
+IF(AX=1)MENMES[2]="離開城裡﹐很危險的哪﹗"
+IF(AX=2)MENMES[2]="女孩子在城外很危險的哦﹗"
+IF(AX=3)MENMES[2]="武者修行﹖還是改變主意﹐快回家吧﹗"
+RANDAM(3)
+IF(AX=1)MENMES[3]="什麼﹐那麼高傲的孩子﹗"
+IF(AX=2)MENMES[3]="什麼啊﹗那孩子．．．．．．"
+IF(AX=3)MENMES[3]="啊﹗真是亂來﹗﹗"
+MENMES[4]="咦啊﹗在做什麼﹗"
+MENMES[5]="．．．不要．．．快住手．．．．．．"
+MENMES[6]="喔﹗不要做傻事﹗"
+RANDAM(3)
+IF(AX=1)MENMES[7]="．．．咳咳咳．．．真是殘酷．．．．．．"
+IF(AX=2)MENMES[7]="．．．喔喔喔．．．妳一定是惡魔．．．．．．"
+IF(AX=3)MENMES[7]="．．．這樣的事一定會被人發現的．．．．．．"
+RET
+
+
+
+

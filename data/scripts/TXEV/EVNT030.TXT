@@ -1,0 +1,266 @@
+
+
+
+
+
+
+
+
+
+
+.IT_RECORD
+
+.S_WORKS
+.S_COUNTER
+.S_STARTDAY
+.S_ENDDAY
+.TODAY_COUNT
+.DAYLIGHT
+.SOUBI_FLG
+.SOUBI_REC
+.SOUBI_DAY
+
+S_WORKS 	=	BX
+S_COUNTER	=	CX
+S_STARTDAY	=	C1
+S_ENDDAY	=	C2
+TODAY_COUNT	=	C3
+DAYLIGHT	=	C4
+SOUBI_FLG	=	C5
+SOUBI_REC	=	C6
+SOUBI_DAY	=	C7
+
+STRSCLEAR
+
+TXLC(1,17,280,0)
+TXLC(2,28,130,1)
+TXLC(3,13,260,2)
+WWIVENT(5,1,19,40)
+
+EVNT030
+
+WWMUSYA(9)
+WWMUSYA(8,1)
+
+PLAY(14)
+
+BX = S_WORKS
+CX = S_COUNTER
+C1 = S_STARTDAY
+C2 = S_ENDDAY
+C3 = TODAY_COUNT
+C4 = DAYLIGHT
+C5 = SOUBI_FLG
+C6 = SOUBI_REC
+C7 = SOUBI_DAY
+
+IF ( S_WORKS = 0 )	LOAD("RPGLOP,RPG000")
+IF ( S_WORKS = 1 )	LOAD("RPGLOP,RPG001")
+IF ( S_WORKS = 2 )	LOAD("RPGLOP,RPG002")
+IF ( S_WORKS = 3 )	LOAD("RPGLOP,RPG003")
+
+TXOPEN(1)致命的錯誤WAITU
+
+
+
+
+
+*EVNT030
+
+ITEM_SRCH(1,23)
+IT_RECORD = DX
+IF ( AX=0 ) RET
+
+RUN_MONTH[30]++
+
+TXOPEN(1)
+TXA(NAME_FIRST)露營結束後﹐從樹林中出現一頭漂亮的白馬﹐而它的頭上有一支角．．．．．．
+WWMUSYA(7)
+TXF(2)
+@P
+TXCLOSE(1)
+
+WWIVENT(1,1,"E030")
+
+PLAY(27)
+
+TXOPEN(3)
+TXGIRL(15)
+「獨角獸﹗﹖」
+@P
+TXOPEN(2)
+TXFACE("F153")
+「人類的姑娘．．．．．．」
+@P
+@3
+
+@C
+「．．．．．．﹗」
+@P
+@2
+@C
+「那個角笛是從那裡得到的﹖」
+SHOW_ITEMS
+@P
+@3
+TXGIRL(9)
+@C
+「這是我父親給我的。」
+@P
+@2
+@C
+「那是我同伴的角﹐妳父親殺了獨角獸嗎﹖」
+@P
+@3
+TXGIRL(11)
+@C
+「不是﹐它真的是從商人手中買下來的。」
+@P
+@2
+@C
+「當真﹖」
+@P
+@3
+
+@C
+「是真的。」
+@P
+@2
+@C
+「是怎麼樣的商人﹖」
+@P
+@3
+@C
+
+「穿著東方的服飾﹐操著很重的口音﹐個子矮小．．．．．．」
+@P
+@2
+@C
+「哼﹐是恰尼斯歐古．．．．相信妳了﹐無論如何﹐那是我同伴的紀念﹐請妳馬上還給我。」
+SLCTBAK(5)
+SLCPOS(1)SLCTX("交出角笛,拒　　絕")
+
+IF ( ISLCT = 0 )
+	@3
+	TXGIRL(0)
+	@C
+	「我知道﹐雖然這是好不容易從父親那裡得到的寶物．．．．．．」
+	@P
+	ITEMPRN(2)
+	@2
+	@C
+	「好．．．聰明的姑娘﹐我提高妳的力量做為獎勵．．．．．．」
+	@P
+	MUSIC(6,2)
+	EFC(4)
+
+	TXCLOSE(2)
+	TXCLOSE(3)
+	WWIVENT(2,1)
+	TIMER1(30)WAIT1
+	EFC(3)
+	EFC(16)
+	TIMER1(30)WAIT1
+	TXLC(1,17,110,0)
+	TXOPEN(1)
+	回過神來的時候﹐獨角獸不知何時已經消失了．．．．．．
+	@P
+	TXCLOSE(1)
+	TXOPEN(3)
+	TXGIRL(9)
+	@C
+	「真是不思議的經驗啊．．．．．．」
+	@P
+	TXCLOSE(3)
+	TXLC(1,17,280,0)
+	TXOPEN(1)
+	GR_OPEN
+	STRSCLEAR
+	IGRP_TBL1[0]="感受"
+	IGRP_TBL3[0]=B_KANJUSEI
+	IGRP_CNT=1
+	IGRP_X=25
+	IGRP_Y=236
+	GRPOPEN(1,1)
+	獨角獸力量的影響﹐TXA(NAME_FIRST)的感受上昇了５０點。
+	B_KANJUSEI += 50
+	GRPUPD(1,0,B_KANJUSEI)
+	MUSIC(2)
+	@P
+	GR_CLOSE
+	TXCLOSE(1)
+	ITEM_KILL(IT_RECORD)
+	RET
+
+
+@3
+
+@C
+「對不起﹐我不想交給你。」
+@P
+@2
+@C
+「真是個不懂是非的笨蛋﹐不要再出現在我的面前﹗」
+@P
+TXCLOSE(2)
+
+WWIVENT(2,1)
+
+TXLC(1,17,110,0)
+TXOPEN(1)
+獨角獸憤怒的離去．．．．．．
+@P
+TXCLOSE(1)
+
+@3
+TXGIRL(12)
+@C
+「什麼嘛﹐明明是你自己出現的。」
+@P
+TXCLOSE(3)
+
+ITEMPRN(2)
+
+IF ( B_KIHIN>0 )
+	TXLC(1,17,280,0)
+	TXOPEN(1)
+	GR_OPEN
+	STRSCLEAR
+	IGRP_TBL1[0]="氣質"
+	IGRP_TBL3[0]=B_KIHIN
+	IGRP_CNT=1
+	IGRP_X=25
+	IGRP_Y=236
+	GRPOPEN(1,1)
+	C1 = B_KIHIN / 2
+	IF ( B_KIHIN = 1 ) C1 = 1
+	由於獨角獸的力量﹐TXA(NAME_FIRST)的氣質下降了TXPOINT(C1)點﹗
+	B_KIHIN -= C1
+	GRPUPD(1,0,B_KIHIN)
+	MUSIC(2)
+	@P
+	GR_CLOSE
+	TXCLOSE(1)
+RET
+
+
+
+
+
+*SHOW_ITEMS
+C1 = IT_RECORD
+ITEMID_TBL1[0]=ITEM_NAME[C1]
+ITEMID_TBL2[0]=ITEM_ICON[C1]
+ITEMID_TBL3[0]=ITEM_GOLD[C1]
+ITEMID_TBL4[0]=ITEM_HELP[C1]
+ITEMID_TBL5[0]=0
+ITEMID_TBL6[0]=""
+ITEMID_TBL7[0]=0
+ITEMID_CNT=1
+ITEMPRN(3,60,280)
+ITEMPRN(1,5)
+RET
+
+
+
+

@@ -1,0 +1,75 @@
+
+
+
+
+
+*CHECK_MONSTOR
+MSR18N
+RET
+
+*KAIWA_OK
+KWA18N
+RET
+
+*MSR18N
+R_MS_NUMBER		=18
+R_FACE			="F178"
+R_MONSTOR		="M018"
+R_NAME			="地獄鳥"
+R_CHINOH		=90
+RDM(55,60)
+R_SENTOH=AX
+RDM(55,60)
+R_KOUGEKI=AX
+R_BOUGYO		=55
+R_SOUKOU		=30
+R_SKNAME		="厚羽毛"
+RDM(40,50)
+R_MAHOGIJUTSU=AX
+R_MARYOKU		=50
+R_KOHMARYOKU	=80
+RDM(55,65)
+R_SENI	=AX
+R_DASSYUTU		=50
+R_TSUKON		=0
+RDM(60,80)
+R_MAX_HP=AX
+RDM(320,450)
+R_MAX_MP=AX
+RDM(200,250)
+R_GOLD=AX
+R_SE_ATTACK	=3
+
+R_ITEM_NAME ="妖精之蜜"
+R_ITEM_ICON	=42
+R_ITEM_GOLD	=200
+R_ITEM_ATTR	=4000
+R_ITEM_PROG	="B_IROKE+10"
+R_ITEM_HELP	="魅力+10"
+R_ITEM_PROPA=5
+
+RANDAM(3)
+IF(AX=1)MONSTR[0]="呼呼呼．．．不想要命了嗎﹖"
+IF(AX=2)MONSTR[0]="快過來﹗我馬上送妳上西天﹗"
+IF(AX=3)MONSTR[0]="小姑娘﹗急著送死嗎﹗﹖"
+RANDAM(3)
+IF(AX=1)MONSTR[1]="這裡是暗世的冥界．．．．．．"
+IF(AX=2)MONSTR[1]="這裡不是女孩子應該來的地方．．．"
+IF(AX=3)MONSTR[1]="人類的女孩子在這裡是十分罕見的．．．"
+RANDAM(3)
+IF(AX=1)MONSTR[2]="不相信神的人﹐最後的命運將由罪孽決定．．．"
+IF(AX=2)MONSTR[2]="不顧罪孽深重的話﹐就成了魔王的同伙．．．"
+IF(AX=3)MONSTR[2]="不走自己不相信的路．．．"
+MONSTR[3]="像妳這樣的傢伙﹐不用多說﹗"
+MONSTR[4]="哈哈哈哈哈﹗看吧﹗我是很強的﹗"
+MONSTR[5]="喔喔喔．．．我居然會輸給人類的女子．．．"
+RET
+
+*KWA18N
+AX = 0
+IF ( B_SHINKOH >= 300 ) AX=1
+RET
+
+
+
+

@@ -1,0 +1,380 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.N_WIN_NUM = 7
+
+.S_WORKS
+.S_COUNTER
+.S_STARTDAY
+.S_ENDDAY
+.TODAY_COUNT
+.DAYLIGHT
+.SOUBI_FLG
+.SOUBI_REC
+.SOUBI_DAY
+
+S_WORKS 	=	BX
+S_COUNTER	=	CX
+S_STARTDAY	=	C1
+S_ENDDAY	=	C2
+TODAY_COUNT	=	C3
+DAYLIGHT	=	C4
+SOUBI_FLG	=	C5
+SOUBI_REC	=	C6
+SOUBI_DAY	=	C7
+
+TXLC(1,17,280,0)
+TXLC(2,28,130,1)
+TXLC(3,13,260,2)
+TXLC(N_WIN_NUM,44,120,0)
+TXLC(11,28,20,1)
+
+EVNTBSN2
+
+E_ETC[30]=1
+
+BX = S_WORKS
+CX = S_COUNTER
+C1 = S_STARTDAY
+C2 = S_ENDDAY
+C3 = TODAY_COUNT
+C4 = DAYLIGHT
+C5 = SOUBI_FLG
+C6 = SOUBI_REC
+C7 = SOUBI_DAY
+
+LOAD("RPGLOP,RPG003")
+
+
+
+
+
+*EVNTBSN2
+
+RUN_MONTH[54]++
+
+PLAY(27)
+
+STAR_OPEN
+WWMUSYA(7)
+TXF(2)
+
+IF ( P_SYUGOSEI = 0 )	SYUGO_00N
+IF ( P_SYUGOSEI = 1 )	SYUGO_01N
+IF ( P_SYUGOSEI = 2 )	SYUGO_02N
+IF ( P_SYUGOSEI = 3 )	SYUGO_03N
+IF ( P_SYUGOSEI = 4 )	SYUGO_04N
+IF ( P_SYUGOSEI = 5 )	SYUGO_05N
+IF ( P_SYUGOSEI = 6 )	SYUGO_06N
+IF ( P_SYUGOSEI = 7 )	SYUGO_07N
+IF ( P_SYUGOSEI = 8 )	SYUGO_08N
+IF ( P_SYUGOSEI = 9 )	SYUGO_09N
+
+STAR_CLOSE
+WWMUSYA(9)
+WWMUSYA(8,1)
+RET
+
+
+
+
+
+
+*STAR_OPEN
+TXOPEN(11)
+TXSYU(P_SYUGOSEI)
+TXA(DEF_STR_STAR[P_SYUGOSEI])
+@L
+RET
+
+*STAR_CLOSE
+
+RET
+
+
+
+
+
+*SYUGO_00N
+「這可真是出乎意料﹗了不起的姑娘﹐竟然能來到這裡。血脈的相承是不爭的事實啊．．．．．．」
+@P
+TXOPEN(3)
+TXGIRL(9)
+「．．．．．．﹖」
+@P
+TXSLCT(11)
+@C
+「我是妳的守護神﹐也就是掌管太陽之神索爾。TXA(NAME_FIRST)啊﹐我要讓妳擁有和妳武術及勇氣相匹配的高尚人格。」
+@P
+PARA_OPEN("氣質",B_KIHIN)
+TXA(NAME_FIRST)的氣質上昇１００點﹗
+B_KIHIN  +=  100
+PARA_CLOSE(B_KIHIN)
+「現在快走吧﹗這裡是天界的入口﹐不是凡人所能停留的地方。」
+@P
+RET
+
+
+
+
+
+*SYUGO_01N
+「喔喔．．．你終於來到這個地方了．．．這或許是命運的指引吧﹗」
+@P
+TXOPEN(3)
+TXGIRL(9)
+「．．．．．．﹖」
+@P
+TXSLCT(11)
+@C
+「我是妳的守護神﹐也就是掌管月亮之神德暮。TXA(NAME_FIRST)啊﹐我要使妳擁有和妳武術及勇氣相稱的心靈。」
+@P
+PARA_OPEN("感受",B_KANJUSEI)
+TXA(NAME_FIRST)的感受上昇１００點﹗
+B_KANJUSEI  +=	100
+PARA_CLOSE(B_KANJUSEI)
+「現在請回去吧﹗這裡是天界的入口﹐凡人是不應該來的。」
+@P
+RET
+
+
+
+
+
+*SYUGO_02N
+「哎呀﹐妳終於來到這裡了﹗真不愧是．．．」
+@P
+TXOPEN(3)
+TXGIRL(9)
+「．．．．．．﹖」
+@P
+TXSLCT(11)
+@C
+「我是妳的守護之神﹐司掌火星的馬斯。TXA(NAME_FIRST)啊﹐我希望妳擁有如強人般的正直之心。」
+@P
+PARA_OPEN("道德",B_MORALS)
+TXA(NAME_FIRST)的道德上昇１００點﹗
+B_MORALS  +=  100
+PARA_CLOSE(B_MORALS)
+「走吧﹐現在回去比較好。這裡是天界的入口﹐可不是凡人能來的地方。」
+@P
+RET
+
+
+
+
+
+*SYUGO_03N
+「啊啊﹐妳終於來到這裡了．．．應該是命運指引妳的吧﹗」
+@P
+TXOPEN(3)
+TXGIRL(9)
+「．．．．．．﹖」
+@P
+TXSLCT(11)
+@C
+「我是妳的守護者﹐掌管水星之神瑪琪莉。TXA(NAME_FIRST)啊﹐我要傳授給妳和妳武術及勇氣相匹配的的智力﹗」
+@P
+PARA_OPEN("智力",B_CHINOH)
+TXA(NAME_FIRST)的智力上昇１００點﹗
+B_CHINOH  +=  100
+PARA_CLOSE(B_CHINOH)
+「好了﹐快點回去吧﹗這裡是天界的入口﹐凡人是不應該來的。」
+@P
+RET
+
+
+
+
+
+*SYUGO_04N
+「妳能來到這裡﹐真是太出乎意料了．．．血脈的傳承是不爭的事實．．．」
+@P
+TXOPEN(3)
+TXGIRL(9)
+「．．．．．．﹖」
+@P
+TXSLCT(11)
+@C
+「我是妳的守護神﹐木星的掌管者邱比特。TXA(NAME_FIRST)﹐妳踏入了諸神的領域﹐可別忘了誠心祈禱喔．．．．．．」
+@P
+PARA_OPEN("信仰",B_SHINKOH)
+TXA(NAME_FIRST)的信仰上昇了１００點﹗
+B_SHINKOH  +=  100
+PARA_CLOSE(B_SHINKOH)
+「好了﹐快點回去吧﹗這裡是天界的入口﹐凡人是不應該進來的。」
+@P
+RET
+
+
+
+
+
+*SYUGO_05N
+「哎呀﹐妳終於來的這裡了．．．這也是命運的導引吧．．．」
+@P
+TXOPEN(3)
+TXGIRL(9)
+「．．．．．．﹖」
+@P
+TXSLCT(11)
+@C
+「我是妳的守護者﹐掌管金星之神維納斯。妳是個非常堅強的女孩﹐但是女孩子只有這些是不夠的喔．．．．．．」
+@P
+PARA_OPEN("魅力",B_IROKE)
+TXA(NAME_FIRST)的魅力點數上昇１００點﹗
+B_IROKE  +=  100
+PARA_CLOSE(B_IROKE)
+「好了﹐現在快走吧﹗這裡是天界的入口﹐可不是凡人應該來的地方。」
+@P
+RET
+
+
+
+
+
+*SYUGO_06N
+「哎呀﹗妳終於來到這裡了﹐血脈相傳果然是不爭的事實﹗」
+@P
+TXOPEN(3)
+TXGIRL(9)
+「．．．．．．﹖」
+@P
+TXSLCT(11)
+@C
+「我是妳的守護神﹐土星的掌管者撒旦。TXA(NAME_FIRST)啊﹐我要贈予和妳武術和勇氣相稱的高尚氣質。」
+@P
+PARA_OPEN("氣質",B_KIHIN)
+TXA(NAME_FIRST)的氣質上昇１００點﹗
+B_KIHIN  +=  100
+PARA_CLOSE(B_KIHIN)
+「好了﹐現在請回吧﹗這裡是天界的入口﹐可不是凡人應該來的地方。」
+@P
+RET
+
+
+
+
+
+*SYUGO_07N
+「啊啊﹐妳終於來到這個地方了．．．或許是命運的指引吧﹗」
+@P
+TXOPEN(3)
+TXGIRL(9)
+「．．．．．．﹖」
+@P
+TXSLCT(11)
+@C
+「我是妳的守護者﹐司掌天王星的烏拉努斯之神。TXA(NAME_FIRST)啊﹐我要讓妳擁有和妳武術及勇氣相匹配的心靈﹗」
+@P
+PARA_OPEN("感受",B_KANJUSEI)
+TXA(NAME_FIRST)的感受點數上昇１００點﹗
+B_KANJUSEI  +=	100
+PARA_CLOSE(B_KANJUSEI)
+「好了﹐快點回去吧。這裡是天界的入口﹐可不是凡人應該來的地方。」
+@P
+RET
+
+
+
+
+
+*SYUGO_08N
+「啊﹐妳終於來到這裡了．．．這應該是命運吧﹗」
+@P
+TXOPEN(3)
+TXGIRL(9)
+「．．．．．．﹖」
+@P
+TXSLCT(11)
+@C
+「我是妳的守護者﹐司掌海王星之神妮普坦。TXA(NAME_FIRST)啊﹐我要賜予妳武術和勇氣相稱的深謀遠慮﹗」
+@P
+PARA_OPEN("智力",B_CHINOH)
+TXA(NAME_FIRST)的智力點上昇１００點﹗
+B_CHINOH  +=  100
+PARA_CLOSE(B_CHINOH)
+「好﹐妳快點走吧﹗這裡是天界的入口﹐凡人是不應該出現在這個地方的。」
+@P
+RET
+
+
+
+
+
+*SYUGO_09N
+「呵呵﹐妳終於來了．．．這是命運的導引吧﹗」
+@P
+TXOPEN(3)
+TXGIRL(9)
+「．．．．．．﹖」
+@P
+TXSLCT(11)
+@C
+「我是妳的守護者﹐掌管冥王星之神黑帝斯。TXA(NAME_FIRST)﹐武術和勇氣並不代表全知全能﹐心靈之窗還是要好好培養的。」
+@P
+PARA_OPEN("感受",B_KANJUSEI)
+TXA(NAME_FIRST)的感受點數上昇１００點﹗
+B_KANJUSEI  +=	100
+PARA_CLOSE(B_KANJUSEI)
+「好了﹐回去吧﹗這裡是天界的入口﹐凡人是不應該來的．．．．．．」
+@P
+RET
+
+
+
+
+
+*PARA_OPEN
+
+C1 = AX
+TXOPEN(N_WIN_NUM)
+GR_OPEN
+STRSCLEAR
+IGRP_TBL1[0]=SI
+IGRP_TBL3[0]=C1
+IGRP_CNT=1
+IGRP_X=44
+IGRP_Y=224
+GRPOPEN(1,1)
+RET
+
+*PARA_CLOSE
+
+C1 = AX
+GRPUPD(1,0,C1)
+@P
+GR_CLOSE
+TXCLOSE(N_WIN_NUM)
+TXSLCT(11)
+@C
+RET
+
+
+
+

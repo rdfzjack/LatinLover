@@ -1,0 +1,211 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+RUN_MONTH[44]++
+
+STRSCLEAR
+
+TXLC(2,28,146,1)
+TXLC(3,13,270,2)
+TXLC(1,19,240,0)
+
+WWIVENT(5,1,21,40)
+
+EVNT044
+
+IF ( GIRL_DAMEG!0 )
+	PLAY(8)
+IF ( GIRL_DAMEG=0 )
+	IF ( TM_SEASON =1 ) PLAY(4)
+	IF ( TM_SEASON =2 ) PLAY(5)
+	IF ( TM_SEASON =3 ) PLAY(6)
+	IF ( TM_SEASON =4 ) PLAY(7)
+
+LOAD("MAINBORN")
+
+
+
+
+
+*EVNT044
+
+IF ( RUN_MONTH[44]=1 )
+	EVNT044_1ST
+IF ( RUN_MONTH[44]>1 )
+	EVNT044_2ND
+RET
+
+*EVNT044_1ST
+
+TXOPEN(2)
+TXFACE("F088")
+「呀﹗小姐﹐新年快樂﹗」
+WAIT1
+@P
+PLAY(9)
+
+TXOPEN(3)
+TXGIRL(0)
+「新年快樂﹐請問你在城裡擔任什麼樣的工作﹖」
+@P
+@2
+@C
+TXFACE("F089")
+「耶﹖這．．．是這樣的﹐到城中巡視是否有可疑的人物﹐只是看守的工作。」
+@P
+@3
+@C
+
+「呀﹐很辛苦吧﹗」
+@P
+@2
+@C
+TXFACE("F090")
+「不﹐不會﹐沒什麼。不是什麼了不起的工作。」
+@P
+@3
+@C
+TXGIRL(14)
+「唉﹐自己的工作不就是要這樣的努力嗎﹖無論什麼工作最重要的就是要賣力地完成。」
+@P
+@2
+@C
+TXFACE("F091")
+「．．．．．．．．．說得也是﹐妳說的真有道理。」
+@P
+@3
+@C
+TXGIRL(10)
+「很抱歉﹐這樣說似乎有點傲氣﹐這全部都是受到父親教誨之故。」
+@P
+@2
+@C
+TXFACE("F088")
+「令人敬佩的父親。」
+@P
+TXCLOSE(2)
+WWIVENT(2,0)
+WWIVENT(1,1,"L001")
+TXCLOSE(3)
+
+TXOPEN(1)
+TXA(NAME_FIRST)和青年武官渡過了愉快的一天．．．．．．
+@P
+TXCLOSE(1)
+
+TXOPEN(2)
+TXFACE("F088")
+「今天真是太快樂了．．．．．．」
+@P
+TXOPEN(3)
+TXGIRL(1)
+「我也很快樂﹐現在我必須要回去了．．．．．．」
+@P
+@2
+@C
+TXFACE("F091")
+「TXA(NAME_FIRST)﹐我每年只有一月會待在城裡﹐下次見面的機會是在明年一月﹐願意再和我相見嗎﹖」
+@P
+SLCTX("願　　意,拒　　絕")
+IF ( ISLCT=0 )
+	@3
+	@C
+
+	「好﹐就這麼說定了﹐一年後再見了﹗」
+	@P
+	TXCLOSE(3)
+	TXCLOSE(2)
+	WWIVENT(2,1)
+	URA_PRINCE += 12
+	RET
+
+
+@3
+@C
+TXGIRL(0)
+「很抱歉﹐這地方我不想再來。」
+@P
+@2
+@C
+TXFACE("F092")
+「．．．．．．．．．這樣﹐就．．．．．．太可惜了。」
+@P
+TXCLOSE(3)
+TXCLOSE(2)
+WWIVENT(2,1)
+RET
+
+
+*EVNT044_2ND
+
+
+TXOPEN(2)
+TXFACE("F088")
+「妳真的來了﹐太好了﹗」
+WAIT1
+@P
+PLAY(9)
+
+TXOPEN(3)
+TXGIRL(0)
+「真的只有每年的一月才能相見。」
+@P
+TXCLOSE(2)
+WWIVENT(2,0)
+WWIVENT(1,1,"L001")
+TXCLOSE(3)
+
+TXOPEN(1)
+TXA(NAME_FIRST)和青年武官愉快的渡過了一天．．．．．．
+@P
+TXCLOSE(1)
+
+TXOPEN(2)
+TXFACE("F091")
+「今天過得真是快樂﹐我們明年能再相見嗎﹖」
+
+SLCTX("願　　意,拒　　絕")
+IF ( ISLCT=0 )
+	TXOPEN(3)
+	TXGIRL(1)
+	「好﹐就這麼說定了﹐一年後再相見了﹗」
+	@P
+	TXCLOSE(3)
+	TXCLOSE(2)
+	WWIVENT(2,1)
+	URA_PRINCE += 12
+	RET
+
+
+TXOPEN(3)
+TXGIRL(0)
+「很抱歉﹐這種地方我不想再來。」
+@P
+@2
+@C
+TXFACE("F092")
+「．．．．．．．．．這樣﹐就．．．．．．太可惜了。」
+@P
+TXCLOSE(3)
+TXCLOSE(2)
+WWIVENT(2,1)
+RET
+
+
+
+

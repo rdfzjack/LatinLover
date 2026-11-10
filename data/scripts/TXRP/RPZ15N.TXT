@@ -1,0 +1,75 @@
+
+
+
+
+
+*CHECK_MONSTOR
+MSR15N
+RET
+
+*KAIWA_OK
+KWA15N
+RET
+
+*MSR15N
+R_MS_NUMBER		=15
+R_FACE			="F175"
+R_MONSTOR		="M015"
+R_NAME			="妖精"
+R_CHINOH		=40
+RDM(35,50)
+R_SENTOH=AX
+RDM(50,65)
+R_KOUGEKI=AX
+R_BOUGYO		=20
+R_SOUKOU		=15
+R_SKNAME		="皮甲"
+R_MAHOGIJUTSU	=0
+R_MARYOKU		=0
+R_KOHMARYOKU	=15
+RDM(40,50)
+R_SENI=AX
+R_DASSYUTU		=60
+R_TSUKON		=5
+RDM(180,260)
+R_MAX_HP=AX
+R_MAX_MP		=0
+RDM(10,99)
+R_GOLD=AX
+R_SE_ATTACK	=1
+
+R_ITEM_NAME ="快癒丸"
+R_ITEM_ICON	=16
+R_ITEM_GOLD	=30
+R_ITEM_ATTR	=0
+R_ITEM_PROG	=""
+R_ITEM_HELP	="ＨＰ恢復"
+R_ITEM_PROPA=20
+
+RANDAM(3)
+IF(AX=1)MONSTR[0]="喂﹗﹗"
+IF(AX=2)MONSTR[0]="嘻滋嘻滋嘻滋﹗"
+IF(AX=3)MONSTR[0]="咕嘻∼滋﹗"
+RANDAM(3)
+IF(AX=1)MONSTR[1]="蟻地獄就在這附近．．．"
+IF(AX=2)MONSTR[1]="哎呀﹐可愛的小姑娘在散步嗎﹖卡卡卡．．．"
+IF(AX=3)MONSTR[1]="這一帶並不是很安全哪．．．卡卡卡"
+RANDAM(2)
+IF(AX=1)MONSTR[2]="西邊的地獄中似乎有惡人．．．"
+IF(AX=2)MONSTR[2]="一個人走很危險哦﹐要注意壞人．．．"
+RANDAM(3)
+IF(AX=1)MONSTR[3]="不淮多嘴﹗否則殺了妳﹗"
+IF(AX=2)MONSTR[3]="卡卡卡卡﹗今天的獵物似乎很可口哦﹗"
+IF(AX=3)MONSTR[3]="用我的爪子將妳撕碎好嗎﹖"
+MONSTR[4]="嗶呀哈哈哈﹗現在﹐要從那裡開始吃呢﹖"
+MONSTR[5]="咻．．．"
+RET
+
+*KWA15N
+AX = 0
+IF ( B_KANJUSEI >= 200 )	AX=1
+RET
+
+
+
+

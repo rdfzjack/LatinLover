@@ -1,0 +1,119 @@
+TTL$("幫忙家事")
+
+START
+
+OPEN(2)
+TXFACE("F039")
+「早安﹐小姐。」
+@T
+OPEN(3)
+TXGIRL(0)
+「啊﹗早安．．．哎呀﹐對了．．．今天開始輪我做早餐了。」
+@T
+SS$(2)
+@C
+
+「真的可以嗎﹖現在改變主意﹐讓我來做也可以唷。」
+@T
+SS$(3)
+@C
+
+「不行﹗每個人到了十八歲就要開始工作﹐我至少也應該幫忙家事才對。」
+@T
+SS$(2)
+@C
+TXFACE("F046")
+「嗯．．．小姐真可憐．．．我如果可以做得更好的話﹐就不需要小姐幫忙了。」
+@T
+SS$(3)
+@C
+TXGIRL(18)
+「不要這樣說﹐吉普．．．不要讓我有濃重的卑賤感．．．．．．」
+@T
+SS$(2)
+@C
+
+「嗯．．．小姐﹐職業是沒有什麼尊貴之分的﹐幫忙家事是了不起的事。」
+@T
+SS$(3)
+@C
+
+「但是﹐請不要再說了．．．．．．」
+@T
+CLOSE(3)
+CLOSE(2)
+PICWORKING("Z024")
+
+FINAL
+
+*GN$
+TXA(NAME_FIRST)
+RET
+
+*FN$
+TXA(NAME_FAMILY)
+RET
+
+*OPEN
+IF(AX=1)TXOPEN(10) RET
+IF(AX=2)TXOPEN(13) RET
+IF(AX=3)TXOPEN(15) RET
+IF(AX=4)TXOPEN(14) RET
+RET
+
+*CLOSE
+IF(AX=1)TXCLOSE(10) RET
+IF(AX=2)TXCLOSE(13) RET
+IF(AX=3)TXCLOSE(15) RET
+IF(AX=4)TXCLOSE(14) RET
+RET
+
+*SS$
+IF(AX=1)TXSLCT(10) RET
+IF(AX=2)TXSLCT(13) RET
+IF(AX=3)TXSLCT(15) RET
+IF(AX=4)TXSLCT(14) RET
+RET
+
+*TTL$
+RET
+
+*START
+TXLC(10,21,220,0)
+TXLC(13,32,146,1)
+TXLC(14,32,20,1)
+TXLC(15,17,270,2)
+RET
+
+*FINAL
+LOAD("EEWEDD")
+RET
+
+*PICWORKING
+
+STRSTACK
+C5 = BX
+PTBK(2)
+PTLD("ENDWFRML")
+PTLA("ENDWFRMR")
+PTLA("ENDWFRMU")
+PTLA("ENDWFRMD")
+PTBK(0)
+PTLD("ENDWFRMM")
+PTX(20,0,0)
+PTBK(2)
+PTM(12,0,0)
+PTM(60,0,2)
+PTM(18,-40,4)
+PTM(18,400,6)
+PIC(11)
+PTBK(0)
+PTX(0,0,0)
+SI = C5
+PTLD
+PTMF(0,0,0)
+PIC(12)
+PIC(13,0,0,20,0,40,400)
+TIMER1(120)WAIT1
+RET
+

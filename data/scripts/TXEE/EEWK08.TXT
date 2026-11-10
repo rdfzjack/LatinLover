@@ -1,0 +1,143 @@
+TTL$("學士")
+
+START
+
+OPEN(4)
+TXFACE("F039")
+「小姐﹐巴克雷歐先生想見你。」
+@T
+CLOSE(4)
+OPEN(2)
+TXFACE("F051")
+「午安﹐GN$。恭喜你已經成人了。」
+@T
+OPEN(3)
+TXGIRL(1)
+「謝謝你﹐教授。」
+@T
+SS$(2)
+@C
+
+「哈哈哈．．．我已經不是什麼教授了。對了﹐你已經決定要做什麼工作了嗎﹖」
+@T
+SS$(3)
+@C
+TXGIRL(9)
+「不﹐還沒有。我還在煩惱．．．．．．」
+@T
+SS$(2)
+@C
+
+「那很好﹐這次在城裡要設立研究所﹐我和卡姆斯多古要尋找一些有才能的人來擔任教授。」
+@T
+SS$(3)
+@C
+TXGIRL(1)
+「哇﹗那麼您成名了﹐真是恭喜恭喜。」
+@T
+SS$(2)
+@C
+
+「我想要找妳加入我們的研究員行列﹐換句話說就是學士。怎麼樣﹐妳願意嗎﹖」
+@T
+SS$(3)
+@C
+TXGIRL(9)
+「我嗎﹖」
+@T
+SS$(2)
+@C
+
+「能夠生活在研究學問中﹐做一個研究生﹐這應該是一般人最大的心願吧。」
+@T
+SS$(3)
+@C
+TXGIRL(0)
+「我知道了﹐我也正為著如何繼續追求學問而煩惱著﹐請讓我加入吧。」
+@T
+SS$(2)
+@C
+
+「好﹗歡迎妳的加入。GN$小姐﹐有了妳王國的科學發展就有希望了。」
+@T
+CLOSE(2)
+CLOSE(3)
+PICWORKING("Z008")
+OPEN(1)
+就這樣﹐GN$•FN$成為國立研究所的學士﹐踏上了研究學問之途．．．．．．
+@T
+CLOSE(1)
+
+FINAL
+
+*GN$
+TXA(NAME_FIRST)
+RET
+
+*FN$
+TXA(NAME_FAMILY)
+RET
+
+*OPEN
+IF(AX=1)TXOPEN(10) RET
+IF(AX=2)TXOPEN(13) RET
+IF(AX=3)TXOPEN(15) RET
+IF(AX=4)TXOPEN(14) RET
+RET
+
+*CLOSE
+IF(AX=1)TXCLOSE(10) RET
+IF(AX=2)TXCLOSE(13) RET
+IF(AX=3)TXCLOSE(15) RET
+IF(AX=4)TXCLOSE(14) RET
+RET
+
+*SS$
+IF(AX=1)TXSLCT(10) RET
+IF(AX=2)TXSLCT(13) RET
+IF(AX=3)TXSLCT(15) RET
+IF(AX=4)TXSLCT(14) RET
+RET
+
+*TTL$
+RET
+
+*START
+TXLC(10,21,220,0)
+TXLC(13,32,146,1)
+TXLC(14,32,20,1)
+TXLC(15,17,270,2)
+RET
+
+*FINAL
+LOAD("EEWEDD")
+RET
+
+*PICWORKING
+
+STRSTACK
+C5 = BX
+PTBK(2)
+PTLD("ENDWFRML")
+PTLA("ENDWFRMR")
+PTLA("ENDWFRMU")
+PTLA("ENDWFRMD")
+PTBK(0)
+PTLD("ENDWFRMM")
+PTX(20,0,0)
+PTBK(2)
+PTM(12,0,0)
+PTM(60,0,2)
+PTM(18,-40,4)
+PTM(18,400,6)
+PIC(11)
+PTBK(0)
+PTX(0,0,0)
+SI = C5
+PTLD
+PTMF(0,0,0)
+PIC(12)
+PIC(13,0,0,20,0,40,400)
+TIMER1(120)WAIT1
+RET
+

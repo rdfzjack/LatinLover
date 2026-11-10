@@ -1,0 +1,596 @@
+
+
+
+
+
+
+
+.HEAVY_TRANING
+.HEAVY_T_COUNT
+.HEAVY_WORKING
+.HEAVY_W_COUNT
+.TENSU_SOGO
+
+HEAVY_TRANING	=	ENDNM[10]
+HEAVY_T_COUNT	=	ENDNM[11]
+HEAVY_WORKING	=	ENDNM[13]
+HEAVY_W_COUNT	=	ENDNM[14]
+
+TENSU_SOGO		=	ENDNM[18]
+
+.SCRL_LENG_0N=0
+.SCRL_LENG_1N=0
+.SCRL_LENG_2N=0
+.SCRL_BASE_XX=20
+.SCRL_BASE_YY=78
+
+.WTIMER_SCRL=	4
+
+TIMER1(180)
+PTBK(0)
+PTLD("ENDMAILL")
+PTLA("ENDMAILR")
+PTLA("ENDMAILU")
+PTLA("ENDMAILD")
+PTLA("ENDMAINW")
+PIC(14,P_NENREI,0)
+PTLA
+PTLA("ENDPALET")
+WAIT1
+EFC(1)
+TIMER1(60)
+PTBK(0)
+PTX(0,0,0)
+PTX(40,0,1)
+PTX(0,-40,2)
+PTX(0,400,3)
+PTMF(0,0,4)
+PTX(66,54,6)
+PTPLT(8,0)
+WAIT1
+
+PARAM_ROLL
+
+PLAY(31)
+
+PIC(18,0,-40,79,439,15)
+PALET_SET(0)
+PIC(19,13,0,0,0)
+C1 = 6	C2 = 1
+	PIC(20,0,C2,0,0,0) : еяЧЬ單色ＰＵＴ
+	C2++
+LOOP C1
+EFC(16)
+STAFF_ROLL
+PARC(10)
+EFC(1)
+GRPCLS
+TIMER1(30)
+WAIT1
+PALET_SET(0)
+C1 = 2
+
+LOAD("PARAINIT")
+
+
+
+
+
+
+
+
+*PARAM_ROLL
+EDTX(1)
+ROLL_DATA_PARAM
+PARC(2,6,40)
+
+EDTX(5)
+SCRL_LENG_0N = DX * 18 / 2 +75
+
+PARC(2,11, 18)
+PARC(2,5,  0,280)
+PARC(2,13,3)
+PARC(2,10, 16,SCRL_BASE_YY,40,284)
+PARC(2,9,WTIMER_SCRL,SCRL_LENG_0N,2)
+EFC(21)
+PARC(2,12,3)
+
+ROLL_DATA_ONCE
+
+TIMER1(180)
+WAIT1
+MUSIC(2)
+EFC(4)
+
+RET
+
+
+
+
+
+*STAFF_ROLL
+
+
+
+EDTX(1)
+ROLL_DATA00
+PARC(2,8,  40)
+EDTX(5)
+
+SCRL_LENG_0N = DX * 18 / 2 -4
+
+
+
+PARC(2,11, 18)
+PARC(2,5,  0,280)
+
+PARC(2,13,3)
+
+
+
+EDTX(1)
+ROLL_DATA11
+PARC(2,8, 40)
+EDTX(5)
+
+SCRL_LENG_1N = DX * 18 / 2 -70
+
+PARC(2,11, 18)
+PARC(2,5,  0,0)
+
+PARC(2,13,1)
+
+
+
+C2 = 1	C1 = 15
+	PIC(19,C2,0,0,100)
+	C2++
+LOOP C1
+
+C1 = 50 + 24
+C2 = 53 + 24
+PIC(18,16,C1,63,C2,2)  C1 += 4	C2 += 4
+PIC(18,16,C1,63,C2,3)  C1 += 4	C2 += 4
+PIC(18,16,C1,63,C2,6)  C1 += 4	C2 += 4
+PIC(18,16,C1,63,C2,7)  C1 += 4	C2 += 4
+PIC(18,16,C1,63,C2,10)	C1 += 4  C2 += 4
+PIC(18,16,C1,63,C2,11)	C1 += 4  C2 += 4
+PIC(18,16,C1,63,C2,14)	C1 += 4  C2 += 4
+PIC(18,16,C1,63,C2,15)	C1 += 4  C2 += 4
+
+C1 = 347 + 11
+C2 = 350 + 11
+PIC(18,16,C1,63,C2,2)  C1 -= 4	C2 -= 4
+PIC(18,16,C1,63,C2,3)  C1 -= 4	C2 -= 4
+PIC(18,16,C1,63,C2,6)  C1 -= 4	C2 -= 4
+PIC(18,16,C1,63,C2,7)  C1 -= 4	C2 -= 4
+PIC(18,16,C1,63,C2,10)	C1 -= 4  C2 -= 4
+PIC(18,16,C1,63,C2,11)	C1 -= 4  C2 -= 4
+PIC(18,16,C1,63,C2,14)	C1 -= 4  C2 -= 4
+PIC(18,16,C1,63,C2,15)	C1 -= 4  C2 -= 4
+
+PIC(19,0,0,0,0)
+PIC(19,1,0,0,90)
+PIC(19,2,0,0,100)
+PIC(19,3,0,0,100)
+PIC(19,4,0,0,80)
+PIC(19,5,0,0,64)
+PIC(19,6,0,0,100)
+PIC(19,7,0,0,100)
+PIC(19,8,0,0,48)
+PIC(19,9,0,0,32)
+PIC(19,10,0,0,100)
+PIC(19,11,0,0,100)
+PIC(19,12,0,0,16)
+PIC(19,13,0,0,0)
+PIC(19,14,0,0,100)
+PIC(19,15,0,0,100)
+
+
+
+
+PARC(2,10, SCRL_BASE_XX,SCRL_BASE_YY,40,280)
+PARC(2,9,WTIMER_SCRL,SCRL_LENG_0N,2)
+PARC(2,12,3)
+PARC(2,9,WTIMER_SCRL,SCRL_LENG_1N,2)
+PARC(2,12,1)
+
+
+
+TIMER1(30)
+C1 = 50 + 24
+C2 = 53 + 24 + 24
+PIC(18,16,C1,63,C2,15)
+C1 = 347 + 11 - 24
+C2 = 350 + 11
+PIC(18,16,C1,63,C2,15)
+WAIT1
+RET
+
+
+*ROLL_DATA_PARAM
+@G
+@R．@F
+
+@@
+IF ( P_BLOOD=0 )	@G血型•Ａ@@
+IF ( P_BLOOD=1 )	@G血型•Ｂ@@
+IF ( P_BLOOD=2 )	@G血型•Ｏ@@
+IF ( P_BLOOD=3 )	@G血型•ＡＢ@@
+@G
+　生日@@
+EDTX(8,P_BORTHYEAR)
+@G年@@
+EDTX(8,P_BORTHMONTH)
+@G月@@
+EDTX(8,P_BORTHDAY)
+@G日
+
+@@
+IF ( P_SHIKYU=0 )	@G白羊座@@
+IF ( P_SHIKYU=1 )	@G金牛座@@
+IF ( P_SHIKYU=2 )	@G雙子座@@
+IF ( P_SHIKYU=3 )	@G巨蟹座@@
+IF ( P_SHIKYU=4 )	@G獅子座@@
+IF ( P_SHIKYU=5 )	@G處女座@@
+IF ( P_SHIKYU=6 )	@G天秤座@@
+IF ( P_SHIKYU=7 )	@G天蠍座@@
+IF ( P_SHIKYU=8 )	@G人馬座@@
+IF ( P_SHIKYU=9 )	@G摩羯座@@
+IF ( P_SHIKYU=10 )	@G寶瓶座@@
+IF ( P_SHIKYU=11 )	@G雙魚座@@
+@G
+•@@
+IF (P_SYUGOSEI=0)	@G太陽神@@
+IF (P_SYUGOSEI=1)	@G月神@@
+IF (P_SYUGOSEI=2)	@G火星神@@
+IF (P_SYUGOSEI=3)	@G水星神@@
+IF (P_SYUGOSEI=4)	@G木星神@@
+IF (P_SYUGOSEI=5)	@G金星神@@
+IF (P_SYUGOSEI=6)	@G土星神@@
+IF (P_SYUGOSEI=7)	@G天王星神@@
+IF (P_SYUGOSEI=8)	@G海王星神@@
+IF (P_SYUGOSEI=9)	@G冥王星神@@
+@G
+
+
+身高 @@EDTX(6,P_SHINCHO)
+@G
+cm　體重 @@EDTX(6,P_TAIJYU)
+@G
+kg
+B@@EDTX(6,P_BUST)
+@G
+cm　W@@EDTX(6,P_WAIST)
+@G
+cm　H@@EDTX(6,P_HIP)
+@G
+cm
+
+體力••••••@@EDTX(7,B_TAIRYOKU)
+@G
+
+腕力••••••@@EDTX(7,B_KINRYOKU)
+@G
+
+智力••••••@@EDTX(7,B_CHINOH)
+@G
+
+氣質••••••@@EDTX(7,B_KIHIN)
+@G
+
+魅力••••••@@EDTX(7,B_IROKE)
+@G
+
+道德••••••@@EDTX(7,B_MORALS)
+@G
+
+信仰••••••@@EDTX(7,B_SHINKOH)
+@G
+
+罪孽••••••@@EDTX(7,B_INGYO)
+@G
+
+感受••••••@@EDTX(7,B_KANJUSEI)
+@G
+
+
+戰士評價@@EDTX(7,H_SENSHI)
+@G　　　　　　　　　　　　　　@@
+@G
+
+戰鬥技術@@EDTX(7,V_SENTOH)
+@G　攻擊能力@@EDTX(7,V_KOUGEKI)
+@G　防禦能力@@EDTX(7,V_BOUGYO)
+@G
+
+
+魔法評價@@EDTX(7,H_MAHO)
+@G　　　　　　　　　　　　　　@@
+@G
+
+魔法技術@@EDTX(7,V_MAHOGIJUTSU)
+@G　魔法能力@@EDTX(7,V_MARYOKU)
+@G　抗魔能力@@EDTX(7,V_KOHMARYOKU)
+@G
+
+
+社交評價@@EDTX(7,H_SYAKOH)
+@G　　　　　　　　　　　　　　@@
+@G
+
+禮儀表現@@EDTX(7,V_REIGI)
+@G　藝術修養@@EDTX(7,V_GEIJYUTSU)
+@G　談話技巧@@EDTX(7,V_WAJYUTU)
+@G
+
+
+家事評價@@EDTX(7,H_KAJI)
+@G　　　　　　　　　　　　　　@@
+@G
+
+烹飪技術@@EDTX(7,V_RYOURI)
+@G　掃地洗衣@@EDTX(7,V_SOUJISENTAKU)
+@G　待人接物@@EDTX(7,V_KIDATE)
+@G
+
+@@
+IF ( HEAVY_T_COUNT>0 )
+	@G
+
+	上課次數最頻繁的是•••@@
+	IF ( HEAVY_TRANING=1 )	@G•「自然科學」@@
+	IF ( HEAVY_TRANING=2 )	@G•••「詩詞」@@
+	IF ( HEAVY_TRANING=3 )	@G•••「神學」@@
+	IF ( HEAVY_TRANING=4 )	@G•••「軍事」@@
+	IF ( HEAVY_TRANING=5 )	@G•••「劍術」@@
+	IF ( HEAVY_TRANING=6 )	@G••「格鬥術」@@
+	IF ( HEAVY_TRANING=7 )	@G•••「魔法」@@
+	IF ( HEAVY_TRANING=8 )	@G•••「禮儀」@@
+	IF ( HEAVY_TRANING=9 )	@G•••「繪畫」@@
+	IF ( HEAVY_TRANING=10 ) @G•••「舞蹈」@@
+	IF ( HEAVY_TRANING=11 ) @G•「武者修行」@@
+
+IF ( HEAVY_W_COUNT>0 )
+	@G
+
+	最多實行的打工是••••@@
+	IF ( HEAVY_WORKING=1 )	@G•「家庭管理」@@
+	IF ( HEAVY_WORKING=2 )	@G••「育幼院」@@
+	IF ( HEAVY_WORKING=3 )	@G•••「旅館」@@
+	IF ( HEAVY_WORKING=4 )	@G•••「農場」@@
+	IF ( HEAVY_WORKING=5 )	@G•••「教堂」@@
+	IF ( HEAVY_WORKING=6 )	@G•••「餐廳」@@
+	IF ( HEAVY_WORKING=7 )	@G••「伐木場」@@
+	IF ( HEAVY_WORKING=8 )	@G••「美容院」@@
+	IF ( HEAVY_WORKING=9 )	@G•••「工地」@@
+	IF ( HEAVY_WORKING=10 ) @G••「狩獵區」@@
+	IF ( HEAVY_WORKING=11 ) @G•••「墓園」@@
+	IF ( HEAVY_WORKING=12 ) @G•「家庭教師」@@
+	IF ( HEAVY_WORKING=13 ) @G•••「酒店」@@
+	IF ( HEAVY_WORKING=14 ) @G•••「酒家」@@
+	IF ( HEAVY_WORKING=15 ) @G•「大夜總會」@@
+@G
+
+
+殺死怪獸數目••••@@EDTX(7,URA_KILL_MONSTR)
+@G
+
+母性••••••••@@EDTX(7,URA_MOTHER_LOVE)
+@G
+
+和父親的關係••••@@EDTX(7,URA_FATHER)
+@G
+
+和管家的關係••••@@EDTX(7,URA_STEWARD)
+@G
+
+和王子的關係••••@@EDTX(7,URA_PRINCE)
+@G
+
+
+
+總合點數••••••@@EDTX(8,TENSU_SOGO)
+@G
+
+
+
+
+
+
+
+
+
+@@
+RET
+
+
+
+
+*ROLL_DATA_ONCE
+IF ( TENSU_SOGO>=1000 )
+	PUT_EFCSTR("將神最高的祝福賜給父親和女兒．．．．．．")
+IF ( TENSU_SOGO>=700  TENSU_SOGO<=999 )
+	PUT_EFCSTR("很棒的父親和女兒的故事．．．．．．")
+IF ( TENSU_SOGO>=400  TENSU_SOGO<=699 )
+	PUT_EFCSTR("這個父親和女兒的事將永遠．．．．．．")
+IF ( TENSU_SOGO>=50   TENSU_SOGO<=399 )
+	PUT_EFCSTR("再見了﹐父親和女兒．．．．．．")
+IF ( TENSU_SOGO<=49 )
+	PUT_EFCSTR("這個女兒和父親的故事結束了．．．．．．")
+RET
+
+*PUT_EFCSTR
+TIMER1(5)
+PIC(16,2,0,1)PIC(15,20,203)
+WAIT1
+TIMER1(5)
+PIC(16,3,0,1)PIC(15,20,203)
+WAIT1
+TIMER1(5)
+PIC(16,4,0,1)PIC(15,20,203)
+WAIT1
+TIMER1(5)
+PIC(16,5,0,1)PIC(15,20,202)
+WAIT1
+TIMER1(5)
+PIC(16,6,0,1)PIC(15,20,202)
+WAIT1
+TIMER1(5)
+PIC(16,0,0,1)PIC(15,20,202)
+WAIT1
+RET
+
+*ROLL_DATA00
+@G
+
+原　　著　　　　　　　　赤井　孝美
+原　　畫
+
+
+
+ＣＧ監督　　　　　　　　玉谷　純
+
+
+美　　術　　　　　　　　木島　康貴
+　　　　　　　　　　　　　管　真理子
+　　　　　　　　　　　　木我　浩一
+　　　　　　　　　　　　伊佐　和人
+　　　　　　　　　　　　加藤　正人
+　　　　　　　　　　　　藤田　武
+
+
+音　　樂　　　　　　　　�}原　正裕
+
+
+
+音樂／效果音程式　　　　�}原　正裕
+　　　　Music Driver "PMD" Ver.4.6
+　　　MIDI Music Driver "MMD" Ver.2.0
+
+
+
+測　　試　　　　　　　　太田　由美子
+　　　　　　　　　　　　大見　昭
+　　　　　　　　　　　　神村　靖宏
+　　　　　　　　　　　　佐藤　裕紀
+　　　　　　　　　　　　外山　昌平
+　　　　　　　　　　　　安藤　健
+
+
+輔佐演出　　　　　　　　加藤　正人
+
+
+
+技術管理　　　　　　　　赤荻　修
+　　　　　　　　　　　　武田　信孝
+
+
+
+廣告／包裝製作　　　　　赤井　紀美子
+　　　　　　　　　　　　神村　幸子
+
+
+廣告宣傳　　　　　　　　�~入　一彌
+　　　　　　　　　　　　伊藤　美雪
+
+
+
+市場調查　　　　　　　　大橋　豊
+
+
+
+製作進行　　　　　　　　中丸　知美
+
+
+
+程　　式　　　　　　　　橋本　立郎
+
+@@
+RET
+*ROLL_DATA11
+@G
+
+廣告宣傳　　　　　　　　�~入　一彌
+　　　　　　　　　　　　伊藤　美雪
+
+
+
+市場調查　　　　　　　　大橋　豊
+
+
+
+製作進行　　　　　　　　中丸　知美
+
+
+
+程　　式　　　　　　　　橋本　立郎
+
+
+
+
+製　　片　　　　　　　　澤村　武伺
+
+
+
+
+
+
+
+
+監　　督　　　　　　　　赤井　孝美
+
+
+
+
+
+
+
+
+
+中文版製作群
+
+
+
+程式設計　　　　　　　　精訊中文工作室
+
+
+
+
+美術支援　　　　　　　　陳靜芬
+
+
+
+中文輸入　　　　　　　　蔡承澔
+　　　　　　　　　　　　宋明義
+　　　　　　　　　　　　徐政棠
+
+
+
+測　　試　　　　　　　　精訊工作室企劃部
+
+
+
+執行製作　　　　　　　　蔡承澔
+
+
+
+總　　監　　　　　　　　李培民
+
+
+
+
+
+
+
+
+發　　行　　　　　　　　精訊資訊有限公司
+
+企劃製作　　　　　　　　ＧＡＩＮＡＸ
+@@
+
+RET
+
+
+
+

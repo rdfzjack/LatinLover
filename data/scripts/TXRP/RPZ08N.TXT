@@ -1,0 +1,63 @@
+
+
+
+
+
+*CHECK_MONSTOR
+MSR08N
+RET
+
+*KAIWA_OK
+KWA08N
+RET
+
+*MSR08N
+R_MS_NUMBER		=8
+R_FACE			="F168"
+R_MONSTOR		="M008"
+R_NAME			="山怪"
+R_CHINOH		=30
+RDM(40,55)
+R_SENTOH		=AX
+R_KOUGEKI		=50
+R_BOUGYO		=8
+R_SOUKOU		=8
+R_SKNAME		="固體"
+R_MAHOGIJUTSU	=0
+R_MARYOKU		=0
+R_KOHMARYOKU	=0
+RDM(40,50)
+R_SENI=AX
+R_DASSYUTU		=30
+R_TSUKON		=15
+RDM(45,120)
+R_MAX_HP=AX
+R_MAX_MP		=0
+R_GOLD			=0
+R_SE_ATTACK	=4
+
+RANDAM(3)
+IF(AX=1)MONSTR[0]="Ｇｉ！！"
+IF(AX=2)MONSTR[0]="Ｇｉｉｉ∼！"
+IF(AX=3)MONSTR[0]="咻∼﹗﹗"
+MONSTR[1]="嘰嘰嘰嘰．．．．．．"
+RANDAM(3)
+IF(AX=1)MONSTR[2]="貓眼石是山貓族的至寶．．．．．．"
+IF(AX=2)MONSTR[2]="看不到豐厚的感受性．．．．．．"
+IF(AX=3)MONSTR[2]="與小妖精見面可以豐厚內心．．．．．．"
+RANDAM(3)
+IF(AX=1)MONSTR[3]="Ｋｉ∼！"
+IF(AX=2)MONSTR[3]="Ｋｉｉｉｉ∼﹗﹗"
+IF(AX=3)MONSTR[3]="咻∼﹗"
+MONSTR[4]="咻咻咻∼﹗"
+MONSTR[5]="Ｋｉ．．．﹗"
+RET
+
+*KWA08N
+AX = 0
+IF ( B_KANJUSEI >= 200 )	AX=1
+RET
+
+
+
+

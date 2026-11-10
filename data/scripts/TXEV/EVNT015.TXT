@@ -1,0 +1,1062 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.UP_FITER_POINT[3]=3,4,5
+.UP_MAGIC_POINT[3]=3,4,5
+.UP_SOCIAL_POINT[3]=3,4,5
+.UP_KEEPER_POINT[3]=3,4,5
+
+.ITEM_ATTRBUTE[1]
+.ITEM_KOUKA[1]
+
+RUN_MONTH[15]++
+
+STRSCLEAR
+
+TXLC(1,4,290,0)
+TXLC(2,17,148,1)
+TXLC(3,31,270,2)
+ITEMPRN(3,50,120)	: сюХヤユЪу TYPE 5 位置
+
+EVNT015
+
+IF ( GIRL_DAMEG!0 )
+	PLAY(8)
+IF ( GIRL_DAMEG=0 )
+	IF ( TM_SEASON =1 ) PLAY(4)
+	IF ( TM_SEASON =2 ) PLAY(5)
+	IF ( TM_SEASON =3 ) PLAY(6)
+	IF ( TM_SEASON =4 ) PLAY(7)
+
+LOAD("MAINBORN")
+
+
+
+
+
+
+
+
+
+
+
+*EVNT015
+
+PLAY(27)
+
+C1 = RUN_KITAERU[5] + RUN_KITAERU[6] + RUN_MUSYA[0]
+
+
+IF ( C1 >= 48  E_ETC[4]=3  H_SENSHI>=400 ) FITER_4TH
+IF ( C1 >= 24  E_ETC[4]=2  H_SENSHI>=300 ) FITER_3RD
+IF ( C1 >= 12  E_ETC[4]=1  H_SENSHI>=200 ) FITER_2ND
+IF ( C1 >= 6   E_ETC[4]=0  H_SENSHI>=100 ) FITER_1ST
+
+C1 = RUN_KITAERU[7]
+
+IF ( C1 >= 32  E_ETC[5]=3  V_MAHOGIJUTSU>=85  H_MAHO>=400 ) MAGIC_4TH
+IF ( C1 >= 16  E_ETC[5]=2  V_MAHOGIJUTSU>=75  H_MAHO>=300 ) MAGIC_3RD
+IF ( C1 >= 8   E_ETC[5]=1  V_MAHOGIJUTSU>=60  H_MAHO>=200 ) MAGIC_2ND
+IF ( C1 >= 4   E_ETC[5]=0  V_MAHOGIJUTSU>=50  H_MAHO>=100 ) MAGIC_1ST
+
+C1 = RUN_KITAERU[9] + RUN_KITAERU[10] + RUN_KITAERU[8]
+
+IF ( C1 >= 64  E_ETC[6]=3  H_SYAKOH>=400 ) SOCIAL_4TH
+IF ( C1 >= 32  E_ETC[6]=2  H_SYAKOH>=300 ) SOCIAL_3RD
+IF ( C1 >= 16  E_ETC[6]=1  H_SYAKOH>=200 ) SOCIAL_2ND
+IF ( C1 >= 8   E_ETC[6]=0  H_SYAKOH>=100 ) SOCIAL_1ST
+
+C1 = RUN_ARBEIT[1] + RUN_ARBEIT[6] + RUN_ARBEIT[13]
+
+IF ( C1 >= 120	E_ETC[7]=3  H_KAJI>=400 ) KEEPER_4TH
+IF ( C1 >= 60	E_ETC[7]=2  H_KAJI>=300 ) KEEPER_3RD
+IF ( C1 >= 30	E_ETC[7]=1  H_KAJI>=200 ) KEEPER_2ND
+IF ( C1 >= 15	E_ETC[7]=0  H_KAJI>=100 ) KEEPER_1ST
+
+RET
+
+
+
+
+
+*FITER_1ST
+E_ETC[4]++
+
+TXOPEN(2)
+TXFACE("F133")
+「妳是勇者TXA(NAME_FAMILY)的女兒﹐TXA(NAME_FIRST)小姐嗎﹖．．．．．．」
+@P
+TXOPEN(3)
+TXGIRL(15)
+「是﹐我是．．．請問您是那位﹖」
+@P
+@2
+@C
+「我是戰鬥的精靈•威魯吉利亞。
+@P
+TXA(NAME_FIRST)啊﹐妳每日都在鍛鍊武術之道﹐進步非凡。我是戰士的守護者﹐對妳目前的鍛鍊成果十分讚賞﹐想給予妳大大的讚美。」
+@P
+
+MUSIC(6,2)
+EFC(4)
+
+TXCLOSE(2)
+TXCLOSE(3)
+TIMER1(30)WAIT1
+EFC(3)
+EFC(16)
+
+TXOPEN(1)
+耀眼的光芒照亮了室內﹐等到光芒消失時﹐威魯吉利亞的身影已經消失了．．．．．．
+@P
+TXCLOSE(1)
+TXOPEN(3)
+TXGIRL(9)
+「總覺得身體似乎變輕了﹖」
+@P
+GR_OPEN
+IGRP_TBL3[0]=V_SENTOH
+IGRP_TBL1[0]="戰鬥技術"
+IGRP_TBL5[0]=2
+IGRP_CNT=1
+IGRP_X=50
+IGRP_Y=180
+GRPOPEN(1,1)
+
+
+
+TXOPEN(1)
+TXA(NAME_FIRST)的戰鬥技術上昇了TXPOINT(UP_FITER_POINT[0])點﹗
+V_SENTOH += UP_FITER_POINT[0]
+CLENDER(13)
+GRPUPD(1,0,V_SENTOH)
+@P
+TXCLOSE(1)
+
+GR_CLOSE
+TXCLOSE(3)
+RET
+
+
+
+
+
+
+*FITER_2ND
+*FITER_3RD
+E_ETC[4]++
+TXOPEN(2)
+TXFACE("F133")
+「TXA(NAME_FIRST)啊．．．．．．」
+@P
+TXOPEN(3)
+TXGIRL(1)
+「啊﹐威魯吉利亞先生﹐歡迎。」
+@P
+@2
+@C
+「我是掌管戰鬥者•威魯吉利亞。TXA(NAME_FIRST)啊﹐妳聽從我的話﹐在武術之道上發出耀眼的光彩﹐為此我要再度的讚美妳的努力。」
+@P
+MUSIC(6,2)
+EFC(4)
+
+TXCLOSE(2)
+TXCLOSE(3)
+TIMER1(30)WAIT1
+EFC(3)
+EFC(16)
+
+TXOPEN(1)
+熟悉的光芒再度閃耀在室內﹐當光芒消散時﹐威魯吉利亞的身影也消失了。
+@P
+TXCLOSE(1)
+TXOPEN(3)
+TXGIRL(1)
+「總覺得力氣好像變大了。」
+@P
+GR_OPEN
+IF ( E_ETC[4]=2 )
+	IGRP_TBL3[0]=V_KOUGEKI
+	IGRP_TBL1[0]="攻擊能力"
+	IGRP_TBL5[0]=2
+IF ( E_ETC[4]=3 )
+	IGRP_TBL3[0]=V_BOUGYO
+	IGRP_TBL1[0]="防禦能力"
+	IGRP_TBL5[0]=2
+IGRP_CNT=1
+IGRP_X=50
+IGRP_Y=180
+GRPOPEN(1,1)
+
+
+
+TXOPEN(1)
+IF ( E_ETC[4]=2 )
+	TXA(NAME_FIRST)的攻擊能力上昇了TXPOINT(UP_FITER_POINT[1])點﹗
+	V_KOUGEKI += UP_FITER_POINT[1]
+	CLENDER(13)
+	GRPUPD(1,0,V_KOUGEKI)
+IF ( E_ETC[4]=3 )
+	TXA(NAME_FIRST)的防禦能力上昇了TXPOINT(UP_FITER_POINT[2])點﹗
+	V_BOUGYO += UP_FITER_POINT[2]
+	CLENDER(13)
+	GRPUPD(1,0,V_BOUGYO)
+@P
+TXCLOSE(1)
+
+GR_CLOSE
+TXCLOSE(3)
+RET
+
+
+
+
+
+*FITER_4TH
+IF ( ITEM_MAX >= ITEM_DIM ) RET
+
+E_ETC[4]++
+TXOPEN(2)
+TXFACE("F133")
+「TXA(NAME_FIRST)啊．．．．．．」
+@P
+TXOPEN(3)
+TXGIRL(1)
+「威魯吉利亞﹗」
+@P
+@2
+@C
+「TXA(NAME_FIRST)啊﹐妳的武術和勇氣已經名聞四海﹐享有戰士的最高聲譽了。我非常高興﹐唯有妳才有資格當我的化身。」
+@P
+@3
+@C
+「真的嗎﹖」
+@P
+@2
+@C
+「我相當欣賞妳的武術和勇氣﹐我將我的劍讓給妳﹐如果好好使用的話﹐將受益無窮。」
+@P
+@3
+
+
+
+
+
+ITEMID_TBL1[0]="威魯吉利亞劍"
+ITEMID_TBL2[0]=10
+ITEMID_TBL3[0]=5000
+ITEMID_TBL4[0]="攻+25 防+10 戰+18"
+ITEMID_TBL5[0]=0
+ITEMID_TBL6[0]=""
+ITEMID_TBL7[0]=0
+ITEM_KOUKA[0]="V_KOUGEKI+25 V_BOUGYO+10 V_SENTOH+18 E_KAISIN!"
+ITEM_ATTRBUTE[0]=2000
+ITEMID_CNT=1
+
+BX=ITEMID_TBL2[0]
+CX=ITEMID_TBL3[0]
+DX=ITEM_ATTRBUTE[0]
+SI=ITEMID_TBL1[0]
+DI=ITEM_KOUKA[0]
+BP=ITEMID_TBL4[0]
+ITEM_INST(1)
+
+MUSIC(6,2)
+EFC(4)
+
+TXCLOSE(2)
+TXCLOSE(3)
+TIMER1(30)
+ITEMPRN(1,5)
+WAIT1
+EFC(3)
+EFC(16)
+
+TXOPEN(1)
+一道光芒照亮了四周﹐光芒消散後﹐威魯吉利亞的身影已經消失﹐只留下了一把劍。
+@P
+TXCLOSE(1)
+TXOPEN(3)
+TXGIRL(1)
+「哇．．．這把劍真是稀世之寶。」
+@P
+
+
+
+TXOPEN(1)
+TXA(NAME_FIRST)得到了『威魯吉利亞劍』﹗
+@P
+TXCLOSE(1)
+TXCLOSE(3)
+ITEMPRN(2)	: сюХヤユЪу復ˍ
+RET
+
+
+
+
+
+*MAGIC_1ST
+E_ETC[5]++
+
+TXOPEN(2)
+TXFACE("F134")
+「來﹐全國學習魔法的年輕人﹐我正是你們嚮往的目標﹐人生的標的﹐世界第一大魔法師∼費依。」
+@P
+TXOPEN(3)
+TXGIRL(15)
+「．．．．．．」
+@P
+@2
+@C
+「啊∼哈﹗妳就是勇者TXA(NAME_FAMILY)的女兒﹐TXA(NAME_FIRST)吧﹗看得出妳在魔法上所下的功夫。
+@P
+我非常欣賞努力學習魔法的小孩﹐今天我要給妳特別的讚美﹗」
+@P
+
+MUSIC(6,2)
+EFC(4)
+
+TXCLOSE(2)
+TXCLOSE(3)
+TIMER1(30)
+WAIT1
+EFC(3)
+EFC(16)
+
+TXOPEN(1)
+一瞬間光芒籠罩著室內﹐而費依的身影就在光芒中消失了．．．．．．
+@P
+TXCLOSE(1)
+
+TXOPEN(3)
+TXGIRL(9)
+「我覺得好像變得好輕鬆﹐頭腦很清楚．．．．．．」
+@P
+GR_OPEN
+IGRP_TBL3[0]=V_MAHOGIJUTSU
+IGRP_TBL1[0]="魔法技術"
+IGRP_TBL5[0]=2
+IGRP_CNT=1
+IGRP_X=50
+IGRP_Y=180
+GRPOPEN(1,1)
+
+
+
+TXOPEN(1)
+TXA(NAME_FIRST)的魔法技術上昇了TXPOINT(UP_MAGIC_POINT[0])點﹗
+V_MAHOGIJUTSU += UP_MAGIC_POINT[0]
+CLENDER(13)
+GRPUPD(1,0,V_MAHOGIJUTSU)
+@P
+TXCLOSE(1)
+
+GR_CLOSE
+TXCLOSE(3)
+RET
+
+
+
+
+
+
+*MAGIC_2ND
+*MAGIC_3RD
+E_ETC[5]++
+TXOPEN(2)
+TXFACE("F134")
+「啊∼咿﹐我又來了∼」
+@P
+TXOPEN(3)
+TXGIRL(1)
+「啊﹐費依先生。」
+@P
+@2
+@C
+「呀∼呀﹐TXA(NAME_FIRST)看來精神真好。因為妳一直持續著魔法的練習﹐讓我十分高興。讓我給妳一點鼓勵吧﹗」
+@P
+
+MUSIC(6,2)
+EFC(4)
+
+TXCLOSE(2)
+TXCLOSE(3)
+TIMER1(30)
+WAIT1
+EFC(3)
+EFC(16)
+
+TXOPEN(1)
+一道光芒籠罩著室內﹐而費依的身影就在光芒中消失了．．．．．．
+@P
+TXCLOSE(1)
+
+TXOPEN(3)
+TXGIRL(1)
+「真謝謝你﹐費依先生。」
+@P
+GR_OPEN
+IF ( E_ETC[5] = 2 )
+	IGRP_TBL3[0]=V_MARYOKU
+	IGRP_TBL1[0]="魔法能力"
+	IGRP_TBL5[0]=2
+IF ( E_ETC[5] = 3 )
+	IGRP_TBL3[0]=V_KOHMARYOKU
+	IGRP_TBL1[0]="抗魔能力"
+	IGRP_TBL5[0]=2
+IGRP_CNT=1
+IGRP_X=50
+IGRP_Y=180
+GRPOPEN(1,1)
+
+
+
+TXOPEN(1)
+IF ( E_ETC[5] = 2 )
+	TXA(NAME_FIRST)的魔法能力上昇了TXPOINT(UP_MAGIC_POINT[1])點﹗
+	V_MARYOKU += UP_MAGIC_POINT[1]
+	CLENDER(13)
+	GRPUPD(1,0,V_MARYOKU)
+IF ( E_ETC[5] = 3 )
+	TXA(NAME_FIRST)的抗魔能力上昇了TXPOINT(UP_MAGIC_POINT[2])點﹗
+	V_KOHMARYOKU += UP_MAGIC_POINT[2]
+	CLENDER(13)
+	GRPUPD(1,0,V_KOHMARYOKU)
+@P
+TXCLOSE(1)
+GR_CLOSE
+TXCLOSE(3)
+RET
+
+
+
+
+
+
+*MAGIC_4TH
+IF ( ITEM_MAX >= ITEM_DIM ) RET
+
+E_ETC[5]++
+
+TXOPEN(2)
+TXFACE("F134")
+「咿∼呀﹐妳還記得世界第一大魔法師﹐費依嗎﹖」
+@P
+TXOPEN(3)
+TXGIRL(1)
+「怎麼會忘了呢﹖費依先生。」
+@P
+@2
+@C
+「TXA(NAME_FIRST)﹐以你在魔法上的天份及累積的經驗﹐現在使用魔法應該可以得心應手了吧﹖」
+@P
+@3
+@C
+TXGIRL(10)
+「還沒有到那種程度．．．．．．」
+@P
+@2
+@C
+「我將送妳一份好禮物﹐當作對妳的祝福。
+@P
+這枚『無敵的戒指』就是我送妳的禮物。只要戴著這枚戒指﹐無論妳使用任何魔法﹐ＭＰ都不會減少﹐可說是通往魔法最高境界不可或缺之物。」
+
+@3
+@C
+TXGIRL(1)
+「啊﹐謝謝你﹐費依先生﹗」
+@P
+@2
+@C
+「這個是世界上獨一無二的貴重戒指﹐千萬記住﹐不可以隨便賣出去﹗」
+@P
+
+
+
+
+
+ITEMID_TBL1[0]="無敵的戒指"
+ITEMID_TBL2[0]=37
+ITEMID_TBL3[0]=1000
+ITEMID_TBL4[0]="ＭＰ不會減少"
+ITEMID_TBL5[0]=0
+ITEMID_TBL6[0]=""
+ITEMID_TBL7[0]=0
+ITEM_KOUKA[0]="E_MAX_MP!"
+ITEM_ATTRBUTE[0]=4000
+ITEMID_CNT=1
+
+BX=ITEMID_TBL2[0]
+CX=ITEMID_TBL3[0]
+DX=ITEM_ATTRBUTE[0]
+SI=ITEMID_TBL1[0]
+DI=ITEM_KOUKA[0]
+BP=ITEMID_TBL4[0]
+ITEM_INST(1)
+
+MUSIC(6,2)
+EFC(4)
+
+TXCLOSE(2)
+TXCLOSE(3)
+TIMER1(30)
+ITEMPRN(1,5)
+WAIT1
+EFC(3)
+EFC(16)
+
+TXOPEN(1)
+一道光芒籠罩著室內﹐而費依的身影就在光芒中消失了﹐但是一枚戒指緩緩從空中飄落．．．．．．
+@P
+TXCLOSE(1)
+TXOPEN(3)
+TXGIRL(1)
+「啊﹗這就是無敵的戒指﹗」
+@P
+
+
+
+TXOPEN(1)
+TXA(NAME_FIRST)得到了『無敵的戒指』。
+@P
+TXCLOSE(1)
+TXCLOSE(3)
+ITEMPRN(2)	: сюХヤユЪу復ˍ
+RET
+
+
+
+
+
+*SOCIAL_1ST
+E_ETC[6]++
+
+TXOPEN(2)
+TXFACE("F135")
+「勇者TXA(NAME_FAMILY)的女兒﹐TXA(NAME_FIRST)是嗎﹖」
+@P
+TXOPEN(3)
+TXGIRL(15)
+「是．．是的﹖」
+@P
+@2
+@C
+「我的名字是派蒙﹐掌管名譽及成功的魔神。最近妳在社交界中﹐有著不錯的評價。」
+@P
+@3
+@C
+TXGIRL(11)
+「．．．．．．」
+@P
+@2
+@C
+「哈哈哈﹐我是魔神﹐妳當然會感到害怕﹗但是我是帶給人們成功的魔神。
+@P
+我非常喜歡成功的人﹐今日之所以會專程來訪﹐是因為看來妳好像具有成功的希望。」
+@P
+@3
+@C
+
+「成功的希望﹖」
+@P
+@2
+@C
+「是的﹐我可以看出妳具有成功的希望。我所謂的成功﹐是指社交界的認同﹐並給予高度的評價。
+@P
+請記得朝著這個方向的努力﹐我將盡我的能力來幫助妳。
+@P
+成功的話﹐我將視妳的努力﹐給予妳一項足以代表我的物品。」
+@P
+
+MUSIC(6,2)
+EFC(4)
+
+TXCLOSE(2)
+TXCLOSE(3)
+TIMER1(30)
+WAIT1
+EFC(3)
+EFC(16)
+
+
+TXOPEN(1)
+一道光芒照亮了室內﹐當光線消失時﹐派蒙的身影也不見了．．．．．．
+@P
+TXCLOSE(1)
+TXOPEN(3)
+TXGIRL(9)
+「啊﹐這．．．﹖」
+@P
+
+GR_OPEN
+IGRP_TBL3[0]=V_REIGI
+IGRP_TBL1[0]="禮儀表現"
+IGRP_TBL5[0]=2
+IGRP_CNT=1
+IGRP_X=50
+IGRP_Y=180
+GRPOPEN(1,1)
+
+
+
+TXOPEN(1)
+因為魔神派蒙的魔力﹐TXA(NAME_FIRST)的禮儀表現上昇了TXPOINT(UP_SOCIAL_POINT[0])點。
+V_REIGI += UP_SOCIAL_POINT[0]
+CLENDER(13)
+GRPUPD(1,0,V_REIGI)
+@P
+TXCLOSE(1)
+
+GR_CLOSE
+TXCLOSE(3)
+RET
+
+
+
+
+
+
+*SOCIAL_2ND
+*SOCIAL_3RD
+E_ETC[6]++
+
+TXOPEN(2)
+TXFACE("F135")
+「又見面了﹐TXA(NAME_FIRST)小姐。」
+@P
+TXOPEN(3)
+TXGIRL(11)
+「啊﹗是你．．．．．．」
+@P
+@2
+@C
+TXFACE("F135")
+「嗯嗯嗯﹐真是令人吃驚﹐妳真是一個了不起的女孩﹐不斷的朝這個方向努力。依照我們之間的約定﹐我再增強你的力量。」
+@P
+@3
+@C
+
+「．．．．．．」
+@P
+
+MUSIC(6,2)
+EFC(4)
+
+TXCLOSE(2)
+TXCLOSE(3)
+TIMER1(30)
+WAIT1
+EFC(3)
+EFC(16)
+
+TXOPEN(1)
+一道光芒照亮了室內﹐當光線消失時﹐派蒙的身影也不見了．．．．．．
+@P
+TXCLOSE(1)
+
+TXOPEN(3)
+TXGIRL(1)
+「雖然我有點害怕﹐但是看起來好像是真的要幫助我．．．．．．」
+@P
+GR_OPEN
+IF ( E_ETC[6] = 2 )
+	IGRP_TBL3[0]=V_GEIJYUTSU
+	IGRP_TBL1[0]="藝術修養"
+	IGRP_TBL5[0]=2
+IF ( E_ETC[6] = 3 )
+	IGRP_TBL3[0]=V_WAJYUTU
+	IGRP_TBL1[0]="談話技巧"
+	IGRP_TBL5[0]=2
+IGRP_CNT=1
+IGRP_X=50
+IGRP_Y=180
+GRPOPEN(1,1)
+
+
+
+TXOPEN(1)
+IF ( E_ETC[6] = 2 )
+	由於魔神派蒙的魔力﹐TXA(NAME_FIRST)的藝術修養上昇了TXPOINT(UP_SOCIAL_POINT[1])點﹗
+	V_GEIJYUTSU += UP_SOCIAL_POINT[1]
+	CLENDER(13)
+	GRPUPD(1,0,V_GEIJYUTSU)
+IF ( E_ETC[6] = 3 )
+	由於魔神派蒙的魔力﹐TXA(NAME_FIRST)的談話技巧上昇TXPOINT(UP_SOCIAL_POINT[2])點﹗
+	V_WAJYUTU += UP_SOCIAL_POINT[2]
+	CLENDER(13)
+	GRPUPD(1,0,V_WAJYUTU)
+@P
+TXCLOSE(1)
+GR_CLOSE
+TXCLOSE(3)
+RET
+
+
+
+
+
+*SOCIAL_4TH
+IF ( ITEM_MAX >= ITEM_DIM ) RET
+
+E_ETC[6]++
+
+TXOPEN(2)
+TXFACE("F135")
+「TXA(NAME_FIRST)啊﹐是我。」
+@P
+TXOPEN(3)
+TXGIRL(0)
+「歡迎光臨﹗魔神派蒙先生。」
+@P
+@2
+@C
+「呼呼呼﹐妳比以前進步多了﹐也穩定多了。現在﹐這個國家中妳的名望已經是無人不知、無人不曉。」
+@P
+@3
+@C
+「哎呀∼還沒有到那樣的程度．．．．．．」
+@P
+@2
+@C
+「妳可以說是大大的成功了。今天我來到這裡﹐是依照我們的約定﹐將最後的禮物送給妳﹐請妳收下。」
+@P
+
+
+
+
+
+ITEMID_TBL1[0]="誘惑的香水"
+ITEMID_TBL2[0]=31
+ITEMID_TBL3[0]=800
+ITEMID_TBL4[0]=""
+ITEMID_TBL5[0]=0
+ITEMID_TBL6[0]=""
+ITEMID_TBL7[0]=0
+ITEM_KOUKA[0]="E_PROPOSAL!"
+ITEM_ATTRBUTE[0]=4000
+ITEMID_CNT=1
+
+BX=ITEMID_TBL2[0]
+CX=ITEMID_TBL3[0]
+DX=ITEM_ATTRBUTE[0]
+SI=ITEMID_TBL1[0]
+DI=ITEM_KOUKA[0]
+BP=ITEMID_TBL4[0]
+ITEM_INST(1)
+
+MUSIC(6,2)
+EFC(4)
+
+TXCLOSE(2)
+TXCLOSE(3)
+TIMER1(30)
+ITEMPRN(1,5)
+WAIT1
+EFC(3)
+EFC(16)
+
+TXOPEN(1)
+一道光芒照亮了室內﹐當光線消失時﹐派蒙的身影也不見﹐只見桌上出現了一瓶罕見的香水。
+@P
+TXCLOSE(1)
+
+TXOPEN(3)
+TXGIRL(1)
+「哇﹗真是美麗．．．．．．」
+@P
+
+
+
+TXOPEN(1)
+TXA(NAME_FIRST)得到了『誘惑的香水』。
+@P
+TXCLOSE(1)
+TXCLOSE(3)
+ITEMPRN(2)	: сюХヤユЪу復ˍ
+RET
+
+
+
+
+
+
+*KEEPER_1ST
+E_ETC[7]++
+
+TXOPEN(2)
+TXFACE("F136")
+「哦﹐原來妳就是TXA(NAME_FIRST)﹗妳好嗎﹖」
+@P
+TXOPEN(3)
+TXGIRL(15)
+「是﹐是的．．．請問你是．．．﹖」
+@P
+@2
+@C
+「我嗎﹖我就是廚房的精靈﹐多摩歐依。」
+@P
+@3
+@C
+TXGIRL(9)
+「廚房的精靈﹖」
+@P
+@2
+@C
+「今天我之所以來到這裡的原因﹐是因為妳平日非常熱心於家事﹐所以打算前來獎勵妳。」
+@P
+@3
+@C
+TXGIRL(10)
+「是嗎﹖我認為家事不過是我份內該做的事罷了．．．．．．」
+@P
+@2
+@C
+「不﹐不﹗近來像妳這樣的女孩已經不多見了。大多數的人都將廚房荒置不用﹐讓我深感痛心。」
+@P
+@3
+@C
+TXGIRL(9)
+「哦﹐真的會這樣嗎﹖．．．」
+@P
+@2
+@C
+「女孩子家就應該將廚房打掃乾淨﹐保持整潔。所以﹐我希望妳能勤於家事。」
+@P
+
+MUSIC(6,2)
+EFC(4)
+
+TXCLOSE(2)
+TXCLOSE(3)
+TIMER1(30)
+WAIT1
+EFC(3)
+EFC(16)
+
+TXOPEN(1)
+一道光芒照亮了室內﹐當雙眼能夠再看到屋內時﹐多摩歐依已經消失了．．．．．．
+@P
+TXCLOSE(1)
+
+TXOPEN(3)
+TXGIRL(9)
+「竟然會有這種不可思議的事情．．．．．．」
+@P
+GR_OPEN
+IGRP_TBL3[0]=V_RYOURI
+IGRP_TBL1[0]="烹飪技術"
+IGRP_TBL5[0]=2
+IGRP_CNT=1
+IGRP_X=50
+IGRP_Y=180
+GRPOPEN(1,1)
+
+
+
+TXOPEN(1)
+因為廚房精靈多摩歐依力量的幫助﹐TXA(NAME_FIRST)的烹飪技術上昇了TXPOINT(UP_KEEPER_POINT[0])點﹗
+V_RYOURI += UP_KEEPER_POINT[0]
+CLENDER(13)
+GRPUPD(1,0,V_RYOURI)
+@P
+TXCLOSE(1)
+
+GR_CLOSE
+TXCLOSE(3)
+RET
+
+
+
+
+
+
+*KEEPER_2ND
+*KEEPER_3RD
+E_ETC[7]++
+
+TXOPEN(2)
+TXFACE("F136")
+「喲﹗TXA(NAME_FIRST)﹗」
+@P
+TXOPEN(3)
+TXGIRL(1)
+「啊﹐多摩歐依先生。」
+@P
+@2
+@C
+「妳果真依照約定在努力著。真替妳高興﹐我會繼續的幫助妳﹐提高妳的能力的。」
+@P
+@3
+@C
+
+「真的﹖﹗好高興﹗」
+@P
+
+MUSIC(6,2)
+EFC(4)
+
+TXCLOSE(2)
+TXCLOSE(3)
+TIMER1(30)
+WAIT1
+EFC(3)
+EFC(16)
+
+TXOPEN(1)
+一道光芒照亮了室內﹐當雙眼能夠再看到屋內時﹐多摩歐依己經消失了．．．．．．
+@P
+TXCLOSE(1)
+
+TXOPEN(3)
+TXGIRL(1)
+「咦﹖廚房的精靈呢﹖」
+@P
+GR_OPEN
+IF ( E_ETC[7] = 2 )
+	IGRP_TBL3[0]=V_SOUJISENTAKU
+	IGRP_TBL1[0]="掃地洗衣"
+	IGRP_TBL5[0]=2
+IF ( E_ETC[7] = 3 )
+	IGRP_TBL3[0]=V_KIDATE
+	IGRP_TBL1[0]="待人接物"
+	IGRP_TBL5[0]=2
+IGRP_CNT=1
+IGRP_X=50
+IGRP_Y=180
+GRPOPEN(1,1)
+
+
+
+TXOPEN(1)
+IF ( E_ETC[7] = 2 )
+	由於廚房精靈多摩歐依的力量﹐TXA(NAME_FIRST)的掃地洗衣上昇TXPOINT(UP_KEEPER_POINT[1])點﹗
+	V_SOUJISENTAKU += UP_KEEPER_POINT[1]
+	CLENDER(13)
+	GRPUPD(1,0,V_SOUJISENTAKU)
+IF ( E_ETC[7] = 3 )
+	由於廚房精靈多摩歐依的力量﹐TXA(NAME_FIRST)的待人接物上昇TXPOINT(UP_KEEPER_POINT[2])點﹗
+	V_KIDATE += UP_KEEPER_POINT[2]
+	CLENDER(13)
+	GRPUPD(1,0,V_KIDATE)
+@P
+TXCLOSE(1)
+GR_CLOSE
+TXCLOSE(3)
+RET
+
+
+
+
+
+
+*KEEPER_4TH
+IF ( ITEM_MAX >= ITEM_DIM ) RET
+
+E_ETC[7]++
+
+TXOPEN(2)
+TXFACE("F136")
+「呀﹐TXA(NAME_FIRST)小姐﹐是我。」
+@P
+TXOPEN(3)
+TXGIRL(1)
+「多摩歐依先生。」
+@P
+@2
+@C
+「呵﹗呵﹗呵﹗你真是世上少有的好姑娘﹐今天我是專程來送妳禮物的。」
+@P
+@3
+@C
+
+「真的﹗﹖好高興呀﹗﹗」
+@P
+@2
+@C
+「這個東西叫做『幸福的麵包粉』。用這個麵包粉做麵包﹐可以讓妳吃得飽飽的。」
+@P
+@3
+@C
+
+「幸福的麵包粉﹖哇哇哇﹗世界上居然有這種東西。」
+@P
+@2
+@C
+「呵呵呵﹐雖然是奇怪的東西﹐卻相當有用。總而言之﹐這是我送給妳最後的禮物﹐我們再也不會見面了﹐再見﹗」
+@P
+@3
+@C
+TXGIRL(9)
+「咦﹖」
+@P
+
+
+
+
+
+ITEMID_TBL1[0]="幸福的麵包粉"
+ITEMID_TBL2[0]=32
+ITEMID_TBL3[0]=10
+ITEMID_TBL4[0]=""
+ITEMID_TBL5[0]=0
+ITEMID_TBL6[0]=""
+ITEMID_TBL7[0]=0
+ITEM_KOUKA[0]="E_COOK_WIN!"
+ITEM_ATTRBUTE[0]=4000
+ITEMID_CNT=1
+
+BX=ITEMID_TBL2[0]
+CX=ITEMID_TBL3[0]
+DX=ITEM_ATTRBUTE[0]
+SI=ITEMID_TBL1[0]
+DI=ITEM_KOUKA[0]
+BP=ITEMID_TBL4[0]
+ITEM_INST(1)
+
+MUSIC(6,2)
+EFC(4)
+
+TXCLOSE(2)
+TXCLOSE(3)
+TIMER1(30)
+ITEMPRN(1,5)
+WAIT1
+EFC(3)
+EFC(16)
+
+TXOPEN(1)
+一道光芒照亮了室內﹐當雙眼能夠再看到屋內時﹐多摩歐依己經消失﹐留下了一袋麵包粉．．．．．．
+@P
+TXCLOSE(1)
+
+TXOPEN(3)
+TXGIRL(9)
+「再也不能見面了．．．嗎﹖」
+@P
+
+
+
+TXOPEN(1)
+TXA(NAME_FIRST)得到了『幸福的麵包粉』﹗
+@P
+TXCLOSE(1)
+TXCLOSE(3)
+ITEMPRN(2)	: сюХヤユЪу復ˍ
+RET
+
+
+
+

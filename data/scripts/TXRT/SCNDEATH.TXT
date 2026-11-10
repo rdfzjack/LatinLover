@@ -1,0 +1,147 @@
+
+
+
+
+
+
+TXLC(2,28,146,1)
+TXLC(3,13,270,2)
+TXLC(1,4,290,0)
+TXLC(11,31,220,2)
+
+MAIN
+
+MUSIC(2)
+EFC(1)
+GRPCLS
+EFC(0)
+
+C1 = 2
+LOAD("PARAINIT")
+
+
+
+
+
+
+*MAIN
+
+TXOPEN(2)
+TXFACE("F047")
+「老爺﹐不好了﹗小姐的樣子不太對勁．．．．．．」
+@P
+TXOPEN(3)
+TXGIRL(7)
+「啊﹐啊﹐啊．．．．．．好痛苦呀．．．嗚嗚嗚．．．．．．」
+@P
+@2
+@C
+
+「小姐﹗小姐﹗振作一點﹐支持下去﹗」
+@P
+@3
+@C
+
+「我．．．我．．．我想要活下去．．．．．．咳咳咳．．．．．．」
+@P
+@2
+@C
+
+「小姐∼﹗﹗﹗」
+MUSIC(2)
+EFC(1)
+
+TXCLOSE(2)
+TXCLOSE(3)
+WWGIRL(5)
+PLAY(1006)
+EFC(0)
+TXOPEN(1)
+TXA(NAME_FIRST)在TXPOINT(P_NENREI)歲的時候結束了她短暫的一生．．．．．．
+@P
+TXCLOSE(1)
+
+IF (P_SYUGOSEI=0)
+	OPEN_SYUGO
+	「TXA(NAME_FAMILY)﹐小女孩的死亡完全是你不小心所導致的﹐這件事你必需負全部的責任。小女孩的健康應該要隨時的注意才是。」
+	@P
+	CLOSE_SYUGO
+	RET
+
+IF (P_SYUGOSEI=1)
+	OPEN_SYUGO
+	「TXA(NAME_FAMILY)﹐小女孩的死亡完全是你不小心所導致的﹐這件事你必需負全部的責任。小女孩的健康應該要隨時的注意才是。」
+	@P
+	CLOSE_SYUGO
+	RET
+
+IF (P_SYUGOSEI=2)
+	OPEN_SYUGO
+	「TXA(NAME_FAMILY)﹐小女孩的死亡完全是你不小心所導致的﹐這件事你必需負全部的責任。小女孩的健康應該要隨時的注意才是。」
+	@P
+	CLOSE_SYUGO
+	RET
+
+IF (P_SYUGOSEI=3)
+	OPEN_SYUGO
+	「TXA(NAME_FAMILY)﹐小女孩的死亡完全是你不小心所導致的﹐這件事你必需負全部的責任。小女孩的健康應該要隨時的注意才是。」
+	@P
+	CLOSE_SYUGO
+	RET
+
+IF (P_SYUGOSEI=4)
+	OPEN_SYUGO
+	「TXA(NAME_FAMILY)﹐小女孩的死亡完全是你不小心所導致的﹐這件事你必需負全部的責任。小女孩的健康應該要隨時的注意才是。」
+	@P
+	CLOSE_SYUGO
+	RET
+
+IF (P_SYUGOSEI=5)
+	OPEN_SYUGO
+	「TXA(NAME_FAMILY)﹐小女孩的死亡完全是你不小心所導致的﹐這件事你必需負全部的責任。小女孩的健康應該要隨時的注意才是。」
+	@P
+	CLOSE_SYUGO
+	RET
+
+IF (P_SYUGOSEI=6)
+	OPEN_SYUGO
+	「TXA(NAME_FAMILY)﹐小女孩的死亡完全是你不小心所導致的﹐這件事你必需負全部的責任。小女孩的健康應該要隨時的注意才是。」
+	@P
+	CLOSE_SYUGO
+	RET
+
+IF (P_SYUGOSEI=7)
+	OPEN_SYUGO
+	「TXA(NAME_FAMILY)﹐小女孩的死亡完全是你不小心所導致的﹐這件事你必需負全部的責任。小女孩的健康應該要隨時的注意才是。」
+	@P
+	CLOSE_SYUGO
+	RET
+
+IF (P_SYUGOSEI=8)
+	OPEN_SYUGO
+	「TXA(NAME_FAMILY)﹐小女孩的死亡完全是你不小心所導致的﹐這件事你必需負全部的責任。小女孩的健康應該要隨時的注意才是。」
+	@P
+	CLOSE_SYUGO
+	RET
+
+IF (P_SYUGOSEI=9)
+	OPEN_SYUGO
+	「TXA(NAME_FAMILY)﹐小女孩的死亡完全是你不小心所導致的﹐這件事你必需負全部的責任。小女孩的健康應該要隨時的注意才是。」
+	@P
+	CLOSE_SYUGO
+	RET
+*OPEN_SYUGO
+TXOPEN(11)
+TXSYU(P_SYUGOSEI)
+TXA(DEF_STR_STAR[P_SYUGOSEI])
+@L
+RET
+
+*CLOSE_SYUGO
+TXCLOSE(11)
+RET
+
+
+
+
+

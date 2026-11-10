@@ -1,0 +1,128 @@
+TTL$("酒場工作")
+
+START
+
+OPEN(2)
+TXFACE("F071")
+「噢﹐是GN$小姐呀﹗好久不見了。以前妳還經常在我那裡打工﹐現在妳在做什麼﹖」
+@T
+OPEN(3)
+TXGIRL(10)
+「這個嘛．．．我還沒有找到工作．．．．．．」
+@T
+SS$(2)
+@C
+
+「什麼﹖是這樣的啊．．．妳有工作了﹗」
+@T
+SS$(3)
+@C
+TXGIRL(9)
+「．．．．．．﹖」
+@T
+SS$(2)
+@C
+
+「我的酒店裡生意很好﹐但是人手卻越來越不夠﹐像GN$妳這樣的女孩子實在是不多﹐再回來工作吧。」
+@T
+SS$(3)
+@C
+TXGIRL(10)
+「啊﹗真是會說話。」
+@T
+SS$(2)
+@C
+
+「其實好久以前就想要請GN$到我那邊工作﹐但是一直沒有說。拜託．．．拜託．．．」
+@T
+SS$(3)
+@C
+TXGIRL(1)
+「嗯﹐這樣拜託就沒辦法了。好吧．．．我知道了﹐萬事拜託了。」
+@T
+SS$(2)
+@C
+
+「好﹗酒店之花復出了﹐客人們會很高興的。」
+@T
+CLOSE(2)
+CLOSE(3)
+PICWORKING("Z020")
+OPEN(1)
+就這樣﹐GN$•FN$在多米托利的酒店中開始工作．．．．．．
+@T
+CLOSE(1)
+
+FINAL
+
+*GN$
+TXA(NAME_FIRST)
+RET
+
+*FN$
+TXA(NAME_FAMILY)
+RET
+
+*OPEN
+IF(AX=1)TXOPEN(10) RET
+IF(AX=2)TXOPEN(13) RET
+IF(AX=3)TXOPEN(15) RET
+IF(AX=4)TXOPEN(14) RET
+RET
+
+*CLOSE
+IF(AX=1)TXCLOSE(10) RET
+IF(AX=2)TXCLOSE(13) RET
+IF(AX=3)TXCLOSE(15) RET
+IF(AX=4)TXCLOSE(14) RET
+RET
+
+*SS$
+IF(AX=1)TXSLCT(10) RET
+IF(AX=2)TXSLCT(13) RET
+IF(AX=3)TXSLCT(15) RET
+IF(AX=4)TXSLCT(14) RET
+RET
+
+*TTL$
+RET
+
+*START
+TXLC(10,21,220,0)
+TXLC(13,32,146,1)
+TXLC(14,32,20,1)
+TXLC(15,17,270,2)
+RET
+
+*FINAL
+LOAD("EEWEDD")
+RET
+
+*PICWORKING
+
+STRSTACK
+C5 = BX
+PTBK(2)
+PTLD("ENDWFRML")
+PTLA("ENDWFRMR")
+PTLA("ENDWFRMU")
+PTLA("ENDWFRMD")
+PTBK(0)
+PTLD("ENDWFRMM")
+PTX(20,0,0)
+PTBK(2)
+PTM(12,0,0)
+PTM(60,0,2)
+PTM(18,-40,4)
+PTM(18,400,6)
+PIC(11)
+PTBK(0)
+PTX(0,0,0)
+SI = C5
+PTLD
+PTMF(0,0,0)
+PIC(12)
+PIC(13,0,0,20,0,40,400)
+TIMER1(120)WAIT1
+RET
+

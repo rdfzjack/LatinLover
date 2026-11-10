@@ -1,0 +1,128 @@
+TTL$("騎士")
+
+START
+
+OPEN(4)
+TXFACE("F039")
+「小姐﹐城裡的騎士先生要見妳。」
+@T
+CLOSE(4)
+OPEN(2)
+TXFACE("F081")
+「早安﹐GN$小姐。今天國王陛下正式頒佈任命GN$•FN$為騎士。」
+@T
+OPEN(3)
+TXGIRL(0)
+「是的﹐真光榮。」
+@T
+SS$(2)
+@C
+
+「這是國王首度任命女性為騎士﹐因此國王對此事抱著相當大的期望﹐請為我們成為一名不平凡的騎士。」
+@T
+SS$(3)
+@C
+
+「我會努力的。」
+@T
+SS$(2)
+@C
+
+「騎士擁有很高的榮譽﹐所以要非常勇敢。」
+@T
+SS$(3)
+@C
+
+「是﹗」
+@T
+SS$(2)
+@C
+
+「而且對女性都很親切．．．啊﹐在妳的情況該如何說呢﹖對男性親切．．．不好﹐這不太自然．．．．．．」
+@T
+OPEN(4)
+TXFACE("F043")
+「嘻嘻嘻．．．．．．」
+@T
+CLOSE(4)
+CLOSE(2)
+CLOSE(3)
+PICWORKING("Z029")
+OPEN(1)
+就這樣﹐GN$•FN$成為國王麾下的騎士﹐在城裡工作．．．．．．
+@T
+CLOSE(1)
+
+FINAL
+
+*GN$
+TXA(NAME_FIRST)
+RET
+
+*FN$
+TXA(NAME_FAMILY)
+RET
+
+*OPEN
+IF(AX=1)TXOPEN(10) RET
+IF(AX=2)TXOPEN(13) RET
+IF(AX=3)TXOPEN(15) RET
+IF(AX=4)TXOPEN(14) RET
+RET
+
+*CLOSE
+IF(AX=1)TXCLOSE(10) RET
+IF(AX=2)TXCLOSE(13) RET
+IF(AX=3)TXCLOSE(15) RET
+IF(AX=4)TXCLOSE(14) RET
+RET
+
+*SS$
+IF(AX=1)TXSLCT(10) RET
+IF(AX=2)TXSLCT(13) RET
+IF(AX=3)TXSLCT(15) RET
+IF(AX=4)TXSLCT(14) RET
+RET
+
+*TTL$
+RET
+
+*START
+TXLC(10,21,220,0)
+TXLC(13,32,146,1)
+TXLC(14,32,20,1)
+TXLC(15,17,270,2)
+RET
+
+*FINAL
+LOAD("EEWEDD")
+RET
+
+*PICWORKING
+
+STRSTACK
+C5 = BX
+PTBK(2)
+PTLD("ENDWFRML")
+PTLA("ENDWFRMR")
+PTLA("ENDWFRMU")
+PTLA("ENDWFRMD")
+PTBK(0)
+PTLD("ENDWFRMM")
+PTX(20,0,0)
+PTBK(2)
+PTM(12,0,0)
+PTM(60,0,2)
+PTM(18,-40,4)
+PTM(18,400,6)
+PIC(11)
+PTBK(0)
+PTX(0,0,0)
+SI = C5
+PTLD
+PTMF(0,0,0)
+PIC(12)
+PIC(13,0,0,20,0,40,400)
+TIMER1(120)WAIT1
+RET
+

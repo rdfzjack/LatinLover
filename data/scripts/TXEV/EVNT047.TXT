@@ -1,0 +1,170 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+.S_WORKS
+.S_COUNTER
+.S_STARTDAY
+.S_ENDDAY
+.TODAY_COUNT
+.DAYLIGHT
+.SOUBI_FLG
+.SOUBI_REC
+.SOUBI_DAY
+
+S_WORKS 	=	BX
+S_COUNTER	=	CX
+S_STARTDAY	=	C1
+S_ENDDAY	=	C2
+TODAY_COUNT	=	C3
+DAYLIGHT	=	C4
+SOUBI_FLG	=	C5
+SOUBI_REC	=	C6
+SOUBI_DAY	=	C7
+
+RUN_MONTH[47]++
+
+STRSCLEAR
+
+TXLC(1,17,280,0)
+TXLC(2,28,130,1)
+TXLC(3,13,260,2)
+WWIVENT(5,1,19,40)
+
+EVNT047
+
+WWMUSYA(9)
+WWMUSYA(8,1)
+
+BX = S_WORKS
+CX = S_COUNTER
+C1 = S_STARTDAY
+C2 = S_ENDDAY
+C3 = TODAY_COUNT
+C4 = DAYLIGHT
+C5 = SOUBI_FLG
+C6 = SOUBI_REC
+C7 = SOUBI_DAY
+
+IF ( S_WORKS = 0 )	LOAD("RPGLOP,RPG000")
+IF ( S_WORKS = 1 )	LOAD("RPGLOP,RPG001")
+IF ( S_WORKS = 2 )	LOAD("RPGLOP,RPG002")
+IF ( S_WORKS = 3 )	LOAD("RPGLOP,RPG003")
+
+TXOPEN(1)致命的錯誤WAITU
+
+
+
+
+
+*EVNT047
+
+PLAY(27)
+
+TXOPEN(1)
+TXA(NAME_FIRST)結束了露營的活動時﹐不知從那傳來細小的談話聲．．．．．．
+WWMUSYA(7)
+TXF(2)
+@P
+TXCLOSE(1)
+
+TXOPEN(3)
+TXGIRL(9)
+「嗯﹖．．．．．．是誰的聲音﹖加上這迷人淡雅的清香．．．．．．」
+@P
+TXCLOSE(3)
+
+WWIVENT(3,1,"E032")
+TXOPEN(1)
+
+IF ( S_WORKS = 0 )
+	可以清楚的看見在石碑的陰影處﹐有妖精們在舉辦茶會。
+
+IF ( S_WORKS = 2 )
+	可以清楚的看見在花瓣的陰影處﹐有妖精們在與辦茶會。
+@P
+TXCLOSE(1)
+
+TXOPEN(3)
+TXGIRL(1)
+「哎呀．．．好快樂的樣子呀．．．」
+@P
+TXOPEN(2)
+TXFACE("F197")
+「嗯﹐您好﹐小姐。妳可以看見我們﹖」
+@P
+@3
+@C
+「是的﹐你好﹐妖精們。」
+@P
+@2
+@C
+「我們的身影對感受能力遲鈍的人來說﹐是完全看不到的。」
+@P
+@3
+TXGIRL(10)
+@C
+「呀﹐那．．．謝謝你。看來是一個愉快的茶會。」
+@P
+@2
+@C
+「我們妖精最喜歡美味的東西﹐妳呢﹖」
+@P
+@3
+@C
+「我也非常喜歡美味的食物﹗」
+@P
+@2
+@C
+「好孩子﹐妳隨身攜帶的食物真是好吃啊．．．διζτξηψνσυ．．．．．．」
+@P
+@3
+
+
+
+
+GR_OPEN
+STRSCLEAR
+IGRP_TBL1[0]="烹飪技術"
+IGRP_TBL3[0]=V_RYOURI
+IGRP_TBL5[0]=2
+IGRP_TBL1[1]="疲勞"
+IGRP_TBL3[1]=B_STRESS
+IGRP_CNT=2
+IGRP_X=28
+IGRP_Y=240
+GRPOPEN(1,1)
+@3
+IF ( S_WORKS = 0 )
+	IRAND2(25,35)	C6 = AX
+IF ( S_WORKS = 2 )
+	IRAND2(5,15)	C6 = AX
+TXA(NAME_FIRST)的烹飪技術上昇了TXPOINT(C6)點﹗
+疲勞一掃而空﹗
+V_RYOURI += C6
+B_STRESS = 0
+CLENDER(13)
+GRPUPD(1,0,V_RYOURI)
+GRPUPD(1,1,B_STRESS)
+
+MUSIC(2)
+
+@P
+GR_CLOSE
+TXCLOSE(3)
+TXCLOSE(2)
+PLAY(14)
+RET
+
+
+
+

@@ -1,0 +1,307 @@
+
+
+
+
+
+
+
+
+
+STRSCLEAR
+
+.HEAVY_TRANING
+.HEAVY_T_COUNT
+.RANK_TRANING
+.HEAVY_WORKING
+.HEAVY_W_COUNT
+.RANK_WORKING
+
+HEAVY_TRANING	=	ENDNM[10]
+HEAVY_T_COUNT	=	ENDNM[11]
+RANK_TRANING	=	ENDNM[12]
+HEAVY_WORKING	=	ENDNM[13]
+HEAVY_W_COUNT	=	ENDNM[14]
+RANK_WORKING	=	ENDNM[15]
+
+.TBLNAMESTR[18]
+.TBLGIRLSTR[18]
+
+NARRATION
+
+PLAY(30)
+
+KANSOU_GIRL
+
+TIMER1(180)
+
+LOAD("EEWORK")
+
+
+
+
+
+
+
+
+*NARRATION
+MUSIC(2)
+EFC(23)
+TIMER1(60)
+PTBK(0)
+PTLD("ENDGIRLL")
+WAIT1
+TIMER1(60)
+PTX(0,0,0)
+PTLD("ENDGIRLR")
+PTLA("ENDGIRLU")
+PTLA("ENDGIRLD")
+PTX(40,0,0)
+PTX(0,-40,1)
+PTX(0,400,2)
+
+EDTX(1)
+@G
+八年的時間像夢一樣的過去了．．．．．．
+
+@F的女兒十八歲了﹐現在已經成為大人。
+@@
+
+PARC(2,6,70)
+PARC(2,11, 22)
+PARC(2,5,  5,152)
+PARC(2,4)
+
+WAIT1
+EFC(22)
+RET
+
+
+
+
+
+
+*KANSOU_GIRL
+TIMER1(180)
+PTBK(0)
+PTLD("ENDMAILL")
+PTLA("ENDMAILR")
+PTLA("ENDMAILU")
+PTLA("ENDMAILD")
+PTLA("ENDMAINW")
+
+PIC(14,P_NENREI,8)
+PTLA
+PTLA("ENDPALET")
+WAIT1
+
+EFC(1)
+
+TIMER1(60)
+PTBK(0)
+PTX(0,0,0)
+PTX(40,0,1)
+PTX(0,-40,2)
+PTX(0,400,3)
+PTMF(0,0,4)
+PTX(66,54,6)
+PTPLT(8,0)
+WAIT1
+
+EFC(16)
+
+TEXT_EDIT_KANSOU
+
+PARC(2,8,  52)
+
+EDTX(5)
+C2 = DX
+C1 = DX * 23 / 2
+
+
+
+
+
+
+PARC(2,19,C2)
+PARC(2,11, 23)
+PARC(2,5,  0,0)
+PARC(2,9,  4,C1,2)
+PARC(2,10, 10,78,54,284)
+PARC(2,18)
+RET
+
+
+
+
+
+
+
+
+
+
+
+*TEXT_EDIT_KANSOU
+EDTX(1)
+@G
+父親大人﹐我已經長大成人了﹐真是謝謝你。@@
+IF ( S_BYOUKI>=0  S_BYOUKI=<9 )
+	@G
+	啊﹗能夠健康的成長真是十分快樂．．．．．．
+	@@
+IF ( S_BYOUKI>=10  S_BYOUKI=<49 )
+	@G
+	可是現在身體的狀況不太好﹐真是讓我感到難受．．．．．．
+	@@
+IF ( S_BYOUKI>=50 )
+	@G
+	不過﹐一天到晚生病真是可怕的事呀．．．．．．
+	@@
+@G
+如果讓我再回到少女時代的話﹐@@
+
+STRSCLEAR
+TBLNAMESTR[1]="自然科學的學習"
+TBLNAMESTR[2]="詩詞的學習"
+TBLNAMESTR[3]="神學的學習"
+TBLNAMESTR[4]="軍事的學習"
+TBLNAMESTR[5]="劍術的學習"
+TBLNAMESTR[6]="格鬥術的學習"
+TBLNAMESTR[7]="魔法的學習"
+TBLNAMESTR[8]="禮儀的學習"
+TBLNAMESTR[9]="繪畫的學習"
+TBLNAMESTR[10]="舞蹈的學習"
+TBLNAMESTR[11]="武者修行"
+
+TBLGIRLSTR[1]="鍊金術士"
+TBLGIRLSTR[2]="詩人"
+TBLGIRLSTR[3]="修女"
+TBLGIRLSTR[4]="軍事家"
+TBLGIRLSTR[5]="優秀的劍士"
+TBLGIRLSTR[6]="優秀的格鬥家"
+TBLGIRLSTR[7]="優秀的魔法師"
+TBLGIRLSTR[8]="貴婦"
+TBLGIRLSTR[9]="藝術家"
+TBLGIRLSTR[10]="舞蹈家"
+TBLGIRLSTR[11]="傳說的勇者"
+
+IF ( RANK_TRANING=1 )
+	@G
+	但是現在的我﹐雖然以前在@@
+	EDTX(3,TBLNAMESTR[HEAVY_TRANING])
+	@G
+	時只是一心一意的上著課﹐沒想到真的在@@
+	EDTX(3,TBLNAMESTR[HEAVY_TRANING])
+	@G
+	有那麼大的進展﹐而能夠成為@@
+	EDTX(3,TBLGIRLSTR[HEAVY_TRANING])
+	@G
+	或許正是我想要的吧．．．．．．@@
+	@G
+	在這麼多的訓練中可以有這樣的結果﹐我也算是個好孩子吧．．．．．．
+	@@
+IF ( RANK_TRANING=2 )
+	@G
+	我一直十分用心在@@
+	EDTX(3,TBLNAMESTR[HEAVY_TRANING])
+	@G
+	上實行訓練﹐但是在成為@@
+	EDTX(3,TBLGIRLSTR[HEAVY_TRANING])
+	@G
+	之前也不知道是為了什麼﹖@@
+	@G
+	不過這些訓練也讓我成為一個不錯的女孩子。
+	@@
+IF ( RANK_TRANING=3 )
+	EDTX(3,TBLNAMESTR[HEAVY_TRANING])
+	@G
+	剛開始時雖然有些浮燥﹐但是我還是完成了這些訓練﹐可算是一個普通的女孩子吧．．．．．．
+	@@
+IF ( RANK_TRANING=4 )
+	EDTX(3,TBLNAMESTR[HEAVY_TRANING])
+	@G
+	嗎．．．參加訓練也不是件壞事吧﹐雖然我只是個普通的女孩子．．．．．．
+	@@
+IF ( RANK_TRANING=5 )
+	@G
+	雖然說我有些浮燥﹐但是有些東西實在不是我拿手的﹐所以也沒有辦法．．．．．．
+	@@
+
+STRSCLEAR
+TBLNAMESTR[2]="照顧小孩"
+TBLNAMESTR[3]="旅店"
+TBLNAMESTR[4]="農業"
+TBLNAMESTR[5]="公職"
+TBLNAMESTR[6]="廚師"
+TBLNAMESTR[7]="伐木"
+TBLNAMESTR[8]="美容院"
+TBLNAMESTR[9]="泥水匠"
+TBLNAMESTR[10]="打獵"
+TBLNAMESTR[11]="守墓"
+TBLNAMESTR[12]="家庭教師"
+TBLNAMESTR[13]="酒店服務生"
+TBLNAMESTR[14]="黑夜裡"
+TBLNAMESTR[15]="跳舞"
+
+TBLGIRLSTR[2]="托兒所的阿姨"
+TBLGIRLSTR[3]="旅館的伯伯"
+TBLGIRLSTR[4]="農場的叔叔"
+TBLGIRLSTR[5]="教會的修女"
+TBLGIRLSTR[6]="餐廳的叔叔"
+TBLGIRLSTR[7]="伐木的師父"
+TBLGIRLSTR[8]="美髮的師傅"
+TBLGIRLSTR[9]="工地的師傅"
+TBLGIRLSTR[10]="獵人叔叔"
+TBLGIRLSTR[11]="守墓的老爹"
+TBLGIRLSTR[12]="伯母"
+TBLGIRLSTR[13]="酒店的伯伯"
+TBLGIRLSTR[14]="酒家的老闆"
+TBLGIRLSTR[15]="男爵"
+
+IF ( RANK_WORKING=1 )
+	@G
+	我在打工時相當的勤快．．．也幫了@@
+	EDTX(3,TBLGIRLSTR[HEAVY_WORKING])
+	@G
+	不少忙﹐在@@
+	EDTX(3,TBLNAMESTR[HEAVY_WORKING])
+	@G
+	的工作上可以說是相當的有自信．．．或是該說是習慣了．．．．．．
+	@@
+IF ( RANK_WORKING=2 )
+	@G
+	我的打工次數不少﹐@@
+	EDTX(3,TBLGIRLSTR[HEAVY_WORKING])
+	@G
+	一直都承受您的照顧﹐真是麻煩您了。@@
+	EDTX(3,TBLNAMESTR[HEAVY_WORKING])
+	@G
+	的工作讓我能夠專心投身於工作之中．．．．．．
+	@@
+IF ( RANK_WORKING=3 )
+	@G
+	我的打工次數不少唷．．．@@
+	EDTX(3,TBLGIRLSTR[HEAVY_WORKING])
+	@G
+	真是麻煩您了。我一直都很喜歡工作﹐謝謝大家的照顧了．．．．．．
+	再一次的謝謝。@@
+	EDTX(3,TBLNAMESTR[HEAVY_WORKING])
+	@G
+	也越來越順手了．．．．．．
+	@@
+IF ( RANK_WORKING=4 )
+	@G
+	打工已經結束了﹐在那個時候@@
+	EDTX(3,TBLGIRLSTR[HEAVY_WORKING])
+	@G
+	的工作對我相當有幫助．．．．．．
+	@@
+IF ( RANK_WORKING=5 )
+	@G
+	說不定不來打工會比較好一點﹐但是至少是增加了工作的經驗．．．．．．
+	@@
+RET
+
+
+
+
+

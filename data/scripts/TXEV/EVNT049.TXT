@@ -1,0 +1,260 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.NAME_KIHON
+.VALUE_KIHON
+.UP_KIHON
+.UP_INGYO
+.DOWN_SHINKO
+
+.S_WORKS
+.S_COUNTER
+.S_STARTDAY
+.S_ENDDAY
+.TODAY_COUNT
+.DAYLIGHT
+.SOUBI_FLG
+.SOUBI_REC
+.SOUBI_DAY
+
+S_WORKS 	=	BX
+S_COUNTER	=	CX
+S_STARTDAY	=	C1
+S_ENDDAY	=	C2
+TODAY_COUNT	=	C3
+DAYLIGHT	=	C4
+SOUBI_FLG	=	C5
+SOUBI_REC	=	C6
+SOUBI_DAY	=	C7
+
+RUN_MONTH[49]++
+E_ETC[98]=1
+
+STRSCLEAR
+
+TXLC(1,17,280,0)
+TXLC(2,28,130,1)
+TXLC(3,13,260,2)
+WWIVENT(5,1,19,40)
+
+EVNT049
+
+WWMUSYA(9)
+WWMUSYA(8,1)
+
+PLAY(14)
+
+BX = S_WORKS
+CX = S_COUNTER
+C1 = S_STARTDAY
+C2 = S_ENDDAY
+C3 = TODAY_COUNT
+C4 = DAYLIGHT
+C5 = SOUBI_FLG
+C6 = SOUBI_REC
+C7 = SOUBI_DAY
+
+IF ( S_WORKS = 0 )	LOAD("RPGLOP,RPG000")
+IF ( S_WORKS = 1 )	LOAD("RPGLOP,RPG001")
+IF ( S_WORKS = 2 )	LOAD("RPGLOP,RPG002")
+IF ( S_WORKS = 3 )	LOAD("RPGLOP,RPG003")
+
+TXOPEN(1)致命的錯誤WAITU
+
+
+
+
+
+*EVNT049
+
+TXOPEN(1)
+TXA(NAME_FIRST)露營結束後﹐不知從那傳來喧嘩吵雜的聲音．．．．．
+WWMUSYA(7)
+TXF(2)
+@P
+TXCLOSE(1)
+
+TXOPEN(3)
+TXGIRL(0)
+「怎麼了．．．﹖」
+@P
+TXCLOSE(3)
+
+TXOPEN(1)
+TXA(NAME_FIRST)聽到聲音由遠而近慢慢接近．．．．．．
+@P
+TXCLOSE(1)
+
+WWIVENT(3,1,"E034")
+
+PLAY(29)
+
+TXLC(2,28,232,1)
+TXOPEN(2)
+TXFACE("F198")
+「嗯﹖怎麼了﹖這種地方怎麼會有人類呢﹖」
+@P
+TXCLOSE(2)
+
+TXOPEN(3)
+TXGIRL(14)
+「啊﹗惡魔﹗﹗」
+@P
+
+TXLC(2,28,130,1)
+TXOPEN(2)
+TXFACE("F198")
+「哈﹗哈﹗哈﹗我是魔王路西弗﹐不要害怕﹐今天我們正要舉辦一個愉快的酒宴﹐妳也來一杯吧﹖」
+@P
+
+IF ( B_SHINKOH < 20 )
+	@3
+	@C
+	TXGIRL(11)
+	「．．．．．．．．．」
+	@P
+	@2
+	@C
+	「不要客氣﹐大口大口的喝吧﹗」
+	@P
+	@3
+	@C
+	TXGIRL(13)
+	「．．．．．．那我就乾了．．．」
+	@P
+	TXA(NAME_FIRST)從魔王手中接過酒杯一飲而盡。
+	@P
+	@2
+	@C
+	「乾得好﹗記著我的話﹐妳的前途是光明的。」
+
+	GR_OPEN
+	STRSCLEAR
+	IGRP_TBL1[0]="罪孽"
+	IGRP_TBL3[0]=B_INGYO
+	IGRP_CNT=1
+	IGRP_X=35
+	IGRP_Y=360
+	GRPOPEN(1,1)
+	B_INGYO += 80
+	GRPUPD(1,0,B_INGYO)
+	@P
+	GR_CLOSE
+
+	TXCLOSE(3)
+	TXCLOSE(2)
+	RET
+
+
+@3
+@C
+TXGIRL(14)
+「不能喝惡魔的酒﹐而且我還沒有成年。」
+@P
+@2
+@C
+「哈哈哈﹗．．．不要不給我面子﹐減了我的威風。我可以給予妳想要的力量﹐妳想要什麼樣的力量呢﹖」
+@P
+有沒有心中想要的能力呢﹖
+SLCPOS(1)SLCTX("體　　力,腕　　力,智　　力,氣　　質,魅　　力,拒　　絕")
+
+IF ( ISLCT = 5 )
+	@3
+	@C
+	「夠了﹐就到此為上吧﹗」
+	@P
+	@2
+	@C
+	「呵呵呵．．．算了﹐這樣也好。」
+	@P
+	TXCLOSE(3)
+	TXCLOSE(2)
+	RET
+
+
+@2
+@C
+「好﹗但是﹐要以妳的信仰來交換．．．διζτξηψνσυ﹗」
+@P
+TXCLOSE(2)
+
+
+
+
+
+STRSCLEAR
+
+IF ( ISLCT = 0 )
+	NAME_KIHON = "體力"
+	VALUE_KIHON= B_TAIRYOKU
+IF ( ISLCT = 1 )
+	NAME_KIHON = "腕力"
+	VALUE_KIHON= B_KINRYOKU
+IF ( ISLCT = 2 )
+	NAME_KIHON = "智力"
+	VALUE_KIHON= B_CHINOH
+IF ( ISLCT = 3 )
+	NAME_KIHON = "氣質"
+	VALUE_KIHON= B_KIHIN
+IF ( ISLCT = 4 )
+	NAME_KIHON = "魅力"
+	VALUE_KIHON= B_IROKE
+
+RANDAM(45,60)	UP_KIHON = AX
+RANDAM(10,20)	DOWN_SHINKO = AX
+				UP_INGYO = 25
+
+GR_OPEN
+IGRP_TBL1[0] = NAME_KIHON
+IGRP_TBL3[0] = VALUE_KIHON
+IGRP_TBL1[1] = "信仰"
+IGRP_TBL3[1] = B_SHINKOH
+IGRP_TBL1[2] = "罪孽"
+IGRP_TBL3[2] = B_INGYO
+IGRP_CNT=3
+IGRP_X=35
+IGRP_Y=192
+GRPOPEN(1,1)
+IF ( ISLCT = 0 )
+	B_TAIRYOKU += UP_KIHON
+IF ( ISLCT = 1 )
+	B_KINRYOKU += UP_KIHON
+IF ( ISLCT = 2 )
+	B_CHINOH += UP_KIHON
+IF ( ISLCT = 3 )
+	B_KIHIN += UP_KIHON
+IF ( ISLCT = 4 )
+	B_IROKE += UP_KIHON
+
+VALUE_KIHON += UP_KIHON
+B_SHINKOH	-= DOWN_SHINKO
+IF ( B_SHINKOH < 0 ) B_SHINKOH = 0
+B_INGYO 	+= UP_INGYO
+@3
+@C
+TXA(NAME_FIRST)的TXA(NAME_KIHON)上昇了TXPOINT(UP_KIHON)點﹗
+信仰下降了TXPOINT(DOWN_SHINKO)點﹗
+GRPUPD(1,0,VALUE_KIHON)
+GRPUPD(1,1,B_SHINKOH)
+GRPUPD(1,2,B_INGYO)
+@P
+GR_CLOSE
+TXCLOSE(3)
+E_ETC[85]++
+RET
+
+
+
+

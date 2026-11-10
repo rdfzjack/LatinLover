@@ -1,0 +1,51 @@
+
+
+
+
+
+*CHECK_MEN
+MAN02N
+RET
+
+*MAN02N
+R_FACE			="F122"
+R_NAME			="旅人"
+R_CHINOH		=10
+R_SENTOH		=45
+R_KOUGEKI		=30
+R_BOUGYO		=40
+R_SOUKOU		=20
+R_SKNAME		="皮衣"
+R_MAHOGIJUTSU	=0
+R_MARYOKU		=0
+R_KOHMARYOKU	=15
+R_SENI			=100
+R_DASSYUTU		=100
+R_TSUKON		=0
+RDM(240,300)
+R_MAX_HP		=AX
+R_MAX_MP		=0
+RDM(150,250)
+R_GOLD			=AX
+R_SE_ATTACK	=3
+
+MENMES[0]="啊﹐小姑娘﹐午安﹗"
+MENMES[1]="啊﹐小姑娘﹐晚安。"
+
+RANDAM(3)
+IF(AX=1)MENMES[2]="我是旅行者﹐現在要到城中。"
+IF(AX=2)MENMES[2]="誘拐小孩的犯人都把像妳這樣的孩子送到外國去﹐當做別人的奴隸。"
+IF(AX=3)MENMES[2]="武者修行﹖真是勇敢啊﹗"
+MENMES[3]="真是不親切的姑娘。"
+MENMES[4]="嘿﹐想做什麼﹗粗暴的人﹗"
+MENMES[5]="好了﹐住手．．．我還不想死．．．．．．"
+MENMES[6]="妳這個強盜﹗知道被抓了之後會如何嗎﹗"
+RANDAM(3)
+IF(AX=1)MENMES[7]="唔唔．．．殘酷的傢伙．．．．．．"
+IF(AX=2)MENMES[7]="．．．妳一定會遭到天譴．．．．．．"
+IF(AX=3)MENMES[7]="喔喔∼．．．誰來救我．．．．．．"
+RET
+
+
+
+

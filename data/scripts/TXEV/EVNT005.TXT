@@ -1,0 +1,241 @@
+
+
+
+
+
+
+
+.PAY_GOLD
+
+.WORKS_NUM
+WORKS_NUM = ENDNM[4]
+
+STRSCLEAR
+
+
+
+TXLC(2,17,148,1)
+TXLC(3,31,270,2)
+
+IF ( ENDNM[0]!1001 )	EVNT005
+
+IF ( ENDNM[0]=1001 )	UNMEI_KEKKA
+
+IF ( GIRL_DAMEG!0 )
+	PLAY(8)
+IF ( GIRL_DAMEG=0 )
+	IF ( TM_SEASON =1 ) PLAY(4)
+	IF ( TM_SEASON =2 ) PLAY(5)
+	IF ( TM_SEASON =3 ) PLAY(6)
+	IF ( TM_SEASON =4 ) PLAY(7)
+
+ENDNM[0] = 0
+LOAD("MAINBORN")
+
+
+
+
+
+
+
+
+
+*LOAD_UNMEI
+ENDNM[0]=1001
+LOAD("EECALC")
+
+
+
+
+
+*EVNT005
+
+RUN_MONTH[5]++
+
+TXOPEN(1)
+MUSIC(6,1)
+不知是誰在敲著TXA(NAME_FAMILY)家的大門．．．．．．
+@P
+TXCLOSE(1)
+TXOPEN(3)
+TXFACE("F039")
+「老爺､小姐﹐有位占卜師來拜訪。」
+@P
+TXCLOSE(3)
+TXOPEN(2)
+TXFACE("F130")
+PAY_GOLD = P_NENREI * 3
+@2「只要TXGOLD(PAY_GOLD)的代價﹐我可以告訴妳女兒的將來。」
+GR_OPEN
+IGRP_TBL1[0]="占卜金額"
+IGRP_TBL3[0]=PAY_GOLD
+IGRP_X=54
+IGRP_Y=128
+IGRP_CNT=1
+GOLDOPEN(1,1)
+
+GOLDCMP(PAY_GOLD)
+IF ( AX = 2 )
+	@P
+	TXOPEN(3)
+	TXFACE("F039")
+	@3 金錢不足。
+	@P
+	GR_CLOSE
+	@3 TXFACE("F041")
+	「對不起﹐我們沒那麼多錢﹐請回吧﹗」
+	@P
+	@2
+	@C
+	「那麼﹐我下次再來．．．．．．」
+	@P
+	TXCLOSE(2)
+	TXCLOSE(3)
+	TXOPEN(1)
+	占卜師離開了．．．．．．
+	@P
+	TXCLOSE(1)
+	RET
+
+SLCPOS(4)
+SLCTBAK(5)
+SLCTX("占　　卜,拒　　絕")
+
+IF ( ISLCT = 1 )
+	TXOPEN(3)
+	@3 TXFACE("F041")
+	「對不起﹐我們不需要﹐請回吧﹗」
+	@P
+	GR_CLOSE
+	@2
+	@C
+	「可能下次還有機會．．．．．．」
+	@P
+	TXCLOSE(2)
+	TXCLOSE(3)
+	TXOPEN(1)
+	占卜師離去了．．．．．．
+	@P
+	TXCLOSE(1)
+	RET
+
+
+
+MUSIC(2)
+
+GOLDSUB(PAY_GOLD)
+WWPROF(3)
+GR_CLOSE
+@2
+@C
+「⑷ζυΠιΥψδλ．．．ΨζδΛｎυξ．．．
+唔唔．．．」
+@P
+LOAD_UNMEI
+
+
+
+
+
+*UNMEI_KEKKA
+TXOPEN(9)
+TXFACE("F042")
+@C
+「結果是．．．．．．」
+@P
+@2
+@C
+「TXA(NAME_FIRST)的未來﹐極可能是NAME_SHIGOTO吧﹗」
+@P
+@9 TXFACE("F039")
+@C 「真的嗎﹖」
+@P
+TXCLOSE(2)
+TXCLOSE(9)
+TXOPEN(1)
+占卜師離去了．．．．．．
+@P
+TXCLOSE(1)
+RET
+
+*NAME_SHIGOTO
+C1 = WORKS_NUM
+IF ( C1=01 ) 雍容華貴的人@@
+IF ( C1=02 ) 出色的政治家@@
+IF ( C1=03 ) 宗教家@@
+IF ( C1=04 ) 政治家@@
+IF ( C1=05 ) 偉大的學者@@
+IF ( C1=06 ) 教會的修女@@
+IF ( C1=07 ) 法官@@
+IF ( C1=08 ) 學士@@
+IF ( C1=09 ) 保姆@@
+IF ( C1=10 ) 經營旅館的@@
+IF ( C1=11 ) 經營農業的@@
+IF ( C1=12 ) 教會中工作的@@
+IF ( C1=13 ) 餐廳的店員@@
+IF ( C1=14 ) 和樹木為伍的@@
+IF ( C1=15 ) 美髮師@@
+IF ( C1=16 ) 泥水匠@@
+IF ( C1=17 ) 獵人@@
+IF ( C1=18 ) 守墓者@@
+IF ( C1=19 ) 家庭教師@@
+IF ( C1=20 ) 酒店的店員@@
+IF ( C1=21 ) 不正當場所的女主人@@
+IF ( C1=22 ) 舞師@@
+IF ( C1=23 ) 城鎮的女官員@@
+IF ( C1=24 ) 保姆@@
+IF ( C1=25 ) 經營旅館的@@
+IF ( C1=26 ) 經營農業的@@
+IF ( C1=27 ) 教會中工作@@
+IF ( C1=28 ) 餐廳的店員@@
+IF ( C1=29 ) 和樹木為伍的@@
+IF ( C1=30 ) 美髮師@@
+IF ( C1=31 ) 泥水匠@@
+IF ( C1=32 ) 獵人@@
+IF ( C1=33 ) 守墓者@@
+IF ( C1=34 ) 家庭教師@@
+IF ( C1=35 ) 酒店的店員@@
+IF ( C1=36 ) 不正當場所的女主人@@
+IF ( C1=37 ) 舞師@@
+IF ( C1=38 ) 女佣@@
+IF ( C1=39 ) 偉大的武者@@
+IF ( C1=40 ) 出色的軍人@@
+IF ( C1=41 ) 軍人@@
+IF ( C1=42 ) 武術的老師@@
+IF ( C1=43 ) 軍人@@
+IF ( C1=44 ) 兵士@@
+IF ( C1=45 ) 武術家@@
+IF ( C1=46 ) 兵士@@
+IF ( C1=47 ) 偉大的魔法師@@
+IF ( C1=48 ) 出色的魔法師@@
+IF ( C1=49 ) 魔法的老師@@
+IF ( C1=50 ) 魔法師@@
+IF ( C1=51 ) 魔法師@@
+IF ( C1=52 ) 我的同行@@
+IF ( C1=53 ) 一毛不拔的藝人@@
+IF ( C1=54 ) 一毛不拔的藝人@@
+IF ( C1=55 ) 坐上高貴寶石做的轎子@@
+IF ( C1=56 ) 有錢人的太太@@
+IF ( C1=57 ) 坐上華麗寶石做的轎子@@
+IF ( C1=58 ) 坐上寶石做的轎子@@
+IF ( C1=59 ) 平凡的主婦@@
+IF ( C1=60 ) 平凡的主婦@@
+IF ( C1=61 ) 小妾@@
+IF ( C1=62 ) 平凡的主婦@@
+IF ( C1=63 ) 平凡的主婦@@
+IF ( C1=64 ) 小丑@@
+IF ( C1=65 ) 作家@@
+IF ( C1=66 ) 畫家@@
+IF ( C1=67 ) 舞蹈家@@
+IF ( C1=68 ) 從事不正當工作的人@@
+IF ( C1=69 ) 一無是處的壞人@@
+IF ( C1=70 ) 一無是處的壞人@@
+IF ( C1=71 ) 從事不正當工作的人@@
+IF ( C1=72 ) 騙子@@
+IF ( C1=73 ) 從事不正當工作的人@@
+IF ( C1=74 ) 非常恐怖的人@@
+RET
+
+
+
+

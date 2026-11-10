@@ -1,0 +1,761 @@
+
+
+
+
+
+
+
+
+
+STRSCLEAR
+
+.FLG_LOAD_MODE
+FLG_LOAD_MODE = C1
+
+.ERR_DISK = 0
+.FLG_EXIT = 0
+
+.SDAT_YEAR
+.SDAT_MONTH
+.SDAT_WEEK
+.SDAT_DAY
+.SDAT_NAME
+
+.DAT_FILE_NUM	=	0
+
+.STATUS_FFDISK
+
+.MSG_ADRS
+
+.COUNT_INTO_DATA
+.TBL_DATA_FLAG[12]
+
+TXLC(1,4,290,0)
+TXLC(5,1,90,0)
+
+TXLC(11,48,275,4)
+
+IF ( FLG_LOAD_MODE = 2 )
+	PARC(1,"DSKTOOL.COM",1,0)
+	START_SYUGOSEI
+	C1 = 1
+	LOAD("PARAINIT")
+
+IF ( FLG_LOAD_MODE = 3 )
+	PARC(1,"DSKTOOL.COM",1,0)
+	START_SYUGOSEI
+	C1 = 2
+	LOAD("PARAINIT")
+
+SYUGOSEI
+
+FFDISK(4)
+IF ( AX=0 )
+	IF ( P_NENREI < 15 )
+		FFDISK(5,3)
+	IF ( P_NENREI >=15 )
+		FFDISK(5,12)
+
+LOAD("MAINLOOP")
+
+
+
+
+
+*START_SYUGOSEI
+
+TXLC(11,48,275,0)
+TXOPEN(11)
+要讀取那一個記錄檔。
+DDISK_LOAD
+TXSLCT(11)
+IF ( ERR_DISK = 101 )
+	@C
+	「沒有可以讀取的記錄檔。」
+	@P
+TXCLOSE(11)
+
+IF ( ERR_DISK = 0  FLG_EXIT = 0 )
+	TXOPEN(1)
+	「時間回到王國曆TXPOINT(VAL_YEAR)年TXPOINT(VAL_MONTH)月」
+	「TXA(NAME_FIRST)•TXA(NAME_FAMILY)」
+	回到那個時間．．．．．．
+	@P
+	TXCLOSE(1)
+	FREAM_GIRL
+	LOAD("MAINLOOP")
+RET
+
+
+
+
+
+
+*SYUGOSEI
+TXOPEN(1)
+「向守護星祈禱」
+SLCPOS(4)
+SLCT("時光停留,時光倒轉,暫時告別")
+TXCLOSE(1)
+IF ( ISLCT=0 )
+	TIME_STORE
+	GOTO SYUGOSEI
+IF ( ISLCT=1 )
+	BACK_TO_FUTURE
+	IF ( ERR_DISK = 0  FLG_EXIT = 0 )
+		TXOPEN(1)
+		「王國曆TXPOINT(VAL_YEAR)年TXPOINT(VAL_MONTH)月」
+		「TXA(NAME_FIRST)•TXA(NAME_FAMILY)」
+		回到那個時間．．．．．．
+		@P
+		TXCLOSE(1)
+		FREAM_GIRL
+		RET
+	GOTO SYUGOSEI
+IF ( ISLCT=2 )
+	XDBG(5)
+	IF ( AX=1 )
+		RET
+	QUIT_OF_GAME
+	GOTO SYUGOSEI
+RET
+
+
+*OPEN_SYUGO
+TXOPEN(11)
+TXSYU(P_SYUGOSEI)
+TXA(DEF_STR_STAR[P_SYUGOSEI])
+@L
+RET
+
+*CLOSE_SYUGO
+TXCLOSE(11)
+RET
+
+*FREAM_GIRL
+MUSIC(2)
+EFC(1)
+WWFRAME(1)
+CLENDER(1)
+WWPROF(1)
+IF ( E_RWAY = 0 )
+	WWGIRL(3)
+EFC(0)
+
+IF ( GIRL_DAMEG!0 )
+	PLAY(8)
+IF ( GIRL_DAMEG=0 )
+	IF ( TM_SEASON =1 ) PLAY(4)
+	IF ( TM_SEASON =2 ) PLAY(5)
+	IF ( TM_SEASON =3 ) PLAY(6)
+	IF ( TM_SEASON =4 ) PLAY(7)
+
+IF ( E_RWAY ! 0 )
+	TXOPEN(1)
+	小女孩離家出走中。
+	@P
+	TXCLOSE(1)
+RET
+
+
+
+
+
+*TIME_STORE
+
+IF ( P_SYUGOSEI = 0 )
+	OPEN_SYUGO
+	「TXA(NAME_FAMILY)呀﹐我以太陽神索爾的名字﹐將你女兒TXA(NAME_FIRST)的記錄留在時空中了。」
+	@P@C
+	「請選擇要存入的位置﹖」
+	DDISK_SAVE
+	TXSLCT(11)
+	IF ( ERR_DISK = 0  FLG_EXIT = 0 )
+		@C
+		「已經正確的記錄了。」
+		@P
+	CLOSE_SYUGO
+	RET
+IF ( P_SYUGOSEI = 1 )
+	OPEN_SYUGO
+	「我以月的守護者德暮之名﹐將你TXA(NAME_FAMILY)女兒TXA(NAME_FIRST)的記錄留在時空中了。」
+	@P@C
+	「請選擇要存入的位置﹖」
+	DDISK_SAVE
+	TXSLCT(11)
+	IF ( ERR_DISK = 0  FLG_EXIT = 0 )
+		@C
+		「已經正確的記錄了。」
+		@P
+	CLOSE_SYUGO
+	RET
+IF ( P_SYUGOSEI = 2 )
+	OPEN_SYUGO
+	「TXA(NAME_FAMILY)呀﹐我以火星神馬斯的力量﹐將你的女兒TXA(NAME_FIRST)的記錄留在時空中了。」
+	@P@C
+	「要將記錄存入那個位置﹖」
+	DDISK_SAVE
+	TXSLCT(11)
+	IF ( ERR_DISK = 0  FLG_EXIT = 0 )
+		@C
+		「已經正確的記錄了。」
+		@P
+	CLOSE_SYUGO
+	RET
+IF ( P_SYUGOSEI = 3 )
+	OPEN_SYUGO
+	「我以水星守護神瑪琪莉之名﹐將TXA(NAME_FAMILY)女兒TXA(NAME_FIRST)的記錄留在時空中了。」
+	@P@C
+	「要將記錄存入那個位置﹖」
+	DDISK_SAVE
+	TXSLCT(11)
+	IF ( ERR_DISK = 0  FLG_EXIT = 0 )
+		@C
+		「已經正確的記錄了。」
+		@P
+	CLOSE_SYUGO
+	RET
+IF ( P_SYUGOSEI = 4 )
+	OPEN_SYUGO
+	「TXA(NAME_FAMILY)．．．我以木星的守護神邱比特的名義﹐將你的女兒TXA(NAME_FIRST)的記錄存入時空中了。」
+	@P@C
+	「好﹐要存入那一個位置﹖」
+	DDISK_SAVE
+	TXSLCT(11)
+	IF ( ERR_DISK = 0  FLG_EXIT = 0 )
+		@C
+		「已經存入了．．．．．．」
+		@P
+	CLOSE_SYUGO
+	RET
+IF ( P_SYUGOSEI = 5 )
+	OPEN_SYUGO
+	「親愛的TXA(NAME_FAMILY)﹐我以金星神維納斯之名﹐將你的女兒TXA(NAME_FIRST)的記錄存入時空中了。」
+	@P@C
+	「要存入那一個位置﹖」
+	DDISK_SAVE
+	TXSLCT(11)
+	IF ( ERR_DISK = 0  FLG_EXIT = 0 )
+		@C
+		「好的﹐存入了．．．．．．」
+		@P
+	CLOSE_SYUGO
+	RET
+IF ( P_SYUGOSEI = 6 )
+	OPEN_SYUGO
+	「TXA(NAME_FAMILY)．．．我以土星守護神撒旦之名﹐將你的女兒TXA(NAME_FIRST)的記錄存入時空了。」
+	@P@C
+	「要存入那個位置﹖」
+	DDISK_SAVE
+	TXSLCT(11)
+	IF ( ERR_DISK = 0  FLG_EXIT = 0 )
+		@C
+		「確實存入了。」
+		@P
+	CLOSE_SYUGO
+	RET
+IF ( P_SYUGOSEI = 7 )
+	OPEN_SYUGO
+	「我以天王星的守護神烏拉努斯之名﹐將TXA(NAME_FAMILY)的女兒TXA(NAME_FIRST)的記錄存入時空了。」
+	@P@C
+	「請選擇希望的位置﹖」
+	DDISK_SAVE
+	TXSLCT(11)
+	IF ( ERR_DISK = 0  FLG_EXIT = 0 )
+		@C
+		「已經正確的存入了。」
+		@P
+	CLOSE_SYUGO
+	RET
+IF ( P_SYUGOSEI = 8 )
+	OPEN_SYUGO
+	「TXA(NAME_FAMILY)．．．憑我海王星神妮普坦之名﹐將TXA(NAME_FIRST)的記錄存入時空了。」
+	@P@C
+	「記錄在那個位置﹖」
+	DDISK_SAVE
+	TXSLCT(11)
+	IF ( ERR_DISK = 0  FLG_EXIT = 0 )
+		@C
+		「正確的記錄了。」
+		@P
+	CLOSE_SYUGO
+	RET
+IF ( P_SYUGOSEI = 9 )
+	OPEN_SYUGO
+	「以冥王星的守護者黑帝斯之名﹐將TXA(NAME_FAMILY)的女兒TXA(NAME_FIRST)的記錄存入時空吧﹗」
+	@P@C
+	「請選擇你希望的位置﹖」
+	DDISK_SAVE
+	TXSLCT(11)
+	IF ( ERR_DISK = 0  FLG_EXIT = 0 )
+		@C
+		「記錄好了。」
+		@P
+	CLOSE_SYUGO
+	RET
+RET
+
+
+
+
+
+
+*BACK_TO_FUTURE
+
+IF ( P_SYUGOSEI = 0 )
+	OPEN_SYUGO
+	「要取回那個位置的記錄呢﹖」
+	DDISK_LOAD
+	TXSLCT(11)
+	IF ( ERR_DISK = 101 )
+		@C
+		「沒有任何的記錄。」
+		@P
+	CLOSE_SYUGO
+	RET
+IF ( P_SYUGOSEI = 1 )
+	OPEN_SYUGO
+	「要取回那一個位置的記錄呢﹖」
+	DDISK_LOAD
+	TXSLCT(11)
+	IF ( ERR_DISK = 101 )
+		@C
+		「對不起﹐這裡沒有任何的記錄。」
+		@P
+	CLOSE_SYUGO
+	RET
+IF ( P_SYUGOSEI = 2 )
+	OPEN_SYUGO
+	「要取回那一個記錄﹖」
+	DDISK_LOAD
+	TXSLCT(11)
+	IF ( ERR_DISK = 101 )
+		@C
+		「沒有任何的記錄。」
+		@P
+	CLOSE_SYUGO
+	RET
+IF ( P_SYUGOSEI = 3 )
+	OPEN_SYUGO
+	「取回那個記錄﹖」
+	DDISK_LOAD
+	TXSLCT(11)
+	IF ( ERR_DISK = 101 )
+		@C
+		「這裡並沒有任何的記錄．．．．．．」
+		@P
+	CLOSE_SYUGO
+	RET
+IF ( P_SYUGOSEI = 4 )
+	OPEN_SYUGO
+	「呵呵呵﹐要取回那一個進度呀﹖」
+	DDISK_LOAD
+	TXSLCT(11)
+	IF ( ERR_DISK = 101 )
+		@C
+		「沒有記錄可以取回唷。」
+		@P
+	CLOSE_SYUGO
+	RET
+IF ( P_SYUGOSEI = 5 )
+	OPEN_SYUGO
+	「想要取回那一個記錄﹖」
+	DDISK_LOAD
+	TXSLCT(11)
+	IF ( ERR_DISK = 101 )
+		@C
+		「取回記錄嗎．．．沒有東西可以取回。」
+		@P
+	CLOSE_SYUGO
+	RET
+IF ( P_SYUGOSEI = 6 )
+	OPEN_SYUGO
+	「想要取回那一個進度﹖」
+	DDISK_LOAD
+	TXSLCT(11)
+	IF ( ERR_DISK = 101 )
+		@C
+		「咦﹖這裡沒有進度可以取回。」
+		@P
+	CLOSE_SYUGO
+	RET
+IF ( P_SYUGOSEI = 7 )
+	OPEN_SYUGO
+	「想要取回那一個位置的進度﹖」
+	DDISK_LOAD
+	TXSLCT(11)
+	IF ( ERR_DISK = 101 )
+		@C
+		「啊﹖沒有進度可以取回呀﹗」
+		@P
+	CLOSE_SYUGO
+	RET
+IF ( P_SYUGOSEI = 8 )
+	OPEN_SYUGO
+	「取回進度．．．想要取回那一個位置的進度﹖」
+	DDISK_LOAD
+	TXSLCT(11)
+	IF ( ERR_DISK = 101 )
+		@C
+		「似乎沒有任何進度可以取回唷。」
+		@P
+	CLOSE_SYUGO
+	RET
+IF ( P_SYUGOSEI = 9 )
+	OPEN_SYUGO
+	「好﹐要取回那一個進度﹖」
+	DDISK_LOAD
+	TXSLCT(11)
+	IF ( ERR_DISK = 101 )
+		@C
+		「可惜沒有任何進度留下來。」
+		@P
+	CLOSE_SYUGO
+	RET
+RET
+
+
+
+
+
+*QUIT_OF_GAME
+TXOPEN(1)
+打算和「美少女夢工場２」的世界告別嗎﹖
+SLCTX("是　　的,不　　是")
+TXCLOSE(1)
+IF ( ISLCT ! 0 ) RET
+
+OPEN_SYUGO
+QUIT_MESSAGE
+@P
+CLOSE_SYUGO
+EFC(1)
+GRPCLS
+TIMER1(30)
+WAIT1
+FFDISK(4)
+IF ( AX=1 )
+	GRPCLS
+	TXOPEN(1)
+	EFC(0)
+	回到ＭＳ－ＤＯＳ下．．．．．．
+	SLCTX("是　　的,不　　是")
+	IF ( ISLCT=0 )
+		MUSIC(2)
+		TIMER1(30)
+		WAIT1
+		EFC(1)
+		GRPCLS
+		END
+	TXCLOSE(1)
+	FREAM_GIRL
+	LOAD("MAINLOOP")
+GRPCLS
+TXOPEN(1)
+MUSIC(2)
+EFC(0)
+請關閉電源吧．．．．．．
+@P@P@P@P@P@P@P@P@P
+FREAM_GIRL
+LOAD("MAINLOOP")
+
+
+
+*QUIT_MESSAGE
+
+IF ( P_SYUGOSEI = 0 )
+	「父女兩個都安靜的休息吧。」
+	RET
+IF ( P_SYUGOSEI = 1 )
+	「晚安了．．．．．．」
+	RET
+IF ( P_SYUGOSEI = 2 )
+	「還會再見面的．．．．．．」
+	RET
+IF ( P_SYUGOSEI = 3 )
+	「下次再見吧．．．．．．」
+	RET
+IF ( P_SYUGOSEI = 4 )
+	「那麼請慢慢的休息吧。」
+	RET
+IF ( P_SYUGOSEI = 5 )
+	「期待下一次再見面。」
+	RET
+IF ( P_SYUGOSEI = 6 )
+	「請安心的休息吧．．．．．．」
+	RET
+IF ( P_SYUGOSEI = 7 )
+	「晚安。」
+	RET
+IF ( P_SYUGOSEI = 8 )
+	「讓我們期待下次再見．．．．．．」
+	RET
+IF ( P_SYUGOSEI = 9 )
+	「那麼﹐再見吧．．．．．．」
+	RET
+RET
+
+
+
+
+
+*DDISK_SAVE
+ERR_DISK = 0
+FLG_EXIT = 0
+
+INST_NEW_DISK
+IF ( FLG_EXIT=1 )	RET
+
+DSKTOOLREAD
+
+MSG_ADRS="放　　棄"
+PARC(2,8,11,MSG_ADRS)
+
+*DDISK_SAVE_RETRY
+PARC(2,7)
+DAT_FILE_NUM = BX
+
+IF ( DAT_FILE_NUM = 11 )( DAT_FILE_NUM = -1 )
+	PARC(2,3)
+	FLG_EXIT = 1
+	RET
+
+TXOPEN(5)
+記錄在TXPOINT(DAT_FILE_NUM)進度中。
+SLCPOS(6,48,180)
+SLCTBAK(6)
+SLCT("記錄時間,放　　棄")
+TXCLOSE(5)
+IF ( ISLCT ! 0 ) GOTO DDISK_SAVE_RETRY
+
+INST_USER_DISK
+IF ( FLG_EXIT=1 )
+	TXOPEN(5)
+	停止時間的記錄。
+	@P
+	TXCLOSE(5)
+	PARC(2,3)
+	RET
+
+FFDISK(1,DAT_FILE_NUM)
+
+IF ( AX ! 0 )
+	TXOPEN(5)
+	發生錯誤﹐無法將進度存入﹗
+	@P
+	TXCLOSE(5)
+	PARC(2,3)
+	FLG_EXIT = 1
+	RET
+
+DSKTOOL_1_RD
+
+TXOPEN(5)
+記錄存入TXPOINT(DAT_FILE_NUM)號檔案中。
+@P
+TXCLOSE(5)
+
+PARC(2,3)
+RET
+
+
+
+
+
+*DDISK_LOAD
+ERR_DISK = 0
+FLG_EXIT = 0
+
+INST_USER_DISK
+IF ( FLG_EXIT=1 )	RET
+
+DSKTOOLREAD
+
+MSG_ADRS="放　　棄"
+PARC(2,8,11,MSG_ADRS)
+
+IF ( COUNT_INTO_DATA = 0 )
+	PARC(2,3)
+	ERR_DISK = 101
+	RET
+
+*DDISK_LOAD_RETRY
+PARC(2,7)
+DAT_FILE_NUM = BX
+
+IF ( DAT_FILE_NUM = 11 )( DAT_FILE_NUM = -1 )
+	PARC(2,3)
+	FLG_EXIT = 1
+	RET
+
+IF ( TBL_DATA_FLAG[DAT_FILE_NUM] = 0 )
+	TXOPEN(5)
+	這個位置無法記錄。
+	@P
+	TXCLOSE(5)
+	GOTO DDISK_LOAD_RETRY
+
+TXOPEN(5)
+取回第TXPOINT(DAT_FILE_NUM)號記錄嗎﹖
+SLCPOS(6,48,180)
+SLCTBAK(6)
+SLCT("取回記錄,放　　棄")
+TXCLOSE(5)
+IF ( ISLCT ! 0 ) GOTO DDISK_LOAD_RETRY
+
+INST_USER_DISK
+IF ( FLG_EXIT=1 )
+	TXOPEN(5)
+	回到原本的進度。
+	@P
+	TXCLOSE(5)
+	PARC(2,3)
+	RET
+
+FFDISK(2,DAT_FILE_NUM)
+
+IF ( AX ! 0 )
+	TXOPEN(5)
+	讀取資料發生錯誤﹐無法取回舊進度。
+	@P
+	TXCLOSE(5)
+	PARC(2,3)
+	FLG_EXIT = 1
+	RET
+
+PARC(2,3)
+RET
+
+*MSG_READ_ERR
+磁片發生損壞﹗
+@
+FLG_EXIT = 1
+RET
+
+
+*DSKTOOLREAD
+STRSCLEAR
+MSG_ADRS =	"diskcheck......"
+DSKTOOLOPEN
+DAT_FILE_NUM = 1
+COUNT_INTO_DATA = 0
+C1 = 10
+	PARC(2,8,DAT_FILE_NUM,MSG_ADRS)
+
+	FFDISK(3,DAT_FILE_NUM)
+	STATUS_FFDISK = AX
+	SDAT_YEAR	=	BX
+	SDAT_MONTH	=	CX
+	SDAT_WEEK	=	DX
+	SDAT_DAY	=	SI
+	SDAT_NAME	=	DI
+
+	IF ( STATUS_FFDISK=0 )
+		TBL_DATA_FLAG[DAT_FILE_NUM] = 1
+		COUNT_INTO_DATA++
+
+	IF ( STATUS_FFDISK=1 )
+		PARC(2,3)
+		MSG_READ_ERR
+		FLG_EXIT = 1
+		RET
+
+	IF ( STATUS_FFDISK=101 )
+		SDAT_YEAR	=	0
+		TBL_DATA_FLAG[DAT_FILE_NUM] = 0
+
+	PARC(2,4,DAT_FILE_NUM,SDAT_YEAR,SDAT_MONTH,SDAT_WEEK,SDAT_DAY,SDAT_NAME)
+	PARC(2,5,DAT_FILE_NUM)
+	DAT_FILE_NUM++
+LOOP C1
+RET
+
+*DSKTOOLOPEN
+
+PARC(2,9,1)
+PARC(2,2)
+C1="編號"
+
+ C2="   王國曆"
+ C3="   名　字"
+PARC(2,6,C1,C2,C3)
+RET
+
+
+*DSKTOOL_1_RD
+FFDISK(3,DAT_FILE_NUM)
+STATUS_FFDISK = AX
+SDAT_YEAR	=	BX
+SDAT_MONTH	=	CX
+SDAT_WEEK	=	DX
+SDAT_DAY	=	SI
+SDAT_NAME	=	DI
+PARC(2,4,DAT_FILE_NUM,SDAT_YEAR,SDAT_MONTH,SDAT_WEEK,SDAT_DAY,SDAT_NAME)
+PARC(2,5,DAT_FILE_NUM)
+RET
+
+*INST_USER_DISK
+FLG_EXIT = 0
+FFDISK(4)
+IF ( AX=1 ) RET
+
+PARC(2,202)
+FLG_EXIT = BX
+RET
+
+*INST_NEW_DISK
+FLG_EXIT = 0
+FFDISK(4)
+IF ( AX=1 ) RET
+
+PARC(2,201)
+IF ( BX=-1 )
+	FLG_EXIT = 1
+	RET
+IF ( BX=1 )
+	RET
+IF ( BX=2 )
+	USER_DISK_MAKE
+	RET
+IF ( BX=3 )
+	TXOPEN(1)
+	別的軟體使用的磁片唷﹐可以拿來製作使用者磁片嗎﹖
+	SLCTBAK(5)
+	SLCT("可　　以,放　　棄")
+	TXCLOSE(1)
+	IF ( ISLCT=0 )
+		USER_DISK_MAKE
+		RET
+	FLG_EXIT = 1
+	RET
+IF ( BX=4 )
+	TXOPEN(1)
+	請將磁片的防寫口打開。
+	@P
+	TXCLOSE(1)
+	GOTO INST_NEW_DISK
+RET
+
+
+*USER_DISK_MAKE
+FLG_EXIT = 0
+PARC(2,203)
+IF ( BX=0 )
+	RET
+IF ( BX=4 )
+	TXOPEN(1)
+	請將磁片的防寫口打開。
+	@P
+	TXCLOSE(1)
+	FLG_EXIT = 1
+	RET
+TXOPEN(1)
+使用者磁片製作完成。
+@P
+TXCLOSE(1)
+FLG_EXIT = 1
+RET
+
+
+
+

@@ -1,0 +1,123 @@
+TTL$("占卜師")
+
+START
+
+OPEN(3)
+TXGIRL(0)
+「傷腦筋呀．．．一直找不到好工作﹐雖然我在魔法上的評價相當高．．．．．．」
+@T
+OPEN(2)
+TXFACE("F130")
+「呵﹗呵﹗呵﹗．．．這是很平常的煩惱嘛．．．找不到工作的理由很簡單﹐實力不足。」
+@T
+SS$(3)
+@C
+TXGIRL(12)
+「哦﹗你知道我在魔法上的功力嗎﹖」
+@T
+SS$(2)
+@C
+
+「能力的強弱是靠修行累積的﹐那種程度．．．啊﹐這樣的實力或許可以為像我這樣的占卜師．．．．．．」
+@T
+SS$(3)
+@C
+TXGIRL(9)
+「占卜師﹖那奶奶的魔法力量和我差不多嗎﹖」
+@T
+SS$(2)
+@C
+
+「同樣是占卜師﹐也有一流和三流之分．．．能否成為像我這樣的一流占卜師﹐就靠妳的努力來決定了。」
+@T
+SS$(3)
+@C
+TXGIRL(0)
+「嗯．．．占卜的確是我所喜歡的工作．．．好吧﹐奶奶﹐我決定要成為占卜師﹗」
+@T
+SS$(2)
+@C
+
+「因為以前承蒙妳父親的照顧﹐我在此祈禱妳能成功．．．．．．」
+@T
+CLOSE(2)
+CLOSE(3)
+PICWORKING("Z039")
+OPEN(1)
+就這樣﹐GN$•FN$成為了善用魔法技能的占卜師．．．．．．
+@T
+CLOSE(1)
+
+FINAL
+
+*GN$
+TXA(NAME_FIRST)
+RET
+
+*FN$
+TXA(NAME_FAMILY)
+RET
+
+*OPEN
+IF(AX=1)TXOPEN(10) RET
+IF(AX=2)TXOPEN(13) RET
+IF(AX=3)TXOPEN(15) RET
+IF(AX=4)TXOPEN(14) RET
+RET
+
+*CLOSE
+IF(AX=1)TXCLOSE(10) RET
+IF(AX=2)TXCLOSE(13) RET
+IF(AX=3)TXCLOSE(15) RET
+IF(AX=4)TXCLOSE(14) RET
+RET
+
+*SS$
+IF(AX=1)TXSLCT(10) RET
+IF(AX=2)TXSLCT(13) RET
+IF(AX=3)TXSLCT(15) RET
+IF(AX=4)TXSLCT(14) RET
+RET
+
+*TTL$
+RET
+
+*START
+TXLC(10,21,220,0)
+TXLC(13,32,146,1)
+TXLC(14,32,20,1)
+TXLC(15,17,270,2)
+RET
+
+*FINAL
+LOAD("EEWEDD")
+RET
+
+*PICWORKING
+
+STRSTACK
+C5 = BX
+PTBK(2)
+PTLD("ENDWFRML")
+PTLA("ENDWFRMR")
+PTLA("ENDWFRMU")
+PTLA("ENDWFRMD")
+PTBK(0)
+PTLD("ENDWFRMM")
+PTX(20,0,0)
+PTBK(2)
+PTM(12,0,0)
+PTM(60,0,2)
+PTM(18,-40,4)
+PTM(18,400,6)
+PIC(11)
+PTBK(0)
+PTX(0,0,0)
+SI = C5
+PTLD
+PTMF(0,0,0)
+PIC(12)
+PIC(13,0,0,20,0,40,400)
+TIMER1(120)WAIT1
+RET
+

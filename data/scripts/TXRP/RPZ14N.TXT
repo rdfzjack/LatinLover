@@ -1,0 +1,63 @@
+
+
+
+
+
+*CHECK_MONSTOR
+MSR14N
+RET
+
+*KAIWA_OK
+KWA14N
+RET
+
+*MSR14N
+R_MS_NUMBER		=14
+R_FACE			="F174"
+R_MONSTOR		="M014"
+R_NAME			="巨蠍"
+R_CHINOH		=50
+RDM(35,55)
+R_SENTOH=AX
+R_KOUGEKI		=50
+R_BOUGYO		=45
+R_SOUKOU		=45
+R_SKNAME		="堅硬的表皮"
+R_MAHOGIJUTSU	=0
+R_MARYOKU		=0
+R_KOHMARYOKU	=0
+RDM(80,200)
+R_SENI=AX
+R_DASSYUTU		=50
+R_TSUKON		=10
+RDM(100,185)
+R_MAX_HP=AX
+R_MAX_MP		=0
+R_GOLD			=0
+R_SE_ATTACK	=4
+
+MONSTR[0]="沙沙沙沙沙﹗"
+RANDAM(3)
+IF(AX=1)MONSTR[1]="沙漠危險﹐是地獄的入口．．．"
+IF(AX=2)MONSTR[1]="四處走走也好．．．"
+IF(AX=3)MONSTR[1]="沙漠真正的面貌是什麼﹖"
+RANDAM(3)
+IF(AX=1)MONSTR[2]="想去西邊的地獄嗎﹖"
+IF(AX=2)MONSTR[2]="注意蟻地獄．．．"
+IF(AX=3)MONSTR[2]="遺跡的老龍喜歡美人．．．"
+RANDAM(3)
+IF(AX=1)MONSTR[3]="沙沙沙∼﹗﹗"
+IF(AX=2)MONSTR[3]="卡﹗卡卡卡卡卡卡卡﹗﹗"
+IF(AX=3)MONSTR[3]="咻∼﹖"
+MONSTR[4]="咻∼﹗"
+MONSTR[5]="卡．．．卡．．．"
+RET
+
+*KWA14N
+AX = 0
+IF ( B_KANJUSEI >= 350 )	AX=1
+RET
+
+
+
+

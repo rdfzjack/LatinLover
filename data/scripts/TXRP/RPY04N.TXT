@@ -1,0 +1,54 @@
+
+
+
+
+
+*CHECK_MEN
+MAN04N
+RET
+
+*MAN04N
+R_FACE			="F124"
+R_NAME			="年輕人"
+R_CHINOH		=10
+R_SENTOH		=40
+R_KOUGEKI		=45
+R_BOUGYO		=25
+R_SOUKOU		=0
+R_SKNAME		=""
+R_MAHOGIJUTSU	=0
+R_MARYOKU		=0
+R_KOHMARYOKU	=5
+RDM(100,150)
+R_SENI=AX
+R_DASSYUTU		=100
+R_TSUKON		=0
+RDM(90,250)
+R_MAX_HP=AX
+R_MAX_MP		=0
+RDM(20,100)
+R_GOLD=AX
+R_SE_ATTACK	=3
+
+MENMES[0]="呀﹗午安﹗"
+MENMES[1]="呀﹗晚上一個人走啊﹖"
+RANDAM(3)
+IF(AX=1)MENMES[2]="城西的怪物﹐聽說非常的恐怖．．．．．．"
+IF(AX=2)MENMES[2]="城東的怪物﹐就比較沒有那麼的恐怖．．．．．．"
+IF(AX=3)MENMES[2]="南河似乎有個淺灘可以通過。"
+RANDAM(3)
+IF(AX=1)MENMES[3]="啊﹖沒有跟上﹖﹗"
+IF(AX=2)MENMES[3]="啐﹗怎麼了﹖﹗"
+IF(AX=3)MENMES[3]="哼﹐被怪物吃掉也不知道﹗"
+MENMES[4]="啊﹐這傢伙﹗沒看過那麼傲慢的女孩子﹗﹗"
+MENMES[5]="．．．這．．．拜託．．．幫幫我．．．．．．"
+MENMES[6]="哼﹗家中有這樣的女孩﹐大人一定很苦惱﹗"
+RANDAM(3)
+IF(AX=1)MENMES[7]="喔喔喔．．．．．．"
+IF(AX=2)MENMES[7]="．．．喔喔．．．血﹐血流出來了．．．．．．"
+IF(AX=3)MENMES[7]="唔∼我不行了﹐馬上要死了．．．．．．"
+RET
+
+
+
+

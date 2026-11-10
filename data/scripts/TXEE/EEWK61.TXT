@@ -1,0 +1,154 @@
+TTL$("地主的愛人")
+
+START
+
+OPEN(4)
+TXFACE("F042")
+「小姐﹐有客人．．．．．．」
+@T
+CLOSE(4)
+OPEN(2)
+TXFACE("F141")
+「GN$小姐﹐我是布利顛的大地主．．．．．．」
+@T
+OPEN(3)
+TXGIRL(9)
+「是的．．．有什麼事情嗎﹖」
+@T
+SS$(2)
+@C
+
+「老實說我對妳相當著迷﹐但是我已經有妻兒了﹐所以．．．是否能夠請妳當我的小妾﹖」
+@T
+SS$(3)
+@C
+TXGIRL(15)
+「咦咦﹗．．．．．．當你的小妾﹖」
+@T
+SS$(2)
+@C
+TXFACE("F044")
+「什麼麼麼麼麼．．．．﹗﹖」
+@T
+OPEN(4)
+TXFACE("F141")
+「相信我吧﹗這一生都會讓妳稱心如意﹐也會給妳錢用﹗會讓妳過著貴族般奢華的生活。」
+@T
+CLOSE(4)
+CLOSE(3)
+CLOSE(2)
+EFC(3)
+OPEN(2)
+TXFACE("F045")
+「你這個失禮的傢伙﹗馬上給我滾出去﹗﹗」
+@T
+OPEN(3)
+TXGIRL(10)
+「會讓我一生都稱心如意嗎．．．．．．」
+@T
+SS$(2)
+@C
+TXFACE("F047")
+「小姐﹐難．．．難道﹐不可以呀﹗不可以當別人的小妾呀﹗」
+@T
+SS$(3)
+@C
+
+「那也是一種追求呀﹐我想．．．．．．當小妾也沒什麼不好．．．．．．」
+@T
+SS$(2)
+@C
+TXFACE("F046")
+「這﹐小姐∼．．．如果老爺知道了怎麼辦．．．．．．」
+@T
+SS$(3)
+@C
+TXGIRL(13)
+「啊﹐父親說過：『因為GN$已經長大成人了﹐所以自己的事由自己來決定。』﹐所以沒關係。」
+@T
+SS$(2)
+@C
+
+「這∼．．．怎麼會這樣．．．」
+@T
+CLOSE(2)
+CLOSE(3)
+PICWORKING("Z049")
+OPEN(1)
+就這樣﹐GN$•FN$成了地主的小妾．．．啊∼啊．．．．．．
+@T
+CLOSE(1)
+
+FINAL
+
+*GN$
+TXA(NAME_FIRST)
+RET
+
+*FN$
+TXA(NAME_FAMILY)
+RET
+
+*OPEN
+IF(AX=1)TXOPEN(10) RET
+IF(AX=2)TXOPEN(13) RET
+IF(AX=3)TXOPEN(15) RET
+IF(AX=4)TXOPEN(14) RET
+RET
+
+*CLOSE
+IF(AX=1)TXCLOSE(10) RET
+IF(AX=2)TXCLOSE(13) RET
+IF(AX=3)TXCLOSE(15) RET
+IF(AX=4)TXCLOSE(14) RET
+RET
+
+*SS$
+IF(AX=1)TXSLCT(10) RET
+IF(AX=2)TXSLCT(13) RET
+IF(AX=3)TXSLCT(15) RET
+IF(AX=4)TXSLCT(14) RET
+RET
+
+*TTL$
+RET
+
+*START
+TXLC(10,21,220,0)
+TXLC(13,32,146,1)
+TXLC(14,32,20,1)
+TXLC(15,17,270,2)
+RET
+
+*FINAL
+LOAD("EETNMT")
+RET
+
+*PICWORKING
+
+STRSTACK
+C5 = BX
+PTBK(2)
+PTLD("ENDWFRML")
+PTLA("ENDWFRMR")
+PTLA("ENDWFRMU")
+PTLA("ENDWFRMD")
+PTBK(0)
+PTLD("ENDWFRMM")
+PTX(20,0,0)
+PTBK(2)
+PTM(12,0,0)
+PTM(60,0,2)
+PTM(18,-40,4)
+PTM(18,400,6)
+PIC(11)
+PTBK(0)
+PTX(0,0,0)
+SI = C5
+PTLD
+PTMF(0,0,0)
+PIC(12)
+PIC(13,0,0,20,0,40,400)
+TIMER1(120)WAIT1
+RET
+

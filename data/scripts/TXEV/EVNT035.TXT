@@ -1,0 +1,348 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.IT_RECORD
+
+.S_WORKS
+.S_COUNTER
+.S_STARTDAY
+.S_ENDDAY
+.TODAY_COUNT
+.DAYLIGHT
+.SOUBI_FLG
+.SOUBI_REC
+.SOUBI_DAY
+
+S_WORKS 	=	BX
+S_COUNTER	=	CX
+S_STARTDAY	=	C1
+S_ENDDAY	=	C2
+TODAY_COUNT	=	C3
+DAYLIGHT	=	C4
+SOUBI_FLG	=	C5
+SOUBI_REC	=	C6
+SOUBI_DAY	=	C7
+
+STRSCLEAR
+
+TXLC(1,17,280,0)
+TXLC(2,28,130,1)
+TXLC(3,13,260,2)
+TXLC(10,19,280,0)
+WWIVENT(5,1,19,40)
+WWIVENT(5,0,24,60)
+
+RUN_MONTH[35]++
+E_ETC[97]=1
+
+EVNT035
+
+PLAY(14)
+
+WWMUSYA(9)
+WWMUSYA(8,1)
+
+BX = S_WORKS
+CX = S_COUNTER
+C1 = S_STARTDAY
+C2 = S_ENDDAY
+C3 = TODAY_COUNT
+C4 = DAYLIGHT
+C5 = SOUBI_FLG
+C6 = SOUBI_REC
+C7 = SOUBI_DAY
+
+IF ( S_WORKS = 0 )	LOAD("RPGLOP,RPG000")
+IF ( S_WORKS = 1 )	LOAD("RPGLOP,RPG001")
+IF ( S_WORKS = 2 )	LOAD("RPGLOP,RPG002")
+IF ( S_WORKS = 3 )	LOAD("RPGLOP,RPG003")
+
+TXOPEN(1)致命的錯誤WAITU
+
+
+
+
+
+*EVNT035
+
+ITEM_SRCH(1,27)
+IT_RECORD = DX
+IF ( AX=0 ) RET
+
+IF ( RUN_MONTH[35]=1 )
+	TXOPEN(1)
+	TXA(NAME_FIRST)進入小屋之中．．．．．．
+	WWMUSYA(7)
+	TXF(2)
+	@P
+	TXCLOSE(1)
+	TXOPEN(3)
+	TXGIRL(9)
+	「喂﹖有人在嗎﹖」
+	WWIVENT(1,1,"E031")
+	PLAY(27)
+	@P
+	TXOPEN(2)
+	TXFACE("F156")
+	「哎呀﹗小姐﹐我在這兒等妳很久了。」
+	@P
+	@3
+	TXGIRL(16)
+	@C
+	「哇哇哇﹗貓﹐貓在說話﹗﹗」
+	@P
+	@2
+	@C
+	「真是失禮呢。我是凱特•奇﹐貓族的妖精﹐因崇拜著我們信仰的神明而來。能夠和人類交談﹐是不是很不可思議﹖」
+	@P
+	@3
+	TXGIRL(9)
+	@C
+	「咦．．．你是貓的精靈凱特•奇．．．第一次見面。」
+	@P
+	@2
+	@C
+	「小姐﹐像今天這樣的事情從沒發生過吧﹖請問妳是否持有『貓眼石』這項寶物﹖」
+	@P
+	@3
+	TXGIRL(11)
+	@C
+	「咦﹖是的﹐我有．．．．．．」
+	SHOW_ITEMS
+	@P
+	@2
+	@C
+	「那是山貓一族重要的寶物﹐能不能交給我送還﹖當然我會給妳相當的謝禮。」
+	@P
+
+IF ( RUN_MONTH[35]>=2 )
+	TXOPEN(1)
+	TXA(NAME_FIRST)進入小屋之中．．．．．．
+	WWIVENT(1,1,"E031")
+	PLAY(27)
+	WWMUSYA(7)
+	TXF(2)
+	@P
+	TXCLOSE(1)
+	TXOPEN(2)
+	TXFACE("F156")
+	「再度見面﹐真是我的光榮。小姐﹐妳身上帶了貓眼石嗎﹖」
+	@P
+	TXOPEN(3)
+	TXGIRL(0)
+	「是的﹐我的確有．．．．．．」
+	SHOW_ITEMS
+	@P
+
+
+@2
+@C
+「如果還給我的話﹐我會在妳身上施用很棒的魔法﹐我推薦三種魔法﹐好好選擇自己喜歡的吧﹗」
+
+SLCTBAK(5)
+SLCPOS(1)SLCTX("增加身高,減少身高,減輕體重,不　　要")
+
+IF ( ISLCT = 0 )
+	@C
+	「比南洋之月更高的椰子精啊﹐請增加這個孩子的身高吧﹗」
+	ITEMPRN(2)
+	@P
+	MUSIC(6,5)
+	GR_OPEN
+	STRSCLEAR
+	IGRP_TBL1[0]="身高"
+	IGRP_TBL3[0]=P_SHINCHO
+	IGRP_CNT=1
+	IGRP_X=25
+	IGRP_Y=236
+	PROPROPEN(1,1)
+	TXOPEN(10)
+	TXA(NAME_FIRST)的身高增加了一公分。
+	P_SHINCHO += 100
+	PROPRUPD(1,0,P_SHINCHO)
+	@P
+	TXCLOSE(10)
+	GR_CLOSE
+	TXCLOSE(2)
+	@3
+	TXGIRL(9)
+	@C
+	「不可思議．．．能看到的景色變多了。」
+	@P
+	TXCLOSE(3)
+	STN_ALLCLEAR
+	RET
+
+IF ( ISLCT = 1 )
+	@C
+	「北邊邊境的摩可之神啊﹐請讓這個孩子的身高降低一點吧﹗」
+	ITEMPRN(2)
+	@P
+	MUSIC(6,5)
+	GR_OPEN
+	STRSCLEAR
+	IGRP_TBL1[0]="身高"
+	IGRP_TBL3[0]=P_SHINCHO
+	IGRP_CNT=1
+	IGRP_X=25
+	IGRP_Y=236
+	PROPROPEN(1,1)
+	TXOPEN(10)
+	TXA(NAME_FIRST)的身高縮減了一公分。
+	P_SHINCHO -= 100
+	IF ( P_SHINCHO < 0 ) P_SHINCHO = 0
+	PROPRUPD(1,0,P_SHINCHO)
+	@P
+	TXCLOSE(10)
+	GR_CLOSE
+	TXCLOSE(2)
+	@3
+	TXGIRL(9)
+	@C
+	「總覺得好像損失了什麼．．．．．．」
+	@P
+	TXCLOSE(3)
+	STN_ALLCLEAR
+	RET
+
+IF ( ISLCT = 2 )
+	@C
+	「東方火山島的浮石啊﹗請吸取這個孩子的重量吧﹗」
+	ITEMPRN(2)
+	@P
+	MUSIC(6,5)
+	GR_OPEN
+	STRSCLEAR
+	IGRP_TBL1[0]="體重"
+	IGRP_TBL3[0]=P_TAIJYU
+	IGRP_CNT=1
+	IGRP_X=25
+	IGRP_Y=236
+	PROPROPEN(1,1)
+	TXOPEN(10)
+	TXA(NAME_FIRST)體重減輕了一公斤。
+	P_TAIJYU -= 100
+	IF ( P_TAIJYU < 0 ) P_TAIJYU = 0
+	PROPRUPD(1,0,P_TAIJYU)
+	@P
+	TXCLOSE(10)
+	GR_CLOSE
+	TXCLOSE(2)
+	@3
+	TXGIRL(1)
+	@C
+	「身體變輕了﹗﹗」
+	@P
+	TXCLOSE(3)
+	STN_ALLCLEAR
+	RET
+
+
+@3
+TXGIRL(14)
+@C
+「雖然覺得很可惜﹐但是不能還給你。因為我好不容易才從山貓手中得到這顆貓眼石。」
+@P
+@2
+TXFACE("F157")
+@C
+「為什麼﹗居然不還給我﹖﹗我都這樣的拜託妳了呀﹗為什麼﹖﹗」
+@P
+@3
+TXGIRL(11)
+@C
+「呃﹐不要那麼生氣嘛．．．．．．」
+@P
+@2
+@C
+「哇啊﹗怎麼可能叫我不生氣﹗﹖」@P@C
+「貓眼石是山貓一族的寶物啊﹗」@P@C
+「我被他們拜託取回這項東西﹐卻一事無成﹗」@P@C
+「太丟臉了﹗﹗」@P@C
+「我還有什麼面子﹗」@P@C
+「世上居然有這樣的事情﹗」@P@C
+「妳是鬼﹗」@P@C
+「惡魔﹗」@P@C
+「無盡的貪婪﹗」
+@P
+@3
+TXGIRL(3)
+@C
+「即使你這樣說也不能．．．．．．」
+@P
+@2
+@C
+「我知道了﹐不再拜託妳了﹐再見。」
+@P
+TXCLOSE(2)
+
+WWIVENT(2,1)
+
+TXLC(1,17,130,0)
+TXOPEN(1)
+凱特•奇離開了．．．．．．
+ITEMPRN(2)
+@P
+TXCLOSE(1)
+
+@3
+TXGIRL(15)
+@C
+「哎呀﹗貓眼石不見了﹗」
+@P
+TXCLOSE(3)
+
+TXLC(1,17,280,0)
+TXOPEN(1)
+好像是凱特•奇用不知名的魔法將貓眼石偷走了．．．．．．
+@P
+TXCLOSE(1)
+STN_ALLCLEAR
+RET
+
+
+
+
+
+*STN_ALLCLEAR
+ITEM_SRCH(1,27)
+IF ( AX=0 ) RET
+AX = DX
+ITEM_KILL
+GOTO STN_ALLCLEAR
+
+
+
+
+
+*SHOW_ITEMS
+C1 = IT_RECORD
+ITEMID_TBL1[0]=ITEM_NAME[C1]
+ITEMID_TBL2[0]=ITEM_ICON[C1]
+ITEMID_TBL3[0]=ITEM_GOLD[C1]
+ITEMID_TBL4[0]=ITEM_HELP[C1]
+ITEMID_TBL5[0]=0
+ITEMID_TBL6[0]=""
+ITEMID_TBL7[0]=0
+ITEMID_CNT=1
+ITEMPRN(3,60,280)
+ITEMPRN(1,5)
+RET
+
+
+
+

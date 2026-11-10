@@ -1,0 +1,53 @@
+
+
+
+
+
+*CHECK_MONSTOR
+MSR02N
+RET
+
+*KAIWA_OK
+KWA02N
+RET
+
+*MSR02N
+R_MS_NUMBER		=2
+R_FACE			="F162"
+R_MONSTOR		="M002"
+R_NAME			="阿米巴"
+R_CHINOH		=10
+RDM(25,45)
+R_SENTOH		=AX
+R_KOUGEKI		=30
+R_BOUGYO		=18
+R_SOUKOU		=18
+R_SKNAME		="光滑的表皮"
+R_MAHOGIJUTSU	=0
+R_MARYOKU		=0
+R_KOHMARYOKU	=0
+R_SENI			=100
+R_DASSYUTU		=80
+R_TSUKON		=30
+RDM(20,100)
+R_MAX_HP=AX
+R_MAX_MP		=0
+R_GOLD			=0
+R_SE_ATTACK	=3
+
+MONSTR[0]="波咕波咕．．．．．．"
+MONSTR[1]="波咕咕．．．．．．"
+MONSTR[2]="波咕波咕波咕"
+MONSTR[3]="波咕波咕波咕．．．．．．"
+MONSTR[4]="嗯可嗯可嗯可．．．．．．"
+MONSTR[5]="咭唷∼．．．．．．"
+RET
+
+*KWA02N
+AX = 0
+IF ( B_KANJUSEI >= 200 )	AX=1
+RET
+
+
+
+

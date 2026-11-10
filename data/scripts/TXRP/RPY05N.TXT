@@ -1,0 +1,63 @@
+
+
+
+
+
+*CHECK_MEN
+MAN05N
+RET
+
+*MAN05N
+R_FACE			="F125"
+R_NAME			="商人"
+R_CHINOH		=10
+R_SENTOH		=40
+R_KOUGEKI		=40
+R_BOUGYO		=40
+R_SOUKOU		=25
+R_SKNAME		="皮衣"
+R_MAHOGIJUTSU	=0
+R_MARYOKU		=0
+R_KOHMARYOKU	=5
+R_SENI			=50
+R_DASSYUTU		=100
+R_TSUKON		=0
+RDM(75,190)
+R_MAX_HP		=AX
+R_MAX_MP		=0
+RDM(500,1500)
+R_GOLD			=AX
+R_SE_ATTACK	=3
+
+R_ITEM_NAME ="茶杯"
+R_ITEM_ICON	=19
+R_ITEM_GOLD	=500
+R_ITEM_ATTR	=4000
+R_ITEM_PROG	="B_KIHIN+10"
+R_ITEM_HELP	="氣質+10"
+R_ITEM_PROPA=25
+
+MENMES[0]="哎呀﹐小姑娘﹐午安。"
+MENMES[1]="哎呀﹐小姑娘﹐晚安﹗"
+RANDAM(3)
+IF(AX=1)MENMES[2]="一個人旅行很危險哪。一想到有可能被強盜打劫﹐都令人覺得毛骨悚然﹗"
+IF(AX=2)MENMES[2]="我是旅行的商人﹐身上帶著那麼多金錢﹐真是有點擔心．．．．．．"
+IF(AX=3)MENMES[2]="我是旅行的商人﹐聽到城市復興的消息﹐來做買賣的。"
+RANDAM(3)
+IF(AX=1)MENMES[3]="呀﹐真沒有禮貌。"
+IF(AX=2)MENMES[3]="年輕人真不懂得禮貌．．．．．．"
+IF(AX=3)MENMES[3]="不懂禮貌﹐就算有錢又有什麼用﹗"
+MENMES[4]="喔﹗喔喔﹗難道妳就是強盜﹗﹖"
+MENMES[5]="．．．錢都給妳﹐求求妳不要殺我﹗﹗"
+MENMES[6]="哈哈．．．沒本事的小姑娘﹐將她送給官吏﹗"
+RANDAM(3)
+IF(AX=1)MENMES[7]="真是好冷酷的目光．．．．．．"
+IF(AX=2)MENMES[7]="咦∼．．．難道這樣的女孩是強盜．．．．．．"
+IF(AX=3)MENMES[7]="誰來救我．．．多少錢都可以．．．．．．"
+RET
+
+
+
+
+
+

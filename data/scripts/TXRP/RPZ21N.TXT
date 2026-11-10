@@ -1,0 +1,73 @@
+
+
+
+
+
+*CHECK_MONSTOR
+MSR21N
+RET
+
+*KAIWA_OK
+KWA21N
+RET
+
+*MSR21N
+R_MS_NUMBER		=21
+R_FACE			="F181"
+R_MONSTOR		="M021"
+R_NAME			="龍族"
+R_CHINOH		=100
+RDM(80,90)
+R_SENTOH=AX
+R_KOUGEKI		=85
+R_BOUGYO		=75
+R_SOUKOU		=60
+R_SKNAME		="堅硬的鱗甲"
+R_MAHOGIJUTSU	=45
+RDM(40,50)
+R_MARYOKU=AX
+R_KOHMARYOKU	=50
+R_SENI			=150
+R_DASSYUTU		=80
+R_TSUKON		=10
+RDM(250,500)
+R_MAX_HP=AX
+RDM(120,150)
+R_MAX_MP=AX
+RDM(1,500)
+R_GOLD=AX
+R_SE_ATTACK	=4
+
+R_ITEM_NAME	="龍之牙"
+R_ITEM_ICON	=28
+R_ITEM_GOLD	=2200
+R_ITEM_ATTR	=4000
+R_ITEM_PROG	="H_SENSHI+20"
+R_ITEM_HELP	="戰士評價+20"
+R_ITEM_PROPA=5
+
+
+MONSTR[0]="咕吼吼吼．．．"
+RANDAM(3)
+IF(AX=1)MONSTR[1]="保持高貴的氣質﹐更加強磨練自已是好的。"
+IF(AX=2)MONSTR[1]="人類的姑娘﹐現在的心情如何﹖"
+IF(AX=3)MONSTR[1]="哇﹐女孩子一個人在這種地方行走﹖好勇敢．．．"
+RANDAM(3)
+IF(AX=1)MONSTR[2]="不付龍之谷的通行費﹖只有警備隊才有這種特權．．．"
+IF(AX=2)MONSTR[2]="只要有朝偉人看齊的心﹐人生的大道上處處也可看到成功。"
+IF(AX=3)MONSTR[2]="疲勞是身體及心理的蛀蟲．．．"
+
+
+MONSTR[3]="吼﹗﹗﹗"
+MONSTR[4]="吼嗚嗚嗚∼．．．．"
+MONSTR[5]="唔唔唔．．．"
+RET
+
+*KWA21N
+AX = 0
+IF ( B_KIHIN >= 300 )	AX=1
+RET
+
+
+
+

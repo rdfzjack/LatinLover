@@ -1,0 +1,341 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.IT_RECORD
+
+.S_WORKS
+.S_COUNTER
+.S_STARTDAY
+.S_ENDDAY
+.TODAY_COUNT
+.DAYLIGHT
+.SOUBI_FLG
+.SOUBI_REC
+.SOUBI_DAY
+
+S_WORKS 	=	BX
+S_COUNTER	=	CX
+S_STARTDAY	=	C1
+S_ENDDAY	=	C2
+TODAY_COUNT	=	C3
+DAYLIGHT	=	C4
+SOUBI_FLG	=	C5
+SOUBI_REC	=	C6
+SOUBI_DAY	=	C7
+
+STRSCLEAR
+
+TXLC(1,17,280,0)
+TXLC(2,28,130,1)
+TXLC(3,13,260,2)
+WWIVENT(5,1,19,40)
+
+EVNT028
+
+WWMUSYA(9)
+WWMUSYA(8,1)
+
+BX = S_WORKS
+CX = S_COUNTER
+C1 = S_STARTDAY
+C2 = S_ENDDAY
+C3 = TODAY_COUNT
+C4 = DAYLIGHT
+C5 = SOUBI_FLG
+C6 = SOUBI_REC
+C7 = SOUBI_DAY
+
+IF ( S_WORKS = 0 )	LOAD("RPGLOP,RPG000")
+IF ( S_WORKS = 1 )	LOAD("RPGLOP,RPG001")
+IF ( S_WORKS = 2 )	LOAD("RPGLOP,RPG002")
+IF ( S_WORKS = 3 )	LOAD("RPGLOP,RPG003")
+
+TXOPEN(1)致命的錯誤WAITU
+
+
+
+
+
+*EVNT028
+
+E_ETC[95]=1
+
+IF ( E_ETC[25] ! 0 )
+	KARETAYO
+	RET
+
+ITEM_SRCH(1,22)
+IT_RECORD = DX
+IF ( AX=1 )
+	RUN_MONTH[28]++
+	EVNT028_HAVE
+	RET
+IF ( AX=0 )
+	EVNT028_NONE
+	RET
+
+
+
+
+
+*EVNT028_HAVE
+
+TXOPEN(3)
+TXA(NAME_FIRST)一站到泉水的旁邊﹐水面就開始波紋盪漾．．．．．．
+TXGIRL(15)
+「啊﹗﹗﹗」
+WWMUSYA(7)
+TXF(2)
+@P
+TXCLOSE(3)
+
+TXOPEN(1)
+不久波浪化為一道煙霧﹐幻化成美麗的泉水精靈．．．．．．
+@P
+TXCLOSE(1)
+
+PLAY(27)
+
+WWIVENT(3,1,"L002")
+
+TXOPEN(3)
+TXGIRL(15)
+「．．．．．．」
+@P
+TXOPEN(2)
+TXFACE("F155")
+「請歸還我們的卵．．．．．．」
+@P
+@3
+@C
+TXGIRL(9)
+「什麼﹖」
+@P
+@2
+@C
+「我是泉水的精靈﹐是這一帶水脈的守護者。妳拿著『精靈戒指』上面的寶石就是精靈的卵。」
+@P
+@3
+@C
+
+「精靈的卵﹖」
+@P
+@2
+@C
+「我們泉水精靈每九十九年產一次卵﹐而去年生下來的卵﹐不知被誰偷走了。」
+@P
+@C
+「卵在一年期間會自然孵化﹐但是剛產下的精靈若是沒有泉水﹐是會死亡的。」
+@P
+@3
+@C
+TXGIRL(11)
+「這樣啊．．．．．．」
+@P
+@2
+@C
+「泉水精靈的壽命剛好是一百年。若沒有孩子守護這座泉水﹐則泉水會失去保護而枯竭。」
+@P
+@C
+「求求妳﹐請把卵還給我。」
+@P
+@3
+@C
+
+「似乎很可憐．．．但是﹐這是我父親給我很貴重的東西．．．．．．」
+SHOW_ITEMS
+SLCTBAK(5)
+SLCPOS(1)SLCTX("歸　　還,拒　　絕")
+
+IF ( ISLCT=0 )
+	@C
+	TXGIRL(1)
+	「我了解﹐這個戒指﹐就還給你吧﹗」
+	@P
+	ITEMPRN(2)
+	@2
+	@C
+	「謝謝﹐妳也因此而救了這道清泉。」
+	@P
+	@3
+	@C
+
+	「那裡﹐這本來就是你的東西。」
+	@P
+	@2
+	@C
+	「好親切的姑娘﹐希望妳的人生會更加的燦爛．．．．．．」
+	@P
+	TXCLOSE(3)
+	TXCLOSE(2)
+	TXOPEN(1)
+	泉水的精靈親切的微笑著﹐消失在泉水之中．．．．．．
+	@P
+	GR_OPEN
+	STRSCLEAR
+	IGRP_TBL1[0]="氣質"
+	IGRP_TBL3[0]=B_KIHIN
+	IGRP_CNT=1
+	IGRP_X=25
+	IGRP_Y=236
+	GRPOPEN(1,1)
+	B_KIHIN += 50
+	TXA(NAME_FIRST)的氣質上昇５０點﹗
+	GRPUPD(1,0,B_KIHIN)
+	MUSIC(2)
+	@P
+	GR_CLOSE
+	TXCLOSE(1)
+	ITEM_KILL(IT_RECORD)
+	E_ETC[1]=1
+	E_ETC[82]=VAL_YEAR
+	E_ETC[83]=VAL_MONTH
+	E_ETC[84]=VAL_DAY
+	PLAY(14)
+	RET
+
+
+
+
+@3
+@C
+「對不起﹐雖然你很可憐﹐但是這樣東西對我來說是很重要的。」
+@P
+@2
+@C
+「求求妳﹐我的生命只剩下一點點﹐若沒有卵﹐泉水就會滅亡。」
+@P
+@3
+TXGIRL(3)
+@C
+「對不起﹐對不起．．．．．．」
+@P
+ITEMPRN(2)
+TXCLOSE(3)
+TXCLOSE(2)
+TXOPEN(1)
+TXA(NAME_FIRST)用跑的離開了那個地方。
+@P
+TXCLOSE(1)
+TXOPEN(2)
+TXFACE("F155")
+「哎∼人類為什麼那麼卑鄙﹐最好那女孩的心也像這道泉水一樣的枯竭．．．．．．」
+@P
+TXCLOSE(2)
+
+E_ETC[27] = VAL_MONTH
+
+
+IF ( B_KANJUSEI = 0 ) RET
+
+TXOPEN(1)
+泉水精靈無力的嘆息﹐而後消失．．．．．．
+GR_OPEN
+STRSCLEAR
+IGRP_TBL1[0]="感受"
+IGRP_TBL3[0]=B_KANJUSEI
+IGRP_CNT=1
+IGRP_X=25
+IGRP_Y=236
+GRPOPEN(1,1)
+C1 = B_KANJUSEI / 2
+IF ( B_KANJUSEI=1 ) C1=1
+TXA(NAME_FIRST)的感受下降了TXPOINT(C1)點﹗
+B_KANJUSEI -= C1
+GRPUPD(1,0,B_KANJUSEI)
+MUSIC(2)
+@P
+GR_CLOSE
+TXCLOSE(1)
+PLAY(14)
+RET
+
+
+
+
+
+
+*EVNT028_NONE
+TXOPEN(3)
+TXGIRL(0)
+「真漂亮的泉水．．．似乎心靈也被洗滌了。」
+WWMUSYA(7)
+TXF(2)
+@P
+GR_OPEN
+STRSCLEAR
+IGRP_TBL1[0]="感受"
+IGRP_TBL3[0]=B_KANJUSEI
+IGRP_CNT=1
+IGRP_X=25
+IGRP_Y=220
+GRPOPEN(1,1)
+B_KANJUSEI += 2
+TXA(NAME_FIRST)的感受上昇２點﹗
+GRPUPD(1,0,B_KANJUSEI)
+@P
+GR_CLOSE
+TXCLOSE(3)
+RET
+
+
+
+
+
+*KARETAYO
+TXOPEN(1)
+泉水慢慢的乾枯了．．．．．．
+WWMUSYA(7)
+TXF(2)
+@P
+TXCLOSE(1)
+
+TXOPEN(3)
+TXGIRL(3)
+「．．．．．．．．．．．．．．．」
+@P
+TXCLOSE(3)
+RET
+
+
+
+
+
+
+*SHOW_ITEMS
+C1 = IT_RECORD
+ITEMID_TBL1[0]=ITEM_NAME[C1]
+ITEMID_TBL2[0]=ITEM_ICON[C1]
+ITEMID_TBL3[0]=ITEM_GOLD[C1]
+ITEMID_TBL4[0]=ITEM_HELP[C1]
+ITEMID_TBL5[0]=0
+ITEMID_TBL6[0]=""
+ITEMID_TBL7[0]=0
+ITEMID_CNT=1
+ITEMPRN(3,60,280)
+ITEMPRN(1,5)
+RET
+
+
+
+

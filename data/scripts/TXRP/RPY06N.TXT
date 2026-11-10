@@ -1,0 +1,53 @@
+
+
+
+
+
+*CHECK_MEN
+MAN06N
+RET
+
+*MAN06N
+R_FACE			="F126"
+R_NAME			="老人"
+R_CHINOH		=10
+R_SENTOH		=40
+R_KOUGEKI		=30
+R_BOUGYO		=15
+R_SOUKOU		=0
+R_SKNAME		=""
+R_MAHOGIJUTSU	=30
+R_MARYOKU		=0
+R_KOHMARYOKU	=30
+R_SENI			=55
+R_DASSYUTU		=100
+R_TSUKON		=10
+RDM(40,150)
+R_MAX_HP		=AX
+R_MAX_MP		=0
+RDM(50,100)
+R_GOLD			=AX
+R_SE_ATTACK	=3
+
+MENMES[0]="呀．．．好晴朗的天啊．．．．．．"
+MENMES[1]="啊．．．美好的月夜啊．．．．．．"
+RANDAM(3)
+IF(AX=1)MENMES[2]="在外頭走著﹐有時會不經意的撿到好東西。"
+IF(AX=2)MENMES[2]="身家出世良好﹐又有平穩無事的人生﹐實在是不壞啊．．．．．．"
+IF(AX=3)MENMES[2]="重視世間評價的話﹐人格還是相當重要的．．．．．．"
+RANDAM(3)
+IF(AX=1)MENMES[3]="耳朵聽不到嗎﹖"
+IF(AX=2)MENMES[3]="啊﹐不正經的大人樣．．．．．．"
+IF(AX=3)MENMES[3]="哎﹐老了真是笨了﹐連怎麼和小女孩說話都不會了．．．．．．"
+MENMES[4]="嗯．．．想對老人做什麼﹗﹖"
+MENMES[5]="．．．唔唔唔．．．這麼想要我的命嗎﹖．．．．．．"
+MENMES[6]="哼哼哼．．．不要輕視老人家．．．．．．"
+RANDAM(3)
+IF(AX=1)MENMES[7]="．．．唔唔唔．．．世界末日來了．．．．．．"
+IF(AX=2)MENMES[7]="．．．啊啊．．．好不容易活到這把年紀﹐卻再也看不到這個世界了．．．．．．"
+IF(AX=3)MENMES[7]="．．．．．．是種下了什麼因﹐遭受到如此嚴厲的報應．．．．．．"
+RET
+
+
+
+
