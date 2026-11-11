@@ -25,13 +25,13 @@ class TestPoints(unittest.TestCase):
         self.assertEqual(A.build_deck([1, 1, 1, 1], [0, 0, 0]), [(0, 1), (0, 0), (0, 0)])
 
     def test_effective(self):
-        # 场风 ×1.3；硬汉克情人 ×1.5 / ×0.7；场风色不受克制
+        # 场风 ×1.3；硬汉克情人 ×1.3 / ×0.8；场风色不受克制
         self.assertEqual(A.effective(D, (1, 6), (1, 6), 1), (780, 780))
-        self.assertEqual(A.effective(D, (0, 6), (1, 6), 2), (900, 420))
+        self.assertEqual(A.effective(D, (0, 6), (1, 6), 2), (780, 480))
         self.assertEqual(A.effective(D, (0, 6), (1, 6), 1), (600, 780))
-        self.assertEqual(A.effective(D, (0, 6), (1, 6), 0), (1170, 420))
+        self.assertEqual(A.effective(D, (0, 6), (1, 6), 0), (1014, 480))
         self.assertEqual(A.effective(D, (0, 5), (2, 5), 3), (500, 500))   # 相对两色互不相干
-        self.assertEqual(A.effective(D, (3, 4), (0, 8), 1), (600, 560))    # 手腕克硬汉
+        self.assertEqual(A.effective(D, (3, 4), (0, 8), 1), (520, 640))    # 手腕克硬汉
 
     def test_tie(self):
         self.assertFalse(A.round_winner(D, (1, 6), (1, 6), 1, 100, 100))
@@ -70,12 +70,13 @@ class TestTable77(unittest.TestCase):
 
 class TestOpponent(unittest.TestCase):
     def test_deck_formula(self):
-        # 等级 [5,9,2,3]，场风 [15,60,10,15]：情人主色；第二大 9 之后是硬汉 5
+        # 等级 [5,9,2,3]，场风 [15,60,10,15]：情人主色；副色是克星的克星（克情人的硬汉被手腕克）
         rv = rival([5, 9, 2, 3], k=4)
-        self.assertEqual(A.opponent_deck(D, rv, [15, 60, 10, 15]), [(1, 9), (1, 8), (1, 7), (1, 6), (0, 5)])
+        self.assertEqual(A.opponent_deck(D, rv, [15, 60, 10, 15]), [(1, 9), (1, 8), (1, 7), (1, 6), (3, 3)])
+        self.assertEqual([A.guard_color(D, c) for c in range(4)], [2, 3, 0, 1])
         # 5 × (1 + 0.3×5%) = 5.075 仍大于 4 × (1 + 0.3×60%) = 4.72；同级时场风概率决定
-        self.assertEqual(A.opponent_colors(D, [5, 1, 4, 1], [5, 30, 60, 5])[:2], [0, 2])
-        self.assertEqual(A.opponent_colors(D, [5, 1, 5, 1], [5, 30, 60, 5])[:2], [2, 0])
+        self.assertEqual(A.opponent_colors(D, [5, 1, 4, 1], [5, 30, 60, 5]), (0, 2))
+        self.assertEqual(A.opponent_colors(D, [5, 1, 5, 1], [5, 30, 60, 5]), (2, 0))
 
     def test_unnamed(self):
         st = bare(3)
@@ -84,14 +85,14 @@ class TestOpponent(unittest.TestCase):
             r = A.unnamed_rival(st, '小', probs=[10, 60, 10, 20])
             self.assertIn(r['等级'][1], (1, 2))
             self.assertEqual(r['名气'], 40)
-            self.assertEqual(r['k'], 4)
-            self.assertEqual(r['等级'][0], 1)
+            self.assertEqual(r['k'], 3)
+            self.assertEqual(r['等级'][0], 1)   # 副色在手腕（克星的克星），其余 1 级
             self.assertEqual(r['等级'][2], 1)
         st.ym = 47   # h = 7：主色 2 + 7/3 = 4，随机 -1..0
         ls = {A.unnamed_rival(st, '小', probs=[10, 60, 10, 20])['等级'][1] for _ in range(100)}
         self.assertEqual(ls, {3, 4})
         r = A.unnamed_rival(st, '大', main_level=7, probs=[15, 60, 10, 15])
-        self.assertEqual(r['等级'], [5, 7, 1, 1])
+        self.assertEqual(r['等级'], [1, 7, 1, 5])
         self.assertEqual(r['名气'], 300 + 15 * 7)
         st.ym = 18   # 1927-07 涨一级：h = 3
         self.assertEqual(A.half_years(st) // 3, 1)

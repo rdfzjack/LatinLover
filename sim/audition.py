@@ -82,16 +82,25 @@ def solo_value(d, card, field):
 
 
 # ---------- 对手 ----------
+def guard_color(d, main):
+    """克星的克星：克 main 的那一色被谁克，就是谁（情人 -> 手腕，硬汉 -> 文化）。"""
+    bt = beats(d)
+    beater = bt.index(main)
+    return bt.index(beater)
+
+
 def opponent_colors(d, levels, probs):
-    """按 等级 × (1 + 0.3 × 场风概率) 排颜色，并列取靠前的（7.5）。"""
+    """对手的 (主色, 副色)（7.5）：主色按 等级 × (1 + 0.3 × 场风概率) 最大，并列取靠前的；
+    副色取克星的克星，防被克制。"""
     co = cfg(d)['对手组牌']['场风系数百分比']
     key = [levels[c] * (10000 + co * probs[c]) for c in range(COLORS)]
-    return sorted(range(COLORS), key=lambda c: (-key[c], c))
+    main = min(range(COLORS), key=lambda c: (-key[c], c))
+    return main, guard_color(d, main)
 
 
 def opponent_deck(d, rival, probs):
-    order = opponent_colors(d, rival['等级'], probs)
-    return deck_of(rival['等级'], order[0], rival['k'], order[1])
+    main, sub = opponent_colors(d, rival['等级'], probs)
+    return deck_of(rival['等级'], main, rival['k'], sub)
 
 
 def half_years(st):
@@ -99,7 +108,7 @@ def half_years(st):
 
 
 def unnamed_rival(st, tier, main_level=None, probs=None):
-    """无名对手（9.2）。主色 = 场风概率最高的颜色，副色 = 第二高（等级 主色−2），其余两色 1 级。"""
+    """无名对手（9.2）。主色 = 场风概率最高的颜色，副色 = 克星的克星（等级 主色−2），其余两色 1 级。"""
     d = st.d
     g = st.rng.logic
     r = d.t['rivals']['无名']
@@ -111,10 +120,10 @@ def unnamed_rival(st, tier, main_level=None, probs=None):
         L = main_level
     L = max(1, L)
     probs = probs or [25, 25, 25, 25]
-    order = sorted(range(COLORS), key=lambda c: (-probs[c], c))
+    main = min(range(COLORS), key=lambda c: (-probs[c], c))
     lv = [1] * COLORS
-    lv[order[0]] = L
-    lv[order[1]] = max(1, L - t['副色差'])
+    lv[main] = L
+    lv[guard_color(d, main)] = max(1, L - t['副色差'])
     habits = d.t['habits']['习惯']
     hb = habits[g.below(len(habits))]['id']
     return {'id': None, '名字': f'无名（{tier}）', '等级': lv,
@@ -329,7 +338,7 @@ def audition(st, role, player, rivals, probs=None):
 
 # ---------- GDD 7.7 的试算表 ----------
 # 贴近实际的局面：一个情人角色（场风 15/60/10/15），对手按 9.2 的无名规则组牌
-# （4 张情人 + 1 张第二高色硬汉，副色低 2 级）；场风按角色概率抽；双方随机出牌。
+# （3 张情人 + 2 张手腕，副色低 2 级）；场风按角色概率抽；双方随机出牌。
 # 玩家在“纯色 / 主色 4 或 3 张 + 一种副色”里取胜率最高的一副。颜色 0 硬汉 1 情人 2 文化 3 手腕。
 ROLE_77 = [15, 60, 10, 15]
 OPP_77 = 6
@@ -346,11 +355,12 @@ CASES_77 = [
 
 
 def opp_77(d, L=OPP_77, probs=ROLE_77):
-    order = sorted(range(COLORS), key=lambda c: (-probs[c], c))
+    t = d.t['rivals']['无名']['档'][1]
+    main = min(range(COLORS), key=lambda c: (-probs[c], c))
     lv = [1] * COLORS
-    lv[order[0]] = L
-    lv[order[1]] = max(1, L - 2)
-    return {'id': None, '名字': '无名', '等级': lv, '名气': 100, '习惯': 'habit_random', 'k': 4}
+    lv[main] = L
+    lv[guard_color(d, main)] = max(1, L - t['副色差'])
+    return {'id': None, '名字': '无名', '等级': lv, '名气': 100, '习惯': 'habit_random', 'k': t['k']}
 
 
 def exact_win(d, my_deck, their_deck, field, fame_me=0, fame_them=100):
@@ -407,7 +417,10 @@ def table_77(d, fame_hi=False):
 if __name__ == '__main__':
     from .data import load
     d = load()
-    print(f'GDD 7.7：情人角色（场风 {ROLE_77}），对手 {OPP_77} 级情人 4 张 + 硬汉 1 张；双方随机出牌')
+    rv = opp_77(d)
+    names = ['硬', '情', '文', '手']
+    print(f'GDD 7.7：情人角色（场风 {ROLE_77}），对手牌 '
+          + ' '.join(f'{names[c]}{p}' for c, p in opponent_deck(d, rv, ROLE_77)) + '；双方随机出牌')
     a, b = table_77(d), table_77(d, fame_hi=True)
     for x, y in zip(a, b):
         print(f'{x[0]:<16} {x[1]:<5} 对手名气高 {x[2]*100:3.0f}%（情人场风 {x[3]*100:3.0f}% / 其他 {x[4]*100:3.0f}%）'
