@@ -285,6 +285,27 @@ for r in roles['角色']:
     for o in r['对手']:
         if '有名' in o and o['有名'] not in RIVALS: err(f, f'{w} 对手不存在 {o}')
     if r['有声'] and r['谈吐线'] is None: err(f, f'{w} 有声角色要有谈吐线')
+    if r['有声'] not in (True, False, None): err(f, f'{w} 有声应为 true/false/null')
+# roles.json 默认里第 6 步用的规则块
+df = roles['默认']
+for k in ('选片板', '有声', '拍摄', '上映', '占位生成', '剧本'):
+    if k not in df: err(f, f'默认 缺 {k}')
+if '占位生成' in df:
+    pg = df['占位生成']
+    if sorted(pg['标签按主色']) != sorted(ROADS): err(f, '占位生成 标签按主色 要四条路')
+    for road, ts in pg['标签按主色'].items():
+        for t in ts:
+            if t not in TAGS or t == '低成本制作': err(f, f'占位生成 标签 {t}')
+    if pg['主色场风'] + 3 * pg['其余场风'] != 100: err(f, '占位生成 场风和不是 100')
+if '剧本' in df:
+    for k in ('自己写', 'Duv写', '合写'): check_cond(f, df['剧本'][k]['条件'], '剧本 ' + k)
+if '拍摄' in df:
+    for t in df['拍摄']['亲自上']['标签']:
+        if t not in TAGS: err(f, f'亲自上 标签 {t}')
+    parse_effect(f, df['拍摄']['亲自上']['受伤效果'], '亲自上')
+if '选片板' in df:
+    for t in df['选片板']['瓦伦去世后多一个']['标签']:
+        if t not in TAGS: err(f, f'瓦伦去世后 标签 {t}')
 # items
 f = 'items.json'
 if len(ITEM_NAMES) != len(items_t['物品']): err(f, '物品 id 重复')

@@ -15,6 +15,17 @@ def clamp(v, lo, hi):
 STATUS_KEYS = ['生病', '重病', '失控', '恋爱', '长约', '拍摄旬', '当月有拍摄', '有未开拍角色']
 
 
+def new_story():
+    """第 6 步的状态，都能直接存进 JSON。
+    板：当前选片板（board.py）；片：所有片约（film.py）；上过板：角色 id -> 上板次数；
+    待上板：下一块板多出的角色；告密：下一块板要揭开场风的角色数；末次：事件 id -> 最近触发的月序；
+    剧本：自己写 / Duv 写 最近一次的年份、合写是否用过；长约拒绝：最近一次拒绝的月序；
+    转型：剩余板数和戏路族；序号：生成角色、片约用的流水号；结局：结局判定的结果。"""
+    return {'板': None, '片': [], '上过板': {}, '待上板': [], '告密': 0, '末次': {},
+            '剧本': {'自己写': 0, 'Duv写': 0, '合写': 0}, '长约拒绝': -99, '转型': [0, None],
+            '压丑闻年': 0, '放消息年': 0, '序号': 0, '结局': None}
+
+
 class State:
     def __init__(self, data):
         self.d = data
@@ -49,6 +60,7 @@ class State:
         self.fired = {}                   # 已触发事件：id -> 次数（第 6 步用）
         self.ended = None                 # 结局 id；中途强制结局也写这里
         self.finished = 0                 # 1929-12 月结之后为 1
+        self.story = new_story()          # 第 6 步：选片板、片约、事件记录、结局（见 new_story）
         self.log = []                     # 调试用，不进存档
 
     # ---------- 开局 ----------
@@ -186,7 +198,7 @@ class State:
     SAVE_KEYS = ['ym', 'attr', 'skill', 'money', 'corr', 'favor', 'known', 'flags', 'count', 'tags', 'weights',
                  'books', 'read_books', 'items', 'equip', 'lifestyle', 'idx', 'status', 'romance_months',
                  'debt_months', 'drug', 'stock', 'collapse_months', 'forced_rest', 'void_next', 'exposed',
-                 'month_used', 'fired', 'ended', 'finished']
+                 'month_used', 'fired', 'ended', 'finished', 'story']
 
     def to_dict(self):
         out = {'版本': 1, 'rng': self.rng.dump()}
@@ -202,7 +214,7 @@ class State:
         st = cls(data)
         st.rng = Rng.load(d['rng'])
         for k in cls.SAVE_KEYS:
-            setattr(st, k, json.loads(json.dumps(d[k])))
+            setattr(st, k, json.loads(json.dumps(d[k] if k in d else getattr(st, k))))
         return st
 
     @classmethod
