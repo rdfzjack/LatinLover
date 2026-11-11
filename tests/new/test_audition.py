@@ -39,31 +39,33 @@ class TestPoints(unittest.TestCase):
 
 
 class TestTable77(unittest.TestCase):
-    """GDD 7.7：双方随机出牌的胜率，误差 ±3 个百分点。"""
+    """GDD 7.7：完整的 match()（场风按角色概率抽、对手按 7.5 组牌、双方随机出牌）抽样，
+    和精确枚举的胜率相差不超过 3 个百分点。"""
 
-    def test_exact(self):
-        for name, v, gdd in A.table_77(D):
-            if gdd == 13:
-                continue   # 第 3 行和现行规则对不上（现行 0%），等用户定，见 README 交接
-            self.assertAlmostEqual(v, gdd, delta=3, msg=name)
-
-    @unittest.skip('GDD 7.7 第 3 行（13%）在现行规则下是 0%，等用户定')
-    def test_row3(self):
-        self.assertAlmostEqual(A.table_77(D)[2][1], 13, delta=3)
-
-    def test_through_match(self):
-        """同样的局面走完整的 match()（对手随性、玩家随机），抽样结果也在 ±3 内。"""
+    def check(self, fame_hi):
         st = bare(5)
-        st.attr['名气'] = 0
-        for name, ml, mc, ol, k, f, gdd in A.TABLE_77:
-            if gdd == 13:
-                continue
-            rv = rival(ol, k)
-            deck = A.build_deck(ml, mc)
+        st.attr['名气'] = 200 if fame_hi else 0
+        rv = A.opp_77(D)
+        for name, deck_name, exact, on, off, cols in A.table_77(D, fame_hi):
+            lv = dict(A.CASES_77)[name]
             n = 3000
-            w = sum(A.match(st, deck, rv, [25, 25, 25, 25], A.FixedRandomPlayer(mc), field=f)['比分'][0] == 3
+            w = sum(A.match(st, A.build_deck(lv, cols), rv, A.ROLE_77, A.FixedRandomPlayer(cols))['比分'][0] == 3
                     for _ in range(n))
-            self.assertAlmostEqual(w * 100 / n, gdd, delta=3, msg=name)
+            self.assertAlmostEqual(w / n, exact, delta=0.03, msg=name)
+
+    def test_fame_low(self):
+        self.check(False)
+
+    def test_fame_high(self):
+        self.check(True)
+
+    def test_shape(self):
+        """表的形状：同路时等级差决定胜负，名气只在平点时起作用。"""
+        t = {r[0]: r[2] for r in A.table_77(D)}
+        self.assertLess(t['同路低 1 级'], 0.05)
+        self.assertLess(t['同路同级'], t['同路高 1 级'])
+        self.assertLess(t['同路高 1 级'], t['同路高 2 级'])
+        self.assertGreater(t['同路高 2 级'], 0.85)
 
 
 class TestOpponent(unittest.TestCase):

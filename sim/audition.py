@@ -328,18 +328,29 @@ def audition(st, role, player, rivals, probs=None):
 
 
 # ---------- GDD 7.7 的试算表 ----------
-# 每行：(说明, 我的等级, 我的 5 张颜色, 对手等级, 对手 k, 场风, GDD 写的胜率%)
-# 设定是第 5 步补的（GDD 没写当时用的牌组）：对手主色 5 张（第 5 行 3 张），场风取对手主色，
-# 平点时对手名气高。颜色 0 硬汉 1 情人 2 文化 3 手腕。
-TABLE_77 = [
-    ('同色同级 6 对 6，我全主色', [1, 6, 1, 1], [1, 1, 1, 1, 1], [1, 6, 1, 1], 5, 1, 23),
-    ('同上，我 3 主 2 副（副色硬汉 6）', [6, 6, 1, 1], [1, 1, 1, 0, 0], [1, 6, 1, 1], 5, 1, 70),
-    ('同色我低 2 级 6 对 8，3 主 2 副', [6, 6, 1, 1], [1, 1, 1, 0, 0], [1, 8, 1, 1], 5, 1, 13),
-    ('同色我高 1 级 7 对 6，4 主 1 副', [6, 7, 1, 1], [1, 1, 1, 1, 0], [1, 6, 1, 1], 5, 1, 93),
-    ('我情人 6 手腕 4 对硬汉 8，场风硬汉', [1, 6, 1, 4], [1, 1, 1, 1, 1], [8, 1, 1, 1], 3, 0, 0),
-    ('同上，场风情人', [1, 6, 1, 4], [1, 1, 1, 1, 1], [8, 1, 1, 1], 3, 1, 57),
-    ('四路各 4 级对 8 级纯色', [4, 4, 4, 4], [0, 1, 2, 3, 0], [1, 8, 1, 1], 5, 1, 1),
+# 贴近实际的局面：一个情人角色（场风 15/60/10/15），对手按 9.2 的无名规则组牌
+# （4 张情人 + 1 张第二高色硬汉，副色低 2 级）；场风按角色概率抽；双方随机出牌。
+# 玩家在“纯色 / 主色 4 或 3 张 + 一种副色”里取胜率最高的一副。颜色 0 硬汉 1 情人 2 文化 3 手腕。
+ROLE_77 = [15, 60, 10, 15]
+OPP_77 = 6
+CASES_77 = [
+    ('同路同级', [2, 6, 2, 2]),
+    ('同路低 1 级', [2, 5, 2, 2]),
+    ('同路高 1 级', [2, 7, 2, 2]),
+    ('同路高 2 级', [2, 8, 2, 2]),
+    ('同路同级，副路硬汉 4', [4, 6, 2, 2]),
+    ('硬汉路玩家（硬 6 情 2）', [6, 2, 2, 2]),
+    ('文化路玩家（文 6 情 2）', [2, 2, 6, 2]),
+    ('手腕路玩家（手 6 情 2）', [2, 2, 2, 6]),
 ]
+
+
+def opp_77(d, L=OPP_77, probs=ROLE_77):
+    order = sorted(range(COLORS), key=lambda c: (-probs[c], c))
+    lv = [1] * COLORS
+    lv[order[0]] = L
+    lv[order[1]] = max(1, L - 2)
+    return {'id': None, '名字': '无名', '等级': lv, '名气': 100, '习惯': 'habit_random', 'k': 4}
 
 
 def exact_win(d, my_deck, their_deck, field, fame_me=0, fame_them=100):
@@ -358,20 +369,46 @@ def exact_win(d, my_deck, their_deck, field, fame_me=0, fame_them=100):
                 them += 1
         win += me >= need
         total += 1
-    return win * 100 / total
+    return win / total
 
 
-def table_77(d):
+def candidate_decks(levels):
+    """主色 = 等级最高的颜色；纯色，或主色 4/3 张加一种副色。返回 {名字: 颜色列表}。"""
+    names = ['硬', '情', '文', '手']
+    main = max(range(COLORS), key=lambda c: (levels[c], -c))
+    out = {'纯色': [main] * 5}
+    for k in (4, 3):
+        for s in range(COLORS):
+            if s != main:
+                out[f'{k}+{5 - k}{names[s]}'] = [main] * k + [s] * (5 - k)
+    return out
+
+
+def table_77(d, fame_hi=False):
+    """每行：(局面, 最佳牌组, 胜率, 场风=情人时, 场风为其他色时)，胜率是 0–1。"""
+    fm, ft = (200, 100) if fame_hi else (0, 100)
+    rv = opp_77(d)
+    theirs = opponent_deck(d, rv, ROLE_77)
     out = []
-    for name, ml, mc, ol, k, f, gdd in TABLE_77:
-        order = sorted(range(COLORS), key=lambda c: (-ol[c], c))
-        theirs = deck_of(ol, order[0], k, order[1])
-        out.append((name, exact_win(d, build_deck(ml, mc), theirs, f), gdd))
+    for name, lv in CASES_77:
+        best = None
+        for dn, cols in candidate_decks(lv).items():
+            mine = build_deck(lv, cols)
+            per = [exact_win(d, mine, theirs, f, fm, ft) for f in range(COLORS)]
+            tot = sum(ROLE_77[f] * per[f] for f in range(COLORS)) / 100
+            if best is None or tot > best[2]:
+                main_f = max(range(COLORS), key=lambda c: (ROLE_77[c], -c))
+                rest = sum(ROLE_77[f] * per[f] for f in range(COLORS) if f != main_f) / (100 - ROLE_77[main_f])
+                best = (name, dn, tot, per[main_f], rest, cols)
+        out.append(best)
     return out
 
 
 if __name__ == '__main__':
     from .data import load
-    print('GDD 7.7 按现行规则重算（双方随机出牌）')
-    for name, v, gdd in table_77(load()):
-        print(f'{name:<28} 现行 {v:5.1f}%   GDD {gdd}%')
+    d = load()
+    print(f'GDD 7.7：情人角色（场风 {ROLE_77}），对手 {OPP_77} 级情人 4 张 + 硬汉 1 张；双方随机出牌')
+    a, b = table_77(d), table_77(d, fame_hi=True)
+    for x, y in zip(a, b):
+        print(f'{x[0]:<16} {x[1]:<5} 对手名气高 {x[2]*100:3.0f}%（情人场风 {x[3]*100:3.0f}% / 其他 {x[4]*100:3.0f}%）'
+              f'  我名气高 {y[2]*100:3.0f}%')
