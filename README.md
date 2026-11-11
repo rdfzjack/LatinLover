@@ -4,7 +4,8 @@
 
 ## 现在做到哪
 
-- **PLAN 第 1–9 步和 8b 已完成。下一步是第 9b 步**（Excel 表格编辑），然后 10。
+- **PLAN 第 1–9 步和 8b、9b 已完成。下一步是第 10 步**（Godot 移植日程和月结）。
+- 用户会自己改 `data/new/` 的表（指南 `data/USER_GUIDE.md`）。开工先跑 `python3 tools/check.py`，不通过先告诉用户。
 - 第 9 步：Godot 工程 `game/silentstar/` 有了数据加载、随机数、状态、条件和效果、存读档，和 Python 对账逐字节一致（命令在 `design/IMPL_NOTES.md` 末尾）。
 - 股票系统已删；休息只剩在家（Sil 陪着）和外出（选去处）两种（`design/CHANGE.md`）。
 - `sim/`（Python 试算器）能从开局跑到结局，数值调过一轮。第 8 步还留了三处数值要修，见 `design/BALANCE_LOG.md` 的“下一轮要修的”。
@@ -22,6 +23,7 @@
 | `design/BALANCE_LOG.md` | 数值调过什么、现在的报告、没解决的项 | 改数值前 |
 | `design/IMPL_NOTES.md` | `sim/` 和 Godot 的结构、接口、GDD 没写到的实现细节、对账命令 | 移植 Godot、改 `sim/` 时 |
 | `data/new/README.md` | JSON 表的条件、效果语法 | 改表时 |
+| `data/USER_GUIDE.md` | 给用户的改表指南（中文、带例子） | 改了表的写法、加了字段时同步更新 |
 
 数值有三处：`data/new/*.json` 是真源，GDD 是说明，两边不一致时以 JSON 为准并改 GDD。
 
@@ -33,14 +35,15 @@
 | `sim/` | Python 试算器：规则的参考实现，也是批量测数值的工具 |
 | `tests/new/` | 试算器的单元测试 |
 | `game/silentstar/` | Godot 4.3 工程：`core/` 逻辑（不依赖节点），`tools/trace.gd` 对账 |
-| `tools/check_data.py` | 数据表校验，改了 JSON 就跑 |
+| `tools/check.py` | 一键检查：格式、重复、类型、内容（调 `check_data.py`）、机器人试玩。`检查数据.bat` 是它的双击版 |
+| `tools/check_data.py` | 数据表的内容校验 |
 | `tools/trace.py` `trace_cases.json` `compare_trace.py` | Python 和 Godot 对账 |
 | `original/` | 原版游戏的逆向资料和原版模拟器。做新游戏不用读 |
 
 ## 常用命令
 
 ```bash
-python3 tools/check_data.py
+python3 tools/check.py
 ```
 
 ```bash
@@ -76,7 +79,7 @@ python3 -m sim.story --seed 1 --origin 0,1,2 --plan class_acting,job_dock,rest_h
 - 删掉股票系统（1929-10 股灾只留剧情）。
 - 休息只留两种：在家（Sil 陪着，便宜）、外出（一个人，选去处：度假村、城里等，遇到各种人和选项；代码上是同一套）。
 - 四路等级照旧随声望自动变，不做手动升级。
-- 角色、事件、地点、物品、开局等内容要能在 Excel 里自己增删改，配中文使用指南（第 9b 步）。
+- 用户自己直接改 JSON（不做 Excel），按 `data/USER_GUIDE.md`；改了表的写法要同步更新指南。
 - 只把必须用户定的设计决策列出来问；占位内容、模型能自己检查的细节不要列给用户。
 
 ## 等用户定的事

@@ -183,7 +183,7 @@ def new_game(seed=1, origin=(0, 0, 0), agent=None, data=None):
 
 
 def fit_plan(g, plan):
-    """把固定日程里本月不能排的项换成在家休息（生病不能逛街、书读完了、工还没解锁…）。"""
+    """把固定日程里本月不能排的项换成在家休息（生病不能外出、书读完了、工还没解锁…）。"""
     st = g.st
     out = []
     for i, e in enumerate(plan):

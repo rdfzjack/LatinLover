@@ -309,7 +309,7 @@ def run_rest(st, rid, place, days, hooks):
             else:
                 add_stat(st, '疲劳', d.rests['rest_home']['疲劳每天'])
             if k == mid - 1:
-                st.inc('计数.逛街.' + place)
+                st.inc('计数.外出.' + place)
                 hooks.outing(st, place)
         elif rid == 'rest_sanatorium':
             if st.money >= r['花费']:

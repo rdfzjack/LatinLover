@@ -1,7 +1,7 @@
 # data/new：新游戏的数据表
 
 规则和数值都在这里，Python 试算器（`sim/`）和 Godot 读同一份。改数值只改 JSON。
-校验：`python3 tools/check_data.py`（出错退出码 1）。
+校验：`python3 tools/check.py`（格式、重复、内容、试玩一起查；出错退出码 1）。给用户看的中文改表指南在 `data/USER_GUIDE.md`。
 
 ## 约定
 

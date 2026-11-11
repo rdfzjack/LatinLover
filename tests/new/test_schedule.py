@@ -184,7 +184,7 @@ class TestRest(unittest.TestCase):
         # 10/天，只有第 1 天付得起：-10，其余 9 天 -5
         self.assertEqual((st.money, st.attr['疲劳']), (3, 200 - 10 - 45))
         self.assertEqual(rec.calls, [('outing', 'place_seaside')])
-        self.assertEqual(st.cnt('计数.逛街.place_seaside'), 1)
+        self.assertEqual(st.cnt('计数.外出.place_seaside'), 1)
         self.assertIsNotNone(S.validate(st, 'rest_outing'))
         self.assertIsNotNone(S.validate(st, 'rest_home@place_dock'))
 
