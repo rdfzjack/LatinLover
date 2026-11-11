@@ -5,17 +5,17 @@
     rec = play(BOTS['专练情人'], seed=1)      # 跑完一局，返回一份记录（sim.report 汇总它）
 
 八种机器人（BOTS 里的名字）：
-    专练硬汉 / 专练情人 / 专练文化 / 专练手腕   练满一路再练一条副路，剩下的旬打工赚钱
+    专练硬汉 / 专练情人 / 专练文化 / 专练手腕   练满一路再练一条副路，剩下的旬打工赚钱；月初买本路装备
     两路（硬汉+情人）                           两路里训练值低的先练
     乱选                                        日程、试镜、事件选项全随机（用自己的随机流，不动游戏的）
     犯罪线                                      只打犯罪类的工：运私酒、看场子、码头
     只读书文化                                  不上课，只读书；教育不够读下一本时才上家教
 
-日程的做法照 tools/pacing_trial.py 的机器人：疲劳高了就休息，钱不够上课就去打工，钱够就买书。
+日程的做法：疲劳高了就休息，钱不够上课就去打工，钱够就买书。
 决定都在月初（排日程时）做；本月内的疲劳、钱用估计值往前推。
 
 试镜：组牌和选角色用一个快速的胜率估计（双方随机出牌时，主色/副色各种组法的胜率按场风加权），
-出牌用“能赢几张对手的牌”的贪心（`smart_play=False` 时随机出，对照 N60 的随机配对用）。
+出牌用“能赢几张对手的牌”的贪心（`smart_play=False` 时随机出）。
 """
 import itertools
 import random
@@ -147,7 +147,7 @@ def best_equip(st, road):
 
 class Bot(SimpleAgent):
     name = '?'
-    origin = (0, 0, 3)          # 开局三问；第三问选“戒指”：只给一个旗标，不改数值，方便和 N60 对
+    origin = (0, 0, 3)          # 开局三问；第三问选“戒指”：只给一个旗标，不改数值
     smart_play = True
     crime = False
     buy = True                  # 月初买本路装备（report 的 --no-buy 关掉）
@@ -305,7 +305,7 @@ class Bot(SimpleAgent):
                 return self.rest_entry(g, P, i)
             df, dm = self.delta(g, P, i, want)
             kind = 'job'
-        # 疲劳高了就休息（照 pacing_trial：≥45，或加上这旬会过“自律线”）
+        # 疲劳高了就休息（≥45，或加上这旬会过“自律线”）
         fat = P['fat']
         sta, disc = st.val('体力'), st.val('自律')
         if fat >= 45 or (fat >= 20 and (fat + df >= 10 + disc or fat + df >= sta + 5)):
