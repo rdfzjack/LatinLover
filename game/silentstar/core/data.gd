@@ -1,8 +1,8 @@
 extends RefCounted
-## 读 data/new/*.json，建好按 id 查找的索引。只读，不改表。照抄 sim/data.py。
+## Loads data/new/*.json and builds id lookup indexes. Read-only: never modifies the tables. Port of sim/data.py.
 ##
-## 表放在仓库根目录的 data/new/，和 Python 试算器共用一份。
-## 默认从工程目录往上两级找（game/silentstar → 仓库根）；也可以传别的目录。
+## The tables live in data/new/ at the repository root, shared with the Python simulator.
+## By default they are found two levels above the project folder (game/silentstar -> repository root); another folder can be passed.
 
 const Jsonx = preload("res://core/jsonx.gd")
 
@@ -13,16 +13,17 @@ const TABLES := ["stats", "skills", "classes", "books", "jobs", "rest", "places"
 var t := {}
 var ok := true
 
+# Table order is the canonical order wherever a tie or an iteration order matters.
 var attrs := []
 var attr_init := {}
-var attr_range := {}          # 名字 -> [lo, hi]
+var attr_range := {}          # id -> [lo, hi]
 var money_init := 0
 var money_cap := 0
 var roads := []
 var road_skills := {}
 var rep_range := []
 var level_gate := []
-var fame_tiers := []          # [[下限, 上限], …]
+var fame_tiers := []          # [[min, max], ...]
 var idx_rule := {}
 var contract := {}
 
@@ -44,10 +45,12 @@ var lifestyles := {}
 var street := {}
 var discount = null
 var items := {}
+var item_order := {}          # item id -> row number in items.json, for stable iteration
 var item_rules := {}
 var months := []
 var month_index := {}
 var npcs := {}
+var npc_order := {}           # npc id -> row number in romance.json
 var romance_lines := []
 var origins := []
 var endings_forced := {}
@@ -78,95 +81,98 @@ func _init(path := "") -> void:
 		t[n] = v
 
 	var st: Dictionary = t["stats"]
-	for a in st["基础属性"]:
-		attrs.append(a["名字"])
-		attr_init[a["名字"]] = a["初值"]
-		attr_range[a["名字"]] = a["范围"]
-	money_init = st["金钱"]["初值"]
-	money_cap = st["金钱"]["上限"]
-	for r in st["声望"]:
-		roads.append(r["名字"])
-		road_skills[r["名字"]] = r["技能"]
-	rep_range = st["声望规则"]["范围"]
-	level_gate = st["等级"]["门槛"]
-	for x in st["名气档"]:
-		fame_tiers.append([x["下限"], x["上限"]])
-	idx_rule = st["指数"]
-	contract = st["合同"]
+	for a in st["attrs"]:
+		attrs.append(a["id"])
+		attr_init[a["id"]] = a["init"]
+		attr_range[a["id"]] = a["range"]
+	money_init = st["money"]["init"]
+	money_cap = st["money"]["max"]
+	for r in st["roads"]:
+		roads.append(r["id"])
+		road_skills[r["id"]] = r["skills"]
+	rep_range = st["rep_rules"]["range"]
+	level_gate = st["levels"]["gate"]
+	for x in st["fame_tiers"]:
+		fame_tiers.append([x["min"], x["max"]])
+	idx_rule = st["indices"]
+	contract = st["contract"]
 
-	for s in t["skills"]["技能"]:
-		skills.append(s["名字"])
-		skill_init[s["名字"]] = s["初值"]
-		skill_range[s["名字"]] = s["训练范围"]
-		skill_road[s["名字"]] = s["路"]
-		if s.has("显示加成"):
-			skill_bonus[s["名字"]] = s["显示加成"]
+	for s in t["skills"]["skills"]:
+		skills.append(s["id"])
+		skill_init[s["id"]] = s["init"]
+		skill_range[s["id"]] = s["train_range"]
+		skill_road[s["id"]] = s["road"]
+		if s.has("display_bonus"):
+			skill_bonus[s["id"]] = s["display_bonus"]
 
-	for c in t["classes"]["课"]:
+	for c in t["classes"]["classes"]:
 		classes[c["id"]] = c
-	class_steps = t["classes"]["等级门槛"]
-	for b in t["books"]["书"]:
+	class_steps = t["classes"]["class_steps"]
+	for b in t["books"]["books"]:
 		books[b["id"]] = b
-	for j in t["jobs"]["工"]:
+	for j in t["jobs"]["jobs"]:
 		jobs[j["id"]] = j
 	job_rules = t["jobs"]
-	for r in t["rest"]["休息"]:
+	for r in t["rest"]["rests"]:
 		rests[r["id"]] = r
-	rest_forced = t["rest"]["强制"]
-	for p in t["places"]["地点"]:
+	rest_forced = t["rest"]["forced"]
+	for p in t["places"]["places"]:
 		places[p["id"]] = p
-	for x in t["lifestyle"]["生活方式"]:
+	for x in t["lifestyle"]["lifestyles"]:
 		lifestyles[x["id"]] = x
-	for e in t["street"]["入口"]:
-		street[e["名字"]] = e
-	discount = t["street"]["折扣"]
-	for i in t["items"]["物品"]:
+	for e in t["street"]["entries"]:
+		street[e["id"]] = e
+	discount = t["street"]["discount"]
+	for i in t["items"]["items"]:
+		item_order[i["id"]] = items.size()
 		items[i["id"]] = i
-	item_rules = t["items"]["规则"]
-	months = t["calendar"]["月"]
+	item_rules = t["items"]["rules"]
+	months = t["calendar"]["months"]
 	for i in months.size():
-		month_index[months[i]["月"]] = i
-	for n in t["romance"]["npc"]:
-		npcs[n["名字"]] = n
-		if n["类"] == "感情线":
-			romance_lines.append(n["名字"])
-	origins = t["origins"]["问"]
-	for e in t["endings"]["强制"]:
+		month_index[months[i]["month"]] = i
+	for n in t["romance"]["npcs"]:
+		npc_order[n["id"]] = npcs.size()
+		npcs[n["id"]] = n
+		if n["class"] == "romance":
+			romance_lines.append(n["id"])
+	origins = t["origins"]["questions"]
+	for e in t["endings"]["forced"]:
 		endings_forced[e["id"]] = e
 
-	# 第 6 步：选片板、拍摄、上映、事件、结局（第 12 步移植时用）
-	for r in t["roles"]["角色"]:
+	# step 6: board, shooting, release, events, endings (ported in step 12)
+	for r in t["roles"]["roles"]:
 		roles[r["id"]] = r
-	role_cfg = t["roles"]["默认"]
-	tag_families = t["endings"]["标签族"]
+	role_cfg = t["roles"]["defaults"]
+	tag_families = t["endings"]["tag_families"]
 	for k in tag_families:
 		for x in tag_families[k]:
 			content_tags.append(x)
-	for r in t["rivals"]["有名"]:
+	for r in t["rivals"]["named"]:
 		rivals_named[r["id"]] = r
-	for e in t["events"]["事件"]:
+	for e in t["events"]["events"]:
 		events[e["id"]] = e
-	for e in t["outing"]["事件"]:
+	for e in t["outing"]["events"]:
 		events[e["id"]] = e
-	opps = t["opportunities"]["机遇"]
-	chains = t["npc_chains"]["链"]
-	schedule_npc = t["npc_schedule"]["日程"]
+	opps = t["opportunities"]["opportunities"]
+	chains = t["npc_chains"]["chains"]
+	schedule_npc = t["npc_schedule"]["schedule"]
 
 
-## 一门课算哪条路的“期数”：收益里第一个技能所在的路（家教的第一个技能是创作，算文化）。
+## The road a class counts for in road_periods: the road of the first skill in its gain list
+## (tutoring's first skill is writing, which counts for culture).
 func class_road(cid: String):
-	for e in classes[cid]["收益"]:
-		if skill_road.has(e["项"]):
-			return skill_road[e["项"]]
+	for e in classes[cid]["gain"]:
+		if skill_road.has(e["stat"]):
+			return skill_road[e["stat"]]
 	return null
 
 
-## 一种工算哪几条路的“期数”：每天效果里出现的技能所在的路，去重，按路的顺序。
+## The roads a job counts for in road_periods: roads of the skills in its daily_effect, deduplicated, in road order.
 func job_roads(jid: String) -> Array:
 	var rs := {}
-	for e in jobs[jid]["每天效果"]:
-		if skill_road.has(e["项"]):
-			rs[skill_road[e["项"]]] = true
+	for e in jobs[jid]["daily_effect"]:
+		if skill_road.has(e["stat"]):
+			rs[skill_road[e["stat"]]] = true
 	var out := []
 	for r in roads:
 		if rs.has(r):

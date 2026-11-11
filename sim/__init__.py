@@ -1,1 +1,1 @@
-"""小咪养成计划的试算器。只读 data/new/*.json，规则见 design/GDD.md。"""
+"""Simulator for the Silent Star game. Reads only data/new/*.json; rules are in design/GDD.md."""

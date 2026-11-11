@@ -1,61 +1,61 @@
 {
- "说明": "月初按名气档扣，可负债；月结效果在月结时生效",
- "名气档顺序": [
-  "无名",
-  "眼熟",
-  "有名",
-  "当红",
-  "巨星"
+ "note": "Charged at the start of the month by fame tier, may go into debt; month_end_effect applies at month end",
+ "fame_tier_order": [
+  "unknown",
+  "familiar",
+  "famous",
+  "hot",
+  "superstar"
  ],
- "强制": "体力 <15 且不是“讲究”时强制改回“讲究”",
- "生活方式": [
+ "forced_note": "When stamina <15 and the lifestyle is not \"fine\", it is forced back to \"fine\"",
+ "lifestyles": [
   {
    "id": "life_normal",
-   "名字": "普通",
-   "月费": [
+   "name": "普通",
+   "monthly_cost": [
     100,
     150,
     220,
     400,
     700
    ],
-   "月结效果": ""
+   "month_end_effect": ""
   },
   {
    "id": "life_fine",
-   "名字": "讲究",
-   "月费": [
+   "name": "讲究",
+   "monthly_cost": [
     250,
     380,
     550,
     1000,
     1750
    ],
-   "月结效果": "体力+10"
+   "month_end_effect": "stamina+10"
   },
   {
    "id": "life_thrift",
-   "名字": "节俭",
-   "月费": [
+   "name": "节俭",
+   "monthly_cost": [
     50,
     75,
     110,
     200,
     350
    ],
-   "月结效果": "体力-5"
+   "month_end_effect": "stamina-5"
   },
   {
    "id": "life_diet",
-   "名字": "节食",
-   "月费": [
+   "name": "节食",
+   "monthly_cost": [
     40,
     60,
     90,
     160,
     280
    ],
-   "月结效果": "体力-20 相貌+3"
+   "month_end_effect": "stamina-20 looks+3"
   }
  ]
 }

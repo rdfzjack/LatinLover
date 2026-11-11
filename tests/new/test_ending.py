@@ -1,15 +1,15 @@
-"""结局判定：endings.json 里每个结局都有一条能走到它的局面（PLAN 第 6 步的完成标准）。"""
+"""Ending resolution: every ending in endings.json has a situation that reaches it (completion standard of PLAN step 6)."""
 import unittest
 from sim import ending
 from tests.new.helpers import D, bare
 
-ROADS = ['硬汉', '情人', '文化', '手腕']
+ROADS = ['tough', 'lover', 'culture', 'savvy']
 
 
 def build(attr=None, skill=None, rep=None, tags=None, flags=None, favor=None, count=None):
-    """造一个局面。属性先取一组中性的底值；技能全 0；声望用修正值凑成指定数（没写的路为 0）。"""
+    """Builds a situation. Attributes start from a neutral set of base values; skills are all 0; reputation is made up with rep_bonus to the given numbers (roads not mentioned are 0)."""
     st = bare()
-    st.attr.update({'体力': 100, '教育': 50, '义气': 100, '相貌': 100, '自律': 50, '犯罪': 0, '疲劳': 0, '名气': 0})
+    st.attr.update({'stamina': 100, 'education': 50, 'loyalty': 100, 'looks': 100, 'discipline': 50, 'crime': 0, 'fatigue': 0, 'fame': 0})
     st.attr.update(attr or {})
     for k in st.skill:
         st.skill[k] = 0
@@ -27,77 +27,77 @@ def build(attr=None, skill=None, rep=None, tags=None, flags=None, favor=None, co
 
 
 def solo(road, v, **kw):
-    """只有一条路有声望（其余 0），用于各路大类。"""
+    """Only one road has reputation (the rest are 0), used for the road categories."""
     return build(rep={road: v}, **kw)
 
 
 CASES = [
-    # 特殊
-    ('end_underworld', dict(attr={'犯罪': 500, '自律': 0}, rep={'硬汉': 300, '手腕': 200})),
-    ('end_idol', dict(attr={'名气': 500, '义气': 40}, flags={'柏林邀约': 1}, rep={'情人': 300})),
-    # 黑暗
-    ('dark_boss', dict(attr={'自律': 0, '犯罪': 100, '义气': 200}, rep={'硬汉': 210})),
-    ('dark_thug_boss', dict(attr={'自律': 20, '犯罪': 250}, rep={'硬汉': 210})),
-    ('dark_marry', dict(attr={'犯罪': 400, '相貌': 200}, skill={'谈吐': 70, '谈判': 70, '人脉': 70}, rep={'情人': 300})),
-    ('dark_con', dict(attr={'犯罪': 400, '相貌': 150}, skill={'谈判': 70}, rep={'手腕': 300})),
-    ('dark_prison', dict(attr={'犯罪': 400}, rep={'文化': 300})),
-    # 演员（名气 ≥300）
-    ('act_legend', dict(attr={'名气': 300}, rep={'情人': 451})),
-    ('act_lowbudget', dict(attr={'名气': 300}, rep={'情人': 381}, count={'计数.低成本': 4}, skill={'谈吐': 40})),
-    ('act_undefined', dict(attr={'名气': 300}, rep={'情人': 311}, skill={'谈吐': 40},
-                           tags={'西部': 1, '浪漫': 1, '文艺': 1, '犯罪': 1, '喜剧': 1, '宗教': 2})),
-    ('act_voice', dict(attr={'名气': 300}, rep={'文化': 381}, skill={'谈吐': 80}, count={'计数.有声片部数': 3})),
-    ('act_lover', dict(attr={'名气': 300}, rep={'情人': 381}, skill={'谈吐': 40}, tags={'浪漫': 3, '西部': 2})),
-    ('act_action', dict(attr={'名气': 300}, rep={'硬汉': 311}, skill={'谈吐': 40}, tags={'西部': 2, '战争': 2})),
-    ('act_character', dict(attr={'名气': 300}, rep={'手腕': 311}, skill={'谈吐': 40}, tags={'反派': 3})),
-    ('act_art', dict(attr={'名气': 300}, rep={'文化': 381}, skill={'谈吐': 40}, tags={'文艺': 2, '悲情': 2})),
-    ('act_comedy', dict(attr={'名气': 300}, rep={'手腕': 381}, skill={'谈吐': 40}, tags={'喜剧': 2, '贵族': 1})),
-    ('act_silent', dict(attr={'名气': 300}, rep={'情人': 381}, skill={'谈吐': 20})),   # 谈吐 <30；排在各标签族之后
-    ('act_second', dict(attr={'名气': 300}, rep={'情人': 300}, skill={'谈吐': 40})),
-    ('act_fallback', dict(attr={'名气': 300}, rep={'情人': 381}, skill={'谈吐': 40})),
-    # 万能（四路极差 <50）
-    ('all_studio', dict(rep={'硬汉': 460, '情人': 455, '文化': 451, '手腕': 470})),
-    ('all_director', dict(rep={'硬汉': 300, '情人': 311, '文化': 300, '手腕': 300})),
-    ('all_job_formal', dict(rep={'硬汉': 220, '情人': 211, '文化': 200, '手腕': 200}, count={'成功期数.job_dock': 5})),
-    ('all_job_temp', dict(rep={'硬汉': 100, '情人': 90, '文化': 80, '手腕': 100}, count={'成功期数.job_bar': 6})),
-    ('all_naples', dict(rep={'硬汉': 100, '情人': 90, '文化': 80, '手腕': 100}, count={'成功期数.job_bar': 4})),
-    # 硬汉
-    ('tough_adventurer', dict(rep={'硬汉': 381}, attr={'自律': 30})),
-    ('tough_stunt', dict(rep={'硬汉': 311}, attr={'义气': 150, '自律': 30})),
-    ('tough_rider', dict(rep={'硬汉': 311}, attr={'义气': 149, '自律': 30})),
-    ('tough_gym', dict(rep={'硬汉': 211}, attr={'自律': 30})),
-    ('tough_double', dict(rep={'硬汉': 100}, attr={'自律': 50})),
-    ('tough_thug', dict(rep={'硬汉': 100}, attr={'自律': 49})),
-    # 情人
-    ('lover_darling', dict(rep={'情人': 381}, attr={'相貌': 500})),
-    ('lover_salon', dict(rep={'情人': 381}, attr={'相貌': 300, '教育': 300})),
-    ('lover_widow', dict(rep={'情人': 311}, attr={'相貌': 300, '教育': 200})),
-    ('lover_dance_teacher', dict(rep={'情人': 211}, attr={'相貌': 100, '教育': 100})),
-    ('lover_dance_hall', dict(rep={'情人': 211}, attr={'相貌': 100, '教育': 50})),
-    ('lover_pinup', dict(rep={'情人': 100}, attr={'相貌': 150})),
-    ('lover_gigolo', dict(rep={'情人': 100}, attr={'相貌': 149})),
-    # 文化
-    ('cult_writer', dict(rep={'文化': 451}, skill={'创作': 60, '审美': 50}, attr={'自律': 50})),
-    ('cult_photog', dict(rep={'文化': 381}, skill={'创作': 40, '审美': 50}, attr={'自律': 50})),
-    ('cult_screenwriter', dict(rep={'文化': 311}, attr={'自律': 50})),
-    ('cult_tabloid', dict(rep={'文化': 381}, attr={'自律': 49})),
-    ('cult_editor', dict(rep={'文化': 211})),
-    ('cult_letter', dict(rep={'文化': 100}, attr={'义气': 100})),
-    ('cult_street_photo', dict(rep={'文化': 100}, attr={'义气': 99})),
-    # 手腕
-    ('biz_producer', dict(rep={'手腕': 381}, favor={'片厂老板': 80})),
-    ('biz_agent', dict(rep={'手腕': 381})),
-    ('biz_dealer', dict(rep={'手腕': 311}, skill={'谈判': 20, '人脉': 30, '生意': 50})),
-    ('biz_broker', dict(rep={'手腕': 311}, skill={'谈判': 60, '人脉': 30, '生意': 50})),
-    ('biz_boss', dict(rep={'手腕': 211})),
-    ('biz_sales', dict(rep={'手腕': 100})),
+    # special
+    ('end_underworld', dict(attr={'crime': 500, 'discipline': 0}, rep={'tough': 300, 'savvy': 200})),
+    ('end_idol', dict(attr={'fame': 500, 'loyalty': 40}, flags={'berlin_invite': 1}, rep={'lover': 300})),
+    # dark
+    ('dark_boss', dict(attr={'discipline': 0, 'crime': 100, 'loyalty': 200}, rep={'tough': 210})),
+    ('dark_thug_boss', dict(attr={'discipline': 20, 'crime': 250}, rep={'tough': 210})),
+    ('dark_marry', dict(attr={'crime': 400, 'looks': 200}, skill={'speech': 70, 'negotiation': 70, 'connections': 70}, rep={'lover': 300})),
+    ('dark_con', dict(attr={'crime': 400, 'looks': 150}, skill={'negotiation': 70}, rep={'savvy': 300})),
+    ('dark_prison', dict(attr={'crime': 400}, rep={'culture': 300})),
+    # actor (fame >= 300)
+    ('act_legend', dict(attr={'fame': 300}, rep={'lover': 451})),
+    ('act_lowbudget', dict(attr={'fame': 300}, rep={'lover': 381}, count={'count.lowbudget': 4}, skill={'speech': 40})),
+    ('act_undefined', dict(attr={'fame': 300}, rep={'lover': 311}, skill={'speech': 40},
+                           tags={'western': 1, 'romance': 1, 'arthouse': 1, 'crime': 1, 'comedy': 1, 'religious': 2})),
+    ('act_voice', dict(attr={'fame': 300}, rep={'culture': 381}, skill={'speech': 80}, count={'count.talkie_count': 3})),
+    ('act_lover', dict(attr={'fame': 300}, rep={'lover': 381}, skill={'speech': 40}, tags={'romance': 3, 'western': 2})),
+    ('act_action', dict(attr={'fame': 300}, rep={'tough': 311}, skill={'speech': 40}, tags={'western': 2, 'war': 2})),
+    ('act_character', dict(attr={'fame': 300}, rep={'savvy': 311}, skill={'speech': 40}, tags={'villain': 3})),
+    ('act_art', dict(attr={'fame': 300}, rep={'culture': 381}, skill={'speech': 40}, tags={'arthouse': 2, 'tragic': 2})),
+    ('act_comedy', dict(attr={'fame': 300}, rep={'savvy': 381}, skill={'speech': 40}, tags={'comedy': 2, 'noble': 1})),
+    ('act_silent', dict(attr={'fame': 300}, rep={'lover': 381}, skill={'speech': 20})),   # speech <30; ranked after the tag families
+    ('act_second', dict(attr={'fame': 300}, rep={'lover': 300}, skill={'speech': 40})),
+    ('act_fallback', dict(attr={'fame': 300}, rep={'lover': 381}, skill={'speech': 40})),
+    # all-round (spread of the four roads <50)
+    ('all_studio', dict(rep={'tough': 460, 'lover': 455, 'culture': 451, 'savvy': 470})),
+    ('all_director', dict(rep={'tough': 300, 'lover': 311, 'culture': 300, 'savvy': 300})),
+    ('all_job_formal', dict(rep={'tough': 220, 'lover': 211, 'culture': 200, 'savvy': 200}, count={'job_periods.job_dock': 5})),
+    ('all_job_temp', dict(rep={'tough': 100, 'lover': 90, 'culture': 80, 'savvy': 100}, count={'job_periods.job_bar': 6})),
+    ('all_naples', dict(rep={'tough': 100, 'lover': 90, 'culture': 80, 'savvy': 100}, count={'job_periods.job_bar': 4})),
+    # tough
+    ('tough_adventurer', dict(rep={'tough': 381}, attr={'discipline': 30})),
+    ('tough_stunt', dict(rep={'tough': 311}, attr={'loyalty': 150, 'discipline': 30})),
+    ('tough_rider', dict(rep={'tough': 311}, attr={'loyalty': 149, 'discipline': 30})),
+    ('tough_gym', dict(rep={'tough': 211}, attr={'discipline': 30})),
+    ('tough_double', dict(rep={'tough': 100}, attr={'discipline': 50})),
+    ('tough_thug', dict(rep={'tough': 100}, attr={'discipline': 49})),
+    # lover
+    ('lover_darling', dict(rep={'lover': 381}, attr={'looks': 500})),
+    ('lover_salon', dict(rep={'lover': 381}, attr={'looks': 300, 'education': 300})),
+    ('lover_widow', dict(rep={'lover': 311}, attr={'looks': 300, 'education': 200})),
+    ('lover_dance_teacher', dict(rep={'lover': 211}, attr={'looks': 100, 'education': 100})),
+    ('lover_dance_hall', dict(rep={'lover': 211}, attr={'looks': 100, 'education': 50})),
+    ('lover_pinup', dict(rep={'lover': 100}, attr={'looks': 150})),
+    ('lover_gigolo', dict(rep={'lover': 100}, attr={'looks': 149})),
+    # culture
+    ('cult_writer', dict(rep={'culture': 451}, skill={'writing': 60, 'taste': 50}, attr={'discipline': 50})),
+    ('cult_photog', dict(rep={'culture': 381}, skill={'writing': 40, 'taste': 50}, attr={'discipline': 50})),
+    ('cult_screenwriter', dict(rep={'culture': 311}, attr={'discipline': 50})),
+    ('cult_tabloid', dict(rep={'culture': 381}, attr={'discipline': 49})),
+    ('cult_editor', dict(rep={'culture': 211})),
+    ('cult_letter', dict(rep={'culture': 100}, attr={'loyalty': 100})),
+    ('cult_street_photo', dict(rep={'culture': 100}, attr={'loyalty': 99})),
+    # savvy
+    ('biz_producer', dict(rep={'savvy': 381}, favor={'studio_boss': 80})),
+    ('biz_agent', dict(rep={'savvy': 381})),
+    ('biz_dealer', dict(rep={'savvy': 311}, skill={'negotiation': 20, 'connections': 30, 'business': 50})),
+    ('biz_broker', dict(rep={'savvy': 311}, skill={'negotiation': 60, 'connections': 30, 'business': 50})),
+    ('biz_boss', dict(rep={'savvy': 211})),
+    ('biz_sales', dict(rep={'savvy': 100})),
 ]
 
 
 class TestEndings(unittest.TestCase):
     def test_every_ending_has_a_case(self):
         t = D.t['endings']
-        ids = {e['id'] for e in t['结局'] + t['特殊']}
+        ids = {e['id'] for e in t['endings'] + t['special']}
         self.assertEqual(ids, {c[0] for c in CASES})
 
     def test_cases(self):
@@ -105,44 +105,44 @@ class TestEndings(unittest.TestCase):
             with self.subTest(eid):
                 st = build(**kw)
                 res = ending.judge(st)
-                self.assertEqual(res['结局'], eid)
+                self.assertEqual(res['ending'], eid)
                 self.assertEqual(st.ended, eid)
 
     def test_collapse(self):
-        st = build(rep={'情人': 300})
+        st = build(rep={'lover': 300})
         st.ended = 'end_collapse'
-        self.assertEqual(ending.judge(st)['结局'], 'end_collapse')
+        self.assertEqual(ending.judge(st)['ending'], 'end_collapse')
 
     def test_tier_and_vars(self):
-        st = build(rep={'情人': 420})
+        st = build(rep={'lover': 420})
         self.assertEqual(ending.tier(st), 'A')
-        st.tags.update({'西部': 2, '古装': 1, '浪漫': 3})
-        self.assertEqual(ending.biggest_family(st), '情人系')      # 3:3 并列按表的顺序，情人系在前
-        st.tags['西部'] = 5
-        self.assertEqual(ending.biggest_family(st), '动作系')
+        st.tags.update({'western': 2, 'costume': 1, 'romance': 3})
+        self.assertEqual(ending.biggest_family(st), 'lover_family')      # 3:3 ties follow the table order, lover family first
+        st.tags['western'] = 5
+        self.assertEqual(ending.biggest_family(st), 'action_family')
         st.tags.clear()
         self.assertIsNone(ending.biggest_family(st))
 
     def test_home_and_score(self):
-        st = build(rep={'情人': 381}, attr={'相貌': 200, '自律': 100}, favor={'Sil': 100, '女明星': 95})
+        st = build(rep={'lover': 381}, attr={'looks': 200, 'discipline': 100}, favor={'sil': 100, 'actress': 95})
         res = ending.judge(st)
-        self.assertEqual(res['归宿'], {'类': '特殊', '对象': 'Sil', '好': True})
-        # Sil 和女明星都满足时取好感高的
-        st = build(rep={'情人': 381}, attr={'相貌': 200, '自律': 100, '义气': 200}, favor={'Sil': 100, '女明星': 95})
-        self.assertEqual(ending.judge(st)['归宿']['对象'], 'Sil')
-        # 普通归宿：自律 ≥30 模式一，看相貌 ≥200
-        st = build(rep={'情人': 381}, attr={'相貌': 250, '自律': 40})
+        self.assertEqual(res['destiny'], {'class': 'special', 'target': 'sil', 'good': True})
+        # When both Sil and actress qualify the one with the higher favor wins
+        st = build(rep={'lover': 381}, attr={'looks': 200, 'discipline': 100, 'loyalty': 200}, favor={'sil': 100, 'actress': 95})
+        self.assertEqual(ending.judge(st)['destiny']['target'], 'sil')
+        # ordinary destiny: discipline >= 30 mode one, looks >= 200
+        st = build(rep={'lover': 381}, attr={'looks': 250, 'discipline': 40})
         res = ending.judge(st)
-        self.assertEqual(res['归宿'], {'类': '普通', '模式': 1, '好': True})
-        # 总分 = (体力+教育+义气+相貌+自律+名气)/6 − 犯罪 + 结局分(A 400) + 品性分(默认梅 −10) + 普通好归宿 40
-        self.assertEqual(res['总分'], (100 + 50 + 100 + 250 + 40 + 0) // 6 - 0 + 400 - 10 + 40)
+        self.assertEqual(res['destiny'], {'class': 'ordinary', 'mode': 1, 'good': True})
+        # total = (stamina+education+loyalty+looks+discipline+fame)/6 - crime + ending_score(A 400) + character_score(default plum -10) + ordinary_good 40
+        self.assertEqual(res['total'], (100 + 50 + 100 + 250 + 40 + 0) // 6 - 0 + 400 - 10 + 40)
 
     def test_idol_drops_sil(self):
-        st = build(attr={'名气': 500, '义气': 40, '相貌': 200, '自律': 100}, flags={'柏林邀约': 1},
-                   rep={'情人': 300}, favor={'Sil': 100})
+        st = build(attr={'fame': 500, 'loyalty': 40, 'looks': 200, 'discipline': 100}, flags={'berlin_invite': 1},
+                   rep={'lover': 300}, favor={'sil': 100})
         res = ending.judge(st)
-        self.assertEqual(res['结局'], 'end_idol')
-        self.assertEqual(res['归宿']['类'], '普通')
+        self.assertEqual(res['ending'], 'end_idol')
+        self.assertEqual(res['destiny']['class'], 'ordinary')
 
 
 if __name__ == '__main__':

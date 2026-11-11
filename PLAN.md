@@ -25,7 +25,7 @@
 
 第 1–9 步和 8b、9b 已完成（详见 `README.md`）。第 9 步的对账在 Godot 4.3 里跑过，和 Python 逐字节一致。
 
-下一步是 **9c**（英文 id 和多语言，规格在 `design/I18N_PLAN.md`，分 9c-1、9c-2 两个对话），然后 10。9c 要在 10 之前做：越往后移植到 Godot 的代码越多，改名越贵。第 8 步可以重复做：读 `design/BALANCE_LOG.md` 的“没解决的”，改完重跑报告。
+9c-1（英文 id 和字段名，Python 侧）和 9c-2（语言文件、Godot 侧、用户指南）已完成，Godot 对账已通过。下一步第 10 步。规格在 `design/STEP9C_IDS_AND_LOCALE.md`。9c 要在 10 之前做：越往后移植到 Godot 的代码越多，改名越贵。第 8 步可以重复做：读 `design/BALANCE_LOG.md` 的“没解决的”，改完重跑报告。
 
 用户的修改意见记在 `design/CHANGE.md`，每条后面写了在哪一步处理。
 
@@ -54,13 +54,13 @@
 
 ### C. Godot 逻辑（无界面）
 
-Godot 4.3，GDScript。工程在 `game/silentstar/`。逻辑和界面分开：`game/silentstar/core/` 不依赖任何节点。移植约定见 `design/IMPL_NOTES.md` 末尾。
+Godot 4.3，GDScript。工程在 `game/silentstar/`。逻辑和界面分开：`game/silentstar/core/` 不依赖任何节点。移植约定见 `design/IMPL_NOTES.md` 的 Godot 一节。
 
 | 步 | 做什么 | 读 | 产出 | 完成标准 | 难度 | 模型 |
 |---|---|---|---|---|---|---|
 | 9 | 工程骨架：数据加载、随机数、状态、条件和效果解释器、存读档（**已完成，对账一致**） | `sim/rng.py` `state.py` `rules.py`；GDD 16 节；`design/IMPL_NOTES.md` | `game/silentstar/core/` 对应脚本；`game/silentstar/tools/trace.gd`；`tools/trace.py` `trace_cases.json` `compare_trace.py` | 无界面运行，输出随机数序列和存档往返，与 Python 逐字节一致 | 中 | Opus |
-| 9b | 让用户自己改数据（`design/CHANGE.md` 第 3 条）。用户选了直接改 JSON，不做 Excel（**已完成**） | `data/new/README.md`；`tools/check_data.py` | `data/USER_GUIDE.md`（中文指南）；`tools/check.py` 一键检查（格式、重复、类型、内容、机器人试玩，报错用大白话）；`检查数据.bat` | 指南里每个例子照抄进表都能通过检查、试玩时会触发 | 中 | Opus |
-| 9c | 英文 id 和多语言：数据结构和代码只用英文 id，玩家看得到的文字搬到 `data/locale/text.csv`（用户定：要做多语言）。**规格见 `design/I18N_PLAN.md`** | `design/I18N_PLAN.md`；`data/new/README.md`；`design/IMPL_NOTES.md` | `design/GLOSSARY.md`、`tools/i18n_map.json`、`tools/migrate_ids.py`；改好的表、`sim/`、测试、检查脚本、`game/silentstar/core/`；`data/locale/text.csv`；新版 `data/USER_GUIDE.md` | 见规格：报告数字和改之前完全相同；测试、检查、Godot 对账通过；代码和数据里没有中文 id。**拆法**：9c-1 改 id 和字段名（Python 侧）；9c-2 抽语言文件、Godot、文档 | 大 | Opus |
+| 9b | 让用户自己改数据（`design/CHANGE.md` 第 3 条）。用户选了直接改 JSON，不做 Excel（**已完成**） | `data/new/README.md`；`tools/check_data.py` | `data/USER_GUIDE.md`（中文指南）；`tools/check.py` 一键检查（格式、重复、类型、内容、机器人试玩，报错用大白话）；`check_data.bat` | 指南里每个例子照抄进表都能通过检查、试玩时会触发 | 中 | Opus |
+| 9c | 英文 id 和多语言：数据结构和代码只用英文 id，玩家看得到的文字搬到 `data/locale/text.csv`（用户定：要做多语言）。**规格见 `design/STEP9C_IDS_AND_LOCALE.md`** | `design/STEP9C_IDS_AND_LOCALE.md`；`data/new/README.md`；`design/IMPL_NOTES.md` | `design/GLOSSARY.md`、`tools/i18n_map.json`、`tools/migrate_ids.py`；改好的表、`sim/`、测试、检查脚本、`game/silentstar/core/`；`data/locale/text.csv`；新版 `data/USER_GUIDE.md` | 见规格：报告数字和改之前完全相同；测试、检查、Godot 对账通过；代码和数据里没有中文 id。**拆法**：9c-1 改 id 和字段名（Python 侧，**已完成**）；9c-2 抽语言文件、Godot、用户指南（**已完成**） | 大 | Opus |
 | 10 | 移植日程和月结 | `sim/schedule.py` `month.py` | `game/silentstar/core/schedule.gd` `month.gd` | 同种子、同日程，每月状态与 Python 一致（对账脚本 `tools/compare_trace.py`） | 中 | Sonnet |
 | 11 | 移植试镜 | `sim/audition.py` | `game/silentstar/core/audition.gd` | 同种子 1000 场试镜逐轮一致 | 小 | Sonnet |
 | 12 | 移植选片板、拍摄、上映、事件、结局 | `sim/board.py` `film.py` `events.py` `ending.py` | `game/silentstar/core/` 对应脚本 | 机器人的决策录成文件后在 Godot 里回放，整局每月状态和结局与 Python 一致。**拆法同第 6 步** | 大 | Opus |

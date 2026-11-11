@@ -1,4 +1,4 @@
-"""条件、效果、判定、概率的解释器。语法见 data/new/README.md，GDD 11.0、16。"""
+"""Interpreter for conditions, effects, checks and probabilities. Syntax: data/new/README.md, GDD 11.0 and 16."""
 import re
 
 EFF = re.compile(r'^([^+\-=]+)([+\-=])(\d+)(%?)$')
@@ -6,31 +6,39 @@ _cache = {}
 
 
 def tdiv(a, b):
-    """向零截断的整数除法（GDD 0）。"""
+    """Integer division truncating toward zero (GDD 0)."""
     q = abs(a) // abs(b)
     return q if (a >= 0) == (b > 0) else -q
 
 
-# ---------- 效果 ----------
+def split_name(name):
+    """'favor.sil' -> ('favor', 'sil'); a name without a prefix gives ('name', '')."""
+    head, _, rest = name.partition('.')
+    return head, rest
+
+
+# ---------- effects ----------
 def parse_effect(text):
-    """'体力+20 自律-15 触发.evt_x' -> [(名字, 符号, 数, 是否百分比)]；触发写成 ('触发', 'evt_x', 0, '')。"""
+    """'stamina+20 discipline-15 trigger.evt_x' -> [(name, sign, number, is_percent)];
+    a trigger is returned as ('trigger', 'evt_x', 0, '')."""
     if text in _cache:
         return _cache[text]
     out = []
     for tok in (text or '').split():
-        if tok.startswith('触发.'):
-            out.append(('触发', tok[3:], 0, ''))
+        head, rest = split_name(tok)
+        if head == 'trigger' and rest:
+            out.append(('trigger', rest, 0, ''))
             continue
         m = EFF.match(tok)
         if not m:
-            raise ValueError(f'效果项格式错误：{tok}')
+            raise ValueError(f'bad effect term: {tok}')
         out.append((m.group(1), m.group(2), int(m.group(3)), m.group(4)))
     _cache[text] = out
     return out
 
 
 def _delta(cur, op, n, pct):
-    """返回新值。百分比按当前值算，向零截断。"""
+    """Returns the new value. A percentage is taken of the current value, truncating toward zero."""
     if op == '=':
         return n
     v = tdiv(cur * n, 100) if pct else n
@@ -38,13 +46,14 @@ def _delta(cur, op, n, pct):
 
 
 def apply_effect(st, text, source='event'):
-    """执行一行效果，返回要接着触发的事件 id 列表。
-    source：'event'（事件、机遇、物品使用等）时，好感正增量在义气 ≥200 时多 1（GDD 10.1）；
-    'schedule'（日程里每旬、每期固定的好感）和 'origin' 不加。"""
+    """Applies one effect line and returns the ids of the events to trigger next.
+    source 'event' (events, opportunities, item use ...): a positive favor gain is +1 more when loyalty >= 200
+    (GDD 10.1); 'schedule' (fixed per-period or per-period favor in schedules) and 'origin' do not get the bonus."""
     trig = []
     d = st.d
     for n, op, v, pct in parse_effect(text):
-        if n == '触发':
+        head, k = split_name(n)
+        if n == 'trigger':
             trig.append(op)
         elif n in st.attr:
             lo, hi = d.attr_range[n]
@@ -52,42 +61,36 @@ def apply_effect(st, text, source='event'):
         elif n in st.skill:
             lo, hi = d.skill_range[n]
             st.skill[n] = max(lo, min(hi, _delta(st.skill[n], op, v, pct)))
-        elif n == '金钱':
+        elif n == 'money':
             st.money = min(_delta(st.money, op, v, pct), d.money_cap)
-        elif n == '药瘾阶段':
+        elif n == 'drug_stage':
             st.drug = max(0, min(3, _delta(st.drug, op, v, pct)))
-        elif n == '负债月数':
+        elif n == 'debt_months':
             st.debt_months = max(0, _delta(st.debt_months, op, v, pct))
-        elif n.startswith('好感.'):
-            k = n[3:]
+        elif head == 'favor':
             cur = st.favor.get(k, 0)
             new = _delta(cur, op, v, pct)
-            if source == 'event' and new > cur and st.val('义气') >= 200:
+            if source == 'event' and new > cur and st.val('loyalty') >= 200:
                 new += 1
             st.favor[k] = max(0, min(100, new))
-        elif n.startswith('修正.'):
-            k = n[3:]
+        elif head == 'rep_bonus':
             st.corr[k] = _delta(st.corr[k], op, v, pct)
-        elif n.startswith('权重.'):
-            k = n[3:]
+        elif head == 'weight':
             st.weights[k] = _delta(st.weights.get(k, 0), op, v, pct)
-        elif n.startswith('物品.'):
-            k = n[3:]
+        elif head == 'item':
             if op == '=' and v == 0:
                 remove_item(st, k)
             else:
                 st.items.append(k)
-        elif n.startswith('状态.'):
-            k = n[3:]
+        elif head == 'status':
             new = _delta(st.status.get(k, 0), op, v, pct)
-            if k == '恋爱' and new and not st.status.get('恋爱'):
+            if k == 'in_love' and new and not st.status.get('in_love'):
                 st.romance_months = 0
             st.status[k] = new
-        elif n.startswith('旗标.'):
-            k = n[3:]
+        elif head == 'flag':
             st.flags[k] = _delta(st.flags.get(k, 0), op, v, pct)
         else:
-            raise KeyError(f'效果名字未知：{n}')
+            raise KeyError(f'unknown effect name: {n}')
     return trig
 
 
@@ -96,15 +99,15 @@ def remove_item(st, iid):
         return False
     st.items.remove(iid)
     if iid not in st.items:
-        if st.equip['服装'] == iid:
-            st.equip['服装'] = None
-        if iid in st.equip['配饰']:
-            st.equip['配饰'].remove(iid)
+        if st.equip['outfit'] == iid:
+            st.equip['outfit'] = None
+        if iid in st.equip['accessory']:
+            st.equip['accessory'].remove(iid)
     return True
 
 
-# ---------- 变量 ----------
-EXTRA_VARS = {}   # 第 6 步登记结局用的派生值（档次、最大标签族…）：名字 -> fn(st)
+# ---------- variables ----------
+EXTRA_VARS = {}   # step 6: derived values for the endings (grade, top tag family ...): name -> fn(st)
 
 
 def get_var(st, name):
@@ -113,56 +116,56 @@ def get_var(st, name):
         return st.val(name)
     if name in st.corr:
         return st.rep(name)
-    if name == '金钱':
+    if name == 'money':
         return st.money
     if name in st.idx:
         return st.idx[name]
-    if name == '日期':
+    if name == 'date':
         return st.date
-    if name == '月份':
+    if name == 'month':
         return int(st.date[5:])
-    if name == '年份':
+    if name == 'year':
         return int(st.date[:4])
-    if name == '最高声望':
+    if name == 'max_rep':
         b = st.bonus()
         return max(st.rep(r, b) for r in d.roads)
-    if name == '最高声望所在路':
+    if name == 'top_road':
         b = st.bonus()
         return max(d.roads, key=lambda r: (st.rep(r, b), -d.roads.index(r)))
-    if name == '四路声望极差':
+    if name == 'rep_spread':
         b = st.bonus()
         v = [st.rep(r, b) for r in d.roads]
         return max(v) - min(v)
-    if name == '药瘾阶段':
+    if name == 'drug_stage':
         return st.drug
-    if name == '负债月数':
+    if name == 'debt_months':
         return st.debt_months
-    if name == '最高基础属性':
+    if name == 'top_base_attr':
         return st.highest_base()
-    if name == '手腕最高技能':
+    if name == 'top_savvy_skill':
         b = st.bonus()
-        sk = d.road_skills['手腕']
+        sk = d.road_skills['savvy']
         return max(sk, key=lambda s: (st.val(s, b), -sk.index(s)))
-    if name == '最大工期数':
-        return max([st.cnt('成功期数.' + j) for j in d.jobs] or [0])
-    if name == '有声片部数':
-        return st.cnt('计数.有声片部数')
-    if name.startswith('好感.'):
-        return st.favor.get(name[3:], 0)
-    if name.startswith('旗标.'):
-        return st.flags.get(name[3:], 0)
-    if name.startswith('状态.'):
-        k = name[3:]
-        if k == '收尾期':
-            return 1 if st.month.get('收尾期') else 0
+    if name == 'max_job_periods':
+        return max([st.cnt('job_periods.' + j) for j in d.jobs] or [0])
+    if name == 'talkie_count':
+        return st.cnt('count.talkie_count')
+    head, k = split_name(name)
+    if head == 'favor':
+        return st.favor.get(k, 0)
+    if head == 'flag':
+        return st.flags.get(k, 0)
+    if head == 'status':
+        if k == 'wrap_up':
+            return 1 if st.month.get('wrap_up') else 0
         return st.status.get(k, 0)
-    if name.startswith('标签.'):
-        return st.tags.get(name[3:], 0)
-    if name.startswith(('成功期数.', '旬数.', '期数.', '计数.', '交手次数.')):
+    if head == 'tag':
+        return st.tags.get(k, 0)
+    if head in ('job_periods', 'class_periods', 'road_periods', 'count', 'duels'):
         return st.cnt(name)
     if name in EXTRA_VARS:
         return EXTRA_VARS[name](st)
-    raise KeyError(f'条件变量未知或还没实现：{name}')
+    raise KeyError(f'condition variable unknown or not implemented: {name}')
 
 
 def _cmp(a, op, b):
@@ -185,36 +188,38 @@ def test(st, term):
 
 
 def cond(st, c):
-    """[[项,…],…]：外层或、组内与；[] 恒真。"""
+    """[[term, ...], ...]: outer list is OR, inner list is AND; [] is always true."""
     if not c:
         return True
     return any(all(test(st, t) for t in g) for g in c)
 
 
-# ---------- 判定（GDD 11.0） ----------
+# ---------- checks (GDD 11.0) ----------
 def check(st, c):
-    """门槛 [变量, 比较符, 值]，或掷骰 {判定: 技能, 线: n}（技能显示值 + r0(20) >= n）。None 为必然成功。"""
+    """A gate [variable, comparator, value], or a dice check {check: skill, line: n}
+    (displayed skill value + r0(20) >= n). None always succeeds."""
     if c is None:
         return True
     if isinstance(c, dict):
-        return st.val(c['判定']) + st.rng.logic.r0(20) >= c['线']
+        return st.val(c['check']) + st.rng.logic.r0(20) >= c['line']
     return test(st, c)
 
 
-# ---------- 概率 ----------
+# ---------- probabilities ----------
 def prob(st, p):
-    """null 必然；[分子,分母]；分档 [{条件,值}] 取第一个满足的；{分子:变量,分母:n,上限:[p,q]}。"""
+    """null always; [numerator, denominator]; tiered list [{cond, value}] takes the first that holds;
+    {numerator: variable, denominator: n, max: [p, q]}."""
     g = st.rng.logic
     if p is None:
         return True
     if isinstance(p, dict):
-        num, den = get_var(st, p['分子']), p['分母']
-        cp, cq = p['上限']
-        # min(num/den, cp/cq) 化成同分母 den*cq
+        num, den = get_var(st, p['numerator']), p['denominator']
+        cp, cq = p['max']
+        # min(num/den, cp/cq) over the common denominator den*cq
         return g.chance(min(num * cq, cp * den), den * cq)
     if p and isinstance(p[0], dict):
         for x in p:
-            if cond(st, x['条件']):
-                return g.chance(*x['值'])
+            if cond(st, x['cond']):
+                return g.chance(*x['value'])
         return False
     return g.chance(p[0], p[1])

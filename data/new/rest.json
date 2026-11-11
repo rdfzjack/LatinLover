@@ -1,53 +1,53 @@
 {
- "说明": "休息只有两种（用户定）：在家（Sil 陪着，不花钱）和外出（选一个去处，花钱，遇到各种人和事）。疗养院只在重病时强制，玩家不能选。每项占一旬，逐日结算。周日的休息按普通休息算",
- "休息": [
+ "note": "Rest has only two kinds (user decision): at home (Sil keeps him company, free) and outing (pick a place, spend money, meet people and things). The sanatorium is forced only when very sick and the player cannot pick it. Each takes one period, settled day by day. Resting on a Sunday counts as ordinary rest",
+ "rests": [
   {
    "id": "rest_home",
-   "名字": "在家休息",
-   "花费": 0,
-   "疲劳每天": -5,
-   "生病可选": true,
-   "说明": "Sil 陪着",
-   "每旬效果": "好感.Sil+2",
-   "玩家可选": true
+   "name": "在家休息",
+   "cost": 0,
+   "fatigue_per_day": -5,
+   "sick_allowed": true,
+   "note": "Sil keeps him company",
+   "period_effect": "favor.sil+2",
+   "player_choice": true
   },
   {
    "id": "rest_outing",
-   "名字": "外出",
-   "花费": "去处",
-   "疲劳每天": "去处",
-   "钱不够": "当天按在家休息算",
-   "事件": "该旬在该去处触发恰好一个事件",
-   "生病可选": false,
-   "玩家可选": true
+   "name": "外出",
+   "cost": "place",
+   "fatigue_per_day": "place",
+   "if_broke": "counts as resting at home for that day",
+   "event": "exactly one event fires at the chosen place during the period",
+   "sick_allowed": false,
+   "player_choice": true
   },
   {
    "id": "rest_sanatorium",
-   "名字": "疗养院",
-   "花费": 8,
-   "疲劳每天": -11,
-   "钱不够": "当天没有效果",
-   "生病可选": true,
-   "玩家可选": false
+   "name": "疗养院",
+   "cost": 8,
+   "fatigue_per_day": -11,
+   "if_broke": "no effect that day",
+   "sick_allowed": true,
+   "player_choice": false
   }
  ],
- "强制": [
+ "forced": [
   {
-   "条件": [
+   "cond": [
     [
      [
-      "生病指数",
+      "sick_index",
       ">=",
       90
      ]
     ]
    ],
-   "日程": "rest_sanatorium",
-   "钱不够改": "rest_home",
-   "作用于": "下月日程",
-   "拍摄违约": {
-    "片酬": 0,
-    "名气百分比": -10
+   "schedule": "rest_sanatorium",
+   "if_broke_switch": "rest_home",
+   "applies_to": "next_month_schedule",
+   "shoot_breach": {
+    "fee": 0,
+    "fame_pct": -10
    }
   }
  ]

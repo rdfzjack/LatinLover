@@ -1,138 +1,138 @@
 {
- "说明": "外出的去处。花费是每天的钱（或 花费按名气档：无名到巨星五档）；疲劳每天是每天减多少。随机表是事件 id 列表（outing.json）。加一个去处就加一行",
- "地点": [
+ "note": "Outing places. cost is money per day (or cost_by_fame_tier: five tiers from unknown to superstar); fatigue_per_day is how much fatigue drops each day. random_table is a list of event ids (outing.json). Add a place by adding a row",
+ "places": [
   {
    "id": "place_studio",
-   "名字": "片厂区",
-   "花费": 8,
-   "常在的人": [
-    "女明星",
-    "片厂老板",
-    "动作片导演"
+   "name": "片厂区",
+   "cost": 8,
+   "residents": [
+    "actress",
+    "studio_boss",
+    "action_director"
    ],
-   "随机表": [
+   "random_table": [
     {
-     "事件": "outing_director_lunch",
-     "权重": 3
+     "event": "outing_director_lunch",
+     "weight": 3
     }
    ],
-   "偏向": [
-    "人脉",
-    "试镜情报",
-    "谈判"
+   "bias": [
+    "connections",
+    "audition_intel",
+    "negotiation"
    ],
-   "疲劳每天": -10
+   "fatigue_per_day": -10
   },
   {
    "id": "place_downtown",
-   "名字": "市中心",
-   "花费": 3,
-   "常在的人": [
-    "Duv",
-    "编辑"
+   "name": "市中心",
+   "cost": 3,
+   "residents": [
+    "duv",
+    "editor"
    ],
-   "随机表": [
+   "random_table": [
     {
-     "事件": "outing_old_bookshop",
-     "权重": 3
+     "event": "outing_old_bookshop",
+     "weight": 3
     },
     {
-     "事件": "outing_pickup",
-     "权重": 2
+     "event": "outing_pickup",
+     "weight": 2
     }
    ],
-   "偏向": [
-    "教育",
-    "创作",
-    "审美",
-    "谈吐"
+   "bias": [
+    "education",
+    "writing",
+    "taste",
+    "speech"
    ],
-   "疲劳每天": -10
+   "fatigue_per_day": -10
   },
   {
    "id": "place_seaside",
-   "名字": "海滨大道",
-   "花费": 10,
-   "常在的人": [
-    "富婆",
-    "画家"
+   "name": "海滨大道",
+   "cost": 10,
+   "residents": [
+    "rich_widow",
+    "painter"
    ],
-   "随机表": [
+   "random_table": [
     {
-     "事件": "outing_salon",
-     "权重": 3
+     "event": "outing_salon",
+     "weight": 3
     },
     {
-     "事件": "outing_romance",
-     "权重": 6
+     "event": "outing_romance",
+     "weight": 6
     }
    ],
-   "偏向": [
-    "相貌",
-    "体态",
-    "艳遇",
-    "审美"
+   "bias": [
+    "looks",
+    "physique",
+    "encounter",
+    "taste"
    ],
-   "疲劳每天": -10
+   "fatigue_per_day": -10
   },
   {
    "id": "place_dock",
-   "名字": "码头",
-   "花费": 2,
-   "常在的人": [
-    "同乡工头",
-    "酒吧老板"
+   "name": "码头",
+   "cost": 2,
+   "residents": [
+    "foreman",
+    "bar_owner"
    ],
-   "随机表": [
+   "random_table": [
     {
-     "事件": "outing_driver",
-     "权重": 3
+     "event": "outing_driver",
+     "weight": 3
     },
     {
-     "事件": "outing_countryman",
-     "权重": 3
+     "event": "outing_countryman",
+     "weight": 3
     },
     {
-     "事件": "outing_backdoor",
-     "权重": 2
+     "event": "outing_backdoor",
+     "weight": 2
     }
    ],
-   "偏向": [
-    "打斗",
-    "胆识",
-    "义气",
-    "犯罪"
+   "bias": [
+    "fight",
+    "nerve",
+    "loyalty",
+    "crime"
    ],
-   "疲劳每天": -10
+   "fatigue_per_day": -10
   },
   {
    "id": "place_resort",
-   "名字": "度假村",
-   "花费按名气档": [
+   "name": "度假村",
+   "cost_by_fame_tier": [
     6,
     8,
     12,
     18,
     30
    ],
-   "疲劳每天": -30,
-   "常在的人": [],
-   "随机表": [
+   "fatigue_per_day": -30,
+   "residents": [],
+   "random_table": [
     {
-     "事件": "vac_1",
-     "权重": 1
+     "event": "vac_1",
+     "weight": 1
     },
     {
-     "事件": "vac_2",
-     "权重": 1
+     "event": "vac_2",
+     "weight": 1
     },
     {
-     "事件": "vac_3",
-     "权重": 1
+     "event": "vac_3",
+     "weight": 1
     }
    ],
-   "偏向": [
-    "疲劳"
+   "bias": [
+    "fatigue"
    ]
   }
  ]

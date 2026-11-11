@@ -1,151 +1,152 @@
 {
- "基础属性": [
+ "attrs": [
   {
-   "id": "tili",
-   "名字": "体力",
-   "范围": [
+   "id": "stamina",
+   "name": "体力",
+   "range": [
     0,
     999
    ],
-   "初值": 80,
-   "用途": "日程成功判定、生病指数、打工成功线、打斗加成"
+   "init": 80,
+   "usage": "Schedule success checks, sick_index, job success lines, fight bonus"
   },
   {
-   "id": "jiaoyu",
-   "名字": "教育",
-   "范围": [
+   "id": "education",
+   "name": "教育",
+   "range": [
     0,
     999
    ],
-   "初值": 5,
-   "用途": "看书门槛、打工成功线、合同、自写剧本、结局分支"
+   "init": 5,
+   "usage": "Book gates, job success lines, contract, self-written scripts, ending branches"
   },
   {
-   "id": "yiqi",
-   "名字": "义气",
-   "范围": [
+   "id": "loyalty",
+   "name": "义气",
+   "range": [
     0,
     999
    ],
-   "初值": 40,
-   "用途": "出事时有没有人帮、好感增量、角色契合、结局分支、归宿"
+   "init": 40,
+   "usage": "Whether anyone helps when trouble hits, favor gains, role fit, ending branches, destiny"
   },
   {
-   "id": "xiangmao",
-   "名字": "相貌",
-   "范围": [
+   "id": "looks",
+   "name": "相貌",
+   "range": [
     0,
     999
    ],
-   "初值": 120,
-   "用途": "角色契合、打工成功线、艳遇、归宿"
+   "init": 120,
+   "usage": "Role fit, job success lines, encounters, destiny"
   },
   {
-   "id": "zilv",
-   "名字": "自律",
-   "范围": [
+   "id": "discipline",
+   "name": "自律",
+   "range": [
     0,
     999
    ],
-   "初值": 40,
-   "用途": "失控指数、结局大类和分支"
+   "init": 40,
+   "usage": "reckless_index, ending categories and branches"
   },
   {
-   "id": "fanzui",
-   "名字": "犯罪",
-   "范围": [
+   "id": "crime",
+   "name": "犯罪",
+   "range": [
     0,
     999
    ],
-   "初值": 10,
-   "用途": "曝光概率、道德条款、黑暗结局"
+   "init": 10,
+   "usage": "Exposure probability, morals clause, dark endings"
   },
   {
-   "id": "pilao",
-   "名字": "疲劳",
-   "范围": [
+   "id": "fatigue",
+   "name": "疲劳",
+   "range": [
     0,
     999
    ],
-   "初值": 0,
-   "用途": "成功判定、两个指数"
+   "init": 0,
+   "usage": "Success checks, the two indices"
   },
   {
-   "id": "mingqi",
-   "名字": "名气",
-   "范围": [
+   "id": "fame",
+   "name": "名气",
+   "range": [
     0,
     999
    ],
-   "初值": 120,
-   "用途": "选片门槛、试镜平局、生活费档位、结局大类"
+   "init": 120,
+   "usage": "Role gates, audition ties, living-cost tier, ending categories"
   }
  ],
- "金钱": {
-  "名字": "金钱",
-  "初值": 500,
-  "上限": 99999999,
-  "可为负": "只有生活费可以扣成负数，其余支出钱不够就不能选"
+ "money": {
+  "id": "money",
+  "name": "金钱",
+  "init": 500,
+  "max": 99999999,
+  "may_be_negative": "Only living costs may push money negative; any other expense you cannot afford cannot be chosen"
  },
- "声望": [
+ "roads": [
   {
-   "id": "yinghan",
-   "名字": "硬汉",
-   "技能": [
-    "打斗",
-    "骑马驾驶",
-    "胆识"
+   "id": "tough",
+   "name": "硬汉",
+   "skills": [
+    "fight",
+    "riding",
+    "nerve"
    ]
   },
   {
-   "id": "qingren",
-   "名字": "情人",
-   "技能": [
-    "演技",
-    "打扮",
-    "体态"
+   "id": "lover",
+   "name": "情人",
+   "skills": [
+    "acting",
+    "grooming",
+    "physique"
    ]
   },
   {
-   "id": "wenhua",
-   "名字": "文化",
-   "技能": [
-    "创作",
-    "审美",
-    "谈吐"
+   "id": "culture",
+   "name": "文化",
+   "skills": [
+    "writing",
+    "taste",
+    "speech"
    ]
   },
   {
-   "id": "shouwan",
-   "名字": "手腕",
-   "技能": [
-    "谈判",
-    "人脉",
-    "生意"
+   "id": "savvy",
+   "name": "手腕",
+   "skills": [
+    "negotiation",
+    "connections",
+    "business"
    ]
   }
  ],
- "声望规则": {
-  "范围": [
+ "rep_rules": {
+  "range": [
    0,
    999
   ],
-  "公式": "同路三项技能显示值之和 + 修正值",
-  "修正值": "只由上映、年度大事、机遇、事件改变",
-  "结局档次线": [
+  "formula": "sum of the road's three skill displayed values + rep_bonus",
+  "rep_bonus_rule": "changed only by releases, annual events, opportunities and events",
+  "ending_grade_lines": [
    451,
    381,
    311,
    211
   ]
  },
- "等级": {
-  "公式": "5*L*(L+1)",
-  "范围": [
+ "levels": {
+  "formula": "5*L*(L+1)",
+  "range": [
    0,
    9
   ],
-  "门槛": [
+  "gate": [
    0,
    10,
    30,
@@ -158,126 +159,126 @@
    450
   ]
  },
- "名气档": [
+ "fame_tiers": [
   {
-   "id": 0,
-   "名字": "无名",
-   "下限": 0,
-   "上限": 49
+   "id": "unknown",
+   "name": "无名",
+   "min": 0,
+   "max": 49
   },
   {
-   "id": 1,
-   "名字": "眼熟",
-   "下限": 50,
-   "上限": 149
+   "id": "familiar",
+   "name": "眼熟",
+   "min": 50,
+   "max": 149
   },
   {
-   "id": 2,
-   "名字": "有名",
-   "下限": 150,
-   "上限": 299
+   "id": "famous",
+   "name": "有名",
+   "min": 150,
+   "max": 299
   },
   {
-   "id": 3,
-   "名字": "当红",
-   "下限": 300,
-   "上限": 499
+   "id": "hot",
+   "name": "当红",
+   "min": 300,
+   "max": 499
   },
   {
-   "id": 4,
-   "名字": "巨星",
-   "下限": 500,
-   "上限": 999
+   "id": "superstar",
+   "name": "巨星",
+   "min": 500,
+   "max": 999
   }
  ],
- "名气规则": {
-  "来信数": "名气/5 ±20%",
-  "月衰减": "当月无曝光则 名气 -= max(1, 名气*2/100)",
-  "月衰减百分比": 2,
-  "月衰减最少": 1
+ "fame_rules": {
+  "mail_count": "fame/5 ±20%",
+  "monthly_decay": "if there was no exposure this month, fame -= max(1, fame*2/100)",
+  "monthly_decay_pct": 2,
+  "monthly_decay_min": 1
  },
- "指数": {
-  "生病指数": {
-   "公式": "疲劳 - 体力",
-   "范围": [
+ "indices": {
+  "sick_index": {
+   "formula": "fatigue - stamina",
+   "range": [
     0,
     100
    ],
-   "状态线": 10,
-   "重病线": 90,
-   "倒下": "=100 连续 2 个月"
+   "status_line": 10,
+   "very_sick_line": 90,
+   "collapse": "=100 for 2 months in a row"
   },
-  "失控指数": {
-   "公式": "疲劳 - 自律",
-   "范围": [
+  "reckless_index": {
+   "formula": "fatigue - discipline",
+   "range": [
     0,
     100
    ],
-   "状态线": 10
+   "status_line": 10
   }
  },
- "隐藏值": [
+ "hidden": [
   {
-   "id": "gan_gan",
-   "名字": "好感",
-   "说明": "每个功能NPC和感情线一个，0-100",
-   "范围": [
+   "id": "favor",
+   "name": "好感",
+   "note": "one per function NPC and romance line, 0-100",
+   "range": [
     0,
     100
    ]
   },
   {
-   "id": "yao_yin",
-   "名字": "药瘾阶段",
-   "范围": [
+   "id": "drug_stage",
+   "name": "药瘾阶段",
+   "range": [
     0,
     3
    ],
-   "说明": "只由剧情改变，不进任何日程公式"
+   "note": "changed only by story, enters no schedule formula"
   },
   {
-   "id": "fuzhai",
-   "名字": "负债月数",
-   "范围": [
+   "id": "debt_months",
+   "name": "负债月数",
+   "range": [
     0,
     999
    ],
-   "说明": "月结金钱<0则+1否则清零，满3个月触发债主事件"
+   "note": "+1 if money <0 at month end, otherwise reset; at 3 months the creditor event fires"
   },
   {
-   "id": "biaoqian",
-   "名字": "标签计数",
-   "说明": "17个戏路标签各一个计数"
+   "id": "tag_counts",
+   "name": "标签计数",
+   "note": "one counter for each of the 17 film tags"
   },
   {
-   "id": "qizhi",
-   "名字": "旗标",
-   "说明": "布尔标记"
+   "id": "flags",
+   "name": "旗标",
+   "note": "boolean marker"
   },
   {
-   "id": "jishuqi",
-   "名字": "计数器",
-   "说明": "每门课旬数、看书旬数、每种工成功期数、每个去处外出次数、交手次数、小中大片部数"
+   "id": "counters",
+   "name": "计数器",
+   "note": "periods per class, book periods, successful periods per job, outings per place, duel counts, numbers of small/medium/big films"
   }
  ],
- "合同": {
-  "教育低于": 100,
-  "片酬系数百分比": 85,
-  "免除条件": [
+ "contract": {
+  "education_below": 100,
+  "fee_coef_pct": 85,
+  "exempt_cond": [
    [
     [
-     "好感.Sil",
+     "favor.sil",
      ">=",
      50
     ]
    ]
   ],
-  "长约": {
-   "说明": "GDD 11.2 长约：每月薪水；每板随机几个角色标为本厂，只能报名本厂角色，本厂角色玩家主色场风 +n 个百分点；拒绝后一个季度再来",
-   "月薪": 150,
-   "本厂角色数": 3,
-   "本厂场风加": 10,
-   "拒绝后月数": 3
+  "long_contract": {
+   "note": "GDD 11.2 long contract: monthly pay; a few random roles per board are marked house roles and only those may be signed; house roles give the player's main color +n style points; after a refusal it returns a quarter later",
+   "monthly_pay": 150,
+   "house_roles": 3,
+   "house_style_add": 10,
+   "refuse_months": 3
   }
  }
 }

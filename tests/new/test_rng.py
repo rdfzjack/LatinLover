@@ -4,7 +4,7 @@ from sim.rng import PCG32, Rng
 
 class TestRng(unittest.TestCase):
     def test_reference_vector(self):
-        # PCG 官方 pcg32-demo：seed 42, seq 54
+        # PCG official pcg32-demo: seed 42, seq 54
         g = PCG32(42, 54)
         self.assertEqual([g.next_u32() for _ in range(6)],
                          [0xa15c02b7, 0x7b47f409, 0xba1d3330, 0x83d2f293, 0xbfa4784b, 0xcbed606e])

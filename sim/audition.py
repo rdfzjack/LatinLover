@@ -1,14 +1,15 @@
-"""试镜（GDD 7、9）：组牌、有效点数、出牌习惯、对手组牌、结果分档。
+"""Auditions (GDD 7, 9): deck building, effective points, play habits, rival decks, result tiers.
 
-颜色用 0–3 表示，顺序 硬汉/情人/文化/手腕（habits.json 的 试镜.颜色顺序）。
-一张牌是 (颜色, 点数)。有效点数按 ×100 的整数算（GDD 16）。
+Colors are 0-3 in the order tough/lover/culture/savvy (habits.json audition.color_order).
+A card is (color, points). Effective points are integers scaled by x100 (GDD 16).
 
-随机数的消耗顺序（Godot 照抄）：
-- 生成无名对手：r(主色等级随机)，然后习惯 below(6)。
-- 一场：先抽场风 below(100)；之后每轮先由对手出牌（习惯不是随性时先掷 80% 是否照习惯，
-  不照或随性时 below(剩余张数)），再问玩家出牌。
-- 演砸：掷上报概率。
-玩家怎么组牌、怎么出牌不由这里决定：传入一个 Player（界面或机器人）。
+Random-number order (Godot copies this):
+- Unnamed rival: r(main_level random), then the habit with below(6).
+- One match: draw the style with below(100) first; then each round the rival plays first (unless the habit is
+  random: first roll 80% whether to follow the habit; if not following, or random, below(remaining cards)),
+  then the player is asked.
+- Botched: roll report_prob.
+How the player builds a deck and plays is not decided here: a Player (UI or bot) is passed in.
 """
 from . import rules
 
@@ -16,23 +17,23 @@ COLORS = 4
 
 
 def cfg(d):
-    return d.t['habits']['试镜']
+    return d.t['habits']['audition']
 
 
 def color_names(d):
-    return cfg(d)['颜色顺序']
+    return cfg(d)['color_order']
 
 
 def beats(d):
-    """克制环：beats[a] = 被 a 克的颜色。"""
+    """Counter ring: beats[a] = the color that a counters."""
     c = cfg(d)
-    names = c['颜色顺序']
-    return [names.index(c['克制'][n]) for n in names]
+    names = c['color_order']
+    return [names.index(c['counters'][n]) for n in names]
 
 
-# ---------- 牌 ----------
+# ---------- cards ----------
 def build_deck(levels, colors):
-    """玩家选 5 张的颜色；同色第 k 张（k 从 0 起）点数 = max(0, 该路等级 − k)（7.2）。"""
+    """The colors the player picks for the 5 cards; the k-th card of one color (k from 0) has points = max(0, road level - k) (7.2)."""
     seen = [0] * COLORS
     out = []
     for c in colors:
@@ -42,31 +43,31 @@ def build_deck(levels, colors):
 
 
 def deck_of(levels, main, k, sub, n=5):
-    """主色 k 张加副色 5−k 张。"""
+    """k cards of the main color plus 5-k of the second color."""
     return build_deck(levels, [main] * k + [sub] * (n - k))
 
 
 def effective(d, a, b, field):
-    """一轮里两张牌的有效点数 (va, vb)，×100 整数（7.3）。"""
+    """Effective points (va, vb) of the two cards in one round, x100 integers (7.3)."""
     c = cfg(d)
     bt = beats(d)
     (ca, pa), (cb, pb) = a, b
     va, vb = pa * 100, pb * 100
     if ca == field:
-        va = va * c['场风百分比'] // 100
+        va = va * c['style_pct'] // 100
     if cb == field:
-        vb = vb * c['场风百分比'] // 100
+        vb = vb * c['style_pct'] // 100
     if bt[ca] == cb and cb != field:
-        va = va * c['克制方百分比'] // 100
-        vb = vb * c['被克方百分比'] // 100
+        va = va * c['counter_pct'] // 100
+        vb = vb * c['countered_pct'] // 100
     elif bt[cb] == ca and ca != field:
-        vb = vb * c['克制方百分比'] // 100
-        va = va * c['被克方百分比'] // 100
+        vb = vb * c['counter_pct'] // 100
+        va = va * c['countered_pct'] // 100
     return va, vb
 
 
 def round_winner(d, mine, theirs, field, fame_me, fame_them):
-    """返回 True 表示玩家赢这一轮。相等看名气，仍相等对手胜（7.3）。"""
+    """True when the player wins this round. Ties go to fame, and on equal fame the rival wins (7.3)."""
     va, vb = effective(d, mine, theirs, field)
     if va != vb:
         return va > vb
@@ -74,33 +75,33 @@ def round_winner(d, mine, theirs, field, fame_me, fame_them):
 
 
 def solo_value(d, card, field):
-    """排“大小”用：只算场风，不计克制（7.6）。"""
+    """Used to rank "big/small": counts the style only, no counters (7.6)."""
     v = card[1] * 100
     if card[0] == field:
-        v = v * cfg(d)['场风百分比'] // 100
+        v = v * cfg(d)['style_pct'] // 100
     return v
 
 
-# ---------- 对手 ----------
+# ---------- rivals ----------
 def guard_color(d, main):
-    """克星的克星：克 main 的那一色被谁克，就是谁（情人 -> 手腕，硬汉 -> 文化）。"""
+    """Counter of counter: whoever counters the color that counters main (lover -> savvy, tough -> culture)."""
     bt = beats(d)
     beater = bt.index(main)
     return bt.index(beater)
 
 
 def opponent_colors(d, levels, probs):
-    """对手的 (主色, 副色)（7.5）：主色按 等级 × (1 + 0.3 × 场风概率) 最大，并列取靠前的；
-    副色取克星的克星，防被克制。"""
-    co = cfg(d)['对手组牌']['场风系数百分比']
+    """The rival's (main color, second color) (7.5): the main color maximizes level x (1 + 0.3 x style probability), ties go to the earlier color;
+        the second color is the counter of counter, to avoid being countered."""
+    co = cfg(d)['rival_deck']['style_factor_pct']
     key = [levels[c] * (10000 + co * probs[c]) for c in range(COLORS)]
     main = min(range(COLORS), key=lambda c: (-key[c], c))
     return main, guard_color(d, main)
 
 
 def opponent_deck(d, rival, probs):
-    main, sub = opponent_colors(d, rival['等级'], probs)
-    return deck_of(rival['等级'], main, rival['k'], sub)
+    main, sub = opponent_colors(d, rival['levels'], probs)
+    return deck_of(rival['levels'], main, rival['k'], sub)
 
 
 def half_years(st):
@@ -108,14 +109,14 @@ def half_years(st):
 
 
 def unnamed_rival(st, tier, main_level=None, probs=None):
-    """无名对手（9.2）。主色 = 场风概率最高的颜色，副色 = 克星的克星（等级 主色−2），其余两色 1 级。"""
+    """Unnamed rival (9.2). Main color = the color with the highest style probability, second color = counter of counter (level main-2), the other two colors level 1."""
     d = st.d
     g = st.rng.logic
-    r = d.t['rivals']['无名']
-    t = next(x for x in r['档'] if x['档次'] == tier)
+    r = d.t['rivals']['unnamed']
+    t = next(x for x in r['tier'] if x['size'] == tier)
     h = half_years(st)
     if main_level is None:
-        L = t['主色等级']['基'] + sum(1 for m in t['主色等级']['涨级月'] if st.date >= m) + g.r(*t['主色等级']['随机'])
+        L = t['main_level']['base'] + sum(1 for m in t['main_level']['level_up_months'] if st.date >= m) + g.r(*t['main_level']['random'])
     else:
         L = main_level
     L = max(1, L)
@@ -123,47 +124,47 @@ def unnamed_rival(st, tier, main_level=None, probs=None):
     main = min(range(COLORS), key=lambda c: (-probs[c], c))
     lv = [1] * COLORS
     lv[main] = L
-    lv[guard_color(d, main)] = max(1, L - t['副色差'])
-    habits = d.t['habits']['习惯']
+    lv[guard_color(d, main)] = max(1, L - t['second_gap'])
+    habits = d.t['habits']['habits']
     hb = habits[g.below(len(habits))]['id']
-    return {'id': None, '名字': f'无名（{tier}）', '等级': lv,
-            '名气': t['名气']['基'] + t['名气']['每半年'] * h, '习惯': hb, 'k': t['k']}
+    return {'id': None, 'name': f'unnamed ({tier})', 'levels': lv,
+            'fame': t['fame']['base'] + t['fame']['per_half_year'] * h, 'habit': hb, 'k': t['k']}
 
 
 def named_rival(st, rid):
-    """有名对手在当前月份的数据（9.1）。瓦伦 1927-09 起由诺瓦或吉尔伯替换（9.3），抽一个。"""
+    """Named rival's data for the current month (9.1). From 1927-09 Valen is replaced by Nova or Jilbo (9.3); one is drawn."""
     d = st.d
     rv = d.t['rivals']
     date = st.date
-    for x in rv['替换']:
-        if x['原'] == rid and date >= x['自']:
-            rid = x['改为'][st.rng.logic.below(len(x['改为']))]
-    r = next(x for x in rv['有名'] if x['id'] == rid)
+    for x in rv['replace']:
+        if x['old'] == rid and date >= x['from']:
+            rid = x['new'][st.rng.logic.below(len(x['new']))]
+    r = next(x for x in rv['named'] if x['id'] == rid)
     lv = fame = None
-    for s in r['阶段']:
-        if date >= s['自']:
-            lv = s['等级']
-            fame = s.get('名气', fame)
-    return {'id': rid, '名字': r['名字'], '等级': list(lv), '名气': fame, '习惯': r['习惯'], 'k': r['k']}
+    for s in r['stages']:
+        if date >= s['from']:
+            lv = s['levels']
+            fame = s.get('fame', fame)
+    return {'id': rid, 'name': r['name'], 'levels': list(lv), 'fame': fame, 'habit': r['habit'], 'k': r['k']}
 
 
 def rival_present(st, rid):
-    r = next(x for x in st.d.t['rivals']['有名'] if x['id'] == rid)
-    return r['在场'][0] <= st.date <= r['在场'][1]
+    r = next(x for x in st.d.t['rivals']['named'] if x['id'] == rid)
+    return r['present'][0] <= st.date <= r['present'][1]
 
 
-# ---------- 出牌习惯 ----------
+# ---------- play habits ----------
 def opponent_pick(st, habit, hand, field, rnd, my_last, score):
-    """对手这一轮出哪张（hand 里的下标）。score = (玩家胜轮, 对手胜轮)。"""
+    """Which card (index into hand) the rival plays this round. score = (player round wins, rival round wins)."""
     d = st.d
     g = st.rng.logic
     if habit != 'habit_random':
-        follow = g.chance(d.t['habits']['遵循概率'], 100)
+        follow = g.chance(d.t['habits']['follow_prob'], 100)
     else:
         follow = False
     if not follow:
         return g.below(len(hand))
-    order = sorted(range(len(hand)), key=lambda i: (solo_value(d, hand[i], field), i))   # 小到大
+    order = sorted(range(len(hand)), key=lambda i: (solo_value(d, hand[i], field), i))   # smallest to largest
     small, big = order[0], order[-1]
     if habit == 'habit_lead':
         return big
@@ -185,21 +186,21 @@ def opponent_pick(st, habit, hand, field, rnd, my_last, score):
     raise ValueError(habit)
 
 
-# ---------- 玩家 ----------
+# ---------- player ----------
 class Player:
-    """界面或机器人实现这两个方法。"""
+    """The UI or a bot implements these two methods."""
 
     def deck(self, st, ctx):
-        """返回 5 个颜色（0–3）。ctx：角色、场次、对手（只给能看到的情报）、自己的等级。"""
+        """Returns 5 colors (0-3). ctx: role, round number, rival (only the intel the player can see), own levels."""
         raise NotImplementedError
 
     def play(self, st, ctx):
-        """返回自己手牌的下标。ctx：手牌、对手剩余手牌、场风、轮次、比分、历史。"""
+        """Returns the index of the card to play from own hand. ctx: hand, rival's remaining hand, style, round, score, history."""
         raise NotImplementedError
 
 
 class FixedRandomPlayer(Player):
-    """固定组牌、随机出牌（测试和粗算用）。出牌用逻辑流。"""
+    """Fixed deck, random play (for tests and rough estimates). Playing uses the logic stream."""
 
     def __init__(self, colors):
         self.colors = colors
@@ -208,10 +209,10 @@ class FixedRandomPlayer(Player):
         return list(self.colors)
 
     def play(self, st, ctx):
-        return st.rng.logic.below(len(ctx['手牌']))
+        return st.rng.logic.below(len(ctx['hand']))
 
 
-# ---------- 一场 ----------
+# ---------- one match ----------
 def roll_field(st, probs):
     v = st.rng.logic.below(100)
     acc = 0
@@ -223,9 +224,9 @@ def roll_field(st, probs):
 
 
 def match(st, my_deck, rival, probs, player, field=None):
-    """打一场。返回 {'比分': (我, 对手), '场风', '轮': [(我的牌, 对手的牌, 我赢)]}。"""
+    """Plays one match. Returns {'score_line': (me, rival), 'style', 'rounds': [(my card, rival card, I won)]}."""
     d = st.d
-    need = cfg(d)['赢轮数']
+    need = cfg(d)['rounds_to_win']
     their_deck = opponent_deck(d, rival, probs)
     if field is None:
         field = roll_field(st, probs)
@@ -233,24 +234,24 @@ def match(st, my_deck, rival, probs, player, field=None):
     me = them = 0
     hist = []
     my_last = None
-    fame_me = st.attr['名气']
+    fame_me = st.attr['fame']
     rnd = 0
     while me < need and them < need and mine:
-        oi = opponent_pick(st, rival['习惯'], theirs, field, rnd, my_last, (me, them))
-        ctx = {'手牌': list(mine), '对手手牌': list(theirs), '场风': field, '轮次': rnd,
-               '比分': (me, them), '历史': list(hist), '对手': rival}
+        oi = opponent_pick(st, rival['habit'], theirs, field, rnd, my_last, (me, them))
+        ctx = {'hand': list(mine), 'rival_hand': list(theirs), 'style': field, 'round': rnd,
+               'score_line': (me, them), 'history': list(hist), 'opponents': rival}
         mi = player.play(st, ctx)
         a, b = mine.pop(mi), theirs.pop(oi)
-        win = round_winner(d, a, b, field, fame_me, rival['名气'])
+        win = round_winner(d, a, b, field, fame_me, rival['fame'])
         me += win
         them += not win
         hist.append((a, b, win))
         my_last = a
         rnd += 1
-    return {'比分': (me, them), '场风': field, '轮': hist, '对手牌': their_deck, '我的牌': list(my_deck)}
+    return {'score_line': (me, them), 'style': field, 'rounds': hist, 'rival_cards': their_deck, 'my_cards': list(my_deck)}
 
 
-# ---------- 结果 ----------
+# ---------- results ----------
 def player_levels(st):
     b = st.bonus()
     lv = []
@@ -265,14 +266,14 @@ def player_levels(st):
 
 
 def player_main(st):
-    """玩家主色：当前声望最高的路，并列取靠前的。"""
+    """The player's main color: the road with the highest current reputation, ties go to the earlier one."""
     b = st.bonus()
     reps = [st.rep(r, b) for r in st.d.roads]
     return max(range(COLORS), key=lambda c: (reps[c], -c))
 
 
 def remembered_probs(probs, main, pts):
-    """被导演记住：玩家主色 +pts 个百分点，从其他色里最高的那一色扣（7.4）。"""
+    """Remembered by the director: the player's main color +pts percentage points, taken from the highest other color (7.4)."""
     p = list(probs)
     others = [c for c in range(COLORS) if c != main]
     top = max(others, key=lambda c: (p[c], -c))
@@ -284,89 +285,89 @@ def remembered_probs(probs, main, pts):
 
 def classify(d, score):
     me, them = score
-    if me >= cfg(d)['赢轮数']:
-        return '记住' if them == 0 else '拿到'
-    if (me, them) == tuple(cfg(d)['结果']['惜败']['比分']):
-        return '惜败'
+    if me >= cfg(d)['rounds_to_win']:
+        return 'remembered' if them == 0 else 'won'
+    if (me, them) == tuple(cfg(d)['result']['narrow_loss']['score_line']):
+        return 'narrow_loss'
     if me == 0:
-        return '演砸'
-    return '落选'
+        return 'botched'
+    return 'lost'
 
 
 def audition(st, role, player, rivals, probs=None):
-    """一次试镜。rivals：对手列表（小、中片 1 个，大片 2 个；由选片板生成）。
-    probs：本次的场风概率（默认取角色的；被记住、教学角色等由调用方先算好）。
-    返回 {'结果': 拿到/惜败/落选/演砸, '记住': bool, '场次': [match…]}，并结算 7.4 的名气、上报、交手次数。"""
+    """One audition. rivals: the rival list (1 for small/medium films, 2 for big films; made by the board).
+        probs: the style probabilities for this audition (default the role's; remembered, tutorial role etc. are computed by the caller first).
+        Returns {'result': won/narrow_loss/lost/botched, 'remembered': bool, 'rounds': [match ...]} and settles 7.4 fame, report and duels."""
     d = st.d
-    probs = probs or role['场风概率']
-    res = cfg(d)['结果']
-    out = {'角色': role['id'], '场次': [], '记住': False}
+    probs = probs or role['style_probs']
+    res = cfg(d)['result']
+    out = {'roles': role['id'], 'rounds': [], 'remembered': False}
     final = None
     for n, rv in enumerate(rivals):
-        ctx = {'角色': role, '场次': n, '对手': rv, '等级': player_levels(st)}
+        ctx = {'roles': role, 'rounds': n, 'opponents': rv, 'levels': player_levels(st)}
         colors = player.deck(st, ctx)
-        if len(colors) != cfg(d)['张数'] or any(not 0 <= c < COLORS for c in colors):
-            raise ValueError(f'牌组不对：{colors}')
-        m = match(st, build_deck(ctx['等级'], colors), rv, probs, player)
-        out['场次'].append(m)
+        if len(colors) != cfg(d)['cards'] or any(not 0 <= c < COLORS for c in colors):
+            raise ValueError(f'bad deck: {colors}')
+        m = match(st, build_deck(ctx['levels'], colors), rv, probs, player)
+        out['rounds'].append(m)
         if rv['id']:
-            st.inc('交手次数.' + rv['id'])
-        kind = classify(d, m['比分'])
+            st.inc('duels.' + rv['id'])
+        kind = classify(d, m['score_line'])
         if n == 0:
             final = kind
-            out['记住'] = kind == '记住'
-            if kind not in ('拿到', '记住'):
+            out['remembered'] = kind == 'remembered'
+            if kind not in ('won', 'remembered'):
                 break
-        else:   # 大片第二场：赢了才算拿到，输了一律惜败
-            final = final if kind in ('拿到', '记住') else '惜败'
-            out['记住'] = out['记住'] and kind in ('拿到', '记住')
-    if final == '记住':
-        final = '拿到'
-    if final == '演砸':
-        x = res['演砸']
-        rules.apply_effect(st, x['效果'], source='schedule')
-        rules.apply_effect(st, x['好感'], source='schedule')
-        if st.rng.logic.chance(*x['上报概率']):
+        else:   # Second match of a big film: you only get the role by winning; a loss always counts as narrow_loss
+            final = final if kind in ('won', 'remembered') else 'narrow_loss'
+            out['remembered'] = out['remembered'] and kind in ('won', 'remembered')
+    if final == 'remembered':
+        final = 'won'
+    if final == 'botched':
+        x = res['botched']
+        rules.apply_effect(st, x['effect'], source='schedule')
+        rules.apply_effect(st, x['favor'], source='schedule')
+        if st.rng.logic.chance(*x['report_prob']):
             st.exposed = 1
-            rules.apply_effect(st, x['上报效果'], source='schedule')
-            out['上报'] = True
-    if out['记住']:
-        st.flags['记住.' + role['id']] = 1
-    out['结果'] = final
+            rules.apply_effect(st, x['report_effect'], source='schedule')
+            out['reported'] = True
+    if out['remembered']:
+        st.flags['remembered.' + role['id']] = 1
+    out['result'] = final
     return out
 
 
-# ---------- GDD 7.7 的试算表 ----------
-# 贴近实际的局面：一个情人角色（场风 15/60/10/15），对手按 9.2 的无名规则组牌
-# （3 张情人 + 2 张手腕，副色低 2 级）；场风按角色概率抽；双方随机出牌。
-# 玩家在“纯色 / 主色 4 或 3 张 + 一种副色”里取胜率最高的一副。颜色 0 硬汉 1 情人 2 文化 3 手腕。
+# ---------- GDD 7.7 table ----------
+# A realistic setup: one lover role (style 15/60/10/15), the rival builds its deck by the 9.2 unnamed rule
+# (3 lover cards + 2 savvy cards, second color 2 levels lower); the style is drawn from the role's probabilities; both sides play at random.
+# The player takes the best-winning deck among "mono / main color 4 or 3 cards + one second color". Colors: 0 tough, 1 lover, 2 culture, 3 savvy.
 ROLE_77 = [15, 60, 10, 15]
 OPP_77 = 6
 CASES_77 = [
-    ('同路同级', [2, 6, 2, 2]),
-    ('同路低 1 级', [2, 5, 2, 2]),
-    ('同路高 1 级', [2, 7, 2, 2]),
-    ('同路高 2 级', [2, 8, 2, 2]),
-    ('同路同级，副路硬汉 4', [4, 6, 2, 2]),
-    ('硬汉路玩家（硬 6 情 2）', [6, 2, 2, 2]),
-    ('文化路玩家（文 6 情 2）', [2, 2, 6, 2]),
-    ('手腕路玩家（手 6 情 2）', [2, 2, 2, 6]),
+    ('same road, same level', [2, 6, 2, 2]),
+    ('same road, 1 level lower', [2, 5, 2, 2]),
+    ('same road, 1 level higher', [2, 7, 2, 2]),
+    ('same road, 2 levels higher', [2, 8, 2, 2]),
+    ('same road, same level, tough as second road at 4', [4, 6, 2, 2]),
+    ('tough-road player (T 6, L 2)', [6, 2, 2, 2]),
+    ('culture-road player (C 6, L 2)', [2, 2, 6, 2]),
+    ('savvy-road player (S 6, L 2)', [2, 2, 2, 6]),
 ]
 
 
 def opp_77(d, L=OPP_77, probs=ROLE_77):
-    t = d.t['rivals']['无名']['档'][1]
+    t = d.t['rivals']['unnamed']['tier'][1]
     main = min(range(COLORS), key=lambda c: (-probs[c], c))
     lv = [1] * COLORS
     lv[main] = L
-    lv[guard_color(d, main)] = max(1, L - t['副色差'])
-    return {'id': None, '名字': '无名', '等级': lv, '名气': 100, '习惯': 'habit_random', 'k': t['k']}
+    lv[guard_color(d, main)] = max(1, L - t['second_gap'])
+    return {'id': None, 'name': 'unnamed', 'levels': lv, 'fame': 100, 'habit': 'habit_random', 'k': t['k']}
 
 
 def exact_win(d, my_deck, their_deck, field, fame_me=0, fame_them=100):
-    """双方都随机出牌时的胜率：枚举对手出牌顺序的 120 种排列（我的顺序固定不影响结果）。"""
+    """Win rate when both sides play at random: enumerate the 120 orderings of the rival's plays (my own order does not matter)."""
     import itertools
-    need = cfg(d)['赢轮数']
+    need = cfg(d)['rounds_to_win']
     win = total = 0
     for p in itertools.permutations(range(len(their_deck))):
         me = them = 0
@@ -383,10 +384,10 @@ def exact_win(d, my_deck, their_deck, field, fame_me=0, fame_them=100):
 
 
 def candidate_decks(levels):
-    """主色 = 等级最高的颜色；纯色，或主色 4/3 张加一种副色。返回 {名字: 颜色列表}。"""
-    names = ['硬', '情', '文', '手']
+    """Main color = the color with the highest level; mono, or main color 4/3 cards plus one second color. Returns {name: color list}."""
+    names = ['T', 'L', 'C', 'S']
     main = max(range(COLORS), key=lambda c: (levels[c], -c))
-    out = {'纯色': [main] * 5}
+    out = {'mono': [main] * 5}
     for k in (4, 3):
         for s in range(COLORS):
             if s != main:
@@ -395,7 +396,7 @@ def candidate_decks(levels):
 
 
 def table_77(d, fame_hi=False):
-    """每行：(局面, 最佳牌组, 胜率, 场风=情人时, 场风为其他色时)，胜率是 0–1。"""
+    """Each row: (case, best deck, win rate, when style = lover, when style = another color); win rates are 0-1."""
     fm, ft = (200, 100) if fame_hi else (0, 100)
     rv = opp_77(d)
     theirs = opponent_deck(d, rv, ROLE_77)
@@ -418,10 +419,10 @@ if __name__ == '__main__':
     from .data import load
     d = load()
     rv = opp_77(d)
-    names = ['硬', '情', '文', '手']
-    print(f'GDD 7.7：情人角色（场风 {ROLE_77}），对手牌 '
-          + ' '.join(f'{names[c]}{p}' for c, p in opponent_deck(d, rv, ROLE_77)) + '；双方随机出牌')
+    names = ['T', 'L', 'C', 'S']
+    print(f'GDD 7.7: lover role (style {ROLE_77}), rival cards '
+          + ' '.join(f'{names[c]}{p}' for c, p in opponent_deck(d, rv, ROLE_77)) + '; both sides play at random')
     a, b = table_77(d), table_77(d, fame_hi=True)
     for x, y in zip(a, b):
-        print(f'{x[0]:<16} {x[1]:<5} 对手名气高 {x[2]*100:3.0f}%（情人场风 {x[3]*100:3.0f}% / 其他 {x[4]*100:3.0f}%）'
-              f'  我名气高 {y[2]*100:3.0f}%')
+        print(f'{x[0]:<16} {x[1]:<5} rival fame high {x[2]*100:3.0f}% (lover style {x[3]*100:3.0f}% / other {x[4]*100:3.0f}%)'
+              f'  my fame high {y[2]*100:3.0f}%')

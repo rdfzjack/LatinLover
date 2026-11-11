@@ -1,105 +1,106 @@
 {
- "说明": "判定顺序：强制 → 特殊 → 大类 → 档次 → 品性 → 归宿 → 评语和总分。结局表在各自大类里按“顺序”取第一个条件满足的，条件为空表示兜底",
- "强制": [
+ "note": "Resolution order: forced -> special -> category -> grade -> character tier -> destiny -> comment and total score. Within a category the ending list takes the first whose cond holds, by `order`; an empty cond is the fallback",
+ "forced": [
   {
    "id": "end_collapse",
-   "名字": "倒下",
-   "条件": [
+   "name": "倒下",
+   "cond": [
     [
      [
-      "生病指数",
+      "sick_index",
       "==",
       100
      ]
     ]
    ],
-   "说明": "生病指数 100 连续 2 个月（游戏中途触发）。他没能撑过去，认真写",
-   "文本": null
+   "note": "sick_index stays 100 for 2 months in a row (can trigger mid-game). He did not survive; write it seriously",
+   "body": null
   }
  ],
- "特殊": [
+ "special": [
   {
    "id": "end_underworld",
-   "名字": "地下皇帝",
-   "条件": [
+   "name": "地下皇帝",
+   "cond": [
     [
      [
-      "犯罪",
+      "crime",
       ">=",
       500
      ],
      [
-      "硬汉",
+      "tough",
       ">=",
       300
      ],
      [
-      "手腕",
+      "savvy",
       ">=",
       200
      ]
     ]
    ],
-   "说明": "坏但强：城里的私酒都过他的手 [原 魔王]",
-   "文本": null
+   "note": "Bad but strong: all the bootleg liquor in town passes through his hands [orig Demon King]",
+   "body": null
   },
   {
    "id": "end_idol",
-   "名字": "帝国银幕偶像",
-   "条件": [
+   "name": "帝国银幕偶像",
+   "cond": [
     [
      [
-      "名气",
+      "fame",
       ">=",
       500
      ],
      [
-      "义气",
+      "loyalty",
       "<",
       50
      ],
      [
-      "旗标.柏林邀约",
+      "flag.berlin_invite",
       "==",
       1
      ]
     ]
    ],
-   "说明": "去了德国，成了那边的偶像；Sil 线在此断掉 [用素材]",
-   "文本": null
+   "note": "Went to Germany and became an idol there; the Sil line breaks here [user material]",
+   "body": null
   }
  ],
- "大类": [
+ "categories": [
   {
-   "名字": "黑暗",
-   "条件": [
+   "id": "dark",
+   "name": "黑暗",
+   "cond": [
     [
      [
-      "自律",
+      "discipline",
       "==",
       0
      ],
      [
-      "犯罪",
+      "crime",
       ">=",
       100
      ]
     ],
     [
      [
-      "自律",
+      "discipline",
       "<",
       30
      ],
      [
-      "犯罪",
+      "crime",
       ">=",
       250
      ]
     ],
     [
      [
-      "犯罪",
+      "crime",
       ">=",
       400
      ]
@@ -107,11 +108,12 @@
    ]
   },
   {
-   "名字": "演员",
-   "条件": [
+   "id": "actor",
+   "name": "演员",
+   "cond": [
     [
      [
-      "名气",
+      "fame",
       ">=",
       300
      ]
@@ -119,11 +121,12 @@
    ]
   },
   {
-   "名字": "万能",
-   "条件": [
+   "id": "all",
+   "name": "万能",
+   "cond": [
     [
      [
-      "四路声望极差",
+      "rep_spread",
       "<",
       50
      ]
@@ -131,101 +134,105 @@
    ]
   },
   {
-   "名字": "硬汉",
-   "条件": [
+   "id": "tough",
+   "name": "硬汉",
+   "cond": [
     [
      [
-      "最高声望所在路",
+      "top_road",
       "==",
-      "硬汉"
+      "tough"
      ]
     ]
    ]
   },
   {
-   "名字": "情人",
-   "条件": [
+   "id": "lover",
+   "name": "情人",
+   "cond": [
     [
      [
-      "最高声望所在路",
+      "top_road",
       "==",
-      "情人"
+      "lover"
      ]
     ]
    ]
   },
   {
-   "名字": "文化",
-   "条件": [
+   "id": "culture",
+   "name": "文化",
+   "cond": [
     [
      [
-      "最高声望所在路",
+      "top_road",
       "==",
-      "文化"
+      "culture"
      ]
     ]
    ]
   },
   {
-   "名字": "手腕",
-   "条件": [
+   "id": "savvy",
+   "name": "手腕",
+   "cond": [
     [
      [
-      "最高声望所在路",
+      "top_road",
       "==",
-      "手腕"
+      "savvy"
      ]
     ]
    ]
   }
  ],
- "大类说明": "取第一个满足的；最高声望所在路相同按 硬汉、情人、文化、手腕",
- "档次线": {
+ "category_note": "Take the first that matches; ties on top_road go by tough, lover, culture, savvy",
+ "grade_lines": {
   "S": 451,
   "A": 381,
   "B": 311,
   "C": 211,
   "D": 0
  },
- "标签族": {
-  "情人系": [
-   "浪漫",
-   "异国情人",
-   "歌舞"
+ "tag_families": {
+  "lover_family": [
+   "romance",
+   "exotic_lover",
+   "musical"
   ],
-  "动作系": [
-   "西部",
-   "动作冒险",
-   "战争",
-   "古装"
+  "action_family": [
+   "western",
+   "action_adventure",
+   "war",
+   "costume"
   ],
-  "性格系": [
-   "反派",
-   "犯罪",
-   "恐怖"
+  "persona_family": [
+   "villain",
+   "crime",
+   "horror"
   ],
-  "艺术系": [
-   "文艺",
-   "悲情",
-   "宗教",
-   "地下片"
+  "art_family": [
+   "arthouse",
+   "tragic",
+   "religious",
+   "underground"
   ],
-  "喜剧贵族系": [
-   "喜剧",
-   "贵族"
+  "comedy_noble_family": [
+   "comedy",
+   "noble"
   ]
  },
- "标签族说明": "最大标签族 = 计数之和最大的族；并列按此表顺序",
- "结局": [
+ "tag_families_note": "Top tag family = the family with the largest sum of tag counts; ties follow the order of this table",
+ "endings": [
   {
    "id": "act_legend",
-   "名字": "银幕传奇",
-   "大类": "演员",
-   "顺序": 1,
-   "条件": [
+   "name": "银幕传奇",
+   "category": "actor",
+   "order": 1,
+   "cond": [
     [
      [
-      "档次",
+      "grade",
       "in",
       [
        "S"
@@ -233,40 +240,40 @@
      ]
     ]
    ],
-   "内容": "进了 1930 年代仍是头牌",
-   "文本": null
+   "content": "进了 1930 年代仍是头牌",
+   "body": null
   },
   {
    "id": "act_lowbudget",
-   "名字": "低成本片之王",
-   "大类": "演员",
-   "顺序": 2,
-   "条件": [
+   "name": "低成本片之王",
+   "category": "actor",
+   "order": 2,
+   "cond": [
     [
      [
-      "低成本定型",
+      "lowbudget_typed",
       "==",
       1
      ]
     ]
    ],
-   "内容": "小厂的招牌，一年拍八部 [推N56]",
-   "文本": null
+   "content": "小厂的招牌，一年拍八部 [推N56]",
+   "body": null
   },
   {
    "id": "act_undefined",
-   "名字": "无法定义的人",
-   "大类": "演员",
-   "顺序": 3,
-   "条件": [
+   "name": "无法定义的人",
+   "category": "actor",
+   "order": 3,
+   "cond": [
     [
      [
-      "无法定义",
+      "undefined",
       "==",
       1
      ],
      [
-      "档次",
+      "grade",
       "in",
       [
        "S",
@@ -276,18 +283,18 @@
      ]
     ]
    ],
-   "内容": "泰山、圣徒、禁片都演过，没人知道怎么写他 [用素材]",
-   "文本": null
+   "content": "泰山、圣徒、禁片都演过，没人知道怎么写他 [用素材]",
+   "body": null
   },
   {
    "id": "act_voice",
-   "名字": "有声片的新声音",
-   "大类": "演员",
-   "顺序": 4,
-   "条件": [
+   "name": "有声片的新声音",
+   "category": "actor",
+   "order": 4,
+   "cond": [
     [
      [
-      "档次",
+      "grade",
       "in",
       [
        "A",
@@ -295,29 +302,29 @@
       ]
      ],
      [
-      "谈吐",
+      "speech",
       ">=",
       80
      ],
      [
-      "有声片部数",
+      "talkie_count",
       ">=",
       3
      ]
     ]
    ],
-   "内容": "口音成了招牌",
-   "文本": null
+   "content": "口音成了招牌",
+   "body": null
   },
   {
    "id": "act_lover",
-   "名字": "一代情人",
-   "大类": "演员",
-   "顺序": 5,
-   "条件": [
+   "name": "一代情人",
+   "category": "actor",
+   "order": 5,
+   "cond": [
     [
      [
-      "档次",
+      "grade",
       "in",
       [
        "A",
@@ -325,24 +332,24 @@
       ]
      ],
      [
-      "最大标签族",
+      "top_tag_family",
       "==",
-      "情人系"
+      "lover_family"
      ]
     ]
    ],
-   "内容": "接过了瓦伦的位置",
-   "文本": null
+   "content": "接过了瓦伦的位置",
+   "body": null
   },
   {
    "id": "act_action",
-   "名字": "动作明星",
-   "大类": "演员",
-   "顺序": 6,
-   "条件": [
+   "name": "动作明星",
+   "category": "actor",
+   "order": 6,
+   "cond": [
     [
      [
-      "档次",
+      "grade",
       "in",
       [
        "A",
@@ -350,24 +357,24 @@
       ]
      ],
      [
-      "最大标签族",
+      "top_tag_family",
       "==",
-      "动作系"
+      "action_family"
      ]
     ]
    ],
-   "内容": "自己上马的那种明星",
-   "文本": null
+   "content": "自己上马的那种明星",
+   "body": null
   },
   {
    "id": "act_character",
-   "名字": "性格演员",
-   "大类": "演员",
-   "顺序": 7,
-   "条件": [
+   "name": "性格演员",
+   "category": "actor",
+   "order": 7,
+   "cond": [
     [
      [
-      "档次",
+      "grade",
       "in",
       [
        "A",
@@ -375,24 +382,24 @@
       ]
      ],
      [
-      "最大标签族",
+      "top_tag_family",
       "==",
-      "性格系"
+      "persona_family"
      ]
     ]
    ],
-   "内容": "观众怕他，导演爱他",
-   "文本": null
+   "content": "观众怕他，导演爱他",
+   "body": null
   },
   {
    "id": "act_art",
-   "名字": "艺术片的脸",
-   "大类": "演员",
-   "顺序": 8,
-   "条件": [
+   "name": "艺术片的脸",
+   "category": "actor",
+   "order": 8,
+   "cond": [
     [
      [
-      "档次",
+      "grade",
       "in",
       [
        "A",
@@ -400,24 +407,24 @@
       ]
      ],
      [
-      "最大标签族",
+      "top_tag_family",
       "==",
-      "艺术系"
+      "art_family"
      ]
     ]
    ],
-   "内容": "钱不多，影评人记得他",
-   "文本": null
+   "content": "钱不多，影评人记得他",
+   "body": null
   },
   {
    "id": "act_comedy",
-   "名字": "喜剧和贵族",
-   "大类": "演员",
-   "顺序": 9,
-   "条件": [
+   "name": "喜剧和贵族",
+   "category": "actor",
+   "order": 9,
+   "cond": [
     [
      [
-      "档次",
+      "grade",
       "in",
       [
        "A",
@@ -425,24 +432,24 @@
       ]
      ],
      [
-      "最大标签族",
+      "top_tag_family",
       "==",
-      "喜剧贵族系"
+      "comedy_noble_family"
      ]
     ]
    ],
-   "内容": "轻喜剧里的常客",
-   "文本": null
+   "content": "轻喜剧里的常客",
+   "body": null
   },
   {
    "id": "act_silent",
-   "名字": "默片的遗物",
-   "大类": "演员",
-   "顺序": 10,
-   "条件": [
+   "name": "默片的遗物",
+   "category": "actor",
+   "order": 10,
+   "cond": [
     [
      [
-      "档次",
+      "grade",
       "in",
       [
        "D"
@@ -451,24 +458,24 @@
     ],
     [
      [
-      "谈吐",
+      "speech",
       "<",
       30
      ]
     ]
    ],
-   "内容": "电影开口说话以后没人找他了",
-   "文本": null
+   "content": "电影开口说话以后没人找他了",
+   "body": null
   },
   {
    "id": "act_second",
-   "名字": "二线",
-   "大类": "演员",
-   "顺序": 11,
-   "条件": [
+   "name": "二线",
+   "category": "actor",
+   "order": 11,
+   "cond": [
     [
      [
-      "档次",
+      "grade",
       "in",
       [
        "C"
@@ -476,28 +483,28 @@
      ]
     ]
    ],
-   "内容": "名字在海报第三行",
-   "文本": null
+   "content": "名字在海报第三行",
+   "body": null
   },
   {
    "id": "act_fallback",
-   "名字": "二线（其余）",
-   "大类": "演员",
-   "顺序": 99,
-   "条件": [],
-   "内容": "演员大类里没有被前面任何一条接住的局，落到这里",
-   "文本": null,
-   "说明": "补漏，GDD 没写"
+   "name": "二线（其余）",
+   "category": "actor",
+   "order": 99,
+   "cond": [],
+   "content": "演员大类里没有被前面任何一条接住的局，落到这里",
+   "body": null,
+   "note": "Gap filler, not in the GDD"
   },
   {
    "id": "tough_adventurer",
-   "名字": "冒险家",
-   "大类": "硬汉",
-   "顺序": 1,
-   "条件": [
+   "name": "冒险家",
+   "category": "tough",
+   "order": 1,
+   "cond": [
     [
      [
-      "档次",
+      "grade",
       "in",
       [
        "S",
@@ -505,139 +512,139 @@
       ]
      ],
      [
-      "自律",
+      "discipline",
       ">=",
       30
      ]
     ]
    ],
-   "内容": "到处走，偶尔寄回明信片 [用素材]",
-   "文本": null
+   "content": "到处走，偶尔寄回明信片 [用素材]",
+   "body": null
   },
   {
    "id": "tough_stunt",
-   "名字": "特技指导",
-   "大类": "硬汉",
-   "顺序": 2,
-   "条件": [
+   "name": "特技指导",
+   "category": "tough",
+   "order": 2,
+   "cond": [
     [
      [
-      "档次",
+      "grade",
       "in",
       [
        "B"
       ]
      ],
      [
-      "义气",
+      "loyalty",
       ">=",
       150
      ],
      [
-      "自律",
+      "discipline",
       ">=",
       30
      ]
     ]
    ],
-   "内容": "教别人怎么摔",
-   "文本": null
+   "content": "教别人怎么摔",
+   "body": null
   },
   {
    "id": "tough_rider",
-   "名字": "马术教练",
-   "大类": "硬汉",
-   "顺序": 3,
-   "条件": [
+   "name": "马术教练",
+   "category": "tough",
+   "order": 3,
+   "cond": [
     [
      [
-      "档次",
+      "grade",
       "in",
       [
        "B"
       ]
      ],
      [
-      "义气",
+      "loyalty",
       "<",
       150
      ],
      [
-      "自律",
+      "discipline",
       ">=",
       30
      ]
     ]
    ],
-   "内容": "",
-   "文本": null
+   "content": "",
+   "body": null
   },
   {
    "id": "tough_gym",
-   "名字": "拳馆教练",
-   "大类": "硬汉",
-   "顺序": 4,
-   "条件": [
+   "name": "拳馆教练",
+   "category": "tough",
+   "order": 4,
+   "cond": [
     [
      [
-      "档次",
+      "grade",
       "in",
       [
        "C"
       ]
      ],
      [
-      "自律",
+      "discipline",
       ">=",
       30
      ]
     ]
    ],
-   "内容": "开了一间小拳馆",
-   "文本": null
+   "content": "开了一间小拳馆",
+   "body": null
   },
   {
    "id": "tough_double",
-   "名字": "只拍枪战的替身",
-   "大类": "硬汉",
-   "顺序": 5,
-   "条件": [
+   "name": "只拍枪战的替身",
+   "category": "tough",
+   "order": 5,
+   "cond": [
     [
      [
-      "档次",
+      "grade",
       "in",
       [
        "D"
       ]
      ],
      [
-      "自律",
+      "discipline",
       ">=",
       50
      ]
     ]
    ],
-   "内容": "脸从不出现在片子里",
-   "文本": null
+   "content": "脸从不出现在片子里",
+   "body": null
   },
   {
    "id": "tough_thug",
-   "名字": "打手",
-   "大类": "硬汉",
-   "顺序": 99,
-   "条件": [],
-   "内容": "给人看场子 [原 奖金猎人/佣兵]",
-   "文本": null
+   "name": "打手",
+   "category": "tough",
+   "order": 99,
+   "cond": [],
+   "content": "给人看场子 [原 奖金猎人/佣兵]",
+   "body": null
   },
   {
    "id": "lover_darling",
-   "名字": "上流社会的宠儿",
-   "大类": "情人",
-   "顺序": 1,
-   "条件": [
+   "name": "上流社会的宠儿",
+   "category": "lover",
+   "order": 1,
+   "cond": [
     [
      [
-      "档次",
+      "grade",
       "in",
       [
        "S"
@@ -646,31 +653,31 @@
     ],
     [
      [
-      "档次",
+      "grade",
       "in",
       [
        "A"
       ]
      ],
      [
-      "相貌",
+      "looks",
       ">=",
       500
      ]
     ]
    ],
-   "内容": "每张请柬上都有他 [原 宠妃/王妃]",
-   "文本": null
+   "content": "每张请柬上都有他 [原 宠妃/王妃]",
+   "body": null
   },
   {
    "id": "lover_salon",
-   "名字": "沙龙主人",
-   "大类": "情人",
-   "顺序": 2,
-   "条件": [
+   "name": "沙龙主人",
+   "category": "lover",
+   "order": 2,
+   "cond": [
     [
      [
-      "档次",
+      "grade",
       "in",
       [
        "A",
@@ -678,25 +685,25 @@
       ]
      ],
      [
-      "教育",
+      "education",
       ">=",
-      "@相貌"
+      "@looks"
      ]
     ]
    ],
-   "内容": "[原 伯爵夫人]",
-   "文本": null,
-   "说明": "GDD 的 B 行；A 且相貌 <500 也落在这里（补漏）"
+   "content": "[原 伯爵夫人]",
+   "body": null,
+   "note": "GDD's B row; A with looks <500 also lands here (gap filler)"
   },
   {
    "id": "lover_widow",
-   "名字": "富孀的伴侣",
-   "大类": "情人",
-   "顺序": 3,
-   "条件": [
+   "name": "富孀的伴侣",
+   "category": "lover",
+   "order": 3,
+   "cond": [
     [
      [
-      "档次",
+      "grade",
       "in",
       [
        "A",
@@ -705,42 +712,42 @@
      ]
     ]
    ],
-   "内容": "[原 富豪之妻]",
-   "文本": null
+   "content": "[原 富豪之妻]",
+   "body": null
   },
   {
    "id": "lover_dance_teacher",
-   "名字": "舞蹈教师",
-   "大类": "情人",
-   "顺序": 4,
-   "条件": [
+   "name": "舞蹈教师",
+   "category": "lover",
+   "order": 4,
+   "cond": [
     [
      [
-      "档次",
+      "grade",
       "in",
       [
        "C"
       ]
      ],
      [
-      "教育",
+      "education",
       ">=",
-      "@相貌"
+      "@looks"
      ]
     ]
    ],
-   "内容": "[原 商人之妻]",
-   "文本": null
+   "content": "[原 商人之妻]",
+   "body": null
   },
   {
    "id": "lover_dance_hall",
-   "名字": "舞厅老板",
-   "大类": "情人",
-   "顺序": 5,
-   "条件": [
+   "name": "舞厅老板",
+   "category": "lover",
+   "order": 5,
+   "cond": [
     [
      [
-      "档次",
+      "grade",
       "in",
       [
        "C"
@@ -748,51 +755,51 @@
      ]
     ]
    ],
-   "内容": "[原 农家之妻]",
-   "文本": null
+   "content": "[原 农家之妻]",
+   "body": null
   },
   {
    "id": "lover_pinup",
-   "名字": "画报上的人",
-   "大类": "情人",
-   "顺序": 6,
-   "条件": [
+   "name": "画报上的人",
+   "category": "lover",
+   "order": 6,
+   "cond": [
     [
      [
-      "档次",
+      "grade",
       "in",
       [
        "D"
       ]
      ],
      [
-      "相貌",
+      "looks",
       ">=",
       150
      ]
     ]
    ],
-   "内容": "[原 地主的爱人]",
-   "文本": null
+   "content": "[原 地主的爱人]",
+   "body": null
   },
   {
    "id": "lover_gigolo",
-   "名字": "舞男",
-   "大类": "情人",
-   "顺序": 99,
-   "条件": [],
-   "内容": "[原 离婚的女人]",
-   "文本": null
+   "name": "舞男",
+   "category": "lover",
+   "order": 99,
+   "cond": [],
+   "content": "[原 离婚的女人]",
+   "body": null
   },
   {
    "id": "cult_writer",
-   "名字": "作家",
-   "大类": "文化",
-   "顺序": 1,
-   "条件": [
+   "name": "作家",
+   "category": "culture",
+   "order": 1,
+   "cond": [
     [
      [
-      "档次",
+      "grade",
       "in",
       [
        "S",
@@ -800,29 +807,29 @@
       ]
      ],
      [
-      "创作",
+      "writing",
       ">=",
-      "@审美"
+      "@taste"
      ],
      [
-      "自律",
+      "discipline",
       ">=",
       50
      ]
     ]
    ],
-   "内容": "[用素材]",
-   "文本": null
+   "content": "[用素材]",
+   "body": null
   },
   {
    "id": "cult_photog",
-   "名字": "摄影家",
-   "大类": "文化",
-   "顺序": 2,
-   "条件": [
+   "name": "摄影家",
+   "category": "culture",
+   "order": 2,
+   "cond": [
     [
      [
-      "档次",
+      "grade",
       "in",
       [
        "S",
@@ -830,24 +837,24 @@
       ]
      ],
      [
-      "自律",
+      "discipline",
       ">=",
       50
      ]
     ]
    ],
-   "内容": "[用素材]",
-   "文本": null
+   "content": "[用素材]",
+   "body": null
   },
   {
    "id": "cult_screenwriter",
-   "名字": "编剧",
-   "大类": "文化",
-   "顺序": 3,
-   "条件": [
+   "name": "编剧",
+   "category": "culture",
+   "order": 3,
+   "cond": [
     [
      [
-      "档次",
+      "grade",
       "in",
       [
        "S",
@@ -856,24 +863,24 @@
       ]
      ],
      [
-      "自律",
+      "discipline",
       ">=",
       50
      ]
     ]
    ],
-   "内容": "",
-   "文本": null
+   "content": "",
+   "body": null
   },
   {
    "id": "cult_tabloid",
-   "名字": "小报写手",
-   "大类": "文化",
-   "顺序": 4,
-   "条件": [
+   "name": "小报写手",
+   "category": "culture",
+   "order": 4,
+   "cond": [
     [
      [
-      "档次",
+      "grade",
       "in",
       [
        "S",
@@ -883,18 +890,18 @@
      ]
     ]
    ],
-   "内容": "",
-   "文本": null
+   "content": "",
+   "body": null
   },
   {
    "id": "cult_editor",
-   "名字": "报馆编辑",
-   "大类": "文化",
-   "顺序": 5,
-   "条件": [
+   "name": "报馆编辑",
+   "category": "culture",
+   "order": 5,
+   "cond": [
     [
      [
-      "档次",
+      "grade",
       "in",
       [
        "C"
@@ -902,51 +909,51 @@
      ]
     ]
    ],
-   "内容": "",
-   "文本": null
+   "content": "",
+   "body": null
   },
   {
    "id": "cult_letter",
-   "名字": "写信的人",
-   "大类": "文化",
-   "顺序": 6,
-   "条件": [
+   "name": "写信的人",
+   "category": "culture",
+   "order": 6,
+   "cond": [
     [
      [
-      "档次",
+      "grade",
       "in",
       [
        "D"
       ]
      ],
      [
-      "义气",
+      "loyalty",
       ">=",
       100
      ]
     ]
    ],
-   "内容": "替不识字的同乡写信",
-   "文本": null
+   "content": "替不识字的同乡写信",
+   "body": null
   },
   {
    "id": "cult_street_photo",
-   "名字": "街头照相的",
-   "大类": "文化",
-   "顺序": 99,
-   "条件": [],
-   "内容": "",
-   "文本": null
+   "name": "街头照相的",
+   "category": "culture",
+   "order": 99,
+   "cond": [],
+   "content": "",
+   "body": null
   },
   {
    "id": "biz_producer",
-   "名字": "制片人",
-   "大类": "手腕",
-   "顺序": 1,
-   "条件": [
+   "name": "制片人",
+   "category": "savvy",
+   "order": 1,
+   "cond": [
     [
      [
-      "档次",
+      "grade",
       "in",
       [
        "S"
@@ -955,31 +962,31 @@
     ],
     [
      [
-      "档次",
+      "grade",
       "in",
       [
        "A"
       ]
      ],
      [
-      "好感.片厂老板",
+      "favor.studio_boss",
       ">=",
       80
      ]
     ]
    ],
-   "内容": "别人的片子由他点头",
-   "文本": null
+   "content": "别人的片子由他点头",
+   "body": null
   },
   {
    "id": "biz_agent",
-   "名字": "经纪人",
-   "大类": "手腕",
-   "顺序": 2,
-   "条件": [
+   "name": "经纪人",
+   "category": "savvy",
+   "order": 2,
+   "cond": [
     [
      [
-      "档次",
+      "grade",
       "in",
       [
        "A"
@@ -987,42 +994,42 @@
      ]
     ]
    ],
-   "内容": "手里有十几个演员",
-   "文本": null
+   "content": "手里有十几个演员",
+   "body": null
   },
   {
    "id": "biz_dealer",
-   "名字": "生意人",
-   "大类": "手腕",
-   "顺序": 3,
-   "条件": [
+   "name": "生意人",
+   "category": "savvy",
+   "order": 3,
+   "cond": [
     [
      [
-      "档次",
+      "grade",
       "in",
       [
        "B"
       ]
      ],
      [
-      "手腕最高技能",
+      "top_savvy_skill",
       "==",
-      "生意"
+      "business"
      ]
     ]
    ],
-   "内容": "",
-   "文本": null
+   "content": "",
+   "body": null
   },
   {
    "id": "biz_broker",
-   "名字": "掮客",
-   "大类": "手腕",
-   "顺序": 4,
-   "条件": [
+   "name": "掮客",
+   "category": "savvy",
+   "order": 4,
+   "cond": [
     [
      [
-      "档次",
+      "grade",
       "in",
       [
        "B"
@@ -1030,18 +1037,18 @@
      ]
     ]
    ],
-   "内容": "",
-   "文本": null
+   "content": "",
+   "body": null
   },
   {
    "id": "biz_boss",
-   "名字": "小老板",
-   "大类": "手腕",
-   "顺序": 5,
-   "条件": [
+   "name": "小老板",
+   "category": "savvy",
+   "order": 5,
+   "cond": [
     [
      [
-      "档次",
+      "grade",
       "in",
       [
        "C"
@@ -1049,27 +1056,27 @@
      ]
     ]
    ],
-   "内容": "一间餐馆或一间酒吧",
-   "文本": null
+   "content": "一间餐馆或一间酒吧",
+   "body": null
   },
   {
    "id": "biz_sales",
-   "名字": "推销员",
-   "大类": "手腕",
-   "顺序": 99,
-   "条件": [],
-   "内容": "",
-   "文本": null
+   "name": "推销员",
+   "category": "savvy",
+   "order": 99,
+   "cond": [],
+   "content": "",
+   "body": null
   },
   {
    "id": "all_studio",
-   "名字": "片厂老板",
-   "大类": "万能",
-   "顺序": 1,
-   "条件": [
+   "name": "片厂老板",
+   "category": "all",
+   "order": 1,
+   "cond": [
     [
      [
-      "档次",
+      "grade",
       "in",
       [
        "S"
@@ -1077,18 +1084,18 @@
      ]
     ]
    ],
-   "内容": "[原 女王/宰相]",
-   "文本": null
+   "content": "[原 女王/宰相]",
+   "body": null
   },
   {
    "id": "all_director",
-   "名字": "导演",
-   "大类": "万能",
-   "顺序": 2,
-   "条件": [
+   "name": "导演",
+   "category": "all",
+   "order": 2,
+   "cond": [
     [
      [
-      "档次",
+      "grade",
       "in",
       [
        "A",
@@ -1097,249 +1104,249 @@
      ]
     ]
    ],
-   "内容": "什么都会一点的人去当了导演",
-   "文本": null
+   "content": "什么都会一点的人去当了导演",
+   "body": null
   },
   {
    "id": "all_job_formal",
-   "名字": "以最常打的工为业",
-   "大类": "万能",
-   "顺序": 3,
-   "条件": [
+   "name": "以{top_job}为业",
+   "category": "all",
+   "order": 3,
+   "cond": [
     [
      [
-      "档次",
+      "grade",
       "in",
       [
        "C"
       ]
      ],
      [
-      "最大工期数",
+      "max_job_periods",
       ">=",
       5
      ]
     ]
    ],
-   "内容": "正式 [原 HEAVY_WORKING，10 期的一半]",
-   "文本": null,
-   "动态名": "最常打的工"
+   "content": "正式 [原 HEAVY_WORKING，10 期的一半]",
+   "body": null,
+   "dynamic_name": "top_job"
   },
   {
    "id": "all_job_temp",
-   "名字": "暂以最常打的工为生",
-   "大类": "万能",
-   "顺序": 4,
-   "条件": [
+   "name": "暂以{top_job}为生",
+   "category": "all",
+   "order": 4,
+   "cond": [
     [
      [
-      "档次",
+      "grade",
       "in",
       [
        "D"
       ]
      ],
      [
-      "最大工期数",
+      "max_job_periods",
       ">=",
       5
      ]
     ]
    ],
-   "内容": "临时",
-   "文本": null,
-   "动态名": "最常打的工"
+   "content": "临时",
+   "body": null,
+   "dynamic_name": "top_job"
   },
   {
    "id": "all_naples",
-   "名字": "回那不勒斯",
-   "大类": "万能",
-   "顺序": 99,
-   "条件": [],
-   "内容": "一张回程船票",
-   "文本": null,
-   "说明": "GDD 写“C/D 且没有满 5 期的工”；兜底，其余落到这里的局也归它（补漏）"
+   "name": "回那不勒斯",
+   "category": "all",
+   "order": 99,
+   "cond": [],
+   "content": "一张回程船票",
+   "body": null,
+   "note": "GDD says \"C/D with no job reaching 5 periods\"; fallback, any other run that falls through is also filed here (gap filler)"
   },
   {
    "id": "dark_boss",
-   "名字": "黑帮头目",
-   "大类": "黑暗",
-   "顺序": 1,
-   "条件": [
+   "name": "黑帮头目",
+   "category": "dark",
+   "order": 1,
+   "cond": [
     [
      [
-      "硬汉",
+      "tough",
       ">=",
       210
      ],
      [
-      "义气",
+      "loyalty",
       ">=",
       200
      ]
     ]
    ],
-   "内容": "有人愿意跟他 [原 黑街老大]",
-   "文本": null
+   "content": "有人愿意跟他 [原 黑街老大]",
+   "body": null
   },
   {
    "id": "dark_thug_boss",
-   "名字": "打手头子",
-   "大类": "黑暗",
-   "顺序": 2,
-   "条件": [
+   "name": "打手头子",
+   "category": "dark",
+   "order": 2,
+   "cond": [
     [
      [
-      "硬汉",
+      "tough",
       ">=",
       210
      ],
      [
-      "义气",
+      "loyalty",
       "<",
       200
      ]
     ]
    ],
-   "内容": "[原 流氓]",
-   "文本": null
+   "content": "[原 流氓]",
+   "body": null
   },
   {
    "id": "dark_marry",
-   "名字": "骗婚的人",
-   "大类": "黑暗",
-   "顺序": 3,
-   "条件": [
+   "name": "骗婚的人",
+   "category": "dark",
+   "order": 3,
+   "cond": [
     [
      [
-      "谈吐",
+      "speech",
       ">=",
       70
      ],
      [
-      "谈判",
+      "negotiation",
       ">=",
       70
      ],
      [
-      "相貌",
+      "looks",
       ">=",
       200
      ],
      [
-      "人脉",
+      "connections",
       ">=",
       70
      ]
     ]
    ],
-   "内容": "[原 高级妓女的条件形状]",
-   "文本": null
+   "content": "[原 高级妓女的条件形状]",
+   "body": null
   },
   {
    "id": "dark_con",
-   "名字": "骗子",
-   "大类": "黑暗",
-   "顺序": 4,
-   "条件": [
+   "name": "骗子",
+   "category": "dark",
+   "order": 4,
+   "cond": [
     [
      [
-      "相貌",
+      "looks",
       "<",
       200
      ],
      [
-      "谈判",
+      "negotiation",
       ">=",
       70
      ]
     ]
    ],
-   "内容": "[原 诈欺师]",
-   "文本": null
+   "content": "[原 诈欺师]",
+   "body": null
   },
   {
    "id": "dark_prison",
-   "名字": "入狱",
-   "大类": "黑暗",
-   "顺序": 99,
-   "条件": [],
-   "内容": "",
-   "文本": null
+   "name": "入狱",
+   "category": "dark",
+   "order": 99,
+   "cond": [],
+   "content": "",
+   "body": null
   }
  ],
- "归宿": {
-  "特殊": "13 节四条线的归宿条件（romance.json），优先",
-  "普通": {
-   "模式": [
+ "destiny": {
+  "special": "Section 13: the four lines' destiny conditions (romance.json) take priority",
+  "ordinary": {
+   "mode": [
     {
-     "条件": [
+     "cond": [
       [
        [
-        "自律",
+        "discipline",
         ">=",
         30
        ]
       ]
      ],
-     "模式": 1,
-     "好归宿线": [
-      "相貌",
+     "mode": 1,
+     "good_destiny_line": [
+      "looks",
       200
      ]
     },
     {
-     "条件": [
+     "cond": [
       [
        [
-        "相貌",
+        "looks",
         ">",
-        "@义气"
+        "@loyalty"
        ]
       ]
      ],
-     "模式": 2,
-     "好归宿线": [
-      "相貌",
+     "mode": 2,
+     "good_destiny_line": [
+      "looks",
       200
      ]
     },
     {
-     "条件": [],
-     "模式": 3,
-     "好归宿线": [
-      "义气",
+     "cond": [],
+     "mode": 3,
+     "good_destiny_line": [
+      "loyalty",
       200
      ]
     }
    ]
   },
-  "叠加": "归宿叠加在事业结局之后演出"
+  "stacking": "The destiny is played after the career ending"
  },
- "评分": {
-  "总分": "(体力+教育+义气+相貌+自律+名气)/6 - 犯罪 + 结局分 + 品性分 + 归宿分",
-  "结局分": {
+ "scoring": {
+  "total": "(stamina+education+loyalty+looks+discipline+fame)/6 - crime + ending_score + character_score + destiny_score",
+  "ending_score": {
    "S": 500,
    "A": 400,
    "B": 300,
    "C": 100,
    "D": 50
   },
-  "品性分": "沿用原版 300/100/-10 三档",
-  "归宿分": {
-   "特殊": 200,
-   "普通好归宿": 40,
-   "普通": 20
+  "character_score": "Keeps the original's 300/100/-10 three tiers",
+  "destiny_score": {
+   "special": 200,
+   "ordinary_good": 40,
+   "ordinary": 20
   },
-  "评语": "按最常上的课（看书算一门）、最常打的工各给一句",
-  "品性档": {
-   "说明": "原版 TENMATSU_HYOKA：松 300、竹 100、梅 -10；原版 74 个结局里只有 4 个按属性分松竹梅，其余都是梅。新结局还没定哪些分档，暂时全部按 默认档（结局可加 品性:[{条件,档}] 覆盖），待用户定",
-   "分": {
+  "comment": "One line each for the class attended most often (reading counts as one class) and the job done most often",
+  "character_tiers": {
+   "note": "Original TENMATSU_HYOKA: pine 300, bamboo 100, plum -10. Of the original's 74 endings only 4 are graded by attributes, the rest are all plum. Which new endings get a tier is undecided, so all use default_tier for now (an ending may add character: [{cond, tier}] to override); user to decide",
+   "score": {
     "1": 300,
     "2": 100,
     "3": -10
    },
-   "默认档": 3
+   "default_tier": 3
   }
  }
 }

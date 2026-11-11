@@ -1,376 +1,376 @@
 {
- "说明": "外出的随机表事件、NPC 链和常驻事件、家教链事件。选项的判定：null / 门槛[属性,比较符,值] / {判定:技能,线:n}（成功条件 技能显示值 + r0(20) >= 线）。内容大多是 GDD 11.4 的示例；文本待第 18 步",
- "事件": [
+ "note": "Random-table events for outings, NPC chain and resident events, tutor-chain events. Option check: null / gate [attr, comparator, value] / {check: skill, line: n} (success if skill displayed value + r0(20) >= line). Content is mostly GDD 11.4 examples; text is for PLAN step 18",
+ "events": [
   {
    "id": "outing_director_lunch",
-   "名字": "导演的午饭桌",
-   "地点": "place_studio",
-   "权重": 3,
-   "条件": [],
-   "一次性": false,
-   "选项": [
+   "name": "导演的午饭桌",
+   "place": "place_studio",
+   "weight": 3,
+   "cond": [],
+   "once": false,
+   "options": [
     {
-     "文字": "搭话",
-     "判定": [
-      "谈判",
+     "text": "搭话",
+     "check": [
+      "negotiation",
       ">=",
       30
      ],
-     "成功效果": "人脉+3 旗标.认识导演=1",
-     "失败效果": ""
+     "success_effect": "connections+3 flag.knows_director=1",
+     "fail_effect": ""
     }
    ],
-   "说明": "",
-   "文本": null
+   "note": "",
+   "body": null
   },
   {
    "id": "outing_old_bookshop",
-   "名字": "旧书店",
-   "地点": "place_downtown",
-   "权重": 3,
-   "条件": [],
-   "一次性": false,
-   "选项": [
+   "name": "旧书店",
+   "place": "place_downtown",
+   "weight": 3,
+   "cond": [],
+   "once": false,
+   "options": [
     {
-     "文字": "翻翻看",
-     "判定": [
-      "教育",
+     "text": "翻翻看",
+     "check": [
+      "education",
       ">=",
       100
      ],
-     "成功效果": "创作+2",
-     "失败效果": "审美+1"
+     "success_effect": "writing+2",
+     "fail_effect": "taste+1"
     }
    ],
-   "说明": "",
-   "文本": null
+   "note": "",
+   "body": null
   },
   {
    "id": "outing_pickup",
-   "名字": "搭讪",
-   "地点": "place_downtown",
-   "权重": 2,
-   "条件": [
+   "name": "搭讪",
+   "place": "place_downtown",
+   "weight": 2,
+   "cond": [
     [
      [
-      "最高基础属性",
+      "top_base_attr",
       "==",
-      "相貌"
+      "looks"
      ]
     ]
    ],
-   "一次性": true,
-   "选项": [
+   "once": true,
+   "options": [
     {
-     "文字": "接受",
-     "判定": "",
-     "成功效果": "相貌+5",
-     "失败效果": ""
+     "text": "接受",
+     "check": "",
+     "success_effect": "looks+5",
+     "fail_effect": ""
     }
    ],
-   "说明": "[原 EVENT021]",
-   "文本": null
+   "note": "[orig EVENT021]",
+   "body": null
   },
   {
    "id": "outing_salon",
-   "名字": "沙龙的请柬",
-   "地点": "place_seaside",
-   "权重": 3,
-   "条件": [],
-   "一次性": false,
-   "选项": [
+   "name": "沙龙的请柬",
+   "place": "place_seaside",
+   "weight": 3,
+   "cond": [],
+   "once": false,
+   "options": [
     {
-     "文字": "赴约",
-     "判定": {
-      "判定": "谈吐",
-      "线": 40
+     "text": "赴约",
+     "check": {
+      "check": "speech",
+      "line": 40
      },
-     "成功效果": "人脉+3 生意+1",
-     "失败效果": "谈吐+1"
+     "success_effect": "connections+3 business+1",
+     "fail_effect": "speech+1"
     }
    ],
-   "说明": "",
-   "文本": null
+   "note": "",
+   "body": null
   },
   {
    "id": "outing_romance",
-   "名字": "艳遇",
-   "地点": "place_seaside",
-   "权重": 6,
-   "条件": [
+   "name": "艳遇",
+   "place": "place_seaside",
+   "weight": 6,
+   "cond": [
     [
      [
-      "最高基础属性",
+      "top_base_attr",
       "==",
-      "相貌"
+      "looks"
      ],
      [
-      "名气",
+      "fame",
       ">=",
       150
      ],
      [
-      "状态.恋爱",
+      "status.in_love",
       "==",
       0
      ]
     ]
    ],
-   "一次性": false,
-   "选项": [
+   "once": false,
+   "options": [
     {
-     "文字": "上前搭话",
-     "判定": "",
-     "成功效果": "状态.恋爱=1",
-     "失败效果": ""
+     "text": "上前搭话",
+     "check": "",
+     "success_effect": "status.in_love=1",
+     "fail_effect": ""
     }
    ],
-   "说明": "遇到一个人，进入恋爱状态；期间日程 20% 失败，四条感情线好感每月 -2 [原]",
-   "文本": null
+   "note": "Meets someone and enters the in_love state; schedule days fail 20% of the time, and the four romance lines lose 2 favor per month [orig]",
+   "body": null
   },
   {
    "id": "outing_driver",
-   "名字": "有人要找司机",
-   "地点": "place_dock",
-   "权重": 3,
-   "条件": [],
-   "一次性": false,
-   "选项": [
+   "name": "有人要找司机",
+   "place": "place_dock",
+   "weight": 3,
+   "cond": [],
+   "once": false,
+   "options": [
     {
-     "文字": "接",
-     "判定": [
-      "骑马驾驶",
+     "text": "接",
+     "check": [
+      "riding",
       ">=",
       30
      ],
-     "成功效果": "金钱+60 犯罪+5",
-     "失败效果": ""
+     "success_effect": "money+60 crime+5",
+     "fail_effect": ""
     },
     {
-     "文字": "不接",
-     "判定": "",
-     "成功效果": "自律+2",
-     "失败效果": ""
+     "text": "不接",
+     "check": "",
+     "success_effect": "discipline+2",
+     "fail_effect": ""
     }
    ],
-   "说明": "",
-   "文本": null
+   "note": "",
+   "body": null
   },
   {
    "id": "outing_countryman",
-   "名字": "同乡被人欺负",
-   "地点": "place_dock",
-   "权重": 3,
-   "条件": [],
-   "一次性": false,
-   "选项": [
+   "name": "同乡被人欺负",
+   "place": "place_dock",
+   "weight": 3,
+   "cond": [],
+   "once": false,
+   "options": [
     {
-     "文字": "帮",
-     "判定": {
-      "判定": "打斗",
-      "线": 40
+     "text": "帮",
+     "check": {
+      "check": "fight",
+      "line": 40
      },
-     "成功效果": "义气+8 人脉+2",
-     "失败效果": "义气+4 体力-10 疲劳+10"
+     "success_effect": "loyalty+8 connections+2",
+     "fail_effect": "loyalty+4 stamina-10 fatigue+10"
     },
     {
-     "文字": "不帮",
-     "判定": "",
-     "成功效果": "义气-5",
-     "失败效果": ""
+     "text": "不帮",
+     "check": "",
+     "success_effect": "loyalty-5",
+     "fail_effect": ""
     }
    ],
-   "说明": "",
-   "文本": null
+   "note": "",
+   "body": null
   },
   {
    "id": "outing_backdoor",
-   "名字": "酒吧后门的生意",
-   "地点": "place_dock",
-   "权重": 2,
-   "条件": [],
-   "一次性": false,
-   "选项": [
+   "name": "酒吧后门的生意",
+   "place": "place_dock",
+   "weight": 2,
+   "cond": [],
+   "once": false,
+   "options": [
     {
-     "文字": "做",
-     "判定": {
-      "判定": "胆识",
-      "线": 50
+     "text": "做",
+     "check": {
+      "check": "nerve",
+      "line": 50
      },
-     "成功效果": "金钱+100 犯罪+8",
-     "失败效果": "触发.evt_arrest"
+     "success_effect": "money+100 crime+8",
+     "fail_effect": "trigger.evt_arrest"
     }
    ],
-   "说明": "",
-   "文本": null
+   "note": "",
+   "body": null
   },
   {
    "id": "outing_actress_dressing",
-   "名字": "女明星的化妆间",
-   "地点": "(链事件)",
-   "权重": 1,
-   "条件": [],
-   "一次性": true,
-   "选项": [
+   "name": "女明星的化妆间",
+   "place": "(chain)",
+   "weight": 1,
+   "cond": [],
+   "once": true,
+   "options": [
     {
-     "文字": "陪她聊聊",
-     "判定": "",
-     "成功效果": "好感.女明星+3",
-     "失败效果": ""
+     "text": "陪她聊聊",
+     "check": "",
+     "success_effect": "favor.actress+3",
+     "fail_effect": ""
     }
    ],
-   "说明": "女明星在场时（链事件）",
-   "文本": null
+   "note": "When the actress is present (chain event)",
+   "body": null
   },
   {
    "id": "outing_duv_script",
-   "名字": "Duv 开始写剧本",
-   "地点": "(链事件)",
-   "权重": 1,
-   "条件": [
+   "name": "Duv 开始写剧本",
+   "place": "(chain)",
+   "weight": 1,
+   "cond": [
     [
      [
-      "好感.Duv",
+      "favor.duv",
       ">=",
       50
      ]
     ]
    ],
-   "一次性": true,
-   "选项": [
+   "once": true,
+   "options": [
     {
-     "文字": "请他写",
-     "判定": "",
-     "成功效果": "旗标.Duv写剧本=1 好感.Duv+3",
-     "失败效果": ""
+     "text": "请他写",
+     "check": "",
+     "success_effect": "flag.duv_writes_script=1 favor.duv+3",
+     "fail_effect": ""
     }
    ],
-   "说明": "家教课或市中心遇到他时触发（6.5）",
-   "文本": null
+   "note": "Fires when he is met in tutoring class or downtown (6.5)",
+   "body": null
   },
   {
    "id": "outing_duv_tip",
-   "名字": "Duv 的告密",
-   "地点": "(常驻)",
-   "权重": 1,
-   "条件": [
+   "name": "Duv 的告密",
+   "place": "(resident)",
+   "weight": 1,
+   "cond": [
     [
      [
-      "好感.Duv",
+      "favor.duv",
       ">=",
       30
      ]
     ]
    ],
-   "一次性": false,
-   "选项": [
+   "once": false,
+   "options": [
     {
-     "文字": "听他说",
-     "判定": "",
-     "成功效果": "旗标.告密=1",
-     "失败效果": ""
+     "text": "听他说",
+     "check": "",
+     "success_effect": "flag.tipoff=1",
+     "fail_effect": ""
     }
    ],
-   "说明": "当前板或下一块板上随机一个中片/大片角色，显示完整场风概率和标签（6.5）",
-   "文本": null
+   "note": "Picks a random medium/big role on the current or next board and shows its full style probabilities and tags (6.5)",
+   "body": null
   },
   {
    "id": "outing_duv_chat",
-   "名字": "Duv 的闲谈",
-   "地点": "(常驻)",
-   "权重": 1,
-   "条件": [],
-   "一次性": false,
-   "选项": [
+   "name": "Duv 的闲谈",
+   "place": "(resident)",
+   "weight": 1,
+   "cond": [],
+   "once": false,
+   "options": [
     {
-     "文字": "聊聊",
-     "判定": "",
-     "成功效果": "好感.Duv+1",
-     "失败效果": ""
+     "text": "聊聊",
+     "check": "",
+     "success_effect": "favor.duv+1",
+     "fail_effect": ""
     }
    ],
-   "说明": "6.5",
-   "文本": null
+   "note": "6.5",
+   "body": null
   },
   {
    "id": "outing_duv_class_1",
-   "名字": "Duv 登场",
-   "地点": "(家教链)",
-   "权重": 1,
-   "条件": [],
-   "一次性": true,
-   "选项": [],
-   "说明": "家教第 1 旬必出（5.3.1）",
-   "文本": null
+   "name": "Duv 登场",
+   "place": "(tutor_chain)",
+   "weight": 1,
+   "cond": [],
+   "once": true,
+   "options": [],
+   "note": "Always happens in tutoring period 1 (5.3.1)",
+   "body": null
   },
   {
    "id": "outing_duv_class_2",
-   "名字": "Duv 后续一",
-   "地点": "(家教链)",
-   "权重": 1,
-   "条件": [],
-   "一次性": true,
-   "选项": [],
-   "说明": "家教第 4 旬",
-   "文本": null
+   "name": "Duv 后续一",
+   "place": "(tutor_chain)",
+   "weight": 1,
+   "cond": [],
+   "once": true,
+   "options": [],
+   "note": "tutoring period 4",
+   "body": null
   },
   {
    "id": "outing_duv_class_3",
-   "名字": "Duv 后续二",
-   "地点": "(家教链)",
-   "权重": 1,
-   "条件": [],
-   "一次性": true,
-   "选项": [],
-   "说明": "家教第 7 旬",
-   "文本": null
+   "name": "Duv 后续二",
+   "place": "(tutor_chain)",
+   "weight": 1,
+   "cond": [],
+   "once": true,
+   "options": [],
+   "note": "tutoring period 7",
+   "body": null
   },
   {
    "id": "outing_duv_class_4",
-   "名字": "Duv 后续三",
-   "地点": "(家教链)",
-   "权重": 1,
-   "条件": [],
-   "一次性": true,
-   "选项": [],
-   "说明": "家教第 10 旬",
-   "文本": null
+   "name": "Duv 后续三",
+   "place": "(tutor_chain)",
+   "weight": 1,
+   "cond": [],
+   "once": true,
+   "options": [],
+   "note": "tutoring period 10",
+   "body": null
   },
   {
    "id": "vac_1",
-   "名字": "度假村 1",
-   "地点": "place_resort",
-   "权重": 1,
-   "条件": [],
-   "一次性": false,
-   "选项": [],
-   "效果": "",
-   "说明": "占位：内容待用户给",
-   "文本": null
+   "name": "度假村 1",
+   "place": "place_resort",
+   "weight": 1,
+   "cond": [],
+   "once": false,
+   "options": [],
+   "effect": "",
+   "note": "Placeholder: content for the user to supply",
+   "body": null
   },
   {
    "id": "vac_2",
-   "名字": "度假村 2",
-   "地点": "place_resort",
-   "权重": 1,
-   "条件": [],
-   "一次性": false,
-   "选项": [],
-   "效果": "",
-   "说明": "占位：内容待用户给",
-   "文本": null
+   "name": "度假村 2",
+   "place": "place_resort",
+   "weight": 1,
+   "cond": [],
+   "once": false,
+   "options": [],
+   "effect": "",
+   "note": "Placeholder: content for the user to supply",
+   "body": null
   },
   {
    "id": "vac_3",
-   "名字": "度假村 3",
-   "地点": "place_resort",
-   "权重": 1,
-   "条件": [],
-   "一次性": false,
-   "选项": [],
-   "效果": "",
-   "说明": "占位：内容待用户给",
-   "文本": null
+   "name": "度假村 3",
+   "place": "place_resort",
+   "weight": 1,
+   "cond": [],
+   "once": false,
+   "options": [],
+   "effect": "",
+   "note": "Placeholder: content for the user to supply",
+   "body": null
   }
  ]
 }

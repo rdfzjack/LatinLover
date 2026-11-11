@@ -1,82 +1,84 @@
-# data/new：新游戏的数据表
+# data/new: data tables of the new game
 
-规则和数值都在这里，Python 试算器（`sim/`）和 Godot 读同一份。改数值只改 JSON。
-校验：`python3 tools/check.py`（格式、重复、内容、试玩一起查；出错退出码 1）。给用户看的中文改表指南在 `data/USER_GUIDE.md`。
+The rules and numbers live here; the Python simulator (`sim/`) and Godot read the same files. To change a number, change only the JSON.
+Validation: `python3 tools/check.py` (format, duplicates, content and a bot playthrough together; exit code 1 on errors). The step-by-step guide for editing tables is `data/USER_GUIDE.md`.
 
-## 约定
+## Conventions
 
-- 金钱和所有数值都是整数，表里不允许出现小数。比例写成百分比整数（85 表示 ×85/100）或 `[分子, 分母]`。
-- 范围 `[a,b]` 含两端；`加:[a,b]` 表示 `r(a,b)`。
-- 名字都是占位。id 用 ASCII（`job_bar`），显示名用中文。
-- 效果和条件里的负号一律用 ASCII 的 `-`（GDD 里的 `−` 在这里写成 `-`）。
+- **Ids, field names, enum values, names inside effects and conditions are English snake_case** (`stamina`, `job_bar`, `favor.sil`). The glossary Chinese | id | category is `design/GLOSSARY.md`.
+- **Chinese appears only in display fields**, as the original text: `name` of every record, `text` of event / outing / opening options, `body` of events and endings, `question`, `film_title`, `content` of endings, `identity` of NPCs. Everything else (notes included) is English. There is no separate language file to edit when you add content: write the Chinese in the display field; `data/locale/text.csv` is generated from the tables by `tools/extract_text.py` (`tools/check.py` runs it); only its `en` column is edited by hand.
+- Every record has an English `id`. A new record gets a new id and its Chinese `name`.
+- Money and all numbers are integers; decimals are not allowed. Ratios are written as integer percentages (85 means x85/100) or `[numerator, denominator]`.
+- A range `[a, b]` includes both ends; `add: [a, b]` means `r(a, b)`.
+- All names are placeholders.
+- The minus sign in effects and conditions is always ASCII `-`.
+- **Row order is significant where ties are possible**: a tie between items goes to the earlier row of `items.json` (the rows are in the order the code used to sort the Chinese names, so the simulation results stayed identical); ties between roads, NPCs and skills go to the earlier row as well.
 
-## 条件
+## Conditions
 
-`[[ [变量,比较符,值], … ], … ]`：外层是“或”，每组内是“与”。空列表 `[]` 表示恒成立。
-比较符：`>= <= > < == !=`。
+`[[ [variable, comparator, value], ... ], ... ]`: the outer list is OR, every inner list is AND. An empty list `[]` is always true.
+Comparators: `>= <= > < == !=`, and `in`, whose value is a list, e.g. `["grade", "in", ["S", "A"]]`. A value written `"@variable"` compares with another variable, e.g. `["education", ">=", "@looks"]`.
 
-比较符还有 `in`：值是列表，如 `["档次","in",["S","A"]]`。值写成 `"@变量名"` 表示拿另一个变量比较，如 `["教育",">=","@相貌"]`。
+Variables:
 
-变量名：
-
-| 写法 | 含义 |
+| Form | Meaning |
 |---|---|
-| `体力` `教育` … `名气` `金钱` | 基础属性 |
-| `打斗` … `生意` | 技能显示值 |
-| `生病指数` `失控指数` | 指数 |
-| `好感.Sil` `好感.女明星` | 好感（NPC 名见 `romance.json`，第 3 步） |
-| `成功期数.<工id>` | 某种工成功过的期数 |
-| `旬数.<课id>` | 某门课上过的旬数 |
-| `旗标.<名>` | 旗标，值 1 或 0 |
-| `日期` | 形如 `1927-04` |
-| `硬汉` `情人` `文化` `手腕` | 该路声望 |
-| `期数.<路>` | 该路的上课＋看书＋相关打工期数（前辈认可用） |
-| `状态.<名>` | 布尔 1/0：生病、重病、失控、恋爱、长约、收尾期、拍摄旬、当月有拍摄、有未开拍角色 |
-| `计数.<名>` | 自由命名的计数器，如 `计数.亲自上`、`计数.外出.place_dock` |
-| `最高声望` `月份` `年份` `药瘾阶段` `负债月数` | 派生值 |
-| `档次` `最大标签族` `无法定义` `低成本定型` `有声片部数` `最高基础属性` `手腕最高技能` `最大工期数` `四路声望极差` `最高声望所在路` | 结局判定用的派生值 |
+| `stamina` `education` ... `fame` `money` | base attributes |
+| `fight` ... `business` | skill displayed values |
+| `sick_index` `reckless_index` | indices |
+| `favor.sil` `favor.actress` | favor (NPC ids are in `romance.json`) |
+| `job_periods.<job id>` | periods in which the job succeeded |
+| `class_periods.<class id>` | periods spent in a class |
+| `flag.<id>` | flag, value 1 or 0 |
+| `date` | like `1927-04` |
+| `tough` `lover` `culture` `savvy` | reputation of that road |
+| `road_periods.<road>` | class + book + job periods of that road (used by senior approval) |
+| `status.<id>` | boolean 1/0: `sick` `very_sick` `reckless` `in_love` `long_contract` `wrap_up` `shooting_period` `shoot_this_month` `has_pending_role` |
+| `count.<id>` | free counters, e.g. `count.stunt_self`, `count.outing.place_dock` |
+| `tag.<id>` | count of a film tag |
+| `duels.<rival id>` | number of auditions against that rival |
+| `max_rep` `month` `year` `drug_stage` `debt_months` | derived values |
+| `grade` `top_tag_family` `undefined` `lowbudget_typed` `talkie_count` `top_base_attr` `top_savvy_skill` `max_job_periods` `rep_spread` `top_road` | derived values used by the endings |
 
-## 效果
+## Effects
 
-一行文字，空格分隔，每项 `名字±数`，如 `体力+20 自律-15`。
-每项是 `名字+n`、`名字-n`、`名字=n`（设成 n），或 `名字+n%`（按当前值的百分比）。`触发.<事件id>` 表示接着触发另一个事件，不带数字。
-名字可以是基础属性、技能、`金钱`、`药瘾阶段`、`负债月数`、`好感.<NPC>`、`修正.<路>`（声望修正）、`权重.<标签>`（上板权重 +1）、`物品.<物品名>`（=1 得到，=0 失去）、`状态.<名>`、`旗标.<名>`。
-打工的 `成功线修正`：`[{条件, 项, 值}]`，条件满足时该项成功线加上 值（如旗标“文凭”教育线 -20）。
+One line of text, terms separated by spaces, each term `name+n`, `name-n`, `name=n` (set to n) or `name+n%` (percentage of the current value), e.g. `stamina+20 discipline-15`. `trigger.<event id>` triggers another event next and has no number.
+A name can be a base attribute, a skill, `money`, `drug_stage`, `debt_months`, `favor.<npc>`, `rep_bonus.<road>` (reputation bonus), `weight.<tag>` (board weight +1), `item.<item id>` (=1 gains, =0 loses), `status.<id>`, `flag.<id>`.
+`success_line_mods` of a job: `[{cond, stat, value}]`; when the cond holds, that stat's success line gets `value` added (e.g. flag `diploma` lowers the education line by 20).
 
-带 `效果公式`/`价格公式` 的字段是公式字符串，由代码解释。事件的 `代码:true` 表示逻辑复杂，数据只给条件、概率和简单效果，其余由代码按 `说明` 实现。
+Fields named `*_formula` hold a formula string interpreted by the code. `code: true` on an event means the logic is complex: the data only gives cond, prob and simple effects and the code implements the rest following the `note`.
 
-## 概率
+## Probability
 
-事件的 `概率`：`null` 必然；`[分子,分母]`；分档列表 `[{条件,值}]` 取第一个满足的（最后一档条件为空）；`{分子:变量,分母:n,上限:[p,q]}`（丑闻曝光用）。
+`prob` of an event: `null` always; `[numerator, denominator]`; a tiered list `[{cond, value}]` takes the first whose cond holds (the last tier has an empty cond); `{numerator: variable, denominator: n, max: [p, q]}` (scandal exposure).
 
-## 文件
+## Files
 
-| 文件 | 内容 | GDD |
+| File | Content | GDD |
 |---|---|---|
-| `stats.json` | 属性、金钱、声望、等级、名气档、指数、隐藏值 | 2 |
-| `skills.json` | 12 项技能 | 2.2 |
-| `classes.json` | 6 门课 | 5.3.1 |
-| `books.json` | 书的档和书目 | 5.3.2 |
-| `jobs.json` | 15 种打工，含解锁、加薪、接口 | 5.4 |
-| `rest.json` | 休息：在家（Sil 陪着）、外出；疗养院只在重病时强制（`玩家可选:false`） | 5.5 |
-| `places.json` | 外出的去处：花费（或按名气档）、每天减的疲劳、常在的人、随机表。加一行就多一个去处 | 5.5.1 |
-| `lifestyle.json` | 生活方式 | 5.7 |
-| `street.json` | 街道入口、货架、服务、折扣 | 5.8 |
-| `origins.json` | 开局三问 | 3.2 |
-| `calendar.json` | 48 个月的天数、周日、板、解锁、时代事件 | 1、4 |
+| `stats.json` | attributes, money, roads, levels, fame tiers, indices, hidden values | 2 |
+| `skills.json` | the 12 skills | 2.2 |
+| `classes.json` | the 6 classes | 5.3.1 |
+| `books.json` | book tiers and the book list | 5.3.2 |
+| `jobs.json` | the 15 jobs, with unlocks, raises and hooks | 5.4 |
+| `rest.json` | rests: at home (Sil keeps company), outing; the sanatorium is forced only when very sick (`player_choice: false`) | 5.5 |
+| `places.json` | outing places: cost (or by fame tier), fatigue change per day, residents, random table. One more row is one more place | 5.5.1 |
+| `lifestyle.json` | lifestyles | 5.7 |
+| `street.json` | street entries, shelves, services, discounts | 5.8 |
+| `origins.json` | the three opening questions | 3.2 |
+| `calendar.json` | days of the 48 months, Sundays, board, unlocks, era events | 1, 4 |
+| `habits.json` | the 6 play habits and the intel rules; the `audition` block holds the numbers of section 7 (multipliers, counter ring, result tiers) | 7 |
+| `rivals.json` | the 9 named rivals (stage by year), the unnamed rival formula, the replacement after Valen's death | 9 |
+| `roles.json` | film tags (`tags`), roles (the 8 GDD examples plus 1 tutorial role; the other 51 come in PLAN steps 16, 17); `talkie` is true/false/null (null is decided by ratio when the board is built); `defaults` holds the rule blocks of step 6: board, talkie, shoot, release, placeholder generation, script | 6, 8 |
+| `items.json` | items (row order matters, see Conventions) | 14 |
+| `events.json` | period-start, month-end, era, job-hook and opportunity story events; `month_end_cap` is the most month-end events per month; the `date` ("MM-DD", null never fires) of the birthday | 8-12 |
+| `outing.json` | random-table events of outings (resort included), NPC chains and resident events, tutoring chain events | 5.5, 11.4 |
+| `romance.json` | the 4 romance lines and 8 function NPCs | 13 |
+| `npc_schedule.json` | NPC schedule | 5.5.2 |
+| `npc_chains.json` | order of chain and resident events | 5.5.2 |
+| `annual.json` | annual events | 12.1 |
+| `opportunities.json` | opportunities | 12.2 |
+| `endings.json` | forced, special, categories, endings, destiny, scoring (`character_tiers`: an ending may write `character: [{cond, tier}]`, otherwise the default tier is used) | 15 |
 
-| `habits.json` | 6 种出牌习惯和情报规则；`试镜` 块放第 7 节的数字（倍率、克制环、结果分档） | 7 |
-| `rivals.json` | 9 个有名对手（逐年阶段）、无名对手公式、瓦伦去世后的替换 | 9 |
-| `roles.json` | 角色：GDD 的 8 个示例加 1 个教学角色。其余 51 个在 PLAN 第 16、17 步。`有声` 为 true/false/null（null 按比例在上板时定）。`默认` 里还有第 6 步的规则块：选片板、有声、拍摄、上映、占位生成、剧本 | 6、8 |
-| `items.json` | 物品 | 14 |
-| `events.json` | 旬初、月末、时代、工作接口、机遇剧情；`月末上限` 每月最多触发几个月末事件；生日的 `日期`（"MM-DD"，null 不触发） | 8–12 |
-| `outing.json` | 外出的随机表事件（含度假村）、NPC 链和常驻事件、家教链事件 | 5.5、11.4 |
-| `romance.json` | 4 条感情线和 8 个功能 NPC | 13 |
-| `npc_schedule.json` | NPC 日程 | 5.5.2 |
-| `npc_chains.json` | 链事件和常驻事件的顺序 | 5.5.2 |
-| `annual.json` | 年度大事 | 12.1 |
-| `opportunities.json` | 机遇 | 12.2 |
-| `endings.json` | 强制、特殊、大类、结局表、归宿、评分（`品性档`：结局可写 `品性:[{条件,档}]`，否则用默认档） | 15 |
-
-`text` 类的文本（事件对白、结局文字、杂志来信）都是 `null`，PLAN 第 18 步写。
-事件文本里的内容、角色的片名、前辈装备的具体技能都是占位。
+`body` (story text of events, ending text, magazine letters) is `null` everywhere; PLAN step 18 writes it.
+The text inside events, film titles and the senior's gear skills are placeholders.

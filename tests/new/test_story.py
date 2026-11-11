@@ -1,4 +1,4 @@
-"""整局：从开局跑到结局不报错、同种子可重复、中途存读档后接着跑结果一样。"""
+"""Whole game: runs from the opening to an ending without errors, the same seed repeats, and saving and loading mid-game gives the same result afterwards."""
 import unittest
 from sim import film
 from sim.month import Game, trace_line
@@ -23,11 +23,11 @@ class TestStory(unittest.TestCase):
                     lines, g = run(seed, origin, plan)
                     st = g.st
                     self.assertTrue(st.finished)
-                    self.assertIsNotNone(st.story['结局'])
-                    self.assertEqual(st.ended, st.story['结局']['结局'])
+                    self.assertIsNotNone(st.story['ending'])
+                    self.assertEqual(st.ended, st.story['ending']['ending'])
                     if st.ended != 'end_collapse':
                         self.assertEqual(len(lines), 48)
-                        self.assertIn('总分', st.story['结局'])
+                        self.assertIn('total', st.story['ending'])
                     self.assertGreater(len(film.films(st)), 0)
 
     def test_deterministic(self):
@@ -54,9 +54,9 @@ class TestStory(unittest.TestCase):
     def test_films_lock_next_month(self):
         lines, g = run(1, (0, 1, 2), PLANS[0])
         for f in film.films(g.st):
-            if f['状态'] == '已映':
-                last = f['锁'][-1][0]
-                self.assertEqual(f['结果']['月'], last + 2)
+            if f['status'] == 'released':
+                last = f['locks'][-1][0]
+                self.assertEqual(f['result']['month'], last + 2)
 
 
 if __name__ == '__main__':

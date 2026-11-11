@@ -1,22 +1,22 @@
 extends RefCounted
-## 随机数：PCG32（XSH-RR，64 位状态），两个独立流。照抄 sim/rng.py。
+## Random numbers: PCG32 (XSH-RR, 64-bit state), two independent streams. Port of sim/rng.py.
 ##
-## GDD 16：逻辑流给规则用，表现流只给动画和文本用，互不影响。
-## 约定和 Python 一样：
-## - r(a, b) 取 a..b 的整数（含两端）。a == b 时直接返回 a，不消耗随机数。
-## - r0(n) = r(0, n)；r1(n) = r(1, n)。
-## - below(n) 取 0..n-1，拒绝小于 2^32 mod n 的值（无偏）。
-## - chance(p, q) 为 below(q) < p；p <= 0 或 p >= q 时不消耗随机数。
+## GDD 16: the logic stream is for rules, the show stream only for animation and text; they never affect each other.
+## Conventions, the same as Python:
+## - r(a, b) returns an integer in a..b (both ends included). When a == b it returns a without consuming a random number.
+## - r0(n) = r(0, n); r1(n) = r(1, n).
+## - below(n) returns 0..n-1, rejecting values below 2^32 mod n (unbiased).
+## - chance(p, q) is below(q) < p; when p <= 0 or p >= q no random number is consumed.
 ##
-## GDScript 的 int 是有符号 64 位，乘法溢出不可靠，所以 64 位状态拆成高、低两个 32 位数来算。
+## GDScript ints are signed 64-bit and overflowing multiplication is unreliable, so the 64-bit state is split into a high and a low 32-bit number.
 
 class PCG32:
 	extends RefCounted
 	const M32 := 0xFFFFFFFF
-	const MULT_HI := 0x5851F42D   # 6364136223846793005 的高 32 位
+	const MULT_HI := 0x5851F42D   # high 32 bits of 6364136223846793005
 	const MULT_LO := 0x4C957F2D
-	var hi := 0      # 状态高 32 位
-	var lo := 0      # 状态低 32 位
+	var hi := 0      # high 32 bits of the state
+	var lo := 0      # low 32 bits of the state
 	var inc_hi := 0
 	var inc_lo := 0
 
@@ -32,7 +32,7 @@ class PCG32:
 		_add(sd)
 		next_u32()
 
-	## 两个 32 位数相乘，返回 [高 32 位, 低 32 位]。按 16 位拆开，中间值都不超过 2^34。
+	## Multiplies two 32-bit numbers and returns [high 32 bits, low 32 bits]. Split into 16-bit halves; no intermediate value exceeds 2^34.
 	static func _mul32(a: int, b: int) -> Array:
 		var a0 := a & 0xFFFF
 		var a1 := a >> 16
@@ -47,7 +47,7 @@ class PCG32:
 		var h := p11 + (p01 >> 16) + (p10 >> 16) + (mid >> 16)
 		return [h & M32, l & M32]
 
-	## state += n（mod 2^64）。n 可以是负数，按补码处理，和 Python 的 & MASK64 一致。
+	## state += n (mod 2^64). n may be negative (two's complement), like Python's & MASK64.
 	func _add(n: int) -> void:
 		var n_hi := (n >> 32) & M32
 		var n_lo := n & M32
@@ -64,7 +64,7 @@ class PCG32:
 		var nl: int = p[1] + inc_lo
 		lo = nl & M32
 		hi = (nh + inc_hi + (nl >> 32)) & M32
-		# 输出：x = ((old >> 18) ^ old) >> 27 取低 32 位；rot = old >> 59
+		# output: x = low 32 bits of ((old >> 18) ^ old) >> 27; rot = old >> 59
 		var sh_hi := old_hi >> 18
 		var sh_lo := ((old_lo >> 18) | (old_hi << 14)) & M32
 		var y_hi := sh_hi ^ old_hi
@@ -75,7 +75,7 @@ class PCG32:
 
 	func below(n: int) -> int:
 		if n <= 0:
-			push_error("below(n) 需要 n >= 1")
+			push_error("below(n) needs n >= 1")
 			return 0
 		var threshold := (0x100000000 - n) % n
 		while true:
@@ -105,7 +105,7 @@ class PCG32:
 			return true
 		return below(q) < p
 
-	## 存档：64 位数写成 16 位十六进制字符串
+	## Save: 64-bit numbers are written as 16-digit hex strings
 	func dump() -> Array:
 		return [_hex8(hi) + _hex8(lo), _hex8(inc_hi) + _hex8(inc_lo)]
 
@@ -128,7 +128,7 @@ class PCG32:
 		return s
 
 
-## 两个流：logic（规则）、show（表现）。同一种子派生，序列号不同。
+## Two streams: logic (rules) and show (presentation). Derived from the same seed with different sequence numbers.
 var logic: PCG32
 var show: PCG32
 

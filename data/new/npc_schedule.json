@@ -1,15 +1,15 @@
 {
- "说明": "本旬在该地点、年份和月份命中、条件满足的 NPC 算在场（5.5.2）。玩家在某地遇到过某人一次，日程本里记下这一条；人脉 >= 日程本全显示线 时已认识的 NPC 全显示",
- "日程本全显示线": 40,
- "日程": [
+ "note": "An NPC is present this period when place, year and month match and the cond holds (5.5.2). Once the player has met someone at a place, the schedule book records that entry; with connections >= schedule_full_view_line every known NPC is shown",
+ "schedule_full_view_line": 40,
+ "schedule": [
   {
-   "npc": "Duv",
-   "地点": "place_downtown",
-   "年份": [
+   "npc": "duv",
+   "place": "place_downtown",
+   "years": [
     1926,
     1929
    ],
-   "月份": [
+   "months": [
     1,
     2,
     3,
@@ -23,20 +23,20 @@
     11,
     12
    ],
-   "旬": [
-    "下"
+   "periods": [
+    "late"
    ],
-   "条件": [],
-   "认识途径": "家教第 1 旬"
+   "cond": [],
+   "met_via": "tutor_period_1"
   },
   {
-   "npc": "编辑",
-   "地点": "place_downtown",
-   "年份": [
+   "npc": "editor",
+   "place": "place_downtown",
+   "years": [
     1926,
     1929
    ],
-   "月份": [
+   "months": [
     1,
     2,
     3,
@@ -50,78 +50,78 @@
     11,
     12
    ],
-   "旬": [
-    "上"
+   "periods": [
+    "early"
    ],
-   "条件": [],
-   "认识途径": "报馆帮工"
+   "cond": [],
+   "met_via": "job_news"
   },
   {
-   "npc": "女明星",
-   "地点": "place_studio",
-   "年份": [
+   "npc": "actress",
+   "place": "place_studio",
+   "years": [
     1926,
     1929
    ],
-   "月份": [
+   "months": [
     3,
     6,
     9,
     12
    ],
-   "旬": [
-    "中"
+   "periods": [
+    "mid"
    ],
-   "条件": [],
-   "认识途径": "开局认识"
+   "cond": [],
+   "met_via": "known_at_start"
   },
   {
-   "npc": "片厂老板",
-   "地点": "place_studio",
-   "年份": [
+   "npc": "studio_boss",
+   "place": "place_studio",
+   "years": [
     1926,
     1929
    ],
-   "月份": [
+   "months": [
     1,
     4,
     7,
     10
    ],
-   "旬": [
-    "上"
+   "periods": [
+    "early"
    ],
-   "条件": [],
-   "认识途径": "片厂办公室"
+   "cond": [],
+   "met_via": "job_studio"
   },
   {
-   "npc": "富婆",
-   "地点": "place_seaside",
-   "年份": [
+   "npc": "rich_widow",
+   "place": "place_seaside",
+   "years": [
     1926,
     1929
    ],
-   "月份": [
+   "months": [
     5,
     6,
     7,
     8,
     9
    ],
-   "旬": [
-    "上"
+   "periods": [
+    "early"
    ],
-   "条件": [],
-   "认识途径": "舞厅伴舞"
+   "cond": [],
+   "met_via": "job_ballroom"
   },
   {
-   "npc": "画家",
-   "地点": "place_seaside",
-   "年份": [
+   "npc": "painter",
+   "place": "place_seaside",
+   "years": [
     1926,
     1929
    ],
-   "月份": [
+   "months": [
     10,
     11,
     12,
@@ -130,20 +130,20 @@
     3,
     4
    ],
-   "旬": [
-    "下"
+   "periods": [
+    "late"
    ],
-   "条件": [],
-   "认识途径": "艺术家模特"
+   "cond": [],
+   "met_via": "job_model_art"
   },
   {
-   "npc": "同乡工头",
-   "地点": "place_dock",
-   "年份": [
+   "npc": "foreman",
+   "place": "place_dock",
+   "years": [
     1926,
     1929
    ],
-   "月份": [
+   "months": [
     1,
     2,
     3,
@@ -157,20 +157,20 @@
     11,
     12
    ],
-   "旬": [
-    "中"
+   "periods": [
+    "mid"
    ],
-   "条件": [],
-   "认识途径": "码头搬货"
+   "cond": [],
+   "met_via": "job_dock"
   },
   {
-   "npc": "酒吧老板",
-   "地点": "place_dock",
-   "年份": [
+   "npc": "bar_owner",
+   "place": "place_dock",
+   "years": [
     1926,
     1929
    ],
-   "月份": [
+   "months": [
     1,
     2,
     3,
@@ -184,23 +184,23 @@
     11,
     12
    ],
-   "旬": [
-    "中"
+   "periods": [
+    "mid"
    ],
-   "条件": [],
-   "认识途径": "酒吧看场子"
+   "cond": [],
+   "met_via": "job_bar"
   },
   {
-   "npc": "第四人",
-   "地点": null,
-   "年份": [
+   "npc": "fourth",
+   "place": null,
+   "years": [
     1926,
     1929
    ],
-   "月份": [],
-   "旬": [],
-   "条件": [],
-   "认识途径": "留空"
+   "months": [],
+   "periods": [],
+   "cond": [],
+   "met_via": null
   }
  ]
 }

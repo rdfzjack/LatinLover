@@ -1,169 +1,169 @@
 {
- "说明": "开局三问，每题选一项；效果语法同物品（14.1）",
- "问": [
+ "note": "Three opening questions, pick one option each; effect syntax as for items (14.1)",
+ "questions": [
   {
    "id": "origin_past",
-   "问题": "来美国前做什么",
-   "选项": [
+   "question": "来美国前做什么",
+   "options": [
     {
-     "文字": "逃兵",
-     "效果": "体力+20 打斗+10 胆识+5 自律-15",
-     "标签计数": {},
-     "旗标": [
-      "逃兵"
+     "text": "逃兵",
+     "effect": "stamina+20 fight+10 nerve+5 discipline-15",
+     "tag_counts": {},
+     "flags": [
+      "deserter"
      ],
-     "物品": [],
-     "旗标说明": "领事馆找上门的事件；战争片契合加成"
+     "items": [],
+     "flag_note": "An event where the consulate comes looking; war-film fit bonus"
     },
     {
-     "文字": "走私",
-     "效果": "骑马驾驶+5 谈判+5 生意+5 犯罪+30",
-     "标签计数": {},
-     "旗标": [
-      "走私"
+     "text": "走私",
+     "effect": "riding+5 negotiation+5 business+5 crime+30",
+     "tag_counts": {},
+     "flags": [
+      "smuggling"
      ],
-     "物品": [],
-     "旗标说明": "运私酒不需要看场子的期数"
+     "items": [],
+     "flag_note": "Periods bootlegging can skip the bar-bouncer requirement"
     },
     {
-     "文字": "黑道跑腿",
-     "效果": "义气+20 打斗+5 胆识+10 犯罪+40",
-     "标签计数": {},
-     "旗标": [
-      "旧人"
+     "text": "黑道跑腿",
+     "effect": "loyalty+20 fight+5 nerve+10 crime+40",
+     "tag_counts": {},
+     "flags": [
+      "old_friend"
      ],
-     "物品": [],
-     "旗标说明": "那边的人找上门的事件"
+     "items": [],
+     "flag_note": "An event where people from over there come looking"
     },
     {
-     "文字": "男妓",
-     "效果": "相貌+15 体态+10 谈判+5 自律-10",
-     "标签计数": {},
-     "旗标": [
-      "旧客"
+     "text": "男妓",
+     "effect": "looks+15 physique+10 negotiation+5 discipline-10",
+     "tag_counts": {},
+     "flags": [
+      "old_client"
      ],
-     "物品": [],
-     "旗标说明": "被认出来的事件；富婆线提前"
+     "items": [],
+     "flag_note": "An event where he is recognized; the rich widow line comes earlier"
     },
     {
-     "文字": "农学院学生",
-     "效果": "教育+40 骑马驾驶+5 义气-10",
-     "标签计数": {},
-     "旗标": [
-      "文凭"
+     "text": "农学院学生",
+     "effect": "education+40 riding+5 loyalty-10",
+     "tag_counts": {},
+     "flags": [
+      "diploma"
      ],
-     "物品": [],
-     "旗标说明": "报馆、片厂办公室的教育线 -20"
+     "items": [],
+     "flag_note": "Education line -20 for the newspaper and studio office jobs"
     }
    ]
   },
   {
    "id": "origin_fame",
-   "问题": "之前靠什么红的",
-   "选项": [
+   "question": "之前靠什么红的",
+   "options": [
     {
-     "文字": "硬汉派",
-     "效果": "打斗+10 骑马驾驶+10 胆识+10",
-     "标签计数": {
-      "动作冒险": 1,
-      "西部": 1
+     "text": "硬汉派",
+     "effect": "fight+10 riding+10 nerve+10",
+     "tag_counts": {
+      "action_adventure": 1,
+      "western": 1
      },
-     "旗标": [],
-     "物品": []
+     "flags": [],
+     "items": []
     },
     {
-     "文字": "演技派",
-     "效果": "演技+20 谈吐+5 创作+5 名气-20",
-     "标签计数": {
-      "悲情": 1,
-      "文艺": 1
+     "text": "演技派",
+     "effect": "acting+20 speech+5 writing+5 fame-20",
+     "tag_counts": {
+      "tragic": 1,
+      "arthouse": 1
      },
-     "旗标": [],
-     "物品": []
+     "flags": [],
+     "items": []
     },
     {
-     "文字": "大众情人",
-     "效果": "体态+10 打扮+10 相貌+10 名气+20",
-     "标签计数": {
-      "浪漫": 1,
-      "异国情人": 1
+     "text": "大众情人",
+     "effect": "physique+10 grooming+10 looks+10 fame+20",
+     "tag_counts": {
+      "romance": 1,
+      "exotic_lover": 1
      },
-     "旗标": [],
-     "物品": []
+     "flags": [],
+     "items": []
     },
     {
-     "文字": "色情电影",
-     "效果": "相貌+20 体态+10 名气+30 犯罪+20",
-     "标签计数": {
-      "地下片": 1,
-      "浪漫": 1
+     "text": "色情电影",
+     "effect": "looks+20 physique+10 fame+30 crime+20",
+     "tag_counts": {
+      "underground": 1,
+      "romance": 1
      },
-     "旗标": [
-      "旧片"
+     "flags": [
+      "old_film"
      ],
-     "物品": [],
-     "旗标说明": "拷贝流出来的丑闻事件"
+     "items": [],
+     "flag_note": "A scandal event from a leaked copy"
     }
    ]
   },
   {
    "id": "origin_keepsake",
-   "问题": "手里留着什么",
-   "选项": [
+   "question": "手里留着什么",
+   "options": [
     {
-     "文字": "一点存款",
-     "效果": "金钱+300",
-     "标签计数": {},
-     "旗标": [],
-     "物品": []
+     "text": "一点存款",
+     "effect": "money+300",
+     "tag_counts": {},
+     "flags": [],
+     "items": []
     },
     {
-     "文字": "一套旧西装",
-     "效果": "",
-     "标签计数": {},
-     "旗标": [],
-     "物品": [
-      "旧西装"
+     "text": "一套旧西装",
+     "effect": "",
+     "tag_counts": {},
+     "flags": [],
+     "items": [
+      "suit_old"
      ]
     },
     {
-     "文字": "一个欠他人情的人",
-     "效果": "人脉+10",
-     "标签计数": {},
-     "旗标": [
-      "人情"
+     "text": "一个欠他人情的人",
+     "effect": "connections+10",
+     "tag_counts": {},
+     "flags": [
+      "owed_favor"
      ],
-     "物品": []
+     "items": []
     },
     {
-     "文字": "一枚不知是谁的戒指",
-     "效果": "",
-     "标签计数": {},
-     "旗标": [
-      "戒指"
+     "text": "一枚不知是谁的戒指",
+     "effect": "",
+     "tag_counts": {},
+     "flags": [
+      "ring"
      ],
-     "物品": []
+     "items": []
     },
     {
-     "文字": "一张回那不勒斯的船票",
-     "效果": "",
-     "标签计数": {},
-     "旗标": [
-      "船票"
+     "text": "一张回那不勒斯的船票",
+     "effect": "",
+     "tag_counts": {},
+     "flags": [
+      "ship_ticket"
      ],
-     "物品": []
+     "items": []
     },
     {
-     "文字": "一本看不懂的书",
-     "效果": "",
-     "标签计数": {},
-     "旗标": [
-      "旧书"
+     "text": "一本看不懂的书",
+     "effect": "",
+     "tag_counts": {},
+     "flags": [
+      "old_book"
      ],
-     "物品": [
-      "旧书"
+     "items": [
+      "old_book"
      ],
-     "旗标说明": "教育门槛 300，读完事件留空"
+     "flag_note": "education gate 300, finish event left blank"
     }
    ]
   }

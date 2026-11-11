@@ -1,193 +1,193 @@
 {
- "说明": {
-  "概率": "null=必然；[分子,分母]；分档列表[{条件,值}]取第一个满足的；{分子:变量,分母:n,上限:[p,q]}",
-  "频次": "每局一次 / 每年一次 / 每季度一次 / null",
-  "代码": "true 表示逻辑复杂，效果由代码按“说明”实现，数据只给条件、概率和简单效果",
-  "文本": "null=待第 18 步写",
-  "月末顺序": "按“顺序”字段，每月最多触发 2 个，其余顺延",
-  "月末上限": "见 月末上限"
+ "note": {
+  "prob": "null = always; [numerator, denominator]; tiered list [{cond, value}] takes the first that holds; {numerator: variable, denominator: n, cap: [p, q]}",
+  "freq": "once_per_game / once_per_year / once_per_quarter / null",
+  "code": "true means complex logic: the effect is implemented in code following `note`; the data only gives cond, prob and simple effects",
+  "body": "null = to be written in PLAN step 18",
+  "month_end_order": "By the `order` field; at most 2 fire per month, the rest wait",
+  "month_end_cap": "see month_end_cap"
  },
- "事件": [
+ "events": [
   {
    "id": "evt_swap_role",
-   "名字": "临时换角",
-   "类": "旬初",
-   "时机": "旬初",
-   "条件": [
+   "name": "临时换角",
+   "class": "period_start",
+   "timing": "period_start",
+   "cond": [
     [
      [
-      "最高声望",
+      "max_rep",
       ">=",
       200
      ],
      [
-      "状态.拍摄旬",
+      "status.shooting_period",
       "==",
       0
      ],
      [
-      "状态.生病",
+      "status.sick",
       "==",
       0
      ]
     ]
    ],
-   "概率": [
+   "prob": [
     {
-     "条件": [
+     "cond": [
       [
        [
-        "最高声望",
+        "max_rep",
         ">=",
         300
        ]
       ]
      ],
-     "值": [
+     "value": [
       1,
       10
      ]
     },
     {
-     "条件": [],
-     "值": [
+     "cond": [],
+     "value": [
       1,
       20
      ]
     }
    ],
-   "频次": "每季度一次",
-   "效果": "",
-   "代码": true,
-   "说明": "某部片的演员出事，导演找人顶替。立刻打一场中片试镜，赢了占下一旬拍摄",
-   "来源": "[原 踢馆][推N40]",
-   "文本": null
+   "freq": "once_per_quarter",
+   "effect": "",
+   "code": true,
+   "note": "An actor in some film is in trouble and the director needs a stand-in. Play a medium audition at once; a win takes the next period for shooting",
+   "source": "[orig dojo challenge][inferred N40]",
+   "body": null
   },
   {
    "id": "evt_steal_role",
-   "名字": "抢角",
-   "类": "旬初",
-   "时机": "旬初",
-   "条件": [
+   "name": "抢角",
+   "class": "period_start",
+   "timing": "period_start",
+   "cond": [
     [
      [
-      "状态.有未开拍角色",
+      "status.has_pending_role",
       "==",
       1
      ],
      [
-      "状态.拍摄旬",
+      "status.shooting_period",
       "==",
       0
      ]
     ]
    ],
-   "概率": [
+   "prob": [
     1,
     20
    ],
-   "频次": "每季度一次",
-   "效果": "",
-   "代码": true,
-   "说明": "一个无名对手找上门抢这个角色。打一场试镜，输了角色归他",
-   "来源": "[原 道场被踢][推N40]",
-   "文本": null
+   "freq": "once_per_quarter",
+   "effect": "",
+   "code": true,
+   "note": "An unnamed rival turns up to take this role. Play an audition; on a loss the role goes to him",
+   "source": "[orig dojo kicked in][inferred N40]",
+   "body": null
   },
   {
    "id": "evt_missing",
-   "名字": "失踪",
-   "类": "月末",
-   "时机": "月末",
-   "条件": [
+   "name": "失踪",
+   "class": "month_end",
+   "timing": "month_end",
+   "cond": [
     [
      [
-      "失控指数",
+      "reckless_index",
       ">=",
       60
      ],
      [
-      "状态.收尾期",
+      "status.wrap_up",
       "==",
       0
      ],
      [
-      "状态.重病",
+      "status.very_sick",
       "==",
       0
      ]
     ]
    ],
-   "概率": [
+   "prob": [
     1,
     20
    ],
-   "频次": null,
-   "效果": "",
-   "代码": true,
-   "说明": "他不见了一个月。下月日程作废，四项声望修正各减去当前声望的 10%",
-   "来源": "[原]",
-   "文本": null,
-   "顺序": 1
+   "freq": null,
+   "effect": "",
+   "code": true,
+   "note": "He disappears for a month. Next month's schedule is void; the four rep_bonus values each lose 10% of the current reputation",
+   "source": "[orig]",
+   "body": null,
+   "order": 1
   },
   {
    "id": "evt_arrest",
-   "名字": "被捕",
-   "类": "月末",
-   "时机": "月末",
-   "条件": [
+   "name": "被捕",
+   "class": "month_end",
+   "timing": "month_end",
+   "cond": [
     [
      [
-      "失控指数",
+      "reckless_index",
       "==",
       100
      ],
      [
-      "状态.生病",
+      "status.sick",
       "==",
       0
      ]
     ]
    ],
-   "概率": null,
-   "频次": null,
-   "效果": "",
-   "代码": true,
-   "说明": "拘留，罚款 min(金钱, 500)，犯罪 +20，曝光。义气 ≥150 时有人保释：罚款减半，不算曝光，义气 -30。也由看场子、运私酒没过判定触发",
-   "来源": "[原 EVENT045]",
-   "文本": null,
-   "顺序": 2
+   "prob": null,
+   "freq": null,
+   "effect": "",
+   "code": true,
+   "note": "Detained, fine min(money, 500), crime +20, exposure. With loyalty >=150 someone bails him out: fine halved, no exposure, loyalty -30. Also triggered by failing the check in bar bouncer / bootlegging jobs",
+   "source": "[orig EVENT045]",
+   "body": null,
+   "order": 2
   },
   {
    "id": "evt_scandal",
-   "名字": "丑闻曝光",
-   "类": "月末",
-   "时机": "月末",
-   "条件": [],
-   "概率": {
-    "分子": "犯罪",
-    "分母": 2000,
-    "上限": [
+   "name": "丑闻曝光",
+   "class": "month_end",
+   "timing": "month_end",
+   "cond": [],
+   "prob": {
+    "numerator": "crime",
+    "denominator": 2000,
+    "max": [
      1,
      5
     ]
    },
-   "频次": null,
-   "效果": "",
-   "代码": true,
-   "说明": "报纸登出一件事。反派＋犯罪标签计数 ≥3：名气 +10%；否则名气 -15%。算曝光。报馆线可压下，义气 ≥200 惩罚减半",
-   "来源": "[推N39]",
-   "文本": null,
-   "顺序": 3
+   "freq": null,
+   "effect": "",
+   "code": true,
+   "note": "The paper prints a story. villain + crime tag counts >=3: fame +10%; otherwise fame -15%. Counts as exposure. The newspaper line can suppress it; loyalty >=200 halves the penalty",
+   "source": "[inferred N39]",
+   "body": null,
+   "order": 3
   },
   {
    "id": "evt_heatstroke",
-   "名字": "中暑",
-   "类": "月末",
-   "时机": "月末",
-   "条件": [
+   "name": "中暑",
+   "class": "month_end",
+   "timing": "month_end",
+   "cond": [
     [
      [
-      "月份",
+      "month",
       "in",
       [
        6,
@@ -196,27 +196,27 @@
      ]
     ]
    ],
-   "概率": [
+   "prob": [
     1,
     4
    ],
-   "频次": "每年一次",
-   "效果": "疲劳+10 体力-5",
-   "代码": false,
-   "说明": "",
-   "来源": "[原，幅度推]",
-   "文本": null,
-   "顺序": 4
+   "freq": "once_per_year",
+   "effect": "fatigue+10 stamina-5",
+   "code": false,
+   "note": "",
+   "source": "[orig, magnitude inferred]",
+   "body": null,
+   "order": 4
   },
   {
    "id": "evt_cold",
-   "名字": "感冒",
-   "类": "月末",
-   "时机": "月末",
-   "条件": [
+   "name": "感冒",
+   "class": "month_end",
+   "timing": "month_end",
+   "cond": [
     [
      [
-      "月份",
+      "month",
       "in",
       [
        11,
@@ -225,73 +225,73 @@
      ]
     ]
    ],
-   "概率": [
+   "prob": [
     1,
     4
    ],
-   "频次": "每年一次",
-   "效果": "疲劳+10 体力-5",
-   "代码": false,
-   "说明": "",
-   "来源": "[原，幅度推]",
-   "文本": null,
-   "顺序": 5
+   "freq": "once_per_year",
+   "effect": "fatigue+10 stamina-5",
+   "code": false,
+   "note": "",
+   "source": "[orig, magnitude inferred]",
+   "body": null,
+   "order": 5
   },
   {
    "id": "evt_deposit_1000",
-   "名字": "存款过线 1000",
-   "类": "月末",
-   "时机": "月末",
-   "条件": [
+   "name": "存款过线 1000",
+   "class": "month_end",
+   "timing": "month_end",
+   "cond": [
     [
      [
-      "金钱",
+      "money",
       ">=",
       1000
      ]
     ]
    ],
-   "概率": null,
-   "频次": "每局一次",
-   "效果": "旗标.推销员=1",
-   "代码": false,
-   "说明": "推销员上门卖特殊货",
-   "来源": "[原 EVENT006]",
-   "文本": null,
-   "顺序": 6
+   "prob": null,
+   "freq": "once_per_game",
+   "effect": "flag.salesman=1",
+   "code": false,
+   "note": "A salesman comes to the door selling special goods",
+   "source": "[orig EVENT006]",
+   "body": null,
+   "order": 6
   },
   {
    "id": "evt_deposit_2000",
-   "名字": "存款过线 2000",
-   "类": "月末",
-   "时机": "月末",
-   "条件": [
+   "name": "存款过线 2000",
+   "class": "month_end",
+   "timing": "month_end",
+   "cond": [
     [
      [
-      "金钱",
+      "money",
       ">=",
       2000
      ]
     ]
    ],
-   "概率": null,
-   "频次": "每局一次",
-   "效果": "",
-   "代码": false,
-   "说明": "借钱的同乡",
-   "来源": "[原 EVENT006]",
-   "文本": null,
-   "顺序": 7,
-   "选项": [
+   "prob": null,
+   "freq": "once_per_game",
+   "effect": "",
+   "code": false,
+   "note": "A countryman who borrows money",
+   "source": "[orig EVENT006]",
+   "body": null,
+   "order": 7,
+   "options": [
     {
-     "文字": "借 300",
-     "判定": null,
-     "成功效果": "金钱-300 义气+10",
-     "失败效果": "",
-     "条件": [
+     "text": "借 300",
+     "check": null,
+     "success_effect": "money-300 loyalty+10",
+     "fail_effect": "",
+     "cond": [
       [
        [
-        "金钱",
+        "money",
         ">=",
         300
        ]
@@ -299,1708 +299,1708 @@
      ]
     },
     {
-     "文字": "不借",
-     "判定": null,
-     "成功效果": "义气-5",
-     "失败效果": ""
+     "text": "不借",
+     "check": null,
+     "success_effect": "loyalty-5",
+     "fail_effect": ""
     }
    ]
   },
   {
    "id": "evt_senior_yinghan_1",
-   "名字": "前辈认可·硬汉 100",
-   "类": "月末",
-   "时机": "月末",
-   "条件": [
+   "name": "前辈认可·硬汉 100",
+   "class": "month_end",
+   "timing": "month_end",
+   "cond": [
     [
      [
-      "硬汉",
+      "tough",
       ">=",
       100
      ],
      [
-      "期数.硬汉",
+      "road_periods.tough",
       ">=",
       3
      ]
     ]
    ],
-   "概率": null,
-   "频次": "每局一次",
-   "效果": "",
-   "代码": false,
-   "说明": "一句指点：该路一项技能 +5",
-   "来源": "[原 EVENT015，四档]",
-   "文本": null,
-   "顺序": 9,
-   "选项": [
+   "prob": null,
+   "freq": "once_per_game",
+   "effect": "",
+   "code": false,
+   "note": "A word of advice: +5 to one skill of the road",
+   "source": "[orig EVENT015, four tiers]",
+   "body": null,
+   "order": 9,
+   "options": [
     {
-     "文字": "打斗",
-     "判定": null,
-     "成功效果": "打斗+5",
-     "失败效果": ""
+     "text": "打斗",
+     "check": null,
+     "success_effect": "fight+5",
+     "fail_effect": ""
     },
     {
-     "文字": "骑马驾驶",
-     "判定": null,
-     "成功效果": "骑马驾驶+5",
-     "失败效果": ""
+     "text": "骑马驾驶",
+     "check": null,
+     "success_effect": "riding+5",
+     "fail_effect": ""
     },
     {
-     "文字": "胆识",
-     "判定": null,
-     "成功效果": "胆识+5",
-     "失败效果": ""
+     "text": "胆识",
+     "check": null,
+     "success_effect": "nerve+5",
+     "fail_effect": ""
     }
    ]
   },
   {
    "id": "evt_senior_yinghan_2",
-   "名字": "前辈认可·硬汉 200",
-   "类": "月末",
-   "时机": "月末",
-   "条件": [
+   "name": "前辈认可·硬汉 200",
+   "class": "month_end",
+   "timing": "month_end",
+   "cond": [
     [
      [
-      "硬汉",
+      "tough",
       ">=",
       200
      ],
      [
-      "期数.硬汉",
+      "road_periods.tough",
       ">=",
       7
      ]
     ]
    ],
-   "概率": null,
-   "频次": "每局一次",
-   "效果": "物品.前辈的装备·硬汉=1",
-   "代码": false,
-   "说明": "给一件装备",
-   "来源": "[原 EVENT015，四档]",
-   "文本": null,
-   "顺序": 9
+   "prob": null,
+   "freq": "once_per_game",
+   "effect": "item.senior_gear_tough=1",
+   "code": false,
+   "note": "Gives a piece of gear",
+   "source": "[orig EVENT015, four tiers]",
+   "body": null,
+   "order": 9
   },
   {
    "id": "evt_senior_yinghan_3",
-   "名字": "前辈认可·硬汉 300",
-   "类": "月末",
-   "时机": "月末",
-   "条件": [
+   "name": "前辈认可·硬汉 300",
+   "class": "month_end",
+   "timing": "month_end",
+   "cond": [
     [
      [
-      "硬汉",
+      "tough",
       ">=",
       300
      ],
      [
-      "期数.硬汉",
+      "road_periods.tough",
       ">=",
       10
      ]
     ]
    ],
-   "概率": null,
-   "频次": "每局一次",
-   "效果": "旗标.前辈三档_硬汉=1",
-   "代码": false,
-   "说明": "给一次机遇（opportunities.json 的“前辈的机遇”读这个旗标）",
-   "来源": "[原 EVENT015，四档]",
-   "文本": null,
-   "顺序": 9
+   "prob": null,
+   "freq": "once_per_game",
+   "effect": "flag.senior_tier3_tough=1",
+   "code": false,
+   "note": "Gives one opportunity (the \"senior's opportunity\" in opportunities.json reads this flag)",
+   "source": "[orig EVENT015, four tiers]",
+   "body": null,
+   "order": 9
   },
   {
    "id": "evt_senior_yinghan_4",
-   "名字": "前辈认可·硬汉 400",
-   "类": "月末",
-   "时机": "月末",
-   "条件": [
+   "name": "前辈认可·硬汉 400",
+   "class": "month_end",
+   "timing": "month_end",
+   "cond": [
     [
      [
-      "硬汉",
+      "tough",
       ">=",
       400
      ],
      [
-      "期数.硬汉",
+      "road_periods.tough",
       ">=",
       13
      ]
     ]
    ],
-   "概率": null,
-   "频次": "每局一次",
-   "效果": "旗标.前辈四档_硬汉=1",
-   "代码": false,
-   "说明": "给一件最好的装备：GDD 14.2 只列了 4 件前辈的装备，这一档的装备没定义，待用户定",
-   "来源": "[原 EVENT015，四档]",
-   "文本": null,
-   "顺序": 9
+   "prob": null,
+   "freq": "once_per_game",
+   "effect": "flag.senior_tier4_tough=1",
+   "code": false,
+   "note": "Gives the best gear: GDD 14.2 lists only 4 senior gear items and this tier's gear is undefined; user to decide",
+   "source": "[orig EVENT015, four tiers]",
+   "body": null,
+   "order": 9
   },
   {
    "id": "evt_senior_qingren_1",
-   "名字": "前辈认可·情人 100",
-   "类": "月末",
-   "时机": "月末",
-   "条件": [
+   "name": "前辈认可·情人 100",
+   "class": "month_end",
+   "timing": "month_end",
+   "cond": [
     [
      [
-      "情人",
+      "lover",
       ">=",
       100
      ],
      [
-      "期数.情人",
+      "road_periods.lover",
       ">=",
       3
      ]
     ]
    ],
-   "概率": null,
-   "频次": "每局一次",
-   "效果": "",
-   "代码": false,
-   "说明": "一句指点：该路一项技能 +5",
-   "来源": "[原 EVENT015，四档]",
-   "文本": null,
-   "顺序": 9,
-   "选项": [
+   "prob": null,
+   "freq": "once_per_game",
+   "effect": "",
+   "code": false,
+   "note": "A word of advice: +5 to one skill of the road",
+   "source": "[orig EVENT015, four tiers]",
+   "body": null,
+   "order": 9,
+   "options": [
     {
-     "文字": "演技",
-     "判定": null,
-     "成功效果": "演技+5",
-     "失败效果": ""
+     "text": "演技",
+     "check": null,
+     "success_effect": "acting+5",
+     "fail_effect": ""
     },
     {
-     "文字": "打扮",
-     "判定": null,
-     "成功效果": "打扮+5",
-     "失败效果": ""
+     "text": "打扮",
+     "check": null,
+     "success_effect": "grooming+5",
+     "fail_effect": ""
     },
     {
-     "文字": "体态",
-     "判定": null,
-     "成功效果": "体态+5",
-     "失败效果": ""
+     "text": "体态",
+     "check": null,
+     "success_effect": "physique+5",
+     "fail_effect": ""
     }
    ]
   },
   {
    "id": "evt_senior_qingren_2",
-   "名字": "前辈认可·情人 200",
-   "类": "月末",
-   "时机": "月末",
-   "条件": [
+   "name": "前辈认可·情人 200",
+   "class": "month_end",
+   "timing": "month_end",
+   "cond": [
     [
      [
-      "情人",
+      "lover",
       ">=",
       200
      ],
      [
-      "期数.情人",
+      "road_periods.lover",
       ">=",
       7
      ]
     ]
    ],
-   "概率": null,
-   "频次": "每局一次",
-   "效果": "物品.前辈的装备·情人=1",
-   "代码": false,
-   "说明": "给一件装备",
-   "来源": "[原 EVENT015，四档]",
-   "文本": null,
-   "顺序": 9
+   "prob": null,
+   "freq": "once_per_game",
+   "effect": "item.senior_gear_lover=1",
+   "code": false,
+   "note": "Gives a piece of gear",
+   "source": "[orig EVENT015, four tiers]",
+   "body": null,
+   "order": 9
   },
   {
    "id": "evt_senior_qingren_3",
-   "名字": "前辈认可·情人 300",
-   "类": "月末",
-   "时机": "月末",
-   "条件": [
+   "name": "前辈认可·情人 300",
+   "class": "month_end",
+   "timing": "month_end",
+   "cond": [
     [
      [
-      "情人",
+      "lover",
       ">=",
       300
      ],
      [
-      "期数.情人",
+      "road_periods.lover",
       ">=",
       10
      ]
     ]
    ],
-   "概率": null,
-   "频次": "每局一次",
-   "效果": "旗标.前辈三档_情人=1",
-   "代码": false,
-   "说明": "给一次机遇（opportunities.json 的“前辈的机遇”读这个旗标）",
-   "来源": "[原 EVENT015，四档]",
-   "文本": null,
-   "顺序": 9
+   "prob": null,
+   "freq": "once_per_game",
+   "effect": "flag.senior_tier3_lover=1",
+   "code": false,
+   "note": "Gives one opportunity (the \"senior's opportunity\" in opportunities.json reads this flag)",
+   "source": "[orig EVENT015, four tiers]",
+   "body": null,
+   "order": 9
   },
   {
    "id": "evt_senior_qingren_4",
-   "名字": "前辈认可·情人 400",
-   "类": "月末",
-   "时机": "月末",
-   "条件": [
+   "name": "前辈认可·情人 400",
+   "class": "month_end",
+   "timing": "month_end",
+   "cond": [
     [
      [
-      "情人",
+      "lover",
       ">=",
       400
      ],
      [
-      "期数.情人",
+      "road_periods.lover",
       ">=",
       13
      ]
     ]
    ],
-   "概率": null,
-   "频次": "每局一次",
-   "效果": "旗标.前辈四档_情人=1",
-   "代码": false,
-   "说明": "给一件最好的装备：GDD 14.2 只列了 4 件前辈的装备，这一档的装备没定义，待用户定",
-   "来源": "[原 EVENT015，四档]",
-   "文本": null,
-   "顺序": 9
+   "prob": null,
+   "freq": "once_per_game",
+   "effect": "flag.senior_tier4_lover=1",
+   "code": false,
+   "note": "Gives the best gear: GDD 14.2 lists only 4 senior gear items and this tier's gear is undefined; user to decide",
+   "source": "[orig EVENT015, four tiers]",
+   "body": null,
+   "order": 9
   },
   {
    "id": "evt_senior_wenhua_1",
-   "名字": "前辈认可·文化 100",
-   "类": "月末",
-   "时机": "月末",
-   "条件": [
+   "name": "前辈认可·文化 100",
+   "class": "month_end",
+   "timing": "month_end",
+   "cond": [
     [
      [
-      "文化",
+      "culture",
       ">=",
       100
      ],
      [
-      "期数.文化",
+      "road_periods.culture",
       ">=",
       3
      ]
     ]
    ],
-   "概率": null,
-   "频次": "每局一次",
-   "效果": "",
-   "代码": false,
-   "说明": "一句指点：该路一项技能 +5",
-   "来源": "[原 EVENT015，四档]",
-   "文本": null,
-   "顺序": 9,
-   "选项": [
+   "prob": null,
+   "freq": "once_per_game",
+   "effect": "",
+   "code": false,
+   "note": "A word of advice: +5 to one skill of the road",
+   "source": "[orig EVENT015, four tiers]",
+   "body": null,
+   "order": 9,
+   "options": [
     {
-     "文字": "创作",
-     "判定": null,
-     "成功效果": "创作+5",
-     "失败效果": ""
+     "text": "创作",
+     "check": null,
+     "success_effect": "writing+5",
+     "fail_effect": ""
     },
     {
-     "文字": "审美",
-     "判定": null,
-     "成功效果": "审美+5",
-     "失败效果": ""
+     "text": "审美",
+     "check": null,
+     "success_effect": "taste+5",
+     "fail_effect": ""
     },
     {
-     "文字": "谈吐",
-     "判定": null,
-     "成功效果": "谈吐+5",
-     "失败效果": ""
+     "text": "谈吐",
+     "check": null,
+     "success_effect": "speech+5",
+     "fail_effect": ""
     }
    ]
   },
   {
    "id": "evt_senior_wenhua_2",
-   "名字": "前辈认可·文化 200",
-   "类": "月末",
-   "时机": "月末",
-   "条件": [
+   "name": "前辈认可·文化 200",
+   "class": "month_end",
+   "timing": "month_end",
+   "cond": [
     [
      [
-      "文化",
+      "culture",
       ">=",
       200
      ],
      [
-      "期数.文化",
+      "road_periods.culture",
       ">=",
       7
      ]
     ]
    ],
-   "概率": null,
-   "频次": "每局一次",
-   "效果": "物品.前辈的装备·文化=1",
-   "代码": false,
-   "说明": "给一件装备",
-   "来源": "[原 EVENT015，四档]",
-   "文本": null,
-   "顺序": 9
+   "prob": null,
+   "freq": "once_per_game",
+   "effect": "item.senior_gear_culture=1",
+   "code": false,
+   "note": "Gives a piece of gear",
+   "source": "[orig EVENT015, four tiers]",
+   "body": null,
+   "order": 9
   },
   {
    "id": "evt_senior_wenhua_3",
-   "名字": "前辈认可·文化 300",
-   "类": "月末",
-   "时机": "月末",
-   "条件": [
+   "name": "前辈认可·文化 300",
+   "class": "month_end",
+   "timing": "month_end",
+   "cond": [
     [
      [
-      "文化",
+      "culture",
       ">=",
       300
      ],
      [
-      "期数.文化",
+      "road_periods.culture",
       ">=",
       10
      ]
     ]
    ],
-   "概率": null,
-   "频次": "每局一次",
-   "效果": "旗标.前辈三档_文化=1",
-   "代码": false,
-   "说明": "给一次机遇（opportunities.json 的“前辈的机遇”读这个旗标）",
-   "来源": "[原 EVENT015，四档]",
-   "文本": null,
-   "顺序": 9
+   "prob": null,
+   "freq": "once_per_game",
+   "effect": "flag.senior_tier3_culture=1",
+   "code": false,
+   "note": "Gives one opportunity (the \"senior's opportunity\" in opportunities.json reads this flag)",
+   "source": "[orig EVENT015, four tiers]",
+   "body": null,
+   "order": 9
   },
   {
    "id": "evt_senior_wenhua_4",
-   "名字": "前辈认可·文化 400",
-   "类": "月末",
-   "时机": "月末",
-   "条件": [
+   "name": "前辈认可·文化 400",
+   "class": "month_end",
+   "timing": "month_end",
+   "cond": [
     [
      [
-      "文化",
+      "culture",
       ">=",
       400
      ],
      [
-      "期数.文化",
+      "road_periods.culture",
       ">=",
       13
      ]
     ]
    ],
-   "概率": null,
-   "频次": "每局一次",
-   "效果": "旗标.前辈四档_文化=1",
-   "代码": false,
-   "说明": "给一件最好的装备：GDD 14.2 只列了 4 件前辈的装备，这一档的装备没定义，待用户定",
-   "来源": "[原 EVENT015，四档]",
-   "文本": null,
-   "顺序": 9
+   "prob": null,
+   "freq": "once_per_game",
+   "effect": "flag.senior_tier4_culture=1",
+   "code": false,
+   "note": "Gives the best gear: GDD 14.2 lists only 4 senior gear items and this tier's gear is undefined; user to decide",
+   "source": "[orig EVENT015, four tiers]",
+   "body": null,
+   "order": 9
   },
   {
    "id": "evt_senior_shouwan_1",
-   "名字": "前辈认可·手腕 100",
-   "类": "月末",
-   "时机": "月末",
-   "条件": [
+   "name": "前辈认可·手腕 100",
+   "class": "month_end",
+   "timing": "month_end",
+   "cond": [
     [
      [
-      "手腕",
+      "savvy",
       ">=",
       100
      ],
      [
-      "期数.手腕",
+      "road_periods.savvy",
       ">=",
       3
      ]
     ]
    ],
-   "概率": null,
-   "频次": "每局一次",
-   "效果": "",
-   "代码": false,
-   "说明": "一句指点：该路一项技能 +5",
-   "来源": "[原 EVENT015，四档]",
-   "文本": null,
-   "顺序": 9,
-   "选项": [
+   "prob": null,
+   "freq": "once_per_game",
+   "effect": "",
+   "code": false,
+   "note": "A word of advice: +5 to one skill of the road",
+   "source": "[orig EVENT015, four tiers]",
+   "body": null,
+   "order": 9,
+   "options": [
     {
-     "文字": "谈判",
-     "判定": null,
-     "成功效果": "谈判+5",
-     "失败效果": ""
+     "text": "谈判",
+     "check": null,
+     "success_effect": "negotiation+5",
+     "fail_effect": ""
     },
     {
-     "文字": "人脉",
-     "判定": null,
-     "成功效果": "人脉+5",
-     "失败效果": ""
+     "text": "人脉",
+     "check": null,
+     "success_effect": "connections+5",
+     "fail_effect": ""
     },
     {
-     "文字": "生意",
-     "判定": null,
-     "成功效果": "生意+5",
-     "失败效果": ""
+     "text": "生意",
+     "check": null,
+     "success_effect": "business+5",
+     "fail_effect": ""
     }
    ]
   },
   {
    "id": "evt_senior_shouwan_2",
-   "名字": "前辈认可·手腕 200",
-   "类": "月末",
-   "时机": "月末",
-   "条件": [
+   "name": "前辈认可·手腕 200",
+   "class": "month_end",
+   "timing": "month_end",
+   "cond": [
     [
      [
-      "手腕",
+      "savvy",
       ">=",
       200
      ],
      [
-      "期数.手腕",
+      "road_periods.savvy",
       ">=",
       7
      ]
     ]
    ],
-   "概率": null,
-   "频次": "每局一次",
-   "效果": "物品.前辈的装备·手腕=1",
-   "代码": false,
-   "说明": "给一件装备",
-   "来源": "[原 EVENT015，四档]",
-   "文本": null,
-   "顺序": 9
+   "prob": null,
+   "freq": "once_per_game",
+   "effect": "item.senior_gear_savvy=1",
+   "code": false,
+   "note": "Gives a piece of gear",
+   "source": "[orig EVENT015, four tiers]",
+   "body": null,
+   "order": 9
   },
   {
    "id": "evt_senior_shouwan_3",
-   "名字": "前辈认可·手腕 300",
-   "类": "月末",
-   "时机": "月末",
-   "条件": [
+   "name": "前辈认可·手腕 300",
+   "class": "month_end",
+   "timing": "month_end",
+   "cond": [
     [
      [
-      "手腕",
+      "savvy",
       ">=",
       300
      ],
      [
-      "期数.手腕",
+      "road_periods.savvy",
       ">=",
       10
      ]
     ]
    ],
-   "概率": null,
-   "频次": "每局一次",
-   "效果": "旗标.前辈三档_手腕=1",
-   "代码": false,
-   "说明": "给一次机遇（opportunities.json 的“前辈的机遇”读这个旗标）",
-   "来源": "[原 EVENT015，四档]",
-   "文本": null,
-   "顺序": 9
+   "prob": null,
+   "freq": "once_per_game",
+   "effect": "flag.senior_tier3_savvy=1",
+   "code": false,
+   "note": "Gives one opportunity (the \"senior's opportunity\" in opportunities.json reads this flag)",
+   "source": "[orig EVENT015, four tiers]",
+   "body": null,
+   "order": 9
   },
   {
    "id": "evt_senior_shouwan_4",
-   "名字": "前辈认可·手腕 400",
-   "类": "月末",
-   "时机": "月末",
-   "条件": [
+   "name": "前辈认可·手腕 400",
+   "class": "month_end",
+   "timing": "month_end",
+   "cond": [
     [
      [
-      "手腕",
+      "savvy",
       ">=",
       400
      ],
      [
-      "期数.手腕",
+      "road_periods.savvy",
       ">=",
       13
      ]
     ]
    ],
-   "概率": null,
-   "频次": "每局一次",
-   "效果": "旗标.前辈四档_手腕=1",
-   "代码": false,
-   "说明": "给一件最好的装备：GDD 14.2 只列了 4 件前辈的装备，这一档的装备没定义，待用户定",
-   "来源": "[原 EVENT015，四档]",
-   "文本": null,
-   "顺序": 9
+   "prob": null,
+   "freq": "once_per_game",
+   "effect": "flag.senior_tier4_savvy=1",
+   "code": false,
+   "note": "Gives the best gear: GDD 14.2 lists only 4 senior gear items and this tier's gear is undefined; user to decide",
+   "source": "[orig EVENT015, four tiers]",
+   "body": null,
+   "order": 9
   },
   {
    "id": "evt_contract",
-   "名字": "长约",
-   "类": "月末",
-   "时机": "月末",
-   "条件": [
+   "name": "长约",
+   "class": "month_end",
+   "timing": "month_end",
+   "cond": [
     [
      [
-      "名气",
+      "fame",
       ">=",
       300
      ],
      [
-      "最高声望",
+      "max_rep",
       ">=",
       200
      ],
      [
-      "状态.长约",
+      "status.long_contract",
       "==",
       0
      ]
     ]
    ],
-   "概率": [
+   "prob": [
     {
-     "条件": [
+     "cond": [
       [
        [
-        "好感.片厂老板",
+        "favor.studio_boss",
         ">=",
         30
        ]
       ]
      ],
-     "值": [
+     "value": [
       1,
       3
      ]
     },
     {
-     "条件": [],
-     "值": [
+     "cond": [],
+     "value": [
       1,
       6
      ]
     }
    ],
-   "频次": null,
-   "效果": "",
-   "代码": true,
-   "说明": "大厂提出长约。签：每月薪水 150，片酬照发；只能报名本厂角色（每板随机 3 个标为本厂），本厂角色玩家主色场风 +10 个百分点，受道德条款约束。可拒绝，一个季度后再来",
-   "来源": "[原 求婚][推N41][推N63]",
-   "文本": null,
-   "顺序": 10,
-   "选项": [
+   "freq": null,
+   "effect": "",
+   "code": true,
+   "note": "A big studio offers a long contract. If signed: monthly pay 150, fees still paid; may only sign house roles (3 random roles per board are marked house), house roles give the player's main color +10 style points, and the morals clause applies. May be refused; they come back after a quarter",
+   "source": "[orig proposal][inferred N41][inferred N63]",
+   "body": null,
+   "order": 10,
+   "options": [
     {
-     "文字": "签",
-     "判定": null,
-     "成功效果": "状态.长约=1 旗标.长约=1",
-     "失败效果": ""
+     "text": "签",
+     "check": null,
+     "success_effect": "status.long_contract=1 flag.long_contract=1",
+     "fail_effect": ""
     },
     {
-     "文字": "拒绝",
-     "判定": null,
-     "成功效果": "",
-     "失败效果": ""
+     "text": "拒绝",
+     "check": null,
+     "success_effect": "",
+     "fail_effect": ""
     }
    ]
   },
   {
    "id": "evt_terminate",
-   "名字": "解约",
-   "类": "月末",
-   "时机": "月末",
-   "条件": [
+   "name": "解约",
+   "class": "month_end",
+   "timing": "month_end",
+   "cond": [
     [
      [
-      "状态.长约",
+      "status.long_contract",
       "==",
       1
      ],
      [
-      "犯罪",
+      "crime",
       ">=",
       200
      ]
     ]
    ],
-   "概率": null,
-   "频次": null,
-   "效果": "名气-10% 状态.长约=0",
-   "代码": false,
-   "说明": "片厂援引道德条款",
-   "来源": "[推N39]",
-   "文本": null,
-   "顺序": 11
+   "prob": null,
+   "freq": null,
+   "effect": "fame-10% status.long_contract=0",
+   "code": false,
+   "note": "The studio invokes the morals clause",
+   "source": "[inferred N39]",
+   "body": null,
+   "order": 11
   },
   {
    "id": "evt_creditor",
-   "名字": "债主",
-   "类": "月末",
-   "时机": "月末",
-   "条件": [
+   "name": "债主",
+   "class": "month_end",
+   "timing": "month_end",
+   "cond": [
     [
      [
-      "负债月数",
+      "debt_months",
       ">=",
       3
      ]
     ]
    ],
-   "概率": null,
-   "频次": null,
-   "效果": "",
-   "代码": true,
-   "说明": "先看有没有人帮（义气 ≥150 朋友垫上，金钱补到 0，负债清零，义气 -30；或码头同乡）；没有则打斗 ≥50 赶走（犯罪 +10）；再不行拿走一件最贵的物品抵债，没有物品则名气 -10% 并曝光",
-   "来源": "[推N11]",
-   "文本": null,
-   "顺序": 12
+   "prob": null,
+   "freq": null,
+   "effect": "",
+   "code": true,
+   "note": "First check for help (loyalty >=150: a friend covers it, money is topped up to 0, debt cleared, loyalty -30; or the dock countryman); otherwise fight >=50 drives him off (crime +10); otherwise the most expensive item is taken as payment, and with no items fame -10% and exposure",
+   "source": "[inferred N11]",
+   "body": null,
+   "order": 12
   },
   {
    "id": "evt_accent",
-   "名字": "口音",
-   "类": "月末",
-   "时机": "月末",
-   "条件": [
+   "name": "口音",
+   "class": "month_end",
+   "timing": "month_end",
+   "cond": [
     [
      [
-      "旗标.口音待触发",
+      "flag.accent_pending",
       "==",
       1
      ]
     ]
    ],
-   "概率": null,
-   "频次": "每局一次",
-   "效果": "旗标.口音待触发=0 旗标.口音期=4",
-   "代码": true,
-   "说明": "影评笑他的口音。之后 4 个月内，上表演课、礼仪课和读谈吐类的书时，谈吐每个成功日额外 +1",
-   "来源": "[推N3]",
-   "文本": null,
-   "顺序": 13
+   "prob": null,
+   "freq": "once_per_game",
+   "effect": "flag.accent_pending=0 flag.accent_period=4",
+   "code": true,
+   "note": "A critic mocks his accent. For the next 4 months speech gets an extra +1 on every successful day in acting class, etiquette class and speech books",
+   "source": "[inferred N3]",
+   "body": null,
+   "order": 13
   },
   {
    "id": "evt_offer_drug",
-   "名字": "递药",
-   "类": "月末",
-   "时机": "月末",
-   "条件": [
+   "name": "递药",
+   "class": "month_end",
+   "timing": "month_end",
+   "cond": [
     [
      [
-      "疲劳",
+      "fatigue",
       ">=",
       60
      ],
      [
-      "状态.当月有拍摄",
+      "status.shoot_this_month",
       "==",
       1
      ],
      [
-      "药瘾阶段",
+      "drug_stage",
       "==",
       0
      ]
     ]
    ],
-   "概率": [
+   "prob": [
     1,
     4
    ],
-   "频次": null,
-   "效果": "",
-   "代码": false,
-   "说明": "片场有人递来一种“提神的东西”",
-   "来源": "[推N13]",
-   "文本": null,
-   "顺序": 14,
-   "选项": [
+   "freq": null,
+   "effect": "",
+   "code": false,
+   "note": "Someone on the set hands over a \"pick-me-up\"",
+   "source": "[inferred N13]",
+   "body": null,
+   "order": 14,
+   "options": [
     {
-     "文字": "拒绝",
-     "判定": null,
-     "成功效果": "",
-     "失败效果": ""
+     "text": "拒绝",
+     "check": null,
+     "success_effect": "",
+     "fail_effect": ""
     },
     {
-     "文字": "接受",
-     "判定": null,
-     "成功效果": "疲劳-30 药瘾阶段=1",
-     "失败效果": ""
+     "text": "接受",
+     "check": null,
+     "success_effect": "fatigue-30 drug_stage=1",
+     "fail_effect": ""
     }
    ]
   },
   {
    "id": "evt_drug_deeper",
-   "名字": "加深",
-   "类": "月末",
-   "时机": "月末",
-   "条件": [
+   "name": "加深",
+   "class": "month_end",
+   "timing": "month_end",
+   "cond": [
     [
      [
-      "药瘾阶段",
+      "drug_stage",
       ">=",
       1
      ],
      [
-      "药瘾阶段",
+      "drug_stage",
       "<=",
       2
      ],
      [
-      "疲劳",
+      "fatigue",
       ">=",
       60
      ]
     ]
    ],
-   "概率": [
+   "prob": [
     1,
     4
    ],
-   "频次": null,
-   "效果": "疲劳-30 药瘾阶段+1",
-   "代码": true,
-   "说明": "他自己去找了。阶段到 3 时体力 -30、犯罪 +20",
-   "来源": "[推N13]",
-   "文本": null,
-   "顺序": 15
+   "freq": null,
+   "effect": "fatigue-30 drug_stage+1",
+   "code": true,
+   "note": "He goes looking for it himself. At stage 3: stamina -30, crime +20",
+   "source": "[inferred N13]",
+   "body": null,
+   "order": 15
   },
   {
    "id": "evt_detox",
-   "名字": "戒断",
-   "类": "月末",
-   "时机": "月末",
-   "条件": [
+   "name": "戒断",
+   "class": "month_end",
+   "timing": "month_end",
+   "cond": [
     [
      [
-      "药瘾阶段",
+      "drug_stage",
       ">=",
       2
      ],
      [
-      "好感.Sil",
+      "favor.sil",
       ">=",
       60
      ]
     ],
     [
      [
-      "药瘾阶段",
+      "drug_stage",
       ">=",
       2
      ],
      [
-      "好感.Duv",
+      "favor.duv",
       ">=",
       60
      ]
     ],
     [
      [
-      "药瘾阶段",
+      "drug_stage",
       ">=",
       2
      ],
      [
-      "旗标.送去戒",
+      "flag.detox_sent",
       "==",
       1
      ]
     ]
    ],
-   "概率": null,
-   "频次": null,
-   "效果": "体力-20 疲劳=0 药瘾阶段=0 旗标.送去戒=0",
-   "代码": true,
-   "说明": "一段剧情，占掉整个下月。认真写，不当玩笑。Sil 在场时 Sil 好感 +10",
-   "来源": "[用][推N13]",
-   "文本": null,
-   "顺序": 16
+   "prob": null,
+   "freq": null,
+   "effect": "stamina-20 fatigue=0 drug_stage=0 flag.detox_sent=0",
+   "code": true,
+   "note": "A story that takes the whole next month. Write it seriously, not as a joke. With Sil present, Sil favor +10",
+   "source": "[user][inferred N13]",
+   "body": null,
+   "order": 16
   },
   {
    "id": "evt_official",
-   "名字": "官方来访",
-   "类": "月末",
-   "时机": "月末",
-   "条件": [
+   "name": "官方来访",
+   "class": "month_end",
+   "timing": "month_end",
+   "cond": [
     [
      [
-      "犯罪",
+      "crime",
       ">=",
       150
      ],
      [
-      "名气",
+      "fame",
       ">=",
       300
      ]
     ]
    ],
-   "概率": null,
-   "频次": "每局一次",
-   "效果": "",
-   "代码": false,
-   "说明": "行业自律机构的人来谈话。自律 ≥100 或神父作保：无事；否则警告，下次曝光名气惩罚加倍",
-   "来源": "[原 EVENT052，内容推]",
-   "文本": null,
-   "顺序": 17,
-   "分支": [
+   "prob": null,
+   "freq": "once_per_game",
+   "effect": "",
+   "code": false,
+   "note": "A man from the industry's self-regulation body comes to talk. discipline >=100 or priest_vouch: nothing happens; otherwise a warning, and the next exposure's fame penalty is doubled",
+   "source": "[orig EVENT052, content inferred]",
+   "body": null,
+   "order": 17,
+   "branches": [
     {
-     "条件": [
+     "cond": [
       [
        [
-        "自律",
+        "discipline",
         ">=",
         100
        ]
       ],
       [
        [
-        "旗标.神父作保",
+        "flag.priest_vouch",
         "==",
         1
        ]
       ]
      ],
-     "效果": ""
+     "effect": ""
     },
     {
-     "条件": [],
-     "效果": "旗标.警告=1"
+     "cond": [],
+     "effect": "flag.warning=1"
     }
    ]
   },
   {
    "id": "evt_newyear",
-   "名字": "新年",
-   "类": "月末",
-   "时机": "月末",
-   "条件": [
+   "name": "新年",
+   "class": "month_end",
+   "timing": "month_end",
+   "cond": [
     [
      [
-      "月份",
+      "month",
       "==",
       1
      ]
     ]
    ],
-   "概率": null,
-   "频次": null,
-   "效果": "好感.Sil+3",
-   "代码": false,
-   "说明": "Sil 递来一年的来信统计和杂志对他的一句评价（由标签计数生成）",
-   "来源": "[原 EVENT044]",
-   "文本": null,
-   "顺序": 18
+   "prob": null,
+   "freq": null,
+   "effect": "favor.sil+3",
+   "code": false,
+   "note": "Sil hands over the year's fan-mail statistics and a magazine's remark about him (generated from tag counts)",
+   "source": "[orig EVENT044]",
+   "body": null,
+   "order": 18
   },
   {
    "id": "evt_birthday",
-   "名字": "生日",
-   "类": "月末",
-   "时机": "小咪生日当天",
-   "条件": [],
-   "概率": null,
-   "频次": null,
-   "效果": "好感.Sil+3",
-   "代码": true,
-   "说明": "日期占位（待用户定，格式 \"MM-DD\"；null 时不触发）。收到来信和礼物；好感 ≥60 的感情线对象各有一段小剧情；女明星好感 +3",
-   "来源": "[原 EVENT042/043]",
-   "文本": null,
-   "顺序": 19,
-   "日期": null
+   "name": "生日",
+   "class": "month_end",
+   "timing": "birthday",
+   "cond": [],
+   "prob": null,
+   "freq": null,
+   "effect": "favor.sil+3",
+   "code": true,
+   "note": "Date is a placeholder (user to decide, format \"MM-DD\"; null = never fires). Letters and gifts arrive; each romance line with favor >=60 gets a small scene; actress favor +3",
+   "source": "[orig EVENT042/043]",
+   "body": null,
+   "order": 19,
+   "date": null
   },
   {
    "id": "evt_berlin",
-   "名字": "柏林邀约",
-   "类": "月末",
-   "时机": "月末",
-   "条件": [
+   "name": "柏林邀约",
+   "class": "month_end",
+   "timing": "month_end",
+   "cond": [
     [
      [
-      "年份",
+      "year",
       "==",
       1929
      ],
      [
-      "名气",
+      "fame",
       ">=",
       500
      ],
      [
-      "谈吐",
+      "speech",
       ">=",
       60
      ]
     ]
    ],
-   "概率": [
+   "prob": [
     1,
     6
    ],
-   "频次": "每局一次",
-   "效果": "",
-   "代码": false,
-   "说明": "接受了才能走“帝国银幕偶像”结局",
-   "来源": "[用素材]",
-   "文本": null,
-   "顺序": 20,
-   "选项": [
+   "freq": "once_per_game",
+   "effect": "",
+   "code": false,
+   "note": "Only after accepting can the \"Imperial screen idol\" ending be reached",
+   "source": "[user material]",
+   "body": null,
+   "order": 20,
+   "options": [
     {
-     "文字": "接受",
-     "判定": null,
-     "成功效果": "旗标.柏林邀约=1",
-     "失败效果": ""
+     "text": "接受",
+     "check": null,
+     "success_effect": "flag.berlin_invite=1",
+     "fail_effect": ""
     },
     {
-     "文字": "拒绝",
-     "判定": null,
-     "成功效果": "",
-     "失败效果": ""
+     "text": "拒绝",
+     "check": null,
+     "success_effect": "",
+     "fail_effect": ""
     }
    ]
   },
   {
    "id": "era_sound_short",
-   "名字": "会出声的短片",
-   "类": "时代",
-   "时机": "1926-08",
-   "条件": [],
-   "概率": null,
-   "频次": null,
-   "效果": "旗标.谈吐进阶上架=1",
-   "代码": false,
-   "说明": "一场带同步配乐和几段说话短片的首映。没有数值效果；Duv 或 Sil 提一句“以后也许都要开口”，书店上架谈吐类的进阶档（books.json 已按日期处理）",
-   "来源": "[推N61]",
-   "文本": null
+   "name": "会出声的短片",
+   "class": "era",
+   "timing": "1926-08",
+   "cond": [],
+   "prob": null,
+   "freq": null,
+   "effect": "flag.speech_advanced_on_shelf=1",
+   "code": false,
+   "note": "A premiere with synchronized score and a few spoken shorts. No numeric effect; Duv or Sil says \"maybe we'll all have to talk someday\", and the bookstore stocks the advanced speech books (books.json already handles it by date)",
+   "source": "[inferred N61]",
+   "body": null
   },
   {
    "id": "era_academy",
-   "名字": "学院成立",
-   "类": "时代",
-   "时机": "1927-05",
-   "条件": [],
-   "概率": null,
-   "频次": null,
-   "效果": "",
-   "代码": false,
-   "说明": "名气 ≥150 受邀入会，记旗标“会员”",
-   "来源": "[推N61]",
-   "文本": null,
-   "分支": [
+   "name": "学院成立",
+   "class": "era",
+   "timing": "1927-05",
+   "cond": [],
+   "prob": null,
+   "freq": null,
+   "effect": "",
+   "code": false,
+   "note": "fame >=150: invited to join, sets flag member",
+   "source": "[inferred N61]",
+   "body": null,
+   "branches": [
     {
-     "条件": [
+     "cond": [
       [
        [
-        "名气",
+        "fame",
         ">=",
         150
        ]
       ]
      ],
-     "效果": "人脉+5 旗标.会员=1"
+     "effect": "connections+5 flag.member=1"
     },
     {
-     "条件": [],
-     "效果": ""
+     "cond": [],
+     "effect": ""
     }
    ]
   },
   {
    "id": "era_valen_death",
-   "名字": "瓦伦去世",
-   "类": "时代",
-   "时机": "1927-08",
-   "条件": [],
-   "概率": null,
-   "频次": null,
-   "效果": "旗标.瓦伦去世=1",
-   "代码": true,
-   "说明": "葬礼剧情。瓦伦从对手表移除；此后板上“异国情人”“浪漫”标签的角色数量 +1（至 1928 年底）",
-   "来源": "[用][推N61]",
-   "文本": null
+   "name": "瓦伦去世",
+   "class": "era",
+   "timing": "1927-08",
+   "cond": [],
+   "prob": null,
+   "freq": null,
+   "effect": "flag.valen_dead=1",
+   "code": true,
+   "note": "Funeral scene. Valen is removed from the rival table; from then on boards get +1 role with the \"exotic_lover\" or \"romance\" tag (until the end of 1928)",
+   "source": "[user][inferred N61]",
+   "body": null
   },
   {
    "id": "era_talkie",
-   "名字": "有声片",
-   "类": "时代",
-   "时机": "1927-10",
-   "条件": [],
-   "概率": null,
-   "频次": null,
-   "效果": "旗标.有声片=1",
-   "代码": true,
-   "说明": "一部会说话的电影上映。开始出现有声角色（6.4）；乔森加入对手表；电台播音开放（jobs.json、rivals.json 已按日期处理）",
-   "来源": "[推N61]",
-   "文本": null
+   "name": "有声片",
+   "class": "era",
+   "timing": "1927-10",
+   "cond": [],
+   "prob": null,
+   "freq": null,
+   "effect": "flag.talkies=1",
+   "code": true,
+   "note": "A talking picture is released. Talkie roles start to appear (6.4); Jolson joins the rival table; radio announcing opens (jobs.json and rivals.json already handle it by date)",
+   "source": "[inferred N61]",
+   "body": null
   },
   {
    "id": "era_all_sound",
-   "名字": "全片有声、试音",
-   "类": "时代",
-   "时机": "1928-07",
-   "条件": [],
-   "概率": null,
-   "频次": null,
-   "效果": "",
-   "代码": false,
-   "说明": "谈吐 ≥50 通过；否则进入口音事件的加成期。每局一次",
-   "来源": "[推N61]",
-   "文本": null,
-   "分支": [
+   "name": "全片有声、试音",
+   "class": "era",
+   "timing": "1928-07",
+   "cond": [],
+   "prob": null,
+   "freq": null,
+   "effect": "",
+   "code": false,
+   "note": "speech >=50 passes; otherwise enters the bonus period of the accent event. Once per game",
+   "source": "[inferred N61]",
+   "body": null,
+   "branches": [
     {
-     "条件": [
+     "cond": [
       [
        [
-        "谈吐",
+        "speech",
         ">=",
         50
        ]
       ]
      ],
-     "效果": "名气+5%"
+     "effect": "fame+5%"
     },
     {
-     "条件": [],
-     "效果": "名气-5% 旗标.口音待触发=1"
+     "cond": [],
+     "effect": "fame-5% flag.accent_pending=1"
     }
    ]
   },
   {
    "id": "era_awards",
-   "名字": "第一届颁奖礼",
-   "类": "时代",
-   "时机": "1929-05",
-   "条件": [],
-   "概率": null,
-   "频次": null,
-   "效果": "",
-   "代码": false,
-   "说明": "占位，可并入机遇",
-   "来源": "[推N61]",
-   "文本": null,
-   "分支": [
+   "name": "第一届颁奖礼",
+   "class": "era",
+   "timing": "1929-05",
+   "cond": [],
+   "prob": null,
+   "freq": null,
+   "effect": "",
+   "code": false,
+   "note": "Placeholder, may be merged into an opportunity",
+   "source": "[inferred N61]",
+   "body": null,
+   "branches": [
     {
-     "条件": [
+     "cond": [
       [
        [
-        "旗标.会员",
+        "flag.member",
         "==",
         1
        ],
        [
-        "计数.近12月大片大卖",
+        "count.big_hits_12m",
         ">=",
         1
        ]
       ]
      ],
-     "效果": "名气+30"
+     "effect": "fame+30"
     },
     {
-     "条件": [],
-     "效果": ""
+     "cond": [],
+     "effect": ""
     }
    ]
   },
   {
    "id": "era_crash",
-   "名字": "股灾",
-   "类": "时代",
-   "时机": "1929-10",
-   "条件": [],
-   "概率": null,
-   "频次": null,
-   "效果": "",
-   "代码": false,
-   "说明": "剧情：股市崩盘。时代背景，没有数值效果",
-   "来源": "[推N61]",
-   "文本": null
+   "name": "股灾",
+   "class": "era",
+   "timing": "1929-10",
+   "cond": [],
+   "prob": null,
+   "freq": null,
+   "effect": "",
+   "code": false,
+   "note": "Story: the stock market crash. Period backdrop, no numeric effect",
+   "source": "[inferred N61]",
+   "body": null
   },
   {
    "id": "job_assistant_r1",
-   "名字": "小事件，女明星好感 +3",
-   "类": "工作",
-   "时机": "工期间",
-   "条件": [],
-   "概率": null,
-   "频次": null,
-   "效果": "好感.女明星+3",
-   "代码": false,
-   "说明": "小事件，女明星好感 +3",
-   "来源": "[用] 明星助理接口",
-   "文本": null
+   "name": "小事件，女明星好感 +3",
+   "class": "job",
+   "timing": "during_job",
+   "cond": [],
+   "prob": null,
+   "freq": null,
+   "effect": "favor.actress+3",
+   "code": false,
+   "note": "Small event, actress favor +3",
+   "source": "[user] star assistant hook",
+   "body": null
   },
   {
    "id": "job_assistant_m1",
-   "名字": "可转女明星保镖",
-   "类": "工作",
-   "时机": "工期间",
-   "条件": [],
-   "概率": null,
-   "频次": null,
-   "效果": "",
-   "代码": false,
-   "说明": "可转女明星保镖",
-   "来源": "[用] 明星助理接口",
-   "文本": null
+   "name": "可转女明星保镖",
+   "class": "job",
+   "timing": "during_job",
+   "cond": [],
+   "prob": null,
+   "freq": null,
+   "effect": "",
+   "code": false,
+   "note": "May lead to the actress bodyguard job",
+   "source": "[user] star assistant hook",
+   "body": null
   },
   {
    "id": "job_waiter_r1",
-   "名字": "客人是圈内人，人脉 +2",
-   "类": "工作",
-   "时机": "工期间",
-   "条件": [],
-   "概率": null,
-   "频次": null,
-   "效果": "人脉+2",
-   "代码": false,
-   "说明": "客人是圈内人，人脉 +2",
-   "来源": "[用] 餐厅侍者接口",
-   "文本": null
+   "name": "客人是圈内人，人脉 +2",
+   "class": "job",
+   "timing": "during_job",
+   "cond": [],
+   "prob": null,
+   "freq": null,
+   "effect": "connections+2",
+   "code": false,
+   "note": "The customer is in the business, connections +2",
+   "source": "[user] restaurant waiter hook",
+   "body": null
   },
   {
    "id": "job_waiter_m1",
-   "名字": "每块板随机一个角色直接显示对手的出牌习惯",
-   "类": "工作",
-   "时机": "工期间",
-   "条件": [],
-   "概率": null,
-   "频次": null,
-   "效果": "旗标.侍者情报=1",
-   "代码": false,
-   "说明": "每块板随机一个角色直接显示对手的出牌习惯",
-   "来源": "[用] 餐厅侍者接口",
-   "文本": null
+   "name": "每块板随机一个角色直接显示对手的出牌习惯",
+   "class": "job",
+   "timing": "during_job",
+   "cond": [],
+   "prob": null,
+   "freq": null,
+   "effect": "flag.waiter_tip=1",
+   "code": false,
+   "note": "Each board shows the rival's play habit for one random role",
+   "source": "[user] restaurant waiter hook",
+   "body": null
   },
   {
    "id": "job_dock_m1",
-   "名字": "债主事件时同乡出面挡一次，不消耗义气；码头的随机表加入走私类事件",
-   "类": "工作",
-   "时机": "工期间",
-   "条件": [],
-   "概率": null,
-   "频次": null,
-   "效果": "旗标.同乡挡债=1",
-   "代码": false,
-   "说明": "债主事件时同乡出面挡一次，不消耗义气；码头的随机表加入走私类事件",
-   "来源": "[用] 码头搬货接口",
-   "文本": null
+   "name": "债主事件时同乡出面挡一次，不消耗义气；码头的随机表加入走私类事件",
+   "class": "job",
+   "timing": "during_job",
+   "cond": [],
+   "prob": null,
+   "freq": null,
+   "effect": "flag.fellow_debt_shield=1",
+   "code": false,
+   "note": "On the creditor event the countryman steps in once, costing no loyalty; smuggling events are added to the dock random table",
+   "source": "[user] dock hauling hook",
+   "body": null
   },
   {
    "id": "job_church_m1",
-   "名字": "“官方来访”时神父作保，视同自律达标；宗教标签的角色上板权重 +1",
-   "类": "工作",
-   "时机": "工期间",
-   "条件": [],
-   "概率": null,
-   "频次": null,
-   "效果": "旗标.神父作保=1 权重.宗教+1",
-   "代码": false,
-   "说明": "“官方来访”时神父作保，视同自律达标；宗教标签的角色上板权重 +1",
-   "来源": "[用] 教堂义工接口",
-   "文本": null
+   "name": "“官方来访”时神父作保，视同自律达标；宗教标签的角色上板权重 +1",
+   "class": "job",
+   "timing": "during_job",
+   "cond": [],
+   "prob": null,
+   "freq": null,
+   "effect": "flag.priest_vouch=1 weight.religious+1",
+   "code": false,
+   "note": "On the \"official visit\" the priest vouches, counting as discipline met; roles with the religious tag get +1 board weight",
+   "source": "[user] church volunteer hook",
+   "body": null
   },
   {
    "id": "job_model_art_m1",
-   "名字": "文艺、地下片标签的角色上板权重 +1",
-   "类": "工作",
-   "时机": "工期间",
-   "条件": [],
-   "概率": null,
-   "频次": null,
-   "效果": "权重.文艺+1 权重.地下片+1",
-   "代码": false,
-   "说明": "文艺、地下片标签的角色上板权重 +1",
-   "来源": "[用] 艺术家模特接口",
-   "文本": null
+   "name": "文艺、地下片标签的角色上板权重 +1",
+   "class": "job",
+   "timing": "during_job",
+   "cond": [],
+   "prob": null,
+   "freq": null,
+   "effect": "weight.arthouse+1 weight.underground+1",
+   "code": false,
+   "note": "Roles with the arthouse and underground tags get +1 board weight",
+   "source": "[user] artist model hook",
+   "body": null
   },
   {
    "id": "job_model_art_m2",
-   "名字": "画展事件（审美 +5、名气 +10）",
-   "类": "工作",
-   "时机": "工期间",
-   "条件": [],
-   "概率": null,
-   "频次": null,
-   "效果": "审美+5 名气+10",
-   "代码": false,
-   "说明": "画展事件（审美 +5、名气 +10）",
-   "来源": "[用] 艺术家模特接口",
-   "文本": null
+   "name": "画展事件（审美 +5、名气 +10）",
+   "class": "job",
+   "timing": "during_job",
+   "cond": [],
+   "prob": null,
+   "freq": null,
+   "effect": "taste+5 fame+10",
+   "code": false,
+   "note": "Art show event (taste +5, fame +10)",
+   "source": "[user] artist model hook",
+   "body": null
   },
   {
    "id": "job_bar_r1",
-   "名字": "遇上搜查，胆识判定线 40，不过则被捕",
-   "类": "工作",
-   "时机": "工期间",
-   "条件": [],
-   "概率": null,
-   "频次": null,
-   "效果": "",
-   "代码": false,
-   "说明": "遇上搜查，胆识判定线 40，不过则被捕",
-   "来源": "[用] 酒吧看场子接口",
-   "文本": null,
-   "判定": {
-    "判定": "胆识",
-    "线": 40
+   "name": "遇上搜查，胆识判定线 40，不过则被捕",
+   "class": "job",
+   "timing": "during_job",
+   "cond": [],
+   "prob": null,
+   "freq": null,
+   "effect": "",
+   "code": false,
+   "note": "A police search: nerve check line 40, failing means arrest",
+   "source": "[user] bar bouncer hook",
+   "body": null,
+   "check": {
+    "check": "nerve",
+    "line": 40
    },
-   "成功效果": "",
-   "失败效果": "触发.evt_arrest"
+   "success_effect": "",
+   "fail_effect": "trigger.evt_arrest"
   },
   {
    "id": "job_bar_m1",
-   "名字": "解锁运私酒",
-   "类": "工作",
-   "时机": "工期间",
-   "条件": [],
-   "概率": null,
-   "频次": null,
-   "效果": "",
-   "代码": false,
-   "说明": "解锁运私酒",
-   "来源": "[用] 酒吧看场子接口",
-   "文本": null
+   "name": "解锁运私酒",
+   "class": "job",
+   "timing": "during_job",
+   "cond": [],
+   "prob": null,
+   "freq": null,
+   "effect": "",
+   "code": false,
+   "note": "Unlocks bootlegging",
+   "source": "[user] bar bouncer hook",
+   "body": null
   },
   {
    "id": "job_bar_m2",
-   "名字": "被捕时罚款减半；犯罪标签的角色上板权重 +1",
-   "类": "工作",
-   "时机": "工期间",
-   "条件": [],
-   "概率": null,
-   "频次": null,
-   "效果": "旗标.保释减半=1 权重.犯罪+1",
-   "代码": false,
-   "说明": "被捕时罚款减半；犯罪标签的角色上板权重 +1",
-   "来源": "[用] 酒吧看场子接口",
-   "文本": null
+   "name": "被捕时罚款减半；犯罪标签的角色上板权重 +1",
+   "class": "job",
+   "timing": "during_job",
+   "cond": [],
+   "prob": null,
+   "freq": null,
+   "effect": "flag.bail_half=1 weight.crime+1",
+   "code": false,
+   "note": "Halves the fine when arrested; roles with the crime tag get +1 board weight",
+   "source": "[user] bar bouncer hook",
+   "body": null
   },
   {
    "id": "job_studio_m1",
-   "名字": "长约概率翻倍",
-   "类": "工作",
-   "时机": "工期间",
-   "条件": [],
-   "概率": null,
-   "频次": null,
-   "效果": "旗标.长约翻倍=1",
-   "代码": true,
-   "说明": "长约概率翻倍",
-   "来源": "[用] 片厂办公室接口",
-   "文本": null
+   "name": "长约概率翻倍",
+   "class": "job",
+   "timing": "during_job",
+   "cond": [],
+   "prob": null,
+   "freq": null,
+   "effect": "flag.long_contract_double=1",
+   "code": true,
+   "note": "Doubles the long-contract probability",
+   "source": "[user] studio office hook",
+   "body": null
   },
   {
    "id": "job_studio_m2",
-   "名字": "“支持转型”，之后 3 块板各多一个玩家指定戏路族的中片角色",
-   "类": "工作",
-   "时机": "工期间",
-   "条件": [],
-   "概率": null,
-   "频次": null,
-   "效果": "旗标.支持转型=1",
-   "代码": true,
-   "说明": "“支持转型”，之后 3 块板各多一个玩家指定戏路族的中片角色",
-   "来源": "[用] 片厂办公室接口",
-   "文本": null
+   "name": "“支持转型”，之后 3 块板各多一个玩家指定戏路族的中片角色",
+   "class": "job",
+   "timing": "during_job",
+   "cond": [],
+   "prob": null,
+   "freq": null,
+   "effect": "flag.backs_transition=1",
+   "code": true,
+   "note": "\"Backs transition\": the next 3 boards each get an extra medium role of the tag family the player picks",
+   "source": "[user] studio office hook",
+   "body": null
   },
   {
    "id": "job_studio_m3",
-   "名字": "结局接口（制片人线）",
-   "类": "工作",
-   "时机": "工期间",
-   "条件": [],
-   "概率": null,
-   "频次": null,
-   "效果": "旗标.制片人线=1",
-   "代码": false,
-   "说明": "结局接口（制片人线）",
-   "来源": "[用] 片厂办公室接口",
-   "文本": null
+   "name": "结局接口（制片人线）",
+   "class": "job",
+   "timing": "during_job",
+   "cond": [],
+   "prob": null,
+   "freq": null,
+   "effect": "flag.producer_line=1",
+   "code": false,
+   "note": "Ending hook (producer line)",
+   "source": "[user] studio office hook",
+   "body": null
   },
   {
    "id": "job_news_m1",
-   "名字": "丑闻提前一个月知道，可花 200 压下",
-   "类": "工作",
-   "时机": "工期间",
-   "条件": [],
-   "概率": null,
-   "频次": null,
-   "效果": "旗标.丑闻预知=1",
-   "代码": false,
-   "说明": "丑闻提前一个月知道，可花 200 压下",
-   "来源": "[用] 报馆帮工接口",
-   "文本": null
+   "name": "丑闻提前一个月知道，可花 200 压下",
+   "class": "job",
+   "timing": "during_job",
+   "cond": [],
+   "prob": null,
+   "freq": null,
+   "effect": "flag.scandal_foresight=1",
+   "code": false,
+   "note": "Learns of a scandal a month early and may pay 200 to suppress it",
+   "source": "[user] newspaper helper hook",
+   "body": null
   },
   {
    "id": "job_news_m2",
-   "名字": "每年免费压一次",
-   "类": "工作",
-   "时机": "工期间",
-   "条件": [],
-   "概率": null,
-   "频次": null,
-   "效果": "旗标.免费压丑闻=1",
-   "代码": false,
-   "说明": "每年免费压一次",
-   "来源": "[用] 报馆帮工接口",
-   "文本": null
+   "name": "每年免费压一次",
+   "class": "job",
+   "timing": "during_job",
+   "cond": [],
+   "prob": null,
+   "freq": null,
+   "effect": "flag.free_scandal_cover=1",
+   "code": false,
+   "note": "One free cover-up per year",
+   "source": "[user] newspaper helper hook",
+   "body": null
   },
   {
    "id": "job_news_m3",
-   "名字": "每年可放一条消息，名气 +10%",
-   "类": "工作",
-   "时机": "工期间",
-   "条件": [],
-   "概率": null,
-   "频次": null,
-   "效果": "旗标.放消息=1",
-   "代码": false,
-   "说明": "每年可放一条消息，名气 +10%",
-   "来源": "[用] 报馆帮工接口",
-   "文本": null
+   "name": "每年可放一条消息，名气 +10%",
+   "class": "job",
+   "timing": "during_job",
+   "cond": [],
+   "prob": null,
+   "freq": null,
+   "effect": "flag.leak_news=1",
+   "code": false,
+   "note": "May leak one piece of news per year, fame +10%",
+   "source": "[user] newspaper helper hook",
+   "body": null
   },
   {
    "id": "job_ballroom_r1",
-   "名字": "遇到富婆，富婆好感 +5",
-   "类": "工作",
-   "时机": "工期间",
-   "条件": [],
-   "概率": null,
-   "频次": null,
-   "效果": "好感.富婆+5",
-   "代码": false,
-   "说明": "遇到富婆，富婆好感 +5",
-   "来源": "[用] 舞厅伴舞接口",
-   "文本": null
+   "name": "遇到富婆，富婆好感 +5",
+   "class": "job",
+   "timing": "during_job",
+   "cond": [],
+   "prob": null,
+   "freq": null,
+   "effect": "favor.rich_widow+5",
+   "code": false,
+   "note": "Meets the rich widow, rich_widow favor +5",
+   "source": "[user] ballroom dancer hook",
+   "body": null
   },
   {
    "id": "job_ballroom_m1",
-   "名字": "解锁私人男伴",
-   "类": "工作",
-   "时机": "工期间",
-   "条件": [],
-   "概率": null,
-   "频次": null,
-   "效果": "",
-   "代码": false,
-   "说明": "解锁私人男伴",
-   "来源": "[用] 舞厅伴舞接口",
-   "文本": null
+   "name": "解锁私人男伴",
+   "class": "job",
+   "timing": "during_job",
+   "cond": [],
+   "prob": null,
+   "freq": null,
+   "effect": "",
+   "code": false,
+   "note": "Unlocks the private male companion job",
+   "source": "[user] ballroom dancer hook",
+   "body": null
   },
   {
    "id": "job_ballroom_m2",
-   "名字": "赞助一件服装",
-   "类": "工作",
-   "时机": "工期间",
-   "条件": [],
-   "概率": null,
-   "频次": null,
-   "效果": "旗标.富婆赞助服装=1",
-   "代码": false,
-   "说明": "赞助一件服装",
-   "来源": "[用] 舞厅伴舞接口",
-   "文本": null
+   "name": "赞助一件服装",
+   "class": "job",
+   "timing": "during_job",
+   "cond": [],
+   "prob": null,
+   "freq": null,
+   "effect": "flag.widow_outfit_sponsor=1",
+   "code": false,
+   "note": "Sponsors one outfit",
+   "source": "[user] ballroom dancer hook",
+   "body": null
   },
   {
    "id": "job_ballroom_m3",
-   "名字": "出钱投一部片，下一块板多一个中片角色",
-   "类": "工作",
-   "时机": "工期间",
-   "条件": [],
-   "概率": null,
-   "频次": null,
-   "效果": "旗标.富婆投资=1",
-   "代码": false,
-   "说明": "出钱投一部片，下一块板多一个中片角色",
-   "来源": "[用] 舞厅伴舞接口",
-   "文本": null
+   "name": "出钱投一部片，下一块板多一个中片角色",
+   "class": "job",
+   "timing": "during_job",
+   "cond": [],
+   "prob": null,
+   "freq": null,
+   "effect": "flag.widow_invest=1",
+   "code": false,
+   "note": "Invests in a film: the next board gets an extra medium role",
+   "source": "[user] ballroom dancer hook",
+   "body": null
   },
   {
    "id": "job_stunt_r1",
-   "名字": "受伤（体力 -30、疲劳 +20）",
-   "类": "工作",
-   "时机": "工期间",
-   "条件": [],
-   "概率": null,
-   "频次": null,
-   "效果": "体力-30 疲劳+20",
-   "代码": false,
-   "说明": "受伤（体力 -30、疲劳 +20）",
-   "来源": "[用] 替身接口",
-   "文本": null
+   "name": "受伤（体力 -30、疲劳 +20）",
+   "class": "job",
+   "timing": "during_job",
+   "cond": [],
+   "prob": null,
+   "freq": null,
+   "effect": "stamina-30 fatigue+20",
+   "code": false,
+   "note": "Injury (stamina -30, fatigue +20)",
+   "source": "[user] stunt double hook",
+   "body": null
   },
   {
    "id": "job_stunt_m1",
-   "名字": "“亲自上”的胆识线从 60 降到 50；西部、动作冒险标签的角色上板权重 +1",
-   "类": "工作",
-   "时机": "工期间",
-   "条件": [],
-   "概率": null,
-   "频次": null,
-   "效果": "旗标.亲自上线50=1 权重.西部+1 权重.动作冒险+1",
-   "代码": false,
-   "说明": "“亲自上”的胆识线从 60 降到 50；西部、动作冒险标签的角色上板权重 +1",
-   "来源": "[用] 替身接口",
-   "文本": null
+   "name": "“亲自上”的胆识线从 60 降到 50；西部、动作冒险标签的角色上板权重 +1",
+   "class": "job",
+   "timing": "during_job",
+   "cond": [],
+   "prob": null,
+   "freq": null,
+   "effect": "flag.stunt_line_50=1 weight.western+1 weight.action_adventure+1",
+   "code": false,
+   "note": "The \"stunt_self\" nerve line drops from 60 to 50; roles with the western and action_adventure tags get +1 board weight",
+   "source": "[user] stunt double hook",
+   "body": null
   },
   {
    "id": "job_bootleg_r1",
-   "名字": "查车，胆识判定线 60，不过则被捕",
-   "类": "工作",
-   "时机": "工期间",
-   "条件": [],
-   "概率": null,
-   "频次": null,
-   "效果": "",
-   "代码": false,
-   "说明": "查车，胆识判定线 60，不过则被捕",
-   "来源": "[用] 运私酒接口",
-   "文本": null,
-   "判定": {
-    "判定": "胆识",
-    "线": 60
+   "name": "查车，胆识判定线 60，不过则被捕",
+   "class": "job",
+   "timing": "during_job",
+   "cond": [],
+   "prob": null,
+   "freq": null,
+   "effect": "",
+   "code": false,
+   "note": "Car inspection, nerve check line 60, failing means arrest",
+   "source": "[user] bootlegging hook",
+   "body": null,
+   "check": {
+    "check": "nerve",
+    "line": 60
    },
-   "成功效果": "",
-   "失败效果": "触发.evt_arrest"
+   "success_effect": "",
+   "fail_effect": "trigger.evt_arrest"
   },
   {
    "id": "job_bootleg_m1",
-   "名字": "“入伙”邀请，记旗标（地下皇帝线）",
-   "类": "工作",
-   "时机": "工期间",
-   "条件": [],
-   "概率": null,
-   "频次": null,
-   "效果": "旗标.入伙=1",
-   "代码": false,
-   "说明": "“入伙”邀请，记旗标（地下皇帝线）",
-   "来源": "[用] 运私酒接口",
-   "文本": null
+   "name": "“入伙”邀请，记旗标（地下皇帝线）",
+   "class": "job",
+   "timing": "during_job",
+   "cond": [],
+   "prob": null,
+   "freq": null,
+   "effect": "flag.joined_crew=1",
+   "code": false,
+   "note": "\"Join the crew\" invitation, sets a flag (underworld emperor line)",
+   "source": "[user] bootlegging hook",
+   "body": null
   },
   {
    "id": "job_magazine_m1",
-   "名字": "封面事件（名气 +15）；浪漫、异国情人标签的角色上板权重 +1",
-   "类": "工作",
-   "时机": "工期间",
-   "条件": [],
-   "概率": null,
-   "频次": null,
-   "效果": "名气+15 权重.浪漫+1 权重.异国情人+1",
-   "代码": false,
-   "说明": "封面事件（名气 +15）；浪漫、异国情人标签的角色上板权重 +1",
-   "来源": "[用] 画报模特接口",
-   "文本": null
+   "name": "封面事件（名气 +15）；浪漫、异国情人标签的角色上板权重 +1",
+   "class": "job",
+   "timing": "during_job",
+   "cond": [],
+   "prob": null,
+   "freq": null,
+   "effect": "fame+15 weight.romance+1 weight.exotic_lover+1",
+   "code": false,
+   "note": "Cover story (fame +15); roles with the romance and exotic_lover tags get +1 board weight",
+   "source": "[user] pinup model hook",
+   "body": null
   },
   {
    "id": "job_bodyguard_r1",
-   "名字": "“挡了一下”（体力 -20、女明星好感 +10、义气 +10、名气 +10）",
-   "类": "工作",
-   "时机": "工期间",
-   "条件": [],
-   "概率": null,
-   "频次": null,
-   "效果": "体力-20 好感.女明星+10 义气+10 名气+10",
-   "代码": false,
-   "说明": "“挡了一下”（体力 -20、女明星好感 +10、义气 +10、名气 +10）",
-   "来源": "[用] 女明星保镖接口",
-   "文本": null
+   "name": "“挡了一下”（体力 -20、女明星好感 +10、义气 +10、名气 +10）",
+   "class": "job",
+   "timing": "during_job",
+   "cond": [],
+   "prob": null,
+   "freq": null,
+   "effect": "stamina-20 favor.actress+10 loyalty+10 fame+10",
+   "code": false,
+   "note": "\"Took the hit\" (stamina -20, actress favor +10, loyalty +10, fame +10)",
+   "source": "[user] actress bodyguard hook",
+   "body": null
   },
   {
    "id": "job_radio_m1",
-   "名字": "此后有声角色的谈吐线 -10",
-   "类": "工作",
-   "时机": "工期间",
-   "条件": [],
-   "概率": null,
-   "频次": null,
-   "效果": "旗标.有声谈吐线减10=1",
-   "代码": false,
-   "说明": "此后有声角色的谈吐线 -10",
-   "来源": "[用] 电台播音接口",
-   "文本": null
+   "name": "此后有声角色的谈吐线 -10",
+   "class": "job",
+   "timing": "during_job",
+   "cond": [],
+   "prob": null,
+   "freq": null,
+   "effect": "flag.talkie_speech_line_minus_10=1",
+   "code": false,
+   "note": "From then on talkie roles' speech line -10",
+   "source": "[user] radio announcer hook",
+   "body": null
   },
   {
    "id": "job_escort_r1",
-   "名字": "被小报拍到，按丑闻曝光结算",
-   "类": "工作",
-   "时机": "工期间",
-   "条件": [],
-   "概率": null,
-   "频次": null,
-   "效果": "触发.evt_scandal",
-   "代码": false,
-   "说明": "被小报拍到，按丑闻曝光结算",
-   "来源": "[用] 私人男伴接口",
-   "文本": null
+   "name": "被小报拍到，按丑闻曝光结算",
+   "class": "job",
+   "timing": "during_job",
+   "cond": [],
+   "prob": null,
+   "freq": null,
+   "effect": "trigger.evt_scandal",
+   "code": false,
+   "note": "Caught by the tabloids, settled as scandal exposure",
+   "source": "[user] private male companion hook",
+   "body": null
   },
   {
    "id": "opp_accident",
-   "名字": "一场真的事故",
-   "类": "机遇",
-   "时机": "月末",
-   "条件": [],
-   "概率": null,
-   "频次": null,
-   "效果": "",
-   "代码": false,
-   "说明": "剧情留空（GDD 12.2 占位）",
-   "来源": "[用][推N7]",
-   "文本": null
+   "name": "一场真的事故",
+   "class": "opportunity",
+   "timing": "month_end",
+   "cond": [],
+   "prob": null,
+   "freq": null,
+   "effect": "",
+   "code": false,
+   "note": "Story left blank (GDD 12.2 placeholder)",
+   "source": "[user][inferred N7]",
+   "body": null
   },
   {
    "id": "opp_expedition",
-   "名字": "探险队的邀请",
-   "类": "机遇",
-   "时机": "月末",
-   "条件": [],
-   "概率": null,
-   "频次": null,
-   "效果": "",
-   "代码": false,
-   "说明": "剧情留空（GDD 12.2 占位）",
-   "来源": "[用][推N7]",
-   "文本": null
+   "name": "探险队的邀请",
+   "class": "opportunity",
+   "timing": "month_end",
+   "cond": [],
+   "prob": null,
+   "freq": null,
+   "effect": "",
+   "code": false,
+   "note": "Story left blank (GDD 12.2 placeholder)",
+   "source": "[user][inferred N7]",
+   "body": null
   },
   {
    "id": "opp_tango",
-   "名字": "一支探戈",
-   "类": "机遇",
-   "时机": "月末",
-   "条件": [],
-   "概率": null,
-   "频次": null,
-   "效果": "",
-   "代码": false,
-   "说明": "剧情留空（GDD 12.2 占位）",
-   "来源": "[用][推N7]",
-   "文本": null
+   "name": "一支探戈",
+   "class": "opportunity",
+   "timing": "month_end",
+   "cond": [],
+   "prob": null,
+   "freq": null,
+   "effect": "",
+   "code": false,
+   "note": "Story left blank (GDD 12.2 placeholder)",
+   "source": "[user][inferred N7]",
+   "body": null
   },
   {
    "id": "opp_valen_seat",
-   "名字": "瓦伦留下的位置",
-   "类": "机遇",
-   "时机": "月末",
-   "条件": [],
-   "概率": null,
-   "频次": null,
-   "效果": "",
-   "代码": false,
-   "说明": "剧情留空（GDD 12.2 占位）",
-   "来源": "[用][推N7]",
-   "文本": null
+   "name": "瓦伦留下的位置",
+   "class": "opportunity",
+   "timing": "month_end",
+   "cond": [],
+   "prob": null,
+   "freq": null,
+   "effect": "",
+   "code": false,
+   "note": "Story left blank (GDD 12.2 placeholder)",
+   "source": "[user][inferred N7]",
+   "body": null
   },
   {
    "id": "opp_article",
-   "名字": "一篇被转载的文章",
-   "类": "机遇",
-   "时机": "月末",
-   "条件": [],
-   "概率": null,
-   "频次": null,
-   "效果": "",
-   "代码": false,
-   "说明": "剧情留空（GDD 12.2 占位）",
-   "来源": "[用][推N7]",
-   "文本": null
+   "name": "一篇被转载的文章",
+   "class": "opportunity",
+   "timing": "month_end",
+   "cond": [],
+   "prob": null,
+   "freq": null,
+   "effect": "",
+   "code": false,
+   "note": "Story left blank (GDD 12.2 placeholder)",
+   "source": "[user][inferred N7]",
+   "body": null
   },
   {
    "id": "opp_painting",
-   "名字": "一幅画进了展览",
-   "类": "机遇",
-   "时机": "月末",
-   "条件": [],
-   "概率": null,
-   "频次": null,
-   "效果": "",
-   "代码": false,
-   "说明": "剧情留空（GDD 12.2 占位）",
-   "来源": "[用][推N7]",
-   "文本": null
+   "name": "一幅画进了展览",
+   "class": "opportunity",
+   "timing": "month_end",
+   "cond": [],
+   "prob": null,
+   "freq": null,
+   "effect": "",
+   "code": false,
+   "note": "Story left blank (GDD 12.2 placeholder)",
+   "source": "[user][inferred N7]",
+   "body": null
   },
   {
    "id": "opp_fixer",
-   "名字": "替片厂摆平一件事",
-   "类": "机遇",
-   "时机": "月末",
-   "条件": [],
-   "概率": null,
-   "频次": null,
-   "效果": "",
-   "代码": false,
-   "说明": "剧情留空（GDD 12.2 占位）",
-   "来源": "[用][推N7]",
-   "文本": null
+   "name": "替片厂摆平一件事",
+   "class": "opportunity",
+   "timing": "month_end",
+   "cond": [],
+   "prob": null,
+   "freq": null,
+   "effect": "",
+   "code": false,
+   "note": "Story left blank (GDD 12.2 placeholder)",
+   "source": "[user][inferred N7]",
+   "body": null
   },
   {
    "id": "opp_investment",
-   "名字": "一笔早到的投资",
-   "类": "机遇",
-   "时机": "月末",
-   "条件": [],
-   "概率": null,
-   "频次": null,
-   "效果": "",
-   "代码": false,
-   "说明": "剧情留空（GDD 12.2 占位）",
-   "来源": "[用][推N7]",
-   "文本": null
+   "name": "一笔早到的投资",
+   "class": "opportunity",
+   "timing": "month_end",
+   "cond": [],
+   "prob": null,
+   "freq": null,
+   "effect": "",
+   "code": false,
+   "note": "Story left blank (GDD 12.2 placeholder)",
+   "source": "[user][inferred N7]",
+   "body": null
   },
   {
    "id": "opp_senior_yinghan",
-   "名字": "前辈的机遇·硬汉",
-   "类": "机遇",
-   "时机": "月末",
-   "条件": [],
-   "概率": null,
-   "频次": null,
-   "效果": "",
-   "代码": false,
-   "说明": "前辈认可 300 档后必然触发",
-   "来源": "[用][推N7]",
-   "文本": null
+   "name": "前辈的机遇·硬汉",
+   "class": "opportunity",
+   "timing": "month_end",
+   "cond": [],
+   "prob": null,
+   "freq": null,
+   "effect": "",
+   "code": false,
+   "note": "Always fires after the senior-approval 300 tier",
+   "source": "[user][inferred N7]",
+   "body": null
   },
   {
    "id": "opp_senior_qingren",
-   "名字": "前辈的机遇·情人",
-   "类": "机遇",
-   "时机": "月末",
-   "条件": [],
-   "概率": null,
-   "频次": null,
-   "效果": "",
-   "代码": false,
-   "说明": "前辈认可 300 档后必然触发",
-   "来源": "[用][推N7]",
-   "文本": null
+   "name": "前辈的机遇·情人",
+   "class": "opportunity",
+   "timing": "month_end",
+   "cond": [],
+   "prob": null,
+   "freq": null,
+   "effect": "",
+   "code": false,
+   "note": "Always fires after the senior-approval 300 tier",
+   "source": "[user][inferred N7]",
+   "body": null
   },
   {
    "id": "opp_senior_wenhua",
-   "名字": "前辈的机遇·文化",
-   "类": "机遇",
-   "时机": "月末",
-   "条件": [],
-   "概率": null,
-   "频次": null,
-   "效果": "",
-   "代码": false,
-   "说明": "前辈认可 300 档后必然触发",
-   "来源": "[用][推N7]",
-   "文本": null
+   "name": "前辈的机遇·文化",
+   "class": "opportunity",
+   "timing": "month_end",
+   "cond": [],
+   "prob": null,
+   "freq": null,
+   "effect": "",
+   "code": false,
+   "note": "Always fires after the senior-approval 300 tier",
+   "source": "[user][inferred N7]",
+   "body": null
   },
   {
    "id": "opp_senior_shouwan",
-   "名字": "前辈的机遇·手腕",
-   "类": "机遇",
-   "时机": "月末",
-   "条件": [],
-   "概率": null,
-   "频次": null,
-   "效果": "",
-   "代码": false,
-   "说明": "前辈认可 300 档后必然触发",
-   "来源": "[用][推N7]",
-   "文本": null
+   "name": "前辈的机遇·手腕",
+   "class": "opportunity",
+   "timing": "month_end",
+   "cond": [],
+   "prob": null,
+   "freq": null,
+   "effect": "",
+   "code": false,
+   "note": "Always fires after the senior-approval 300 tier",
+   "source": "[user][inferred N7]",
+   "body": null
   }
  ],
- "月末上限": 2
+ "month_end_cap": 2
 }

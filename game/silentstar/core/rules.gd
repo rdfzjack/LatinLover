@@ -1,20 +1,20 @@
 extends RefCounted
-## 条件、效果、判定、概率的解释器。照抄 sim/rules.py。语法见 data/new/README.md，GDD 11.0、16。
-## 函数都是静态的，st 是 core/state.gd 的实例。
+## Interpreter for conditions, effects, checks and probabilities. Port of sim/rules.py.
+## Syntax: data/new/README.md, GDD 11.0 and 16. All functions are static; st is an instance of core/state.gd.
 
 static var _cache := {}
 static var _re: RegEx = null
 
-## 第 6 步登记结局用的派生值（档次、最大标签族…）：名字 -> Callable(st)。第 12 步移植时填。
+## Derived values for the endings (grade, top tag family ...): name -> Callable(st). Filled in when step 6 is ported (step 12).
 static var extra_vars := {}
 
 
-## 向零截断的整数除法（GDD 0）。GDScript 的 int / int 本来就向零截断。
+## Integer division truncating toward zero (GDD 0). GDScript int / int already truncates.
 static func tdiv(a: int, b: int) -> int:
 	return a / b
 
 
-## 向下取整的整数除法，同 Python 的 //。
+## Integer division rounding down, like Python's //.
 static func fdiv(a: int, b: int) -> int:
 	var q := a / b
 	if (a % b != 0) and ((a < 0) != (b < 0)):
@@ -22,9 +22,18 @@ static func fdiv(a: int, b: int) -> int:
 	return q
 
 
-# ---------- 效果 ----------
+## 'favor.sil' -> ["favor", "sil"]; a name without a prefix gives [name, ""]. Always split at the first '.', never slice by length.
+static func split_name(name: String) -> Array:
+	var i := name.find(".")
+	if i < 0:
+		return [name, ""]
+	return [name.substr(0, i), name.substr(i + 1)]
 
-## '体力+20 自律-15 触发.evt_x' -> [[名字, 符号, 数, 是否百分比]]；触发写成 ['触发', 'evt_x', 0, '']。
+
+# ---------- effects ----------
+
+## 'stamina+20 discipline-15 trigger.evt_x' -> [[name, sign, number, is_percent]];
+## a trigger is returned as ["trigger", "evt_x", 0, ""].
 static func parse_effect(text) -> Array:
 	if text == null:
 		text = ""
@@ -35,22 +44,23 @@ static func parse_effect(text) -> Array:
 		_re.compile("^([^+\\-=]+)([+\\-=])(\\d+)(%?)$")
 	var out := []
 	var norm: String = text
-	for ws in ["\t", "\n", "\r", "　"]:
+	for ws in ["\t", "\n", "\r", "\u3000"]:
 		norm = norm.replace(ws, " ")
 	for tok in norm.split(" ", false):
-		if tok.begins_with("触发."):
-			out.append(["触发", tok.substr(3), 0, ""])
+		var hr := split_name(tok)
+		if hr[0] == "trigger" and hr[1] != "":
+			out.append(["trigger", hr[1], 0, ""])
 			continue
 		var m := _re.search(tok)
 		if m == null:
-			push_error("效果项格式错误：%s" % tok)
+			push_error("bad effect term: %s" % tok)
 			continue
 		out.append([m.get_string(1), m.get_string(2), m.get_string(3).to_int(), m.get_string(4)])
 	_cache[text] = out
 	return out
 
 
-## 返回新值。百分比按当前值算，向零截断。
+## Returns the new value. A percentage is taken of the current value, truncating toward zero.
 static func _delta(cur: int, op: String, n: int, pct: String) -> int:
 	if op == "=":
 		return n
@@ -62,9 +72,9 @@ static func _clampi(v: int, lo: int, hi: int) -> int:
 	return lo if v < lo else (hi if v > hi else v)
 
 
-## 执行一行效果，返回要接着触发的事件 id 列表。
-## source：'event'（事件、机遇、物品使用等）时，好感正增量在义气 ≥200 时多 1（GDD 10.1）；
-## 'schedule'（日程里每旬、每期固定的好感）和 'origin' 不加。
+## Applies one effect line and returns the ids of the events to trigger next.
+## source "event" (events, opportunities, item use ...): a positive favor gain is +1 more when loyalty >= 200 (GDD 10.1);
+## "schedule" (fixed per-period or per-period favor in schedules) and "origin" do not get the bonus.
 static func apply_effect(st, text, source := "event") -> Array:
 	var trig := []
 	var d = st.d
@@ -73,7 +83,10 @@ static func apply_effect(st, text, source := "event") -> Array:
 		var op: String = e[1]
 		var v: int = e[2]
 		var pct: String = e[3]
-		if n == "触发":
+		var hr := split_name(n)
+		var head: String = hr[0]
+		var k: String = hr[1]
+		if n == "trigger":
 			trig.append(op)
 		elif st.attr.has(n):
 			var rg: Array = d.attr_range[n]
@@ -81,58 +94,52 @@ static func apply_effect(st, text, source := "event") -> Array:
 		elif st.skill.has(n):
 			var rg: Array = d.skill_range[n]
 			st.skill[n] = _clampi(_delta(st.skill[n], op, v, pct), rg[0], rg[1])
-		elif n == "金钱":
+		elif n == "money":
 			st.money = mini(_delta(st.money, op, v, pct), d.money_cap)
-		elif n == "药瘾阶段":
+		elif n == "drug_stage":
 			st.drug = _clampi(_delta(st.drug, op, v, pct), 0, 3)
-		elif n == "负债月数":
+		elif n == "debt_months":
 			st.debt_months = maxi(0, _delta(st.debt_months, op, v, pct))
-		elif n.begins_with("好感."):
-			var k := n.substr(3)
+		elif head == "favor":
 			var cur: int = st.favor.get(k, 0)
 			var nv := _delta(cur, op, v, pct)
-			if source == "event" and nv > cur and st.val("义气") >= 200:
+			if source == "event" and nv > cur and st.val("loyalty") >= 200:
 				nv += 1
 			st.favor[k] = _clampi(nv, 0, 100)
-		elif n.begins_with("修正."):
-			var k := n.substr(3)
+		elif head == "rep_bonus":
 			st.corr[k] = _delta(st.corr[k], op, v, pct)
-		elif n.begins_with("权重."):
-			var k := n.substr(3)
+		elif head == "weight":
 			st.weights[k] = _delta(st.weights.get(k, 0), op, v, pct)
-		elif n.begins_with("物品."):
-			var k := n.substr(3)
+		elif head == "item":
 			if op == "=" and v == 0:
 				remove_item(st, k)
 			else:
 				st.items.append(k)
-		elif n.begins_with("状态."):
-			var k := n.substr(3)
+		elif head == "status":
 			var nv := _delta(st.status.get(k, 0), op, v, pct)
-			if k == "恋爱" and nv != 0 and not st.status.get("恋爱", 0):
+			if k == "in_love" and nv != 0 and not st.status.get("in_love", 0):
 				st.romance_months = 0
 			st.status[k] = nv
-		elif n.begins_with("旗标."):
-			var k := n.substr(3)
+		elif head == "flag":
 			st.flags[k] = _delta(st.flags.get(k, 0), op, v, pct)
 		else:
-			push_error("效果名字未知：%s" % n)
+			push_error("unknown effect name: %s" % n)
 	return trig
 
 
 static func remove_item(st, iid: String) -> bool:
 	if not st.items.has(iid):
 		return false
-	st.items.erase(iid)   # 去掉第一个，同 Python list.remove
+	st.items.erase(iid)   # removes the first one, like Python list.remove
 	if not st.items.has(iid):
-		if st.equip["服装"] == iid:
-			st.equip["服装"] = null
-		if st.equip["配饰"].has(iid):
-			st.equip["配饰"].erase(iid)
+		if st.equip["outfit"] == iid:
+			st.equip["outfit"] = null
+		if st.equip["accessory"].has(iid):
+			st.equip["accessory"].erase(iid)
 	return true
 
 
-# ---------- 变量 ----------
+# ---------- variables ----------
 
 static func get_var(st, name: String):
 	var d = st.d
@@ -140,17 +147,17 @@ static func get_var(st, name: String):
 		return st.val(name)
 	if st.corr.has(name):
 		return st.rep(name)
-	if name == "金钱":
+	if name == "money":
 		return st.money
 	if st.idx.has(name):
 		return st.idx[name]
-	if name == "日期":
+	if name == "date":
 		return st.date()
-	if name == "月份":
+	if name == "month":
 		return st.date().substr(5).to_int()
-	if name == "年份":
+	if name == "year":
 		return st.date().substr(0, 4).to_int()
-	if name == "最高声望":
+	if name == "max_rep":
 		var b: Dictionary = st.bonus()
 		var best = null
 		for r in d.roads:
@@ -158,17 +165,17 @@ static func get_var(st, name: String):
 			if best == null or x > best:
 				best = x
 		return best
-	if name == "最高声望所在路":
+	if name == "top_road":
 		var b: Dictionary = st.bonus()
 		var best_r = null
 		var best := 0
-		for r in d.roads:     # 并列取靠前的
+		for r in d.roads:     # a tie goes to the earlier road
 			var x: int = st.rep(r, b)
 			if best_r == null or x > best:
 				best_r = r
 				best = x
 		return best_r
-	if name == "四路声望极差":
+	if name == "rep_spread":
 		var b: Dictionary = st.bonus()
 		var lo = null
 		var hi = null
@@ -179,50 +186,51 @@ static func get_var(st, name: String):
 			if hi == null or x > hi:
 				hi = x
 		return hi - lo
-	if name == "药瘾阶段":
+	if name == "drug_stage":
 		return st.drug
-	if name == "负债月数":
+	if name == "debt_months":
 		return st.debt_months
-	if name == "最高基础属性":
+	if name == "top_base_attr":
 		return st.highest_base()
-	if name == "手腕最高技能":
+	if name == "top_savvy_skill":
 		var b: Dictionary = st.bonus()
 		var best_s = null
 		var best := 0
-		for s in d.road_skills["手腕"]:
+		for s in d.road_skills["savvy"]:
 			var x: int = st.val(s, b)
 			if best_s == null or x > best:
 				best_s = s
 				best = x
 		return best_s
-	if name == "最大工期数":
+	if name == "max_job_periods":
 		var m := 0
 		for j in d.jobs:
-			m = maxi(m, st.cnt("成功期数." + j))
+			m = maxi(m, st.cnt("job_periods." + j))
 		return m
-	if name == "有声片部数":
-		return st.cnt("计数.有声片部数")
-	if name.begins_with("好感."):
-		return st.favor.get(name.substr(3), 0)
-	if name.begins_with("旗标."):
-		return st.flags.get(name.substr(3), 0)
-	if name.begins_with("状态."):
-		var k := name.substr(3)
-		if k == "收尾期":
-			return 1 if st.month().get("收尾期", false) else 0
+	if name == "talkie_count":
+		return st.cnt("count.talkie_count")
+	var hr := split_name(name)
+	var head: String = hr[0]
+	var k: String = hr[1]
+	if head == "favor":
+		return st.favor.get(k, 0)
+	if head == "flag":
+		return st.flags.get(k, 0)
+	if head == "status":
+		if k == "wrap_up":
+			return 1 if st.month().get("wrap_up", false) else 0
 		return st.status.get(k, 0)
-	if name.begins_with("标签."):
-		return st.tags.get(name.substr(3), 0)
-	for p in ["成功期数.", "旬数.", "期数.", "计数.", "交手次数."]:
-		if name.begins_with(p):
-			return st.cnt(name)
+	if head == "tag":
+		return st.tags.get(k, 0)
+	if head in ["job_periods", "class_periods", "road_periods", "count", "duels"]:
+		return st.cnt(name)
 	if extra_vars.has(name):
 		return extra_vars[name].call(st)
-	push_error("条件变量未知或还没实现：%s" % name)
+	push_error("condition variable unknown or not implemented: %s" % name)
 	return null
 
 
-## Python 里 int 和 str 用 == 比较得 False；GDScript 会报错，所以先比类型。
+## In Python, == between an int and a str is False; GDScript raises an error, so compare the types first.
 static func _same_kind(a, b) -> bool:
 	var ta := typeof(a)
 	var tb := typeof(b)
@@ -244,7 +252,7 @@ static func _cmp(a, op: String, b) -> bool:
 					return true
 			return false
 	if not _same_kind(a, b):
-		push_error("比较的两边类型不同：%s %s %s" % [a, op, b])
+		push_error("the two sides have different types: %s %s %s" % [a, op, b])
 		return false
 	match op:
 		">=":
@@ -255,7 +263,7 @@ static func _cmp(a, op: String, b) -> bool:
 			return a > b
 		"<":
 			return a < b
-	push_error("比较符未知：%s" % op)
+	push_error("unknown comparator: %s" % op)
 	return false
 
 
@@ -269,7 +277,7 @@ static func test(st, term: Array) -> bool:
 	return _cmp(a, op, val)
 
 
-## [[项,…],…]：外层或、组内与；[] 恒真。
+## [[term, ...], ...]: the outer list is OR, the inner list is AND; [] is always true.
 static func cond(st, c) -> bool:
 	if c == null or c.is_empty():
 		return true
@@ -284,34 +292,36 @@ static func cond(st, c) -> bool:
 	return false
 
 
-# ---------- 判定（GDD 11.0） ----------
+# ---------- checks (GDD 11.0) ----------
 
-## 门槛 [变量, 比较符, 值]，或掷骰 {判定: 技能, 线: n}（技能显示值 + r0(20) >= n）。null 为必然成功。
+## A gate [variable, comparator, value], or a dice check {check: skill, line: n}
+## (displayed skill value + r0(20) >= n). null always succeeds.
 static func check(st, c) -> bool:
 	if c == null:
 		return true
 	if typeof(c) == TYPE_DICTIONARY:
-		return st.val(c["判定"]) + st.rng.logic.r0(20) >= c["线"]
+		return st.val(c["check"]) + st.rng.logic.r0(20) >= c["line"]
 	return test(st, c)
 
 
-# ---------- 概率 ----------
+# ---------- probabilities ----------
 
-## null 必然；[分子,分母]；分档 [{条件,值}] 取第一个满足的；{分子:变量,分母:n,上限:[p,q]}。
+## null always; [numerator, denominator]; a tiered list [{cond, value}] takes the first that holds;
+## {numerator: variable, denominator: n, max: [p, q]}.
 static func prob(st, p) -> bool:
 	var g = st.rng.logic
 	if p == null:
 		return true
 	if typeof(p) == TYPE_DICTIONARY:
-		var num: int = get_var(st, p["分子"])
-		var den: int = p["分母"]
-		var cp: int = p["上限"][0]
-		var cq: int = p["上限"][1]
-		# min(num/den, cp/cq) 化成同分母 den*cq
+		var num: int = get_var(st, p["numerator"])
+		var den: int = p["denominator"]
+		var cp: int = p["max"][0]
+		var cq: int = p["max"][1]
+		# min(num/den, cp/cq) over the common denominator den*cq
 		return g.chance(mini(num * cq, cp * den), den * cq)
 	if p.size() > 0 and typeof(p[0]) == TYPE_DICTIONARY:
 		for x in p:
-			if cond(st, x["条件"]):
-				return g.chance(x["值"][0], x["值"][1])
+			if cond(st, x["cond"]):
+				return g.chance(x["value"][0], x["value"][1])
 		return false
 	return g.chance(p[0], p[1])

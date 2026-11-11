@@ -1,609 +1,675 @@
 {
- "说明": "GDD 6.3 的 8 个示例加 1 个教学角色；大片 20 个、中小片 40 个在 PLAN 第 16、17 步补。场风顺序 硬汉/情人/文化/手腕，和为 100，单色最高 60、最低 5。片名全是占位。有声：true 一定带、false 一定不带、null 按 默认.有声 的比例在上板时定（GDD 6.4）",
- "角色": [
+ "note": "GDD 6.3's 8 examples plus 1 tutorial role; 20 big and 40 medium/small roles are added in PLAN steps 16-17. Style order tough/lover/culture/savvy, sums to 100, a single color at most 60 and at least 5. All film titles are placeholders. talkie: true always has it, false never, null is decided by the defaults.talkie ratio when the board is built (GDD 6.4)",
+ "tags": [
+  {
+   "id": "action_adventure",
+   "name": "动作冒险"
+  },
+  {
+   "id": "exotic_lover",
+   "name": "异国情人"
+  },
+  {
+   "id": "costume",
+   "name": "古装"
+  },
+  {
+   "id": "western",
+   "name": "西部"
+  },
+  {
+   "id": "crime",
+   "name": "犯罪"
+  },
+  {
+   "id": "villain",
+   "name": "反派"
+  },
+  {
+   "id": "arthouse",
+   "name": "文艺"
+  },
+  {
+   "id": "tragic",
+   "name": "悲情"
+  },
+  {
+   "id": "religious",
+   "name": "宗教"
+  },
+  {
+   "id": "romance",
+   "name": "浪漫"
+  },
+  {
+   "id": "war",
+   "name": "战争"
+  },
+  {
+   "id": "musical",
+   "name": "歌舞"
+  },
+  {
+   "id": "horror",
+   "name": "恐怖"
+  },
+  {
+   "id": "underground",
+   "name": "地下片"
+  },
+  {
+   "id": "comedy",
+   "name": "喜剧"
+  },
+  {
+   "id": "noble",
+   "name": "贵族"
+  }
+ ],
+ "roles": [
   {
    "id": "role_tutorial",
-   "名字": "替补演员",
-   "片名": "（占位）",
-   "档次": "小",
-   "名气门槛": 0,
-   "场风概率": null,
-   "看重": [
+   "name": "替补演员",
+   "film_title": "（占位）",
+   "size": "small",
+   "fame_gate": 0,
+   "style_probs": null,
+   "wants": [
     {
-     "项": "相貌",
-     "目标": 120
+     "stat": "looks",
+     "target": 120
     }
    ],
-   "标签": [
-    "动作冒险"
+   "tags": [
+    "action_adventure"
    ],
-   "对手": [
+   "opponents": [
     {
-     "无名": true
+     "unnamed": true
     }
    ],
-   "加分技能": "演技",
-   "有声": null,
-   "谈吐线": null,
-   "片酬": 300,
-   "出现年份": [
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 300,
+   "years_active": [
     1926,
     1929
    ],
-   "教学": true,
-   "场风规则": "玩家当前最高声望的路 60%，其余三色平分；对手为 2 级无名演员",
-   "说明": "第一块板固定的教学角色（GDD 3.3）；名字、看重、标签都是占位"
+   "tutorial": true,
+   "style_rule": "60% on the player's current highest-reputation road, the other three colors share the rest; the rival is a level-2 unnamed actor",
+   "note": "The fixed tutorial role of the first board (GDD 3.3); name, wants and tags are placeholders"
   },
   {
    "id": "role_sheikh_son",
-   "名字": "沙漠酋长之子",
-   "片名": "（占位）",
-   "档次": "大",
-   "名气门槛": 250,
-   "场风概率": [
+   "name": "沙漠酋长之子",
+   "film_title": "（占位）",
+   "size": "big",
+   "fame_gate": 250,
+   "style_probs": [
     15,
     60,
     10,
     15
    ],
-   "看重": [
+   "wants": [
     {
-     "项": "相貌",
-     "目标": 300
+     "stat": "looks",
+     "target": 300
     },
     {
-     "项": "体态",
-     "目标": 70
+     "stat": "physique",
+     "target": 70
     }
    ],
-   "标签": [
-    "异国情人"
+   "tags": [
+    "exotic_lover"
    ],
-   "对手": [
+   "opponents": [
     {
-     "无名": true,
-     "主色等级": 7
+     "unnamed": true,
+     "main_level": 7
     },
     {
-     "有名": "rival_valen"
+     "named": "rival_valen"
     }
    ],
-   "加分技能": "演技",
-   "有声": null,
-   "谈吐线": null,
-   "片酬": 2500,
-   "出现年份": [
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 2500,
+   "years_active": [
     1926,
     1929
    ]
   },
   {
    "id": "role_swordsman",
-   "名字": "剑客",
-   "片名": "（占位）",
-   "档次": "大",
-   "名气门槛": 250,
-   "场风概率": [
+   "name": "剑客",
+   "film_title": "（占位）",
+   "size": "big",
+   "fame_gate": 250,
+   "style_probs": [
     55,
     25,
     5,
     15
    ],
-   "看重": [
+   "wants": [
     {
-     "项": "体力",
-     "目标": 300
+     "stat": "stamina",
+     "target": 300
     },
     {
-     "项": "相貌",
-     "目标": 200
+     "stat": "looks",
+     "target": 200
     }
    ],
-   "标签": [
-    "动作冒险",
-    "古装"
+   "tags": [
+    "action_adventure",
+    "costume"
    ],
-   "对手": [
+   "opponents": [
     {
-     "无名": true
+     "unnamed": true
     },
     {
-     "有名": "rival_fanban"
+     "named": "rival_fanban"
     }
    ],
-   "加分技能": "演技",
-   "有声": null,
-   "谈吐线": null,
-   "片酬": 2500,
-   "出现年份": [
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 2500,
+   "years_active": [
     1926,
     1929
    ]
   },
   {
    "id": "role_ranch_hand",
-   "名字": "沉默的牧场帮工",
-   "片名": "（占位）",
-   "档次": "中",
-   "名气门槛": 100,
-   "场风概率": [
+   "name": "沉默的牧场帮工",
+   "film_title": "（占位）",
+   "size": "medium",
+   "fame_gate": 100,
+   "style_probs": [
     50,
     20,
     20,
     10
    ],
-   "看重": [
+   "wants": [
     {
-     "项": "体力",
-     "目标": 200
+     "stat": "stamina",
+     "target": 200
     }
    ],
-   "标签": [
-    "西部"
+   "tags": [
+    "western"
    ],
-   "对手": [
+   "opponents": [
     {
-     "无名": true
+     "unnamed": true
     }
    ],
-   "加分技能": "演技",
-   "有声": null,
-   "谈吐线": null,
-   "片酬": 800,
-   "出现年份": [
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 800,
+   "years_active": [
     1926,
     1929
    ]
   },
   {
    "id": "role_casino_owner",
-   "名字": "赌场老板",
-   "片名": "（占位）",
-   "档次": "中",
-   "名气门槛": 100,
-   "场风概率": [
+   "name": "赌场老板",
+   "film_title": "（占位）",
+   "size": "medium",
+   "fame_gate": 100,
+   "style_probs": [
     20,
     15,
     15,
     50
    ],
-   "看重": [
+   "wants": [
     {
-     "项": "谈判",
-     "目标": 60
+     "stat": "negotiation",
+     "target": 60
     },
     {
-     "项": "犯罪",
-     "目标": 100
+     "stat": "crime",
+     "target": 100
     }
    ],
-   "标签": [
-    "犯罪",
-    "反派"
+   "tags": [
+    "crime",
+    "villain"
    ],
-   "对手": [
+   "opponents": [
     {
-     "无名": true
+     "unnamed": true
     }
    ],
-   "加分技能": "演技",
-   "有声": null,
-   "谈吐线": null,
-   "片酬": 800,
-   "出现年份": [
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 800,
+   "years_active": [
     1926,
     1929
    ]
   },
   {
    "id": "role_pianist",
-   "名字": "落魄的钢琴师",
-   "片名": "（占位）",
-   "档次": "中",
-   "名气门槛": 100,
-   "场风概率": [
+   "name": "落魄的钢琴师",
+   "film_title": "（占位）",
+   "size": "medium",
+   "fame_gate": 100,
+   "style_probs": [
     5,
     35,
     55,
     5
    ],
-   "看重": [
+   "wants": [
     {
-     "项": "审美",
-     "目标": 60
+     "stat": "taste",
+     "target": 60
     },
     {
-     "项": "教育",
-     "目标": 200
+     "stat": "education",
+     "target": 200
     }
    ],
-   "标签": [
-    "文艺",
-    "悲情"
+   "tags": [
+    "arthouse",
+    "tragic"
    ],
-   "对手": [
+   "opponents": [
     {
-     "无名": true
+     "unnamed": true
     }
    ],
-   "加分技能": "演技",
-   "有声": null,
-   "谈吐线": null,
-   "片酬": 800,
-   "出现年份": [
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 800,
+   "years_active": [
     1926,
     1929
    ]
   },
   {
    "id": "role_martyr",
-   "名字": "殉道的修士",
-   "片名": "（占位）",
-   "档次": "中",
-   "名气门槛": 100,
-   "场风概率": [
+   "name": "殉道的修士",
+   "film_title": "（占位）",
+   "size": "medium",
+   "fame_gate": 100,
+   "style_probs": [
     5,
     20,
     60,
     15
    ],
-   "看重": [
+   "wants": [
     {
-     "项": "自律",
-     "目标": 200
+     "stat": "discipline",
+     "target": 200
     }
    ],
-   "标签": [
-    "宗教"
+   "tags": [
+    "religious"
    ],
-   "对手": [
+   "opponents": [
     {
-     "无名": true
+     "unnamed": true
     }
    ],
-   "加分技能": "演技",
-   "有声": null,
-   "谈吐线": null,
-   "片酬": 800,
-   "出现年份": [
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 800,
+   "years_active": [
     1926,
     1929
    ]
   },
   {
    "id": "role_stranger",
-   "名字": "舞厅里的陌生人",
-   "片名": "（占位）",
-   "档次": "小",
-   "名气门槛": 0,
-   "场风概率": [
+   "name": "舞厅里的陌生人",
+   "film_title": "（占位）",
+   "size": "small",
+   "fame_gate": 0,
+   "style_probs": [
     10,
     60,
     10,
     20
    ],
-   "看重": [
+   "wants": [
     {
-     "项": "相貌",
-     "目标": 150
+     "stat": "looks",
+     "target": 150
     }
    ],
-   "标签": [
-    "浪漫"
+   "tags": [
+    "romance"
    ],
-   "对手": [
+   "opponents": [
     {
-     "无名": true
+     "unnamed": true
     }
    ],
-   "加分技能": "演技",
-   "有声": null,
-   "谈吐线": null,
-   "片酬": 300,
-   "出现年份": [
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 300,
+   "years_active": [
     1926,
     1929
    ]
   },
   {
    "id": "role_boxer",
-   "名字": "街头拳手",
-   "片名": "（占位）",
-   "档次": "小",
-   "名气门槛": 0,
-   "场风概率": [
+   "name": "街头拳手",
+   "film_title": "（占位）",
+   "size": "small",
+   "fame_gate": 0,
+   "style_probs": [
     55,
     5,
     5,
     35
    ],
-   "看重": [
+   "wants": [
     {
-     "项": "体力",
-     "目标": 120
+     "stat": "stamina",
+     "target": 120
     },
     {
-     "项": "义气",
-     "目标": 80
+     "stat": "loyalty",
+     "target": 80
     }
    ],
-   "标签": [
-    "犯罪"
+   "tags": [
+    "crime"
    ],
-   "对手": [
+   "opponents": [
     {
-     "无名": true
+     "unnamed": true
     }
    ],
-   "加分技能": "演技",
-   "有声": null,
-   "谈吐线": null,
-   "片酬": 300,
-   "出现年份": [
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 300,
+   "years_active": [
     1926,
     1929
    ]
   }
  ],
- "默认": {
-  "名气门槛": {
-   "小": 0,
-   "中": 100,
-   "大": 250
+ "defaults": {
+  "fame_gate": {
+   "small": 0,
+   "medium": 100,
+   "big": 250
   },
-  "片酬": {
-   "小": 300,
-   "中": 800,
-   "大": 2500
+  "fee": {
+   "small": 300,
+   "medium": 800,
+   "big": 2500
   },
-  "谈吐线": {
-   "小": 30,
-   "中": 50,
-   "大": 70
+  "speech_line": {
+   "small": 30,
+   "medium": 50,
+   "big": 70
   },
-  "加分技能": "演技",
-  "拍摄旬数": {
-   "小": 1,
-   "中": 2,
-   "大": 3
+  "bonus_skill": "acting",
+  "shoot_periods": {
+   "small": 1,
+   "medium": 2,
+   "big": 3
   },
-  "选片板": {
-   "说明": "GDD 6.1、3.3、11.3",
-   "每板": {
-    "大": 1,
-    "中": 2,
-    "小": 2
+  "board": {
+   "note": "GDD 6.1, 3.3, 11.3",
+   "per_board": {
+    "big": 1,
+    "medium": 2,
+    "small": 2
    },
-   "人脉多一个中片": 50,
-   "人脉多一个大片": 80,
-   "试镜次数": 2,
-   "同角色上板上限": {
-    "小": 2,
-    "中": 2,
-    "大": 1
+   "connections_extra_medium": 50,
+   "connections_extra_big": 80,
+   "audition_tries": 2,
+   "same_role_cap": {
+    "small": 2,
+    "medium": 2,
+    "big": 1
    },
-   "权重上限": 2,
-   "道德条款犯罪": 300,
-   "低成本大片门槛加": 50,
-   "转型板数": 3,
-   "瓦伦去世后多一个": {
-    "标签": [
-     "异国情人",
-     "浪漫"
+   "weight_cap": 2,
+   "morals_crime": 300,
+   "lowbudget_big_gate_add": 50,
+   "transition_boards": 3,
+   "after_valen_extra": {
+    "tags": [
+     "exotic_lover",
+     "romance"
     ],
-    "档次": "小",
-    "至": "1928-12"
+    "size": "small",
+    "until": "1928-12"
    },
-   "情报": {
-    "标签审美": 50,
-    "习惯交手次数": 2,
-    "习惯人脉": 60,
-    "排除一色人脉": 80
+   "intel": {
+    "tag_taste": 50,
+    "habit_duels": 2,
+    "habit_connections": 60,
+    "exclude_color_connections": 80
    }
   },
-  "有声": {
-   "说明": "GDD 6.4：1927-10 的板 1 个；1928 年每个角色 30%；1929 年 80%",
-   "开始": "1927-10",
-   "比例": [
+  "talkie": {
+   "note": "GDD 6.4: 1 role on the 1927-10 board; 30% of roles in 1928; 80% in 1929",
+   "start": "1927-10",
+   "ratio": [
     {
-     "自": "1927-10",
-     "个数": 1
+     "from": "1927-10",
+     "count": 1
     },
     {
-     "自": "1928-01",
-     "百分比": 30
+     "from": "1928-01",
+     "pct": 30
     },
     {
-     "自": "1929-01",
-     "百分比": 80
+     "from": "1929-01",
+     "pct": 80
     }
    ]
   },
-  "拍摄": {
-   "说明": "GDD 5.6。表现 P 按 ×1000 的整数：500 + 成功日×500/拍摄日 + 加分技能×2（+亲自上），夹在 500–1200",
-   "疲劳": {
-    "小": 2,
-    "中": 3,
-    "大": 4
+  "shoot": {
+   "note": "GDD 5.6. Performance P is an integer scaled x1000: 500 + successful days x 500 / shooting days + bonus skill x 2 (+ stunt_self), clamped to 500-1200",
+   "fatigue": {
+    "small": 2,
+    "medium": 3,
+    "big": 4
    },
-   "成功线": {
-    "小": 20,
-    "中": 30,
-    "大": 40
+   "success_lines": {
+    "small": 20,
+    "medium": 30,
+    "big": 40
    },
-   "表现下限": 500,
-   "表现上限": 1200,
-   "谈判除数": 600,
-   "亲自上": {
-    "标签": [
-     "西部",
-     "动作冒险",
-     "战争"
+   "perf_min": 500,
+   "perf_max": 1200,
+   "negotiation_div": 600,
+   "stunt_self": {
+    "tags": [
+     "western",
+     "action_adventure",
+     "war"
     ],
-    "胆识线": 60,
-    "胆识线_旗标": {
-     "旗标": "亲自上线50",
-     "线": 50
+    "nerve_line": 60,
+    "nerve_line_flag": {
+     "flags": "stunt_line_50",
+     "line": 50
     },
-    "片酬百分比": 130,
-    "表现加": 100,
-    "受伤概率": [
+    "fee_pct": 130,
+    "perf_add": 100,
+    "injury_prob": [
      1,
      40
     ],
-    "受伤效果": "体力-30 疲劳+20"
+    "injury_effect": "stamina-30 fatigue+20"
    },
-   "临时换角": {
-    "档次": "中",
-    "旬数": 1
+   "swap_role": {
+    "size": "medium",
+    "period_count": 1
    }
   },
-  "上映": {
-   "说明": "GDD 8。S 按 ×1000 的整数算：B × P × F × T / 10^6",
-   "隔月": 2,
-   "基数": {
-    "小": 40,
-    "中": 100,
-    "大": 250
+  "release": {
+   "note": "GDD 8. S is an integer scaled x1000: B x P x F x T / 10^6",
+   "delay_months": 2,
+   "box_base": {
+    "small": 40,
+    "medium": 100,
+    "big": 250
    },
-   "契合": {
-    "底": 600,
-    "系数": 400,
-    "单项上限百分比": 150
+   "fit": {
+    "floor": 600,
+    "coef": 400,
+    "item_cap_pct": 150
    },
-   "标签熟悉": {
-    "每个": 30,
-    "上限个数": 5
+   "tag_familiarity": {
+    "per_tag": 30,
+    "cap_count": 5
    },
-   "定型线": 3,
-   "非定型百分比": 90,
-   "名气百分比": 30,
-   "分红倍数": 2,
-   "修正": {
-    "小": 2,
-    "中": 4,
-    "大": 8
+   "typed_line": 3,
+   "untyped_pct": 90,
+   "fame_pct": 30,
+   "dividend_mult": 2,
+   "rep_bonus": {
+    "small": 2,
+    "medium": 4,
+    "big": 8
    },
-   "大卖百分比": 140,
-   "扑街百分比": 70,
-   "有声罚百分比": 60,
-   "电台谈吐线减": 10,
-   "低成本": {
-    "增减": {
-     "小": 1,
-     "中": -1,
-     "大": -2
+   "hit_pct": 140,
+   "flop_pct": 70,
+   "talkie_penalty_pct": 60,
+   "radio_speech_line_cut": 10,
+   "lowbudget": {
+    "delta": {
+     "small": 1,
+     "medium": -1,
+     "big": -2
     },
-    "定型线": 4
+    "typed_line": 4
    },
-   "无法定义种类": 6,
-   "女主好感": 8
+   "undefined_kinds": 6,
+   "lead_favor": 8
   },
-  "占位生成": {
-   "说明": "角色池不够时临时生成的占位角色（第 16、17 步补齐角色池后基本用不到）。场风 主色 55、其余 15；看重 = 主色那条路随机一项技能；标签从主色对应的标签里随机一个；大片第二场的有名对手从当年在场、主色等级最高的 3 人里按权重抽",
-   "主色场风": 55,
-   "其余场风": 15,
-   "看重目标": {
-    "小": 40,
-    "中": 60,
-    "大": 80
+  "placeholder_gen": {
+   "note": "Placeholder roles generated when the role pool runs out (rarely needed once PLAN steps 16-17 fill the pool). Style: main color 55, others 15; wants = one random skill of the main color's road; tag = a random tag of the main color's set; the big film's second-round named rival is drawn by weight from the 3 highest-level present rivals of the main color",
+   "main_style": 55,
+   "other_style": 15,
+   "wants_target": {
+    "small": 40,
+    "medium": 60,
+    "big": 80
    },
-   "标签按主色": {
-    "硬汉": [
-     "西部",
-     "动作冒险",
-     "战争",
-     "古装",
-     "恐怖"
+   "tags_by_color": {
+    "tough": [
+     "western",
+     "action_adventure",
+     "war",
+     "costume",
+     "horror"
     ],
-    "情人": [
-     "浪漫",
-     "异国情人",
-     "歌舞"
+    "lover": [
+     "romance",
+     "exotic_lover",
+     "musical"
     ],
-    "文化": [
-     "文艺",
-     "悲情",
-     "宗教",
-     "地下片"
+    "culture": [
+     "arthouse",
+     "tragic",
+     "religious",
+     "underground"
     ],
-    "手腕": [
-     "反派",
-     "犯罪",
-     "喜剧",
-     "贵族"
+    "savvy": [
+     "villain",
+     "crime",
+     "comedy",
+     "noble"
     ]
    },
-   "大片有名对手": {
-    "取前": 3,
-    "权重": [
+   "big_named_rivals": {
+    "take_top": 3,
+    "weight": [
      5,
      3,
      2
     ]
    }
   },
-  "剧本": {
-   "说明": "GDD 6.5",
-   "自己写": {
-    "条件": [
+  "script": {
+   "note": "GDD 6.5",
+   "self_written": {
+    "cond": [
      [
       [
-       "创作",
+       "writing",
        ">=",
        80
       ],
       [
-       "教育",
+       "education",
        ">=",
        300
       ]
      ]
     ],
-    "档次": "中"
+    "size": "medium"
    },
-   "Duv写": {
-    "条件": [
+   "duv_written": {
+    "cond": [
      [
       [
-       "旗标.Duv写剧本",
+       "flag.duv_writes_script",
        "==",
        1
       ]
      ]
     ],
-    "档次": "中",
-    "看重百分比": 80,
-    "好感": "好感.Duv+3"
+    "size": "medium",
+    "wants_pct": 80,
+    "favor": "favor.duv+3"
    },
-   "合写": {
-    "条件": [
+   "co_written": {
+    "cond": [
      [
       [
-       "创作",
+       "writing",
        ">=",
        80
       ],
       [
-       "教育",
+       "education",
        ">=",
        300
       ],
       [
-       "旗标.Duv写剧本",
+       "flag.duv_writes_script",
        "==",
        1
       ],
       [
-       "好感.Duv",
+       "favor.duv",
        ">=",
        80
       ]
      ]
     ],
-    "档次": "大"
+    "size": "big"
    },
-   "主色场风": 60
+   "main_style": 60
   }
  }
 }

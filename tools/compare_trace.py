@@ -1,9 +1,9 @@
-"""比较 Python 和 Godot 的对账输出，只打印第一处不同。
+"""Compares the reconciliation output of Python and Godot and prints only the first difference.
 
     python3 tools/compare_trace.py work/trace_py.txt work/trace_godot.txt
 
-一致时退出码 0；不一致时打印行号、两边那一行在第一个不同字符附近的片段，退出码 1。
-第 10 步以后的逐月对账也用它。
+Exit code 0 when identical; otherwise prints the line number and the part of the line on both sides around the first differing character, exit code 1.
+The month-by-month reconciliation from step 10 on uses it too.
 """
 import sys
 
@@ -13,21 +13,21 @@ def main(a, b):
     y = open(b, 'rb').read()
     if x == y:
         n = x.count(b'\n')
-        print(f'一致：{n} 行，{len(x)} 字节')
+        print(f'identical: {n} lines, {len(x)} bytes')
         return 0
     lx = x.decode('utf-8', 'replace').split('\n')
     ly = y.decode('utf-8', 'replace').split('\n')
     for i in range(max(len(lx), len(ly))):
-        p = lx[i] if i < len(lx) else '<没有这一行>'
-        q = ly[i] if i < len(ly) else '<没有这一行>'
+        p = lx[i] if i < len(lx) else '<no such line>'
+        q = ly[i] if i < len(ly) else '<no such line>'
         if p != q:
             k = next((j for j in range(min(len(p), len(q))) if p[j] != q[j]), min(len(p), len(q)))
             s = max(0, k - 40)
-            print(f'第 {i + 1} 行第 {k + 1} 个字符起不同')
+            print(f'differs from line {i + 1}, char {k + 1}')
             print(f'  {a}: …{p[s:k + 80]}')
             print(f'  {b}: …{q[s:k + 80]}')
             return 1
-    print('内容相同，只有换行或编码不同（检查是否写成了 CRLF 或带 BOM）')
+    print('same content, only line endings or encoding differ (check for CRLF or a BOM)')
     return 1
 
 

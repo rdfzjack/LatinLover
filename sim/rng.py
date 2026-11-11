@@ -1,11 +1,11 @@
-"""随机数：PCG32（XSH-RR，64 位状态），两个独立流。
+"""Random numbers: PCG32 (XSH-RR, 64-bit state), two independent streams.
 
-GDD 16：逻辑流给规则用，表现流只给动画和文本用，互不影响。
-约定（Godot 移植时照抄）：
-- r(a, b) 取 a..b 的整数（含两端）。a == b 时直接返回 a，不消耗随机数。
-- r0(n) = r(0, n)；r1(n) = r(1, n)。
-- below(n) 取 0..n-1，用 PCG 官方的无偏做法（拒绝小于 2^32 mod n 的值）。
-- chance(p, q) 为 below(q) < p，q 必须 >= 1；p <= 0 或 p >= q 时不消耗随机数。
+GDD 16: the logic stream is for rules, the show stream only for animation and text; they never affect each other.
+Conventions (Godot copies them when porting):
+- r(a, b) returns an integer in a..b (both ends included). When a == b it returns a without consuming a random number.
+- r0(n) = r(0, n); r1(n) = r(1, n).
+- below(n) returns 0..n-1 using PCG's official unbiased method (rejecting values below 2^32 mod n).
+- chance(p, q) is below(q) < p, q must be >= 1; when p <= 0 or p >= q no random number is consumed.
 """
 MASK64 = (1 << 64) - 1
 MULT = 6364136223846793005
@@ -28,7 +28,7 @@ class PCG32:
 
     def below(self, n):
         if n <= 0:
-            raise ValueError('below(n) 需要 n >= 1')
+            raise ValueError('below(n) needs n >= 1')
         threshold = (0x100000000 - n) % n
         while True:
             v = self.next_u32()
@@ -55,7 +55,7 @@ class PCG32:
             return True
         return self.below(q) < p
 
-    # 存档：64 位整数写成十六进制字符串，JSON 读进 Godot 不会丢精度
+    # Save: the 64-bit integers are written as hex strings so that Godot's JSON reader does not lose precision
     def dump(self):
         return [f'{self.state:016x}', f'{self.inc:016x}']
 
@@ -67,7 +67,7 @@ class PCG32:
 
 
 class Rng:
-    """两个流：logic（规则）、show（表现）。同一种子派生，序列号不同。"""
+    """Two streams: logic (rules) and show (presentation). Derived from the same seed with different sequence numbers."""
 
     def __init__(self, seed=0):
         self.logic = PCG32(seed, 1)
