@@ -1,4 +1,4 @@
-# 实现说明：sim/ 的结构、接口和补的细节
+# 实现说明：sim/ 和 Godot 的结构、接口和补的细节
 
 给移植 Godot（PLAN 第 9–12 步）和改 `sim/` 的人看。规则以 `design/GDD.md` 为准；这里记的是 GDD 没写到、写代码时补上的做法。Godot 要和 `sim/` 逐字节对上，所以这些细节照抄。
 
@@ -11,7 +11,7 @@
 | `state.py` | 状态、显示值、声望、指数、存读档 | 2、10、14.1 |
 | `rules.py` | 条件、效果、事件判定、概率 | 11.0、16 |
 | `schedule.py` | 上课、看书、打工、休息 | 5.1–5.5 |
-| `street.py` | 街道、物品和装备、Sil、股票 | 5.8、11.3、14 |
+| `street.py` | 街道、物品和装备、Sil | 5.8、14 |
 | `month.py` | 月流程、月结、对账输出 | 4、10 |
 | `audition.py` | 组牌、有效点数、出牌习惯、对手、结果分档 | 7、9 |
 | `board.py` | 选片板：组板、占位角色、对手、有声、本厂、情报、报名和试镜；临时换角、抢角；剧本 | 3.3、6、11.1 |
@@ -22,7 +22,7 @@
 | `report.py` | 批量跑机器人出报告（≤60 行）；`--n` `--bots` `--random-play` `--no-buy` | PLAN 7 |
 | `story.py` | `Story`（`Hooks` 的实现）、`Agent`（玩家要回答的问题）、`SimpleAgent`、整局命令行 | 4 |
 
-**Agent 接口。** 界面和机器人都继承 `story.Agent`（或 `SimpleAgent` 改几个方法）：`deck` `play`（试镜）、`pick_role`（报名哪个角色）、`accept_support`（接不接配角）、`go_personally`（亲自上）、`option`（事件选项）、`annual`（年度大事）、`family`（转型的戏路族）、`suppress`（压丑闻）、`month_start`（月初的写剧本、送去戒、放消息、街道、股票）。日程由调用方每月给：`g = story.new_game(seed, origin, agent)`，然后每月 `g.start_month()`、`g.run_month(三旬)`；`story.fit_plan` 把排不了的旬换成在家休息。报告要的数从这里取：`st.story['片']`（每部片的档次、配角、表现、片酬、上映结果 S/大卖/扑街/口音）、`st.story['结局']`、`st.count` 里的 `计数.*`（试镜、试镜拿到、上映、大卖、扑街、配角、违约、被捕、丑闻、机遇、年度名次等）、`g.hooks.boards`（每块板的试镜结果）、`g.hooks.log`（触发过的事件）。整局约 0.02 秒。
+**Agent 接口。** 界面和机器人都继承 `story.Agent`（或 `SimpleAgent` 改几个方法）：`deck` `play`（试镜）、`pick_role`（报名哪个角色）、`accept_support`（接不接配角）、`go_personally`（亲自上）、`option`（事件选项）、`annual`（年度大事）、`family`（转型的戏路族）、`suppress`（压丑闻）、`month_start`（月初的写剧本、送去戒、放消息、街道）。日程由调用方每月给：`g = story.new_game(seed, origin, agent)`，然后每月 `g.start_month()`、`g.run_month(三旬)`；`story.fit_plan` 把排不了的旬换成在家休息。报告要的数从这里取：`st.story['片']`（每部片的档次、配角、表现、片酬、上映结果 S/大卖/扑街/口音）、`st.story['结局']`、`st.count` 里的 `计数.*`（试镜、试镜拿到、上映、大卖、扑街、配角、违约、被捕、丑闻、机遇、年度名次等）、`g.hooks.boards`（每块板的试镜结果）、`g.hooks.log`（触发过的事件）。整局约 0.02 秒。
 
 **状态。** 第 6 步的状态都在 `st.story`（存档的一部分，字段见 `state.new_story`）。`month.py` 为它加了两个钩子：`month_start`（出板之后）、`period_end`（每旬做完）；倒下改为当场调用结局钩子并结束月结。
 
@@ -36,7 +36,7 @@
 **数据表（第 2、3 步）**
 - 条件格式：外层“或”、组内“与”，加了 `in` 比较符和 `"@变量"` 引用。
 - 谈吐类的书进阶档和专著档都从 1926-08 上架。“瓦伦留下的位置”取 `>= 1927-09`。
-- 前辈认可：100 档该路一项技能 +5（三选一）；200 档给“前辈的装备·路”（类别和技能占位）；300 档设旗标，由机遇接。
+- 前辈认可：100 档该路一项技能 +5（三选一）；200 档给“前辈的装备·路”（类别和技能占位）；300 档设旗标，由机遇接；400 档“最好的装备”GDD 没定义，现在只设旗标，第 17 步补物品时由模型定一件占位。
 - 度假事件 3 个空占位；“旧书”的技能未定，放在 `items.json`。
 - 结局补了兜底：演员“二线（其余）”、情人大类 A 且相貌 <500 并入“沙龙主人 / 富孀的伴侣”、文化大类 S/A 自律 <50 并入“编剧 / 小报写手”、万能大类兜底“回那不勒斯”。
 - 动作片导演在 `places.json` 常在片厂区，GDD 5.5.2 没给他日程，所以 `npc_schedule.json` 没有他（校验会提示）。
@@ -97,7 +97,7 @@
 - 送去戒、放消息、写剧本都是月初操作（`Story.send_detox` / `leak_news` / `write_script`）。
 
 **结局（第 6 步）**
-- 品性分：原版 74 个结局里只有 4 个分松竹梅，其余都是梅（−10）。新结局还没定哪些分档，暂时全部按梅；结局可以加 `品性:[{条件,档}]` 覆盖（`endings.json` 评分.品性档）。**要用户定。**
+- 品性分：原版 74 个结局里只有 4 个分松竹梅，其余都是梅（−10）。新结局还没定哪些分档，暂时全部按梅；结局可以加 `品性:[{条件,档}]` 覆盖（`endings.json` 评分.品性档）。第 18 步写结局文本时由模型照原版比例挑几个结局分档，不用问用户。
 - 评语只给出最常打的工、最常上的课（看书算一门 `book`）的 id，文字等第 18 步。
 - 中途倒下：当场调用结局判定，只记结局 id 和档次，不算总分。
 
@@ -114,3 +114,35 @@ GDD 和 JSON 不一致时先问用户。
 - 无名对手的成长：`rivals.json` 每档 `主色等级.涨级月` 列表，等级 = 基 + 已过的涨级月个数 + 随机（原来是全局的“每三半年一级”）。
 - `items.json` 新增舞鞋（服装店）、化妆箱（杂货店），补情人路可买的装备。
 - 结局 S 线在 `stats.json` 声望规则 和 `endings.json` 档次线 两处，改时一起改。
+
+## Godot（game/silentstar/，第 9 步起）
+
+Godot 4.3，GDScript。工程在 `game/silentstar/`，逻辑在 `core/`（不依赖任何节点），对账脚本在 `tools/`。`.godot/` 是编辑器缓存，不进 git。
+
+| 文件 | 对应 Python | 内容 |
+|---|---|---|
+| `core/rng.gd` | `rng.py` | PCG32 两个流。64 位状态拆成高低两个 32 位数算（GDScript 的 int 是有符号 64 位，乘法溢出不可靠）；拆分算法已用 Python 对过 5000 个数 |
+| `core/jsonx.gd` | — | JSON 读写。读：整数值的 float 转回 int（Godot 把数字都读成 float）。写：和 Python `json.dumps(ensure_ascii=False, sort_keys=True, separators=(',',':'))` 逐字节一致 |
+| `core/data.gd` | `data.py` | 读表、建索引。默认读仓库根的 `data/new/`（工程目录往上两级），和 Python 共用一份 |
+| `core/rules.gd` | `rules.py` | 条件、效果、判定、概率。全是静态函数；`extra_vars` 留给第 12 步登记结局用的派生值 |
+| `core/state.gd` | `state.py` | 状态、显示值、声望、指数、存读档 |
+| `tools/trace.gd` | `tools/trace.py` | 按 `tools/trace_cases.json` 输出对账文本 |
+
+**移植约定**
+- 脚本之间用 `preload("res://core/xxx.gd")`，不用 `class_name`：`--script` 无界面运行时全局类可能还没注册。
+- Python 的 `State.new(data, seed, origin)` 在 Godot 里是 `State.new(data)` 再 `start(seed, origin)`；`State.loads` 是 `State.new(data)` 再 `loads(s)`。`st.month`、`st.date` 是方法：`st.month()`、`st.date()`。`st.log` 改名 `debug_log`（`log` 是内置函数）。
+- 整数：`tdiv` 向零截断（GDScript 的 `/` 本来就是），`fdiv` 同 Python 的 `//`。
+- 比较：Python 里 int 和 str 用 `==` 得 False，GDScript 会报错，所以 `rules._cmp` 先比类型。
+- 字典的键都是字符串；存档写出时按码位排序，和 Python 一样。
+
+**对账（第 9 步的完成标准）**，在仓库根目录：
+
+```
+godot --headless --path game/silentstar --script res://tools/trace.gd -- --out=work/trace_godot.txt
+python3 tools/trace.py --out work/trace_py.txt
+python3 tools/compare_trace.py work/trace_py.txt work/trace_godot.txt
+```
+
+`compare_trace.py` 只打印第一处不同的行。第 10 步以后的逐月对账也用它，往 `trace_cases.json` 加用例、两边的 trace 各加一段输出即可。
+
+**导出时**：数据表在工程外，导出前要把 `data/new/` 复制进工程（第 13 步处理）。
