@@ -1,133 +1,133 @@
 {
- "说明": "每轮 遵循概率% 按习惯出，其余在剩余牌里均匀随机；“大小”按对当前场风的有效点数（不计克制）排",
- "遵循概率": 80,
- "习惯": [
+ "note": "Each round follows the habit with probability follow_prob%, otherwise a uniformly random card from those left; \"big/small\" is ranked by effective points against the current style (counters not counted)",
+ "follow_prob": 80,
+ "habits": [
   {
    "id": "habit_lead",
-   "名字": "抢先",
-   "出牌": "从大到小"
+   "name": "抢先",
+   "play_order": "largest to smallest"
   },
   {
    "id": "habit_finish",
-   "名字": "压轴",
-   "出牌": "从小到大"
+   "name": "压轴",
+   "play_order": "smallest to largest"
   },
   {
    "id": "habit_open",
-   "名字": "开门红",
-   "出牌": "第一轮出最大，之后从小到大"
+   "name": "开门红",
+   "play_order": "largest in round 1, then smallest to largest"
   },
   {
    "id": "habit_follow",
-   "名字": "跟牌",
-   "出牌": "第一轮出中间那张；之后出能赢过玩家上一轮那张牌的最小牌，没有就出最小"
+   "name": "跟牌",
+   "play_order": "middle card in round 1; afterwards the smallest card that beats the player's previous card, or the smallest if none does"
   },
   {
    "id": "habit_score",
-   "名字": "看比分",
-   "出牌": "落后或平手时出最大，领先时出最小"
+   "name": "看比分",
+   "play_order": "largest when behind or tied, smallest when ahead"
   },
   {
    "id": "habit_random",
-   "名字": "随性",
-   "出牌": "始终均匀随机"
+   "name": "随性",
+   "play_order": "always uniformly random"
   }
  ],
- "情报": [
+ "intel": [
   {
-   "条件": [
+   "cond": [
     [
      [
-      "交手次数.对手",
+      "duels.opponent",
       ">=",
       2
      ]
     ],
     [
      [
-      "人脉",
+      "connections",
       ">=",
       60
      ]
     ]
    ],
-   "显示": "对手的习惯和主色张数 k"
+   "shows": "the rival's habit and main-color card count k"
   },
   {
-   "条件": [
+   "cond": [
     [
      [
-      "人脉",
+      "connections",
       ">=",
       80
      ]
     ]
    ],
-   "显示": "组牌前排除场风概率最低的一色"
+   "shows": "exclude the lowest-style-probability color before building the deck"
   },
   {
-   "来源": "Duv 告密",
-   "显示": "某个角色完整的场风概率和标签"
+   "source": "Duv tip-off",
+   "shows": "the full style probabilities and tags of one role"
   },
   {
-   "来源": "餐厅侍者里程碑",
-   "显示": "每块板一个角色直接显示对手习惯"
+   "source": "waiter milestone",
+   "shows": "each board shows the rival's habit for one role"
   }
  ],
- "试镜": {
-  "说明": "GDD 7.1–7.5 的数字。有效点数按 ×100 的整数算，倍率是百分比整数",
-  "张数": 5,
-  "赢轮数": 3,
-  "颜色顺序": [
-   "硬汉",
-   "情人",
-   "文化",
-   "手腕"
+ "audition": {
+  "note": "The numbers of GDD 7.1-7.5. Effective points are integers scaled by x100; multipliers are integer percentages",
+  "cards": 5,
+  "rounds_to_win": 3,
+  "color_order": [
+   "tough",
+   "lover",
+   "culture",
+   "savvy"
   ],
-  "克制": {
-   "硬汉": "情人",
-   "情人": "文化",
-   "文化": "手腕",
-   "手腕": "硬汉"
+  "counters": {
+   "tough": "lover",
+   "lover": "culture",
+   "culture": "savvy",
+   "savvy": "tough"
   },
-  "场风百分比": 130,
-  "克制方百分比": 130,
-  "被克方百分比": 80,
-  "对手组牌": {
-   "说明": "主色 = 等级 × (100 + 系数 × 场风概率%/100) 最大的颜色；其余 5-k 张取“克星的克星”（克主色的那一色被谁克，就带谁），防被克制",
-   "场风系数百分比": 30,
-   "副色": "克星的克星"
+  "style_pct": 130,
+  "counter_pct": 130,
+  "countered_pct": 80,
+  "rival_deck": {
+   "note": "main color = the color with the largest level x (100 + coef x style probability%/100); the other 5-k cards take the \"counter of counter\" (whoever counters the color that counters the main color), to avoid being countered",
+   "style_factor_pct": 30,
+   "second_color": "counter_of_counter"
   },
-  "结果": {
-   "记住": {
-    "比分": [
+  "result": {
+   "remembered": {
+    "score_line": [
      3,
      0
     ],
-    "主色场风加百分点": 10
+    "main_style_add_pts": 10
    },
-   "惜败": {
-    "比分": [
+   "narrow_loss": {
+    "score_line": [
      2,
      3
     ],
-    "拍摄旬数减": 1,
-    "拍摄旬数最少": 1,
-    "片酬百分比": 40,
-    "上映百分比": 30
+    "shoot_periods_cut": 1,
+    "shoot_periods_min": 1,
+    "fee_pct": 40,
+    "release_pct": 30
    },
-   "演砸": {
-    "比分": [
+   "botched": {
+    "score_line": [
      0,
      3
     ],
-    "效果": "名气-5%",
-    "上报概率": [
+    "effect": "fame-5%",
+    "report_prob": [
      1,
      5
     ],
-    "上报效果": "名气-5%",
-    "好感": "好感.Sil+2"
+    "report_effect": "fame-5%",
+    "favor": "favor.sil+2"
    }
   }
  }

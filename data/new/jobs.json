@@ -1,1176 +1,1176 @@
 {
- "说明": {
-  "日薪": "基数；乘加薪档，向下取整；成功日才有薪水",
-  "加薪档": "按该工成功过的期数",
-  "成功线": "各项各自 属性 - r0(疲劳) >= 值，技能用显示值",
-  "每天效果": "不论成败都结算；加:[a,b] 即 r(a,b)",
-  "每期效果": "成功的期结算一次",
-  "每期随机": "概率 [分子,分母]，每期一次",
-  "前置": "条件，格式见 data/new/README.md",
-  "成功线修正": "条件满足时该项成功线加上 值（负数为降低）"
+ "note": {
+  "daily_wage": "Base amount; multiplied by the raise tier and rounded down; pay only on successful days",
+  "raise_tiers": "by the number of periods this job was successful",
+  "success_lines": "each line: attribute - r0(fatigue) >= value; skills use the displayed value",
+  "daily_effect": "settled whether or not the day succeeds; add:[a,b] means r(a,b)",
+  "job_period_effect": "settled once for each successful period",
+  "period_random": "prob [numerator, denominator], once per period",
+  "prereq": "a cond, format in data/new/README.md",
+  "success_line_mods": "when the cond holds, add value to that stat's success line (a negative value lowers it)"
  },
- "加薪档": [
+ "raise_tiers": [
   {
-   "期数小于": 5,
-   "加成百分比": 0
+   "periods_below": 5,
+   "bonus_pct": 0
   },
   {
-   "期数小于": 15,
-   "加成百分比": 20
+   "periods_below": 15,
+   "bonus_pct": 20
   },
   {
-   "期数小于": 30,
-   "加成百分比": 44
+   "periods_below": 30,
+   "bonus_pct": 44
   },
   {
-   "期数小于": 45,
-   "加成百分比": 73
+   "periods_below": 45,
+   "bonus_pct": 73
   },
   {
-   "期数小于": 999999,
-   "加成百分比": 108
+   "periods_below": 999999,
+   "bonus_pct": 108
   }
  ],
- "全勤加成百分比": 50,
- "拒绝": {
-  "条件": [
+ "full_attendance_bonus_pct": 50,
+ "refuse": {
+  "cond": [
    [
     [
-     "失控指数",
+     "reckless_index",
      ">=",
      60
     ]
    ]
   ],
-  "例外": [
+  "except": [
    "job_church",
    "job_assistant",
    "job_bar"
   ]
  },
- "工": [
+ "jobs": [
   {
    "id": "job_assistant",
-   "名字": "明星助理",
-   "最早时间": "1926-01",
-   "前置": [],
-   "日薪": 3,
-   "成功线": [
+   "name": "明星助理",
+   "earliest": "1926-01",
+   "prereq": [],
+   "daily_wage": 3,
+   "success_lines": [
     {
-     "项": "体力",
-     "值": 5
+     "stat": "stamina",
+     "value": 5
     }
    ],
-   "每天效果": [
+   "daily_effect": [
     {
-     "项": "谈判",
-     "加": [
+     "stat": "negotiation",
+     "add": [
       0,
       1
      ]
     },
     {
-     "项": "人脉",
-     "加": [
+     "stat": "connections",
+     "add": [
       0,
       1
      ]
     },
     {
-     "项": "生意",
-     "加": [
+     "stat": "business",
+     "add": [
       0,
       1
      ]
     },
     {
-     "项": "疲劳",
-     "加": [
+     "stat": "fatigue",
+     "add": [
       1,
       1
      ]
     }
    ],
-   "曝光": false,
-   "原版形状": "家庭管理",
-   "npc": "女明星",
-   "每期效果": null,
-   "每期随机": [
+   "exposure": false,
+   "original_shape": "housekeeping",
+   "npc": "actress",
+   "job_period_effect": null,
+   "period_random": [
     {
-     "概率": [
+     "prob": [
       1,
       5
      ],
-     "事件": "job_assistant_r1",
-     "说明": "小事件，女明星好感 +3"
+     "event": "job_assistant_r1",
+     "note": "Small event, actress favor +3"
     }
    ],
-   "里程碑": [
+   "milestones": [
     {
-     "事件": "job_assistant_m1",
-     "条件": [
+     "event": "job_assistant_m1",
+     "cond": [
       [
        [
-        "成功期数.job_assistant",
+        "job_periods.job_assistant",
         ">=",
         4
        ]
       ]
      ],
-     "说明": "可转女明星保镖"
+     "note": "May lead to the actress bodyguard job"
     }
    ]
   },
   {
    "id": "job_waiter",
-   "名字": "餐厅侍者",
-   "最早时间": "1926-01",
-   "前置": [],
-   "日薪": 5,
-   "成功线": [
+   "name": "餐厅侍者",
+   "earliest": "1926-01",
+   "prereq": [],
+   "daily_wage": 5,
+   "success_lines": [
     {
-     "项": "体力",
-     "值": 20
+     "stat": "stamina",
+     "value": 20
     }
    ],
-   "每天效果": [
+   "daily_effect": [
     {
-     "项": "谈判",
-     "加": [
+     "stat": "negotiation",
+     "add": [
       0,
       1
      ]
     },
     {
-     "项": "疲劳",
-     "加": [
+     "stat": "fatigue",
+     "add": [
       2,
       2
      ]
     }
    ],
-   "曝光": false,
-   "原版形状": "餐厅",
+   "exposure": false,
+   "original_shape": "restaurant",
    "npc": null,
-   "每期效果": null,
-   "每期随机": [
+   "job_period_effect": null,
+   "period_random": [
     {
-     "概率": [
+     "prob": [
       1,
       10
      ],
-     "事件": "job_waiter_r1",
-     "说明": "客人是圈内人，人脉 +2"
+     "event": "job_waiter_r1",
+     "note": "The customer is in the business, connections +2"
     }
    ],
-   "里程碑": [
+   "milestones": [
     {
-     "事件": "job_waiter_m1",
-     "条件": [
+     "event": "job_waiter_m1",
+     "cond": [
       [
        [
-        "成功期数.job_waiter",
+        "job_periods.job_waiter",
         ">=",
         5
        ]
       ]
      ],
-     "说明": "每块板随机一个角色直接显示对手的出牌习惯"
+     "note": "Each board shows the rival's play habit for one random role"
     }
    ]
   },
   {
    "id": "job_dock",
-   "名字": "码头搬货",
-   "最早时间": "1926-01",
-   "前置": [],
-   "日薪": 6,
-   "成功线": [
+   "name": "码头搬货",
+   "earliest": "1926-01",
+   "prereq": [],
+   "daily_wage": 6,
+   "success_lines": [
     {
-     "项": "体力",
-     "值": 30
+     "stat": "stamina",
+     "value": 30
     }
    ],
-   "每天效果": [
+   "daily_effect": [
     {
-     "项": "体力",
-     "加": [
+     "stat": "stamina",
+     "add": [
       1,
       1
      ]
     },
     {
-     "项": "义气",
-     "加": [
+     "stat": "loyalty",
+     "add": [
       0,
       1
      ]
     },
     {
-     "项": "相貌",
-     "加": [
+     "stat": "looks",
+     "add": [
       -1,
       -1
      ]
     },
     {
-     "项": "疲劳",
-     "加": [
+     "stat": "fatigue",
+     "add": [
       3,
       3
      ]
     }
    ],
-   "曝光": false,
-   "原版形状": "农场",
-   "npc": "同乡工头",
-   "每期效果": null,
-   "每期随机": [],
-   "里程碑": [
+   "exposure": false,
+   "original_shape": "farm",
+   "npc": "foreman",
+   "job_period_effect": null,
+   "period_random": [],
+   "milestones": [
     {
-     "事件": "job_dock_m1",
-     "条件": [
+     "event": "job_dock_m1",
+     "cond": [
       [
        [
-        "成功期数.job_dock",
+        "job_periods.job_dock",
         ">=",
         4
        ]
       ]
      ],
-     "说明": "债主事件时同乡出面挡一次，不消耗义气；码头的随机表加入走私类事件"
+     "note": "On the creditor event the countryman steps in once, costing no loyalty; smuggling events are added to the dock random table"
     }
    ]
   },
   {
    "id": "job_church",
-   "名字": "教堂义工",
-   "最早时间": "1926-01",
-   "前置": [],
-   "日薪": 1,
-   "成功线": [
+   "name": "教堂义工",
+   "earliest": "1926-01",
+   "prereq": [],
+   "daily_wage": 1,
+   "success_lines": [
     {
-     "项": "体力",
-     "值": 10
+     "stat": "stamina",
+     "value": 10
     }
    ],
-   "每天效果": [
+   "daily_effect": [
     {
-     "项": "自律",
-     "加": [
+     "stat": "discipline",
+     "add": [
       2,
       2
      ]
     },
     {
-     "项": "犯罪",
-     "加": [
+     "stat": "crime",
+     "add": [
       -2,
       -2
      ]
     },
     {
-     "项": "义气",
-     "加": [
+     "stat": "loyalty",
+     "add": [
       0,
       1
      ]
     },
     {
-     "项": "疲劳",
-     "加": [
+     "stat": "fatigue",
+     "add": [
       1,
       1
      ]
     }
    ],
-   "曝光": false,
-   "原版形状": "教堂",
-   "npc": "神父",
-   "每期效果": null,
-   "每期随机": [],
-   "里程碑": [
+   "exposure": false,
+   "original_shape": "church",
+   "npc": "priest",
+   "job_period_effect": null,
+   "period_random": [],
+   "milestones": [
     {
-     "事件": "job_church_m1",
-     "条件": [
+     "event": "job_church_m1",
+     "cond": [
       [
        [
-        "成功期数.job_church",
+        "job_periods.job_church",
         ">=",
         5
        ]
       ]
      ],
-     "说明": "“官方来访”时神父作保，视同自律达标；宗教标签的角色上板权重 +1"
+     "note": "On the \"official visit\" the priest vouches, counting as discipline met; roles with the religious tag get +1 board weight"
     }
    ]
   },
   {
    "id": "job_model_art",
-   "名字": "艺术家模特",
-   "最早时间": "1926-01",
-   "前置": [],
-   "日薪": 3,
-   "成功线": [
+   "name": "艺术家模特",
+   "earliest": "1926-01",
+   "prereq": [],
+   "daily_wage": 3,
+   "success_lines": [
     {
-     "项": "体力",
-     "值": 20
+     "stat": "stamina",
+     "value": 20
     }
    ],
-   "每天效果": [
+   "daily_effect": [
     {
-     "项": "审美",
-     "加": [
+     "stat": "taste",
+     "add": [
       0,
       1
      ]
     },
     {
-     "项": "疲劳",
-     "加": [
+     "stat": "fatigue",
+     "add": [
       3,
       3
      ]
     }
    ],
-   "曝光": false,
-   "原版形状": "育幼院",
-   "npc": "画家",
-   "每期效果": null,
-   "每期随机": [],
-   "里程碑": [
+   "exposure": false,
+   "original_shape": "orphanage",
+   "npc": "painter",
+   "job_period_effect": null,
+   "period_random": [],
+   "milestones": [
     {
-     "事件": "job_model_art_m1",
-     "条件": [
+     "event": "job_model_art_m1",
+     "cond": [
       [
        [
-        "成功期数.job_model_art",
+        "job_periods.job_model_art",
         ">=",
         4
        ]
       ]
      ],
-     "说明": "文艺、地下片标签的角色上板权重 +1"
+     "note": "Roles with the arthouse and underground tags get +1 board weight"
     },
     {
-     "事件": "job_model_art_m2",
-     "条件": [
+     "event": "job_model_art_m2",
+     "cond": [
       [
        [
-        "成功期数.job_model_art",
+        "job_periods.job_model_art",
         ">=",
         8
        ]
       ]
      ],
-     "说明": "画展事件（审美 +5、名气 +10）"
+     "note": "Art show event (taste +5, fame +10)"
     }
    ]
   },
   {
    "id": "job_bar",
-   "名字": "酒吧看场子",
-   "最早时间": "1926-01",
-   "前置": [],
-   "日薪": 8,
-   "成功线": [
+   "name": "酒吧看场子",
+   "earliest": "1926-01",
+   "prereq": [],
+   "daily_wage": 8,
+   "success_lines": [
     {
-     "项": "体力",
-     "值": 60
+     "stat": "stamina",
+     "value": 60
     }
    ],
-   "每天效果": [
+   "daily_effect": [
     {
-     "项": "胆识",
-     "加": [
+     "stat": "nerve",
+     "add": [
       0,
       1
      ]
     },
     {
-     "项": "犯罪",
-     "加": [
+     "stat": "crime",
+     "add": [
       1,
       1
      ]
     },
     {
-     "项": "自律",
-     "加": [
+     "stat": "discipline",
+     "add": [
       -1,
       -1
      ]
     },
     {
-     "项": "疲劳",
-     "加": [
+     "stat": "fatigue",
+     "add": [
       4,
       4
      ]
     }
    ],
-   "曝光": false,
-   "原版形状": "伐木场",
-   "npc": "酒吧老板",
-   "每期效果": null,
-   "每期随机": [
+   "exposure": false,
+   "original_shape": "lumber camp",
+   "npc": "bar_owner",
+   "job_period_effect": null,
+   "period_random": [
     {
-     "概率": [
+     "prob": [
       1,
       30
      ],
-     "事件": "job_bar_r1",
-     "说明": "遇上搜查，胆识判定线 40，不过则被捕"
+     "event": "job_bar_r1",
+     "note": "A police search: nerve check line 40, failing means arrest"
     }
    ],
-   "里程碑": [
+   "milestones": [
     {
-     "事件": "job_bar_m1",
-     "条件": [
+     "event": "job_bar_m1",
+     "cond": [
       [
        [
-        "成功期数.job_bar",
+        "job_periods.job_bar",
         ">=",
         3
        ]
       ]
      ],
-     "说明": "解锁运私酒"
+     "note": "Unlocks bootlegging"
     },
     {
-     "事件": "job_bar_m2",
-     "条件": [
+     "event": "job_bar_m2",
+     "cond": [
       [
        [
-        "成功期数.job_bar",
+        "job_periods.job_bar",
         ">=",
         5
        ]
       ]
      ],
-     "说明": "被捕时罚款减半；犯罪标签的角色上板权重 +1"
+     "note": "Halves the fine when arrested; roles with the crime tag get +1 board weight"
     }
    ]
   },
   {
    "id": "job_studio",
-   "名字": "片厂办公室",
-   "最早时间": "1926-04",
-   "前置": [],
-   "日薪": 6,
-   "成功线": [
+   "name": "片厂办公室",
+   "earliest": "1926-04",
+   "prereq": [],
+   "daily_wage": 6,
+   "success_lines": [
     {
-     "项": "教育",
-     "值": 60
+     "stat": "education",
+     "value": 60
     }
    ],
-   "每天效果": [
+   "daily_effect": [
     {
-     "项": "生意",
-     "加": [
+     "stat": "business",
+     "add": [
       0,
       1
      ]
     },
     {
-     "项": "人脉",
-     "加": [
+     "stat": "connections",
+     "add": [
       1,
       1
      ]
     },
     {
-     "项": "疲劳",
-     "加": [
+     "stat": "fatigue",
+     "add": [
       4,
       4
      ]
     }
    ],
-   "曝光": false,
-   "原版形状": "墓园",
-   "npc": "片厂老板",
-   "每期效果": "好感.片厂老板+2",
-   "每期随机": [],
-   "里程碑": [
+   "exposure": false,
+   "original_shape": "cemetery",
+   "npc": "studio_boss",
+   "job_period_effect": "favor.studio_boss+2",
+   "period_random": [],
+   "milestones": [
     {
-     "事件": "job_studio_m1",
-     "条件": [
+     "event": "job_studio_m1",
+     "cond": [
       [
        [
-        "好感.片厂老板",
+        "favor.studio_boss",
         ">=",
         30
        ]
       ]
      ],
-     "说明": "长约概率翻倍"
+     "note": "Doubles the long-contract probability"
     },
     {
-     "事件": "job_studio_m2",
-     "条件": [
+     "event": "job_studio_m2",
+     "cond": [
       [
        [
-        "好感.片厂老板",
+        "favor.studio_boss",
         ">=",
         50
        ]
       ]
      ],
-     "说明": "“支持转型”，之后 3 块板各多一个玩家指定戏路族的中片角色"
+     "note": "\"Backs transition\": the next 3 boards each get an extra medium role of the tag family the player picks"
     },
     {
-     "事件": "job_studio_m3",
-     "条件": [
+     "event": "job_studio_m3",
+     "cond": [
       [
        [
-        "好感.片厂老板",
+        "favor.studio_boss",
         ">=",
         80
        ]
       ]
      ],
-     "说明": "结局接口（制片人线）"
+     "note": "Ending hook (producer line)"
     }
    ],
-   "成功线修正": [
+   "success_line_mods": [
     {
-     "条件": [
+     "cond": [
       [
        [
-        "旗标.文凭",
+        "flag.diploma",
         "==",
         1
        ]
       ]
      ],
-     "项": "教育",
-     "值": -20,
-     "说明": "开局第一问“农学院学生”的旗标（GDD 3.2）"
+     "stat": "education",
+     "value": -20,
+     "note": "Flag from opening question 1, \"agriculture student\" (GDD 3.2)"
     }
    ]
   },
   {
    "id": "job_news",
-   "名字": "报馆帮工",
-   "最早时间": "1926-04",
-   "前置": [],
-   "日薪": 5,
-   "成功线": [
+   "name": "报馆帮工",
+   "earliest": "1926-04",
+   "prereq": [],
+   "daily_wage": 5,
+   "success_lines": [
     {
-     "项": "教育",
-     "值": 60
+     "stat": "education",
+     "value": 60
     }
    ],
-   "每天效果": [
+   "daily_effect": [
     {
-     "项": "创作",
-     "加": [
+     "stat": "writing",
+     "add": [
       0,
       1
      ]
     },
     {
-     "项": "疲劳",
-     "加": [
+     "stat": "fatigue",
+     "add": [
       3,
       3
      ]
     }
    ],
-   "曝光": false,
-   "原版形状": "墓园",
-   "npc": "编辑",
-   "每期效果": "好感.编辑+2",
-   "每期随机": [],
-   "里程碑": [
+   "exposure": false,
+   "original_shape": "cemetery",
+   "npc": "editor",
+   "job_period_effect": "favor.editor+2",
+   "period_random": [],
+   "milestones": [
     {
-     "事件": "job_news_m1",
-     "条件": [
+     "event": "job_news_m1",
+     "cond": [
       [
        [
-        "好感.编辑",
+        "favor.editor",
         ">=",
         30
        ]
       ]
      ],
-     "说明": "丑闻提前一个月知道，可花 200 压下"
+     "note": "Learns of a scandal a month early and may pay 200 to suppress it"
     },
     {
-     "事件": "job_news_m2",
-     "条件": [
+     "event": "job_news_m2",
+     "cond": [
       [
        [
-        "好感.编辑",
+        "favor.editor",
         ">=",
         50
        ]
       ]
      ],
-     "说明": "每年免费压一次"
+     "note": "One free cover-up per year"
     },
     {
-     "事件": "job_news_m3",
-     "条件": [
+     "event": "job_news_m3",
+     "cond": [
       [
        [
-        "好感.编辑",
+        "favor.editor",
         ">=",
         80
        ]
       ]
      ],
-     "说明": "每年可放一条消息，名气 +10%"
+     "note": "May leak one piece of news per year, fame +10%"
     }
    ],
-   "成功线修正": [
+   "success_line_mods": [
     {
-     "条件": [
+     "cond": [
       [
        [
-        "旗标.文凭",
+        "flag.diploma",
         "==",
         1
        ]
       ]
      ],
-     "项": "教育",
-     "值": -20,
-     "说明": "开局第一问“农学院学生”的旗标（GDD 3.2）"
+     "stat": "education",
+     "value": -20,
+     "note": "Flag from opening question 1, \"agriculture student\" (GDD 3.2)"
     }
    ]
   },
   {
    "id": "job_ballroom",
-   "名字": "舞厅伴舞",
-   "最早时间": "1926-07",
-   "前置": [],
-   "日薪": 7,
-   "成功线": [
+   "name": "舞厅伴舞",
+   "earliest": "1926-07",
+   "prereq": [],
+   "daily_wage": 7,
+   "success_lines": [
     {
-     "项": "体力",
-     "值": 60
+     "stat": "stamina",
+     "value": 60
     },
     {
-     "项": "相貌",
-     "值": 50
+     "stat": "looks",
+     "value": 50
     }
    ],
-   "每天效果": [
+   "daily_effect": [
     {
-     "项": "体态",
-     "加": [
+     "stat": "physique",
+     "add": [
       0,
       1
      ]
     },
     {
-     "项": "谈判",
-     "加": [
+     "stat": "negotiation",
+     "add": [
       0,
       1
      ]
     },
     {
-     "项": "自律",
-     "加": [
+     "stat": "discipline",
+     "add": [
       -1,
       -1
      ]
     },
     {
-     "项": "疲劳",
-     "加": [
+     "stat": "fatigue",
+     "add": [
       5,
       5
      ]
     }
    ],
-   "曝光": false,
-   "原版形状": "酒店",
-   "npc": "富婆",
-   "每期效果": null,
-   "每期随机": [
+   "exposure": false,
+   "original_shape": "hotel",
+   "npc": "rich_widow",
+   "job_period_effect": null,
+   "period_random": [
     {
-     "概率": [
+     "prob": [
       1,
       8
      ],
-     "事件": "job_ballroom_r1",
-     "说明": "遇到富婆，富婆好感 +5"
+     "event": "job_ballroom_r1",
+     "note": "Meets the rich widow, rich_widow favor +5"
     }
    ],
-   "里程碑": [
+   "milestones": [
     {
-     "事件": "job_ballroom_m1",
-     "条件": [
+     "event": "job_ballroom_m1",
+     "cond": [
       [
        [
-        "成功期数.job_ballroom",
+        "job_periods.job_ballroom",
         ">=",
         5
        ]
       ]
      ],
-     "说明": "解锁私人男伴"
+     "note": "Unlocks the private male companion job"
     },
     {
-     "事件": "job_ballroom_m2",
-     "条件": [
+     "event": "job_ballroom_m2",
+     "cond": [
       [
        [
-        "好感.富婆",
+        "favor.rich_widow",
         ">=",
         50
        ]
       ]
      ],
-     "说明": "赞助一件服装"
+     "note": "Sponsors one outfit"
     },
     {
-     "事件": "job_ballroom_m3",
-     "条件": [
+     "event": "job_ballroom_m3",
+     "cond": [
       [
        [
-        "好感.富婆",
+        "favor.rich_widow",
         ">=",
         80
        ]
       ]
      ],
-     "说明": "出钱投一部片，下一块板多一个中片角色"
+     "note": "Invests in a film: the next board gets an extra medium role"
     }
    ]
   },
   {
    "id": "job_stunt",
-   "名字": "替身",
-   "最早时间": "1926-07",
-   "前置": [],
-   "日薪": 10,
-   "成功线": [
+   "name": "替身",
+   "earliest": "1926-07",
+   "prereq": [],
+   "daily_wage": 10,
+   "success_lines": [
     {
-     "项": "体力",
-     "值": 80
+     "stat": "stamina",
+     "value": 80
     },
     {
-     "项": "胆识",
-     "值": 30
+     "stat": "nerve",
+     "value": 30
     }
    ],
-   "每天效果": [
+   "daily_effect": [
     {
-     "项": "体力",
-     "加": [
+     "stat": "stamina",
+     "add": [
       2,
       2
      ]
     },
     {
-     "项": "相貌",
-     "加": [
+     "stat": "looks",
+     "add": [
       -1,
       -1
      ]
     },
     {
-     "项": "胆识",
-     "加": [
+     "stat": "nerve",
+     "add": [
       0,
       1
      ]
     },
     {
-     "项": "疲劳",
-     "加": [
+     "stat": "fatigue",
+     "add": [
       3,
       3
      ]
     }
    ],
-   "曝光": false,
-   "原版形状": "工地",
-   "npc": "动作片导演",
-   "每期效果": null,
-   "每期随机": [
+   "exposure": false,
+   "original_shape": "construction site",
+   "npc": "action_director",
+   "job_period_effect": null,
+   "period_random": [
     {
-     "概率": [
+     "prob": [
       1,
       40
      ],
-     "事件": "job_stunt_r1",
-     "说明": "受伤（体力 -30、疲劳 +20）"
+     "event": "job_stunt_r1",
+     "note": "Injury (stamina -30, fatigue +20)"
     }
    ],
-   "里程碑": [
+   "milestones": [
     {
-     "事件": "job_stunt_m1",
-     "条件": [
+     "event": "job_stunt_m1",
+     "cond": [
       [
        [
-        "成功期数.job_stunt",
+        "job_periods.job_stunt",
         ">=",
         4
        ]
       ]
      ],
-     "说明": "“亲自上”的胆识线从 60 降到 50；西部、动作冒险标签的角色上板权重 +1"
+     "note": "The \"stunt_self\" nerve line drops from 60 to 50; roles with the western and action_adventure tags get +1 board weight"
     }
    ]
   },
   {
    "id": "job_bootleg",
-   "名字": "运私酒",
-   "最早时间": "1927-01",
-   "前置": [
+   "name": "运私酒",
+   "earliest": "1927-01",
+   "prereq": [
     [
      [
-      "成功期数.job_bar",
+      "job_periods.job_bar",
       ">=",
       3
      ]
     ],
     [
      [
-      "旗标.走私",
+      "flag.smuggling",
       "==",
       1
      ]
     ]
    ],
-   "日薪": 30,
-   "成功线": [
+   "daily_wage": 30,
+   "success_lines": [
     {
-     "项": "体力",
-     "值": 70
+     "stat": "stamina",
+     "value": 70
     },
     {
-     "项": "骑马驾驶",
-     "值": 30
+     "stat": "riding",
+     "value": 30
     }
    ],
-   "每天效果": [
+   "daily_effect": [
     {
-     "项": "犯罪",
-     "加": [
+     "stat": "crime",
+     "add": [
       2,
       2
      ]
     },
     {
-     "项": "自律",
-     "加": [
+     "stat": "discipline",
+     "add": [
       -2,
       -2
      ]
     },
     {
-     "项": "胆识",
-     "加": [
+     "stat": "nerve",
+     "add": [
       0,
       1
      ]
     },
     {
-     "项": "生意",
-     "加": [
+     "stat": "business",
+     "add": [
       0,
       1
      ]
     },
     {
-     "项": "疲劳",
-     "加": [
+     "stat": "fatigue",
+     "add": [
       8,
       8
      ]
     }
    ],
-   "曝光": false,
-   "原版形状": "大夜总会",
-   "npc": "酒吧老板",
-   "每期效果": null,
-   "每期随机": [
+   "exposure": false,
+   "original_shape": "big nightclub",
+   "npc": "bar_owner",
+   "job_period_effect": null,
+   "period_random": [
     {
-     "概率": [
+     "prob": [
       1,
       20
      ],
-     "事件": "job_bootleg_r1",
-     "说明": "查车，胆识判定线 60，不过则被捕"
+     "event": "job_bootleg_r1",
+     "note": "Car inspection, nerve check line 60, failing means arrest"
     }
    ],
-   "里程碑": [
+   "milestones": [
     {
-     "事件": "job_bootleg_m1",
-     "条件": [
+     "event": "job_bootleg_m1",
+     "cond": [
       [
        [
-        "成功期数.job_bootleg",
+        "job_periods.job_bootleg",
         ">=",
         4
        ]
       ]
      ],
-     "说明": "“入伙”邀请，记旗标（地下皇帝线）"
+     "note": "\"Join the crew\" invitation, sets a flag (underworld emperor line)"
     }
    ]
   },
   {
    "id": "job_magazine",
-   "名字": "画报模特",
-   "最早时间": "1927-04",
-   "前置": [],
-   "日薪": 12,
-   "成功线": [
+   "name": "画报模特",
+   "earliest": "1927-04",
+   "prereq": [],
+   "daily_wage": 12,
+   "success_lines": [
     {
-     "项": "打扮",
-     "值": 40
+     "stat": "grooming",
+     "value": 40
     }
    ],
-   "每天效果": [
+   "daily_effect": [
     {
-     "项": "相貌",
-     "加": [
+     "stat": "looks",
+     "add": [
       1,
       1
      ]
     },
     {
-     "项": "疲劳",
-     "加": [
+     "stat": "fatigue",
+     "add": [
       3,
       3
      ]
     }
    ],
-   "曝光": true,
-   "原版形状": "美容院",
+   "exposure": true,
+   "original_shape": "beauty salon",
    "npc": null,
-   "每期效果": null,
-   "每期随机": [],
-   "里程碑": [
+   "job_period_effect": null,
+   "period_random": [],
+   "milestones": [
     {
-     "事件": "job_magazine_m1",
-     "条件": [
+     "event": "job_magazine_m1",
+     "cond": [
       [
        [
-        "成功期数.job_magazine",
+        "job_periods.job_magazine",
         ">=",
         4
        ]
       ]
      ],
-     "说明": "封面事件（名气 +15）；浪漫、异国情人标签的角色上板权重 +1"
+     "note": "Cover story (fame +15); roles with the romance and exotic_lover tags get +1 board weight"
     }
    ]
   },
   {
    "id": "job_bodyguard",
-   "名字": "女明星保镖",
-   "最早时间": "1927-04",
-   "前置": [
+   "name": "女明星保镖",
+   "earliest": "1927-04",
+   "prereq": [
     [
      [
-      "成功期数.job_assistant",
+      "job_periods.job_assistant",
       ">=",
       4
      ],
      [
-      "好感.女明星",
+      "favor.actress",
       ">=",
       30
      ]
     ]
    ],
-   "日薪": 12,
-   "成功线": [
+   "daily_wage": 12,
+   "success_lines": [
     {
-     "项": "体力",
-     "值": 80
+     "stat": "stamina",
+     "value": 80
     },
     {
-     "项": "打斗",
-     "值": 30
+     "stat": "fight",
+     "value": 30
     }
    ],
-   "每天效果": [
+   "daily_effect": [
     {
-     "项": "胆识",
-     "加": [
+     "stat": "nerve",
+     "add": [
       0,
       1
      ]
     },
     {
-     "项": "义气",
-     "加": [
+     "stat": "loyalty",
+     "add": [
       1,
       1
      ]
     },
     {
-     "项": "疲劳",
-     "加": [
+     "stat": "fatigue",
+     "add": [
       3,
       3
      ]
     }
    ],
-   "曝光": false,
-   "原版形状": "工地",
-   "npc": "女明星",
-   "每期效果": "好感.女明星+2",
-   "每期随机": [
+   "exposure": false,
+   "original_shape": "construction site",
+   "npc": "actress",
+   "job_period_effect": "favor.actress+2",
+   "period_random": [
     {
-     "概率": [
+     "prob": [
       1,
       20
      ],
-     "事件": "job_bodyguard_r1",
-     "说明": "“挡了一下”（体力 -20、女明星好感 +10、义气 +10、名气 +10）"
+     "event": "job_bodyguard_r1",
+     "note": "\"Took the hit\" (stamina -20, actress favor +10, loyalty +10, fame +10)"
     }
    ],
-   "里程碑": []
+   "milestones": []
   },
   {
    "id": "job_radio",
-   "名字": "电台播音",
-   "最早时间": "1927-10",
-   "前置": [
+   "name": "电台播音",
+   "earliest": "1927-10",
+   "prereq": [
     [
      [
-      "成功期数.job_news",
+      "job_periods.job_news",
       ">=",
       3
      ]
     ]
    ],
-   "日薪": 10,
-   "成功线": [
+   "daily_wage": 10,
+   "success_lines": [
     {
-     "项": "教育",
-     "值": 120
+     "stat": "education",
+     "value": 120
     },
     {
-     "项": "谈吐",
-     "值": 30
+     "stat": "speech",
+     "value": 30
     }
    ],
-   "每天效果": [
+   "daily_effect": [
     {
-     "项": "谈吐",
-     "加": [
+     "stat": "speech",
+     "add": [
       0,
       1
      ]
     },
     {
-     "项": "自律",
-     "加": [
+     "stat": "discipline",
+     "add": [
       1,
       1
      ]
     },
     {
-     "项": "疲劳",
-     "加": [
+     "stat": "fatigue",
+     "add": [
       7,
       7
      ]
     }
    ],
-   "曝光": true,
-   "原版形状": "家教",
-   "npc": "编辑",
-   "每期效果": null,
-   "每期随机": [],
-   "里程碑": [
+   "exposure": true,
+   "original_shape": "tutoring",
+   "npc": "editor",
+   "job_period_effect": null,
+   "period_random": [],
+   "milestones": [
     {
-     "事件": "job_radio_m1",
-     "条件": [
+     "event": "job_radio_m1",
+     "cond": [
       [
        [
-        "成功期数.job_radio",
+        "job_periods.job_radio",
         ">=",
         4
        ]
       ]
      ],
-     "说明": "此后有声角色的谈吐线 -10"
+     "note": "From then on talkie roles' speech line -10"
     }
    ]
   },
   {
    "id": "job_escort",
-   "名字": "私人男伴",
-   "最早时间": "1928-04",
-   "前置": [
+   "name": "私人男伴",
+   "earliest": "1928-04",
+   "prereq": [
     [
      [
-      "成功期数.job_ballroom",
+      "job_periods.job_ballroom",
       ">=",
       5
      ]
     ]
    ],
-   "日薪": 35,
-   "成功线": [
+   "daily_wage": 35,
+   "success_lines": [
     {
-     "项": "相貌",
-     "值": 150
+     "stat": "looks",
+     "value": 150
     },
     {
-     "项": "体态",
-     "值": 50
+     "stat": "physique",
+     "value": 50
     }
    ],
-   "每天效果": [
+   "daily_effect": [
     {
-     "项": "相貌",
-     "加": [
+     "stat": "looks",
+     "add": [
       2,
       2
      ]
     },
     {
-     "项": "自律",
-     "加": [
+     "stat": "discipline",
+     "add": [
       -3,
       -3
      ]
     },
     {
-     "项": "人脉",
-     "加": [
+     "stat": "connections",
+     "add": [
       0,
       1
      ]
     },
     {
-     "项": "疲劳",
-     "加": [
+     "stat": "fatigue",
+     "add": [
       12,
       12
      ]
     }
    ],
-   "曝光": false,
-   "原版形状": "酒家",
-   "npc": "富婆",
-   "每期效果": null,
-   "每期随机": [
+   "exposure": false,
+   "original_shape": "tavern",
+   "npc": "rich_widow",
+   "job_period_effect": null,
+   "period_random": [
     {
-     "概率": [
+     "prob": [
       1,
       20
      ],
-     "事件": "job_escort_r1",
-     "说明": "被小报拍到，按丑闻曝光结算"
+     "event": "job_escort_r1",
+     "note": "Caught by the tabloids, settled as scandal exposure"
     }
    ],
-   "里程碑": []
+   "milestones": []
   }
  ]
 }

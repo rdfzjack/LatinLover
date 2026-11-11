@@ -1,15 +1,15 @@
-"""把第 6 步的模块接到月流程上：Story 是 month.Hooks 的实现，Agent 是玩家（界面或机器人）要回答的问题。
+"""Connects the step-6 modules to the month flow: Story implements month.Hooks, Agent is the questions the player (UI or bot) must answer.
 
-用法：
+Usage:
     from sim.story import Story, SimpleAgent, new_game
     g = new_game(seed=1, origin=(0, 1, 2), agent=SimpleAgent())
     while not g.st.finished:
-        g.start_month()                  # 生活费、选片板（agent 报名、出牌）、agent.month_start
-        g.run_month(plan)                # 三旬日程；被拍摄锁定的旬不看 plan
-    g.st.story['结局']
+        g.start_month()                  # living costs, board (agent signs up, plays), agent.month_start
+        g.run_month(plan)                # the three periods; periods locked by shooting ignore the plan
+    g.st.story['ending']
 
-命令行：python3 -m sim.story --seed 1 --origin 0,1,2 --plan class_acting,job_dock,rest_home
-每月一行对账（同 sim.month），最后一行是结局。
+Command line: python3 -m sim.story --seed 1 --origin 0,1,2 --plan class_acting,job_dock,rest_home
+One reconciliation line per month (same as sim.month), the last line is the ending.
 """
 import argparse
 
@@ -19,56 +19,56 @@ from .month import Game, Hooks, trace_line
 
 
 class Agent(audition.Player):
-    """玩家要做的决定。界面和第 7 步的机器人实现这些方法；默认实现见 SimpleAgent。"""
+    """The decisions the player has to make. The UI and the step-7 bots implement these methods; see SimpleAgent for the default implementation."""
 
     def pick_role(self, st, b, ok):
-        """选片板：从可报名的下标 ok 里选一个去试镜，None 表示不试了。b = st.story['板']。"""
+        """Board: pick one of the signable indexes ok to audition for; None means stop trying. b = st.story['board']."""
         raise NotImplementedError
 
     def accept_support(self, st, role):
-        """惜败时接不接同片配角。"""
+        """On a narrow loss: whether to take a supporting part in the same film."""
         raise NotImplementedError
 
     def go_personally(self, st, role):
-        """拿到可以亲自上的角色时，要不要亲自上。"""
+        """When a role that allows stunt_self is won: whether to do it yourself."""
         raise NotImplementedError
 
     def option(self, st, ev, avail):
-        """事件选项：avail 是能选的选项下标，返回其中一个。"""
+        """Event option: avail is the list of pickable option indexes; returns one of them."""
         raise NotImplementedError
 
     def annual(self, st, opts):
-        """年度大事：返回场合 id，None 表示休息。"""
+        """Annual event: returns the occasion id; None means rest."""
         raise NotImplementedError
 
     def family(self, st):
-        """片厂老板支持转型：返回戏路族名（endings.json 的 标签族）。"""
+        """Studio boss backs transition: returns a tag family name (tag_families of endings.json)."""
         raise NotImplementedError
 
     def suppress(self, st, kind):
-        """丑闻要不要压下：kind 为 '免费' 或 '花钱'（200）。"""
+        """Whether to suppress a scandal: kind is 'free' or 'paid' (200)."""
         raise NotImplementedError
 
     def month_start(self, story, st):
-        """月初的自由操作：story.write_script / send_detox / leak_news，街道等（不占日程）。"""
+        """Free actions at the start of the month: story.write_script / send_detox / leak_news, the street etc. (they take no schedule slot)."""
 
 
 class SimpleAgent(Agent):
-    """最简单的玩家，测试和对账用：
-    组牌 主色（等级最高）3 张 + 等级第二高的颜色 2 张；出牌用逻辑流随机；
-    报名能报的最高档里第一个；接配角；能亲自上就上；事件选第一个能选的选项；
-    年度大事参加声望最高的那条路；转型选第一个族；能压丑闻就压；月初不做别的事。"""
+    """The simplest player, for tests and reconciliation:
+        deck: main color (highest level) 3 cards + the color with the second-highest level 2 cards; plays at random with the logic stream;
+        signs up for the first role of the highest signable size; takes supporting parts; does the stunt when possible; picks the first pickable event option;
+        annual event: attends the road with the highest reputation; transition picks the first family; suppresses a scandal when possible; does nothing else at month start."""
 
     def deck(self, st, ctx):
-        lv = ctx['等级']
+        lv = ctx['levels']
         order = sorted(range(4), key=lambda c: (-lv[c], c))
         return [order[0]] * 3 + [order[1]] * 2
 
     def play(self, st, ctx):
-        return st.rng.logic.below(len(ctx['手牌']))
+        return st.rng.logic.below(len(ctx['hand']))
 
     def pick_role(self, st, b, ok):
-        return max(ok, key=lambda i: (board.RANK[b['角色'][i]['档次']], -i))
+        return max(ok, key=lambda i: (board.RANK[b['roles'][i]['size']], -i))
 
     def accept_support(self, st, role):
         return True
@@ -81,7 +81,7 @@ class SimpleAgent(Agent):
 
     def annual(self, st, opts):
         b = st.bonus()
-        best = max(opts, key=lambda x: (st.rep(x['路'], b), -opts.index(x)))
+        best = max(opts, key=lambda x: (st.rep(x['road'], b), -opts.index(x)))
         return best['id']
 
     def family(self, st):
@@ -95,38 +95,38 @@ class Story(Hooks):
     def __init__(self, agent=None):
         self.agent = agent or SimpleAgent()
         self.cur_period = 0
-        self.log = []          # 本局触发过的事件（不进存档）
-        self.boards = []       # 每块板的试镜结果（不进存档）
+        self.log = []          # events fired in this game (not saved)
+        self.boards = []       # audition results of each board (not saved)
         self.annuals = []
 
-    # ---------- 月初 ----------
+    # ---------- month start ----------
     def board(self, st):
         board.make(st)
-        self.boards.append({'月': st.date, '试镜': board.run(st, self.agent)})
+        self.boards.append({'month': st.date, 'audition': board.run(st, self.agent)})
 
     def month_start(self, st):
         self.agent.month_start(self, st)
 
-    # 月初的操作（玩家调用）
+    # month-start actions (called by the player)
     def write_script(self, st, kind, color=None):
         board.write_script(st, kind, color)
 
     def send_detox(self, st):
-        """送去戒：药瘾阶段 ≥2 时可选，当月月末触发戒断。"""
+        """Send to detox: allowed at drug_stage >= 2; the withdrawal event fires at the end of that month."""
         if st.drug < 2:
-            raise ValueError('药瘾阶段不到 2')
-        st.flags['送去戒'] = 1
+            raise ValueError('drug_stage below 2')
+        st.flags['detox_sent'] = 1
 
     def leak_news(self, st):
-        """报馆线好感 80：每年可放一条消息，名气 +10%，算曝光。"""
+        """Newspaper line favor 80: one news leak per year, fame +10%, counts as exposure."""
         y = st.ym // 12 + 1
-        if not st.flags.get('放消息') or st.story['放消息年'] == y:
-            raise ValueError('现在不能放消息')
-        st.story['放消息年'] = y
+        if not st.flags.get('leak_news') or st.story['leak_year'] == y:
+            raise ValueError('cannot leak news now')
+        st.story['leak_year'] = y
         events.fame_pct(st, 10)
         st.exposed = 1
 
-    # ---------- 三旬 ----------
+    # ---------- the three periods ----------
     def locked(self, st, i):
         return film.locked(st, i)
 
@@ -158,7 +158,7 @@ class Story(Hooks):
     def job_period(self, st, jid, good):
         events.job_period(self, st, jid, good)
 
-    # ---------- 月末、月结 ----------
+    # ---------- month end, settlement ----------
     def month_events(self, st):
         events.month_end(self, st)
 
@@ -166,7 +166,7 @@ class Story(Hooks):
         film.release(st)
 
     def rival_growth(self, st):
-        """有名对手按 rivals.json 的“自”日期换阶段，无名对手按半年数算，10 月不用另做。"""
+        """Named rivals switch stage by the `from` date of rivals.json, unnamed rivals by the half-year count; nothing extra is needed in October."""
 
     def annual(self, st):
         events.annual(self, st)
@@ -183,7 +183,7 @@ def new_game(seed=1, origin=(0, 0, 0), agent=None, data=None):
 
 
 def fit_plan(g, plan):
-    """把固定日程里本月不能排的项换成在家休息（生病不能外出、书读完了、工还没解锁…）。"""
+    """Replaces the entries of a fixed schedule that cannot be scheduled this month with resting at home (sick cannot go out, book finished, job not unlocked ...)."""
     st = g.st
     out = []
     for i, e in enumerate(plan):
@@ -195,7 +195,7 @@ def fit_plan(g, plan):
 
 
 def run(seed, origin, plan, agent=None, data=None):
-    """固定日程跑一局（不能排的旬改在家休息）。返回 (每月对账行, Game)。"""
+    """Runs one game with a fixed schedule (entries that cannot be scheduled become resting at home). Returns (reconciliation lines per month, Game)."""
     g = new_game(seed, origin, agent, data)
     lines = []
     while not g.st.finished:
@@ -208,10 +208,10 @@ def run(seed, origin, plan, agent=None, data=None):
 
 
 def main():
-    ap = argparse.ArgumentParser(description='固定日程、SimpleAgent 跑完一局，每月一行状态，最后输出结局')
+    ap = argparse.ArgumentParser(description='run one game with a fixed schedule and SimpleAgent, one status line per month, print the ending at the end')
     ap.add_argument('--seed', type=int, default=1)
-    ap.add_argument('--origin', default='0,0,0', help='开局三问的选项序号，从 0 数')
-    ap.add_argument('--plan', default='class_acting,job_dock,rest_home', help='每月三旬的日程')
+    ap.add_argument('--origin', default='0,0,0', help='option index of each opening question, counting from 0')
+    ap.add_argument('--plan', default='class_acting,job_dock,rest_home', help='the three period entries of each month')
     a = ap.parse_args()
     origin = tuple(int(x) for x in a.origin.split(','))
     lines, g = run(a.seed, origin, a.plan.split(','))
@@ -219,8 +219,8 @@ def main():
         print(line)
     st = g.st
     fs = film.films(st)
-    print(f"片约 {len(fs)}：" + ' '.join(f"{f['档次']}{'配' if f['配角'] else ''}{f['状态']}" for f in fs))
-    print(f"结局 {st.story['结局']}")
+    print(f"films {len(fs)}: " + ' '.join(f"{f['size']}{'(support)' if f['support'] else ''}:{f['status']}" for f in fs))
+    print(f"ending {st.story['ending']}")
 
 
 if __name__ == '__main__':

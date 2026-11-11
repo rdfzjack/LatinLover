@@ -1,49 +1,49 @@
 {
- "说明": "等级顺序：硬汉/情人/文化/手腕；阶段从“自”月起生效，名气不写则沿用上一阶段",
- "有名": [
+ "note": "Level order: tough/lover/culture/savvy; a stage takes effect from its `from` month, and if fame is omitted the previous stage's is kept",
+ "named": [
   {
    "id": "rival_valen",
-   "名字": "鲁道夫·瓦伦",
-   "在场": [
+   "name": "鲁道夫·瓦伦",
+   "present": [
     "1926-01",
     "1927-08"
    ],
-   "阶段": [
+   "stages": [
     {
-     "自": "1926-01",
-     "等级": [
+     "from": "1926-01",
+     "levels": [
       5,
       9,
       2,
       3
      ],
-     "名气": 700
+     "fame": 700
     }
    ],
-   "习惯": "habit_finish",
+   "habit": "habit_finish",
    "k": 5
   },
   {
    "id": "rival_fanban",
-   "名字": "道格·范班克",
-   "在场": [
+   "name": "道格·范班克",
+   "present": [
     "1926-01",
     "1929-12"
    ],
-   "阶段": [
+   "stages": [
     {
-     "自": "1926-01",
-     "等级": [
+     "from": "1926-01",
+     "levels": [
       9,
       5,
       3,
       8
      ],
-     "名气": 750
+     "fame": 750
     },
     {
-     "自": "1929-01",
-     "等级": [
+     "from": "1929-01",
+     "levels": [
       8,
       5,
       3,
@@ -51,82 +51,82 @@
      ]
     }
    ],
-   "习惯": "habit_lead",
+   "habit": "habit_lead",
    "k": 4
   },
   {
    "id": "rival_jilbo",
-   "名字": "约翰·吉尔伯",
-   "在场": [
+   "name": "约翰·吉尔伯",
+   "present": [
     "1926-01",
     "1929-12"
    ],
-   "阶段": [
+   "stages": [
     {
-     "自": "1926-01",
-     "等级": [
+     "from": "1926-01",
+     "levels": [
       4,
       7,
       3,
       2
      ],
-     "名气": 500
+     "fame": 500
     },
     {
-     "自": "1927-01",
-     "等级": [
+     "from": "1927-01",
+     "levels": [
       4,
       8,
       3,
       2
      ],
-     "名气": 650
+     "fame": 650
     },
     {
-     "自": "1929-01",
-     "等级": [
+     "from": "1929-01",
+     "levels": [
       4,
       6,
       2,
       2
      ],
-     "名气": 400
+     "fame": 400
     }
    ],
-   "习惯": "habit_score",
+   "habit": "habit_score",
    "k": 4
   },
   {
    "id": "rival_nova",
-   "名字": "拉蒙·诺瓦",
-   "在场": [
+   "name": "拉蒙·诺瓦",
+   "present": [
     "1926-01",
     "1929-12"
    ],
-   "阶段": [
+   "stages": [
     {
-     "自": "1926-01",
-     "等级": [
+     "from": "1926-01",
+     "levels": [
       5,
       7,
       4,
       2
      ],
-     "名气": 450
+     "fame": 450
     },
     {
-     "自": "1927-09",
-     "等级": [
+     "from": "1927-09",
+     "levels": [
       5,
       8,
       4,
       2
      ],
-     "名气": 550
+     "fame": 550
     },
     {
-     "自": "1929-01",
-     "等级": [
+     "from": "1929-01",
+     "levels": [
       5,
       9,
       4,
@@ -134,30 +134,30 @@
      ]
     }
    ],
-   "习惯": "habit_follow",
+   "habit": "habit_follow",
    "k": 3
   },
   {
    "id": "rival_barry",
-   "名字": "约翰·巴里",
-   "在场": [
+   "name": "约翰·巴里",
+   "present": [
     "1926-01",
     "1929-12"
    ],
-   "阶段": [
+   "stages": [
     {
-     "自": "1926-01",
-     "等级": [
+     "from": "1926-01",
+     "levels": [
       3,
       7,
       8,
       4
      ],
-     "名气": 600
+     "fame": 600
     },
     {
-     "自": "1929-01",
-     "等级": [
+     "from": "1929-01",
+     "levels": [
       3,
       7,
       9,
@@ -165,104 +165,104 @@
      ]
     }
    ],
-   "习惯": "habit_finish",
+   "habit": "habit_finish",
    "k": 3
   },
   {
    "id": "rival_channing",
-   "名字": "朗·钱宁",
-   "在场": [
+   "name": "朗·钱宁",
+   "present": [
     "1926-01",
     "1929-12"
    ],
-   "阶段": [
+   "stages": [
     {
-     "自": "1926-01",
-     "等级": [
+     "from": "1926-01",
+     "levels": [
       6,
       2,
       7,
       3
      ],
-     "名气": 550
+     "fame": 550
     }
    ],
-   "习惯": "habit_random",
+   "habit": "habit_random",
    "k": 4
   },
   {
    "id": "rival_cooper",
-   "名字": "加里·库普",
-   "在场": [
+   "name": "加里·库普",
+   "present": [
     "1926-01",
     "1929-12"
    ],
-   "阶段": [
+   "stages": [
     {
-     "自": "1926-01",
-     "等级": [
+     "from": "1926-01",
+     "levels": [
       4,
       3,
       1,
       2
      ],
-     "名气": 100
+     "fame": 100
     },
     {
-     "自": "1927-01",
-     "等级": [
+     "from": "1927-01",
+     "levels": [
       5,
       4,
       1,
       2
      ],
-     "名气": 250
+     "fame": 250
     },
     {
-     "自": "1928-01",
-     "等级": [
+     "from": "1928-01",
+     "levels": [
       7,
       5,
       2,
       2
      ],
-     "名气": 400
+     "fame": 400
     },
     {
-     "自": "1929-01",
-     "等级": [
+     "from": "1929-01",
+     "levels": [
       9,
       5,
       2,
       3
      ],
-     "名气": 550
+     "fame": 550
     }
    ],
-   "习惯": "habit_lead",
+   "habit": "habit_lead",
    "k": 5
   },
   {
    "id": "rival_jolson",
-   "名字": "艾尔·乔森",
-   "在场": [
+   "name": "艾尔·乔森",
+   "present": [
     "1927-10",
     "1929-12"
    ],
-   "阶段": [
+   "stages": [
     {
-     "自": "1927-10",
-     "等级": [
+     "from": "1927-10",
+     "levels": [
       1,
       4,
       6,
       8
      ],
-     "名气": 600
+     "fame": 600
     },
     {
-     "自": "1929-01",
-     "等级": [
+     "from": "1929-01",
+     "levels": [
       1,
       4,
       6,
@@ -270,118 +270,119 @@
      ]
     }
    ],
-   "习惯": "habit_open",
+   "habit": "habit_open",
    "k": 4
   },
   {
    "id": "rival_rintin",
-   "名字": "任丁丁",
-   "在场": [
+   "name": "任丁丁",
+   "present": [
     "1926-01",
     "1929-12"
    ],
-   "阶段": [
+   "stages": [
     {
-     "自": "1926-01",
-     "等级": [
+     "from": "1926-01",
+     "levels": [
       7,
       1,
       1,
       1
      ],
-     "名气": 500
+     "fame": 500
     }
    ],
-   "习惯": "habit_random",
+   "habit": "habit_random",
    "k": 5,
-   "说明": "彩蛋：只在一个角色里出现，不进年度大事排名和无名对手替换"
+   "note": "Easter egg: appears in a single role only; takes no part in the annual ranking or unnamed-rival replacement",
+   "easter_egg": true
   }
  ],
- "替换": [
+ "replace": [
   {
-   "自": "1927-09",
-   "原": "rival_valen",
-   "改为": [
+   "from": "1927-09",
+   "old": "rival_valen",
+   "new": [
     "rival_nova",
     "rival_jilbo"
    ]
   }
  ],
- "无名": {
-  "说明": "主色等级 = 基 + 已过的涨级月个数 + r(随机)；名气里的 h = 从 1926-01 起过了几个半年（1926 上半年为 0）；主色 = 场风概率最高的颜色，副色 = 克星的克星（等级 主色-副色差），其余两色 1 级",
-  "档": [
+ "unnamed": {
+  "note": "main_level = base + number of level_up_months passed + r(random); h in fame = number of half-years since 1926-01 (first half of 1926 is 0); main color = the color with the highest style probability, second color = counter of counter (level main - second_gap), the other two colors level 1",
+  "tier": [
    {
-    "档次": "小",
-    "场次": "唯一",
-    "主色等级": {
-     "基": 2,
-     "涨级月": [
+    "size": "small",
+    "rounds": "single",
+    "main_level": {
+     "base": 2,
+     "level_up_months": [
       "1927-07",
       "1929-01"
      ],
-     "随机": [
+     "random": [
       -1,
       0
      ]
     },
-    "副色差": 2,
-    "名气": {
-     "基": 40,
-     "每半年": 15
+    "second_gap": 2,
+    "fame": {
+     "base": 40,
+     "per_half_year": 15
     },
     "k": 3,
-    "习惯": "随机"
+    "habit": "random"
    },
    {
-    "档次": "中",
-    "场次": "唯一",
-    "主色等级": {
-     "基": 4,
-     "涨级月": [
+    "size": "medium",
+    "rounds": "single",
+    "main_level": {
+     "base": 4,
+     "level_up_months": [
       "1926-10",
       "1927-07",
       "1928-07"
      ],
-     "随机": [
+     "random": [
       -1,
       1
      ]
     },
-    "副色差": 2,
-    "名气": {
-     "基": 150,
-     "每半年": 15
+    "second_gap": 2,
+    "fame": {
+     "base": 150,
+     "per_half_year": 15
     },
     "k": 3,
-    "习惯": "随机"
+    "habit": "random"
    },
    {
-    "档次": "大",
-    "场次": "第一场",
-    "主色等级": {
-     "基": 5,
-     "涨级月": [
+    "size": "big",
+    "rounds": "first",
+    "main_level": {
+     "base": 5,
+     "level_up_months": [
       "1926-10",
       "1927-07",
       "1928-07"
      ],
-     "随机": [
+     "random": [
       0,
       1
      ]
     },
-    "副色差": 2,
-    "名气": {
-     "基": 300,
-     "每半年": 15
+    "second_gap": 2,
+    "fame": {
+     "base": 300,
+     "per_half_year": 15
     },
     "k": 3,
-    "习惯": "随机"
+    "habit": "random"
    }
   ]
  },
- "教学": {
-  "说明": "1926-01 第一块板的教学角色对手",
-  "主色等级": 2
+ "tutorial": {
+  "note": "Rival for the tutorial role on the first board of 1926-01",
+  "main_level": 2
  }
 }

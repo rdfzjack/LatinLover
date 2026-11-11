@@ -1,53 +1,56 @@
 {
- "折扣": {
-  "人脉每满": 20,
-  "每档减百分比": 5,
-  "上限百分比": 25,
-  "取整": "折后向上取整",
-  "生效": [
-   "服装店",
-   "杂货店",
-   "书店",
-   "餐厅",
-   "医院"
+ "discount": {
+  "connections_per": 20,
+  "cut_pct_per_step": 5,
+  "cap_pct": 25,
+  "rounding": "rounded up after the discount",
+  "applies": [
+   "clothing_store",
+   "general_store",
+   "bookstore",
+   "restaurant",
+   "hospital"
   ]
  },
- "入口": [
+ "entries": [
   {
-   "名字": "服装店",
-   "货架": [
-    "旧西装",
-    "定制西装",
-    "晚礼服",
-    "白色皮草",
-    "骑装",
-    "怀表",
-    "奴隶手镯",
-    "拳套",
-    "舞鞋"
+   "id": "clothing_store",
+   "name": "服装店",
+   "shelf": [
+    "suit_old",
+    "suit_custom",
+    "evening_gown",
+    "fur_white",
+    "riding_habit",
+    "gold_watch",
+    "slave_bracelet",
+    "boxing_gloves",
+    "dance_shoes"
    ],
-   "服务": [],
-   "说明": "买服装、配饰；任何物品可按半价卖出，装备中的不能卖"
+   "services": [],
+   "note": "Buy outfits and accessories; any item can be sold at half price, equipped items cannot be sold"
   },
   {
-   "名字": "杂货店",
-   "货架": [
-    "化妆箱",
-    "留声机",
-    "相机",
-    "打字机",
-    "社交名录",
-    "福特车",
-    "跑车",
-    "进口豪车",
-    "补药"
+   "id": "general_store",
+   "name": "杂货店",
+   "shelf": [
+    "makeup_case",
+    "phonograph",
+    "camera",
+    "typewriter",
+    "social_register",
+    "car_ford",
+    "car_sports",
+    "car_luxury",
+    "tonic"
    ],
-   "服务": [],
-   "说明": "买持有即生效的物品和消耗品；任何物品可按半价卖出，装备中的不能卖"
+   "services": [],
+   "note": "Buy held items and consumables; any item can be sold at half price, equipped items cannot be sold"
   },
   {
-   "名字": "书店",
-   "货架": [
+   "id": "bookstore",
+   "name": "书店",
+   "shelf": [
     "book_chuangzuo_1",
     "book_chuangzuo_2",
     "book_chuangzuo_3",
@@ -64,94 +67,105 @@
     "book_yanji_1",
     "book_daban_1"
    ],
-   "服务": [],
-   "说明": "买书；读过的书按半价回收；上架时间见 books.json"
+   "services": [],
+   "note": "Buy books; books already read are bought back at half price; shelf dates are in books.json"
   },
   {
-   "名字": "餐厅",
-   "货架": [],
-   "限次": {
-    "范围": "月",
-    "次数": 1,
-    "合计": true
+   "id": "restaurant",
+   "name": "餐厅",
+   "shelf": [],
+   "limit": {
+    "range": "month",
+    "times": 1,
+    "shared": true
    },
-   "生病": "没有效果",
-   "服务": [
+   "when_sick": "no effect",
+   "services": [
     {
-     "名字": "点心",
-     "价格": 5,
-     "效果": "疲劳-15"
+     "id": "dessert",
+     "name": "点心",
+     "price": 5,
+     "effect": "fatigue-15"
     },
     {
-     "名字": "夜总会晚餐",
-     "价格": 20,
-     "效果": "疲劳-30"
+     "id": "nightclub_dinner",
+     "name": "夜总会晚餐",
+     "price": 20,
+     "effect": "fatigue-30"
     },
     {
-     "名字": "牛排",
-     "价格": 10,
-     "效果": "体力+3"
+     "id": "steak",
+     "name": "牛排",
+     "price": 10,
+     "effect": "stamina+3"
     }
    ]
   },
   {
-   "名字": "教堂",
-   "货架": [],
-   "服务": [
+   "id": "church",
+   "name": "教堂",
+   "shelf": [],
+   "services": [
     {
-     "名字": "捐款",
-     "价格": 100,
-     "效果": "犯罪-10",
-     "限次": {
-      "范围": "月",
-      "次数": 1
+     "id": "donation",
+     "name": "捐款",
+     "price": 100,
+     "effect": "crime-10",
+     "limit": {
+      "range": "month",
+      "times": 1
      }
     }
    ]
   },
   {
-   "名字": "医院",
-   "货架": [],
-   "条件": [
+   "id": "hospital",
+   "name": "医院",
+   "shelf": [],
+   "cond": [
     [
      [
-      "生病指数",
+      "sick_index",
       ">=",
       10
      ]
     ]
    ],
-   "服务": [
+   "services": [
     {
-     "名字": "诊疗",
-     "价格公式": "生病指数*2",
-     "效果公式": "疲劳-(生病指数+1)"
+     "id": "treatment",
+     "name": "诊疗",
+     "price_formula": "sick_index*2",
+     "effect_formula": "fatigue-(sick_index+1)"
     }
    ]
   },
   {
-   "名字": "和 Sil 谈话",
-   "货架": [],
-   "服务": [
+   "id": "sil_talk",
+   "name": "和 Sil 谈话",
+   "shelf": [],
+   "services": [
     {
-     "名字": "近况",
-     "说明": "一句近况提示，按生病、失控、好感、疲劳、最高属性的顺序挑一条"
+     "id": "status_hint",
+     "name": "近况",
+     "note": "One status hint, picked in the order sick, reckless, favor, fatigue, top attribute"
     },
     {
-     "名字": "劝说",
-     "条件": [
+     "id": "persuade",
+     "name": "劝说",
+     "cond": [
       [
        [
-        "失控指数",
+        "reckless_index",
         ">=",
         10
        ]
       ]
      ],
-     "效果公式": "疲劳-(好感.Sil/2) 好感.Sil+2",
-     "限次": {
-      "范围": "月",
-      "次数": 1
+     "effect_formula": "fatigue-(favor.sil/2) favor.sil+2",
+     "limit": {
+      "range": "month",
+      "times": 1
      }
     }
    ]

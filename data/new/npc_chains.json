@@ -1,93 +1,93 @@
 {
- "说明": "链事件按顺序、各看一次；链用完或条件不满足时触发常驻事件（可重复）。Duv 的告密和闲谈各 1/2。除 Duv、女明星外内容留空，待用户给",
- "链": [
+ "note": "Chain events go in order, each seen once; when the chain is used up or its cond fails, resident events fire (repeatable). Duv's tip-off and chat are 1/2 each. Except Duv and the actress the content is blank, user to supply",
+ "chains": [
   {
    "id": "chain_duv_class",
-   "npc": "Duv",
-   "触发": "家教",
-   "链": [
+   "npc": "duv",
+   "trigger": "tutoring",
+   "chain": [
     "outing_duv_class_1",
     "outing_duv_class_2",
     "outing_duv_class_3",
     "outing_duv_class_4"
    ],
-   "常驻": []
+   "resident": []
   },
   {
    "id": "chain_duv_town",
-   "npc": "Duv",
-   "触发": "外出",
-   "链": [
+   "npc": "duv",
+   "trigger": "outing",
+   "chain": [
     "outing_duv_script"
    ],
-   "常驻": [
+   "resident": [
     {
-     "权重": 1,
-     "事件": "outing_duv_tip"
+     "weight": 1,
+     "event": "outing_duv_tip"
     },
     {
-     "权重": 1,
-     "事件": "outing_duv_chat"
+     "weight": 1,
+     "event": "outing_duv_chat"
     }
    ]
   },
   {
    "id": "chain_actress",
-   "npc": "女明星",
-   "触发": "外出",
-   "链": [
+   "npc": "actress",
+   "trigger": "outing",
+   "chain": [
     "outing_actress_dressing"
    ],
-   "常驻": []
+   "resident": []
   },
   {
-   "id": "chain_编辑",
-   "npc": "编辑",
-   "触发": "外出",
-   "链": [],
-   "常驻": []
+   "id": "chain_editor",
+   "npc": "editor",
+   "trigger": "outing",
+   "chain": [],
+   "resident": []
   },
   {
-   "id": "chain_片厂老板",
-   "npc": "片厂老板",
-   "触发": "外出",
-   "链": [],
-   "常驻": []
+   "id": "chain_studio_boss",
+   "npc": "studio_boss",
+   "trigger": "outing",
+   "chain": [],
+   "resident": []
   },
   {
-   "id": "chain_富婆",
-   "npc": "富婆",
-   "触发": "外出",
-   "链": [],
-   "常驻": []
+   "id": "chain_rich_widow",
+   "npc": "rich_widow",
+   "trigger": "outing",
+   "chain": [],
+   "resident": []
   },
   {
-   "id": "chain_画家",
-   "npc": "画家",
-   "触发": "外出",
-   "链": [],
-   "常驻": []
+   "id": "chain_painter",
+   "npc": "painter",
+   "trigger": "outing",
+   "chain": [],
+   "resident": []
   },
   {
-   "id": "chain_同乡工头",
-   "npc": "同乡工头",
-   "触发": "外出",
-   "链": [],
-   "常驻": []
+   "id": "chain_foreman",
+   "npc": "foreman",
+   "trigger": "outing",
+   "chain": [],
+   "resident": []
   },
   {
-   "id": "chain_酒吧老板",
-   "npc": "酒吧老板",
-   "触发": "外出",
-   "链": [],
-   "常驻": []
+   "id": "chain_bar_owner",
+   "npc": "bar_owner",
+   "trigger": "outing",
+   "chain": [],
+   "resident": []
   },
   {
-   "id": "chain_动作片导演",
-   "npc": "动作片导演",
-   "触发": "外出",
-   "链": [],
-   "常驻": []
+   "id": "chain_action_director",
+   "npc": "action_director",
+   "trigger": "outing",
+   "chain": [],
+   "resident": []
   }
  ]
 }

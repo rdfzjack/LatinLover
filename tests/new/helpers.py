@@ -1,4 +1,4 @@
-"""测试用的小工具。"""
+"""Small helpers for the tests."""
 from sim.data import load
 from sim.state import State
 from sim.month import Game, Hooks
@@ -11,7 +11,7 @@ def fresh(seed=1, origin=(0, 0, 0)):
 
 
 def bare(seed=1):
-    """只有底值、不选开局三问的状态。"""
+    """A state with only base values, without the three opening questions."""
     st = State(D)
     from sim.rng import Rng
     st.rng = Rng(seed)
@@ -19,7 +19,7 @@ def bare(seed=1):
 
 
 class Rec(Hooks):
-    """记下钩子被调用的情况。"""
+    """Records how the hooks were called."""
     def __init__(self):
         self.calls = []
 

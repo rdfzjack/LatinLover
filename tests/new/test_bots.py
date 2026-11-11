@@ -1,4 +1,4 @@
-"""机器人和报告：每种机器人跑得完、同种子可重复；报告不超过 60 行。"""
+"""Bots and the report: every bot finishes, the same seed repeats, the report has at most 60 lines."""
 import unittest
 from sim.bots import BOTS, play
 from sim import report
@@ -9,12 +9,12 @@ class TestBots(unittest.TestCase):
         for name, cls in BOTS.items():
             with self.subTest(bot=name):
                 r = play(cls, 3)
-                self.assertTrue(r['结局'])
+                self.assertTrue(r['ending'])
                 self.assertEqual(len(r['money']), len(r['train']))
                 self.assertGreater(len(r['money']), 0)
 
     def test_deterministic(self):
-        for name in ('专练情人', '乱选'):
+        for name in ('only_lover', 'random_pick'):
             self.assertEqual(play(BOTS[name], 5), play(BOTS[name], 5))
 
     def test_report_lines(self):

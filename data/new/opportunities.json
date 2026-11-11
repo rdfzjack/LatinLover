@@ -1,280 +1,280 @@
 {
- "说明": "在月末事件里排在“前辈认可”之后判定；每个机遇每局至多一次。效果写在这里（剧情 是 events.json 里只放剧情文字的事件）",
- "机遇": [
+ "note": "Judged in the month-end events after \"senior approval\"; each opportunity at most once per game. The effect is written here (`story` is an event in events.json that holds only the story text)",
+ "opportunities": [
   {
    "id": "opp_accident",
-   "名字": "一场真的事故",
-   "路": "硬汉",
-   "条件": [
+   "name": "一场真的事故",
+   "road": "tough",
+   "cond": [
     [
      [
-      "计数.亲自上",
+      "count.stunt_self",
       ">=",
       4
      ]
     ]
    ],
-   "每月概率": [
+   "monthly_prob": [
     1,
     12
    ],
-   "剧情": "opp_accident",
-   "效果": "修正.硬汉+25",
-   "占月": 0
+   "story": "opp_accident",
+   "effect": "rep_bonus.tough+25",
+   "takes_month": 0
   },
   {
    "id": "opp_expedition",
-   "名字": "探险队的邀请",
-   "路": "硬汉",
-   "条件": [
+   "name": "探险队的邀请",
+   "road": "tough",
+   "cond": [
     [
      [
-      "硬汉",
+      "tough",
       ">=",
       350
      ],
      [
-      "计数.外出.place_dock",
+      "count.outing.place_dock",
       ">=",
       3
      ]
     ]
    ],
-   "每月概率": [
+   "monthly_prob": [
     1,
     16
    ],
-   "剧情": "opp_expedition",
-   "效果": "修正.硬汉+30",
-   "占月": 1
+   "story": "opp_expedition",
+   "effect": "rep_bonus.tough+30",
+   "takes_month": 1
   },
   {
    "id": "opp_tango",
-   "名字": "一支探戈",
-   "路": "情人",
-   "条件": [
+   "name": "一支探戈",
+   "road": "lover",
+   "cond": [
     [
      [
-      "体态",
+      "physique",
       ">=",
       100
      ],
      [
-      "计数.浪漫系大卖",
+      "count.romance_hits",
       ">=",
       1
      ]
     ]
    ],
-   "每月概率": [
+   "monthly_prob": [
     1,
     12
    ],
-   "剧情": "opp_tango",
-   "效果": "修正.情人+25",
-   "占月": 0
+   "story": "opp_tango",
+   "effect": "rep_bonus.lover+25",
+   "takes_month": 0
   },
   {
    "id": "opp_valen_seat",
-   "名字": "瓦伦留下的位置",
-   "路": "情人",
-   "条件": [
+   "name": "瓦伦留下的位置",
+   "road": "lover",
+   "cond": [
     [
      [
-      "日期",
+      "date",
       ">=",
       "1927-09"
      ],
      [
-      "情人",
+      "lover",
       ">=",
       330
      ]
     ]
    ],
-   "每月概率": [
+   "monthly_prob": [
     1,
     16
    ],
-   "剧情": "opp_valen_seat",
-   "效果": "修正.情人+30",
-   "占月": 0
+   "story": "opp_valen_seat",
+   "effect": "rep_bonus.lover+30",
+   "takes_month": 0
   },
   {
    "id": "opp_article",
-   "名字": "一篇被转载的文章",
-   "路": "文化",
-   "条件": [
+   "name": "一篇被转载的文章",
+   "road": "culture",
+   "cond": [
     [
      [
-      "成功期数.job_news",
+      "job_periods.job_news",
       ">=",
       7
      ],
      [
-      "创作",
+      "writing",
       ">=",
       60
      ]
     ]
    ],
-   "每月概率": [
+   "monthly_prob": [
     1,
     12
    ],
-   "剧情": "opp_article",
-   "效果": "修正.文化+25",
-   "占月": 0
+   "story": "opp_article",
+   "effect": "rep_bonus.culture+25",
+   "takes_month": 0
   },
   {
    "id": "opp_painting",
-   "名字": "一幅画进了展览",
-   "路": "文化",
-   "条件": [
+   "name": "一幅画进了展览",
+   "road": "culture",
+   "cond": [
     [
      [
-      "成功期数.job_model_art",
+      "job_periods.job_model_art",
       ">=",
       8
      ],
      [
-      "审美",
+      "taste",
       ">=",
       80
      ]
     ]
    ],
-   "每月概率": [
+   "monthly_prob": [
     1,
     16
    ],
-   "剧情": "opp_painting",
-   "效果": "修正.文化+30",
-   "占月": 0
+   "story": "opp_painting",
+   "effect": "rep_bonus.culture+30",
+   "takes_month": 0
   },
   {
    "id": "opp_fixer",
-   "名字": "替片厂摆平一件事",
-   "路": "手腕",
-   "条件": [
+   "name": "替片厂摆平一件事",
+   "road": "savvy",
+   "cond": [
     [
      [
-      "人脉",
+      "connections",
       ">=",
       100
      ],
      [
-      "谈判",
+      "negotiation",
       ">=",
       80
      ]
     ]
    ],
-   "每月概率": [
+   "monthly_prob": [
     1,
     12
    ],
-   "剧情": "opp_fixer",
-   "效果": "修正.手腕+25 犯罪+10",
-   "占月": 0
+   "story": "opp_fixer",
+   "effect": "rep_bonus.savvy+25 crime+10",
+   "takes_month": 0
   },
   {
    "id": "opp_investment",
-   "名字": "一笔早到的投资",
-   "路": "手腕",
-   "条件": [
+   "name": "一笔早到的投资",
+   "road": "savvy",
+   "cond": [
     [
      [
-      "生意",
+      "business",
       ">=",
       80
      ],
      [
-      "金钱",
+      "money",
       ">=",
       2000
      ]
     ]
    ],
-   "每月概率": [
+   "monthly_prob": [
     1,
     16
    ],
-   "剧情": "opp_investment",
-   "效果": "修正.手腕+30",
-   "占月": 0
+   "story": "opp_investment",
+   "effect": "rep_bonus.savvy+30",
+   "takes_month": 0
   },
   {
    "id": "opp_senior_yinghan",
-   "名字": "前辈的机遇·硬汉",
-   "路": "硬汉",
-   "条件": [
+   "name": "前辈的机遇·硬汉",
+   "road": "tough",
+   "cond": [
     [
      [
-      "旗标.前辈三档_硬汉",
+      "flag.senior_tier3_tough",
       "==",
       1
      ]
     ]
    ],
-   "每月概率": null,
-   "剧情": "opp_senior_yinghan",
-   "效果": "修正.硬汉+10",
-   "占月": 0
+   "monthly_prob": null,
+   "story": "opp_senior_yinghan",
+   "effect": "rep_bonus.tough+10",
+   "takes_month": 0
   },
   {
    "id": "opp_senior_qingren",
-   "名字": "前辈的机遇·情人",
-   "路": "情人",
-   "条件": [
+   "name": "前辈的机遇·情人",
+   "road": "lover",
+   "cond": [
     [
      [
-      "旗标.前辈三档_情人",
+      "flag.senior_tier3_lover",
       "==",
       1
      ]
     ]
    ],
-   "每月概率": null,
-   "剧情": "opp_senior_qingren",
-   "效果": "修正.情人+10",
-   "占月": 0
+   "monthly_prob": null,
+   "story": "opp_senior_qingren",
+   "effect": "rep_bonus.lover+10",
+   "takes_month": 0
   },
   {
    "id": "opp_senior_wenhua",
-   "名字": "前辈的机遇·文化",
-   "路": "文化",
-   "条件": [
+   "name": "前辈的机遇·文化",
+   "road": "culture",
+   "cond": [
     [
      [
-      "旗标.前辈三档_文化",
+      "flag.senior_tier3_culture",
       "==",
       1
      ]
     ]
    ],
-   "每月概率": null,
-   "剧情": "opp_senior_wenhua",
-   "效果": "修正.文化+10",
-   "占月": 0
+   "monthly_prob": null,
+   "story": "opp_senior_wenhua",
+   "effect": "rep_bonus.culture+10",
+   "takes_month": 0
   },
   {
    "id": "opp_senior_shouwan",
-   "名字": "前辈的机遇·手腕",
-   "路": "手腕",
-   "条件": [
+   "name": "前辈的机遇·手腕",
+   "road": "savvy",
+   "cond": [
     [
      [
-      "旗标.前辈三档_手腕",
+      "flag.senior_tier3_savvy",
       "==",
       1
      ]
     ]
    ],
-   "每月概率": null,
-   "剧情": "opp_senior_shouwan",
-   "效果": "修正.手腕+10",
-   "占月": 0
+   "monthly_prob": null,
+   "story": "opp_senior_shouwan",
+   "effect": "rep_bonus.savvy+10",
+   "takes_month": 0
   }
  ]
 }

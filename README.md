@@ -4,7 +4,7 @@
 
 ## 现在做到哪
 
-- **PLAN 第 1–9 步和 8b、9b 已完成。下一步是第 9c 步**：英文 id 和多语言（规格 `design/I18N_PLAN.md`，用 Opus，分两个对话），然后第 10 步。现在数据和代码里的中文名既是 id 又是显示文字，这一步把它们分开。
+- **PLAN 第 1–9 步和 8b、9b、9c-1 已完成。下一步是第 9c-2 步**：语言文件、Godot 侧、用户指南（规格 `design/STEP9C_IDS_AND_LOCALE.md`，用 Opus），然后第 10 步。9c-1 已把数据和 `sim/` 里的 id、字段名全改成英文（对照表 `design/GLOSSARY.md`），中文只留在数据表的显示字段里；Godot 代码和 `data/USER_GUIDE.md` 还是旧写法，9c-2 处理。
 - 用户会自己改 `data/new/` 的表（指南 `data/USER_GUIDE.md`）。开工先跑 `python3 tools/check.py`，不通过先告诉用户。
 - 第 9 步：Godot 工程 `game/silentstar/` 有了数据加载、随机数、状态、条件和效果、存读档，和 Python 对账逐字节一致（命令在 `design/IMPL_NOTES.md` 末尾）。
 - 股票系统已删；休息只剩在家（Sil 陪着）和外出（选去处）两种（`design/CHANGE.md`）。
@@ -21,7 +21,8 @@
 | `design/GDD.md` | 全部规则和数值，以它为准 | 只读这一步涉及的小节 |
 | `design/DESIGN_NOTES.md` | GDD 里每个 [推N…] 的理由 | 想改某条规则前查它为什么这样定 |
 | `design/BALANCE_LOG.md` | 数值调过什么、现在的报告、没解决的项 | 改数值前 |
-| `design/I18N_PLAN.md` | 第 9c 步的规格：英文 id、语言文件、做法和完成标准 | 做 9c 时 |
+| `design/STEP9C_IDS_AND_LOCALE.md` | 第 9c 步的规格：英文 id、语言文件、规矩和完成标准 | 做 9c 时 |
+| `design/GLOSSARY.md` | 中文名 → 英文 id 对照表（英文文档，由 `tools/i18n_map.json` 生成） | 在设计文档里看到中文名、要找 id 时 |
 | `design/IMPL_NOTES.md` | `sim/` 和 Godot 的结构、接口、GDD 没写到的实现细节、对账命令 | 移植 Godot、改 `sim/` 时 |
 | `data/new/README.md` | JSON 表的条件、效果语法 | 改表时 |
 | `data/USER_GUIDE.md` | 给用户的改表指南（中文、带例子） | 改了表的写法、加了字段时同步更新 |
@@ -36,7 +37,7 @@
 | `sim/` | Python 试算器：规则的参考实现，也是批量测数值的工具 |
 | `tests/new/` | 试算器的单元测试 |
 | `game/silentstar/` | Godot 4.3 工程：`core/` 逻辑（不依赖节点），`tools/trace.gd` 对账 |
-| `tools/check.py` | 一键检查：格式、重复、类型、内容（调 `check_data.py`）、机器人试玩。`检查数据.bat` 是它的双击版 |
+| `tools/check.py` | 一键检查：格式、重复、类型、内容（调 `check_data.py`）、机器人试玩。`check_data.bat` 是它的双击版 |
 | `tools/check_data.py` | 数据表的内容校验 |
 | `tools/trace.py` `trace_cases.json` `compare_trace.py` | Python 和 Godot 对账 |
 | `original/` | 原版游戏的逆向资料和原版模拟器。做新游戏不用读 |
@@ -81,7 +82,7 @@ python3 -m sim.story --seed 1 --origin 0,1,2 --plan class_acting,job_dock,rest_h
 - 休息只留两种：在家（Sil 陪着，便宜）、外出（一个人，选去处：度假村、城里等，遇到各种人和选项；代码上是同一套）。
 - 四路等级照旧随声望自动变，不做手动升级。
 - 用户自己直接改 JSON（不做 Excel），按 `data/USER_GUIDE.md`；改了表的写法要同步更新指南。
-- 要做多语言。代码和数据结构只用英文 id，玩家看得到的文字只放在语言文件里（第 9c 步之后是 `data/locale/`）。
+- 要做多语言。**技术性的东西一律英文**（字段名、id、枚举值、效果和条件、存档的键、代码和注释、开发者备注、检查脚本的输出、`data/new/README.md`、`design/IMPL_NOTES.md`、`data/USER_GUIDE.md`、`design/GLOSSARY.md`）；**中文原文只放在数据表的显示字段里**（`name`、`text`、`body`、`question`、`film_title`、`content`、`identity`），每条记录一个英文 `id`，加内容只写一处；`data/locale/text.csv` 由脚本从数据表生成（9c-2）。设计文档（GDD、DESIGN_NOTES、BALANCE_LOG、PLAN、README、CHANGE）和交接文本保持中文。
 - 只把必须用户定的设计决策列出来问；占位内容、模型能自己检查的细节不要列给用户。
 
 ## 等用户定的事

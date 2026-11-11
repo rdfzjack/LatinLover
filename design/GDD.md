@@ -1,5 +1,7 @@
 # 小咪养成计划 GDD
 
+文中名字对应的英文 id 见 `GLOSSARY.md`。
+
 ## 0. 约定
 
 - 来源标记：**[用]** 用户定；**[原]** 原版规则（美少女梦工厂 2；见 `original/SUMMARY.md`、`original/data/tables/`）；**[推]** 推定，理由见 `DESIGN_NOTES.md` 同编号条目（如 [推N3]）。

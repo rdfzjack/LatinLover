@@ -6,62 +6,62 @@ from tests.new.helpers import D, fresh, bare
 class TestState(unittest.TestCase):
     def test_base_reputation(self):
         st = bare()
-        # 硬汉 = 打斗 10 + 体力加成 min(80/10, 30)=8 + 骑马驾驶 10 + 胆识 5
-        self.assertEqual({r: st.rep(r) for r in D.roads}, {'硬汉': 27, '情人': 50, '文化': 10, '手腕': 20})
-        self.assertEqual(st.level('情人'), 2)
+        # tough = fight 10 + stamina bonus min(80/10, 30)=8 + riding 10 + nerve 5
+        self.assertEqual({r: st.rep(r) for r in D.roads}, {'tough': 27, 'lover': 50, 'culture': 10, 'savvy': 20})
+        self.assertEqual(st.level('lover'), 2)
         self.assertEqual(st.fame_tier(), 1)
 
     def test_origin(self):
-        st = fresh(origin=(0, 1, 2))   # 逃兵、演技派、欠他人情的人
-        self.assertEqual(st.attr['体力'], 100)
-        self.assertEqual(st.attr['自律'], 25)
-        self.assertEqual(st.skill['演技'], 40)
-        self.assertEqual(st.skill['人脉'], 20)
-        self.assertEqual(st.attr['名气'], 100)
-        self.assertEqual(st.flags, {'逃兵': 1, '人情': 1})
-        self.assertEqual(st.tags, {'悲情': 1, '文艺': 1})
-        st = fresh(origin=(4, 3, 1))   # 农学院学生、色情电影、旧西装
-        self.assertEqual(st.items, ['旧西装'])
-        self.assertEqual(st.flags, {'文凭': 1, '旧片': 1})
+        st = fresh(origin=(0, 1, 2))   # deserter, acting school, owes someone a favor
+        self.assertEqual(st.attr['stamina'], 100)
+        self.assertEqual(st.attr['discipline'], 25)
+        self.assertEqual(st.skill['acting'], 40)
+        self.assertEqual(st.skill['connections'], 20)
+        self.assertEqual(st.attr['fame'], 100)
+        self.assertEqual(st.flags, {'deserter': 1, 'owed_favor': 1})
+        self.assertEqual(st.tags, {'tragic': 1, 'arthouse': 1})
+        st = fresh(origin=(4, 3, 1))   # agriculture student, adult film, old suit
+        self.assertEqual(st.items, ['suit_old'])
+        self.assertEqual(st.flags, {'diploma': 1, 'old_film': 1})
 
     def test_fight_bonus(self):
         st = bare()
-        st.attr['体力'] = 500
-        self.assertEqual(st.val('打斗'), 10 + 10)
+        st.attr['stamina'] = 500
+        self.assertEqual(st.val('fight'), 10 + 10)
 
     def test_clothing(self):
         st = bare()
-        st.items.append('定制西装')
-        st.equip['服装'] = '定制西装'
-        # 30 × (50 + 打扮 10)/100 = 18
-        self.assertEqual(st.val('相貌'), 120 + 18)
-        st.skill['打扮'] = 100
-        self.assertEqual(st.val('相貌'), 120 + 45)
+        st.items.append('suit_custom')
+        st.equip['outfit'] = 'suit_custom'
+        # 30 x (50 + grooming 10)/100 = 18
+        self.assertEqual(st.val('looks'), 120 + 18)
+        st.skill['grooming'] = 100
+        self.assertEqual(st.val('looks'), 120 + 45)
 
     def test_held_exclusive_and_accessory(self):
         st = bare()
-        st.items += ['福特车', '跑车', '相机', '相机', '拳套']
-        self.assertEqual(st.val('骑马驾驶'), 10 + 5)    # 车只算最贵的一辆
-        self.assertEqual(st.val('审美'), 5 + 6)         # 同一件持有两个只算一次
-        self.assertEqual(st.val('打斗'), 12)            # 配饰没装上不算
-        st.equip['配饰'].append('拳套')
-        self.assertEqual(st.val('打斗'), 17)
+        st.items += ['car_ford', 'car_sports', 'camera', 'camera', 'boxing_gloves']
+        self.assertEqual(st.val('riding'), 10 + 5)    # only the most expensive car counts
+        self.assertEqual(st.val('taste'), 5 + 6)         # two copies of the same item count once
+        self.assertEqual(st.val('fight'), 12)            # accessories that are not equipped do not count
+        st.equip['accessory'].append('boxing_gloves')
+        self.assertEqual(st.val('fight'), 17)
 
     def test_indices(self):
         st = bare()
-        st.attr['疲劳'] = 200
+        st.attr['fatigue'] = 200
         st.update_indices()
-        self.assertEqual(st.idx, {'生病指数': 100, '失控指数': 100})
-        self.assertEqual((st.status['生病'], st.status['重病'], st.status['失控']), (1, 1, 1))
-        st.attr['疲劳'] = 50
+        self.assertEqual(st.idx, {'sick_index': 100, 'reckless_index': 100})
+        self.assertEqual((st.status['sick'], st.status['very_sick'], st.status['reckless']), (1, 1, 1))
+        st.attr['fatigue'] = 50
         st.update_indices()
-        self.assertEqual(st.idx, {'生病指数': 0, '失控指数': 10})
-        self.assertEqual((st.status['生病'], st.status['失控']), (0, 1))
+        self.assertEqual(st.idx, {'sick_index': 0, 'reckless_index': 10})
+        self.assertEqual((st.status['sick'], st.status['reckless']), (0, 1))
 
     def test_save_roundtrip(self):
         st = fresh(origin=(1, 2, 5))
         st.books['book_tantu_1'] = 12
-        st.count['旬数.class_acting'] = 4
+        st.count['class_periods.class_acting'] = 4
         st.rng.logic.next_u32()
         s = st.dumps()
         st2 = State.loads(D, s)

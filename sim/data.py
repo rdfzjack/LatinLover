@@ -1,4 +1,4 @@
-"""读 data/new/*.json，建好按 id 查找的索引。只读，不改表。"""
+"""Loads data/new/*.json and builds id lookup indexes. Read-only: never modifies the tables."""
 import json
 import os
 
@@ -16,67 +16,72 @@ class Data:
                 self.t[n] = json.load(fh)
         t = self.t
         st = t['stats']
-        self.attrs = [a['名字'] for a in st['基础属性']]
-        self.attr_init = {a['名字']: a['初值'] for a in st['基础属性']}
-        self.attr_range = {a['名字']: tuple(a['范围']) for a in st['基础属性']}
-        self.money_init = st['金钱']['初值']
-        self.money_cap = st['金钱']['上限']
-        self.roads = [r['名字'] for r in st['声望']]
-        self.road_skills = {r['名字']: r['技能'] for r in st['声望']}
-        self.rep_range = tuple(st['声望规则']['范围'])
-        self.level_gate = st['等级']['门槛']
-        self.fame_tiers = [(x['下限'], x['上限']) for x in st['名气档']]
-        self.idx_rule = st['指数']
-        self.contract = st['合同']
+        # Table order is the canonical order wherever a tie or an iteration order matters.
+        self.attrs = [a['id'] for a in st['attrs']]
+        self.attr_init = {a['id']: a['init'] for a in st['attrs']}
+        self.attr_range = {a['id']: tuple(a['range']) for a in st['attrs']}
+        self.money_init = st['money']['init']
+        self.money_cap = st['money']['max']
+        self.roads = [r['id'] for r in st['roads']]
+        self.road_skills = {r['id']: r['skills'] for r in st['roads']}
+        self.rep_range = tuple(st['rep_rules']['range'])
+        self.level_gate = st['levels']['gate']
+        self.fame_tiers = [(x['min'], x['max']) for x in st['fame_tiers']]
+        self.idx_rule = st['indices']
+        self.contract = st['contract']
 
-        self.skills = [s['名字'] for s in t['skills']['技能']]
-        self.skill_init = {s['名字']: s['初值'] for s in t['skills']['技能']}
-        self.skill_range = {s['名字']: tuple(s['训练范围']) for s in t['skills']['技能']}
-        self.skill_road = {s['名字']: s['路'] for s in t['skills']['技能']}
-        self.skill_bonus = {s['名字']: s['显示加成'] for s in t['skills']['技能'] if '显示加成' in s}
+        self.skills = [s['id'] for s in t['skills']['skills']]
+        self.skill_init = {s['id']: s['init'] for s in t['skills']['skills']}
+        self.skill_range = {s['id']: tuple(s['train_range']) for s in t['skills']['skills']}
+        self.skill_road = {s['id']: s['road'] for s in t['skills']['skills']}
+        self.skill_bonus = {s['id']: s['display_bonus'] for s in t['skills']['skills'] if 'display_bonus' in s}
 
-        self.classes = {c['id']: c for c in t['classes']['课']}
-        self.class_steps = t['classes']['等级门槛']
-        self.books = {b['id']: b for b in t['books']['书']}
-        self.jobs = {j['id']: j for j in t['jobs']['工']}
+        self.classes = {c['id']: c for c in t['classes']['classes']}
+        self.class_steps = t['classes']['class_steps']
+        self.books = {b['id']: b for b in t['books']['books']}
+        self.jobs = {j['id']: j for j in t['jobs']['jobs']}
         self.job_rules = t['jobs']
-        self.rests = {r['id']: r for r in t['rest']['休息']}
-        self.rest_forced = t['rest']['强制']
-        self.places = {p['id']: p for p in t['places']['地点']}
-        self.lifestyles = {x['id']: x for x in t['lifestyle']['生活方式']}
-        self.street = {e['名字']: e for e in t['street']['入口']}
-        self.discount = t['street']['折扣']
-        self.items = {i['id']: i for i in t['items']['物品']}
-        self.item_rules = t['items']['规则']
-        self.months = t['calendar']['月']
-        self.month_index = {m['月']: i for i, m in enumerate(self.months)}
-        self.npcs = {n['名字']: n for n in t['romance']['npc']}
-        self.romance_lines = [n['名字'] for n in t['romance']['npc'] if n['类'] == '感情线']
-        self.origins = t['origins']['问']
-        self.endings_forced = {e['id']: e for e in t['endings']['强制']}
+        self.rests = {r['id']: r for r in t['rest']['rests']}
+        self.rest_forced = t['rest']['forced']
+        self.places = {p['id']: p for p in t['places']['places']}
+        self.lifestyles = {x['id']: x for x in t['lifestyle']['lifestyles']}
+        self.street = {e['id']: e for e in t['street']['entries']}
+        self.discount = t['street']['discount']
+        self.items = {i['id']: i for i in t['items']['items']}
+        self.item_order = {iid: n for n, iid in enumerate(self.items)}      # table order, for stable iteration
+        self.item_rules = t['items']['rules']
+        self.months = t['calendar']['months']
+        self.month_index = {m['month']: i for i, m in enumerate(self.months)}
+        self.npcs = {n['id']: n for n in t['romance']['npcs']}
+        self.npc_order = {n: i for i, n in enumerate(self.npcs)}      # table order, for stable sorting
+        self.romance_lines = [n['id'] for n in t['romance']['npcs'] if n['class'] == 'romance']
+        self.origins = t['origins']['questions']
+        self.endings_forced = {e['id']: e for e in t['endings']['forced']}
 
-        # 第 6 步：选片板、拍摄、上映、事件、结局
-        self.roles = {r['id']: r for r in t['roles']['角色']}
-        self.role_cfg = t['roles']['默认']
-        self.tag_families = t['endings']['标签族']
-        self.content_tags = [x for v in self.tag_families.values() for x in v]   # 16 个内容标签
-        self.rivals_named = {r['id']: r for r in t['rivals']['有名']}
-        self.events = {e['id']: e for e in t['events']['事件']}
-        self.events.update({e['id']: e for e in t['outing']['事件']})
-        self.opps = t['opportunities']['机遇']
-        self.chains = t['npc_chains']['链']
-        self.schedule_npc = t['npc_schedule']['日程']
+        # step 6: board, shooting, release, events, endings
+        self.roles = {r['id']: r for r in t['roles']['roles']}
+        self.role_cfg = t['roles']['defaults']
+        self.tag_families = t['endings']['tag_families']
+        self.content_tags = [x for v in self.tag_families.values() for x in v]   # the 16 content tags
+        self.rivals_named = {r['id']: r for r in t['rivals']['named']}
+        self.events = {e['id']: e for e in t['events']['events']}
+        self.events.update({e['id']: e for e in t['outing']['events']})
+        self.opps = t['opportunities']['opportunities']
+        self.chains = t['npc_chains']['chains']
+        self.schedule_npc = t['npc_schedule']['schedule']
 
     def class_road(self, cid):
-        """一门课算哪条路的“期数”：收益里第一个技能所在的路（家教的第一个技能是创作，算文化）。"""
-        for e in self.classes[cid]['收益']:
-            if e['项'] in self.skill_road:
-                return self.skill_road[e['项']]
+        """The road a class counts for in road_periods: the road of the first skill in its gain list
+        (tutoring's first skill is writing, which counts for culture)."""
+        for e in self.classes[cid]['gain']:
+            if e['stat'] in self.skill_road:
+                return self.skill_road[e['stat']]
         return None
 
     def job_roads(self, jid):
-        """一种工算哪几条路的“期数”：每天效果里出现的技能所在的路，去重，按路的顺序。"""
-        rs = {self.skill_road[e['项']] for e in self.jobs[jid]['每天效果'] if e['项'] in self.skill_road}
+        """The roads a job counts for in road_periods: roads of the skills in its daily_effect, deduplicated,
+        in road order."""
+        rs = {self.skill_road[e['stat']] for e in self.jobs[jid]['daily_effect'] if e['stat'] in self.skill_road}
         return [r for r in self.roads if r in rs]
 
 

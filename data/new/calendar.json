@@ -1,13 +1,13 @@
 {
- "说明": "真实日历（含 1928 闰年）；周日不上课、不打工、不拍摄、不看书",
- "开始": "1926-01-01",
- "结束": "1929-12-31",
- "月": [
+ "note": "Real calendar (including leap year 1928); no classes, jobs, shooting or reading on Sundays",
+ "start": "1926-01-01",
+ "end": "1929-12-31",
+ "months": [
   {
-   "月": "1926-01",
-   "序号": 1,
-   "天数": 31,
-   "旬": [
+   "month": "1926-01",
+   "seq": 1,
+   "days": 31,
+   "periods": [
     [
      1,
      10
@@ -21,15 +21,15 @@
      31
     ]
    ],
-   "周日": [
+   "sundays": [
     3,
     10,
     17,
     24,
     31
    ],
-   "选片板": true,
-   "打工解锁": [
+   "board": true,
+   "job_unlocks": [
     "job_assistant",
     "job_waiter",
     "job_dock",
@@ -37,17 +37,17 @@
     "job_model_art",
     "job_bar"
    ],
-   "时代事件": [],
-   "年度大事": false,
-   "对手成长": false,
-   "收尾期": false,
-   "结局判定": false
+   "era_events": [],
+   "annual": false,
+   "rival_growth": false,
+   "wrap_up": false,
+   "ending_check": false
   },
   {
-   "月": "1926-02",
-   "序号": 2,
-   "天数": 28,
-   "旬": [
+   "month": "1926-02",
+   "seq": 2,
+   "days": 28,
+   "periods": [
     [
      1,
      10
@@ -61,25 +61,25 @@
      28
     ]
    ],
-   "周日": [
+   "sundays": [
     7,
     14,
     21,
     28
    ],
-   "选片板": false,
-   "打工解锁": [],
-   "时代事件": [],
-   "年度大事": false,
-   "对手成长": false,
-   "收尾期": false,
-   "结局判定": false
+   "board": false,
+   "job_unlocks": [],
+   "era_events": [],
+   "annual": false,
+   "rival_growth": false,
+   "wrap_up": false,
+   "ending_check": false
   },
   {
-   "月": "1926-03",
-   "序号": 3,
-   "天数": 31,
-   "旬": [
+   "month": "1926-03",
+   "seq": 3,
+   "days": 31,
+   "periods": [
     [
      1,
      10
@@ -93,25 +93,25 @@
      31
     ]
    ],
-   "周日": [
+   "sundays": [
     7,
     14,
     21,
     28
    ],
-   "选片板": false,
-   "打工解锁": [],
-   "时代事件": [],
-   "年度大事": false,
-   "对手成长": false,
-   "收尾期": false,
-   "结局判定": false
+   "board": false,
+   "job_unlocks": [],
+   "era_events": [],
+   "annual": false,
+   "rival_growth": false,
+   "wrap_up": false,
+   "ending_check": false
   },
   {
-   "月": "1926-04",
-   "序号": 4,
-   "天数": 30,
-   "旬": [
+   "month": "1926-04",
+   "seq": 4,
+   "days": 30,
+   "periods": [
     [
      1,
      10
@@ -125,28 +125,28 @@
      30
     ]
    ],
-   "周日": [
+   "sundays": [
     4,
     11,
     18,
     25
    ],
-   "选片板": true,
-   "打工解锁": [
+   "board": true,
+   "job_unlocks": [
     "job_studio",
     "job_news"
    ],
-   "时代事件": [],
-   "年度大事": false,
-   "对手成长": false,
-   "收尾期": false,
-   "结局判定": false
+   "era_events": [],
+   "annual": false,
+   "rival_growth": false,
+   "wrap_up": false,
+   "ending_check": false
   },
   {
-   "月": "1926-05",
-   "序号": 5,
-   "天数": 31,
-   "旬": [
+   "month": "1926-05",
+   "seq": 5,
+   "days": 31,
+   "periods": [
     [
      1,
      10
@@ -160,26 +160,26 @@
      31
     ]
    ],
-   "周日": [
+   "sundays": [
     2,
     9,
     16,
     23,
     30
    ],
-   "选片板": false,
-   "打工解锁": [],
-   "时代事件": [],
-   "年度大事": false,
-   "对手成长": false,
-   "收尾期": false,
-   "结局判定": false
+   "board": false,
+   "job_unlocks": [],
+   "era_events": [],
+   "annual": false,
+   "rival_growth": false,
+   "wrap_up": false,
+   "ending_check": false
   },
   {
-   "月": "1926-06",
-   "序号": 6,
-   "天数": 30,
-   "旬": [
+   "month": "1926-06",
+   "seq": 6,
+   "days": 30,
+   "periods": [
     [
      1,
      10
@@ -193,25 +193,25 @@
      30
     ]
    ],
-   "周日": [
+   "sundays": [
     6,
     13,
     20,
     27
    ],
-   "选片板": false,
-   "打工解锁": [],
-   "时代事件": [],
-   "年度大事": false,
-   "对手成长": false,
-   "收尾期": false,
-   "结局判定": false
+   "board": false,
+   "job_unlocks": [],
+   "era_events": [],
+   "annual": false,
+   "rival_growth": false,
+   "wrap_up": false,
+   "ending_check": false
   },
   {
-   "月": "1926-07",
-   "序号": 7,
-   "天数": 31,
-   "旬": [
+   "month": "1926-07",
+   "seq": 7,
+   "days": 31,
+   "periods": [
     [
      1,
      10
@@ -225,28 +225,28 @@
      31
     ]
    ],
-   "周日": [
+   "sundays": [
     4,
     11,
     18,
     25
    ],
-   "选片板": true,
-   "打工解锁": [
+   "board": true,
+   "job_unlocks": [
     "job_ballroom",
     "job_stunt"
    ],
-   "时代事件": [],
-   "年度大事": false,
-   "对手成长": false,
-   "收尾期": false,
-   "结局判定": false
+   "era_events": [],
+   "annual": false,
+   "rival_growth": false,
+   "wrap_up": false,
+   "ending_check": false
   },
   {
-   "月": "1926-08",
-   "序号": 8,
-   "天数": 31,
-   "旬": [
+   "month": "1926-08",
+   "seq": 8,
+   "days": 31,
+   "periods": [
     [
      1,
      10
@@ -260,28 +260,28 @@
      31
     ]
    ],
-   "周日": [
+   "sundays": [
     1,
     8,
     15,
     22,
     29
    ],
-   "选片板": false,
-   "打工解锁": [],
-   "时代事件": [
+   "board": false,
+   "job_unlocks": [],
+   "era_events": [
     "era_sound_short"
    ],
-   "年度大事": false,
-   "对手成长": false,
-   "收尾期": false,
-   "结局判定": false
+   "annual": false,
+   "rival_growth": false,
+   "wrap_up": false,
+   "ending_check": false
   },
   {
-   "月": "1926-09",
-   "序号": 9,
-   "天数": 30,
-   "旬": [
+   "month": "1926-09",
+   "seq": 9,
+   "days": 30,
+   "periods": [
     [
      1,
      10
@@ -295,25 +295,25 @@
      30
     ]
    ],
-   "周日": [
+   "sundays": [
     5,
     12,
     19,
     26
    ],
-   "选片板": false,
-   "打工解锁": [],
-   "时代事件": [],
-   "年度大事": false,
-   "对手成长": false,
-   "收尾期": false,
-   "结局判定": false
+   "board": false,
+   "job_unlocks": [],
+   "era_events": [],
+   "annual": false,
+   "rival_growth": false,
+   "wrap_up": false,
+   "ending_check": false
   },
   {
-   "月": "1926-10",
-   "序号": 10,
-   "天数": 31,
-   "旬": [
+   "month": "1926-10",
+   "seq": 10,
+   "days": 31,
+   "periods": [
     [
      1,
      10
@@ -327,26 +327,26 @@
      31
     ]
    ],
-   "周日": [
+   "sundays": [
     3,
     10,
     17,
     24,
     31
    ],
-   "选片板": true,
-   "打工解锁": [],
-   "时代事件": [],
-   "年度大事": false,
-   "对手成长": true,
-   "收尾期": false,
-   "结局判定": false
+   "board": true,
+   "job_unlocks": [],
+   "era_events": [],
+   "annual": false,
+   "rival_growth": true,
+   "wrap_up": false,
+   "ending_check": false
   },
   {
-   "月": "1926-11",
-   "序号": 11,
-   "天数": 30,
-   "旬": [
+   "month": "1926-11",
+   "seq": 11,
+   "days": 30,
+   "periods": [
     [
      1,
      10
@@ -360,25 +360,25 @@
      30
     ]
    ],
-   "周日": [
+   "sundays": [
     7,
     14,
     21,
     28
    ],
-   "选片板": false,
-   "打工解锁": [],
-   "时代事件": [],
-   "年度大事": false,
-   "对手成长": false,
-   "收尾期": false,
-   "结局判定": false
+   "board": false,
+   "job_unlocks": [],
+   "era_events": [],
+   "annual": false,
+   "rival_growth": false,
+   "wrap_up": false,
+   "ending_check": false
   },
   {
-   "月": "1926-12",
-   "序号": 12,
-   "天数": 31,
-   "旬": [
+   "month": "1926-12",
+   "seq": 12,
+   "days": 31,
+   "periods": [
     [
      1,
      10
@@ -392,25 +392,25 @@
      31
     ]
    ],
-   "周日": [
+   "sundays": [
     5,
     12,
     19,
     26
    ],
-   "选片板": false,
-   "打工解锁": [],
-   "时代事件": [],
-   "年度大事": true,
-   "对手成长": false,
-   "收尾期": false,
-   "结局判定": false
+   "board": false,
+   "job_unlocks": [],
+   "era_events": [],
+   "annual": true,
+   "rival_growth": false,
+   "wrap_up": false,
+   "ending_check": false
   },
   {
-   "月": "1927-01",
-   "序号": 13,
-   "天数": 31,
-   "旬": [
+   "month": "1927-01",
+   "seq": 13,
+   "days": 31,
+   "periods": [
     [
      1,
      10
@@ -424,28 +424,28 @@
      31
     ]
    ],
-   "周日": [
+   "sundays": [
     2,
     9,
     16,
     23,
     30
    ],
-   "选片板": true,
-   "打工解锁": [
+   "board": true,
+   "job_unlocks": [
     "job_bootleg"
    ],
-   "时代事件": [],
-   "年度大事": false,
-   "对手成长": false,
-   "收尾期": false,
-   "结局判定": false
+   "era_events": [],
+   "annual": false,
+   "rival_growth": false,
+   "wrap_up": false,
+   "ending_check": false
   },
   {
-   "月": "1927-02",
-   "序号": 14,
-   "天数": 28,
-   "旬": [
+   "month": "1927-02",
+   "seq": 14,
+   "days": 28,
+   "periods": [
     [
      1,
      10
@@ -459,25 +459,25 @@
      28
     ]
    ],
-   "周日": [
+   "sundays": [
     6,
     13,
     20,
     27
    ],
-   "选片板": false,
-   "打工解锁": [],
-   "时代事件": [],
-   "年度大事": false,
-   "对手成长": false,
-   "收尾期": false,
-   "结局判定": false
+   "board": false,
+   "job_unlocks": [],
+   "era_events": [],
+   "annual": false,
+   "rival_growth": false,
+   "wrap_up": false,
+   "ending_check": false
   },
   {
-   "月": "1927-03",
-   "序号": 15,
-   "天数": 31,
-   "旬": [
+   "month": "1927-03",
+   "seq": 15,
+   "days": 31,
+   "periods": [
     [
      1,
      10
@@ -491,25 +491,25 @@
      31
     ]
    ],
-   "周日": [
+   "sundays": [
     6,
     13,
     20,
     27
    ],
-   "选片板": false,
-   "打工解锁": [],
-   "时代事件": [],
-   "年度大事": false,
-   "对手成长": false,
-   "收尾期": false,
-   "结局判定": false
+   "board": false,
+   "job_unlocks": [],
+   "era_events": [],
+   "annual": false,
+   "rival_growth": false,
+   "wrap_up": false,
+   "ending_check": false
   },
   {
-   "月": "1927-04",
-   "序号": 16,
-   "天数": 30,
-   "旬": [
+   "month": "1927-04",
+   "seq": 16,
+   "days": 30,
+   "periods": [
     [
      1,
      10
@@ -523,28 +523,28 @@
      30
     ]
    ],
-   "周日": [
+   "sundays": [
     3,
     10,
     17,
     24
    ],
-   "选片板": true,
-   "打工解锁": [
+   "board": true,
+   "job_unlocks": [
     "job_magazine",
     "job_bodyguard"
    ],
-   "时代事件": [],
-   "年度大事": false,
-   "对手成长": false,
-   "收尾期": false,
-   "结局判定": false
+   "era_events": [],
+   "annual": false,
+   "rival_growth": false,
+   "wrap_up": false,
+   "ending_check": false
   },
   {
-   "月": "1927-05",
-   "序号": 17,
-   "天数": 31,
-   "旬": [
+   "month": "1927-05",
+   "seq": 17,
+   "days": 31,
+   "periods": [
     [
      1,
      10
@@ -558,28 +558,28 @@
      31
     ]
    ],
-   "周日": [
+   "sundays": [
     1,
     8,
     15,
     22,
     29
    ],
-   "选片板": false,
-   "打工解锁": [],
-   "时代事件": [
+   "board": false,
+   "job_unlocks": [],
+   "era_events": [
     "era_academy"
    ],
-   "年度大事": false,
-   "对手成长": false,
-   "收尾期": false,
-   "结局判定": false
+   "annual": false,
+   "rival_growth": false,
+   "wrap_up": false,
+   "ending_check": false
   },
   {
-   "月": "1927-06",
-   "序号": 18,
-   "天数": 30,
-   "旬": [
+   "month": "1927-06",
+   "seq": 18,
+   "days": 30,
+   "periods": [
     [
      1,
      10
@@ -593,25 +593,25 @@
      30
     ]
    ],
-   "周日": [
+   "sundays": [
     5,
     12,
     19,
     26
    ],
-   "选片板": false,
-   "打工解锁": [],
-   "时代事件": [],
-   "年度大事": false,
-   "对手成长": false,
-   "收尾期": false,
-   "结局判定": false
+   "board": false,
+   "job_unlocks": [],
+   "era_events": [],
+   "annual": false,
+   "rival_growth": false,
+   "wrap_up": false,
+   "ending_check": false
   },
   {
-   "月": "1927-07",
-   "序号": 19,
-   "天数": 31,
-   "旬": [
+   "month": "1927-07",
+   "seq": 19,
+   "days": 31,
+   "periods": [
     [
      1,
      10
@@ -625,26 +625,26 @@
      31
     ]
    ],
-   "周日": [
+   "sundays": [
     3,
     10,
     17,
     24,
     31
    ],
-   "选片板": true,
-   "打工解锁": [],
-   "时代事件": [],
-   "年度大事": false,
-   "对手成长": false,
-   "收尾期": false,
-   "结局判定": false
+   "board": true,
+   "job_unlocks": [],
+   "era_events": [],
+   "annual": false,
+   "rival_growth": false,
+   "wrap_up": false,
+   "ending_check": false
   },
   {
-   "月": "1927-08",
-   "序号": 20,
-   "天数": 31,
-   "旬": [
+   "month": "1927-08",
+   "seq": 20,
+   "days": 31,
+   "periods": [
     [
      1,
      10
@@ -658,27 +658,27 @@
      31
     ]
    ],
-   "周日": [
+   "sundays": [
     7,
     14,
     21,
     28
    ],
-   "选片板": false,
-   "打工解锁": [],
-   "时代事件": [
+   "board": false,
+   "job_unlocks": [],
+   "era_events": [
     "era_valen_death"
    ],
-   "年度大事": false,
-   "对手成长": false,
-   "收尾期": false,
-   "结局判定": false
+   "annual": false,
+   "rival_growth": false,
+   "wrap_up": false,
+   "ending_check": false
   },
   {
-   "月": "1927-09",
-   "序号": 21,
-   "天数": 30,
-   "旬": [
+   "month": "1927-09",
+   "seq": 21,
+   "days": 30,
+   "periods": [
     [
      1,
      10
@@ -692,25 +692,25 @@
      30
     ]
    ],
-   "周日": [
+   "sundays": [
     4,
     11,
     18,
     25
    ],
-   "选片板": false,
-   "打工解锁": [],
-   "时代事件": [],
-   "年度大事": false,
-   "对手成长": false,
-   "收尾期": false,
-   "结局判定": false
+   "board": false,
+   "job_unlocks": [],
+   "era_events": [],
+   "annual": false,
+   "rival_growth": false,
+   "wrap_up": false,
+   "ending_check": false
   },
   {
-   "月": "1927-10",
-   "序号": 22,
-   "天数": 31,
-   "旬": [
+   "month": "1927-10",
+   "seq": 22,
+   "days": 31,
+   "periods": [
     [
      1,
      10
@@ -724,30 +724,30 @@
      31
     ]
    ],
-   "周日": [
+   "sundays": [
     2,
     9,
     16,
     23,
     30
    ],
-   "选片板": true,
-   "打工解锁": [
+   "board": true,
+   "job_unlocks": [
     "job_radio"
    ],
-   "时代事件": [
+   "era_events": [
     "era_talkie"
    ],
-   "年度大事": false,
-   "对手成长": true,
-   "收尾期": false,
-   "结局判定": false
+   "annual": false,
+   "rival_growth": true,
+   "wrap_up": false,
+   "ending_check": false
   },
   {
-   "月": "1927-11",
-   "序号": 23,
-   "天数": 30,
-   "旬": [
+   "month": "1927-11",
+   "seq": 23,
+   "days": 30,
+   "periods": [
     [
      1,
      10
@@ -761,25 +761,25 @@
      30
     ]
    ],
-   "周日": [
+   "sundays": [
     6,
     13,
     20,
     27
    ],
-   "选片板": false,
-   "打工解锁": [],
-   "时代事件": [],
-   "年度大事": false,
-   "对手成长": false,
-   "收尾期": false,
-   "结局判定": false
+   "board": false,
+   "job_unlocks": [],
+   "era_events": [],
+   "annual": false,
+   "rival_growth": false,
+   "wrap_up": false,
+   "ending_check": false
   },
   {
-   "月": "1927-12",
-   "序号": 24,
-   "天数": 31,
-   "旬": [
+   "month": "1927-12",
+   "seq": 24,
+   "days": 31,
+   "periods": [
     [
      1,
      10
@@ -793,25 +793,25 @@
      31
     ]
    ],
-   "周日": [
+   "sundays": [
     4,
     11,
     18,
     25
    ],
-   "选片板": false,
-   "打工解锁": [],
-   "时代事件": [],
-   "年度大事": true,
-   "对手成长": false,
-   "收尾期": false,
-   "结局判定": false
+   "board": false,
+   "job_unlocks": [],
+   "era_events": [],
+   "annual": true,
+   "rival_growth": false,
+   "wrap_up": false,
+   "ending_check": false
   },
   {
-   "月": "1928-01",
-   "序号": 25,
-   "天数": 31,
-   "旬": [
+   "month": "1928-01",
+   "seq": 25,
+   "days": 31,
+   "periods": [
     [
      1,
      10
@@ -825,26 +825,26 @@
      31
     ]
    ],
-   "周日": [
+   "sundays": [
     1,
     8,
     15,
     22,
     29
    ],
-   "选片板": true,
-   "打工解锁": [],
-   "时代事件": [],
-   "年度大事": false,
-   "对手成长": false,
-   "收尾期": false,
-   "结局判定": false
+   "board": true,
+   "job_unlocks": [],
+   "era_events": [],
+   "annual": false,
+   "rival_growth": false,
+   "wrap_up": false,
+   "ending_check": false
   },
   {
-   "月": "1928-02",
-   "序号": 26,
-   "天数": 29,
-   "旬": [
+   "month": "1928-02",
+   "seq": 26,
+   "days": 29,
+   "periods": [
     [
      1,
      10
@@ -858,25 +858,25 @@
      29
     ]
    ],
-   "周日": [
+   "sundays": [
     5,
     12,
     19,
     26
    ],
-   "选片板": false,
-   "打工解锁": [],
-   "时代事件": [],
-   "年度大事": false,
-   "对手成长": false,
-   "收尾期": false,
-   "结局判定": false
+   "board": false,
+   "job_unlocks": [],
+   "era_events": [],
+   "annual": false,
+   "rival_growth": false,
+   "wrap_up": false,
+   "ending_check": false
   },
   {
-   "月": "1928-03",
-   "序号": 27,
-   "天数": 31,
-   "旬": [
+   "month": "1928-03",
+   "seq": 27,
+   "days": 31,
+   "periods": [
     [
      1,
      10
@@ -890,25 +890,25 @@
      31
     ]
    ],
-   "周日": [
+   "sundays": [
     4,
     11,
     18,
     25
    ],
-   "选片板": false,
-   "打工解锁": [],
-   "时代事件": [],
-   "年度大事": false,
-   "对手成长": false,
-   "收尾期": false,
-   "结局判定": false
+   "board": false,
+   "job_unlocks": [],
+   "era_events": [],
+   "annual": false,
+   "rival_growth": false,
+   "wrap_up": false,
+   "ending_check": false
   },
   {
-   "月": "1928-04",
-   "序号": 28,
-   "天数": 30,
-   "旬": [
+   "month": "1928-04",
+   "seq": 28,
+   "days": 30,
+   "periods": [
     [
      1,
      10
@@ -922,28 +922,28 @@
      30
     ]
    ],
-   "周日": [
+   "sundays": [
     1,
     8,
     15,
     22,
     29
    ],
-   "选片板": true,
-   "打工解锁": [
+   "board": true,
+   "job_unlocks": [
     "job_escort"
    ],
-   "时代事件": [],
-   "年度大事": false,
-   "对手成长": false,
-   "收尾期": false,
-   "结局判定": false
+   "era_events": [],
+   "annual": false,
+   "rival_growth": false,
+   "wrap_up": false,
+   "ending_check": false
   },
   {
-   "月": "1928-05",
-   "序号": 29,
-   "天数": 31,
-   "旬": [
+   "month": "1928-05",
+   "seq": 29,
+   "days": 31,
+   "periods": [
     [
      1,
      10
@@ -957,25 +957,25 @@
      31
     ]
    ],
-   "周日": [
+   "sundays": [
     6,
     13,
     20,
     27
    ],
-   "选片板": false,
-   "打工解锁": [],
-   "时代事件": [],
-   "年度大事": false,
-   "对手成长": false,
-   "收尾期": false,
-   "结局判定": false
+   "board": false,
+   "job_unlocks": [],
+   "era_events": [],
+   "annual": false,
+   "rival_growth": false,
+   "wrap_up": false,
+   "ending_check": false
   },
   {
-   "月": "1928-06",
-   "序号": 30,
-   "天数": 30,
-   "旬": [
+   "month": "1928-06",
+   "seq": 30,
+   "days": 30,
+   "periods": [
     [
      1,
      10
@@ -989,25 +989,25 @@
      30
     ]
    ],
-   "周日": [
+   "sundays": [
     3,
     10,
     17,
     24
    ],
-   "选片板": false,
-   "打工解锁": [],
-   "时代事件": [],
-   "年度大事": false,
-   "对手成长": false,
-   "收尾期": false,
-   "结局判定": false
+   "board": false,
+   "job_unlocks": [],
+   "era_events": [],
+   "annual": false,
+   "rival_growth": false,
+   "wrap_up": false,
+   "ending_check": false
   },
   {
-   "月": "1928-07",
-   "序号": 31,
-   "天数": 31,
-   "旬": [
+   "month": "1928-07",
+   "seq": 31,
+   "days": 31,
+   "periods": [
     [
      1,
      10
@@ -1021,28 +1021,28 @@
      31
     ]
    ],
-   "周日": [
+   "sundays": [
     1,
     8,
     15,
     22,
     29
    ],
-   "选片板": true,
-   "打工解锁": [],
-   "时代事件": [
+   "board": true,
+   "job_unlocks": [],
+   "era_events": [
     "era_all_sound"
    ],
-   "年度大事": false,
-   "对手成长": false,
-   "收尾期": false,
-   "结局判定": false
+   "annual": false,
+   "rival_growth": false,
+   "wrap_up": false,
+   "ending_check": false
   },
   {
-   "月": "1928-08",
-   "序号": 32,
-   "天数": 31,
-   "旬": [
+   "month": "1928-08",
+   "seq": 32,
+   "days": 31,
+   "periods": [
     [
      1,
      10
@@ -1056,25 +1056,25 @@
      31
     ]
    ],
-   "周日": [
+   "sundays": [
     5,
     12,
     19,
     26
    ],
-   "选片板": false,
-   "打工解锁": [],
-   "时代事件": [],
-   "年度大事": false,
-   "对手成长": false,
-   "收尾期": false,
-   "结局判定": false
+   "board": false,
+   "job_unlocks": [],
+   "era_events": [],
+   "annual": false,
+   "rival_growth": false,
+   "wrap_up": false,
+   "ending_check": false
   },
   {
-   "月": "1928-09",
-   "序号": 33,
-   "天数": 30,
-   "旬": [
+   "month": "1928-09",
+   "seq": 33,
+   "days": 30,
+   "periods": [
     [
      1,
      10
@@ -1088,26 +1088,26 @@
      30
     ]
    ],
-   "周日": [
+   "sundays": [
     2,
     9,
     16,
     23,
     30
    ],
-   "选片板": false,
-   "打工解锁": [],
-   "时代事件": [],
-   "年度大事": false,
-   "对手成长": false,
-   "收尾期": false,
-   "结局判定": false
+   "board": false,
+   "job_unlocks": [],
+   "era_events": [],
+   "annual": false,
+   "rival_growth": false,
+   "wrap_up": false,
+   "ending_check": false
   },
   {
-   "月": "1928-10",
-   "序号": 34,
-   "天数": 31,
-   "旬": [
+   "month": "1928-10",
+   "seq": 34,
+   "days": 31,
+   "periods": [
     [
      1,
      10
@@ -1121,25 +1121,25 @@
      31
     ]
    ],
-   "周日": [
+   "sundays": [
     7,
     14,
     21,
     28
    ],
-   "选片板": true,
-   "打工解锁": [],
-   "时代事件": [],
-   "年度大事": false,
-   "对手成长": true,
-   "收尾期": false,
-   "结局判定": false
+   "board": true,
+   "job_unlocks": [],
+   "era_events": [],
+   "annual": false,
+   "rival_growth": true,
+   "wrap_up": false,
+   "ending_check": false
   },
   {
-   "月": "1928-11",
-   "序号": 35,
-   "天数": 30,
-   "旬": [
+   "month": "1928-11",
+   "seq": 35,
+   "days": 30,
+   "periods": [
     [
      1,
      10
@@ -1153,25 +1153,25 @@
      30
     ]
    ],
-   "周日": [
+   "sundays": [
     4,
     11,
     18,
     25
    ],
-   "选片板": false,
-   "打工解锁": [],
-   "时代事件": [],
-   "年度大事": false,
-   "对手成长": false,
-   "收尾期": false,
-   "结局判定": false
+   "board": false,
+   "job_unlocks": [],
+   "era_events": [],
+   "annual": false,
+   "rival_growth": false,
+   "wrap_up": false,
+   "ending_check": false
   },
   {
-   "月": "1928-12",
-   "序号": 36,
-   "天数": 31,
-   "旬": [
+   "month": "1928-12",
+   "seq": 36,
+   "days": 31,
+   "periods": [
     [
      1,
      10
@@ -1185,26 +1185,26 @@
      31
     ]
    ],
-   "周日": [
+   "sundays": [
     2,
     9,
     16,
     23,
     30
    ],
-   "选片板": false,
-   "打工解锁": [],
-   "时代事件": [],
-   "年度大事": true,
-   "对手成长": false,
-   "收尾期": false,
-   "结局判定": false
+   "board": false,
+   "job_unlocks": [],
+   "era_events": [],
+   "annual": true,
+   "rival_growth": false,
+   "wrap_up": false,
+   "ending_check": false
   },
   {
-   "月": "1929-01",
-   "序号": 37,
-   "天数": 31,
-   "旬": [
+   "month": "1929-01",
+   "seq": 37,
+   "days": 31,
+   "periods": [
     [
      1,
      10
@@ -1218,25 +1218,25 @@
      31
     ]
    ],
-   "周日": [
+   "sundays": [
     6,
     13,
     20,
     27
    ],
-   "选片板": true,
-   "打工解锁": [],
-   "时代事件": [],
-   "年度大事": false,
-   "对手成长": false,
-   "收尾期": false,
-   "结局判定": false
+   "board": true,
+   "job_unlocks": [],
+   "era_events": [],
+   "annual": false,
+   "rival_growth": false,
+   "wrap_up": false,
+   "ending_check": false
   },
   {
-   "月": "1929-02",
-   "序号": 38,
-   "天数": 28,
-   "旬": [
+   "month": "1929-02",
+   "seq": 38,
+   "days": 28,
+   "periods": [
     [
      1,
      10
@@ -1250,25 +1250,25 @@
      28
     ]
    ],
-   "周日": [
+   "sundays": [
     3,
     10,
     17,
     24
    ],
-   "选片板": false,
-   "打工解锁": [],
-   "时代事件": [],
-   "年度大事": false,
-   "对手成长": false,
-   "收尾期": false,
-   "结局判定": false
+   "board": false,
+   "job_unlocks": [],
+   "era_events": [],
+   "annual": false,
+   "rival_growth": false,
+   "wrap_up": false,
+   "ending_check": false
   },
   {
-   "月": "1929-03",
-   "序号": 39,
-   "天数": 31,
-   "旬": [
+   "month": "1929-03",
+   "seq": 39,
+   "days": 31,
+   "periods": [
     [
      1,
      10
@@ -1282,26 +1282,26 @@
      31
     ]
    ],
-   "周日": [
+   "sundays": [
     3,
     10,
     17,
     24,
     31
    ],
-   "选片板": false,
-   "打工解锁": [],
-   "时代事件": [],
-   "年度大事": false,
-   "对手成长": false,
-   "收尾期": false,
-   "结局判定": false
+   "board": false,
+   "job_unlocks": [],
+   "era_events": [],
+   "annual": false,
+   "rival_growth": false,
+   "wrap_up": false,
+   "ending_check": false
   },
   {
-   "月": "1929-04",
-   "序号": 40,
-   "天数": 30,
-   "旬": [
+   "month": "1929-04",
+   "seq": 40,
+   "days": 30,
+   "periods": [
     [
      1,
      10
@@ -1315,25 +1315,25 @@
      30
     ]
    ],
-   "周日": [
+   "sundays": [
     7,
     14,
     21,
     28
    ],
-   "选片板": true,
-   "打工解锁": [],
-   "时代事件": [],
-   "年度大事": false,
-   "对手成长": false,
-   "收尾期": false,
-   "结局判定": false
+   "board": true,
+   "job_unlocks": [],
+   "era_events": [],
+   "annual": false,
+   "rival_growth": false,
+   "wrap_up": false,
+   "ending_check": false
   },
   {
-   "月": "1929-05",
-   "序号": 41,
-   "天数": 31,
-   "旬": [
+   "month": "1929-05",
+   "seq": 41,
+   "days": 31,
+   "periods": [
     [
      1,
      10
@@ -1347,27 +1347,27 @@
      31
     ]
    ],
-   "周日": [
+   "sundays": [
     5,
     12,
     19,
     26
    ],
-   "选片板": false,
-   "打工解锁": [],
-   "时代事件": [
+   "board": false,
+   "job_unlocks": [],
+   "era_events": [
     "era_awards"
    ],
-   "年度大事": false,
-   "对手成长": false,
-   "收尾期": false,
-   "结局判定": false
+   "annual": false,
+   "rival_growth": false,
+   "wrap_up": false,
+   "ending_check": false
   },
   {
-   "月": "1929-06",
-   "序号": 42,
-   "天数": 30,
-   "旬": [
+   "month": "1929-06",
+   "seq": 42,
+   "days": 30,
+   "periods": [
     [
      1,
      10
@@ -1381,26 +1381,26 @@
      30
     ]
    ],
-   "周日": [
+   "sundays": [
     2,
     9,
     16,
     23,
     30
    ],
-   "选片板": false,
-   "打工解锁": [],
-   "时代事件": [],
-   "年度大事": false,
-   "对手成长": false,
-   "收尾期": false,
-   "结局判定": false
+   "board": false,
+   "job_unlocks": [],
+   "era_events": [],
+   "annual": false,
+   "rival_growth": false,
+   "wrap_up": false,
+   "ending_check": false
   },
   {
-   "月": "1929-07",
-   "序号": 43,
-   "天数": 31,
-   "旬": [
+   "month": "1929-07",
+   "seq": 43,
+   "days": 31,
+   "periods": [
     [
      1,
      10
@@ -1414,25 +1414,25 @@
      31
     ]
    ],
-   "周日": [
+   "sundays": [
     7,
     14,
     21,
     28
    ],
-   "选片板": true,
-   "打工解锁": [],
-   "时代事件": [],
-   "年度大事": false,
-   "对手成长": false,
-   "收尾期": false,
-   "结局判定": false
+   "board": true,
+   "job_unlocks": [],
+   "era_events": [],
+   "annual": false,
+   "rival_growth": false,
+   "wrap_up": false,
+   "ending_check": false
   },
   {
-   "月": "1929-08",
-   "序号": 44,
-   "天数": 31,
-   "旬": [
+   "month": "1929-08",
+   "seq": 44,
+   "days": 31,
+   "periods": [
     [
      1,
      10
@@ -1446,25 +1446,25 @@
      31
     ]
    ],
-   "周日": [
+   "sundays": [
     4,
     11,
     18,
     25
    ],
-   "选片板": false,
-   "打工解锁": [],
-   "时代事件": [],
-   "年度大事": false,
-   "对手成长": false,
-   "收尾期": false,
-   "结局判定": false
+   "board": false,
+   "job_unlocks": [],
+   "era_events": [],
+   "annual": false,
+   "rival_growth": false,
+   "wrap_up": false,
+   "ending_check": false
   },
   {
-   "月": "1929-09",
-   "序号": 45,
-   "天数": 30,
-   "旬": [
+   "month": "1929-09",
+   "seq": 45,
+   "days": 30,
+   "periods": [
     [
      1,
      10
@@ -1478,26 +1478,26 @@
      30
     ]
    ],
-   "周日": [
+   "sundays": [
     1,
     8,
     15,
     22,
     29
    ],
-   "选片板": false,
-   "打工解锁": [],
-   "时代事件": [],
-   "年度大事": false,
-   "对手成长": false,
-   "收尾期": true,
-   "结局判定": false
+   "board": false,
+   "job_unlocks": [],
+   "era_events": [],
+   "annual": false,
+   "rival_growth": false,
+   "wrap_up": true,
+   "ending_check": false
   },
   {
-   "月": "1929-10",
-   "序号": 46,
-   "天数": 31,
-   "旬": [
+   "month": "1929-10",
+   "seq": 46,
+   "days": 31,
+   "periods": [
     [
      1,
      10
@@ -1511,27 +1511,27 @@
      31
     ]
    ],
-   "周日": [
+   "sundays": [
     6,
     13,
     20,
     27
    ],
-   "选片板": true,
-   "打工解锁": [],
-   "时代事件": [
+   "board": true,
+   "job_unlocks": [],
+   "era_events": [
     "era_crash"
    ],
-   "年度大事": false,
-   "对手成长": true,
-   "收尾期": true,
-   "结局判定": false
+   "annual": false,
+   "rival_growth": true,
+   "wrap_up": true,
+   "ending_check": false
   },
   {
-   "月": "1929-11",
-   "序号": 47,
-   "天数": 30,
-   "旬": [
+   "month": "1929-11",
+   "seq": 47,
+   "days": 30,
+   "periods": [
     [
      1,
      10
@@ -1545,25 +1545,25 @@
      30
     ]
    ],
-   "周日": [
+   "sundays": [
     3,
     10,
     17,
     24
    ],
-   "选片板": false,
-   "打工解锁": [],
-   "时代事件": [],
-   "年度大事": false,
-   "对手成长": false,
-   "收尾期": true,
-   "结局判定": false
+   "board": false,
+   "job_unlocks": [],
+   "era_events": [],
+   "annual": false,
+   "rival_growth": false,
+   "wrap_up": true,
+   "ending_check": false
   },
   {
-   "月": "1929-12",
-   "序号": 48,
-   "天数": 31,
-   "旬": [
+   "month": "1929-12",
+   "seq": 48,
+   "days": 31,
+   "periods": [
     [
      1,
      10
@@ -1577,20 +1577,20 @@
      31
     ]
    ],
-   "周日": [
+   "sundays": [
     1,
     8,
     15,
     22,
     29
    ],
-   "选片板": false,
-   "打工解锁": [],
-   "时代事件": [],
-   "年度大事": true,
-   "对手成长": false,
-   "收尾期": true,
-   "结局判定": true
+   "board": false,
+   "job_unlocks": [],
+   "era_events": [],
+   "annual": true,
+   "rival_growth": false,
+   "wrap_up": true,
+   "ending_check": true
   }
  ]
 }

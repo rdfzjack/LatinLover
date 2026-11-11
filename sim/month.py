@@ -1,17 +1,17 @@
-"""月流程（GDD 4）：月初、三旬、月末事件、月结。
+"""Month flow (GDD 4): month start, three periods, month-end events, month settlement.
 
-第 6 步要接的东西（选片板、旬初检查、拍摄、事件、上映、对手、年度大事、时代事件、结局）
-都是 Hooks 的方法，这里默认什么都不做。
+Everything step 6 plugs in (board, period-start checks, shooting, events, releases, rivals, annual events, era events, endings)
+is a method of Hooks; by default they do nothing here.
 
-用法：
+Usage:
     g = Game(load(), seed=1, origin=(0, 1, 2))
     while not g.st.finished:
-        g.start_month()          # 扣生活费、出选片板
-        street.buy(g.st, '书店', 'book_tantu_1')   # 月初的自由操作
+        g.start_month()          # charge living costs, build the board
+        street.buy(g.st, 'bookstore', 'book_tantu_1')   # free actions at the start of the month
         g.run_month(['class_acting', 'job_dock', 'rest_home'])
 
-命令行：python3 -m sim.month --seed 1 --origin 0,1,2 --plan class_acting,job_dock,rest_home
-每月输出一行状态，供和 Godot 对账（PLAN 第 10 步）。
+Command line: python3 -m sim.month --seed 1 --origin 0,1,2 --plan class_acting,job_dock,rest_home
+Prints one status line per month, for reconciliation with Godot (PLAN step 10).
 """
 import argparse
 
@@ -21,26 +21,26 @@ from .state import State
 
 
 class Hooks:
-    """第 5、6 步实现的部分。每个方法拿到 State，可以改它。"""
+    """The parts implemented in steps 5 and 6. Every method gets the State and may change it."""
 
-    def board(self, st): pass                       # 1、4、7、10 月月初的选片板
-    def month_start(self, st): pass                 # 月初的自由操作之前（写剧本、送去戒…）
-    def locked(self, st, i): return None            # 第 i 旬被拍摄锁定时返回片约
-    def film_period(self, st, i, film, days): pass  # 拍摄旬
-    def film_breach(self, st): pass                 # 重病：下月已锁定的拍摄违约
-    def period_start(self, st, i, entry): pass      # 旬初检查：临时换角、抢角（11.1）
-    def period_end(self, st, i, entry, out): pass   # 一旬日程做完（家教旬的 Duv 告密等）
-    def day(self, st, day): pass                    # 生日等按日的事件
-    def outing(self, st, place): pass               # 外出事件（5.5.2）
-    def class_chain(self, st, chain, n): pass       # 家教的 Duv 剧情（第 n 旬）
-    def book_done(self, st, bid): pass              # 读完事件
-    def job_period(self, st, jid, good): pass       # 打工接口：每期随机、里程碑
-    def month_events(self, st): pass                # 月末事件（11.2）
-    def release(self, st): pass                     # 上映结算（8）
-    def rival_growth(self, st): pass                # 10 月对手换表
-    def annual(self, st): pass                      # 12 月年度大事
-    def era(self, st, ids): pass                    # 时代事件
-    def ending(self, st): pass                      # 1929-12 结局判定
+    def board(self, st): pass                       # the board in months 1, 4, 7, 10
+    def month_start(self, st): pass                 # before the free actions of the month (write script, send to detox ...)
+    def locked(self, st, i): return None            # returns the film contract when period i is locked by shooting
+    def film_period(self, st, i, film, days): pass  # shooting period
+    def film_breach(self, st): pass                 # very sick: the shoots already locked for next month breach
+    def period_start(self, st, i, entry): pass      # period-start checks: swap role, steal role (11.1)
+    def period_end(self, st, i, entry, out): pass   # after a period's schedule is done (Duv's tip-off in tutoring periods etc.)
+    def day(self, st, day): pass                    # per-day events such as birthdays
+    def outing(self, st, place): pass               # outing event (5.5.2)
+    def class_chain(self, st, chain, n): pass       # Duv's story in tutoring (period n)
+    def book_done(self, st, bid): pass              # finish-reading event
+    def job_period(self, st, jid, good): pass       # job hook: period_random, milestones
+    def month_events(self, st): pass                # month-end events (11.2)
+    def release(self, st): pass                     # release settlement (8)
+    def rival_growth(self, st): pass                # rival table swap in October
+    def annual(self, st): pass                      # annual event in December
+    def era(self, st, ids): pass                    # era events
+    def ending(self, st): pass                      # ending resolution in 1929-12
 
 
 class Game:
@@ -49,42 +49,42 @@ class Game:
         self.st = state or State.new(self.d, seed, origin)
         self.hooks = hooks or Hooks()
         self.started = False
-        self.last = []          # 本月每旬的小结
+        self.last = []          # summary of each period of this month
 
-    # ---------- 1. 月初 ----------
+    # ---------- 1. month start ----------
     def start_month(self):
         st, d = self.st, self.d
         if st.finished:
-            raise RuntimeError('这一局已经结束')
+            raise RuntimeError('this game is already over')
         if self.started:
-            raise RuntimeError('本月已经开始')
+            raise RuntimeError('the month has already started')
         self.started = True
         st.month_used = {}
         st.exposed = 0
-        st.status['当月有拍摄'] = 0
-        # 体力 <15 且不是讲究：强制改回讲究（GDD 5.7）
-        if st.val('体力') < 15 and st.lifestyle != 'life_fine':
+        st.status['shoot_this_month'] = 0
+        # stamina <15 and the lifestyle is not fine: forced back to fine (GDD 5.7)
+        if st.val('stamina') < 15 and st.lifestyle != 'life_fine':
             st.lifestyle = 'life_fine'
         life = d.lifestyles[st.lifestyle]
-        st.money -= life['月费'][st.fame_tier()]     # 可以扣成负数
-        if st.month['选片板']:
+        st.money -= life['monthly_cost'][st.fame_tier()]     # may go negative
+        if st.month['board']:
             self.hooks.board(st)
         self.hooks.month_start(st)
 
     def set_lifestyle(self, lid):
-        """月初排日程前改生活方式；下个月初扣费时生效。"""
+        """Changes the lifestyle before scheduling at month start; takes effect when it is charged next month."""
         if lid not in self.d.lifestyles:
             raise ValueError(lid)
         self.st.lifestyle = lid
 
-    # ---------- 2. 三旬 ----------
+    # ---------- 2. the three periods ----------
     def plan_errors(self, plan):
-        """检查本月日程，返回 [(旬, 原因)]。拍摄锁定、强制疗养、作废的月份不检查。"""
+        """Checks this month's schedule and returns [(period, reason)]. Months with a shoot lock, forced sanatorium or void schedule are not checked."""
         st = self.st
         if st.forced_rest or st.void_next:
             return []
         if len(plan) != 3:
-            return [(None, '要排 3 旬')]
+            return [(None, 'need 3 periods')]
         out = []
         for i, e in enumerate(plan):
             if self.hooks.locked(st, i):
@@ -100,87 +100,87 @@ class Game:
             self.start_month()
         errs = self.plan_errors(plan)
         if errs:
-            raise schedule.ScheduleError(f'{st.date} 日程不能这样排：{errs}')
+            raise schedule.ScheduleError(f'{st.date} cannot schedule like this: {errs}')
         forced, void = st.forced_rest, st.void_next
         st.forced_rest = st.void_next = 0
         self.last = []
         for i in range(3):
             days = schedule.days_of(st, i)
             if void:
-                self.last.append({'日程': '作废'})
+                self.last.append({'schedule': 'void'})
                 continue
             film = h.locked(st, i)
             if film:
-                st.status['拍摄旬'] = 1
-                st.status['当月有拍摄'] = 1
+                st.status['shooting_period'] = 1
+                st.status['shoot_this_month'] = 1
                 h.film_period(st, i, film, days)
-                st.status['拍摄旬'] = 0
-                self.last.append({'日程': '拍摄'})
+                st.status['shooting_period'] = 0
+                self.last.append({'schedule': 'shooting'})
                 continue
             e = plan[i] if not forced else self._forced_entry(i)
             h.period_start(st, i, e)
             out = schedule.run_period(st, i, e, h)
             h.period_end(st, i, e, out)
             self.last.append(out)
-        if st.flags.get('口音期', 0) > 0:      # 口音事件后的 4 个月加成，每过一个月减一
-            st.flags['口音期'] -= 1
+        if st.flags.get('accent_period', 0) > 0:      # 4-month bonus after the accent event, one less after each month
+            st.flags['accent_period'] -= 1
         h.month_events(st)
         self.end_month()
 
     def _forced_entry(self, i):
-        """重病的下一个月：疗养院；那一旬的钱不够付每天 8 时改在家休息（GDD 10）。"""
+        """The month after very sick: sanatorium; when the money for that period cannot pay 8 a day it falls back to resting at home (GDD 10)."""
         st, d = self.st, self.d
         f = d.rest_forced[0]
-        need = d.rests[f['日程']]['花费'] * len(schedule.days_of(st, i))
-        return f['日程'] if st.money >= need else f['钱不够改']
+        need = d.rests[f['schedule']]['cost'] * len(schedule.days_of(st, i))
+        return f['schedule'] if st.money >= need else f['if_broke_switch']
 
-    # ---------- 4. 月结 ----------
+    # ---------- 4. month settlement ----------
     def end_month(self):
         st, d, h = self.st, self.d, self.hooks
         m = st.month
-        # 1 生活方式
-        eff = d.lifestyles[st.lifestyle]['月结效果']
+        # 1 lifestyle
+        eff = d.lifestyles[st.lifestyle]['month_end_effect']
         if eff:
             rules.apply_effect(st, eff, source='schedule')
-        # 2 上映
+        # 2 releases
         h.release(st)
-        # 3 名气衰减
+        # 3 fame decay
         if not st.exposed:
-            fr = d.t['stats']['名气规则']
-            f = st.attr['名气']
-            st.attr['名气'] = max(0, f - max(fr['月衰减最少'], f * fr['月衰减百分比'] // 100))
-        # 4 指数和状态
+            fr = d.t['stats']['fame_rules']
+            f = st.attr['fame']
+            st.attr['fame'] = max(0, f - max(fr['monthly_decay_min'], f * fr['monthly_decay_pct'] // 100))
+        # 4 indices and status
         st.update_indices()
-        # 5 重病、倒下
-        if st.status['重病']:
+        # 5 very sick, collapse
+        if st.status['very_sick']:
             st.forced_rest = 1
             h.film_breach(st)
-        st.collapse_months = st.collapse_months + 1 if st.idx['生病指数'] >= 100 else 0
+        st.collapse_months = st.collapse_months + 1 if st.idx['sick_index'] >= 100 else 0
         if st.collapse_months >= 2:
             st.ended = 'end_collapse'
             st.finished = 1
             h.ending(st)
             self.started = False
             return
-        # 6 恋爱计时
-        rr = d.t['romance']['规则']['恋爱状态']
-        if st.status['恋爱']:
+        # 6 in_love timer
+        rr = d.t['romance']['rules']['love_state']
+        if st.status['in_love']:
             st.romance_months += 1
-            for n in rr['作用线']:
-                st.favor[n] = max(0, st.favor.get(n, 0) + rr['每月好感'])
-            if st.romance_months >= rr['持续月数'] and st.highest_base() != '相貌':
-                st.status['恋爱'] = 0
+            for n in rr['lines']:
+                st.favor[n] = max(0, st.favor.get(n, 0) + rr['monthly_favor'])
+            if st.romance_months >= rr['duration_months'] and st.highest_base() != 'looks':
+                st.status['in_love'] = 0
                 st.romance_months = 0
-        # 7 负债
+        # 7 debt
         st.debt_months = st.debt_months + 1 if st.money < 0 else 0
         # 8–11
-        if m['对手成长']:
+        if m['rival_growth']:
             h.rival_growth(st)
-        if m['年度大事']:
+        if m['annual']:
             h.annual(st)
-        if m['时代事件']:
-            h.era(st, m['时代事件'])
-        if m['结局判定']:
+        if m['era_events']:
+            h.era(st, m['era_events'])
+        if m['ending_check']:
             h.ending(st)
             st.finished = 1
         self.started = False
@@ -189,10 +189,10 @@ class Game:
             if st.ym >= len(d.months):
                 st.finished = 1
 
-    # ---------- 存读档 ----------
+    # ---------- save / load ----------
     def save(self):
         if self.started:
-            raise RuntimeError('只能在两个月之间存档')
+            raise RuntimeError('saving is only allowed between two months')
         return self.st.dumps()
 
     @classmethod
@@ -201,21 +201,21 @@ class Game:
         return cls(data, hooks=hooks, state=State.loads(data, s))
 
 
-# ---------- 对账输出 ----------
+# ---------- reconciliation output ----------
 def trace_line(st, date=None):
-    """一个月一行：日期、金钱、8 项属性、12 项训练值、4 路声望、两个指数、逻辑流状态。
-    月结后 st.date 已经是下个月，所以日期由调用方传入。"""
+    """One line per month: date, money, 8 attributes, 12 training values, 4 road reputations, the two indices, logic stream state.
+        st.date is already next month after settlement, so the caller passes the date."""
     d = st.d
     a = ' '.join(str(st.attr[k]) for k in d.attrs)
     s = ' '.join(str(st.skill[k]) for k in d.skills)
     b = st.bonus()
     r = ' '.join(str(st.rep(k, b)) for k in d.roads)
-    return (f"{date or st.date} ${st.money} | {a} | {s} | {r} | {st.idx['生病指数']} {st.idx['失控指数']} "
+    return (f"{date or st.date} ${st.money} | {a} | {s} | {r} | {st.idx['sick_index']} {st.idx['reckless_index']} "
             f"| {st.rng.logic.dump()[0]}")
 
 
 def run_fixed(seed, origin, plan, data=None):
-    """固定日程跑满 48 个月，返回每月一行（月结后的状态）。"""
+    """Runs a fixed schedule for all 48 months and returns one line per month (state after settlement)."""
     g = Game(data, seed=seed, origin=origin)
     lines = []
     while not g.st.finished:
@@ -227,10 +227,10 @@ def run_fixed(seed, origin, plan, data=None):
 
 
 def main():
-    ap = argparse.ArgumentParser(description='固定日程跑一局，每月输出一行状态')
+    ap = argparse.ArgumentParser(description='run one game with a fixed schedule, print one status line per month')
     ap.add_argument('--seed', type=int, default=1)
-    ap.add_argument('--origin', default='0,0,0', help='开局三问的选项序号，从 0 数')
-    ap.add_argument('--plan', default='class_acting,job_dock,rest_home', help='每月三旬的日程')
+    ap.add_argument('--origin', default='0,0,0', help='option index of each opening question, counting from 0')
+    ap.add_argument('--plan', default='class_acting,job_dock,rest_home', help='the three period entries of each month')
     a = ap.parse_args()
     origin = tuple(int(x) for x in a.origin.split(','))
     for line in run_fixed(a.seed, origin, a.plan.split(',')):

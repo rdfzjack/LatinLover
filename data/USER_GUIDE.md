@@ -1,3 +1,5 @@
+> **Out of date (step 9c-1).** Field names, ids and effect/condition names in `data/new/*.json` are English now (see `design/GLOSSARY.md` and `data/new/README.md`). This guide still shows the old Chinese syntax and is rewritten in English in step 9c-2.
+
 # 自己改游戏数据：使用指南
 
 游戏里的物品、角色、事件、外出去处、NPC、开局选项、价格……都写在 `data/new/` 的 JSON 文件里。Python 试算器和 Godot 读的是同一份，你改了这里，两边都跟着变，不用改代码。
@@ -16,7 +18,7 @@
 
 **2. 装 Python 3**（检查脚本要用）。python.org 下载，安装时**勾选 “Add Python to PATH”**。
 
-**3. 改完检查。** 双击仓库根目录的 **`检查数据.bat`**。最后一行是“全部通过，可以提交”就没问题；否则它会用中文告诉你哪个文件、第几行、什么问题。也可以直接跟模型说“跑一下检查”。
+**3. 改完检查。** 双击仓库根目录的 **`check_data.bat`**。最后一行是“全部通过，可以提交”就没问题；否则它会用中文告诉你哪个文件、第几行、什么问题。也可以直接跟模型说“跑一下检查”。
 
 **4. 提交。** 用你平时的方式（GitHub Desktop 等）提交推送；或者跟模型说“帮我提交”。
 

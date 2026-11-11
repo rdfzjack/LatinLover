@@ -1,152 +1,159 @@
-# 实现说明：sim/ 和 Godot 的结构、接口和补的细节
+# Implementation notes: structure, interfaces and details added in `sim/` and Godot
 
-给移植 Godot（PLAN 第 9–12 步）和改 `sim/` 的人看。规则以 `design/GDD.md` 为准；这里记的是 GDD 没写到、写代码时补上的做法。Godot 要和 `sim/` 逐字节对上，所以这些细节照抄。
+For whoever ports Godot (PLAN steps 9-12) or edits `sim/`. The rules are in `design/GDD.md`; this file records what the GDD does not say and what was filled in while writing the code. Godot must match `sim/` byte for byte, so copy these details exactly. Chinese names used in the design documents are looked up in `design/GLOSSARY.md`.
 
-## sim/ 的结构
+## Identifiers and ordering (step 9c-1)
 
-| 文件 | 内容 | GDD |
+- Everything technical is English: JSON field names, ids, enum values, names in effects and conditions, keys of the save, identifiers and strings in code, comments, check output. Chinese lives only in the display fields of the data tables (`name`, `text`, `body`, `question`, `film_title`, `content`, `identity`). `tools/migrate_ids.py` and `tools/i18n_map.json` record the rename; there are no aliases for the old Chinese ids.
+- **Save format version 2** (`"version": 2`). `State.from_dict` refuses other versions. Count keys keep their prefixes: `class_periods.<class>`, `job_periods.<job>`, `road_periods.<road>`, `count.<name>`, `duels.<rival>`. Effect / condition names are split at the first `.` (`rules.split_name`), never sliced by length.
+- **No behaviour may depend on the alphabetical order of a name.** Where an order matters it is the order of the data table: `Data.item_order` (items.json rows) for held items and gear, `Data.npc_order` for the `known` list, `Data.roads` / `Data.skills` for ties between roads and skills, explicit `order` fields for endings and month-end events. The rows of `items.json` are in the order the code used to sort the old Chinese ids, which keeps every number of `python3 -m sim.report` identical to the numbers before step 9c. A new item is appended at the end; a tie then goes to the older row.
+- `sil_hint` breaks favor ties by the order of the romance lines (before: by the Chinese name, UI only).
+- Rival `easter_egg: true` (before: the note started with a certain word).
+
+## Structure of `sim/`
+
+| File | Content | GDD |
 |---|---|---|
-| `rng.py` | PCG32，逻辑流和表现流 | 16 |
-| `data.py` | 读表、建索引 | 16 |
-| `state.py` | 状态、显示值、声望、指数、存读档 | 2、10、14.1 |
-| `rules.py` | 条件、效果、事件判定、概率 | 11.0、16 |
-| `schedule.py` | 上课、看书、打工、休息 | 5.1–5.5 |
-| `street.py` | 街道、物品和装备、Sil | 5.8、14 |
-| `month.py` | 月流程、月结、对账输出 | 4、10 |
-| `audition.py` | 组牌、有效点数、出牌习惯、对手、结果分档 | 7、9 |
-| `board.py` | 选片板：组板、占位角色、对手、有声、本厂、情报、报名和试镜；临时换角、抢角；剧本 | 3.3、6、11.1 |
-| `film.py` | 片约、拍摄、片酬、违约、上映、标签和定型 | 5.6、8、10 |
-| `events.py` | 事件执行器；月末事件和机遇、旬初、外出和 NPC 日程、Duv、打工接口、时代、年度大事 | 5.4、5.5、11、12 |
-| `ending.py` | 结局、品性、归宿、总分；登记结局用的派生变量 | 15 |
-| `bots.py` | 8 种策略机器人（专练四路、两路、犯罪线、只读书文化、乱选）和 `play(机器人, 种子)` | — |
-| `report.py` | 批量跑机器人出报告（≤60 行）；`--n` `--bots` `--random-play` `--no-buy` | PLAN 7 |
-| `story.py` | `Story`（`Hooks` 的实现）、`Agent`（玩家要回答的问题）、`SimpleAgent`、整局命令行 | 4 |
+| `rng.py` | PCG32, logic stream and show stream | 16 |
+| `data.py` | loads the tables and builds the indexes | 16 |
+| `state.py` | state, displayed values, reputation, indices, save / load | 2, 10, 14.1 |
+| `rules.py` | conditions, effects, event checks, probabilities | 11.0, 16 |
+| `schedule.py` | classes, books, jobs, rest | 5.1-5.5 |
+| `street.py` | street, items and gear, Sil | 5.8, 14 |
+| `month.py` | month flow, month settlement, reconciliation output | 4, 10 |
+| `audition.py` | decks, effective points, play habits, rivals, result tiers | 7, 9 |
+| `board.py` | casting board: building the board, placeholder roles, rivals, talkies, house roles, intel, sign-up and auditions; swap role and steal role; scripts | 3.3, 6, 11.1 |
+| `film.py` | film contracts, shooting, fees, breaches, releases, tags and typing | 5.6, 8, 10 |
+| `events.py` | event executor; month-end events and opportunities, period start, outings and NPC schedule, Duv, job hooks, eras, annual events | 5.4, 5.5, 11, 12 |
+| `ending.py` | endings, character, destiny, total score; registers the derived variables of the endings | 15 |
+| `bots.py` | 8 strategy bots (`only_tough` `only_lover` `only_culture` `only_savvy` `two_roads` `crime_line` `books_culture` `random_pick`) and `play(bot, seed)` | - |
+| `report.py` | runs the bots in bulk and prints a report (<=60 lines); `--n` `--bots` `--random-play` `--no-buy` | PLAN 7 |
+| `story.py` | `Story` (the implementation of `Hooks`), `Agent` (the questions the player answers), `SimpleAgent`, whole-game command line | 4 |
 
-**Agent 接口。** 界面和机器人都继承 `story.Agent`（或 `SimpleAgent` 改几个方法）：`deck` `play`（试镜）、`pick_role`（报名哪个角色）、`accept_support`（接不接配角）、`go_personally`（亲自上）、`option`（事件选项）、`annual`（年度大事）、`family`（转型的戏路族）、`suppress`（压丑闻）、`month_start`（月初的写剧本、送去戒、放消息、街道）。日程由调用方每月给：`g = story.new_game(seed, origin, agent)`，然后每月 `g.start_month()`、`g.run_month(三旬)`；`story.fit_plan` 把排不了的旬换成在家休息。报告要的数从这里取：`st.story['片']`（每部片的档次、配角、表现、片酬、上映结果 S/大卖/扑街/口音）、`st.story['结局']`、`st.count` 里的 `计数.*`（试镜、试镜拿到、上映、大卖、扑街、配角、违约、被捕、丑闻、机遇、年度名次等）、`g.hooks.boards`（每块板的试镜结果）、`g.hooks.log`（触发过的事件）。整局约 0.02 秒。
+**Agent interface.** The UI and the bots inherit `story.Agent` (or `SimpleAgent` and override a few methods): `deck` and `play` (auditions), `pick_role` (which role to sign up for), `accept_support` (take a supporting part or not), `go_personally` (do the stunt yourself), `option` (event option), `annual` (annual event), `family` (the tag family for the transition), `suppress` (suppress a scandal), `month_start` (script writing, detox, news leaks and the street at month start). The caller supplies the schedule each month: `g = story.new_game(seed, origin, agent)`, then every month `g.start_month()`, `g.run_month(three periods)`; `story.fit_plan` replaces entries that cannot be scheduled with resting at home. The report takes its numbers from here: `st.story['films']` (size, support, performance, fee and release result per film: S / hit / flop / accent), `st.story['ending']`, the `count.*` entries of `st.count` (auditions, auditions won, releases, hits, flops, supports, breaches, arrests, scandals, opportunities, annual ranks ...), `g.hooks.boards` (audition results of each board), `g.hooks.log` (events that fired). One game takes about 0.02 s.
 
-**状态。** 第 6 步的状态都在 `st.story`（存档的一部分，字段见 `state.new_story`）。`month.py` 为它加了两个钩子：`month_start`（出板之后）、`period_end`（每旬做完）；倒下改为当场调用结局钩子并结束月结。
+**State.** The state of step 6 is in `st.story` (part of the save; fields in `state.new_story`). `month.py` adds two hooks for it: `month_start` (after the board is built) and `period_end` (after every period); a collapse now calls the ending hook on the spot and ends the month settlement.
 
-**随机数约定**（Godot 照抄，细节写在 `rng.py`、`schedule.py`、`audition.py`、`board.py`、`film.py`、`events.py` 的开头）：`r(a,a)` 不消耗随机数；上课、看书每天先掷 `r0(疲劳)` 再掷 `r0(体力/2)`；打工先掷每天效果再掷成功线；试镜先抽场风，每轮对手先出牌再问玩家。存档里 64 位状态写成十六进制字符串，免得 Godot 读 JSON 丢精度。
+**Random-number conventions** (Godot copies them; details at the top of `rng.py`, `schedule.py`, `audition.py`, `board.py`, `film.py`, `events.py`): `r(a, a)` consumes no random number; classes and books roll `r0(fatigue)` then `r0(stamina/2)` every day; jobs roll the daily effects first, then the success lines; auditions draw the style first, and in every round the rival plays before the player is asked. The 64-bit states in a save are hex strings so that Godot's JSON reader does not lose precision.
 
+## Rule details filled in while implementing (the user has not reviewed them one by one)
 
-## 实现时补的规则细节（用户没逐条看过）
+Whoever takes over: do not treat these as user decisions.
 
-接手的人不要把这些当成用户定的。
+**Data tables (steps 2, 3)**
+- Condition format: outer OR, inner AND, with the `in` comparator and `"@variable"` references.
+- Advanced and monograph speech books are on the shelf from 1926-08. "The place Valen leaves" is `>= 1927-09`.
+- Senior approval: tier 100 gives +5 to one skill of the road (pick one of three); tier 200 gives "the senior's gear (road)" (class and skill are placeholders); tier 300 sets a flag that an opportunity reads; tier 400 "the best gear" is not defined in the GDD, so for now it only sets a flag and the model defines a placeholder item in step 17.
+- The resort has 3 empty placeholder events (`vac_1`-`vac_3` in `outing.json`); the skill of the "old book" is undecided and the item sits in `items.json`.
+- Endings got fallbacks: actor "second line (rest)", lover category A with looks <500 merges into "salon owner / widow's companion", culture category S/A with discipline <50 merges into "screenwriter / tabloid writer", and the all-round category falls back to "back to Naples".
+- The action-film director is resident in the studio area in `places.json`, but the GDD 5.5.2 gives him no schedule, so `npc_schedule.json` has no row for him (the check warns).
+- Event id prefixes: `evt_` system, `era_` era, `job_<job>_r<n>` / `_m<n>` random and milestone events of jobs, `opp_` opportunities, `outing_` outings, `vac_` resort. Events with complex logic carry `code: true` and are implemented in step 6 following their `note`.
+- All `body` fields are `null` until steps 16-18.
 
-**数据表（第 2、3 步）**
-- 条件格式：外层“或”、组内“与”，加了 `in` 比较符和 `"@变量"` 引用。
-- 谈吐类的书进阶档和专著档都从 1926-08 上架。“瓦伦留下的位置”取 `>= 1927-09`。
-- 前辈认可：100 档该路一项技能 +5（三选一）；200 档给“前辈的装备·路”（类别和技能占位）；300 档设旗标，由机遇接；400 档“最好的装备”GDD 没定义，现在只设旗标，第 17 步补物品时由模型定一件占位。
-- 度假村事件 3 个空占位（`outing.json` 的 vac_1–3）；“旧书”的技能未定，放在 `items.json`。
-- 结局补了兜底：演员“二线（其余）”、情人大类 A 且相貌 <500 并入“沙龙主人 / 富孀的伴侣”、文化大类 S/A 自律 <50 并入“编剧 / 小报写手”、万能大类兜底“回那不勒斯”。
-- 动作片导演在 `places.json` 常在片厂区，GDD 5.5.2 没给他日程，所以 `npc_schedule.json` 没有他（校验会提示）。
-- 事件 id 前缀：`evt_` 系统、`era_` 时代、`job_<工>_r<n>` / `_m<n>` 打工的随机和里程碑、`opp_` 机遇、`outing_` 外出、`vac_` 度假村。逻辑复杂的事件标 `代码:true`，按 `说明` 在第 6 步写代码。
-- 文本字段都是 `null`，等第 16–18 步。
+**Schedule and month settlement (step 4)**
+- Class level counts the periods including the current one: periods 1-3 level 1, from period 4 level 2 (consistent with Duv's story at periods 4, 7, 10).
+- A class day without enough money is skipped: no fee, no fatigue; a period in which no day was attended does not count.
+- The two indices are computed at month settlement and kept for the whole month (as in the original); skipping work, employer refusal and hospital fees read this value.
+- Gear bonuses apply to attributes too; conditions, success lines and checks use displayed values. The grooming coefficient of outfits uses the training value plus the non-outfit bonus.
+- `road_periods.<road>`: a class counts for the road of the first skill of its gain (tutoring counts for culture), a book for the road of its skill, a job for the roads of the skills in its daily effect, only for successful periods (bootlegging counts for tough and savvy both).
+- The +1 favor at loyalty >= 200 applies only to events and items; fixed favor in schedules and persuasion by Sil do not get it.
+- The month after very sick: the period decides by itself whether the sanatorium can be paid (8 x days); if not it becomes resting at home.
+- The accent bonus counts down by one after the three periods of every month and covers the next 4 months.
+- Outing events fire in the middle of the period; per-day events such as birthdays are checked after that period is settled.
+- When sick, the restaurant takes the money and has no effect. The hints of Sil's status use favor >= 60 on a romance line and fatigue >= 50 for now.
 
-**日程和月结（第 4 步）**
-- 课程等级按含本旬的旬数：第 1–3 旬 1 级，第 4 旬起 2 级（和 Duv 剧情第 4、7、10 旬一致）。
-- 钱不够的上课日不上：不扣钱、不加疲劳；整旬一天没上不算上过。
-- 两个指数在月结时算，整月沿用（原版如此）；偷懒、雇主拒绝、医院收费都看这个值。
-- 装备加成对属性也算；条件、成功线、判定都用显示值。服装的打扮系数用训练值加非服装加成。
-- `期数.<路>`：课按收益里第一个技能的路（家教算文化），书按书的技能，打工按每天效果里技能的路、只算成功的期（运私酒同时算硬汉和手腕）。
-- 义气 ≥200 的好感 +1 只对事件和物品生效，日程里的固定好感、让 Sil 劝不加。
-- 重病的下一个月按旬判断够不够付疗养院（8 × 天数），不够改在家休息。
-- 口音加成期每月三旬过完减一，覆盖之后 4 个月。
-- 外出事件在半旬时触发；生日这类按日事件在那一旬结算完后检查。
-- 生病时去餐厅照付钱、没有效果。Sil 近况提示的“好感”“疲劳”两条暂用感情线好感 ≥60、疲劳 ≥50。
+**Auditions (step 5)**
+- Unnamed rivals: main color is the color with the highest style probability, second color the second highest (main - 2), the other two colors level 1; the minimum level is 1.
+- When Valen is replaced, one of Nova and Jilbo is drawn at random.
+- Habit ties on "big/small" go by hand order; "random" does not roll the 80%; "follow" uses the full comparison (counters included) for "can beat", equal points do not count as a win.
+- Big films: only winning the first match 3:0 and also the second counts as "remembered".
+- GDD 7.7's setup (role style, rival deck, player decks) follows the idea that "the rival fits the role", see `audition.CASES_77`.
+- The counter multipliers 1.3/0.8 and k=3 for unnamed rivals are my choice from the trial calculations of 7.7 (the user agreed that the multipliers may drop and that the rival's deck must avoid counters).
+- A botched audition gives Sil favor +2 (written in `favor_sources` of `romance.json`).
+- The player's main color = the road with the highest current reputation, used for the style adjustment of "remembered".
 
-**试镜（第 5 步）**
-- 无名对手：主色取场风概率最高的颜色，副色取第二高（主色 −2），其余两色 1 级；等级最低 1。
-- 瓦伦被替换时在诺瓦、吉尔伯里随机抽一个。
-- 习惯排“大小”并列时按手牌顺序；“随性”不掷 80%；“跟牌”的“能赢过”按完整比较（含克制），点数相等不算赢。
-- 大片：第一场 3:0 且第二场也赢才算“被记住”。
-- GDD 7.7 的局面（角色场风、对手组牌、玩家可选牌组）是按“对手贴合角色”定的，见 `audition.CASES_77`。
-- 克制倍率 1.3/0.8、无名对手 k=3 是我按 7.7 的试算挑的（用户同意倍率可降、对手组牌要防克制）。
-- 演砸时 Sil 好感 +2（`romance.json` 的好感来源里写了）。
-- 玩家主色 = 当前声望最高的路，用于“被记住”的场风修正。
+**Rest (step 8b, rule changed by the user)**
+- The `period_effect` of resting at home (Sil favor +2) is added after all days of the period, counted as a schedule source (loyalty >= 200 does not add more).
+- Every outing goes through `rest_outing@<place>`: the money per day is the place's `cost` or `cost_by_fame_tier[fame tier]`, fatigue is the place's `fatigue_per_day`; on a day without enough money it counts as resting at home (-5, no Sil favor).
+- The resort has no resident, so every time one event is drawn from its random table by weight (before: uniform `below(count)`; now like the other places).
+- The sanatorium has `player_choice: false`: `schedule.validate` refuses it, only the month flow forces it after very sick.
 
-**休息（第 8b 步，用户改的规则）**
-- 在家休息的 `每旬效果`（Sil 好感 +2）在这一旬的天数都过完后加，按日程来源算（义气 ≥200 不多加）。
-- 外出统一走 `rest_outing@<去处>`：每天的钱取去处的 `花费` 或 `花费按名气档[名气档]`，疲劳取去处的 `疲劳每天`；钱不够的那天按在家休息（−5，不加 Sil 好感）。
-- 度假村没有常在的人，所以每次都从它的随机表按权重抽（原来度假是 `below(个数)` 均匀抽，现在和别的去处一样用权重）。
-- 疗养院 `玩家可选:false`：`schedule.validate` 拒绝，只由月流程在重病的下一个月强制排。
+**Table editing (step 9b)**
+- The effects of an opportunity are written only in `opportunities.json`; the story event with the same id in `events.json` has an empty `effect`; when an opportunity fires at month end the story event goes first and then the opportunity's effect is added (before only the story event's effect applied, so the two places gave different numbers).
+- Outing-related names are unified: the `trigger` of a chain is `"outing"`, the counter is `count.outing.<place>`.
+- `check_data.py` dropped the hard-coded count checks (15 books, 15 jobs, 9 rivals, >=36 endings, 5/4/6 opening options, 4 lifestyles) and now only needs at least one, with unique ids; the rule tables (attributes, skills, calendar, habits, annual events) are still counted.
 
-**改表相关（第 9b 步）**
-- 机遇的效果只写在 `opportunities.json`，`events.json` 里同 id 的剧情事件 `效果` 为空；月末触发机遇时先放剧情事件，再加机遇的效果（原来只有剧情事件的效果生效，两处的数不一样）。
-- 外出相关的名字统一叫“外出”：链的 `触发` 是 `"外出"`，计数器是 `计数.外出.<去处>`。
-- `check_data.py` 去掉了内容数量的写死检查（书 15 本、工 15 种、对手 9 个、结局 ≥36、开局选项 5/4/6、生活方式 4 种），改成至少一个、id 不重复；规则表（属性、技能、日历、习惯、年度大事）的数量照旧检查。
+**Board, shooting, release (step 6)**
+- When the role pool runs out, **placeholder roles** are generated (`roles.json` `defaults.placeholder_gen`): main color style 55, others 15; wants = one random skill of the main color's road (small 40, medium 60, big 80); the tag is one random tag of the set of the main color; the named rival of the second match of a big film is drawn 5:3:2 from the 3 present rivals with the highest main-color level (as in the rough-calculation script).
+- The tutorial role of 1926-01 takes the second small slot; when "the other three colors share equally" does not divide evenly, the leftover 1 point goes to the earlier color (like 14/60/13/13).
+- `talkie` of a role has three values: true always, false never, null by the GDD 6.4 ratio when the board is built (all 9 current roles are null). The 1927-10 board draws 1 among the null roles.
+- Getting a supporting part also counts as "got a role on this board", no second try.
+- The 3 house roles of a long contract are drawn from the roles the fame reaches.
+- The extra small role after Valen's death ("exotic_lover" or "romance" tag): every board gets one more small role with one of the two tags until 1928-12.
+- Widow investment, transition and script roles are added after the board's base roles. The transition's medium film is drawn from the tags of the family the player picked.
+- Duv's tip-off: the GDD says "current or next board". The auditions are all done in the month-start board build, so a tip-off can only come later and always goes to the next board (reveals the style and tags of one medium or big role).
+- A shooting day adds fatigue before the check; in_love 20% and reckless slacking apply to shooting as well (GDD 5.1); the injury of stunt_self is rolled after the check. Performance, fit, tag familiarity and box score are integers scaled x1000.
+- Fee order: base -> stunt_self x130% -> support x40% -> x(400+negotiation)/400 -> contract x85%, rounded down at each step.
+- A supporting part also multiplies fame, rep_bonus and **dividend** by 0.3 on release (the GDD only says fame and rep_bonus; the rough script multiplies the dividend too).
+- The road that gets the rep_bonus on release = the road of the highest **base** style of the role (the remembered and house bonuses do not count).
+- Low-budget typed = `lowbudget` count >= 4; "released when it drops below 3" is read as <= 3, so no extra state is kept.
+- Breaches (very sick, missing, withdrawal, a month-taking opportunity) do not release and cost fame -10%. A shoot locked into a month that is voided later always counts as a breach.
+- A swap role is a medium film (fee 800, B=100) shot for 1 period; if the next period is already taken by another film it does not fire. A lost steal role voids the contract and fame stays.
+- The October "rival growth" is not a separate step: named rivals change stage at their `from` date in `rivals.json`, unnamed rivals by the half-year count.
 
-**选片板、拍摄、上映（第 6 步）**
-- 角色池不够时生成**占位角色**（`roles.json` 默认.占位生成）：主色场风 55、其余 15；看重 = 主色那条路随机一项技能（小 40、中 60、大 80）；标签从主色对应的一组里随机一个；大片第二场的有名对手从当年在场、主色等级最高的 3 人里按 5:3:2 抽（照粗算脚本）。第 16、17 步补齐角色池后基本用不到。
-- 1926-01 的教学角色占第二个小片位；场风“其余三色平分”除不尽的 1 点给顺序靠前的颜色（如 14/60/13/13）。
-- 角色的 `有声` 改成三值：true 一定带、false 一定不带、null 按 GDD 6.4 的比例在上板时定（现有 9 个角色都改成 null）。1927-10 那块板在 null 的角色里抽 1 个。
-- 拿到配角也算“这块板拿到了角色”，不能再试第二次。
-- 长约的“本厂”3 个从名气够得着的角色里抽。
-- 瓦伦去世后“异国情人、浪漫角色 +1”做成：每块板多一个带这两个标签之一的小片角色，到 1928-12。
-- 富婆投资、转型、剧本多出的角色都加在当块板的基本角色之后。转型的中片从玩家指定戏路族的标签里抽。
-- Duv 告密：GDD 写“当前板或下一块板”。试镜都在出板的月初做完，告密只会在之后到来，所以一律给下一块板（揭开一个中、大片角色的场风和标签）。
-- 拍摄日先加疲劳再判定；恋爱 20%、失控偷懒对拍摄同样生效（GDD 5.1）；亲自上的受伤在判定之后掷。表现、契合、标签熟悉、票房分都按 ×1000 的整数算。
-- 片酬的计算顺序：基础 → 亲自上 ×130% → 配角 ×40% → ×(400+谈判)/400 → 合同 ×85%，每步向下取整。
-- 配角上映时名气、声望修正、**分红**都 ×0.3（GDD 只写了名气和修正；分红照粗算脚本也乘）。
-- 上映加声望修正的那条路 = 角色**基础**场风最高的路（不算被记住、本厂的加成）。
-- 低成本定型 = 低成本计数 ≥4；“降到 3 以下即解除”按 ≤3 理解，所以不另记状态。
-- 违约（重病、失踪、戒断、占月的机遇）的片约不上映，名气 −10%。下个月作废的月份里锁定的拍摄一律算违约。
-- 临时换角的角色按中片（片酬 800、B=100）、拍 1 旬；下一旬已被别的片占了就不触发。抢角输了片约作废，名气不变。
-- 10 月的“对手成长”不另做：有名对手按 `rivals.json` 各阶段的“自”日期换，无名对手按半年数算。
+**Events (step 6)**
+- At most 2 month-end events per month, opportunities included (after senior approval). Events squeezed out are judged again next month; if the cond has passed they are gone (e.g. New Year only in January).
+- A job's `period_random` rolls every period whether the period succeeded or not; each milestone fires once. Successful periods meet the function NPC of the job.
+- Arrest: the loyalty bail and the bar owner milestone's "fine halved" do not stack. Bar bouncer and bootlegging arrest on the spot when the check fails; a sick player is not arrested.
+- Scandal: the newspaper line suppresses for free once a year, 200 suppresses without limit, both decided by the player (`Agent.suppress`); "know a month early" is simplified to "may pay 200 when the scandal happens". An official warning doubles the fame loss of the next scandal and is used up.
+- Creditor: the dock countryman blocks once (the flag records it as used) -> loyalty >= 150 a friend covers it -> fight >= 50 drives him off (crime +10, debt months reset) -> the item with the highest price (price > 0) is taken (its value pays the debt, down to 0) -> fame -10% and exposure.
+- After a refused long contract nothing is offered for 3 months. The long contract's monthly pay comes before the month-end events.
+- Outings: everyone present counts as "met"; when the people present have no chain or resident event to fire, the place's random table is used. The smuggling events mentioned in the dock milestone have no content yet and were not added.
+- Tutoring period (at least one day attended): first "Duv starts writing the script", then the 1/10 tip-off. Duv's "education passed 100/200/300 +5 each" is checked every period after he is known (`education_milestones` of Duv in `romance.json`).
+- Annual events: a rival score >= mine ranks ahead of me. The rivals do not include the easter-egg rival.
+- The birthday date `events.json` evt_birthday.date is null (waiting for the user); null never fires; when it fires Sil and the actress get +3.
+- Detox, leaking news and writing a script are month-start actions (`Story.send_detox` / `leak_news` / `write_script`).
 
-**事件（第 6 步）**
-- 月末每月最多 2 个，包括机遇（排在前辈认可之后）。被挤掉的事件下月重新判，条件过了就没了（例如新年只在 1 月）。
-- 打工的每期随机不论这期成不成功都掷；里程碑每个只触发一次。成功的期认识该工的功能 NPC。
-- 被捕：义气保释和酒吧老板里程碑的“罚款减半”不叠加。看场子、运私酒、酒吧后门没过判定时当场被捕；生病状态不被捕。
-- 丑闻：报馆线免费压每年一次、花 200 压不限次，都由玩家决定压不压（`Agent.suppress`）；“提前一个月知道”简化成丑闻发生时可以花 200 压下。官方警告让下一次丑闻的扣名气加倍，用掉即清。
-- 债主：码头同乡挡一次（旗标记为已用）→ 义气 ≥150 朋友垫上 → 打斗 ≥50 赶走（犯罪 +10，负债月数清零重新数）→ 拿走价格最高的一件物品（价格 >0 的；物品价值抵债，抵到 0 为止）→ 名气 −10% 并曝光。
-- 长约拒绝后 3 个月内不再提。长约月薪在月末事件之前发。
-- 外出：在场的人都记为“认识”；在场的人没有可出的链事件和常驻事件时，改抽地点的随机表。码头里程碑说的“走私类事件”还没有内容，没加。
-- 家教旬（至少上了一天）：先看“Duv 开始写剧本”，再掷 1/10 的告密。Duv 的“教育过 100/200/300 各 +5”在认识他之后每旬检查一次（`romance.json` Duv 的 教育里程碑）。
-- 年度大事：对手分 ≥ 我的分就排在我前面。对手不含彩蛋任丁丁。
-- 生日日期 `events.json` 的 evt_birthday.日期 留 null（等用户给），null 时不触发；触发时 Sil、女明星各 +3。
-- 送去戒、放消息、写剧本都是月初操作（`Story.send_detox` / `leak_news` / `write_script`）。
+**Endings (step 6)**
+- Character score: of the 74 endings of the original only 4 are graded pine/bamboo/plum, the others are plum (-10). The new endings do not say which are graded yet, so all use plum; an ending may add `character: [{cond, tier}]` to override (`scoring.character_tiers` of `endings.json`). In step 18, when writing the ending texts, the model picks a few endings to grade, following the original ratio, without asking the user.
+- The comment only gives the id of the class taken most (reading counts as one class `book`) and of the job done most; the text comes in step 18.
+- Collapse mid-game: the ending is resolved on the spot, only the ending id and grade are recorded, no total score.
 
-**结局（第 6 步）**
-- 品性分：原版 74 个结局里只有 4 个分松竹梅，其余都是梅（−10）。新结局还没定哪些分档，暂时全部按梅；结局可以加 `品性:[{条件,档}]` 覆盖（`endings.json` 评分.品性档）。第 18 步写结局文本时由模型照原版比例挑几个结局分档，不用问用户。
-- 评语只给出最常打的工、最常上的课（看书算一门 `book`）的 id，文字等第 18 步。
-- 中途倒下：当场调用结局判定，只记结局 id 和档次，不算总分。
+**Tables changed for code** (all just GDD rules written as data)
+- `jobs.json`: bootlegging prerequisite gets "or flag.smuggling"; the newspaper helper and the studio office get `success_line_mods` (flag diploma education line -20).
+- `stats.json`: fame decay written as `monthly_decay_pct` 2 and `monthly_decay_min` 1.
+- `habits.json`: new `audition` block with the numbers of GDD section 7 (cards, rounds to win, counter ring, style 130, counter 150/70, rival deck coefficient 30, result tiers).
+- `tools/check_data.py` checks them accordingly.
+- Step 6: `roles.json` `defaults` got the blocks board, talkie, shoot, release, placeholder_gen, script; `stats.json` contract.long_contract (monthly pay 150, 3 house roles, style +10, refusal 3 months); `events.json` month_end_cap 2 and the `date` field of the birthday; `romance.json` Duv's education milestones; `endings.json` scoring.character_tiers. All are numbers already in the GDD.
 
-**为代码改过的数据表**（都是把 GDD 已有的规则写成数据）
-- `jobs.json`：运私酒前置加“或 旗标.走私”；报馆帮工、片厂办公室加 `成功线修正`（旗标“文凭”教育线 −20）。
-- `stats.json`：名气衰减写成 `月衰减百分比` 2、`月衰减最少` 1。
-- `habits.json`：新增 `试镜` 块，放 GDD 第 7 节的数字（张数、赢轮数、克制环、场风 130、克制 150/70、对手组牌系数 30、结果分档）。
-- `tools/check_data.py` 相应加了检查。
-- 第 6 步：`roles.json` 默认 加了 选片板、有声、拍摄、上映、占位生成、剧本 六块；`stats.json` 合同.长约（月薪 250、本厂 3 个、场风 +10、拒绝后 3 个月）；`events.json` 加 月末上限 2 和生日的 日期 字段；`romance.json` Duv 的 教育里程碑；`endings.json` 评分.品性档。都是 GDD 已有的数。
+When the GDD and the JSON disagree, ask the user first.
 
-GDD 和 JSON 不一致时先问用户。
+**Balance round (step 8): code and table changes made for the numbers**
+- Growth of unnamed rivals: every tier of `rivals.json` has a `main_level.level_up_months` list, level = base + number of passed level-up months + random (before: a global "one level per three half-years").
+- `items.json` gained dance shoes (clothing store) and a makeup case (general store), so lover-road gear can be bought.
+- The S line of the endings is in `stats.json` `rep_rules.ending_grade_lines` and `endings.json` `grade_lines`; change both together.
 
-**平衡轮（第 8 步）为数值改的代码和表结构**
-- 无名对手的成长：`rivals.json` 每档 `主色等级.涨级月` 列表，等级 = 基 + 已过的涨级月个数 + 随机（原来是全局的“每三半年一级”）。
-- `items.json` 新增舞鞋（服装店）、化妆箱（杂货店），补情人路可买的装备。
-- 结局 S 线在 `stats.json` 声望规则 和 `endings.json` 档次线 两处，改时一起改。
+## Godot (game/silentstar/, from step 9)
 
-## Godot（game/silentstar/，第 9 步起）
+Godot 4.3, GDScript. The project is in `game/silentstar/`; the logic is in `core/` (independent of any node); the reconciliation script is in `tools/`. `.godot/` is the editor cache and not in git. **The Godot code still uses the old Chinese names until step 9c-2.**
 
-Godot 4.3，GDScript。工程在 `game/silentstar/`，逻辑在 `core/`（不依赖任何节点），对账脚本在 `tools/`。`.godot/` 是编辑器缓存，不进 git。
-
-| 文件 | 对应 Python | 内容 |
+| File | Python counterpart | Content |
 |---|---|---|
-| `core/rng.gd` | `rng.py` | PCG32 两个流。64 位状态拆成高低两个 32 位数算（GDScript 的 int 是有符号 64 位，乘法溢出不可靠）；拆分算法已用 Python 对过 5000 个数 |
-| `core/jsonx.gd` | — | JSON 读写。读：整数值的 float 转回 int（Godot 把数字都读成 float）。写：和 Python `json.dumps(ensure_ascii=False, sort_keys=True, separators=(',',':'))` 逐字节一致 |
-| `core/data.gd` | `data.py` | 读表、建索引。默认读仓库根的 `data/new/`（工程目录往上两级），和 Python 共用一份 |
-| `core/rules.gd` | `rules.py` | 条件、效果、判定、概率。全是静态函数；`extra_vars` 留给第 12 步登记结局用的派生值 |
-| `core/state.gd` | `state.py` | 状态、显示值、声望、指数、存读档 |
-| `tools/trace.gd` | `tools/trace.py` | 按 `tools/trace_cases.json` 输出对账文本 |
+| `core/rng.gd` | `rng.py` | two PCG32 streams. The 64-bit state is split into a high and a low 32-bit number (GDScript ints are signed 64-bit and overflowing multiplication is unreliable); the split algorithm was checked against Python on 5000 numbers |
+| `core/jsonx.gd` | - | JSON read / write. Read: float values that are integers are converted back to int (Godot reads every number as float). Write: byte-identical to Python `json.dumps(ensure_ascii=False, sort_keys=True, separators=(',',':'))` |
+| `core/data.gd` | `data.py` | loads the tables and builds indexes. Reads `data/new/` at the repository root by default (two levels above the project folder), shared with Python |
+| `core/rules.gd` | `rules.py` | conditions, effects, checks, probabilities. All static functions; `extra_vars` is kept for the derived values of step 12 |
+| `core/state.gd` | `state.py` | state, displayed values, reputation, indices, save / load |
+| `tools/trace.gd` | `tools/trace.py` | prints the reconciliation text for `tools/trace_cases.json` |
 
-**移植约定**
-- 脚本之间用 `preload("res://core/xxx.gd")`，不用 `class_name`：`--script` 无界面运行时全局类可能还没注册。
-- Python 的 `State.new(data, seed, origin)` 在 Godot 里是 `State.new(data)` 再 `start(seed, origin)`；`State.loads` 是 `State.new(data)` 再 `loads(s)`。`st.month`、`st.date` 是方法：`st.month()`、`st.date()`。`st.log` 改名 `debug_log`（`log` 是内置函数）。
-- 整数：`tdiv` 向零截断（GDScript 的 `/` 本来就是），`fdiv` 同 Python 的 `//`。
-- 比较：Python 里 int 和 str 用 `==` 得 False，GDScript 会报错，所以 `rules._cmp` 先比类型。
-- 字典的键都是字符串；存档写出时按码位排序，和 Python 一样。
+**Porting conventions**
+- Scripts refer to each other with `preload("res://core/xxx.gd")`, not `class_name`: with `--script` in headless mode the global classes may not be registered yet.
+- Python's `State.new(data, seed, origin)` is `State.new(data)` then `start(seed, origin)` in Godot; `State.loads` is `State.new(data)` then `loads(s)`. `st.month` and `st.date` are methods: `st.month()`, `st.date()`. `st.log` is renamed `debug_log` (`log` is a built-in function).
+- Integers: `tdiv` truncates toward zero (GDScript `/` already does), `fdiv` is Python's `//`.
+- Comparison: Python `==` between an int and a str gives False while GDScript raises an error, so `rules._cmp` compares the types first.
+- Dictionary keys are strings; when writing a save the keys are sorted by code point, like Python.
 
-**对账（第 9 步的完成标准）**，在仓库根目录：
+**Reconciliation (completion standard of step 9)**, from the repository root:
 
 ```
 godot --headless --path game/silentstar --script res://tools/trace.gd -- --out=work/trace_godot.txt
@@ -154,6 +161,6 @@ python3 tools/trace.py --out work/trace_py.txt
 python3 tools/compare_trace.py work/trace_py.txt work/trace_godot.txt
 ```
 
-`compare_trace.py` 只打印第一处不同的行。第 10 步以后的逐月对账也用它，往 `trace_cases.json` 加用例、两边的 trace 各加一段输出即可。
+`compare_trace.py` prints only the first differing line. The month-by-month reconciliation from step 10 on uses it too: add cases to `trace_cases.json` and one output section to each side's trace.
 
-**导出时**：数据表在工程外，导出前要把 `data/new/` 复制进工程（第 13 步处理）。
+**When exporting**: the data tables live outside the project, so `data/new/` must be copied into the project before export (handled in step 13).

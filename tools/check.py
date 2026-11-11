@@ -1,12 +1,12 @@
-"""改完数据表后跑这个：一条命令查完所有问题。
+"""Run this after editing the data tables: one command finds all the problems.
 
-    python3 tools/check.py          （Windows：双击仓库根目录的 检查数据.bat）
+    python3 tools/check.py          (Windows: double-click check_data.bat in the repository root)
 
-依次检查：
-1. JSON 格式：少逗号、多逗号、中文引号这类错误，指出第几行。
-2. 重复：同一张表里两条记录 id 相同，或同一条记录里一个字段写了两遍。
-3. 内容：tools/check_data.py 的全部检查（字段齐全、引用的东西存在、条件和效果写法对）。
-4. 试玩：几种机器人各跑一整局，确认游戏不会跑崩。
+In order:
+1. JSON format: missing commas, extra commas, curly quotes and the like, with the line number.
+2. Duplicates: two records of one table with the same id, or one field written twice in one record.
+3. Content: all checks of tools/check_data.py (fields complete, referenced things exist, conditions and effects well written).
+4. Playthrough: several bots each play a whole game to make sure the game does not crash.
 """
 import json
 import os
@@ -23,14 +23,14 @@ except Exception:
     pass
 
 JSON_HINTS = [
-    ('Illegal trailing comma', '这里多了一个逗号：列表 [ ] 或 { } 里最后一项后面不能有逗号'),
-    ("Expecting ',' delimiter", '这里少了一个英文逗号 ,（上一项和这一项之间要用逗号隔开）'),
-    ('Expecting property name enclosed in double quotes', '多半是上一行末尾多了一个逗号（列表或 {} 里最后一项后面不能有逗号），或者字段名没用英文双引号括起来'),
-    ('Expecting value', '这里缺了值：可能多了一个逗号，或者用了中文引号 “ ”，或者把 null / true / false 写错了'),
-    ("Expecting ':' delimiter", '字段名后面要跟英文冒号 :'),
-    ('Unterminated string', '引号没关上：一对英文双引号 " 要成对出现'),
-    ('Invalid control character', '引号里面不能直接换行；要分段就写成两个字段，或者先写在一行里'),
-    ('Extra data', '文件结尾多了东西：括号多了一个，或者在最外层的 } 后面还写了内容'),
+    ('Illegal trailing comma', 'extra comma here: no comma is allowed after the last item of a list [ ] or { }'),
+    ("Expecting ',' delimiter", 'a comma , is missing here (items must be separated by commas)'),
+    ('Expecting property name enclosed in double quotes', 'most likely the previous line ends with an extra comma (no comma after the last item of a list or {}), or a field name is not wrapped in double quotes'),
+    ('Expecting value', 'a value is missing here: maybe an extra comma, or curly quotes were used, or null / true / false is misspelled'),
+    ("Expecting ':' delimiter", 'a colon : must follow the field name'),
+    ('Unterminated string', 'unclosed quote: double quotes " must come in pairs'),
+    ('Invalid control character', 'a string cannot contain a raw line break; use two fields or keep it on one line'),
+    ('Extra data', 'extra content at the end of the file: one bracket too many, or something after the outermost }'),
 ]
 
 
@@ -39,26 +39,26 @@ def json_problem(path, e):
     ln = e.lineno
     line = lines[ln - 1] if 0 < ln <= len(lines) else ''
     hint = next((h for k, h in JSON_HINTS if e.msg.startswith(k)), e.msg)
-    out = [f'{os.path.basename(path)} 第 {ln} 行第 {e.colno} 个字符：{hint}']
+    out = [f'{os.path.basename(path)} line {ln}, char {e.colno}: {hint}']
     if ln > 1:
         out.append(f'    {ln - 1:>5} | {lines[ln - 2]}')
     out.append(f'    {ln:>5} | {line}')
-    out.append('            ' + ' ' * (e.colno - 1) + '^ 大概在这里')
+    out.append('            ' + ' ' * (e.colno - 1) + '^ about here')
     for s in (lines[ln - 2] if ln > 1 else '', line):
         if any(c in s for c in '“”‘’：，'):
-            out.append('    这附近有中文标点（“ ” ： ，），JSON 里的引号、冒号、逗号都要用英文的')
+            out.append('    non-ASCII punctuation near here (curly quotes, colons, commas); JSON needs plain ASCII quotes, colons and commas')
             break
     return '\n'.join(out)
 
 
 def load_strict(path, problems):
-    """读 JSON，同时找一条记录里写了两遍的字段。"""
+    """Reads JSON and also finds a field written twice in one record."""
     def hook(pairs):
         seen = {}
         for k, v in pairs:
             if k in seen:
-                who = dict(pairs).get('id') or dict(pairs).get('名字') or ''
-                problems.append(f'{os.path.basename(path)}：{("记录 " + str(who) + " 里") if who else "某条记录里"}字段“{k}”写了两遍，只能留一个')
+                who = dict(pairs).get('id') or dict(pairs).get('name') or ''
+                problems.append(f'{os.path.basename(path)}: {("record " + str(who) + ": ") if who else "a record: "}field "{k}" appears twice, keep only one')
             seen[k] = v
         return seen
     with open(path, encoding='utf-8-sig') as fh:
@@ -73,13 +73,13 @@ def step_json():
         p = os.path.join(DATA, n)
         raw = open(p, 'rb').read()
         if raw.startswith(b'\xef\xbb\xbf'):
-            problems.append(f'{n}：文件开头带了 BOM（有的编辑器另存为“UTF-8 with BOM”），请存成不带 BOM 的 UTF-8')
+            problems.append(f'{n}: the file starts with a BOM (some editors save as "UTF-8 with BOM"); save as UTF-8 without BOM')
         try:
             tables[n] = load_strict(p, problems)
         except json.JSONDecodeError as e:
             problems.append(json_problem(p, e))
         except UnicodeDecodeError:
-            problems.append(f'{n}：不是 UTF-8 编码，请用 UTF-8 保存')
+            problems.append(f'{n}: not UTF-8, please save as UTF-8')
     return problems, tables
 
 
@@ -92,7 +92,7 @@ def step_dup(tables):
         for k, v in t.items():
             if not (isinstance(v, list) and v and all(isinstance(x, dict) for x in v)):
                 continue
-            key = 'id' if any('id' in x for x in v) else ('名字' if all('名字' in x for x in v) else None)
+            key = 'id' if any('id' in x for x in v) else ('name' if all('name' in x for x in v) else None)
             if key is None:
                 continue
             ids = {}
@@ -101,16 +101,16 @@ def step_dup(tables):
                 if i is None:
                     continue
                 if i in ids:
-                    problems.append(f'{n} 的“{k}”里有两条 {key} 都是 {i}：复制一条改内容时别忘了改 {key}')
+                    problems.append(f'{n} "{k}": two entries have the same {key} {i}; when copying an entry remember to change its {key}')
                 ids[i] = 1
-                if n in ('events.json', 'outing.json') and k == '事件' and key == 'id':
+                if n in ('events.json', 'outing.json') and k == 'event' and key == 'id':
                     if i in seen_event and seen_event[i] != n:
-                        problems.append(f'事件 id {i} 在 events.json 和 outing.json 里都有，事件 id 要全局唯一')
+                        problems.append(f'event id {i} is in both events.json and outing.json; event ids must be globally unique')
                     seen_event[i] = n
     return problems
 
 
-KIND = {bool: '真假（true / false）', int: '数字（不加引号）', str: '文字（加英文双引号）', list: '列表 [ ]', dict: '{ } 块'}
+KIND = {bool: 'boolean (true / false)', int: 'number (no quotes)', str: 'string (in double quotes)', list: 'list [ ]', dict: '{ } block'}
 
 
 def kind(v):
@@ -118,8 +118,8 @@ def kind(v):
 
 
 def step_types(tables):
-    """同一张表的同一个字段，别的记录都是数字、这条却是文字之类：多半是笔误。
-    只比数字、文字、真假；null 和列表、{} 块不管（概率、条件这些本来就有几种写法）。"""
+    """For the same field of one table, the other records have numbers but this one has a string and the like: most likely a typo.
+        Only compares numbers, strings and booleans; null, lists and {} blocks are ignored (prob, cond and the like legitimately have several forms)."""
     problems = []
     for n, t in tables.items():
         if not isinstance(t, dict):
@@ -140,19 +140,19 @@ def step_types(tables):
                     continue
                 main, m = max(count.items(), key=lambda a: a[1])
                 if m < 3 or m < len(lst) * 0.8:
-                    continue      # 本来就混着写的字段（比如 条件 可以是 [] 也可以是别的），不管
+                    continue      # fields that are legitimately mixed (for example cond may be [] or something else) are ignored
                 if main not in (int, str, bool):
                     continue
                 for kd, x in lst:
                     if kd != main and kd in (int, str, bool):
-                        who = x.get('id') or x.get('名字') or '某条'
-                        problems.append(f'{n}：{who} 的“{f}”写成了{KIND.get(kd, "?")}，这张表别的记录都是{KIND[main]}，'
-                                        f'现在的值是 {json.dumps(x[f], ensure_ascii=False)}')
+                        who = x.get('id') or x.get('name') or 'a record'
+                        problems.append(f'{n}: {who} field "{f}" is a {KIND.get(kd, "?")}, but the other records of this table use {KIND[main]},'
+                                        f'the current value is {json.dumps(x[f], ensure_ascii=False)}')
     return problems
 
 
 def step_content():
-    """跑 check_data.py，把它的输出原样带回来。"""
+    """Runs check_data.py and brings its output back unchanged."""
     import io
     import contextlib
     buf = io.StringIO()
@@ -164,14 +164,14 @@ def step_content():
         ok = not e.code
     except KeyError as e:
         ok = False
-        buf.write(f'有一条记录少了字段 {e}。把同一张表里别的记录拿来对照，看少写了哪个字段。\n')
+        buf.write(f'a record is missing field {e}. Compare it with the other records of the same table to see which field is missing.\n')
         buf.write(_where())
     except Exception as e:
         ok = False
-        buf.write(f'检查时出错：{type(e).__name__}: {e}\n多半是某个字段的值类型不对（例如该写数字的地方写成了 "文字"，或该写列表 [] 的地方写成了单个值）。\n')
+        buf.write(f'error while checking: {type(e).__name__}: {e}\nMost likely a field has the wrong value type (for example a "string" where a number belongs, or a single value where a list [] belongs).\n')
         buf.write(_where())
     lines = [x for x in buf.getvalue().split('\n') if x.strip()]
-    errs = [x for x in lines if not x.startswith(('通过', '注：', '失败：'))]
+    errs = [x for x in lines if not x.startswith(('passed', 'note: ', 'failed: '))]
     return ok, errs, lines
 
 
@@ -179,7 +179,7 @@ def _where():
     tb = traceback.extract_tb(sys.exc_info()[2])
     fr = [f for f in tb if f.filename.endswith('check_data.py')]
     if fr:
-        return f'（出错的检查在 tools/check_data.py 第 {fr[-1].lineno} 行：{fr[-1].line}）\n'
+        return f'(the failing check is at tools/check_data.py line {fr[-1].lineno}: {fr[-1].line})\n'
     return ''
 
 
@@ -193,38 +193,38 @@ def step_play():
             except Exception as e:
                 tb = traceback.extract_tb(sys.exc_info()[2])
                 fr = [f for f in tb if os.sep + 'sim' + os.sep in f.filename]
-                at = f'{os.path.relpath(fr[-1].filename, ROOT)} 第 {fr[-1].lineno} 行' if fr else '?'
-                problems.append(f'机器人“{cls.name}”第 {seed} 局跑到一半出错：{type(e).__name__}: {e}（{at}）')
+                at = f'{os.path.relpath(fr[-1].filename, ROOT)} line {fr[-1].lineno}' if fr else '?'
+                problems.append(f'bot "{cls.name}" crashed in game {seed}: {type(e).__name__}: {e} ({at})')
                 break
     return problems
 
 
 def main():
-    print('1/4 检查 JSON 格式……')
+    print('1/4 checking JSON format...')
     problems, tables = step_json()
     if problems:
         print('\n\n'.join(problems))
-        print('\n没通过：先把上面的格式错误改掉，再跑一次。')
+        print('\nFAILED: fix the format errors above, then run again.')
         return 1
-    print('2/4 检查重复和类型……')
+    print('2/4 checking duplicates and types...')
     problems = step_dup(tables) + step_types(tables)
     if problems:
         print('\n'.join(problems))
-        print('\n没通过：先把上面这些改掉，再跑一次。')
+        print('\nFAILED: fix the problems above, then run again.')
         return 1
-    print('3/4 检查内容……')
+    print('3/4 checking content...')
     ok, errs, lines = step_content()
     if not ok:
         print('\n'.join(errs))
-        print(f'\n没通过：内容有 {len(errs)} 处问题。每行开头是文件名，后面是哪一条、什么问题。')
+        print(f'\nFAILED: {len(errs)} content problems. Each line starts with the file name, then which record and what is wrong.')
         return 1
-    print('4/4 机器人试玩……')
+    print('4/4 bot playthrough...')
     problems = step_play()
     if problems:
         print('\n'.join(problems))
-        print('\n没通过：表本身没问题，但游戏跑的时候出错了。多半是新加的内容用到了代码还不支持的写法，把上面这段发给模型。')
+        print('\nFAILED: the tables are fine but the game crashed while running. Most likely newly added content uses something the code does not support yet; send the text above to the model.')
         return 1
-    print('\n全部通过，可以提交。')
+    print('\nAll checks passed, ready to commit.')
     return 0
 
 

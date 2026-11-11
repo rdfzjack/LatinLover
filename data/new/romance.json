@@ -1,213 +1,225 @@
 {
- "说明": "好感 0-100；感情线四条，功能 NPC 挂在打工接口上（5.4）",
- "npc": [
+ "note": "favor 0-100; four romance lines; function NPCs hang off the job hooks (5.4)",
+ "npcs": [
   {
-   "名字": "Sil",
-   "类": "感情线",
-   "好感初值": 0,
-   "开局认识": true,
-   "性别": "男",
-   "身份": "秘书",
-   "好感来源": "在家休息每旬 +2；让他劝 +2；新年、生日 +3；试镜演砸后 +2；戒断剧情 +10",
-   "归宿条件": [
+   "id": "sil",
+   "name": "Sil",
+   "class": "romance",
+   "favor_init": 0,
+   "known_at_start": true,
+   "gender": "male",
+   "identity": "秘书",
+   "favor_sources": "+2 per period resting at home; +2 when he persuades; +3 on New Year and birthday; +2 after a botched audition; +10 for the withdrawal story",
+   "destiny_cond": [
     [
      [
-      "好感.Sil",
+      "favor.sil",
       "==",
       100
      ],
      [
-      "相貌",
+      "looks",
       ">=",
       200
      ],
      [
-      "自律",
+      "discipline",
       ">=",
       100
      ]
     ]
    ],
-   "原版对应": "管家（感受条件换成自律）[推N42]"
+   "original": "Butler (the feeling condition replaced by discipline) [inferred N42]"
   },
   {
-   "名字": "Duv",
-   "类": "感情线",
-   "好感初值": 0,
-   "开局认识": false,
-   "性别": "男",
-   "身份": "家教",
-   "认识途径": "家教第 1 旬",
-   "好感来源": "家教每旬 +2；教育过 100/200/300 各 +5；市中心的链事件和闲谈；请他写剧本 +3",
-   "归宿条件": [
+   "id": "duv",
+   "name": "Duv",
+   "class": "romance",
+   "favor_init": 0,
+   "known_at_start": false,
+   "gender": "male",
+   "identity": "家教",
+   "met_via": "tutor_period_1",
+   "favor_sources": "+2 per tutoring period; +5 each when education passes 100/200/300; downtown chain events and chats; +3 when asked to write a script",
+   "destiny_cond": [
     [
      [
-      "好感.Duv",
+      "favor.duv",
       ">=",
       90
      ],
      [
-      "教育",
+      "education",
       ">=",
       300
      ],
      [
-      "谈吐",
+      "speech",
       ">=",
       60
      ],
      [
-      "犯罪",
+      "crime",
       "<",
       100
      ]
     ]
    ],
-   "原版对应": "形状同王子 [推N42]",
-   "教育里程碑": {
-    "线": [
+   "original": "Same shape as the Prince [inferred N42]",
+   "education_milestones": {
+    "line": [
      100,
      200,
      300
     ],
-    "效果": "好感.Duv+5"
+    "effect": "favor.duv+5"
    }
   },
   {
-   "名字": "女明星",
-   "类": "感情线",
-   "好感初值": 0,
-   "开局认识": true,
-   "性别": "女",
-   "身份": "同行，好友，出身也穷（名字占位）",
-   "好感来源": "同片合作每部 +8（角色数据里标 女主=女明星）；明星助理、保镖；片厂区的链事件；生日 +3",
-   "归宿条件": [
+   "id": "actress",
+   "name": "女明星",
+   "class": "romance",
+   "favor_init": 0,
+   "known_at_start": true,
+   "gender": "female",
+   "identity": "同行，好友，出身也穷（名字占位）",
+   "favor_sources": "+8 per co-starring film (roles mark lead=actress in their data); star assistant, bodyguard; studio-area chain events; +3 on birthday",
+   "destiny_cond": [
     [
      [
-      "好感.女明星",
+      "favor.actress",
       ">=",
       90
      ],
      [
-      "相貌",
+      "looks",
       ">=",
       200
      ],
      [
-      "义气",
+      "loyalty",
       ">=",
       200
      ],
      [
-      "自律",
+      "discipline",
       ">=",
       30
      ],
      [
-      "犯罪",
+      "crime",
       "<",
       100
      ]
     ]
    ],
-   "原版对应": "王子"
+   "original": "Prince"
   },
   {
-   "名字": "第四人",
-   "类": "感情线",
-   "好感初值": 0,
-   "开局认识": false,
-   "性别": "女",
-   "身份": "留空",
-   "好感来源": "接口留空（富婆是功能 NPC，要不要升成第四人由用户定）",
-   "归宿条件": null,
-   "留空": true
+   "id": "fourth",
+   "name": "第四人",
+   "class": "romance",
+   "favor_init": 0,
+   "known_at_start": false,
+   "gender": "female",
+   "identity": null,
+   "favor_sources": "Hook left blank (the rich widow is a function NPC; the user decides whether she becomes the fourth)",
+   "destiny_cond": null,
+   "placeholder": true
   },
   {
-   "名字": "同乡工头",
-   "类": "功能",
-   "好感初值": 0,
-   "开局认识": false,
-   "认识途径": "码头搬货"
+   "id": "foreman",
+   "name": "同乡工头",
+   "class": "function",
+   "favor_init": 0,
+   "known_at_start": false,
+   "met_via": "job_dock"
   },
   {
-   "名字": "神父",
-   "类": "功能",
-   "好感初值": 0,
-   "开局认识": false,
-   "认识途径": "教堂义工"
+   "id": "priest",
+   "name": "神父",
+   "class": "function",
+   "favor_init": 0,
+   "known_at_start": false,
+   "met_via": "job_church"
   },
   {
-   "名字": "画家",
-   "类": "功能",
-   "好感初值": 0,
-   "开局认识": false,
-   "认识途径": "艺术家模特"
+   "id": "painter",
+   "name": "画家",
+   "class": "function",
+   "favor_init": 0,
+   "known_at_start": false,
+   "met_via": "job_model_art"
   },
   {
-   "名字": "酒吧老板",
-   "类": "功能",
-   "好感初值": 0,
-   "开局认识": false,
-   "认识途径": "酒吧看场子"
+   "id": "bar_owner",
+   "name": "酒吧老板",
+   "class": "function",
+   "favor_init": 0,
+   "known_at_start": false,
+   "met_via": "job_bar"
   },
   {
-   "名字": "片厂老板",
-   "类": "功能",
-   "好感初值": 0,
-   "开局认识": false,
-   "认识途径": "片厂办公室"
+   "id": "studio_boss",
+   "name": "片厂老板",
+   "class": "function",
+   "favor_init": 0,
+   "known_at_start": false,
+   "met_via": "job_studio"
   },
   {
-   "名字": "编辑",
-   "类": "功能",
-   "好感初值": 0,
-   "开局认识": false,
-   "认识途径": "报馆帮工"
+   "id": "editor",
+   "name": "编辑",
+   "class": "function",
+   "favor_init": 0,
+   "known_at_start": false,
+   "met_via": "job_news"
   },
   {
-   "名字": "富婆",
-   "类": "功能",
-   "好感初值": 0,
-   "开局认识": false,
-   "认识途径": "舞厅伴舞"
+   "id": "rich_widow",
+   "name": "富婆",
+   "class": "function",
+   "favor_init": 0,
+   "known_at_start": false,
+   "met_via": "job_ballroom"
   },
   {
-   "名字": "动作片导演",
-   "类": "功能",
-   "好感初值": 0,
-   "开局认识": false,
-   "认识途径": "替身"
+   "id": "action_director",
+   "name": "动作片导演",
+   "class": "function",
+   "favor_init": 0,
+   "known_at_start": false,
+   "met_via": "job_stunt"
   }
  ],
- "规则": {
-  "好感范围": [
+ "rules": {
+  "favor_range": [
    0,
    100
   ],
-  "义气加成": {
-   "条件": [
+  "loyalty_bonus": {
+   "cond": [
     [
      [
-      "义气",
+      "loyalty",
       ">=",
       200
      ]
     ]
    ],
-   "说明": "事件给的好感正增量每次多 1（日程里“每旬 +1”那类不算）"
+   "note": "Positive favor gains from events get +1 each time (fixed \"+1 per period\" gains in schedules do not count)"
   },
-  "恋爱状态": {
-   "持续月数": 3,
-   "结束条件": "满 3 个月且相貌不是最高基础属性时自动结束",
-   "每月好感": -2,
-   "作用线": [
-    "Sil",
-    "Duv",
-    "女明星",
-    "第四人"
+  "love_state": {
+   "duration_months": 3,
+   "end_cond": "Ends automatically after 3 months when looks is not the highest base attribute",
+   "monthly_favor": -2,
+   "lines": [
+    "sil",
+    "duv",
+    "actress",
+    "fourth"
    ]
   },
-  "归宿优先": "同时满足多条时好感最高者；相同按 Sil、Duv、女明星、第四人"
+  "destiny_priority": "When several hold, the one with the highest favor; ties go by sil, duv, actress, fourth"
  }
 }
