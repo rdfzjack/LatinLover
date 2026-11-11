@@ -15,4 +15,4 @@
 | 3 表格编辑和用户指南 | 已做（第 9b 步） | 用户选了直接改 JSON（不做 Excel）。指南 `data/USER_GUIDE.md`；改完双击 `check_data.bat`（即 `tools/check.py`）。顺手把机遇的效果统一写到 `opportunities.json`（原来两处，只有 events.json 那处生效），游戏结果不变 |
 | 4 整理 README 里要用户确认的事 | 已做（第 9 步时） | README 只留必须用户定的设计决策；内容类（名字、生日、文本）放 DESIGN_NOTES 末尾“还要用户给的”，不催 |
 | 5 四路等级手动升级 | 取消 | 用户后来决定不做，等级照旧随声望自动变 |
-| 6 要做多语言（对话里提的） | 9c-1 已做（id 和字段名全英文，对照表 `design/GLOSSARY.md`），9c-2 待做（语言文件、Godot、指南） | PLAN 第 9c 步，规格 `design/STEP9C_IDS_AND_LOCALE.md`，用 Opus。中文名既是 id 又是显示文字的问题从第 2 步建表开始，这一步把 id 改英文、显示文字搬到语言文件 |
+| 6 要做多语言（对话里提的） | 9c-1、9c-2 已做（id 和字段名全英文，对照表 `design/GLOSSARY.md`；语言文件、Godot、指南） | PLAN 第 9c 步，规格 `design/STEP9C_IDS_AND_LOCALE.md`，用 Opus。中文名既是 id 又是显示文字的问题从第 2 步建表开始，这一步把 id 改英文、显示文字搬到语言文件 |

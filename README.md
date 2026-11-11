@@ -4,9 +4,9 @@
 
 ## 现在做到哪
 
-- **PLAN 第 1–9 步和 8b、9b、9c 已完成。下一步是第 10 步**。数据、`sim/` 和 Godot 的 `core/` 里的 id、字段名全是英文（对照表 `design/GLOSSARY.md`），中文只在数据表的显示字段里；`data/locale/text.csv` 由 `tools/extract_text.py` 生成（`tools/check.py` 会跑它），`data/USER_GUIDE.md` 已按新写法用英文重写。**还欠一件事：9c-2 的环境装不了 Godot，Godot 对账（命令在 `design/IMPL_NOTES.md` 的 Godot 一节）没跑过，Godot 代码也没真正执行过**；有 Godot 的环境里先跑这个，再开始第 10 步。
+- **PLAN 第 1–9 步和 8b、9b、9c 已完成。下一步是第 10 步**。数据、`sim/` 和 Godot 的 `core/` 里的 id、字段名全是英文（对照表 `design/GLOSSARY.md`），中文只在数据表的显示字段里；`data/locale/text.csv` 由 `tools/extract_text.py` 生成（`tools/check.py` 会跑它），`data/USER_GUIDE.md` 已按新写法用英文重写。Godot 对账（命令在 `design/IMPL_NOTES.md` 的 Godot 一节）已通过。
 - 用户会自己改 `data/new/` 的表（指南 `data/USER_GUIDE.md`）。开工先跑 `python3 tools/check.py`，不通过先告诉用户。
-- 第 9 步：Godot 工程 `game/silentstar/` 有了数据加载、随机数、状态、条件和效果、存读档，和 Python 对账逐字节一致（命令在 `design/IMPL_NOTES.md` 末尾）。
+- 第 9 步：Godot 工程 `game/silentstar/` 有了数据加载、随机数、状态、条件和效果、存读档，和 Python 对账逐字节一致（命令在 `design/IMPL_NOTES.md` 的 Godot 一节）。
 - 股票系统已删；休息只剩在家（Sil 陪着）和外出（选去处）两种（`design/CHANGE.md`）。
 - `sim/`（Python 试算器）能从开局跑到结局，数值调过一轮。第 8 步还留了三处数值要修，见 `design/BALANCE_LOG.md` 的“下一轮要修的”。
 - 用户要等第 13、14 步有界面以后才能自己试玩。角色、事件、NPC、文本大多是占位（第 16–18 步补）。
@@ -61,7 +61,7 @@ python3 -m sim.report
 python3 -m sim.story --seed 1 --origin 0,1,2 --plan class_acting,job_dock,rest_home
 ```
 
-第三条每种机器人跑 200 局，约 25 秒，方括号里是目标；`--n` 改局数，`--bots` 选机器人，`--no-buy` 不买装备。第四条用固定日程跑一局，每月一行状态。Godot 对账命令见 `design/IMPL_NOTES.md` 末尾。`python3 -m sim.month` 只跑日程，`python3 -m sim.audition` 重算 GDD 7.7 的胜率表。
+第三条每种机器人跑 200 局，约 25 秒，方括号里是目标；`--n` 改局数，`--bots` 选机器人，`--no-buy` 不买装备。第四条用固定日程跑一局，每月一行状态。Godot 对账命令见 `design/IMPL_NOTES.md` 的 Godot 一节。`python3 -m sim.month` 只跑日程，`python3 -m sim.audition` 重算 GDD 7.7 的胜率表。
 
 ## 用户定过的事（不要改）
 
