@@ -28,15 +28,15 @@ class TestClass(unittest.TestCase):
         # 1926-01 上旬有 2 个周日（3、10 日），上课 8 天
         st = bare(); st.money = 1000
         S.run_period(st, 0, 'class_boxing', H)
-        self.assertEqual(st.money, 1000 - 8 * 12)
+        self.assertEqual(st.money, 1000 - 8 * 9)
         self.assertEqual(st.attr['疲劳'], 8)
         self.assertEqual(st.cnt('期数.硬汉'), 1)
 
     def test_no_money_days(self):
         st = bare(); st.money = 30
         S.run_period(st, 0, 'class_boxing', H)
-        self.assertEqual(st.money, 6)
-        self.assertEqual(st.cnt('计数.没钱上课日'), 6)
+        self.assertEqual(st.money, 3)
+        self.assertEqual(st.cnt('计数.没钱上课日'), 5)
         st = bare(); st.money = 0
         S.run_period(st, 0, 'class_boxing', H)
         self.assertEqual(st.cnt('旬数.class_boxing'), 0)
@@ -72,7 +72,7 @@ class TestBook(unittest.TestCase):
         self.assertIsNone(S.validate(st, 'book_tantu_1'))
         rec = Rec()
         S.run_period(st, 0, 'book_tantu_1', rec)
-        self.assertEqual((st.skill['谈吐'], st.books['book_tantu_1']), (8, 27))
+        self.assertEqual((st.skill['谈吐'], st.books['book_tantu_1']), (12, 23))
         for _ in range(4):
             S.run_period(st, 0, 'book_tantu_1', rec)
         self.assertEqual(st.skill['谈吐'], 35)
@@ -181,8 +181,8 @@ class TestRest(unittest.TestCase):
         st = bare(); st.attr['疲劳'] = 200; st.money = 13
         rec = Rec()
         S.run_period(st, 0, 'rest_outing@place_seaside', rec)
-        # 4/天，前 3 天付得起：-10×3，其余 7 天 -5
-        self.assertEqual((st.money, st.attr['疲劳']), (1, 200 - 30 - 35))
+        # 10/天，只有第 1 天付得起：-10，其余 9 天 -5
+        self.assertEqual((st.money, st.attr['疲劳']), (3, 200 - 10 - 45))
         self.assertEqual(rec.calls, [('outing', 'place_seaside')])
         self.assertEqual(st.cnt('计数.逛街.place_seaside'), 1)
         self.assertIsNotNone(S.validate(st, 'rest_outing'))

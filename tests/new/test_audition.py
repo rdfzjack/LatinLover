@@ -94,8 +94,9 @@ class TestOpponent(unittest.TestCase):
         r = A.unnamed_rival(st, '大', main_level=7, probs=[15, 60, 10, 15])
         self.assertEqual(r['等级'], [1, 7, 1, 5])
         self.assertEqual(r['名气'], 300 + 15 * 7)
-        st.ym = 18   # 1927-07 涨一级：h = 3
-        self.assertEqual(A.half_years(st) // 3, 1)
+        # 中片对手：基 4，1926-10、1927-07、1928-07 各涨一级，随机 −1..+1
+        st.ym = D.month_index['1928-07']
+        self.assertIn(A.unnamed_rival(st, '中', probs=[15, 60, 10, 15])['等级'][1], (6, 7, 8))
 
     def test_named(self):
         st = bare()
@@ -103,7 +104,7 @@ class TestOpponent(unittest.TestCase):
         r = A.named_rival(st, 'rival_jilbo')
         self.assertEqual((r['等级'], r['名气']), ([4, 8, 3, 2], 650))
         st.ym = D.month_index['1929-02']
-        self.assertEqual(A.named_rival(st, 'rival_fanban')['等级'], [7, 5, 3, 6])
+        self.assertEqual(A.named_rival(st, 'rival_fanban')['等级'], [8, 5, 3, 8])
         self.assertEqual(A.named_rival(st, 'rival_fanban')['名气'], 750)   # 名气沿用
         st.ym = D.month_index['1927-08']
         self.assertEqual(A.named_rival(st, 'rival_valen')['id'], 'rival_valen')

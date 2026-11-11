@@ -168,7 +168,7 @@ class TestCodeEvents(unittest.TestCase):
         events.month_end(story, st)
         events.month_end(story, st)
         self.assertEqual([r['id'] for r in story.log].count('opp_senior_shouwan'), 1)
-        self.assertEqual(st.corr['手腕'], 20)
+        self.assertEqual(st.corr['手腕'], 10)
 
 
 class TestScheduleEvents(unittest.TestCase):
@@ -223,7 +223,7 @@ class TestScheduleEvents(unittest.TestCase):
         story = Story()
         rec = events.annual(story, st)
         self.assertEqual((rec['场合'], rec['名次']), ('annual_yinghan', 1))
-        self.assertEqual((st.corr['硬汉'], st.money), (999 + 40, 2000))
+        self.assertEqual((st.corr['硬汉'], st.money), (999 + 20, 1000 + 500))
 
         class Rest(SimpleAgent):
             def annual(self, st, opts): return None

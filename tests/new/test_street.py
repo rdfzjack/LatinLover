@@ -20,12 +20,12 @@ class TestStreet(unittest.TestCase):
         self.assertNotIn('book_tantu_2', T.shelf(st, '书店'))   # 1926-08 才上架
         st.ym = 7
         self.assertIn('book_tantu_2', T.shelf(st, '书店'))
-        self.assertEqual(T.buy(st, '书店', 'book_tantu_1'), 5)
+        self.assertEqual(T.buy(st, '书店', 'book_tantu_1'), 15)
         self.assertEqual(st.books['book_tantu_1'], 35)
         with self.assertRaises(StreetError):
             T.buy(st, '书店', 'book_tantu_1')
         del st.books['book_tantu_1']; st.read_books.append('book_tantu_1')
-        self.assertEqual(T.sell(st, 'book_tantu_1'), 2)
+        self.assertEqual(T.sell(st, 'book_tantu_1'), 7)
         with self.assertRaises(StreetError):
             T.buy(st, '杂货店', 'book_tantu_1')
 
@@ -37,7 +37,7 @@ class TestStreet(unittest.TestCase):
             T.equip(st, '怀表')          # 配饰槽 2 个
         with self.assertRaises(StreetError):
             T.sell(st, '拳套')           # 两件都装着
-        self.assertEqual(st.val('打斗'), 10 + 8 + 20)
+        self.assertEqual(st.val('打斗'), 10 + 2 + 10)
         T.unequip(st, '拳套')
         self.assertEqual(T.sell(st, '拳套'), 3)
         with self.assertRaises(StreetError):

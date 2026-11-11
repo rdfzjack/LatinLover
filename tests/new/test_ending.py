@@ -42,7 +42,7 @@ CASES = [
     ('dark_con', dict(attr={'犯罪': 400, '相貌': 150}, skill={'谈判': 70}, rep={'手腕': 300})),
     ('dark_prison', dict(attr={'犯罪': 400}, rep={'文化': 300})),
     # 演员（名气 ≥300）
-    ('act_legend', dict(attr={'名气': 300}, rep={'情人': 421})),
+    ('act_legend', dict(attr={'名气': 300}, rep={'情人': 451})),
     ('act_lowbudget', dict(attr={'名气': 300}, rep={'情人': 381}, count={'计数.低成本': 4}, skill={'谈吐': 40})),
     ('act_undefined', dict(attr={'名气': 300}, rep={'情人': 311}, skill={'谈吐': 40},
                            tags={'西部': 1, '浪漫': 1, '文艺': 1, '犯罪': 1, '喜剧': 1, '宗教': 2})),
@@ -56,7 +56,7 @@ CASES = [
     ('act_second', dict(attr={'名气': 300}, rep={'情人': 300}, skill={'谈吐': 40})),
     ('act_fallback', dict(attr={'名气': 300}, rep={'情人': 381}, skill={'谈吐': 40})),
     # 万能（四路极差 <50）
-    ('all_studio', dict(rep={'硬汉': 430, '情人': 425, '文化': 421, '手腕': 440})),
+    ('all_studio', dict(rep={'硬汉': 460, '情人': 455, '文化': 451, '手腕': 470})),
     ('all_director', dict(rep={'硬汉': 300, '情人': 311, '文化': 300, '手腕': 300})),
     ('all_job_formal', dict(rep={'硬汉': 220, '情人': 211, '文化': 200, '手腕': 200}, count={'成功期数.job_dock': 5})),
     ('all_job_temp', dict(rep={'硬汉': 100, '情人': 90, '文化': 80, '手腕': 100}, count={'成功期数.job_bar': 6})),
@@ -77,7 +77,7 @@ CASES = [
     ('lover_pinup', dict(rep={'情人': 100}, attr={'相貌': 150})),
     ('lover_gigolo', dict(rep={'情人': 100}, attr={'相貌': 149})),
     # 文化
-    ('cult_writer', dict(rep={'文化': 421}, skill={'创作': 60, '审美': 50}, attr={'自律': 50})),
+    ('cult_writer', dict(rep={'文化': 451}, skill={'创作': 60, '审美': 50}, attr={'自律': 50})),
     ('cult_photog', dict(rep={'文化': 381}, skill={'创作': 40, '审美': 50}, attr={'自律': 50})),
     ('cult_screenwriter', dict(rep={'文化': 311}, attr={'自律': 50})),
     ('cult_tabloid', dict(rep={'文化': 381}, attr={'自律': 49})),
