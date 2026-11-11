@@ -115,7 +115,7 @@ def unnamed_rival(st, tier, main_level=None, probs=None):
     t = next(x for x in r['档'] if x['档次'] == tier)
     h = half_years(st)
     if main_level is None:
-        L = t['主色等级']['基'] + h // 3 * t['主色等级']['每三半年'] + g.r(*t['主色等级']['随机'])
+        L = t['主色等级']['基'] + sum(1 for m in t['主色等级']['涨级月'] if st.date >= m) + g.r(*t['主色等级']['随机'])
     else:
         L = main_level
     L = max(1, L)

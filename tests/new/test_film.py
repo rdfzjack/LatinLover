@@ -45,7 +45,7 @@ class TestFilm(unittest.TestCase):
         self.assertEqual(f['拍摄日'], days)
         self.assertEqual(f['成功日'], days)                     # 体力 200、疲劳低，天天成功
         self.assertEqual(f['表现'], 500 + 500 + 50 * 2)         # P = 1.1
-        self.assertEqual(f['片酬'], 800 * 440 // 400)           # 教育 ≥100，无合同折扣
+        self.assertEqual(f['片酬'], 800 * (600 + 40) // 600)           # 教育 ≥100，无合同折扣
         self.assertEqual(st.money, m0 + f['片酬'])
         self.assertEqual(f['状态'], '待映')
         self.assertEqual(f['上映'], 4)
@@ -85,7 +85,7 @@ class TestFilm(unittest.TestCase):
         self.assertEqual((res['F'], res['T'], res['S']), (1000, 1000, 100000))
         self.assertEqual(res['名气'], 30)
         self.assertEqual(res['分红'], 200)
-        self.assertEqual(st.corr['硬汉'], 5)
+        self.assertEqual(st.corr['硬汉'], 4)
         self.assertEqual(st.tags['西部'], 1)
         self.assertEqual(st.cnt('计数.低成本'), 0)               # 中片 -1，最低 0
         self.assertEqual(st.attr['名气'], 130)
@@ -97,7 +97,7 @@ class TestFilm(unittest.TestCase):
         res = self._released(st, role(), P=1200)
         self.assertEqual(res['S'], 100 * 1200 * 1200 * 1150 // 1000000)
         self.assertTrue(res['大卖'])
-        self.assertEqual(st.corr['硬汉'], 10)                   # 大卖翻倍
+        self.assertEqual(st.corr['硬汉'], 8)                    # 大卖翻倍
         st = st0()
         st.attr['体力'] = 50                                    # 契合 0.7
         res = self._released(st, role(), P=500)

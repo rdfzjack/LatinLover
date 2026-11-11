@@ -7,7 +7,7 @@ class TestState(unittest.TestCase):
     def test_base_reputation(self):
         st = bare()
         # 硬汉 = 打斗 10 + 体力加成 min(80/10, 30)=8 + 骑马驾驶 10 + 胆识 5
-        self.assertEqual({r: st.rep(r) for r in D.roads}, {'硬汉': 33, '情人': 50, '文化': 10, '手腕': 20})
+        self.assertEqual({r: st.rep(r) for r in D.roads}, {'硬汉': 27, '情人': 50, '文化': 10, '手腕': 20})
         self.assertEqual(st.level('情人'), 2)
         self.assertEqual(st.fame_tier(), 1)
 
@@ -27,7 +27,7 @@ class TestState(unittest.TestCase):
     def test_fight_bonus(self):
         st = bare()
         st.attr['体力'] = 500
-        self.assertEqual(st.val('打斗'), 10 + 30)
+        self.assertEqual(st.val('打斗'), 10 + 10)
 
     def test_clothing(self):
         st = bare()
@@ -41,11 +41,11 @@ class TestState(unittest.TestCase):
     def test_held_exclusive_and_accessory(self):
         st = bare()
         st.items += ['福特车', '跑车', '相机', '相机', '拳套']
-        self.assertEqual(st.val('骑马驾驶'), 10 + 15)   # 车只算最贵的一辆
-        self.assertEqual(st.val('审美'), 5 + 15)        # 同一件持有两个只算一次
-        self.assertEqual(st.val('打斗'), 18)            # 配饰没装上不算
+        self.assertEqual(st.val('骑马驾驶'), 10 + 5)    # 车只算最贵的一辆
+        self.assertEqual(st.val('审美'), 5 + 6)         # 同一件持有两个只算一次
+        self.assertEqual(st.val('打斗'), 12)            # 配饰没装上不算
         st.equip['配饰'].append('拳套')
-        self.assertEqual(st.val('打斗'), 28)
+        self.assertEqual(st.val('打斗'), 17)
 
     def test_indices(self):
         st = bare()

@@ -103,7 +103,8 @@ def est_of(d):
 # ---------- 日程的小工具 ----------
 CRIME_JOBS = ('job_bootleg', 'job_escort', 'job_bar')    # 赚钱用的工里先排除的
 THRESH = {'大': 0.12, '中': 0.2, '小': 0.0}                # 选角色：胜率估计低于这条线就不去
-ROAD_PLACE = {'硬汉': 'place_dock', '情人': 'place_studio', '文化': 'place_downtown', '手腕': 'place_studio'}
+ROAD_PLACE = {'硬汉': 'place_dock', '情人': 'place_downtown', '文化': 'place_downtown', '手腕': 'place_studio'}
+ROAD_JOBS = {'文化': ('job_news', 'job_model_art')}      # 缺钱时先打本路的工（文化路的两个机遇要这两种工的期数）
 
 
 def workdays(st, i):
@@ -126,11 +127,31 @@ def can_do_job(st, jid, margin=10):
     return all(st.val(k) - margin >= v for k, v in schedule.job_lines(st, j))
 
 
+def best_equip(st, road):
+    """把持有的服装、配饰换成让 road 声望最高的一套，返回换完的声望。"""
+    d = st.d
+    cl = [None] + sorted({i for i in st.items if d.items[i]['槽'] == '服装'})
+    ac = sorted({i for i in st.items if d.items[i]['槽'] == '配饰'})
+    n = d.t['items']['规则']['配饰槽']
+    best = None
+    for c in cl:
+        for k in range(min(n, len(ac)), -1, -1):
+            for a in itertools.combinations(ac, k):
+                st.equip = {'服装': c, '配饰': list(a)}
+                r = st.rep(road)
+                if best is None or r > best[0]:
+                    best = (r, c, list(a))
+    st.equip = {'服装': best[1], '配饰': best[2]}
+    return best[0]
+
+
 class Bot(SimpleAgent):
     name = '?'
     origin = (0, 0, 3)          # 开局三问；第三问选“戒指”：只给一个旗标，不改数值，方便和 N60 对
     smart_play = True
     crime = False
+    buy = True                  # 月初买本路装备（report 的 --no-buy 关掉）
+    gear_road = None            # 买哪条路的装备；None = 不买
 
     def __init__(self, seed=1):
         self.rnd = random.Random(seed * 1000003 + 17)   # 机器人自己的随机流，不动游戏的
@@ -177,6 +198,36 @@ class Bot(SimpleAgent):
             if p >= THRESH[t]:
                 return -ni
         return None
+
+    # ---------- 买装备 ----------
+    def month_start(self, story, st):
+        """月初买本路装备：每次挑“每块钱加的声望最多”的一件，留两个月生活费加 200。"""
+        road = self.gear_road
+        if not self.buy or road is None:
+            return
+        reserve = 2 * self.living(st) + 200
+        for _ in range(4):
+            base, best = st.rep(road), None
+            for entry in ('服装店', '杂货店'):
+                for iid in street.shelf(st, entry):
+                    it = st.d.items[iid]
+                    if it['类'] == '消耗' or iid in st.items:
+                        continue
+                    p = street.price(st, entry, it['价格'])
+                    if st.money - p < reserve:
+                        continue
+                    old = dict(st.equip, 配饰=list(st.equip['配饰']))
+                    st.items.append(iid)
+                    gain = best_equip(st, road) - base
+                    st.items.remove(iid)
+                    st.equip = old
+                    if gain > 0 and (best is None or gain / p > best[0]):
+                        best = (gain / p, entry, iid)
+            if best is None:
+                break
+            street.buy(st, best[1], best[2])
+            st.inc('计数.买装备花费', street.price(st, best[1], st.d.items[best[2]]['价格']))
+        best_equip(st, road)
 
     # ---------- 日程 ----------
     def plan(self, g):
@@ -293,8 +344,11 @@ class Bot(SimpleAgent):
         return best[1] if best else None
 
     def money_job(self, g, P, allow=None):
-        """赚钱：日薪减 1.5×每天疲劳，排除犯罪类的工。"""
+        """赚钱：日薪减 1.5×每天疲劳，排除犯罪类的工。本路有对口的工（ROAD_JOBS）先打它。"""
         st, d = g.st, g.d
+        for jid in ROAD_JOBS.get(getattr(self, 'road', None), ()):
+            if can_do_job(st, jid):
+                return jid
         best = None
         for jid, j in d.jobs.items():
             if jid in CRIME_JOBS and not self.crime:
@@ -384,6 +438,10 @@ class RoadBot(Bot):
     def place(self):
         return ROAD_PLACE[self.road]
 
+    @property
+    def gear_road(self):
+        return self.road
+
 
 class Hard(RoadBot):
     name, road, second, origin = '专练硬汉', '硬汉', '情人', (0, 0, 3)
@@ -404,6 +462,7 @@ class Wrist(RoadBot):
 class Two(Bot):
     name, origin = '两路（硬汉+情人）', (0, 2, 3)
     roads = ('硬汉', '情人')
+    gear_road = '硬汉'
     place = 'place_studio'
 
     def want(self, g, P, i):
@@ -422,6 +481,9 @@ class Crime(Bot):
 
     def want(self, g, P, i):
         st = g.st
+        # 每月上旬去拳馆（黑帮头目、打手头子要硬汉 210），其余时间打犯罪类的工
+        if i == 0 and st.skill['打斗'] < 100 and st.cnt('成功期数.job_bar') >= 3:
+            return 'class_boxing'
         for jid in ('job_bootleg', 'job_bar', 'job_dock'):
             if can_do_job(st, jid):
                 return jid
@@ -431,6 +493,7 @@ class Crime(Bot):
 class BookCulture(Bot):
     name, origin = '只读书文化', (4, 1, 3)
     place = 'place_downtown'
+    gear_road = '文化'
 
     def want(self, g, P, i):
         st = g.st
@@ -492,11 +555,13 @@ PURE = ('专练硬汉', '专练情人', '专练文化', '专练手腕')
 
 
 # ---------- 跑一局 ----------
-def play(cls, seed, data=None, smart_play=None):
+def play(cls, seed, data=None, smart_play=None, buy=None):
     """跑完一局，返回记录。记录里的数组下标 = 月序（月结后的值）。"""
     bot = cls(seed)
     if smart_play is not None:
         bot.smart_play = smart_play
+    if buy is not None:
+        bot.buy = buy
     g = new_game(seed, bot.origin, bot, data)
     st, d = g.st, g.d
     rec = {'bot': cls.name, 'seed': seed, 'origin': bot.origin,
@@ -537,4 +602,14 @@ def summarize(g):
     b = st.bonus()
     rec['无年度声望'] = max(st.rep(r, b) - ann[r] for r in d.roads)
     rec['年度修正'] = sum(ann.values())
+    # 主路（期末声望最高的路）的声望拆开：训练值 / 装备和体力加成 / 上映 / 年度 / 其余（机遇、事件）
+    top = max(d.roads, key=lambda r: st.rep(r, b))
+    tr = sum(st.skill[s] for s in d.road_skills[top])
+    rel = sum(f['结果']['修正'] for f in st.story['片'] if f.get('结果') and f['角色']['路'] == top)
+    rec['拆'] = {'训练': tr, '加成': sum(st.val(s, b) for s in d.road_skills[top]) - tr, '上映': rel,
+                '年度': ann[top], '机遇': st.corr[top] - rel - ann[top]}
+    rec['普通声望'] = tr + rec['拆']['加成'] + rel       # “练满加普通上映”（含装备）
+    rec['买装备'] = c.get('计数.买装备花费', 0)
+    rec['片酬'] = sum(f.get('片酬', 0) for f in st.story['片'] if f.get('结果'))
+    rec['年度名次'] = [a.get('名次') for a in g.hooks.annuals]
     return rec
