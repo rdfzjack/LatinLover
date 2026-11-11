@@ -81,18 +81,6 @@ class TestStreet(unittest.TestCase):
         st.attr['疲劳'] = 0; st.update_indices()
         self.assertEqual(T.sil_hint(st), ('最高属性', '相貌'))
 
-    def test_stock(self):
-        st = bare(); st.money = 1000
-        with self.assertRaises(StreetError):
-            T.stock_buy(st, 100)
-        st.flags['股票'] = 1
-        with self.assertRaises(StreetError):
-            T.stock_buy(st, 150)
-        T.stock_buy(st, 500)
-        st.stock = 515
-        T.stock_sell(st, 515)
-        self.assertEqual((st.money, st.stock), (1015, 0))
-
 
 if __name__ == '__main__':
     unittest.main()

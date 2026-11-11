@@ -85,13 +85,13 @@ class TestMonth(unittest.TestCase):
             g.run_month(['rest_home'] * 3)
         self.assertEqual(g.st.status['恋爱'], 1)
 
-    def test_debt_and_stock_and_accent(self):
+    def test_debt_and_accent(self):
         g = Game(D, seed=1, origin=O)
-        g.st.money = 100; g.st.stock = 1000; g.st.flags['口音期'] = 2
+        g.st.money = 100; g.st.flags['口音期'] = 2
         g.run_month(['rest_home'] * 3)
-        self.assertEqual((g.st.debt_months, g.st.stock, g.st.flags['口音期']), (1, 1030, 1))
+        self.assertEqual((g.st.debt_months, g.st.flags['口音期']), (1, 1))
         g.run_month(['rest_home'] * 3)
-        self.assertEqual((g.st.debt_months, g.st.stock, g.st.flags['口音期']), (2, 1060, 0))
+        self.assertEqual((g.st.debt_months, g.st.flags['口音期']), (2, 0))
         g.st.money = 5000
         g.run_month(['rest_home'] * 3)
         self.assertEqual(g.st.debt_months, 0)

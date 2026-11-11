@@ -56,7 +56,7 @@ def ref_event(f, e):
     if EVENT_IDS is None: pending_events.add(e)
     elif e not in EVENT_IDS: err(f, f'事件不存在 {e}')
 
-DERIVED = {'最高声望','月份','年份','药瘾阶段','负债月数','股票','档次','最大标签族','无法定义','低成本定型','有声片部数',
+DERIVED = {'最高声望','月份','年份','药瘾阶段','负债月数','档次','最大标签族','无法定义','低成本定型','有声片部数',
            '最高基础属性','手腕最高技能','最大工期数','四路声望极差','最高声望所在路'}
 PREFIX = ('状态.','计数.','标签.','期数.','旗标.','交手次数.')
 def var_ok(v):
@@ -82,7 +82,7 @@ def check_cond(f, c, where=''):
             elif not isinstance(t[2], (int, str)): err(f, f'{where} 条件值 {t[2]}')
 EFF = re.compile(r'^(.+?)([+\-=])(\d+)(%?)$')
 def eff_name_ok(n):
-    if n in ATTRS or n in SK or n in ('金钱','药瘾阶段','负债月数','股票'): return True
+    if n in ATTRS or n in SK or n in ('金钱','药瘾阶段','负债月数'): return True
     if n.startswith('好感.'): return n[3:] in NPC
     if n.startswith('修正.'): return n[3:] in ROADS
     if n.startswith('权重.'): return n[3:] in TAGS
@@ -241,7 +241,7 @@ for m in ms:
     for e in m['时代事件']: ref_event(f, e)
 if sum(1 for m in ms if m['选片板']) != 16: err(f, '选片板应 16 次')
 if sum(1 for m in ms if m['年度大事']) != 4: err(f, '年度大事应 4 次')
-if sum(1 for m in ms if m['时代事件']) != 8: err(f, '时代节点应 8 个')
+if sum(1 for m in ms if m['时代事件']) != 7: err(f, '时代节点应 7 个（GDD 11.3）')
 
 
 # habits / rivals

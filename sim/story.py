@@ -50,7 +50,7 @@ class Agent(audition.Player):
         raise NotImplementedError
 
     def month_start(self, story, st):
-        """月初的自由操作：story.write_script / send_detox / leak_news，街道、股票等（不占日程）。"""
+        """月初的自由操作：story.write_script / send_detox / leak_news，街道等（不占日程）。"""
 
 
 class SimpleAgent(Agent):

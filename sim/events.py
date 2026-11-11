@@ -194,12 +194,6 @@ def h_detox(story, st, e, ch):
     film.breach_month(st, st.ym + 1)
 
 
-def h_crash(story, st, e, ch):
-    if st.stock == 0 and st.money >= 5000:
-        st.flags['幸存者'] = 1
-    st.stock = st.stock * 10 // 100
-
-
 def h_tip(story, st, e, ch):
     """Duv 的告密：下一块板上随机一个中片或大片角色显示完整场风和标签。"""
     if st.flags.get('告密'):
@@ -221,7 +215,7 @@ def h_birthday(story, st, e, ch):
 
 CODE = {
     'evt_missing': h_missing, 'evt_arrest': h_arrest, 'evt_scandal': h_scandal, 'evt_contract': h_contract,
-    'evt_creditor': h_creditor, 'evt_drug_deeper': h_drug_deeper, 'evt_detox': h_detox, 'era_crash': h_crash,
+    'evt_creditor': h_creditor, 'evt_drug_deeper': h_drug_deeper, 'evt_detox': h_detox,
     'outing_duv_tip': h_tip, 'job_studio_m2': h_transform, 'evt_birthday': h_birthday,
 }
 # 其余 代码:true 的事件只要数据里的效果、旗标就够了，由别的模块读旗标：
