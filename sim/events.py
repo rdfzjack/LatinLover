@@ -377,12 +377,6 @@ def outing(story, st, place):
     return eid
 
 
-def vacation(story, st, table):
-    cands = [x for x in table if ready(st, st.d.events[x])]
-    if cands:
-        fire(story, st, cands[st.rng.logic.below(len(cands))])
-
-
 def class_chain(story, st, chain, n):
     """家教第 1、4、7、10 旬：Duv 的家教链，按顺序出下一个没看过的。"""
     d = st.d

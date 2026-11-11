@@ -179,16 +179,23 @@ if sum(1 for j in jobs['工'] if j['最早时间'] == '1926-01') != 6: err(f, '�
 # rest / places / lifestyle
 f = 'rest.json'
 rest_ids = [r['id'] for r in rest['休息']]
-if len(rest_ids) != 5: err(f, '休息应 5 项')
+if sorted(r['id'] for r in rest['休息'] if r.get('玩家可选', True)) != ['rest_home', 'rest_outing']:
+    err(f, '玩家能选的休息应只有在家和外出两种（用户定）')
 for fo in rest['强制']:
     check_cond(f, fo['条件'], '强制')
     for k in ('日程','钱不够改'):
         if fo[k] not in rest_ids: err(f, f'强制 {k} 引用不存在 {fo[k]}')
 for r in rest['休息']:
-    if r['id'] == 'rest_escort': parse_effect(f, r['每天效果'] + ' ' + r['每旬效果'], r['id'])
+    for k in ('每天效果', '每旬效果'):
+        if r.get(k): parse_effect(f, r[k], r['id'])
 f = 'places.json'
 for p in places['地点']:
-    need(f, p, ['id','名字','花费','常在的人','随机表'], p.get('id'))
+    need(f, p, ['id','名字','疲劳每天','常在的人','随机表'], p.get('id'))
+    if ('花费' in p) == ('花费按名气档' in p): err(f, f"{p.get('id')} 要有 花费 或 花费按名气档（只写一个）")
+    if '花费' in p and not (isinstance(p['花费'], int) and p['花费'] >= 0): err(f, f"{p['id']} 花费")
+    if '花费按名气档' in p and (len(p['花费按名气档']) != 5 or not all(isinstance(x, int) for x in p['花费按名气档'])):
+        err(f, f"{p['id']} 花费按名气档 应是 5 个整数")
+    if not (isinstance(p['疲劳每天'], int) and p['疲劳每天'] < 0): err(f, f"{p['id']} 疲劳每天 应是负整数")
     for n in p['常在的人']:
         if n not in NPC: err(f, f"{p['id']} NPC 不存在 {n}")
 f = 'lifestyle.json'
@@ -367,15 +374,10 @@ for e in outing['事件']:
         check_check(w, o['判定'])
         for k in ('成功效果','失败效果'):
             if o[k]: parse_effect(f, o[k], w)
-rt_ids = [r['事件'] for p in places['地点'] for r in p['随机表']]
 for p in places['地点']:
     for r in p['随机表']:
         if r['事件'] not in {e['id'] for e in outing['事件']}: err('places.json', f"随机表事件不在 outing.json: {r['事件']}")
     if len(p['随机表']) < 1: err('places.json', f"{p['id']} 随机表为空")
-if len(rt_ids) != 8: err('places.json', f'随机表事件应共 8 个，现 {len(rt_ids)}')
-for i in rest['休息']:
-    for e in i.get('事件表', []):
-        if e not in EVENT_IDS: err('rest.json', f'度假事件不存在 {e}')
 # romance / schedule / chains
 f = 'romance.json'
 if len(NPC) != len(romance['npc']): err(f, 'NPC 重名')

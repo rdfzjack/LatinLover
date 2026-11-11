@@ -149,9 +149,6 @@ class Story(Hooks):
     def outing(self, st, place):
         events.outing(self, st, place)
 
-    def vacation(self, st, table):
-        events.vacation(self, st, table)
-
     def class_chain(self, st, chain, n):
         events.class_chain(self, st, chain, n)
 

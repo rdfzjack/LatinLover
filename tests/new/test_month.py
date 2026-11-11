@@ -76,7 +76,7 @@ class TestMonth(unittest.TestCase):
         for _ in range(3):
             g.run_month(['rest_home'] * 3)
         self.assertEqual(g.st.status['恋爱'], 0)
-        self.assertEqual(g.st.favor['Sil'], 4)
+        self.assertEqual(g.st.favor['Sil'], 22)   # 10 + 在家每旬 +2 ×9 − 恋爱每月 2 ×3
 
     def test_romance_stays_if_looks_highest(self):
         g = Game(D, seed=1, origin=O)

@@ -1,7 +1,7 @@
 """日程：上课、看书、打工、休息（GDD 5.1–5.5）。一旬一项，逐日结算。
 
 日程项写成字符串：课 'class_boxing'、书 'book_tantu_1'、工 'job_dock'、休息 'rest_home'，
-逛街带地点 'rest_outing@place_dock'。
+外出带去处 'rest_outing@place_dock'。休息只有两种：在家（Sil 陪着）和外出；疗养院只在重病时由月流程强制。
 
 随机数的消耗顺序（Godot 移植要照抄）：
 - 上课、看书：每个上课日先 r0(疲劳)、再 r0(体力/2)；恋爱状态再掷一次 20%；成功日按表的顺序掷各项收益。
@@ -100,15 +100,15 @@ def validate(st, e):
     r = d.rests.get(iid)
     if r is None:
         return f'没有这种休息 {iid}'
+    if not r.get('玩家可选', True):
+        return '只在重病时强制'
     if st.status['生病'] and not r['生病可选']:
-        return '生病状态只能在家休息或去疗养院'
+        return '生病状态只能在家休息'
     if iid == 'rest_outing':
         if place not in d.places:
-            return '逛街要选地点'
+            return '外出要选去处'
     elif place:
-        return '只有逛街带地点'
-    if iid == 'rest_vacation' and st.money < vacation_cost(st):
-        return '钱不够度假'
+        return '只有外出带去处'
     return None
 
 
@@ -126,8 +126,12 @@ def options(st):
     return out
 
 
-def vacation_cost(st):
-    return st.d.rests['rest_vacation']['花费按名气档'][st.fame_tier()]
+def place_cost(st, place):
+    """外出一天的花费：去处的 花费，或 花费按名气档（度假村）。"""
+    p = st.d.places[place]
+    if '花费按名气档' in p:
+        return p['花费按名气档'][st.fame_tier()]
+    return p['花费']
 
 
 # ---------- 判定 ----------
@@ -293,24 +297,15 @@ def run_job(st, jid, days, hooks):
 def run_rest(st, rid, place, days, hooks):
     d = st.d
     r = d.rests[rid]
-    if rid == 'rest_vacation':
-        cost = vacation_cost(st)
-        if st.money < cost:
-            rid, r = 'rest_home', d.rests['rest_home']
-        else:
-            st.money -= cost
-            st.attr['疲劳'] = 0
-            hooks.vacation(st, r['事件表'])
-            return {'花费': cost}
     spent = 0
     mid = len(days) // 2
     for k, (day, sun) in enumerate(days):
         if rid == 'rest_outing':
-            cost = d.places[place]['花费']
+            cost = place_cost(st, place)
             if st.money >= cost:
                 st.money -= cost
                 spent += cost
-                add_stat(st, '疲劳', r['疲劳每天'])
+                add_stat(st, '疲劳', d.places[place]['疲劳每天'])
             else:
                 add_stat(st, '疲劳', d.rests['rest_home']['疲劳每天'])
             if k == mid - 1:
