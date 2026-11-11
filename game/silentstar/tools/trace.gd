@@ -20,6 +20,7 @@ const Month = preload("res://core/month.gd")
 const Audition = preload("res://core/audition.gd")
 const Story = preload("res://core/story.gd")
 const Street = preload("res://core/street.gd")
+const Bots = preload("res://tools/bots.gd")
 
 
 var games_dir := ""
@@ -153,7 +154,27 @@ func run(d, cases: Dictionary) -> String:
 		_run_audition_cases(d, cases["audition"], out)
 	for gc in cases.get("games", []):
 		_run_game_case(d, gc, out)
+	if cases.has("bots"):
+		_run_bot_cases(d, cases["bots"], out)
 	return "\n".join(out) + "\n"
+
+
+## Step 12b: the bots play live; the same as run_bot_cases in tools/trace.py. Per game: a header, one line per month (the date the
+## month started and the md5 of the save), then the JSON of summarize().
+func _run_bot_cases(d, c: Dictionary, out: PackedStringArray) -> void:
+	for bot_name in c["names"]:
+		for sd in c["seeds"]:
+			var lines := []
+			var cb := func(g, date): lines.append("%s %s" % [date, g.st.dumps().md5_text()])
+			var rec: Dictionary = Bots.play(Bots.BOTS[bot_name], sd, d, null, null, cb)
+			out.append("# bot %s seed=%d origin=%s" % [bot_name, sd, js(rec["origin"])])
+			for line in lines:
+				out.append(line)
+			var summ := {}
+			for k in rec:
+				if not (k in ["bot", "seed", "origin", "train", "rep", "money", "fame", "debt"]):
+					summ[k] = rec[k]
+			out.append("summary " + js(summ))
 
 
 ## Step 10: a fixed schedule for 48 months (default hooks); the same as run_month_case in tools/trace.py.

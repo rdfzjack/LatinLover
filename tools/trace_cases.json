@@ -232,5 +232,10 @@
   {"bot":"random_pick","seed":6,"extras":false},
   {"bot":"random_pick","seed":20,"extras":false},
   {"bot":"random_pick","seed":40,"extras":true}
- ]
+ ],
+ "bots": {
+  "note": "Step 12b: the bots themselves (sim/bots.py and game/silentstar/tools/bots.gd) play live; one line per month (date and md5 of the save), then the summary.",
+  "names": ["only_tough", "only_lover", "only_culture", "only_savvy", "two_roads", "crime_line", "books_culture", "random_pick"],
+  "seeds": [1, 2, 3, 4, 5]
+ }
 }

@@ -7,6 +7,7 @@ The `games` cases are recorded here into work/games/ (tools/record_game.py), so 
     python3 tools/trace.py --out work/trace_py.txt
 """
 import argparse
+import hashlib
 import json
 import os
 import sys
@@ -16,6 +17,7 @@ sys.path.insert(0, ROOT)
 sys.path.insert(0, os.path.join(ROOT, 'tools'))
 
 from sim import audition as A, data as D, rules, schedule  # noqa: E402
+from sim.bots import BOTS, play as play_bot, summarize  # noqa: E402
 from sim.month import Game, trace_line  # noqa: E402
 from sim.rng import PCG32, Rng  # noqa: E402
 from sim.state import State  # noqa: E402
@@ -97,6 +99,8 @@ def run(cases, games_dir=None):
         run_audition_cases(d, cases['audition'], w)
     for c in cases.get('games', []):
         run_game_case(d, c, games_dir, w)
+    if 'bots' in cases:
+        run_bot_cases(d, cases['bots'], w)
     return '\n'.join(out) + '\n'
 
 
@@ -168,6 +172,23 @@ def run_game_case(d, c, games_dir, w):
         w('the replay differs from the recorded game')
     for line in again:
         w(line)
+
+
+def run_bot_cases(d, c, w):
+    """Step 12b: the bots play live (no recording). Per game: a header, one line per month (the date the month started and the md5
+    of the save), then the JSON of summarize()."""
+    for name in c['names']:
+        for seed in c['seeds']:
+            lines = []
+
+            def on_month(g, date):
+                lines.append(f'{date} {hashlib.md5(g.st.dumps().encode("utf-8")).hexdigest()}')
+
+            rec = play_bot(BOTS[name], seed, data=d, on_month=on_month)
+            w(f'# bot {name} seed={seed} origin={js(rec["origin"])}')
+            for line in lines:
+                w(line)
+            w('summary ' + js({k: v for k, v in rec.items() if k not in ('bot', 'seed', 'origin', 'train', 'rep', 'money', 'fame', 'debt')}))
 
 
 def run_month_case(d, c, w):
