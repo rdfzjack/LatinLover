@@ -12,7 +12,8 @@ import sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
 
-from sim import data as D, rules  # noqa: E402
+from sim import data as D, rules, schedule  # noqa: E402
+from sim.month import Game, trace_line  # noqa: E402
 from sim.rng import PCG32, Rng  # noqa: E402
 from sim.state import State  # noqa: E402
 
@@ -85,7 +86,42 @@ def run(cases):
     w('save ' + s1)
     s2 = State.loads(d, s1).dumps()
     w('roundtrip ' + ('identical' if s1 == s2 else 'differs ' + s2))
+
+    for c in cases.get('month', []):
+        run_month_case(d, c, w)
     return '\n'.join(out) + '\n'
+
+
+def run_month_case(d, c, w):
+    """Step 10: a fixed schedule for 48 months (default hooks). The plans are used in turn, month by month; an entry that cannot be
+    scheduled is replaced by rest_home. Optional: effect (applied once at the start), month_effect (applied after every month start), books, lifestyles (in turn),
+    restore_at (month index: save, load and carry on with the loaded game)."""
+    g = Game(d, seed=c['seed'], origin=tuple(c['origin']))
+    w(f'# month {c["name"]} seed={c["seed"]} origin={js(c["origin"])}')
+    if c.get('effect'):
+        rules.apply_effect(g.st, c['effect'], source='origin')
+        g.st.update_indices()
+    for bid, pts in c.get('books', {}).items():
+        g.st.books[bid] = pts
+    n = 0
+    while not g.st.finished:
+        if n == c.get('restore_at', -1):
+            s = g.save()
+            g = Game.restore(s, d)
+            w('restore ' + str(len(s)))
+        date = g.st.date
+        if c.get('lifestyles'):
+            g.set_lifestyle(c['lifestyles'][n % len(c['lifestyles'])])
+        g.start_month()
+        if c.get('month_effect') and n < c.get('month_effect_months', 48):
+            rules.apply_effect(g.st, c['month_effect'], source='origin')
+        plan = [e if not schedule.validate(g.st, e) else 'rest_home' for e in c['plans'][n % len(c['plans'])]]
+        g.run_month(plan)
+        w('plan ' + js(plan) + ' ' + js(g.last))
+        w(trace_line(g.st, date))
+        n += 1
+    w(f'end finished={g.st.finished} ended={js(g.st.ended)} debt={g.st.debt_months} collapse={g.st.collapse_months}')
+    w('save ' + g.st.dumps())
 
 
 def main():

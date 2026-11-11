@@ -13,6 +13,8 @@ const State = preload("res://core/state.gd")
 const Rng = preload("res://core/rng.gd")
 const Rules = preload("res://core/rules.gd")
 const Jsonx = preload("res://core/jsonx.gd")
+const Schedule = preload("res://core/schedule.gd")
+const Month = preload("res://core/month.gd")
 
 
 func _init() -> void:
@@ -135,7 +137,44 @@ func run(d, cases: Dictionary) -> String:
 	var s1: String = st.dumps()
 	out.append("save " + s1)
 	out.append("roundtrip " + _roundtrip(d, s1))
+
+	for mc in cases.get("month", []):
+		_run_month_case(d, mc, out)
 	return "\n".join(out) + "\n"
+
+
+## Step 10: a fixed schedule for 48 months (default hooks); the same as run_month_case in tools/trace.py.
+func _run_month_case(d, c: Dictionary, out: PackedStringArray) -> void:
+	var g = Month.new(d, c["seed"], c["origin"])
+	out.append("# month %s seed=%d origin=%s" % [c["name"], c["seed"], js(c["origin"])])
+	if c.get("effect", "") != "":
+		Rules.apply_effect(g.st, c["effect"], "origin")
+		g.st.update_indices()
+	var bk: Dictionary = c.get("books", {})
+	for bid in bk:
+		g.st.books[bid] = bk[bid]
+	var n := 0
+	while not g.st.finished:
+		if n == c.get("restore_at", -1):
+			var sv: String = g.save()
+			g = Month.restore(sv, d)
+			out.append("restore " + str(sv.length()))
+		var date: String = g.st.date()
+		if c.has("lifestyles"):
+			g.set_lifestyle(c["lifestyles"][n % c["lifestyles"].size()])
+		g.start_month()
+		if c.get("month_effect", "") != "" and n < c.get("month_effect_months", 48):
+			Rules.apply_effect(g.st, c["month_effect"], "origin")
+		var plan := []
+		var base: Array = c["plans"][n % c["plans"].size()]
+		for e in base:
+			plan.append(e if Schedule.validate(g.st, e) == "" else "rest_home")
+		g.run_month(plan)
+		out.append("plan " + js(plan) + " " + js(g.last))
+		out.append(Month.trace_line(g.st, date))
+		n += 1
+	out.append("end finished=%d ended=%s debt=%d collapse=%d" % [g.st.finished, js(g.st.ended), g.st.debt_months, g.st.collapse_months])
+	out.append("save " + g.st.dumps())
 
 
 func _roundtrip(d, s1: String) -> String:

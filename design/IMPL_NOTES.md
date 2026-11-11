@@ -145,6 +145,8 @@ Godot 4.3, GDScript. The project is in `game/silentstar/`; the logic is in `core
 | `core/rules.gd` | `rules.py` | conditions, effects, checks, probabilities. All static functions; `extra_vars` is kept for the derived values of step 12. `split_name` splits at the first `.` |
 | `core/state.gd` | `state.py` | state, displayed values, reputation, indices, save / load |
 | `core/locale.gd` | - | reads `data/locale/text.csv` at run time and registers one `Translation` per locale column with the `TranslationServer` (no editor import needed); empty cells are not registered, so a missing translation shows the key. `ending_name` fills the `{top_job}` placeholder |
+| `core/schedule.gd` | `schedule.py` | classes, books, jobs, rest; all static. `truthy()` gives Python truthiness for table values (null, "", 0, [] and {} are false) |
+| `core/month.gd` | `month.py` | `Month` (= Python `Game`): month start, three periods, settlement, save / restore; inner class `Hooks` with no-op methods, step 12 subclasses it. `trace_line` is the per-month reconciliation line |
 | `tools/trace.gd` | `tools/trace.py` | prints the reconciliation text for `tools/trace_cases.json` |
 
 **Porting conventions**
@@ -165,6 +167,8 @@ python3 tools/compare_trace.py work/trace_py.txt work/trace_godot.txt
 ```
 
 `compare_trace.py` prints only the first differing line. The month-by-month reconciliation from step 10 on uses it too: add cases to `trace_cases.json` and one output section to each side's trace.
+
+**Step 10 conventions.** `validate` returns "" for ok (Python: None). `Month.run_month(plan)` returns the list of schedule errors (Python raises `ScheduleError`) and runs nothing when the list is not empty. Days are `[day, is_sunday]` pairs. The `month` cases of `trace_cases.json` run 48 months with default hooks; entries that cannot be scheduled become `rest_home`; optional `effect`, `month_effect`, `books`, `lifestyles`, `restore_at`. Godot 4.3 can be downloaded from the godotengine GitHub releases (`Godot_v4.3-stable_linux.x86_64.zip`) to run the reconciliation in a container.
 
 **When exporting**: the data tables live outside the project, so `data/new/` must be copied into the project before export (handled in step 13).
 
