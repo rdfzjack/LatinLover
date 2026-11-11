@@ -4,7 +4,7 @@
 
 ## 现在做到哪
 
-- **PLAN 第 1–9 步和 8b、9b 已完成。下一步是第 10 步**（Godot 移植日程和月结）。
+- **PLAN 第 1–9 步和 8b、9b 已完成。下一步是第 9c 步**：英文 id 和多语言（规格 `design/I18N_PLAN.md`，用 Opus，分两个对话），然后第 10 步。现在数据和代码里的中文名既是 id 又是显示文字，这一步把它们分开。
 - 用户会自己改 `data/new/` 的表（指南 `data/USER_GUIDE.md`）。开工先跑 `python3 tools/check.py`，不通过先告诉用户。
 - 第 9 步：Godot 工程 `game/silentstar/` 有了数据加载、随机数、状态、条件和效果、存读档，和 Python 对账逐字节一致（命令在 `design/IMPL_NOTES.md` 末尾）。
 - 股票系统已删；休息只剩在家（Sil 陪着）和外出（选去处）两种（`design/CHANGE.md`）。
@@ -21,6 +21,7 @@
 | `design/GDD.md` | 全部规则和数值，以它为准 | 只读这一步涉及的小节 |
 | `design/DESIGN_NOTES.md` | GDD 里每个 [推N…] 的理由 | 想改某条规则前查它为什么这样定 |
 | `design/BALANCE_LOG.md` | 数值调过什么、现在的报告、没解决的项 | 改数值前 |
+| `design/I18N_PLAN.md` | 第 9c 步的规格：英文 id、语言文件、做法和完成标准 | 做 9c 时 |
 | `design/IMPL_NOTES.md` | `sim/` 和 Godot 的结构、接口、GDD 没写到的实现细节、对账命令 | 移植 Godot、改 `sim/` 时 |
 | `data/new/README.md` | JSON 表的条件、效果语法 | 改表时 |
 | `data/USER_GUIDE.md` | 给用户的改表指南（中文、带例子） | 改了表的写法、加了字段时同步更新 |
@@ -80,6 +81,7 @@ python3 -m sim.story --seed 1 --origin 0,1,2 --plan class_acting,job_dock,rest_h
 - 休息只留两种：在家（Sil 陪着，便宜）、外出（一个人，选去处：度假村、城里等，遇到各种人和选项；代码上是同一套）。
 - 四路等级照旧随声望自动变，不做手动升级。
 - 用户自己直接改 JSON（不做 Excel），按 `data/USER_GUIDE.md`；改了表的写法要同步更新指南。
+- 要做多语言。代码和数据结构只用英文 id，玩家看得到的文字只放在语言文件里（第 9c 步之后是 `data/locale/`）。
 - 只把必须用户定的设计决策列出来问；占位内容、模型能自己检查的细节不要列给用户。
 
 ## 等用户定的事
