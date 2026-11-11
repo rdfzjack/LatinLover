@@ -1,16 +1,16 @@
 extends RefCounted
-## JSON 读写，输出和 Python 的
-## json.dumps(x, ensure_ascii=False, sort_keys=True, separators=(',', ':')) 逐字节一致。
+## JSON reading and writing; the output is byte-identical to Python's
+## json.dumps(x, ensure_ascii=False, sort_keys=True, separators=(',', ':')).
 ##
-## Godot 自带的 JSON 把所有数字读成 float，键的排序和转义也和 Python 不完全一样，所以这里自己写。
-## 数据表和存档里只有整数（data/new/README.md），读进来以后把整数值的 float 转回 int。
+## Godot's built-in JSON reads every number as float, and its key order and escaping differ from Python's, so this is written by hand.
+## The data tables and saves hold only integers (data/new/README.md); after reading, floats with integer values are converted back to int.
 
 
-## 读一个 JSON 文件，数字转成 int。出错返回 null。
+## Reads a JSON file, numbers converted to int. Returns null on error.
 static func read_file(path: String):
 	var f := FileAccess.open(path, FileAccess.READ)
 	if f == null:
-		push_error("打不开 %s（%d）" % [path, FileAccess.get_open_error()])
+		push_error("cannot open %s (%d)" % [path, FileAccess.get_open_error()])
 		return null
 	return parse(f.get_as_text())
 
@@ -18,18 +18,18 @@ static func read_file(path: String):
 static func parse(text: String):
 	var j := JSON.new()
 	if j.parse(text) != OK:
-		push_error("JSON 第 %d 行：%s" % [j.get_error_line(), j.get_error_message()])
+		push_error("JSON line %d: %s" % [j.get_error_line(), j.get_error_message()])
 		return null
 	return intify(j.data)
 
 
-## 递归把整数值的 float 变成 int。
+## Recursively turns floats with integer values into ints.
 static func intify(v):
 	match typeof(v):
 		TYPE_FLOAT:
 			if v == floorf(v) and absf(v) < 9007199254740992.0:
 				return int(v)
-			push_error("数据里出现小数：%s" % v)
+			push_error("fractional number in the data: %s" % v)
 			return v
 		TYPE_ARRAY:
 			var out := []
@@ -44,7 +44,7 @@ static func intify(v):
 	return v
 
 
-## 深拷贝（存档读写时用，和 Python 的 json 往返一样切断引用）。
+## Deep copy (used for saves; cuts references like a Python json round trip).
 static func copy(v):
 	match typeof(v):
 		TYPE_ARRAY:
@@ -76,7 +76,7 @@ static func _key(k) -> String:
 			return "true" if k else "false"
 		TYPE_NIL:
 			return "null"
-	push_error("不支持的键：%s" % [k])
+	push_error("unsupported key: %s" % [k])
 	return str(k)
 
 
@@ -92,7 +92,7 @@ static func _write(v, parts: PackedStringArray) -> void:
 			if v == floorf(v) and absf(v) < 9007199254740992.0:
 				parts.append(str(int(v)))
 			else:
-				push_error("存档里出现小数：%s" % v)
+				push_error("fractional number in a save: %s" % v)
 				parts.append(str(v))
 		TYPE_STRING, TYPE_STRING_NAME:
 			parts.append(quote(String(v)))
@@ -103,7 +103,7 @@ static func _write(v, parts: PackedStringArray) -> void:
 				var s := _key(k)
 				keys.append(s)
 				by_key[s] = v[k]
-			keys.sort()   # Godot 的字符串比较按码位，和 Python 的 sort_keys 相同
+			keys.sort()   # Godot compares strings by code point, like Python's sort_keys
 			parts.append("{")
 			var first := true
 			for s in keys:
@@ -125,11 +125,11 @@ static func _write(v, parts: PackedStringArray) -> void:
 					_write(x, parts)
 				parts.append("]")
 			else:
-				push_error("不支持的类型：%s" % [v])
+				push_error("unsupported type: %s" % [v])
 				parts.append("null")
 
 
-## 字符串转义，同 Python ensure_ascii=False：只转义引号、反斜杠和 0x00–0x1f。
+## String escaping, like Python ensure_ascii=False: only quotes, backslashes and 0x00-0x1f are escaped.
 static func quote(s: String) -> String:
 	var out := PackedStringArray()
 	out.append("\"")

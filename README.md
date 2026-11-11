@@ -4,7 +4,7 @@
 
 ## 现在做到哪
 
-- **PLAN 第 1–9 步和 8b、9b、9c-1 已完成。下一步是第 9c-2 步**：语言文件、Godot 侧、用户指南（规格 `design/STEP9C_IDS_AND_LOCALE.md`，用 Opus），然后第 10 步。9c-1 已把数据和 `sim/` 里的 id、字段名全改成英文（对照表 `design/GLOSSARY.md`），中文只留在数据表的显示字段里；Godot 代码和 `data/USER_GUIDE.md` 还是旧写法，9c-2 处理。
+- **PLAN 第 1–9 步和 8b、9b、9c 已完成。下一步是第 10 步**。数据、`sim/` 和 Godot 的 `core/` 里的 id、字段名全是英文（对照表 `design/GLOSSARY.md`），中文只在数据表的显示字段里；`data/locale/text.csv` 由 `tools/extract_text.py` 生成（`tools/check.py` 会跑它），`data/USER_GUIDE.md` 已按新写法用英文重写。**还欠一件事：9c-2 的环境装不了 Godot，Godot 对账（命令在 `design/IMPL_NOTES.md` 的 Godot 一节）没跑过，Godot 代码也没真正执行过**；有 Godot 的环境里先跑这个，再开始第 10 步。
 - 用户会自己改 `data/new/` 的表（指南 `data/USER_GUIDE.md`）。开工先跑 `python3 tools/check.py`，不通过先告诉用户。
 - 第 9 步：Godot 工程 `game/silentstar/` 有了数据加载、随机数、状态、条件和效果、存读档，和 Python 对账逐字节一致（命令在 `design/IMPL_NOTES.md` 末尾）。
 - 股票系统已删；休息只剩在家（Sil 陪着）和外出（选去处）两种（`design/CHANGE.md`）。
@@ -23,6 +23,7 @@
 | `design/BALANCE_LOG.md` | 数值调过什么、现在的报告、没解决的项 | 改数值前 |
 | `design/STEP9C_IDS_AND_LOCALE.md` | 第 9c 步的规格：英文 id、语言文件、规矩和完成标准 | 做 9c 时 |
 | `design/GLOSSARY.md` | 中文名 → 英文 id 对照表（英文文档，由 `tools/i18n_map.json` 生成） | 在设计文档里看到中文名、要找 id 时 |
+| `tools/extract_text.py` | 显示字段清单；生成 `data/locale/text.csv`（`key,zh_CN,en`）；`--prune` `--ack` | 加内容、改名、翻译时 |
 | `design/IMPL_NOTES.md` | `sim/` 和 Godot 的结构、接口、GDD 没写到的实现细节、对账命令 | 移植 Godot、改 `sim/` 时 |
 | `data/new/README.md` | JSON 表的条件、效果语法 | 改表时 |
 | `data/USER_GUIDE.md` | 给用户的改表指南（中文、带例子） | 改了表的写法、加了字段时同步更新 |
@@ -82,7 +83,7 @@ python3 -m sim.story --seed 1 --origin 0,1,2 --plan class_acting,job_dock,rest_h
 - 休息只留两种：在家（Sil 陪着，便宜）、外出（一个人，选去处：度假村、城里等，遇到各种人和选项；代码上是同一套）。
 - 四路等级照旧随声望自动变，不做手动升级。
 - 用户自己直接改 JSON（不做 Excel），按 `data/USER_GUIDE.md`；改了表的写法要同步更新指南。
-- 要做多语言。**技术性的东西一律英文**（字段名、id、枚举值、效果和条件、存档的键、代码和注释、开发者备注、检查脚本的输出、`data/new/README.md`、`design/IMPL_NOTES.md`、`data/USER_GUIDE.md`、`design/GLOSSARY.md`）；**中文原文只放在数据表的显示字段里**（`name`、`text`、`body`、`question`、`film_title`、`content`、`identity`），每条记录一个英文 `id`，加内容只写一处；`data/locale/text.csv` 由脚本从数据表生成（9c-2）。设计文档（GDD、DESIGN_NOTES、BALANCE_LOG、PLAN、README、CHANGE）和交接文本保持中文。
+- 要做多语言。**技术性的东西一律英文**（字段名、id、枚举值、效果和条件、存档的键、代码和注释、开发者备注、检查脚本的输出、`data/new/README.md`、`design/IMPL_NOTES.md`、`data/USER_GUIDE.md`、`design/GLOSSARY.md`）；**中文原文只放在数据表的显示字段里**（`name`、`text`、`body`、`question`、`film_title`、`content`、`identity`），每条记录一个英文 `id`，加内容只写一处；`data/locale/text.csv` 由 `tools/extract_text.py` 从数据表生成。设计文档（GDD、DESIGN_NOTES、BALANCE_LOG、PLAN、README、CHANGE）和交接文本保持中文。
 - 只把必须用户定的设计决策列出来问；占位内容、模型能自己检查的细节不要列给用户。
 
 ## 等用户定的事

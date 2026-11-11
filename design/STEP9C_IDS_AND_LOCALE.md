@@ -40,7 +40,11 @@
 - `data/USER_GUIDE.md` 还是旧写法（中文字段名），9c-2 按新语法用英文重写；开头已加了“已过期”提示。
 - `game/silentstar/core/` 和 `tools/trace.gd` 还用中文名，数据现在是英文 id，Godot 侧暂时跑不起来。
 
-## 9c-2（另开对话）
+## 9c-2（已完成，Godot 对账待跑）
+
+做了什么：`tools/extract_text.py` 和 `data/locale/text.csv`、`en_basis.json`（接进 `tools/check.py` 第 4 步，测试 `tests/new/test_locale.py`）；`game/silentstar/core/` 和 `tools/trace.gd` 按 `sim/` 移植成英文 id，新增 `core/locale.gd`；`data/USER_GUIDE.md` 英文重写，里面每个例子都照抄进表跑过检查。定下的事：标签族不加显示名；`dynamic_name` 的两个结局，`name` 写成 `以{top_job}为业` 这样带占位符，运行时替换成那个工的译名。**没做到的**：本环境装不了 Godot，Godot 对账和 `locale.gd` 没执行过，Python 侧（检查、测试、200 局报告、trace 输出）与改之前一致。
+
+下面是当时的规格：
 
 1. `tools/extract_text.py`：集中定义显示字段清单，生成 `data/locale/text.csv`（`key,zh_CN,en`；`zh_CN` 每次重生成，`en` 保留；中文变了的标“翻译过期”），并接进 `tools/check.py`：缺中文、多余 key、翻译过期都要报；同一个 key 不重复。
 2. 移植 `game/silentstar/core/`（data、rules、state 里的中文字面量改英文 id，数据结构跟 `sim/` 一致，存档版本 2）和 `tools/trace.gd`（Godot 4.3），读 `trace_cases.json` 的新键名；对账仍要和 Python 逐字节一致（命令见 `design/IMPL_NOTES.md` 末尾）。加一个读 `text.csv` 并注册到 `TranslationServer` 的小脚本（运行时读，不依赖编辑器导入）。缺翻译时显示 key 本身并在检查里报出来。

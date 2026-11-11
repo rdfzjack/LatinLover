@@ -135,15 +135,16 @@ When the GDD and the JSON disagree, ask the user first.
 
 ## Godot (game/silentstar/, from step 9)
 
-Godot 4.3, GDScript. The project is in `game/silentstar/`; the logic is in `core/` (independent of any node); the reconciliation script is in `tools/`. `.godot/` is the editor cache and not in git. **The Godot code still uses the old Chinese names until step 9c-2.**
+Godot 4.3, GDScript. The project is in `game/silentstar/`; the logic is in `core/` (independent of any node); the reconciliation script is in `tools/`. `.godot/` is the editor cache and not in git. Since step 9c-2 the Godot code uses the same English ids and the same data structure as `sim/`.
 
 | File | Python counterpart | Content |
 |---|---|---|
 | `core/rng.gd` | `rng.py` | two PCG32 streams. The 64-bit state is split into a high and a low 32-bit number (GDScript ints are signed 64-bit and overflowing multiplication is unreliable); the split algorithm was checked against Python on 5000 numbers |
 | `core/jsonx.gd` | - | JSON read / write. Read: float values that are integers are converted back to int (Godot reads every number as float). Write: byte-identical to Python `json.dumps(ensure_ascii=False, sort_keys=True, separators=(',',':'))` |
 | `core/data.gd` | `data.py` | loads the tables and builds indexes. Reads `data/new/` at the repository root by default (two levels above the project folder), shared with Python |
-| `core/rules.gd` | `rules.py` | conditions, effects, checks, probabilities. All static functions; `extra_vars` is kept for the derived values of step 12 |
+| `core/rules.gd` | `rules.py` | conditions, effects, checks, probabilities. All static functions; `extra_vars` is kept for the derived values of step 12. `split_name` splits at the first `.` |
 | `core/state.gd` | `state.py` | state, displayed values, reputation, indices, save / load |
+| `core/locale.gd` | - | reads `data/locale/text.csv` at run time and registers one `Translation` per locale column with the `TranslationServer` (no editor import needed); empty cells are not registered, so a missing translation shows the key. `ending_name` fills the `{top_job}` placeholder |
 | `tools/trace.gd` | `tools/trace.py` | prints the reconciliation text for `tools/trace_cases.json` |
 
 **Porting conventions**
@@ -151,7 +152,9 @@ Godot 4.3, GDScript. The project is in `game/silentstar/`; the logic is in `core
 - Python's `State.new(data, seed, origin)` is `State.new(data)` then `start(seed, origin)` in Godot; `State.loads` is `State.new(data)` then `loads(s)`. `st.month` and `st.date` are methods: `st.month()`, `st.date()`. `st.log` is renamed `debug_log` (`log` is a built-in function).
 - Integers: `tdiv` truncates toward zero (GDScript `/` already does), `fdiv` is Python's `//`.
 - Comparison: Python `==` between an int and a str gives False while GDScript raises an error, so `rules._cmp` compares the types first.
-- Dictionary keys are strings; when writing a save the keys are sorted by code point, like Python.
+- Dictionary keys are strings; when writing a save the keys are sorted by code point, like Python. Renaming keys changed the order of `sort_keys` output; both sides sort by code point, so they still agree.
+- `State.loads` / `from_dict` return false (and report an error) when the save version is not 2.
+- Tie rules are the table orders of the section above: `_held` iterates `Data.item_order`, exclusive groups in order of first appearance.
 
 **Reconciliation (completion standard of step 9)**, from the repository root:
 
@@ -164,3 +167,9 @@ python3 tools/compare_trace.py work/trace_py.txt work/trace_godot.txt
 `compare_trace.py` prints only the first differing line. The month-by-month reconciliation from step 10 on uses it too: add cases to `trace_cases.json` and one output section to each side's trace.
 
 **When exporting**: the data tables live outside the project, so `data/new/` must be copied into the project before export (handled in step 13).
+
+## Text and translations (step 9c-2)
+
+- `tools/extract_text.py` holds the one list of display fields (`SPEC`) and writes `data/locale/text.csv` (`key,zh_CN,en`). Key: `<category>.<id>.<field>`; nested lists add `.option.<index>` (options have no id) or `.service.<id>`. `zh_CN` is regenerated on every run, `en` is kept. The Chinese an English line was written against is in `data/locale/en_basis.json`; if the Chinese differs the line is reported as a stale translation until `--ack`. `tools/check.py` runs the same code (step 4/5): missing Chinese, duplicate keys, keys without a record, stale English and Chinese outside the display fields are errors; lines without English are only counted.
+- Decisions: tag families (`tag_families` in `endings.json`) have no display name; the family choice of the transition is shown through the member tags (`tag.<id>.name`). Add a name when a screen needs one. Endings with `dynamic_name: top_job` carry the placeholder `{top_job}` in their `name`; `locale.gd` `ending_name` replaces it by the translated name of the job held by that variable.
+- `test_locale.py` covers the key format, stale / extra / duplicate keys and stray Chinese.

@@ -6,7 +6,7 @@ Validation: `python3 tools/check.py` (format, duplicates, content and a bot play
 ## Conventions
 
 - **Ids, field names, enum values, names inside effects and conditions are English snake_case** (`stamina`, `job_bar`, `favor.sil`). The glossary Chinese | id | category is `design/GLOSSARY.md`.
-- **Chinese appears only in display fields**, as the original text: `name` of every record, `text` of event / outing / opening options, `body` of events and endings, `question`, `film_title`, `content` of endings, `identity` of NPCs. Everything else (notes included) is English. There is no separate language file to edit when you add content: write the Chinese in the display field; `data/locale/text.csv` is generated from the tables (step 9c-2).
+- **Chinese appears only in display fields**, as the original text: `name` of every record, `text` of event / outing / opening options, `body` of events and endings, `question`, `film_title`, `content` of endings, `identity` of NPCs. Everything else (notes included) is English. There is no separate language file to edit when you add content: write the Chinese in the display field; `data/locale/text.csv` is generated from the tables by `tools/extract_text.py` (`tools/check.py` runs it); only its `en` column is edited by hand.
 - Every record has an English `id`. A new record gets a new id and its Chinese `name`.
 - Money and all numbers are integers; decimals are not allowed. Ratios are written as integer percentages (85 means x85/100) or `[numerator, denominator]`.
 - A range `[a, b]` includes both ends; `add: [a, b]` means `r(a, b)`.

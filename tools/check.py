@@ -6,7 +6,9 @@ In order:
 1. JSON format: missing commas, extra commas, curly quotes and the like, with the line number.
 2. Duplicates: two records of one table with the same id, or one field written twice in one record.
 3. Content: all checks of tools/check_data.py (fields complete, referenced things exist, conditions and effects well written).
-4. Playthrough: several bots each play a whole game to make sure the game does not crash.
+4. Text: data/locale/text.csv is regenerated from the display fields (tools/extract_text.py); missing Chinese, duplicate or extra keys,
+   stray Chinese outside the display fields and stale English are errors.
+5. Playthrough: several bots each play a whole game to make sure the game does not crash.
 """
 import json
 import os
@@ -17,6 +19,7 @@ import traceback
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA = os.path.join(ROOT, 'data', 'new')
 sys.path.insert(0, ROOT)
+sys.path.insert(0, os.path.join(ROOT, 'tools'))
 try:
     sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 except Exception:
@@ -200,25 +203,33 @@ def step_play():
 
 
 def main():
-    print('1/4 checking JSON format...')
+    print('1/5 checking JSON format...')
     problems, tables = step_json()
     if problems:
         print('\n\n'.join(problems))
         print('\nFAILED: fix the format errors above, then run again.')
         return 1
-    print('2/4 checking duplicates and types...')
+    print('2/5 checking duplicates and types...')
     problems = step_dup(tables) + step_types(tables)
     if problems:
         print('\n'.join(problems))
         print('\nFAILED: fix the problems above, then run again.')
         return 1
-    print('3/4 checking content...')
+    print('3/5 checking content...')
     ok, errs, lines = step_content()
     if not ok:
         print('\n'.join(errs))
         print(f'\nFAILED: {len(errs)} content problems. Each line starts with the file name, then which record and what is wrong.')
         return 1
-    print('4/4 bot playthrough...')
+    print('4/5 checking text.csv...')
+    import extract_text
+    problems, notes = extract_text.sync()
+    print('\n'.join(notes))
+    if problems:
+        print('\n'.join(problems))
+        print('\nFAILED: fix the problems above, then run again.')
+        return 1
+    print('5/5 bot playthrough...')
     problems = step_play()
     if problems:
         print('\n'.join(problems))

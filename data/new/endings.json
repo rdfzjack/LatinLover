@@ -1109,7 +1109,7 @@
   },
   {
    "id": "all_job_formal",
-   "name": "以最常打的工为业",
+   "name": "以{top_job}为业",
    "category": "all",
    "order": 3,
    "cond": [
@@ -1134,7 +1134,7 @@
   },
   {
    "id": "all_job_temp",
-   "name": "暂以最常打的工为生",
+   "name": "暂以{top_job}为生",
    "category": "all",
    "order": 4,
    "cond": [
