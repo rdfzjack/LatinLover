@@ -1,15 +1,15 @@
-"""事件（GDD 5.4 接口、5.5.2 逛街、6.5 Duv、11、12）。
+"""事件（GDD 5.4 接口、5.5.2 外出、6.5 Duv、11、12）。
 
 事件数据在 events.json 和 outing.json，一个事件可以有：
     效果（直接执行）→ 判定（事件级，成功/失败效果）→ 分支（取第一个条件满足的）→ 选项（问玩家）→ 代码（`代码:true` 的按“说明”写在 CODE 里）
 效果里的 `触发.<id>` 在最后依次触发。
 
-频次：每局一次 / 每年一次 / 每季度一次 / null；逛街事件的 一次性:true 同每局一次。
+频次：每局一次 / 每年一次 / 每季度一次 / null；外出事件的 一次性:true 同每局一次。
 
 随机数的消耗顺序（Godot 照抄）：
 - 月末：按 顺序 逐个看，条件满足且频次允许时才掷概率；机遇排在前辈认可（顺序 9）之后，按表的顺序。触发满 2 个就停。
 - 旬初：临时换角、抢角，同上。
-- 逛街：有人在场且有链事件时不掷；常驻事件、随机表按权重 below(权重和)。
+- 外出：有人在场且有链事件时不掷；常驻事件、随机表按权重 below(权重和)。
 - 打工：每期随机按表的顺序各掷一次，然后看里程碑（不掷）。
 - 家教旬：Duv 好感 ≥30 时掷 1/10 告密。
 - 年度大事：先 r0(50) 我的分，再按排序后的对手各 r0(50)。
@@ -194,12 +194,6 @@ def h_detox(story, st, e, ch):
     film.breach_month(st, st.ym + 1)
 
 
-def h_crash(story, st, e, ch):
-    if st.stock == 0 and st.money >= 5000:
-        st.flags['幸存者'] = 1
-    st.stock = st.stock * 10 // 100
-
-
 def h_tip(story, st, e, ch):
     """Duv 的告密：下一块板上随机一个中片或大片角色显示完整场风和标签。"""
     if st.flags.get('告密'):
@@ -221,7 +215,7 @@ def h_birthday(story, st, e, ch):
 
 CODE = {
     'evt_missing': h_missing, 'evt_arrest': h_arrest, 'evt_scandal': h_scandal, 'evt_contract': h_contract,
-    'evt_creditor': h_creditor, 'evt_drug_deeper': h_drug_deeper, 'evt_detox': h_detox, 'era_crash': h_crash,
+    'evt_creditor': h_creditor, 'evt_drug_deeper': h_drug_deeper, 'evt_detox': h_detox,
     'outing_duv_tip': h_tip, 'job_studio_m2': h_transform, 'evt_birthday': h_birthday,
 }
 # 其余 代码:true 的事件只要数据里的效果、旗标就够了，由别的模块读旗标：
@@ -255,6 +249,7 @@ def month_end(story, st):
             if not rules.prob(st, e['每月概率']):
                 continue
             fire(story, st, e['剧情'])
+            rules.apply_effect(st, e['效果'], source='event')   # 机遇的效果写在 opportunities.json，剧情事件只管剧情
             st.inc('计数.机遇')
             if e['占月']:
                 st.void_next = 1
@@ -305,7 +300,7 @@ def period_end(story, st, i, entry, out):
                 rules.apply_effect(st, duv['效果'], source='event')
 
 
-# ---------- 逛街（5.5.2） ----------
+# ---------- 外出（5.5.2） ----------
 def meet(st, npc):
     if npc not in st.known:
         st.known.append(npc)
@@ -341,7 +336,7 @@ def npc_event(st, npc):
     """在场 NPC 的下一个链事件（没看过、条件满足）；没有返回 None。"""
     d = st.d
     for ch in d.chains:
-        if ch['npc'] == npc and ch['触发'] == '逛街':
+        if ch['npc'] == npc and ch['触发'] == '外出':
             for eid in ch['链']:
                 if ready(st, d.events[eid]):
                     return eid
@@ -352,13 +347,13 @@ def npc_resident(st, npc):
     d = st.d
     pairs = []
     for ch in d.chains:
-        if ch['npc'] == npc and ch['触发'] == '逛街':
+        if ch['npc'] == npc and ch['触发'] == '外出':
             pairs += [(c['权重'], c['事件']) for c in ch['常驻'] if ready(st, d.events[c['事件']])]
     return pairs
 
 
 def outing(story, st, place):
-    """逛街的旬中触发恰好一个事件。有人在场且他有链事件或常驻事件就出他的，否则抽地点的随机表。"""
+    """外出的旬中触发恰好一个事件。有人在场且他有链事件或常驻事件就出他的，否则抽地点的随机表。"""
     d = st.d
     i = story.cur_period
     people = present(st, place, i)
@@ -381,12 +376,6 @@ def outing(story, st, place):
     if eid:
         fire(story, st, eid)
     return eid
-
-
-def vacation(story, st, table):
-    cands = [x for x in table if ready(st, st.d.events[x])]
-    if cands:
-        fire(story, st, cands[st.rng.logic.below(len(cands))])
 
 
 def class_chain(story, st, chain, n):

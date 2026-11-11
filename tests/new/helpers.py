@@ -27,6 +27,5 @@ class Rec(Hooks):
     def book_done(self, st, bid): self.calls.append(('book_done', bid))
     def job_period(self, st, jid, good): self.calls.append(('job', jid, good))
     def outing(self, st, place): self.calls.append(('outing', place))
-    def vacation(self, st, table): self.calls.append(('vacation',))
     def board(self, st): self.calls.append(('board', st.date))
     def film_breach(self, st): self.calls.append(('breach',))

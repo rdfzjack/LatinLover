@@ -31,8 +31,7 @@ class Hooks:
     def period_start(self, st, i, entry): pass      # 旬初检查：临时换角、抢角（11.1）
     def period_end(self, st, i, entry, out): pass   # 一旬日程做完（家教旬的 Duv 告密等）
     def day(self, st, day): pass                    # 生日等按日的事件
-    def outing(self, st, place): pass               # 逛街事件（5.5.2）
-    def vacation(self, st, table): pass             # 度假事件
+    def outing(self, st, place): pass               # 外出事件（5.5.2）
     def class_chain(self, st, chain, n): pass       # 家教的 Duv 剧情（第 n 旬）
     def book_done(self, st, bid): pass              # 读完事件
     def job_period(self, st, jid, good): pass       # 打工接口：每期随机、里程碑
@@ -174,10 +173,7 @@ class Game:
                 st.romance_months = 0
         # 7 负债
         st.debt_months = st.debt_months + 1 if st.money < 0 else 0
-        # 8 股票
-        if st.stock > 0:
-            st.stock = st.stock * 103 // 100
-        # 9–12
+        # 8–11
         if m['对手成长']:
             h.rival_growth(st)
         if m['年度大事']:

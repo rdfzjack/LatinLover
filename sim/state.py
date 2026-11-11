@@ -51,7 +51,6 @@ class State:
         self.romance_months = 0
         self.debt_months = 0
         self.drug = 0
-        self.stock = 0
         self.collapse_months = 0          # 生病指数 = 100 连续的月数
         self.forced_rest = 0              # 1 = 下月日程强制疗养院（重病）
         self.void_next = 0                # 1 = 下月日程作废（失踪，第 6 步的事件设）
@@ -197,7 +196,7 @@ class State:
     # ---------- 存档 ----------
     SAVE_KEYS = ['ym', 'attr', 'skill', 'money', 'corr', 'favor', 'known', 'flags', 'count', 'tags', 'weights',
                  'books', 'read_books', 'items', 'equip', 'lifestyle', 'idx', 'status', 'romance_months',
-                 'debt_months', 'drug', 'stock', 'collapse_months', 'forced_rest', 'void_next', 'exposed',
+                 'debt_months', 'drug', 'collapse_months', 'forced_rest', 'void_next', 'exposed',
                  'month_used', 'fired', 'ended', 'finished', 'story']
 
     def to_dict(self):

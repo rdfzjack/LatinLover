@@ -58,8 +58,6 @@ def apply_effect(st, text, source='event'):
             st.drug = max(0, min(3, _delta(st.drug, op, v, pct)))
         elif n == '负债月数':
             st.debt_months = max(0, _delta(st.debt_months, op, v, pct))
-        elif n == '股票':
-            st.stock = max(0, _delta(st.stock, op, v, pct))
         elif n.startswith('好感.'):
             k = n[3:]
             cur = st.favor.get(k, 0)
@@ -139,8 +137,6 @@ def get_var(st, name):
         return st.drug
     if name == '负债月数':
         return st.debt_months
-    if name == '股票':
-        return st.stock
     if name == '最高基础属性':
         return st.highest_base()
     if name == '手腕最高技能':

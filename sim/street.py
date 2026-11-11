@@ -1,4 +1,4 @@
-"""街道、谈话、物品和装备、股票（GDD 5.8、11.3、14.1）。都是月初的自由操作，不占日程。
+"""街道、谈话、物品和装备（GDD 5.8、14.1）。都是月初的自由操作，不占日程。
 
 出错时抛 StreetError，状态不变。
 """
@@ -195,20 +195,3 @@ def sil_hint(st):
     if st.val('疲劳') >= 50:
         return ('疲劳', st.val('疲劳'))
     return ('最高属性', st.highest_base())
-
-
-# ---------- 股票（11.3） ----------
-def stock_buy(st, n):
-    if not st.flags.get('股票'):
-        raise StreetError('还没开通股票')
-    if n <= 0 or n % 100:
-        raise StreetError('股票以整百为单位')
-    _pay(st, n)
-    st.stock += n
-
-
-def stock_sell(st, n):
-    if n <= 0 or n > st.stock or (n % 100 and n != st.stock):
-        raise StreetError('卖出数额不对（整百，或全部卖出）')
-    st.stock -= n
-    st.add_money(n)

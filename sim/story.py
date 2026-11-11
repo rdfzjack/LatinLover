@@ -50,7 +50,7 @@ class Agent(audition.Player):
         raise NotImplementedError
 
     def month_start(self, story, st):
-        """月初的自由操作：story.write_script / send_detox / leak_news，街道、股票等（不占日程）。"""
+        """月初的自由操作：story.write_script / send_detox / leak_news，街道等（不占日程）。"""
 
 
 class SimpleAgent(Agent):
@@ -149,9 +149,6 @@ class Story(Hooks):
     def outing(self, st, place):
         events.outing(self, st, place)
 
-    def vacation(self, st, table):
-        events.vacation(self, st, table)
-
     def class_chain(self, st, chain, n):
         events.class_chain(self, st, chain, n)
 
@@ -186,7 +183,7 @@ def new_game(seed=1, origin=(0, 0, 0), agent=None, data=None):
 
 
 def fit_plan(g, plan):
-    """把固定日程里本月不能排的项换成在家休息（生病不能逛街、书读完了、工还没解锁…）。"""
+    """把固定日程里本月不能排的项换成在家休息（生病不能外出、书读完了、工还没解锁…）。"""
     st = g.st
     out = []
     for i, e in enumerate(plan):

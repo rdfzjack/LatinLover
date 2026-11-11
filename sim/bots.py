@@ -264,11 +264,9 @@ class Bot(SimpleAgent):
         if kind == 'job':
             return w * job_fat(d.jobs[iid]), int(schedule.wage_of(st, iid) * w * 0.7)
         if iid == 'rest_outing':
-            return -10 * n, -d.places[place]['花费'] * n
+            return d.places[place]['疲劳每天'] * n, -schedule.place_cost(st, place) * n
         if iid == 'rest_sanatorium':
             return -11 * n, -8 * n
-        if iid == 'rest_vacation':
-            return -P['fat'], -schedule.vacation_cost(st)
         return -5 * n, 0
 
     def apply(self, g, P, i, e):
@@ -282,7 +280,7 @@ class Bot(SimpleAgent):
     def rest_entry(self, g, P, i):
         st = g.st
         place = self.place
-        if st.status['生病'] or P['money'] < 60 + g.d.places[place]['花费'] * 10:
+        if st.status['生病'] or P['money'] < 60 + schedule.place_cost(st, place) * 10:
             return 'rest_home'
         return 'rest_outing@' + place
 

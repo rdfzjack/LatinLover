@@ -57,14 +57,10 @@ class TestRunner(unittest.TestCase):
 
     def test_month_limit_two(self):
         st = st_at('1926-03')
-        st.money = 6000                                       # 三档存款同时满足
+        st.money = 6000                                       # 两档存款同时满足
         story = Story()
         events.month_end(story, st)
-        self.assertEqual(len(story.log), 2)
         self.assertEqual([r['id'] for r in story.log], ['evt_deposit_1000', 'evt_deposit_2000'])
-        events.month_end(story, st)
-        self.assertEqual(story.log[2]['id'], 'evt_deposit_5000')
-        self.assertEqual(st.flags['股票'], 1)
 
 
 class TestCodeEvents(unittest.TestCase):
@@ -150,16 +146,6 @@ class TestCodeEvents(unittest.TestCase):
         st.favor['Sil'] = 60
         events.fire(Story(), st, 'evt_detox')
         self.assertEqual((st.drug, st.favor['Sil'], st.void_next), (0, 70, 1))
-
-    def test_crash(self):
-        st = st_at()
-        st.stock = 3000
-        events.fire(Story(), st, 'era_crash')
-        self.assertEqual((st.stock, st.flags.get('幸存者')), (300, None))
-        st = st_at()
-        st.money = 5000
-        events.fire(Story(), st, 'era_crash')
-        self.assertEqual(st.flags['幸存者'], 1)
 
     def test_opportunity_once(self):
         st = st_at('1928-01')

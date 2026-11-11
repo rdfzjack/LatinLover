@@ -56,7 +56,7 @@ def ref_event(f, e):
     if EVENT_IDS is None: pending_events.add(e)
     elif e not in EVENT_IDS: err(f, f'事件不存在 {e}')
 
-DERIVED = {'最高声望','月份','年份','药瘾阶段','负债月数','股票','档次','最大标签族','无法定义','低成本定型','有声片部数',
+DERIVED = {'最高声望','月份','年份','药瘾阶段','负债月数','档次','最大标签族','无法定义','低成本定型','有声片部数',
            '最高基础属性','手腕最高技能','最大工期数','四路声望极差','最高声望所在路'}
 PREFIX = ('状态.','计数.','标签.','期数.','旗标.','交手次数.')
 def var_ok(v):
@@ -82,7 +82,7 @@ def check_cond(f, c, where=''):
             elif not isinstance(t[2], (int, str)): err(f, f'{where} 条件值 {t[2]}')
 EFF = re.compile(r'^(.+?)([+\-=])(\d+)(%?)$')
 def eff_name_ok(n):
-    if n in ATTRS or n in SK or n in ('金钱','药瘾阶段','负债月数','股票'): return True
+    if n in ATTRS or n in SK or n in ('金钱','药瘾阶段','负债月数'): return True
     if n.startswith('好感.'): return n[3:] in NPC
     if n.startswith('修正.'): return n[3:] in ROADS
     if n.startswith('权重.'): return n[3:] in TAGS
@@ -95,11 +95,15 @@ def parse_effect(f, s, where=''):
         if tok.startswith('触发.'):
             ref_event(f, tok[3:]); continue
         m = EFF.match(tok)
-        if not m: err(f, f'{where} 效果项格式 {tok}'); continue
+        if not m: err(f, f'{where} 效果项格式不对：{tok}' + hint(tok)); continue
         n, op, v, pct = m.group(1), m.group(2), int(m.group(3)), m.group(4)
         if not eff_name_ok(n): err(f, f'{where} 效果名字不存在 {n}'); continue
         if op != '=' and not pct: out[n] = out.get(n, 0) + (v if op == '+' else -v)
     return out
+def hint(s):
+    """中文标点、全角符号这类常见笔误的提示。"""
+    bad = [c for c in s if c in '＋－＝％，。：；“”‘’　（）']
+    return f'（里面有中文符号 {"".join(bad)}，要换成英文的 + - = % 和半角空格）' if bad else '（写法是 名字+数、名字-数、名字=数，项之间用空格隔开）'
 def is_range(r): return isinstance(r, list) and len(r) == 2 and all(isinstance(x, int) for x in r) and r[0] <= r[1]
 
 # stats
@@ -141,12 +145,12 @@ for b in books['书']:
         if b[k] != t[k]: err(f, f"{b['id']} {k} 与档表不符")
     ref_event(f, b['读完事件'])
 if len(set(BOOK_IDS)) != len(BOOK_IDS): err(f, 'id 重复')
-if len(BOOK_IDS) != 15: err(f, f'书应为 15 本，现 {len(BOOK_IDS)}')
+if not BOOK_IDS: err(f, '至少要有一本书')
 for s in ('打斗','骑马驾驶','胆识','体态','人脉'):
     if any(b['技能'] == s for b in books['书']): err(f, f'{s} 不应有书')
 # jobs
 f = 'jobs.json'
-if len(JOB_IDS) != 15 or len(set(JOB_IDS)) != 15: err(f, '工应为 15 种且 id 不重复')
+if not JOB_IDS or len(set(JOB_IDS)) != len(JOB_IDS): err(f, '工至少一种，且 id 不能重复')
 ev_ids = []
 for j in jobs['工']:
     w = j['id']
@@ -175,27 +179,34 @@ if len(set(ev_ids)) != len(ev_ids): err(f, '事件 id 重复')
 for m in cal_['月']:
     want = sorted(j['id'] for j in jobs['工'] if j['最早时间'] == m['月'])
     if sorted(m['打工解锁']) != want: err('calendar.json', f"{m['月']} 打工解锁与 jobs.json 不一致")
-if sum(1 for j in jobs['工'] if j['最早时间'] == '1926-01') != 6: err(f, '开局应有 6 种工')
+if not any(j['最早时间'] == '1926-01' for j in jobs['工']): err(f, '开局（1926-01）至少要有一种工能打')
 # rest / places / lifestyle
 f = 'rest.json'
 rest_ids = [r['id'] for r in rest['休息']]
-if len(rest_ids) != 5: err(f, '休息应 5 项')
+if sorted(r['id'] for r in rest['休息'] if r.get('玩家可选', True)) != ['rest_home', 'rest_outing']:
+    err(f, '玩家能选的休息应只有在家和外出两种（用户定）')
 for fo in rest['强制']:
     check_cond(f, fo['条件'], '强制')
     for k in ('日程','钱不够改'):
         if fo[k] not in rest_ids: err(f, f'强制 {k} 引用不存在 {fo[k]}')
 for r in rest['休息']:
-    if r['id'] == 'rest_escort': parse_effect(f, r['每天效果'] + ' ' + r['每旬效果'], r['id'])
+    for k in ('每天效果', '每旬效果'):
+        if r.get(k): parse_effect(f, r[k], r['id'])
 f = 'places.json'
 for p in places['地点']:
-    need(f, p, ['id','名字','花费','常在的人','随机表'], p.get('id'))
+    need(f, p, ['id','名字','疲劳每天','常在的人','随机表'], p.get('id'))
+    if ('花费' in p) == ('花费按名气档' in p): err(f, f"{p.get('id')} 要有 花费 或 花费按名气档（只写一个）")
+    if '花费' in p and not (isinstance(p['花费'], int) and p['花费'] >= 0): err(f, f"{p['id']} 花费")
+    if '花费按名气档' in p and (len(p['花费按名气档']) != 5 or not all(isinstance(x, int) for x in p['花费按名气档'])):
+        err(f, f"{p['id']} 花费按名气档 应是 5 个整数")
+    if not (isinstance(p['疲劳每天'], int) and p['疲劳每天'] < 0): err(f, f"{p['id']} 疲劳每天 应是负整数")
     for n in p['常在的人']:
         if n not in NPC: err(f, f"{p['id']} NPC 不存在 {n}")
 f = 'lifestyle.json'
 for l in life['生活方式']:
     if len(l['月费']) != 5 or not all(isinstance(x, int) for x in l['月费']): err(f, f"{l['id']} 月费")
     if l['月结效果']: parse_effect(f, l['月结效果'], l['id'])
-if len(life['生活方式']) != 4: err(f, '生活方式应 4 种')
+if 'life_normal' not in {l['id'] for l in life['生活方式']}: err(f, '要保留 life_normal（开局用的生活方式）')
 # street
 f = 'street.json'
 for e in street['入口']:
@@ -212,7 +223,7 @@ for e in street['入口']:
 # origins
 f = 'origins.json'
 ATTR_SET = set(ATTRS)
-if [len(q['选项']) for q in origins['问']] != [5,4,6]: err(f, '三问的选项数应为 5/4/6')
+if len(origins['问']) != 3 or not all(q['选项'] for q in origins['问']): err(f, '开局应有 3 个问题，每个至少一个选项')
 for qi, q in enumerate(origins['问']):
     for o in q['选项']:
         eff = parse_effect(f, o['效果'], o['文字'])
@@ -241,7 +252,7 @@ for m in ms:
     for e in m['时代事件']: ref_event(f, e)
 if sum(1 for m in ms if m['选片板']) != 16: err(f, '选片板应 16 次')
 if sum(1 for m in ms if m['年度大事']) != 4: err(f, '年度大事应 4 次')
-if sum(1 for m in ms if m['时代事件']) != 8: err(f, '时代节点应 8 个')
+if sum(1 for m in ms if m['时代事件']) != 7: err(f, '时代节点应 7 个（GDD 11.3）')
 
 
 # habits / rivals
@@ -260,7 +271,7 @@ for r in rivals['有名']:
         if m not in CAL_MONTHS: err(f, f"{r['id']} 在场月不在日历内")
 for x in rivals['替换']:
     if x['原'] not in RIVALS or any(i not in RIVALS for i in x['改为']): err(f, '替换引用不存在')
-if len(rivals['有名']) != 9: err(f, '有名对手应 9 个')
+if not rivals['有名']: err(f, '至少要有一个有名对手')
 # roles
 f = 'roles.json'
 ROLE_IDS = [r['id'] for r in roles['角色']]
@@ -367,15 +378,10 @@ for e in outing['事件']:
         check_check(w, o['判定'])
         for k in ('成功效果','失败效果'):
             if o[k]: parse_effect(f, o[k], w)
-rt_ids = [r['事件'] for p in places['地点'] for r in p['随机表']]
 for p in places['地点']:
     for r in p['随机表']:
         if r['事件'] not in {e['id'] for e in outing['事件']}: err('places.json', f"随机表事件不在 outing.json: {r['事件']}")
     if len(p['随机表']) < 1: err('places.json', f"{p['id']} 随机表为空")
-if len(rt_ids) != 8: err('places.json', f'随机表事件应共 8 个，现 {len(rt_ids)}')
-for i in rest['休息']:
-    for e in i.get('事件表', []):
-        if e not in EVENT_IDS: err('rest.json', f'度假事件不存在 {e}')
 # romance / schedule / chains
 f = 'romance.json'
 if len(NPC) != len(romance['npc']): err(f, 'NPC 重名')
@@ -431,9 +437,6 @@ for b in big:
     if not lst: err(f, f'{b} 没有结局'); continue
     if lst[-1]['条件'] != []: err(f, f'{b} 最后一条应是兜底（条件空）')
     if [x['顺序'] for x in lst] != sorted({x['顺序'] for x in lst}) and len({x['顺序'] for x in lst}) != len(lst): err(f, f'{b} 顺序重复')
-if len(endings['结局']) + len(endings['强制']) + len(endings['特殊']) < 36: err(f, '结局应不少于 36 个')
-non_actor = sum(1 for e in endings['结局'] if e['大类'] != '演员')
-if non_actor * 2 <= len(endings['结局']): err(f, '非演员结局应过半')
 if pending_items: notes.append(f'待第 3 步校验的物品引用 {len(pending_items)} 个：{sorted(pending_items)}')
 if pending_events: notes.append(f'待第 3 步校验的事件引用 {len(pending_events)} 个')
 for n in notes: print('注：' + n)

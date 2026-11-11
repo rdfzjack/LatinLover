@@ -175,7 +175,7 @@ class TestRest(unittest.TestCase):
     def test_home(self):
         st = bare(); st.attr['疲劳'] = 100
         S.run_period(st, 0, 'rest_home', H)
-        self.assertEqual(st.attr['疲劳'], 50)
+        self.assertEqual((st.attr['疲劳'], st.favor['Sil']), (50, 2))   # Sil 陪着：每旬 +2
 
     def test_outing(self):
         st = bare(); st.attr['疲劳'] = 200; st.money = 13
@@ -184,35 +184,28 @@ class TestRest(unittest.TestCase):
         # 10/天，只有第 1 天付得起：-10，其余 9 天 -5
         self.assertEqual((st.money, st.attr['疲劳']), (3, 200 - 10 - 45))
         self.assertEqual(rec.calls, [('outing', 'place_seaside')])
-        self.assertEqual(st.cnt('计数.逛街.place_seaside'), 1)
+        self.assertEqual(st.cnt('计数.外出.place_seaside'), 1)
         self.assertIsNotNone(S.validate(st, 'rest_outing'))
         self.assertIsNotNone(S.validate(st, 'rest_home@place_dock'))
 
-    def test_escort(self):
-        st = bare(); st.attr['疲劳'] = 50
-        S.run_period(st, 0, 'rest_escort', H)
-        self.assertEqual((st.attr['疲劳'], st.attr['自律'], st.favor['Sil']), (30, 50, 2))
-
     def test_sanatorium(self):
         st = bare(); st.attr['疲劳'] = 200; st.money = 20
+        self.assertIsNotNone(S.validate(st, 'rest_sanatorium'))   # 玩家不能选，只在重病时强制
         S.run_period(st, 0, 'rest_sanatorium', H)
         self.assertEqual((st.money, st.attr['疲劳']), (4, 178))
 
-    def test_vacation(self):
-        st = bare(); st.attr['疲劳'] = 200
+    def test_resort(self):
+        st = bare(); st.attr['疲劳'] = 400
         rec = Rec()
-        self.assertEqual(S.vacation_cost(st), 80)
-        S.run_period(st, 0, 'rest_vacation', rec)
-        self.assertEqual((st.money, st.attr['疲劳']), (420, 0))
-        self.assertEqual(rec.calls, [('vacation',)])
-        st.money = 10
-        self.assertIsNotNone(S.validate(st, 'rest_vacation'))
+        self.assertEqual(S.place_cost(st, 'place_resort'), 8)    # 眼熟档每天 8
+        S.run_period(st, 0, 'rest_outing@place_resort', rec)
+        self.assertEqual((st.money, st.attr['疲劳']), (420, 100))
+        self.assertEqual(rec.calls, [('outing', 'place_resort')])
 
     def test_sick_restriction(self):
         st = bare(); st.status['生病'] = 1
         self.assertIsNone(S.validate(st, 'rest_home'))
-        self.assertIsNone(S.validate(st, 'rest_sanatorium'))
-        for r in ('rest_escort', 'rest_vacation', 'rest_outing@place_dock'):
+        for r in ('rest_outing@place_resort', 'rest_outing@place_dock'):
             self.assertIsNotNone(S.validate(st, r))
         self.assertIsNone(S.validate(st, 'job_dock'))   # 生病不改日程成功率，也不禁打工
 
