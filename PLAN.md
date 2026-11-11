@@ -64,6 +64,8 @@ Godot 4.3，GDScript。工程在 `game/silentstar/`。逻辑和界面分开：`g
 | 10 | 移植日程和月结（**已完成，对账一致**） | `sim/schedule.py` `month.py` | `game/silentstar/core/schedule.gd` `month.gd` | 同种子、同日程，每月状态与 Python 一致（对账脚本 `tools/compare_trace.py`） | 中 | Sonnet |
 | 11 | 移植试镜（**已完成，对账一致**） | `sim/audition.py` | `game/silentstar/core/audition.gd` | 同种子 1000 场试镜逐轮一致 | 小 | Sonnet |
 | 12 | 移植选片板、拍摄、上映、事件、结局（**已完成，对账一致**） | `sim/board.py` `film.py` `events.py` `ending.py` | `game/silentstar/core/` 对应脚本 | 机器人的决策录成文件后在 Godot 里回放，整局每月状态和结局与 Python 一致。**拆法同第 6 步** | 大 | Opus |
+| 12b | 把机器人和报告搬进 Godot，之后 `sim/` 冻结。**规格见 `design/STEP12B_12C_BALANCE.md`** | 规格里列的文件 | `game/silentstar/tools/bots.gd` `report.gd` | 对账无差异；Godot 报告和 Python 基准 `diff` 为空 | 中 | Sonnet |
+| 12c | 第二轮平衡：疲劳、毒品、被捕、疗养院的规则改动，三个新机器人，按目标表调数。**规格同上** | 规格里列的 GDD 小节 | 改 `core/`、`data/new/`、GDD、`BALANCE_LOG.md` | 规格里的目标表达标 | 大（c1、c2 一个对话，c3 一个对话） | Opus 写，Fable 看报告 |
 
 ### D. Godot 界面（无美术，占位）
 

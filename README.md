@@ -4,7 +4,7 @@
 
 ## 现在做到哪
 
-- **PLAN 第 1–12 步和 8b、9b、9c 已完成。下一步是第 13 步**（界面）；开工前先和 Fable 讨论平衡和体验（`design/HANDOFF_FABLE.md`）。数据、`sim/` 和 Godot 的 `core/` 里的 id、字段名全是英文（对照表 `design/GLOSSARY.md`），中文只在数据表的显示字段里；`data/locale/text.csv` 由 `tools/extract_text.py` 生成（`tools/check.py` 会跑它），`data/USER_GUIDE.md` 已按新写法用英文重写。Godot 对账（命令在 `design/IMPL_NOTES.md` 的 Godot 一节）已通过。
+- **PLAN 第 1–12 步和 8b、9b、9c 已完成。下一步是第 12b 步**（把机器人和报告搬进 Godot），然后 12c（第二轮平衡），再到第 13 步（界面）。12b、12c 的规格在 `design/STEP12B_12C_BALANCE.md`。数据、`sim/` 和 Godot 的 `core/` 里的 id、字段名全是英文（对照表 `design/GLOSSARY.md`），中文只在数据表的显示字段里；`data/locale/text.csv` 由 `tools/extract_text.py` 生成（`tools/check.py` 会跑它），`data/USER_GUIDE.md` 已按新写法用英文重写。Godot 对账（命令在 `design/IMPL_NOTES.md` 的 Godot 一节）已通过。
 - 用户会自己改 `data/new/` 的表（指南 `data/USER_GUIDE.md`）。开工先跑 `python3 tools/check.py`，不通过先告诉用户。
 - 第 12 步：`core/` 加了 `board.gd` `film.gd` `street.gd`（12-1）和 `events.gd` `ending.gd` `story.gd`（12-2；`story.gd` 是 `Month.Hooks` 的子类，内含 `Agent` 和 `SimpleAgent`）。对账：`tools/record_game.py` 把机器人一整局的每个决定录下来（`--extras` 再加剧本、戒毒、放消息、餐厅等月初动作和一份“偏爱的打工”），`tools/trace.py` 录 `trace_cases.json` 的 `games` 段 38 局到 `work/games/`，Godot 回放；每月状态（含整份存档的 md5）、触发过的事件、每块板的试镜和结局逐字节一致。改了表以后，`python3 tools/record_game.py --coverage` 看各机器人还走得到哪些路径。
 - 第 11 步：`core/audition.gd` 移植了试镜（组牌、有效点数、对手习惯、对手组牌、结果档、`audition()`）；`trace_cases.json` 的 `audition` 段跑 1000 场（月份、名气、声望、场风、有名和无名对手、大片两场、被记住、搞砸都有），Godot 和 Python 逐轮一致。
