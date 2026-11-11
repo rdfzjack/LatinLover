@@ -30,8 +30,11 @@ class TestCond(unittest.TestCase):
         st.ym = 44   # 1929-09
         self.assertEqual(rules.get_var(st, '状态.收尾期'), 1)
         self.assertTrue(rules.cond(st, [[['日期', '>=', '1927-09']]]))
+        import sim.ending  # noqa: F401  第 6 步登记的结局变量
+        self.assertEqual(rules.get_var(st, '档次'), 'D')
+        self.assertEqual(rules.get_var(st, '低成本定型'), 0)
         with self.assertRaises(KeyError):
-            rules.get_var(st, '档次')   # 第 6 步才有
+            rules.get_var(st, '没有这个变量')
 
 
 class TestEffect(unittest.TestCase):

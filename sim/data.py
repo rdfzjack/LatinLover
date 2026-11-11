@@ -55,6 +55,18 @@ class Data:
         self.origins = t['origins']['问']
         self.endings_forced = {e['id']: e for e in t['endings']['强制']}
 
+        # 第 6 步：选片板、拍摄、上映、事件、结局
+        self.roles = {r['id']: r for r in t['roles']['角色']}
+        self.role_cfg = t['roles']['默认']
+        self.tag_families = t['endings']['标签族']
+        self.content_tags = [x for v in self.tag_families.values() for x in v]   # 16 个内容标签
+        self.rivals_named = {r['id']: r for r in t['rivals']['有名']}
+        self.events = {e['id']: e for e in t['events']['事件']}
+        self.events.update({e['id']: e for e in t['outing']['事件']})
+        self.opps = t['opportunities']['机遇']
+        self.chains = t['npc_chains']['链']
+        self.schedule_npc = t['npc_schedule']['日程']
+
     def class_road(self, cid):
         """一门课算哪条路的“期数”：收益里第一个技能所在的路（家教的第一个技能是创作，算文化）。"""
         for e in self.classes[cid]['收益']:
