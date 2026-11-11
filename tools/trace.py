@@ -12,7 +12,7 @@ import sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
 
-from sim import data as D, rules, schedule  # noqa: E402
+from sim import audition as A, data as D, rules, schedule  # noqa: E402
 from sim.month import Game, trace_line  # noqa: E402
 from sim.rng import PCG32, Rng  # noqa: E402
 from sim.state import State  # noqa: E402
@@ -89,7 +89,58 @@ def run(cases):
 
     for c in cases.get('month', []):
         run_month_case(d, c, w)
+    if 'audition' in cases:
+        run_audition_cases(d, cases['audition'], w)
     return '\n'.join(out) + '\n'
+
+
+class _TracePlayer(A.Player):
+    """Step 11: main color of the player + a second color drawn from the show stream, random play from the logic stream."""
+
+    def __init__(self, colors):
+        self.colors = colors
+
+    def deck(self, st, ctx):
+        return list(self.colors)
+
+    def play(self, st, ctx):
+        return st.rng.logic.below(len(ctx['hand']))
+
+
+def run_audition_cases(d, c, w):
+    """Step 11: c['count'] auditions. The scenario of each one (month, fame, reputation, role style, rivals, deck) is drawn from the show
+    stream; the audition itself uses the logic stream. One line per audition with every round, so the first difference shows."""
+    st = State.new(d, c['seed'], tuple(c['origin']))
+    sh = st.rng.show
+    w(f'# audition seed={c["seed"]} origin={js(c["origin"])} count={c["count"]}')
+    named = [x['id'] for x in d.t['rivals']['named']]
+    tiers = ['small', 'medium', 'big']
+    pools = [[15, 60, 10, 15], [25, 25, 25, 25], [70, 10, 10, 10], [10, 10, 10, 70], [0, 0, 100, 0], [40, 0, 0, 60]]
+    for i in range(c['count']):
+        st.ym = sh.below(48)
+        st.attr['fame'] = sh.r(0, 400)
+        for r in d.roads:
+            st.corr[r] = sh.r(-50, 300)
+        probs = list(pools[sh.below(len(pools))])
+        size = tiers[sh.below(3)]
+        rivals = []
+        for k in range(2 if size == 'big' else 1):
+            nid = named[sh.below(len(named))]
+            if sh.below(2) and A.rival_present(st, nid):
+                rivals.append(A.named_rival(st, nid))
+            else:
+                rivals.append(A.unnamed_rival(st, size))
+        main = A.player_main(st)
+        sub = (main + 1 + sh.below(3)) % 4
+        k = 3 + sh.below(3)
+        pl = _TracePlayer([main] * k + [sub] * (5 - k))
+        if sh.below(4) == 0:
+            probs = A.remembered_probs(probs, main, 10)
+        role = {'id': f'role{i}', 'style_probs': probs}
+        out = A.audition(st, role, pl, rivals)
+        w(f'{i} {st.date} fame={st.attr["fame"]} lv={js(A.player_levels(st))} probs={js(probs)} rivals={js(rivals)} -> {js(out)}')
+    w('state ' + js(st.rng.dump()) + ' ' + js(st.count) + ' ' + js(st.favor))
+    w('save ' + st.dumps())
 
 
 def run_month_case(d, c, w):

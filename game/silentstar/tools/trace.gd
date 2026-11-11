@@ -15,6 +15,7 @@ const Rules = preload("res://core/rules.gd")
 const Jsonx = preload("res://core/jsonx.gd")
 const Schedule = preload("res://core/schedule.gd")
 const Month = preload("res://core/month.gd")
+const Audition = preload("res://core/audition.gd")
 
 
 func _init() -> void:
@@ -140,6 +141,8 @@ func run(d, cases: Dictionary) -> String:
 
 	for mc in cases.get("month", []):
 		_run_month_case(d, mc, out)
+	if cases.has("audition"):
+		_run_audition_cases(d, cases["audition"], out)
 	return "\n".join(out) + "\n"
 
 
@@ -182,3 +185,63 @@ func _roundtrip(d, s1: String) -> String:
 	st2.loads(s1)
 	var s2: String = st2.dumps()
 	return "identical" if s1 == s2 else "differs " + s2
+
+
+## Step 11: the same as _TracePlayer in tools/trace.py.
+class TracePlayer:
+	extends Audition.Player
+	var colors := []
+
+	func _init(c: Array) -> void:
+		colors = c
+
+	func deck(_st, _ctx) -> Array:
+		return colors.duplicate()
+
+	func play(st, ctx) -> int:
+		return st.rng.logic.below(ctx["hand"].size())
+
+
+## Step 11: c.count auditions; the same as run_audition_cases in tools/trace.py.
+func _run_audition_cases(d, c: Dictionary, out: PackedStringArray) -> void:
+	var st = State.new(d)
+	st.start(c["seed"], c["origin"])
+	var sh = st.rng.show
+	out.append("# audition seed=%d origin=%s count=%d" % [c["seed"], js(c["origin"]), c["count"]])
+	var named := []
+	for x in d.t["rivals"]["named"]:
+		named.append(x["id"])
+	var tiers := ["small", "medium", "big"]
+	var pools := [[15, 60, 10, 15], [25, 25, 25, 25], [70, 10, 10, 10], [10, 10, 10, 70], [0, 0, 100, 0], [40, 0, 0, 60]]
+	for i in int(c["count"]):
+		st.ym = sh.below(48)
+		st.attr["fame"] = sh.r(0, 400)
+		for r in d.roads:
+			st.corr[r] = sh.r(-50, 300)
+		var probs: Array = pools[sh.below(pools.size())].duplicate()
+		var size: String = tiers[sh.below(3)]
+		var rivals := []
+		for k in (2 if size == "big" else 1):
+			var nid: String = named[sh.below(named.size())]
+			var pick: int = sh.below(2)
+			if pick != 0 and Audition.rival_present(st, nid):
+				rivals.append(Audition.named_rival(st, nid))
+			else:
+				rivals.append(Audition.unnamed_rival(st, size))
+		var main := Audition.player_main(st)
+		var sub: int = (main + 1 + sh.below(3)) % 4
+		var k: int = 3 + sh.below(3)
+		var cols := []
+		for j in k:
+			cols.append(main)
+		for j in 5 - k:
+			cols.append(sub)
+		var pl = TracePlayer.new(cols)
+		if sh.below(4) == 0:
+			probs = Audition.remembered_probs(probs, main, 10)
+		var role := {"id": "role%d" % i, "style_probs": probs}
+		var res := Audition.audition(st, role, pl, rivals)
+		out.append("%d %s fame=%d lv=%s probs=%s rivals=%s -> %s" % [i, st.date(), st.attr["fame"],
+			js(Audition.player_levels(st)), js(probs), js(rivals), js(res)])
+	out.append("state " + js(st.rng.dump()) + " " + js(st.count) + " " + js(st.favor))
+	out.append("save " + st.dumps())

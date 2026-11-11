@@ -147,6 +147,7 @@ Godot 4.3, GDScript. The project is in `game/silentstar/`; the logic is in `core
 | `core/locale.gd` | - | reads `data/locale/text.csv` at run time and registers one `Translation` per locale column with the `TranslationServer` (no editor import needed); empty cells are not registered, so a missing translation shows the key. `ending_name` fills the `{top_job}` placeholder |
 | `core/schedule.gd` | `schedule.py` | classes, books, jobs, rest; all static. `truthy()` gives Python truthiness for table values (null, "", 0, [] and {} are false) |
 | `core/month.gd` | `month.py` | `Month` (= Python `Game`): month start, three periods, settlement, save / restore; inner class `Hooks` with no-op methods, step 12 subclasses it. `trace_line` is the per-month reconciliation line |
+| `core/audition.gd` | `audition.py` | decks, effective points, rivals, habits, one match, result tiers, `audition()`. Inner classes `Player` and `FixedRandomPlayer`. `match` is a reserved word in GDScript, so `match()` is `play_match()`; `field = -1` means "draw the style"; empty `probs` means "the role's". The GDD 7.7 table helpers (`table_77`, `exact_win` ...) stay Python-only (tests) |
 | `tools/trace.gd` | `tools/trace.py` | prints the reconciliation text for `tools/trace_cases.json` |
 
 **Porting conventions**

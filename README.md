@@ -4,8 +4,9 @@
 
 ## 现在做到哪
 
-- **PLAN 第 1–10 步和 8b、9b、9c 已完成。下一步是第 11 步**。数据、`sim/` 和 Godot 的 `core/` 里的 id、字段名全是英文（对照表 `design/GLOSSARY.md`），中文只在数据表的显示字段里；`data/locale/text.csv` 由 `tools/extract_text.py` 生成（`tools/check.py` 会跑它），`data/USER_GUIDE.md` 已按新写法用英文重写。Godot 对账（命令在 `design/IMPL_NOTES.md` 的 Godot 一节）已通过。
+- **PLAN 第 1–11 步和 8b、9b、9c 已完成。下一步是第 12 步**。数据、`sim/` 和 Godot 的 `core/` 里的 id、字段名全是英文（对照表 `design/GLOSSARY.md`），中文只在数据表的显示字段里；`data/locale/text.csv` 由 `tools/extract_text.py` 生成（`tools/check.py` 会跑它），`data/USER_GUIDE.md` 已按新写法用英文重写。Godot 对账（命令在 `design/IMPL_NOTES.md` 的 Godot 一节）已通过。
 - 用户会自己改 `data/new/` 的表（指南 `data/USER_GUIDE.md`）。开工先跑 `python3 tools/check.py`，不通过先告诉用户。
+- 第 11 步：`core/audition.gd` 移植了试镜（组牌、有效点数、对手习惯、对手组牌、结果档、`audition()`）；`trace_cases.json` 的 `audition` 段跑 1000 场（月份、名气、声望、场风、有名和无名对手、大片两场、被记住、搞砸都有），Godot 和 Python 逐轮一致。
 - 第 10 步：`core/schedule.gd`、`month.gd` 移植了日程和月结（钩子为空，选片板等第 12 步接）；`tools/trace_cases.json` 的 `month` 段跑 7 组 48 个月的固定日程（含外出、看书、病倒、疗养院、崩溃结局、存读档），Godot 和 Python 逐字节一致。
 - 第 9 步：Godot 工程 `game/silentstar/` 有了数据加载、随机数、状态、条件和效果、存读档，和 Python 对账逐字节一致（命令在 `design/IMPL_NOTES.md` 的 Godot 一节）。
 - 股票系统已删；休息只剩在家（Sil 陪着）和外出（选去处）两种（`design/CHANGE.md`）。
