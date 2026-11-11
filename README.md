@@ -4,10 +4,10 @@
 
 ## 现在做到哪
 
-- **PLAN 第 1–6 步已完成。下一步是第 7 步**：策略机器人和报告（`sim/bots.py` `sim/report.py`）。
+- **PLAN 第 1–7 步已完成。下一步是第 8 步**：平衡轮（读 `python3 -m sim.report` 的报告和 `design/BALANCE_LOG.md`，只改 `data/new/*.json`）。
 - 设计文档完成，用户确认了结构；角色、事件、NPC、文本大多还是占位。
 - 数值只过了一轮粗算（`tools/pacing_trial.py`，结果在 DESIGN_NOTES N60）。
-- `sim/` 能从 1926-01 跑到 1929-12 的结局：日程、试镜、选片板、拍摄、上映、事件、逛街、打工接口、年度大事、机遇、结局都接上了。数值没调过（第 8 步）。Godot（`game/`）没开始。
+- `sim/` 能从 1926-01 跑到 1929-12 的结局：日程、试镜、选片板、拍摄、上映、事件、逛街、打工接口、年度大事、机遇、结局都接上了。数值没调过（第 8 步）；第 7 步的首次报告显示钱和声望都偏多，见 `design/BALANCE_LOG.md`。Godot（`game/`）没开始。
 - 角色池只有 9 个角色（第 16、17 步补），不够时选片板生成占位角色，所以现在多数板上是占位角色。
 
 ## 文件
@@ -47,6 +47,10 @@ python3 -m sim.audition
 python3 -m sim.story --seed 1 --origin 0,1,2 --plan class_acting,job_dock,rest_home
 ```
 
+```bash
+python3 -m sim.report
+```
+
 第三条只跑日程（没有选片板和事件），每月一行（日期、金钱、8 项属性、12 项训练值、4 路声望、两个指数、逻辑流状态），第 10 步和 Godot 对账就比这个。第四条按现行规则重算 GDD 7.7 的胜率表（对手贴合角色的局面）。第五条是整局：同样的每月一行，用 `SimpleAgent` 做所有决定，最后打出全部片约和结局，第 12 步对账比这个。
 
 ## sim/ 的结构
@@ -65,7 +69,11 @@ python3 -m sim.story --seed 1 --origin 0,1,2 --plan class_acting,job_dock,rest_h
 | `film.py` | 片约、拍摄、片酬、违约、上映、标签和定型 | 5.6、8、10 |
 | `events.py` | 事件执行器；月末事件和机遇、旬初、逛街和 NPC 日程、度假、Duv、打工接口、时代、年度大事 | 5.4、5.5、11、12 |
 | `ending.py` | 结局、品性、归宿、总分；登记结局用的派生变量 | 15 |
+| `bots.py` | 8 种策略机器人（专练四路、两路、犯罪线、只读书文化、乱选）和 `play(机器人, 种子)` | — |
+| `report.py` | 批量跑机器人出报告（≤60 行），并排 N60；`--n` `--bots` `--random-play` | PLAN 7 |
 | `story.py` | `Story`（`Hooks` 的实现）、`Agent`（玩家要回答的问题）、`SimpleAgent`、整局命令行 | 4 |
+
+**第 7 步（已做）。** `bots.py` 的机器人继承 `Agent`；报告 200 局×8 种约 25 秒。机器人没做买装备、写剧本、放消息、度假、股票，所以和 N60 “买装备”一行对不上。下面是接口说明：
 
 **第 7 步怎么接。** 机器人继承 `story.Agent`（或 `SimpleAgent` 改几个方法）：`deck` `play`（试镜）、`pick_role`（报名哪个角色）、`accept_support`（接不接配角）、`go_personally`（亲自上）、`option`（事件选项）、`annual`（年度大事）、`family`（转型的戏路族）、`suppress`（压丑闻）、`month_start`（月初的写剧本、送去戒、放消息、街道、股票）。日程由调用方每月给：`g = story.new_game(seed, origin, agent)`，然后每月 `g.start_month()`、`g.run_month(三旬)`；`story.fit_plan` 把排不了的旬换成在家休息。报告要的数从这里取：`st.story['片']`（每部片的档次、配角、表现、片酬、上映结果 S/大卖/扑街/口音）、`st.story['结局']`、`st.count` 里的 `计数.*`（试镜、试镜拿到、上映、大卖、扑街、配角、违约、被捕、丑闻、机遇、年度名次等）、`g.hooks.boards`（每块板的试镜结果）、`g.hooks.log`（触发过的事件）。整局约 0.02 秒。
 
