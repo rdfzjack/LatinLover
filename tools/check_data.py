@@ -108,6 +108,8 @@ for a in stats['基础属性']: need(f, a, ['id','名字','范围','初值'], a.
 if len(ATTRS) != 8: err(f, '基础属性应为 8 项')
 if len(stats['名气档']) != 5: err(f, '名气档应为 5 档')
 if stats['等级']['门槛'] != [5*l*(l+1) for l in range(10)]: err(f, '等级门槛与 5L(L+1) 不符')
+for k in ('月衰减百分比', '月衰减最少'):
+    if not isinstance(stats['名气规则'].get(k), int): err(f, f'名气规则缺整数字段 {k}')
 # skills
 f = 'skills.json'
 if len(SK) != 12 or len(set(SK)) != 12: err(f, '技能应为 12 项且不重名')
@@ -154,6 +156,10 @@ for j in jobs['工']:
     check_cond(f, j['前置'], w + ' 前置')
     for c in j['成功线']:
         if c['项'] not in ATTRS and c['项'] not in SK: err(f, f"{w} 成功线项不存在 {c['项']}")
+    for c in j.get('成功线修正', []):
+        check_cond(f, c['条件'], w + ' 成功线修正')
+        if c['项'] not in [x['项'] for x in j['成功线']]: err(f, f"{w} 成功线修正的项不在成功线里 {c['项']}")
+        if not isinstance(c['值'], int): err(f, f'{w} 成功线修正的值')
     for e in j['每天效果']:
         if e['项'] not in ATTRS and e['项'] not in SK: err(f, f"{w} 每天效果项不存在 {e['项']}")
         if not is_range(e['加']): err(f, f'{w} 每天效果范围')
