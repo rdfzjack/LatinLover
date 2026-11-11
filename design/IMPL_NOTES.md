@@ -142,13 +142,19 @@ Godot 4.3, GDScript. The project is in `game/silentstar/`; the logic is in `core
 | `core/rng.gd` | `rng.py` | two PCG32 streams. The 64-bit state is split into a high and a low 32-bit number (GDScript ints are signed 64-bit and overflowing multiplication is unreliable); the split algorithm was checked against Python on 5000 numbers |
 | `core/jsonx.gd` | - | JSON read / write. Read: float values that are integers are converted back to int (Godot reads every number as float). Write: byte-identical to Python `json.dumps(ensure_ascii=False, sort_keys=True, separators=(',',':'))` |
 | `core/data.gd` | `data.py` | loads the tables and builds indexes. Reads `data/new/` at the repository root by default (two levels above the project folder), shared with Python |
-| `core/rules.gd` | `rules.py` | conditions, effects, checks, probabilities. All static functions; `extra_vars` is kept for the derived values of step 12. `split_name` splits at the first `.` |
+| `core/rules.gd` | `rules.py` | conditions, effects, checks, probabilities. All static functions; `extra_vars` holds the derived values of the endings (filled by `Ending.register()`). `split_name` splits at the first `.` |
 | `core/state.gd` | `state.py` | state, displayed values, reputation, indices, save / load |
 | `core/locale.gd` | - | reads `data/locale/text.csv` at run time and registers one `Translation` per locale column with the `TranslationServer` (no editor import needed); empty cells are not registered, so a missing translation shows the key. `ending_name` fills the `{top_job}` placeholder |
 | `core/schedule.gd` | `schedule.py` | classes, books, jobs, rest; all static. `truthy()` gives Python truthiness for table values (null, "", 0, [] and {} are false) |
 | `core/month.gd` | `month.py` | `Month` (= Python `Game`): month start, three periods, settlement, save / restore; inner class `Hooks` with no-op methods, step 12 subclasses it. `trace_line` is the per-month reconciliation line |
 | `core/audition.gd` | `audition.py` | decks, effective points, rivals, habits, one match, result tiers, `audition()`. Inner classes `Player` and `FixedRandomPlayer`. `match` is a reserved word in GDScript, so `match()` is `play_match()`; `field = -1` means "draw the style"; empty `probs` means "the role's". The GDD 7.7 table helpers (`table_77`, `exact_win` ...) stay Python-only (tests) |
-| `tools/trace.gd` | `tools/trace.py` | prints the reconciliation text for `tools/trace_cases.json` |
+| `core/street.gd` | `street.py` | street, items and gear, services, Sil; all static. Actions return "" or the reason (Python raises `StreetError`); prices come from `price()` |
+| `core/film.gd` | `film.py` | film contracts, shooting, fees, breaches, releases, tags and typing; all static |
+| `core/board.gd` | `board.py` | the board, placeholder and tutorial roles, rivals, talkies, house roles, intel, sign-up and auditions, swap / steal role, scripts; all static. `eligible` and `can_try` return "" for ok (the board snapshot stores `intel.eligible` as null, like Python); `write_script` returns "" or the reason |
+| `core/events.gd` | `events.py` | event executor, month-end events and opportunities, period start, outings and the NPC schedule, Duv, job hooks, eras, annual events; all static. The code events are one `match` in `_code` |
+| `core/ending.gd` | `ending.py` | ending resolution; `register()` adds `grade`, `top_tag_family`, `undefined`, `lowbudget_typed` to `Rules.extra_vars` (Story calls it; Python does it on import) |
+| `core/story.gd` | `story.py` | the script itself extends `Month.Hooks` (= Python `Story`); inner classes `Agent` (extends `Audition.Player`) and `SimpleAgent`; static `new_game(data, seed, origin, agent)` and `fit_plan`. Python's `Story.log` is `event_log`. `send_detox`, `leak_news` and `write_script` return "" or the reason |
+| `tools/trace.gd` | `tools/trace.py` | prints the reconciliation text for `tools/trace_cases.json`; inner class `ReplayAgent` replays the step-12 recordings |
 
 **Porting conventions**
 - Scripts refer to each other with `preload("res://core/xxx.gd")`, not `class_name`: with `--script` in headless mode the global classes may not be registered yet.
@@ -159,17 +165,25 @@ Godot 4.3, GDScript. The project is in `game/silentstar/`; the logic is in `core
 - `State.loads` / `from_dict` return false (and report an error) when the save version is not 2.
 - Tie rules are the table orders of the section above: `_held` iterates `Data.item_order`, exclusive groups in order of first appearance.
 
-**Reconciliation (completion standard of step 9)**, from the repository root:
+**Reconciliation (completion standard of steps 9-12)**, from the repository root. The Python trace goes first: it records the step-12 games into `work/games/`, which the Godot trace replays.
 
 ```
-godot --headless --path game/silentstar --script res://tools/trace.gd -- --out=work/trace_godot.txt
 python3 tools/trace.py --out work/trace_py.txt
+godot --headless --path game/silentstar --script res://tools/trace.gd -- --out=work/trace_godot.txt
 python3 tools/compare_trace.py work/trace_py.txt work/trace_godot.txt
 ```
 
 `compare_trace.py` prints only the first differing line. The month-by-month reconciliation from step 10 on uses it too: add cases to `trace_cases.json` and one output section to each side's trace.
 
 **Step 10 conventions.** `validate` returns "" for ok (Python: None). `Month.run_month(plan)` returns the list of schedule errors (Python raises `ScheduleError`) and runs nothing when the list is not empty. Days are `[day, is_sunday]` pairs. The `month` cases of `trace_cases.json` run 48 months with default hooks; entries that cannot be scheduled become `rest_home`; optional `effect`, `month_effect`, `books`, `lifestyles`, `restore_at`. Godot 4.3 can be downloaded from the godotengine GitHub releases (`Godot_v4.3-stable_linux.x86_64.zip`) to run the reconciliation in a container.
+
+**Step 12 conventions.**
+- Python exceptions on player actions become return values: street actions, `write_script`, `send_detox`, `leak_news` return "" or the reason, and the state is unchanged on failure. Python's `None` answers stay `null` (`pick_role`, `annual`), so the board snapshot and the ending dictionary save the same JSON.
+- Sorting: GDScript's `sort_custom` is not stable, so every sort that Python does with a partial key carries the table index as a tie-breaker (month-end list by `order`, endings by `order`, annual rivals by level, the placeholder big film's named rivals, Duv's script stats, SimpleAgent's deck). The `known` list is re-sorted by `Data.npc_order` whenever an NPC is met.
+- `max()` with a `-index` tie-breaker in Python is "the first of the largest" here (`main_of`, creditor's item, `SimpleAgent.pick_role` / `annual`, `sil_hint`); `min` likewise.
+- The base `Story.Agent` answers with harmless defaults (decline, rest, first option) instead of raising `NotImplementedError`.
+
+**Step 12 reconciliation: recorded bot games.** `tools/record_game.py` plays a bot game (`sim/bots.py`) and writes down every `Agent` answer in order (deck, play, pick_role, accept_support, go_personally, option, annual, family, suppress, month_start) plus each month's plan and the actions taken while scheduling (the bots buy books then). Month-start actions are recorded as action lists: `buy` (captured by wrapping `street.buy`), `equip` (the final gear after the bot's `best_equip`), `count` (`count.gear_spend`), and with `--extras` also `script`, `detox`, `leak`, `restaurant`, `church`, `hospital`, `persuade`, `use`, `sell`; extras also put a favourite job (drawn per seed) into the middle period, which reaches the studio, ballroom and radio paths. A recorded answer may not consume the game's random stream (the recorder refuses). `tools/trace.py` records the `games` cases of `trace_cases.json` (38 games: one per bot, then seeds picked by `record_game.py --coverage` so that the events, the endings and the crime, arrest, scandal, creditor, collapse, detox, transition and script paths are all reached) and prints the Python replay; `trace.gd` replays the same files. Per month: the reconciliation line plus the md5 of the whole save; at the end: the ending, the fired event ids, the annual events, every audition of every board, the final save. Not reached in 40 seeds of any bot: `evt_birthday` (no date yet), `job_studio_m3`, `job_news_m3`, `job_ballroom_m2`, `job_ballroom_m3` (so the widow-invested board role is not covered), `job_bootleg_m1`, `job_bodyguard_r1`, `job_escort_r1`. `python3 tools/record_game.py --coverage --seeds 40 [--extras]` lists what each bot reaches; re-run it after changing the tables if a path drops out.
 
 **When exporting**: the data tables live outside the project, so `data/new/` must be copied into the project before export (handled in step 13).
 

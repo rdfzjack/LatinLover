@@ -23,9 +23,9 @@
 
 ## 进度
 
-第 1–11 步和 8b、9b 已完成（详见 `README.md`）。第 9 步的对账在 Godot 4.3 里跑过，和 Python 逐字节一致。
+第 1–12 步和 8b、9b 已完成（详见 `README.md`）。第 9 步的对账在 Godot 4.3 里跑过，和 Python 逐字节一致。
 
-9c-1（英文 id 和字段名，Python 侧）和 9c-2（语言文件、Godot 侧、用户指南）已完成，Godot 对账已通过。第 10 步（日程和月结）已完成，对账一致。第 11 步（试镜）已完成，1000 场逐轮一致。下一步第 12 步。9c 的规格在 `design/STEP9C_IDS_AND_LOCALE.md`。9c 要在 10 之前做：越往后移植到 Godot 的代码越多，改名越贵。第 8 步可以重复做：读 `design/BALANCE_LOG.md` 的“没解决的”，改完重跑报告。
+9c-1（英文 id 和字段名，Python 侧）和 9c-2（语言文件、Godot 侧、用户指南）已完成，Godot 对账已通过。第 10 步（日程和月结）已完成，对账一致。第 11 步（试镜）已完成，1000 场逐轮一致。第 12 步（选片板、拍摄、上映、事件、结局）已完成，38 局机器人录像在 Godot 里回放，每月状态和结局一致。下一步第 13 步。9c 的规格在 `design/STEP9C_IDS_AND_LOCALE.md`。9c 要在 10 之前做：越往后移植到 Godot 的代码越多，改名越贵。第 8 步可以重复做：读 `design/BALANCE_LOG.md` 的“没解决的”，改完重跑报告。
 
 用户的修改意见记在 `design/CHANGE.md`，每条后面写了在哪一步处理。
 
@@ -63,7 +63,7 @@ Godot 4.3，GDScript。工程在 `game/silentstar/`。逻辑和界面分开：`g
 | 9c | 英文 id 和多语言：数据结构和代码只用英文 id，玩家看得到的文字搬到 `data/locale/text.csv`（用户定：要做多语言）。**规格见 `design/STEP9C_IDS_AND_LOCALE.md`** | `design/STEP9C_IDS_AND_LOCALE.md`；`data/new/README.md`；`design/IMPL_NOTES.md` | `design/GLOSSARY.md`、`tools/i18n_map.json`、`tools/migrate_ids.py`；改好的表、`sim/`、测试、检查脚本、`game/silentstar/core/`；`data/locale/text.csv`；新版 `data/USER_GUIDE.md` | 见规格：报告数字和改之前完全相同；测试、检查、Godot 对账通过；代码和数据里没有中文 id。**拆法**：9c-1 改 id 和字段名（Python 侧，**已完成**）；9c-2 抽语言文件、Godot、用户指南（**已完成**） | 大 | Opus |
 | 10 | 移植日程和月结（**已完成，对账一致**） | `sim/schedule.py` `month.py` | `game/silentstar/core/schedule.gd` `month.gd` | 同种子、同日程，每月状态与 Python 一致（对账脚本 `tools/compare_trace.py`） | 中 | Sonnet |
 | 11 | 移植试镜（**已完成，对账一致**） | `sim/audition.py` | `game/silentstar/core/audition.gd` | 同种子 1000 场试镜逐轮一致 | 小 | Sonnet |
-| 12 | 移植选片板、拍摄、上映、事件、结局 | `sim/board.py` `film.py` `events.py` `ending.py` | `game/silentstar/core/` 对应脚本 | 机器人的决策录成文件后在 Godot 里回放，整局每月状态和结局与 Python 一致。**拆法同第 6 步** | 大 | Opus |
+| 12 | 移植选片板、拍摄、上映、事件、结局（**已完成，对账一致**） | `sim/board.py` `film.py` `events.py` `ending.py` | `game/silentstar/core/` 对应脚本 | 机器人的决策录成文件后在 Godot 里回放，整局每月状态和结局与 Python 一致。**拆法同第 6 步** | 大 | Opus |
 
 ### D. Godot 界面（无美术，占位）
 
