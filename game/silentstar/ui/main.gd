@@ -21,12 +21,24 @@ const Audition = preload("res://core/audition.gd")
 const Story = preload("res://core/story.gd")
 const State = preload("res://core/state.gd")
 const UiStory = preload("res://ui/ui_story.gd")
+const Fx = preload("res://ui/fx.gd")
+const Assets = preload("res://ui/assets.gd")
+const SaveSlots = preload("res://ui/save_slots.gd")
+const Locale = preload("res://core/locale.gd")
+const CgScene = preload("res://ui/cg_view.tscn")
+const InventoryView = preload("res://ui/inventory_view.gd")
+const JournalView = preload("res://ui/journal_view.gd")
+const EndingScene = preload("res://ui/ending_view.tscn")
 
-const SAVE_PATH := "user://autosave.json"
-const SIZE_NAME := {"small": "小片", "medium": "中片", "big": "大片"}
-const KIND_NAME := {"self_written": "自己写", "duv_written": "Duv 写", "co_written": "合写"}
+## Which cue the effects node gets when a question is put on the screen (see ui/fx.gd and ui/README.md).
+const KIND_CUE := {"pick_period": "map_open", "period": "period_report", "event": "event_dialog", "deck": "deck_open", "play": "round_open",
+	"month_start": "month_start", "summary": "month_summary", "ending": "ending", "annual_result": "annual_result", "pick_role": "board_open"}
+
+const SIZE_KEY := {"small": "ui.size.small", "medium": "ui.size.medium", "big": "ui.size.big"}
+const KIND_KEY := {"self_written": "ui.script_kind.self_written", "duv_written": "ui.script_kind.duv_written", "co_written": "ui.script_kind.co_written"}
 
 var d
+var fx                     # fx.gd: sounds and effects, announced by cue()
 var g                      # Month
 var st
 var thread: Thread
@@ -54,6 +66,8 @@ var status_label: Label
 var body: VBoxContainer
 var log_box: RichTextLabel
 var street_box: VBoxContainer
+var inv_box: VBoxContainer
+var event_snaps: Array = []   # state at the start of each event being settled (events nest)
 var street_msg: Label
 var sel_color := 0
 
@@ -81,6 +95,9 @@ func _ready() -> void:
 			seed_n = int(a.substr(7))
 		elif a.begins_with("--months="):
 			auto_months = int(a.substr(9))
+	Locale.load_csv()
+	Locale.load_csv(Locale.default_path().get_base_dir().path_join("ui.csv"))
+	TranslationServer.set_locale("zh_CN")
 	d = Data.new()
 	if not d.ok:
 		push_error("cannot read the data tables")
@@ -88,6 +105,10 @@ func _ready() -> void:
 		return
 	_index_names(d.t)
 	_build_frame()
+	fx = Fx.new()
+	fx.host = body
+	fx.enabled = shot_path == ""
+	add_child(fx)
 	if title_shot != "":
 		_title()
 		_roll()
@@ -175,29 +196,31 @@ func entry_name(e: String) -> String:
 	var kind: String = pe[0]
 	var s := nm(pe[1])
 	if kind == "class":
-		return "上课·" + s
+		return tr("ui.main.entry_name.1") + s
 	if kind == "book":
-		return "看书·" + s
+		return tr("ui.main.entry_name.2") + s
 	if kind == "job":
-		return "打工·" + s
+		return tr("ui.main.entry_name.3") + s
 	if pe[2] != null:
-		return "外出·" + nm(pe[2]) + "（每天 $%d）" % Schedule.place_cost(st, pe[2])
+		return tr("ui.main.entry_name.4") + nm(pe[2]) + tr("ui.main.entry_name.5") % Schedule.place_cost(st, pe[2])
 	return s
 
 
-const REASONS := {"out_of_reach": "名气不够", "morals": "品行条款（出事后一段时间不能接大片）", "not a house role": "长约期间只能接厂里的角色",
-	"no board this month": "本月没有选片板", "this board already gave a role": "这块板已经拿到角色",
-	"this board was already tried twice": "本月试过两次了", "this role was already tried": "这个角色试过了",
-	"the second try must be a lower size than the first": "第二次要比第一次小一档"}
+
+
+func size_name(size: String) -> String:
+	return tr(SIZE_KEY.get(size, size))
 
 
 func why(r: String) -> String:
-	return REASONS.get(r, r)
+	var key := "ui.reason." + r.replace(" ", "_")
+	var text := tr(key)
+	return r if text == key else text
 
 
 func rival_name(o: Dictionary) -> String:
 	var n := str(o.get("name", ""))
-	return "无名对手" if n == "" or n.begins_with("unnamed") else n
+	return tr("ui.main.rival_name.1") if n == "" or n.begins_with("unnamed") else n
 
 
 func rng_txt(a: int, b: int) -> String:
@@ -221,43 +244,45 @@ func entry_effect(e: String) -> String:
 		for x in c["gain"]:
 			var pl: Array = x["per_level"][lv - 1]
 			gs.append(nm(x["stat"]) + rng_txt(pl[0], pl[1]))
-		t.append("成功日条件：体力/2+随机(0~体力/2)≥随机(0~疲劳)")
-		t.append("成功日：" + " ".join(gs))
-		t.append("每天疲劳%+d" % int(c.get("fatigue_per_day", 1)))
-		t.append("学费 $%d/天（第 %d 级）" % [int(c["fee"][lv - 1]), lv])
+		t.append(tr("ui.main.entry_effect.1"))
+		t.append(tr("ui.main.entry_effect.2") + " ".join(gs))
+		t.append(tr("ui.main.entry_effect.3") % int(c.get("fatigue_per_day", 1)))
+		t.append(tr("ui.main.entry_effect.4") % [int(c["fee"][lv - 1]), lv])
 	elif kind == "book":
 		var b: Dictionary = d.books[iid]
-		t.append("成功日条件：体力/2+随机(0~体力/2)≥随机(0~疲劳)")
-		t.append("成功日：%s%s" % [nm(b["skills"]), rng_txt(b["gain"][0], b["gain"][1])])
-		t.append("每天疲劳%+d" % int(b.get("fatigue_per_day", 1)))
+		t.append(tr("ui.main.entry_effect.1"))
+		t.append(tr("ui.main.entry_effect.5") % [nm(b["skills"]), rng_txt(b["gain"][0], b["gain"][1])])
+		t.append(tr("ui.main.entry_effect.3") % int(b.get("fatigue_per_day", 1)))
 		if st.books.has(iid):
-			t.append("书还剩 %d 点" % int(st.books[iid]))
+			t.append(tr("ui.main.entry_effect.6") % int(st.books[iid]))
 	elif kind == "job":
 		var j: Dictionary = d.jobs[iid]
-		t.append("成功的日子日薪 $%d" % Schedule.wage_of(st, iid))
+		t.append(tr("ui.main.entry_effect.7") % Schedule.wage_of(st, iid))
 		var gs := PackedStringArray()
 		for x in j["daily_effect"]:
 			gs.append(nm(x["stat"]) + rng_txt(x["add"][0], x["add"][1]))
-		t.append("每天：" + " ".join(gs))
+		t.append(tr("ui.main.entry_effect.8") + " ".join(gs))
 		var ls := PackedStringArray()
 		for x in Schedule.job_lines(st, j):
-			ls.append("%s−随机(0~疲劳)≥%s" % [nm(x[0]), str(x[1])])
+			ls.append(tr("ui.main.entry_effect.9") % [nm(x[0]), str(x[1])])
 		if not ls.is_empty():
-			t.append("成功日条件：" + "，".join(ls))
+			t.append(tr("ui.main.entry_effect.10") + tr("ui.main.entry_effect.11").join(ls))
 	else:
 		var r: Dictionary = d.rests[iid]
 		if pe[2] != null:
 			var pl: Dictionary = d.places[pe[2]]
-			t.append("每天疲劳%+d，花 $%d/天，旬内发生一件事" % [int(pl["fatigue_per_day"]), Schedule.place_cost(st, pe[2])])
+			t.append(tr("ui.main.entry_effect.12") % [int(pl["fatigue_per_day"]), Schedule.place_cost(st, pe[2])])
 		else:
-			t.append("每天疲劳%+d，免费，%s" % [int(r["fatigue_per_day"]), pretty(r.get("period_effect", ""))])
-	return "；".join(t)
+			t.append(tr("ui.main.entry_effect.13") % [int(r["fatigue_per_day"]), pretty(r.get("period_effect", ""))])
+	return tr("ui.main.entry_effect.14").join(t)
 
 
 func clear_body() -> void:
 	for c in body.get_children():
 		c.queue_free()
 	body.add_child(Control.new())   # keeps the container non-empty while the old children are freed
+	if fx != null:
+		fx.fade_in(body, 0.15)
 
 
 func label(text: String, parent = null, color := Color(1, 1, 1)) -> Label:
@@ -295,7 +320,7 @@ func _log(text: String) -> void:
 
 func refresh_status() -> void:
 	if st == null:
-		status_label.text = "无声之星"
+		status_label.text = tr("ui.main.refresh_status.1")
 		return
 	var b: Dictionary = st.bonus()
 	var tier: Dictionary = d.t["stats"]["fame_tiers"][st.fame_tier()]
@@ -310,24 +335,24 @@ func refresh_status() -> void:
 		var sk := PackedStringArray()
 		for x in d.road_skills[k]:
 			sk.append("%s %d" % [nm(x), st.val(x, b)])
-		r.append("%s %d（%s）" % [nm(k), st.rep(k, b), " ".join(sk)])
+		r.append(tr("ui.main.refresh_status.2") % [nm(k), st.rep(k, b), " ".join(sk)])
 	var flags := PackedStringArray()
 	if st.status["very_sick"]:
-		flags.append("重病")
+		flags.append(tr("ui.main.refresh_status.3"))
 	elif st.status["sick"]:
-		flags.append("生病")
+		flags.append(tr("ui.main.refresh_status.4"))
 	if st.status["reckless"]:
-		flags.append("失控")
+		flags.append(tr("ui.main.refresh_status.5"))
 	if st.status["in_love"]:
-		flags.append("恋爱中")
+		flags.append(tr("ui.main.refresh_status.6"))
 	if st.status["long_contract"]:
-		flags.append("长约")
+		flags.append(tr("ui.main.refresh_status.7"))
 	if st.drug > 0:
-		flags.append("有瘾")
+		flags.append(tr("ui.main.refresh_status.8"))
 	var stock := int(st.flags.get("drug_stock", 0))
 	if stock > 0:
-		flags.append("药 %d 份" % stock)
-	status_label.text = "%s   金钱 $%d   名气：%s（本月来信约 %d 封）   生活：%s\n%s\n声望（技能）：%s\n生病指数 %d  失控指数 %d   %s" % [
+		flags.append(tr("ui.main.refresh_status.9") % stock)
+	status_label.text = tr("ui.main.refresh_status.10") % [
 		st.date(), st.money, tier["name"], mail, nm(st.lifestyle), "  ".join(a), "   ".join(r),
 		st.idx["sick_index"], st.idx["reckless_index"], " ".join(flags)]
 
@@ -347,29 +372,29 @@ func snapshot() -> Dictionary:
 func diff_text(a: Dictionary, b: Dictionary) -> String:
 	var out := PackedStringArray()
 	if a["money"] != b["money"]:
-		out.append("金钱 %+d" % (b["money"] - a["money"]))
+		out.append(tr("ui.main.diff_text.1") % (b["money"] - a["money"]))
 	for grp in ["attr", "skill", "rep"]:
 		for k in b[grp]:
 			if k == "fame":
 				continue
 			if a[grp][k] != b[grp][k]:
 				out.append("%s %+d" % [nm(k), b[grp][k] - a[grp][k]])
-	return "，".join(out) if not out.is_empty() else "没有变化"
+	return tr("ui.main.entry_effect.11").join(out) if not out.is_empty() else tr("ui.main.diff_text.2")
 
 
 func diff_lines(a: Dictionary, b: Dictionary) -> PackedStringArray:
 	var out := PackedStringArray()
 	if a["money"] != b["money"]:
-		out.append("金钱　$%d → $%d（%+d）" % [a["money"], b["money"], b["money"] - a["money"]])
+		out.append(tr("ui.main.diff_lines.1") % [a["money"], b["money"], b["money"] - a["money"]])
 	for grp in ["attr", "skill"]:
 		for k in b[grp]:
 			if k == "fame":
 				continue
 			if a[grp][k] != b[grp][k]:
-				out.append("%s　%d → %d（%+d）" % [nm(k), a[grp][k], b[grp][k], b[grp][k] - a[grp][k]])
+				out.append(tr("ui.main.diff_lines.2") % [nm(k), a[grp][k], b[grp][k], b[grp][k] - a[grp][k]])
 	for k in b["rep"]:
 		if a["rep"][k] != b["rep"][k]:
-			out.append("声望·%s　%d → %d（%+d）" % [nm(k), a["rep"][k], b["rep"][k], b["rep"][k] - a["rep"][k]])
+			out.append(tr("ui.main.diff_lines.3") % [nm(k), a["rep"][k], b["rep"][k], b["rep"][k] - a["rep"][k]])
 	return out
 
 
@@ -381,9 +406,9 @@ func new_events() -> PackedStringArray:
 		var s: String = nm(rec["id"])
 		if rec.has("options") and rec["options"] != null:
 			var ev: Dictionary = d.events[rec["id"]]
-			s += "（选了：" + str(ev["options"][rec["options"]]["text"]) + "）"
+			s += tr("ui.main.new_events.1") + str(ev["options"][rec["options"]]["text"]) + tr("ui.board.show_board.13")
 		if rec.has("check") and rec["check"] != null:
-			s += "（判定" + ("成功" if rec["check"] else "失败") + "）"
+			s += tr("ui.main.new_events.2") + (tr("ui.main.new_events.3") if rec["check"] else tr("ui.main.new_events.4")) + tr("ui.board.show_board.13")
 		out.append(s)
 		ev_seen += 1
 	return out
@@ -478,10 +503,10 @@ func _update_alloc_info() -> void:
 			sum += alloc[id]
 			tot += base_vals[id]
 		var left: int = tot - sum
-		t.append("%s：还剩 %d 点要分%s" % ["属性" if pool == POOL_ATTRS else "技能", left, "" if left != 0 else "（已分完）"])
+		t.append(tr("ui.main.update_alloc_info.1") % [tr("ui.main.update_alloc_info.2") if pool == POOL_ATTRS else tr("ui.main.update_alloc_info.3"), left, "" if left != 0 else tr("ui.main.update_alloc_info.4")])
 		if left != 0:
 			okk = false
-	alloc_info.text = "　".join(t) + "（多出来的要从别处减掉；每项范围见输入框）"
+	alloc_info.text = tr("ui.audition.show_deck.6").join(t) + tr("ui.main.update_alloc_info.5")
 	start_btn.disabled = not okk
 
 
@@ -489,8 +514,8 @@ func _title() -> void:
 	st = null
 	refresh_status()
 	clear_body()
-	heading("无声之星")
-	label("三个问题决定出身：")
+	heading(tr("ui.main.refresh_status.1"))
+	label(tr("ui.main.title.1"))
 	origin_picks = []
 	for q in d.origins:
 		label(q["question"])
@@ -502,12 +527,12 @@ func _title() -> void:
 		ob.item_selected.connect(func(_i):
 			_read_origin()
 			_rebuild_alloc())
-	heading("起始数值")
-	label("总点数由出身决定，可以重新分配：点“随机”掷一个新的，或者自己填。不动就是默认值。")
+	heading(tr("ui.main.title.2"))
+	label(tr("ui.main.title.3"))
 	var hb0 := HBoxContainer.new()
 	body.add_child(hb0)
-	button("随机一个", func(): _roll(), hb0)
-	button("恢复默认", func():
+	button(tr("ui.main.title.4"), func(): _roll(), hb0)
+	button(tr("ui.main.title.5"), func():
 		alloc = base_vals.duplicate()
 		_rebuild_alloc(), hb0)
 	alloc_box = VBoxContainer.new()
@@ -517,18 +542,21 @@ func _title() -> void:
 	_rebuild_alloc()
 	var hb := HBoxContainer.new()
 	body.add_child(hb)
-	label("随机种子（留空 = 随机）：", hb)
+	label(tr("ui.main.title.6"), hb)
 	var seed_edit := LineEdit.new()
 	seed_edit.custom_minimum_size = Vector2(160, 0)
 	hb.add_child(seed_edit)
-	start_btn = button("新游戏", func():
+	start_btn = button(tr("ui.main.title.7"), func():
 		var o := []
 		for p in origin_picks:
 			o.append(p.selected)
 		var sd: int = int(seed_edit.text) if seed_edit.text.strip_edges() != "" else randi() % 1000000 + 1
 		_start_game(sd, o, alloc))
-	if FileAccess.file_exists(SAVE_PATH):
-		button("继续上次的存档（每月结算后自动存）", func(): _continue_game())
+	for slot in SaveSlots.SLOTS:
+		if SaveSlots.exists(slot):
+			var meta: Dictionary = SaveSlots.read(slot).get("meta", {})
+			var sl: String = slot
+			button(tr("ui.main.title.8") % [slot_name(slot), str(meta.get("date", "?")), str(meta.get("money", "?"))], func(): _continue_game(sl))
 	_update_alloc_info()
 
 
@@ -546,14 +574,30 @@ func _start_game(seed_n: int, origin: Array, start_vals := {}) -> void:
 	_run_thread()
 
 
-func _continue_game() -> void:
-	var s := FileAccess.get_file_as_string(SAVE_PATH)
+func save_meta() -> Dictionary:
+	return {"date": st.date(), "money": st.money}
+
+
+func slot_name(slot: String) -> String:
+	return tr("ui.main.slot_name.1") if slot == "auto" else tr("ui.main.slot_name.2") + slot
+
+
+func save_slot(slot: String) -> void:
+	var text: String = g.save()
+	if text != "" and SaveSlots.write(slot, text, save_meta()):
+		fx.cue("save", {"slot": slot})
+		note(tr("ui.main.save_slot.1") + slot_name(slot))
+
+
+func _continue_game(slot: String) -> void:
+	var rec := SaveSlots.read(slot)
 	var agent = UiStory.UiAgent.new(self)
 	var story = UiStory.new(agent, self)
-	var m = Month.restore(s, d, story)
+	var m = Month.restore(str(rec.get("save", "")), d, story)
 	if m == null:
-		_log("存档读不了（版本不对）。")
+		_log(tr("ui.main.continue_game.1"))
 		return
+	fx.cue("load", {"slot": slot})
 	g = m
 	st = g.st
 	_run_thread()
@@ -562,7 +606,7 @@ func _continue_game() -> void:
 func _run_thread() -> void:
 	ev_seen = 0
 	clear_body()
-	note("—— 新的一局 ——")
+	note(tr("ui.main.run_thread.1"))
 	thread = Thread.new()
 	thread.start(_worker)
 
@@ -589,9 +633,7 @@ func _worker() -> void:
 		months += 1
 		if not st.finished:
 			var s: String = g.save()
-			var f := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
-			if f != null:
-				f.store_string(s)
+			SaveSlots.write("auto", s, save_meta())
 		ask("summary", null)
 	if st.finished:
 		ask("ending", null)
@@ -627,36 +669,37 @@ func period_done(_st, i: int, entry: String, out: Dictionary) -> void:
 	var now := snapshot()
 	var evs := new_events()
 	var days := Schedule.days_of(st, i)
-	var span := "%d–%d 日" % [days[0][0], days[days.size() - 1][0]]
-	var head: String = "%s　%s（%s）" % [st.date(), ["上旬", "中旬", "下旬"][i], span]
+	var span := tr("ui.main.period_done.1") % [days[0][0], days[days.size() - 1][0]]
+	var head: String = tr("ui.main.period_done.2") % [st.date(), [tr("ui.period.early"), tr("ui.period.mid"), tr("ui.period.late")][i], span]
 	var what := ""
 	var cg := ""
+	var cg_keys: Array = Assets.entry_keys(entry, str(out.get("size", "")))
 	var rep := PackedStringArray()
 	if entry == "shooting":
-		what = "拍摄《%s》" % str(out.get("film", ""))
-		cg = "片场拍摄"
-		rep.append("这一旬拍了 %d 天，其中 %d 天顺利。" % [int(out.get("days", 0)), int(out.get("ok", 0))])
+		what = tr("ui.main.period_done.3") % str(out.get("film", ""))
+		cg = tr("ui.main.period_done.4")
+		rep.append(tr("ui.main.period_done.5") % [int(out.get("days", 0)), int(out.get("ok", 0))])
 	else:
 		what = entry_name(entry)
 		var pe := Schedule.parse_entry(entry)
 		cg = what
 		if out.has("class_days"):
-			rep.append("上课 %d 天，其中 %d 天有长进。" % [int(out["class_days"]), int(out["ok_days"])])
+			rep.append(tr("ui.main.period_done.6") % [int(out["class_days"]), int(out["ok_days"])])
 		elif out.has("work_days"):
-			rep.append("工作 %d 天，其中 %d 天顺利，收入 $%d。" % [int(out["work_days"]), int(out["ok_days"]), int(out["pay"])])
+			rep.append(tr("ui.main.period_done.7") % [int(out["work_days"]), int(out["ok_days"]), int(out["pay"])])
 		elif out.has("ok_days"):
-			rep.append("看书：%d 天有长进。" % int(out["ok_days"]))
+			rep.append(tr("ui.main.period_done.8") % int(out["ok_days"]))
 		elif out.has("cost"):
-			rep.append("花了 $%d。" % int(out["cost"]))
+			rep.append(tr("ui.main.period_done.9") % int(out["cost"]))
 		elif pe.size() > 0 and pe[0] == "rest":
-			rep.append("休息。")
+			rep.append(tr("ui.main.period_done.10"))
 	var lines := diff_lines(last_snap, now)
 	var evt := PackedStringArray()
 	for e in evs:
 		evt.append(e)
 	last_snap = now
-	note("%s：%s\n　%s" % [head, what, diff_text(last_snap, now) if false else "；".join(rep)])
-	ask("period", {"head": head, "what": what, "cg": cg, "report": "\n".join(rep), "lines": lines, "events": evt})
+	note(tr("ui.main.period_done.11") % [head, what, diff_text(last_snap, now) if false else tr("ui.main.entry_effect.14").join(rep)])
+	ask("period", {"head": head, "what": what, "cg": cg, "cg_keys": cg_keys, "report": "\n".join(rep), "lines": lines, "events": evt})
 
 
 func ac() -> Dictionary:
@@ -668,9 +711,9 @@ func rules_text() -> String:
 	var order: Array = c["color_order"]
 	var ring := []
 	for n in order:
-		ring.append("%s克%s" % [nm(n), nm(c["counters"][n])])
-	return "【算法】每张牌的点数 = 同色第 k 张：等级−k（最低 0）。比较时 v = 点数×100，然后：\n　① 牌色 = 本场场风色：v × %d%%\n　② 我的色克对方的色，且对方的牌不是场风色：我 v × %d%%，对方 v × %d%%（对方克我同理）\n　③ 场风色不受克制。克制环：%s\n　④ v 大的赢这一轮；相等则名气高的赢；再相等对手赢。先赢 %d 轮的赢这场。" % [
-		int(c["style_pct"]), int(c["counter_pct"]), int(c["countered_pct"]), "、".join(ring), int(c["rounds_to_win"])]
+		ring.append(tr("ui.main.rules_text.1") % [nm(n), nm(c["counters"][n])])
+	return tr("ui.main.rules_text.2") % [
+		int(c["style_pct"]), int(c["counter_pct"]), int(c["countered_pct"]), tr("ui.board.show_board.15").join(ring), int(c["rounds_to_win"])]
 
 
 ## One card's value with the reason, e.g. "硬汉 3 → 300 ×130%（场风）= 390"
@@ -679,37 +722,37 @@ func card_text(card: Array, other: Array, field: int) -> String:
 	var base: int = card[1] * 100
 	var why := []
 	if card[0] == field:
-		why.append("场风 ×%d%%" % int(ac()["style_pct"]))
+		why.append(tr("ui.main.card_text.1") % int(ac()["style_pct"]))
 	var bt := Audition.beats(d)
 	if card[0] != field and other[0] != field:
 		if bt[card[0]] == other[0]:
-			why.append("克制对方 ×%d%%" % int(ac()["counter_pct"]))
+			why.append(tr("ui.main.card_text.2") % int(ac()["counter_pct"]))
 		elif bt[other[0]] == card[0]:
-			why.append("被克制 ×%d%%" % int(ac()["countered_pct"]))
-	return "%s %d点 = %d%s → %d" % [nm(d.roads[card[0]]), card[1], base, ("（" + "，".join(why) + "）") if not why.is_empty() else "", v[0]]
+			why.append(tr("ui.main.card_text.3") % int(ac()["countered_pct"]))
+	return tr("ui.main.card_text.4") % [nm(d.roads[card[0]]), card[1], base, (tr("ui.ending.build.8") + tr("ui.main.entry_effect.11").join(why) + tr("ui.board.show_board.13")) if not why.is_empty() else "", v[0]]
 
 
 func audition_text(role: Dictionary, res: Dictionary) -> String:
 	var t := PackedStringArray()
-	t.append("试镜《%s》[%s]" % [role["name"], SIZE_NAME.get(role["size"], role["size"])])
+	t.append(tr("ui.main.audition_text.1") % [role["name"], size_name(role["size"])])
 	var k := 1
 	for m in res["rounds"]:
-		t.append("　第 %d 场 %d : %d" % [k, m["score_line"][0], m["score_line"][1]])
+		t.append(tr("ui.main.audition_text.2") % [k, m["score_line"][0], m["score_line"][1]])
 		k += 1
 	var r: String = res["result"]
 	var verdict := ""
 	match r:
 		"won":
-			verdict = "赢了！" + ("全胜，导演记住了你的路数。" if res.get("remembered", false) else "") + "拿下了这个角色，下个月开拍。"
+			verdict = tr("ui.main.audition_text.3") + (tr("ui.main.audition_text.4") if res.get("remembered", false) else "") + tr("ui.main.audition_text.5")
 		"narrow_loss":
 			if res.get("support", false):
-				verdict = "险败（2:3），但你接了同片的配角，下个月开拍（酬金少、拍的旬少）。"
+				verdict = tr("ui.main.audition_text.6")
 			else:
-				verdict = "险败（2:3），没拿到角色。"
+				verdict = tr("ui.main.audition_text.7")
 		"botched":
-			verdict = "惨败，一分没得，名气下降" + ("，还上了小报。" if res.get("reported", false) else "。")
+			verdict = tr("ui.main.audition_text.8") + (tr("ui.main.audition_text.9") if res.get("reported", false) else tr("ui.main.audition_text.10"))
 		_:
-			verdict = "输了，没拿到角色。"
+			verdict = tr("ui.main.audition_text.11")
 	t.append(verdict)
 	return "\n".join(t)
 
@@ -760,24 +803,24 @@ func _auto_answer(kind: String, payload):
 
 func _show_request(kind: String, payload) -> void:
 	refresh_status()
+	fx.cue(KIND_CUE.get(kind, kind), {"kind": kind})
 	match kind:
 		"month_start": _show_month_start()
 		"pick_period": _show_map(int(payload))
 		"pick_role": _show_board(payload)
 		"deck": _show_deck(payload)
 		"play": _show_play(payload)
-		"support": _yes_no("险败", "你以微小的差距输了。接受同一部片子的配角吗？（酬金少、拍摄旬少）", payload["name"])
-		"stunt": _yes_no("替身戏", "这个角色可以亲自上阵（高风险、有加成）。亲自上吗？", payload["name"])
-		"suppress": _yes_no("丑闻", "要压下这件丑闻吗？" + ("（本年免费一次）" if payload == "free" else "（花 200）"), "")
-		"boost": _yes_no("用药", "这一旬开始前，要吃一份药吗？（剩 %d 份）" % int(st.flags.get("drug_stock", 0)), "")
+		"support": _yes_no(tr("ui.main.show_request.1"), tr("ui.main.show_request.2"), payload["name"])
+		"stunt": _yes_no(tr("ui.main.show_request.3"), tr("ui.main.show_request.4"), payload["name"])
+		"suppress": _yes_no(tr("ui.main.show_request.5"), tr("ui.main.show_request.6") + (tr("ui.main.show_request.7") if payload == "free" else tr("ui.main.show_request.8")), "")
+		"boost": _yes_no(tr("ui.main.show_request.9"), tr("ui.main.show_request.10") % int(st.flags.get("drug_stock", 0)), "")
 		"option": _show_option(payload)
 		"annual": _show_annual(payload)
 		"family": _show_family()
 		"period": _show_period(payload)
-		"notice":
-			_wait_screen("结果")
-			label(str(payload))
-			button("继续", func(): reply(null))
+		"notice": _show_notice(payload)
+		"event": _show_event(payload)
+		"annual_result": _show_annual_result(payload)
 		"summary": _show_summary()
 		"ending": _show_ending()
 		_:
@@ -845,72 +888,122 @@ func _yes_no(title: String, text: String, extra: String) -> void:
 	label(text)
 	var hb := HBoxContainer.new()
 	body.add_child(hb)
-	button("是", func(): reply(true), hb)
-	button("否", func(): reply(false), hb)
+	button(tr("ui.main.yes_no.1"), func(): reply(true), hb)
+	button(tr("ui.main.yes_no.2"), func(): reply(false), hb)
 
 
 func _show_option(p: Dictionary) -> void:
 	var ev: Dictionary = p["event"]
-	_wait_screen("事件：" + str(ev["name"]))
+	_wait_screen(tr("ui.main.show_option.1") + str(ev["name"]))
 	if ev.get("body") != null:
 		label(str(ev["body"]))
-	label("选一个：")
+	label(tr("ui.main.show_option.2"))
 	for k in p["avail"]:
 		var o: Dictionary = ev["options"][k]
 		var t: String = str(o["text"])
 		if Schedule.truthy(o.get("check")):
-			t += "（要判定）"
+			t += tr("ui.main.show_option.3")
 		var kk: int = k
 		button(t, func(): reply(kk))
 
 
+func _show_notice(payload) -> void:
+	var text: String = payload["text"] if payload is Dictionary else str(payload)
+	if payload is Dictionary and payload.has("cue"):
+		fx.cue(payload["cue"], payload)
+	_wait_screen(tr("ui.main.show_notice.1"))
+	label(text)
+	button(tr("ui.main.show_notice.2"), func(): reply(null))
+
+
+## Called by UiStory (game thread) around every event the core settles.
+func event_started(_eid: String) -> void:
+	event_snaps.append(snapshot())
+
+
+func event_ended(rec: Dictionary) -> void:
+	var before: Dictionary = event_snaps.pop_back() if not event_snaps.is_empty() else snapshot()
+	var ev: Dictionary = d.events[rec["id"]]
+	var picked := ""
+	if rec.get("options") != null:
+		picked = str(ev["options"][rec["options"]]["text"])
+	var check := ""
+	if rec.get("check") != null:
+		check = tr("ui.main.new_events.3") if rec["check"] else tr("ui.main.new_events.4")
+	ask("event", {"id": rec["id"], "name": str(ev["name"]), "class": str(ev.get("class", "")), "body": ev.get("body"),
+		"picked": picked, "check": check, "lines": diff_lines(before, snapshot())})
+
+
+func _show_event(p: Dictionary) -> void:
+	clear_body()
+	heading(str(p["name"]))
+	add_cg("cg", ["event/" + str(p["id"]), "event_class/" + str(p["class"])], str(p["name"]))
+	if p["body"] != null:
+		label(str(p["body"]))
+	if str(p["picked"]) != "":
+		label(tr("ui.main.show_event.1") + str(p["picked"]))
+	if str(p["check"]) != "":
+		label(tr("ui.main.show_event.2") + str(p["check"]))
+	if p["lines"].is_empty():
+		label(tr("ui.main.show_event.3"))
+	else:
+		for x in p["lines"]:
+			label(tr("ui.audition.show_deck.6") + x)
+	button(tr("ui.main.show_notice.2"), func(): reply(null))
+
+
+func _show_annual_result(rec: Dictionary) -> void:
+	clear_body()
+	heading(tr("ui.main.show_annual_result.1"))
+	if rec["occasions"] == null:
+		label(tr("ui.main.show_annual_result.2"))
+	else:
+		label(tr("ui.main.show_annual_result.3") + nm(rec["occasions"]))
+		label(tr("ui.main.show_annual_result.4") % int(rec["rank"]))
+		for rw in d.t["annual"]["ranking"]["rewards"]:
+			if rw["rank"] == rec["rank"]:
+				label(tr("ui.main.show_annual_result.5") % [int(rw["rep_bonus"]), int(rw["prize"])])
+	button(tr("ui.main.show_notice.2"), func(): reply(null))
+
+
 func _show_annual(opts: Array) -> void:
-	_wait_screen("年度大事")
-	label("十二月，选一场出席（会累，会和同行排名），或者休息（疲劳清零）：")
+	_wait_screen(tr("ui.main.show_annual_result.1"))
+	label(tr("ui.main.show_annual.1"))
 	for x in opts:
 		var id: String = x["id"]
-		button("%s（%s路，现有声望 %d）" % [nm(id), nm(x["road"]), st.rep(x["road"])], func(): reply(id))
-	button("休息", func(): reply(null))
+		button(tr("ui.main.show_annual.2") % [nm(id), nm(x["road"]), st.rep(x["road"])], func(): reply(id))
+	button(tr("ui.main.show_annual.3"), func(): reply(null))
 
 
 func _show_family() -> void:
-	_wait_screen("转型")
-	label("片厂老板要帮你转型，选一个内容方向：")
+	_wait_screen(tr("ui.main.show_family.1"))
+	label(tr("ui.main.show_family.2"))
 	for k in d.tag_families:
 		var kk: String = k
 		button(nm(k), func(): reply(kk))
 
 
-func cg_panel(text: String) -> void:
-	var pc := PanelContainer.new()
-	pc.custom_minimum_size = Vector2(0, 240)
-	var sb := StyleBoxFlat.new()
-	sb.bg_color = Color.from_hsv(float(hash(text) % 360) / 360.0, 0.35, 0.35)
-	pc.add_theme_stylebox_override("panel", sb)
-	var l := Label.new()
-	l.text = "【CG 占位】\n" + text
-	l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	l.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	l.add_theme_font_size_override("font_size", 28)
-	pc.add_child(l)
-	body.add_child(pc)
+func add_cg(kind: String, keys: Array, caption: String) -> void:
+	var cg = CgScene.instantiate()
+	body.add_child(cg)
+	cg.show_cg(kind, keys, caption)
 
 
 func _show_period(p: Dictionary) -> void:
 	clear_body()
-	heading(str(p["head"]) + "：" + str(p["what"]))
-	cg_panel(str(p["cg"]))
+	heading(str(p["head"]) + tr("ui.main.show_period.1") + str(p["what"]))
+	add_cg("cg", p["cg_keys"], str(p["cg"]))
 	if str(p["report"]) != "":
 		label(str(p["report"]))
 	if p["lines"].is_empty():
-		label("数值没有变化。")
+		label(tr("ui.main.show_event.3"))
 	else:
-		label("数值变化：")
+		label(tr("ui.main.show_period.2"))
 		for x in p["lines"]:
-			label("　" + x)
+			label(tr("ui.audition.show_deck.6") + x)
 	for e in p["events"]:
-		label("事件：" + e, null, Color(1, 0.85, 0.4))
-	button("继续", func(): reply("ok"))
+		label(tr("ui.main.show_option.1") + e, null, Color(1, 0.85, 0.4))
+	button(tr("ui.main.show_notice.2"), func(): reply("ok"))
 
 
 # ---------- the board and auditions ----------
@@ -943,28 +1036,28 @@ func _show_play(ctx: Dictionary) -> void:
 
 func _show_month_start() -> void:
 	clear_body()
-	heading("%s　月初" % st.date())
+	heading(tr("ui.main.show_month_start.1") % st.date())
 	var m: Dictionary = st.month()
 	var era := PackedStringArray()
 	if Schedule.truthy(m.get("board")):
-		era.append("选片板已经过了")
+		era.append(tr("ui.main.show_month_start.2"))
 	if Schedule.truthy(m.get("annual")):
-		era.append("本月有年度大事")
+		era.append(tr("ui.main.show_month_start.3"))
 	if st.forced_rest:
-		era.append("重病之后，这个月强制进疗养院")
+		era.append(tr("ui.main.show_month_start.4"))
 	if st.void_next:
-		era.append("这个月的日程作废")
+		era.append(tr("ui.main.show_month_start.5"))
 	if not era.is_empty():
-		label("　" + "，".join(era))
-	label("月初可以在街道和谈话里买卖东西、吃饭、看病、投稿剧本（不占日程）。准备好了就开始上旬；之后每旬在地图上选一个地点。")
+		label(tr("ui.audition.show_deck.6") + tr("ui.main.entry_effect.11").join(era))
+	label(tr("ui.main.show_month_start.6"))
 	var hb2 := HBoxContainer.new()
 	body.add_child(hb2)
-	label("生活方式（从下个月起扣）：", hb2)
+	label(tr("ui.main.show_month_start.7"), hb2)
 	var lb := OptionButton.new()
 	var li := 0
 	var k := 0
 	for lid in d.lifestyles:
-		lb.add_item("%s（月费 $%d）" % [nm(lid), d.lifestyles[lid]["monthly_cost"][st.fame_tier()]])
+		lb.add_item(tr("ui.main.show_month_start.8") % [nm(lid), d.lifestyles[lid]["monthly_cost"][st.fame_tier()]])
 		lb.set_item_metadata(k, lid)
 		if lid == st.lifestyle:
 			li = k
@@ -972,19 +1065,34 @@ func _show_month_start() -> void:
 	lb.select(li)
 	lb.item_selected.connect(func(idx): g.set_lifestyle(lb.get_item_metadata(idx)))
 	hb2.add_child(lb)
-	button("开始本月 →", func(): reply(null))
+	button(tr("ui.main.show_month_start.9"), func(): reply(null))
 	var tabs := TabContainer.new()
 	tabs.custom_minimum_size = Vector2(0, 520)
 	body.add_child(tabs)
 	var t2 := ScrollContainer.new()
-	t2.name = "街道和谈话"
+	t2.name = tr("ui.main.show_month_start.10")
 	t2.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	tabs.add_child(t2)
 	street_box = VBoxContainer.new()
 	street_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	t2.add_child(street_box)
+	var t_inv := ScrollContainer.new()
+	t_inv.name = tr("ui.main.show_month_start.11")
+	t_inv.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	tabs.add_child(t_inv)
+	inv_box = VBoxContainer.new()
+	inv_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	t_inv.add_child(inv_box)
+	var t_j := ScrollContainer.new()
+	t_j.name = tr("ui.journal.build.1")
+	t_j.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	tabs.add_child(t_j)
+	var jv := JournalView.new()
+	jv.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	t_j.add_child(jv)
+	jv.build(self)
 	var t3 := ScrollContainer.new()
-	t3.name = "状态"
+	t3.name = tr("ui.main.show_month_start.12")
 	t3.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	tabs.add_child(t3)
 	var sbox := VBoxContainer.new()
@@ -996,11 +1104,11 @@ func _show_month_start() -> void:
 
 ## The places on the map: id -> [name, position, size, hint]. A place groups several schedule entries.
 const LOCATIONS := {
-	"home": ["家", Vector2(40, 40), Vector2(200, 90), "休息（Sil 陪着）、看书、家教"],
-	"school": ["训练场·教室", Vector2(330, 30), Vector2(240, 90), "上课"],
-	"work": ["工作", Vector2(650, 60), Vector2(200, 90), "打工"],
-	"city": ["汽车：进城", Vector2(90, 220), Vector2(240, 90), "片厂区、市中心、海滨、码头"],
-	"boat": ["码头的小船：度假", Vector2(500, 240), Vector2(280, 90), "去度假村"],
+	"home": ["ui.loc.home.name", Vector2(40, 40), Vector2(200, 90), "ui.loc.home.hint"],
+	"school": ["ui.loc.school.name", Vector2(330, 30), Vector2(240, 90), "ui.loc.school.hint"],
+	"work": ["ui.loc.work.name", Vector2(650, 60), Vector2(200, 90), "ui.loc.work.hint"],
+	"city": ["ui.loc.city.name", Vector2(90, 220), Vector2(240, 90), "ui.loc.city.hint"],
+	"boat": ["ui.loc.boat.name", Vector2(500, 240), Vector2(280, 90), "ui.loc.boat.hint"],
 }
 
 
@@ -1033,8 +1141,8 @@ func _show_map(i: int) -> void:
 	cur_period_hint = i
 	clear_body()
 	var days := Schedule.days_of(st, i)
-	heading("%s　%s（%d–%d 日）" % [st.date(), ["上旬", "中旬", "下旬"][i], days[0][0], days[days.size() - 1][0]])
-	label("点一个地点，再选做什么。（拍摄中的旬会自动去片场。）")
+	heading(tr("ui.main.show_map.1") % [st.date(), [tr("ui.period.early"), tr("ui.period.mid"), tr("ui.period.late")][i], days[0][0], days[days.size() - 1][0]])
+	label(tr("ui.main.show_map.2"))
 	var map := Control.new()
 	map.custom_minimum_size = Vector2(900, 380)
 	body.add_child(map)
@@ -1045,7 +1153,7 @@ func _show_map(i: int) -> void:
 	for loc in LOCATIONS:
 		var info: Array = LOCATIONS[loc]
 		var b := Button.new()
-		b.text = "%s\n%s" % [info[0], info[3]]
+		b.text = "%s\n%s" % [tr(info[0]), tr(info[3])]
 		b.position = info[1]
 		b.size = info[2]
 		var ll: String = loc
@@ -1054,23 +1162,24 @@ func _show_map(i: int) -> void:
 
 
 func _show_location(i: int, loc: String) -> void:
+	fx.cue("location_open", {"location": loc})
 	clear_body()
 	var info: Array = LOCATIONS[loc]
-	heading("%s　%s：%s" % [st.date(), ["上旬", "中旬", "下旬"][i], info[0]])
-	button("← 回地图", func(): _show_map(i))
+	heading(tr("ui.main.show_location.1") % [st.date(), [tr("ui.period.early"), tr("ui.period.mid"), tr("ui.period.late")][i], tr(info[0])])
+	button(tr("ui.main.show_location.2"), func(): _show_map(i))
 	var any := false
 	for e in loc_entries(loc):
 		var why_not: String = Schedule.validate(st, e)
-		var txt := "%s（%s）" % [entry_name(e), entry_effect(e)]
+		var txt := tr("ui.main.show_location.3") % [entry_name(e), entry_effect(e)]
 		if why_not == "":
 			any = true
 			var ee: String = e
-			button("选：" + entry_name(e), func(): reply(ee))
-			label("　效果：" + entry_effect(e), null, Color(0.8, 0.9, 1))
+			button(tr("ui.main.show_location.4") + entry_name(e), func(): reply(ee))
+			label(tr("ui.main.show_location.5") + entry_effect(e), null, Color(0.8, 0.9, 1))
 		elif loc != "work" or not why_not.begins_with("not unlocked"):
-			label("（不能选）%s：%s" % [entry_name(e), why(why_not)], null, Color(0.6, 0.6, 0.6))
+			label(tr("ui.main.show_location.6") % [entry_name(e), why(why_not)], null, Color(0.6, 0.6, 0.6))
 	if not any:
-		label("这里现在没有能做的事。")
+		label(tr("ui.main.show_location.7"))
 
 
 # ---------- street ----------
@@ -1080,100 +1189,82 @@ func smsg(text: String) -> void:
 	note(text)
 
 
-func _act(result: String, ok_text: String) -> void:
-	smsg(ok_text if result == "" else "没成功：" + why(result))
+func act(result: String, ok_text: String) -> void:
+	smsg(ok_text if result == "" else tr("ui.main.act.1") + why(result))
 	_fill_street()
 	refresh_status()
 
 
+func _fill_inventory() -> void:
+	if inv_box == null:
+		return
+	for c in inv_box.get_children():
+		c.queue_free()
+	var v := InventoryView.new()
+	inv_box.add_child(v)
+	v.build(self)
+
+
 func _fill_street() -> void:
+	_fill_inventory()
 	for c in street_box.get_children():
 		c.queue_free()
 	var box := street_box
 	street_msg = label("", box, Color(0.6, 1, 0.6))
-	label("钱：$%d　（街道上的事不占日程）" % st.money, box)
+	label(tr("ui.main.fill_street.1") % st.money, box)
 	# stores
 	for entry in ["clothing_store", "general_store", "bookstore"]:
 		heading(nm(entry), box)
 		for iid in Street.shelf(st, entry):
 			var base: int = d.books[iid]["price"] if d.books.has(iid) else d.items[iid]["price"]
 			var p := Street.price(st, entry, base)
-			var eff: String = ("　" + pretty(d.items[iid]["effect"])) if d.items.has(iid) else ""
+			var eff: String = (tr("ui.audition.show_deck.6") + pretty(d.items[iid]["effect"])) if d.items.has(iid) else ""
 			var hb := HBoxContainer.new()
 			box.add_child(hb)
-			label("%s　$%d%s" % [nm(iid), p, eff], hb)
+			label(tr("ui.main.fill_street.2") % [nm(iid), p, eff], hb)
 			var e: String = entry
 			var ii: String = iid
-			button("买", func(): _act(Street.buy(st, e, ii), "买了 " + nm(ii)), hb)
-	# inventory
-	heading("你的东西", box)
-	var seen := {}
-	for iid in st.items:
-		if seen.has(iid):
-			continue
-		seen[iid] = true
-		var it: Dictionary = d.items[iid]
-		var hb := HBoxContainer.new()
-		box.add_child(hb)
-		var eq: bool = st.equip["outfit"] == iid or st.equip["accessory"].has(iid)
-		label("%s ×%d%s　%s" % [nm(iid), st.items.count(iid), "（装备中）" if eq else "", pretty(it["effect"])], hb)
-		var ii: String = iid
-		if it.get("slot") == "outfit" or it.get("slot") == "accessory":
-			if eq:
-				button("卸下", func(): _act(Street.unequip(st, ii), "卸下 " + nm(ii)), hb)
-			else:
-				button("装备", func(): _act(Street.equip(st, ii), "装备 " + nm(ii)), hb)
-		if it["class"] == "consumable":
-			button("用", func(): _act(Street.use(st, ii), "用了 " + nm(ii)), hb)
-		button("卖（$%d）" % (int(it["price"]) / 2), func(): _act(Street.sell(st, ii), "卖了 " + nm(ii)), hb)
-	for bid in st.books:
-		label("书：%s（还剩 %d 点）" % [nm(bid), int(st.books[bid])], box)
-	for bid in st.read_books:
-		var hb := HBoxContainer.new()
-		box.add_child(hb)
-		label("读过的书：%s" % nm(bid), hb)
-		var bb: String = bid
-		button("卖（$%d）" % (int(d.books[bid]["price"]) / 2), func(): _act(Street.sell(st, bb), "卖了 " + nm(bb)), hb)
+			button(tr("ui.main.fill_street.3"), func(): act(Street.buy(st, e, ii), tr("ui.main.fill_street.4") + nm(ii)), hb)
 	# services
-	heading("餐厅（每月一次）", box)
+	heading(tr("ui.main.fill_street.5"), box)
 	var hr := HBoxContainer.new()
 	box.add_child(hr)
 	for s in d.street["restaurant"]["services"]:
 		var sid: String = s["id"]
-		button("%s $%d　%s" % [nm(sid) if names.has(sid) else s["name"], Street.price(st, "restaurant", s["price"]), pretty(s["effect"])],
-			func(): _act(Street.restaurant(st, sid), "吃了 " + sid), hr)
-	heading("教堂 / 医院", box)
+		button(tr("ui.main.fill_street.6") % [nm(sid) if names.has(sid) else s["name"], Street.price(st, "restaurant", s["price"]), pretty(s["effect"])],
+			func(): act(Street.restaurant(st, sid), tr("ui.main.fill_street.7") + sid), hr)
+	heading(tr("ui.main.fill_street.8"), box)
 	var hc := HBoxContainer.new()
 	box.add_child(hc)
-	button("捐 100（犯罪 −10，每月一次）", func(): _act(Street.church(st), "捐了款"), hc)
-	button("去医院（只有生病时；费用 = 生病指数×2）", func(): _act(Street.hospital(st), "看了病"), hc)
-	heading("和 Sil 谈话", box)
+	button(tr("ui.main.fill_street.9"), func(): act(Street.church(st), tr("ui.main.fill_street.10")), hc)
+	button(tr("ui.main.fill_street.11"), func(): act(Street.hospital(st), tr("ui.main.fill_street.12")), hc)
+	heading(tr("ui.main.fill_street.13"), box)
 	var hint := Street.sil_hint(st)
-	label("近况：" + _hint_text(hint), box)
-	button("让 Sil 劝一劝（失控时可用，每月一次）", func(): _act(Street.sil_persuade(st), "Sil 劝了你"), box)
+	label(tr("ui.main.fill_street.14") + _hint_text(hint), box)
+	button(tr("ui.main.fill_street.15"), func(): act(Street.sil_persuade(st), tr("ui.main.fill_street.16")), box)
 	# scripts etc.
-	heading("投稿剧本（下一块选片板多一个角色）", box)
+	heading(tr("ui.main.fill_street.17"), box)
 	for kind in ["self_written", "duv_written", "co_written"]:
 		if not Board.script_ok(st, kind):
 			continue
 		var hb := HBoxContainer.new()
 		box.add_child(hb)
-		label(KIND_NAME[kind], hb)
+		label(tr(KIND_KEY[kind]), hb)
 		var cb := OptionButton.new()
 		for c in 4:
-			cb.add_item("主色：" + nm(d.roads[c]))
+			cb.add_item(tr("ui.main.fill_street.18") + nm(d.roads[c]))
 		hb.add_child(cb)
 		var kk: String = kind
-		button("写", func(): _act(g.hooks.write_script(st, kk, cb.selected), "写了剧本"), hb)
+		button(tr("ui.main.fill_street.19"), func(): act(g.hooks.write_script(st, kk, cb.selected), tr("ui.main.fill_street.20")), hb)
 	if st.drug >= 1:
-		heading("戒毒", box)
-		button("送去戒毒（月末发作）", func(): _act(g.hooks.send_detox(st), "送去戒毒"), box)
+		heading(tr("ui.main.fill_street.21"), box)
+		button(tr("ui.main.fill_street.22"), func(): act(g.hooks.send_detox(st), tr("ui.main.fill_street.23")), box)
 	if Schedule.truthy(st.flags.get("leak_news")):
-		button("向报社放消息（每年一次，名气 +10%）", func(): _act(g.hooks.leak_news(st), "放了消息"), box)
+		button(tr("ui.main.fill_street.24"), func(): act(g.hooks.leak_news(st), tr("ui.main.fill_street.25")), box)
 	if int(st.flags.get("dealer_stock", 0)) > 0:
-		heading("药贩（这个月在街上）", box)
-		label("库存 %d 份，每份 $%d。手里有 %d 份。" % [int(st.flags["dealer_stock"]), int(st.flags["dealer_price"]), int(st.flags.get("drug_stock", 0))], box)
-		button("买 1 份", func(): _act(g.hooks.buy_drug(st, 1), "买了 1 份"), box)
+		heading(tr("ui.main.fill_street.26"), box)
+		label(tr("ui.main.fill_street.27") % [int(st.flags["dealer_stock"]), int(st.flags["dealer_price"]), int(st.flags.get("drug_stock", 0))], box)
+		button(tr("ui.main.fill_street.28"), func(): act(g.hooks.buy_drug(st, 1), tr("ui.main.fill_street.29")), box)
 
 
 func _hint_text(h: Array) -> String:
@@ -1181,40 +1272,40 @@ func _hint_text(h: Array) -> String:
 		"sick":
 			return str(h[1])
 		"reckless":
-			return "你最近太冲动了（失控指数 %s）" % str(h[1])
+			return tr("ui.main.hint_text.1") % str(h[1])
 		"favor":
-			return "%s 对你很有好感" % nm(h[1])
+			return tr("ui.main.hint_text.2") % nm(h[1])
 		"fatigue":
-			return "你看起来很累（疲劳 %s）" % str(h[1])
-	return "你最强的是 " + nm(h[1])
+			return tr("ui.main.hint_text.3") % str(h[1])
+	return tr("ui.main.hint_text.4") + nm(h[1])
 
 
 # ---------- status tab ----------
 
 func _fill_status(box: VBoxContainer) -> void:
 	var b: Dictionary = st.bonus()
-	heading("技能", box)
+	heading(tr("ui.main.update_alloc_info.3"), box)
 	for r in d.roads:
 		var t := PackedStringArray()
 		for s in d.road_skills[r]:
 			t.append("%s %d" % [nm(s), st.val(s, b)])
-		label("%s路：声望 %d　（%s）" % [nm(r), st.rep(r, b), "　".join(t)], box)
-	heading("人物（好感）", box)
+		label(tr("ui.main.fill_status.1") % [nm(r), st.rep(r, b), tr("ui.audition.show_deck.6").join(t)], box)
+	heading(tr("ui.main.fill_status.2"), box)
 	for n in st.known:
-		label("%s　好感 %d" % [nm(n), st.favor.get(n, 0)], box)
-	heading("片约", box)
+		label(tr("ui.main.fill_status.3") % [nm(n), st.favor.get(n, 0)], box)
+	heading(tr("ui.main.fill_status.4"), box)
 	var any := false
 	for f in st.story["films"]:
 		if f["status"] == "to_shoot" or f["status"] == "shooting" or f["status"] == "wrapped":
 			any = true
-			label("%s [%s]　状态：%s　上映：%s" % [f["roles"]["name"], SIZE_NAME.get(f["size"], f["size"]), f["status"], str(f["release"])], box)
+			label(tr("ui.main.fill_status.5") % [f["roles"]["name"], size_name(f["size"]), f["status"], str(f["release"])], box)
 	if not any:
-		label("没有在拍或待映的片子。", box)
-	heading("已上映", box)
+		label(tr("ui.main.fill_status.6"), box)
+	heading(tr("ui.main.fill_status.7"), box)
 	for f in st.story["films"]:
 		if f["status"] == "released":
 			var r = f["result"]
-			label("%s [%s]　%s" % [f["roles"]["name"], SIZE_NAME.get(f["size"], f["size"]), "大卖" if r != null and r.get("hit", false) else "已上映"], box)
+			label(tr("ui.main.fill_status.8") % [f["roles"]["name"], size_name(f["size"]), tr("ui.main.fill_status.9") if r != null and r.get("hit", false) else tr("ui.main.fill_status.7")], box)
 
 
 # ================= month summary and ending =================
@@ -1223,46 +1314,41 @@ func _show_summary() -> void:
 	refresh_status()
 	clear_body()
 	var now := snapshot()
-	heading("%s 月结" % d.months[st.ym - 1]["month"] if st.ym > 0 else "月结")
-	label("本月变化：" + diff_text(snap, now))
+	heading(tr("ui.main.show_summary.1") % d.months[st.ym - 1]["month"] if st.ym > 0 else tr("ui.main.show_summary.2"))
+	label(tr("ui.main.show_summary.3") + diff_text(snap, now))
 	var evs := new_events()
 	if not evs.is_empty():
-		heading("发生的事")
+		heading(tr("ui.main.show_summary.4"))
 		for e in evs:
-			label("　" + e)
+			label(tr("ui.audition.show_deck.6") + e)
 	var rel := 0
 	for f in st.story["films"]:
 		if f["status"] == "released" and f["result"] != null and f["result"].get("month", -1) == st.ym - 1:
 			rel += 1
-			label("上映：%s（%s）　%s" % [f["roles"]["name"], SIZE_NAME.get(f["size"], f["size"]), "大卖" if f["result"].get("hit", false) else "—"])
+			label(tr("ui.main.show_summary.5") % [f["roles"]["name"], size_name(f["size"]), tr("ui.main.fill_status.9") if f["result"].get("hit", false) else tr("ui.main.show_summary.6")])
 	if st.finished:
-		button("看结局", func(): reply(null))
+		button(tr("ui.main.show_summary.7"), func(): reply(null))
 	else:
-		button("下个月", func(): reply(null))
+		var hs := HBoxContainer.new()
+		body.add_child(hs)
+		label(tr("ui.main.show_summary.8"), hs)
+		for slot in ["1", "2", "3"]:
+			var sl: String = slot
+			button(slot_name(slot), func(): save_slot(sl), hs)
+		button(tr("ui.main.show_summary.9"), func(): reply(null))
 
 
 func _show_ending() -> void:
 	refresh_status()
 	clear_body()
-	var e: Dictionary = st.story["ending"]
-	var nmid: String = nm(e["ending"])
-	if e.get("top_job") != null:
-		nmid = nmid.replace("{top_job}", nm(e["top_job"]))
-	heading("结局：" + nmid)
-	label("评级 %s　总分 %s" % [str(e.get("grade")), str(e.get("total", "-"))])
-	label("类别：" + str(e.get("category")))
-	if e.has("character"):
-		label("人物档次：" + str(e["character"]))
-	if e.has("destiny"):
-		label("归宿：" + str(e["destiny"]))
-	var content := ""
-	for x in d.t["endings"].get("endings", []):
-		if x["id"] == e["ending"]:
-			content = str(x.get("content", ""))
-	if content != "":
-		label(content)
-	button("再来一局", func():
+	var v = EndingScene.instantiate()
+	body.add_child(v)
+	v.build(self)
+	var back := func():
 		if thread != null:
 			thread.wait_to_finish()
-		_title())
-	reply(null)
+		_title()
+	v.again.connect(back)
+	v.quit_to_title.connect(back)
+	if shot_path == "":      # the worker thread may finish now; with --shot the picture is taken first
+		reply(null)

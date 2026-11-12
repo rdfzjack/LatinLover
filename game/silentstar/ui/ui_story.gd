@@ -30,8 +30,22 @@ func board(st) -> void:
 			break
 		var res: Dictionary = Board.try_role(st, pick, agent)
 		out.append(res)
-		ui.ask("notice", ui.audition_text(b["roles"][pick], res))
+		ui.ask("notice", {"text": ui.audition_text(b["roles"][pick], res), "cue": "audition_win" if res["result"] == "won" else "audition_lose"})
 	boards.append({"month": st.date(), "audition": out})
+
+
+func event_begin(_st, eid: String) -> void:
+	ui.event_started(eid)
+
+
+func event_end(_st, rec: Dictionary) -> void:
+	ui.event_ended(rec)
+
+
+## December: the result page of the annual event.
+func annual(st) -> void:
+	super(st)
+	ui.ask("annual_result", annuals.back())
 
 
 ## Swap role / steal role happen inside Events.period_start; tell the player how the match went.
@@ -53,18 +67,18 @@ func period_start(st, i: int, entry: String) -> void:
 		var id: String = event_log[k]["id"]
 		if id == "evt_swap_role":
 			if films.size() > n0:
-				ui.ask("notice", "临时换角的试镜：赢了！接下了《%s》，下一旬去拍。" % films[films.size() - 1]["roles"]["name"])
+				ui.ask("notice", tr("ui.story.period_start.1") % films[films.size() - 1]["roles"]["name"])
 			else:
-				ui.ask("notice", "临时换角的试镜：输了，没拿到。")
+				ui.ask("notice", tr("ui.story.period_start.2"))
 		elif id == "evt_steal_role":
 			var stolen1 := 0
 			for f in films:
 				if f["status"] == "stolen":
 					stolen1 += 1
 			if stolen1 > stolen0:
-				ui.ask("notice", "有人来抢《%s》的角色，你输了，角色被抢走了，片约作废。" % first_name)
+				ui.ask("notice", tr("ui.story.period_start.3") % first_name)
 			else:
-				ui.ask("notice", "有人来抢《%s》的角色，你赢了，角色保住了。" % first_name)
+				ui.ask("notice", tr("ui.story.period_start.4") % first_name)
 
 
 func film_period(st, i: int, f, days: Array) -> void:
@@ -121,4 +135,4 @@ class UiAgent:
 		if Events.boost_reason(st, i) == "" and ui.ask("boost", i):
 			var why: String = story.boost(st, i)
 			if why != "":
-				ui.note("用药失败：" + why)
+				ui.note(tr("ui.story.before_period.1") + why)

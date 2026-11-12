@@ -12,8 +12,8 @@ func show_board(m, p: Dictionary) -> void:
 	var st = m.st
 	var b: Dictionary = p["board"]
 	var ok: Array = p["ok"]
-	m.heading("选片板（%s）" % st.date(), self)
-	m.label("本月最多试两次，第二次要比第一次小一档。赢了的片约会锁定下个月的旬。名气门槛：你现在是「%s」。" % d.t["stats"]["fame_tiers"][st.fame_tier()]["name"], self)
+	m.heading(tr("ui.board.show_board.1") % st.date(), self)
+	m.label(tr("ui.board.show_board.2") % d.t["stats"]["fame_tiers"][st.fame_tier()]["name"], self)
 	for i in b["roles"].size():
 		var r: Dictionary = b["roles"][i]
 		var pc := PanelContainer.new()
@@ -27,29 +27,29 @@ func show_board(m, p: Dictionary) -> void:
 		add_child(pc)
 		var box := VBoxContainer.new()
 		pc.add_child(box)
-		var title := "%s　[%s]%s" % [r["name"], m.SIZE_NAME.get(r["size"], r["size"]), "　【厂约】" if r["house"] else ""]
+		var title := tr("ui.board.show_board.3") % [r["name"], m.size_name(r["size"]), tr("ui.board.show_board.4") if r["house"] else ""]
 		m.heading(title, box)
-		var line := "名气要求 %d　酬金 $%s" % [int(r["fame_gate"]), str(r["fee"])]
+		var line := tr("ui.board.show_board.5") % [int(r["fame_gate"]), str(r["fee"])]
 		if r.get("talkie") != null and r["talkie"]:
-			line += "　有声片"
+			line += tr("ui.board.show_board.6")
 		m.label(line, box)
 		var w := PackedStringArray()
 		for x in r["wants"]:
 			var have: int = st.val(x["stat"])
-			w.append("%s %d（你 %d）" % [m.nm(x["stat"]), int(x["target"]), have])
-		m.label("角色要求：" + "　".join(w), box)
+			w.append(tr("ui.board.show_board.7") % [m.nm(x["stat"]), int(x["target"]), have])
+		m.label(tr("ui.board.show_board.8") + tr("ui.audition.show_deck.6").join(w), box)
 		if r["intel"].get("tags", false) and not r["tags"].is_empty():
 			var tg := PackedStringArray()
 			for x in r["tags"]:
 				tg.append(m.nm(x))
-			m.label("内容：" + " ".join(tg), box)
+			m.label(tr("ui.board.show_board.9") + " ".join(tg), box)
 		if r["style_probs"] != null:
 			var sp := PackedStringArray()
 			for c in 4:
 				sp.append("%s %d%%" % [m.nm(d.roads[c]), int(r["style_probs"][c])])
-			var t := "场风概率：" + "　".join(sp)
+			var t := tr("ui.board.show_board.10") + tr("ui.audition.show_deck.6").join(sp)
 			if r["intel"].has("excluded"):
-				t += "（探听到：不会出 %s）" % m.nm(d.roads[r["intel"]["excluded"]])
+				t += tr("ui.board.show_board.11") % m.nm(d.roads[r["intel"]["excluded"]])
 			m.label(t, box)
 		if r["opponents"].size() > 0:
 			var on := PackedStringArray()
@@ -57,12 +57,12 @@ func show_board(m, p: Dictionary) -> void:
 				var o: Dictionary = r["opponents"][k]
 				var s: String = m.rival_name(o)
 				if r["intel"].has("habit") and k < r["intel"]["habit"].size() and r["intel"]["habit"][k]:
-					s += "（习惯：" + m.nm(o["habit"]) + "）"
+					s += tr("ui.board.show_board.12") + m.nm(o["habit"]) + tr("ui.board.show_board.13")
 				on.append(s)
-			m.label("对手：" + "、".join(on), box)
+			m.label(tr("ui.board.show_board.14") + tr("ui.board.show_board.15").join(on), box)
 		if ok.has(i):
 			var ii: int = i
-			m.button("报名这个角色", func(): picked.emit(ii), box)
+			m.button(tr("ui.board.show_board.16"), func(): picked.emit(ii), box)
 		else:
-			m.label("不能报名：" + m.why(Board.can_try(st, i)), box, Color(1, 0.7, 0.7))
-	m.button("不试了", func(): picked.emit(null), self)
+			m.label(tr("ui.board.show_board.17") + m.why(Board.can_try(st, i)), box, Color(1, 0.7, 0.7))
+	m.button(tr("ui.board.show_board.18"), func(): picked.emit(null), self)

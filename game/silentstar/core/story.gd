@@ -137,6 +137,18 @@ static func fit_plan(g, plan: Array) -> Array:
 	return out
 
 
+# ---------- event notifications (step 15: the UI shows a dialog; no effect on the game) ----------
+
+## An event is about to be settled (called by Events.fire; triggered events nest).
+func event_begin(_st, _eid: String) -> void:
+	pass
+
+
+## The event is settled: rec is its record {id, month, check?, options?}.
+func event_end(_st, _rec: Dictionary) -> void:
+	pass
+
+
 # ---------- month start ----------
 
 func board(st) -> void:

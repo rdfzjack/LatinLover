@@ -65,6 +65,7 @@ static func fire(story, st, eid: String, depth := 0) -> Dictionary:
 		push_error("event trigger chain too deep: %s" % eid)
 		return {}
 	var e: Dictionary = st.d.events[eid]
+	story.event_begin(st, eid)
 	st.fired[eid] = st.fired.get(eid, 0) + 1
 	st.story["last_fired"][eid] = st.ym
 	var rec := {"id": eid, "month": st.date()}
@@ -100,6 +101,7 @@ static func fire(story, st, eid: String, depth := 0) -> Dictionary:
 			trig += Rules.apply_effect(st, o["success_effect"] if ok else o["fail_effect"], "event")
 		rec["options"] = choice
 	trig += _code(story, st, eid, choice)
+	story.event_end(st, rec)
 	story.event_log.append(rec)
 	for t in trig:
 		fire(story, st, t, depth + 1)
