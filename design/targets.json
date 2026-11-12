@@ -1,5 +1,5 @@
 {
- "note": "Guard targets (design/BALANCE_WORKFLOW.md). Every target is [low, high]; null = open. Only Fable changes this file, in a balance round (C). 'strategies' are checked on the mean over the road bots of a strategy (bad_boy: tough, lover, savvy), 'bots' on one bot. Sources: the step-12c target table of design/STEP12B_12C_BALANCE.md and the step-8 table of design/BALANCE_LOG.md. check.py runs 30 games per bot and widens every range by 10%. c3 round 1 (Fable): over_311 of the four only_* bots moved from 90 to 50 - they rest without a strategy and the heavier fatigue slowed them; the pace targets now sit on disciplined_*.",
+ "note": "Guard targets (design/BALANCE_WORKFLOW.md). Every target is [low, high]; null = open. Only Fable changes this file, in a balance round (C). 'strategies' are checked on the mean over the road bots of a strategy (bad_boy: tough, lover, savvy), 'bots' on one bot. Sources: the step-12c target table of design/STEP12B_12C_BALANCE.md and the step-8 table of design/BALANCE_LOG.md. check.py runs 30 games per bot and widens every range by 10%. c3 round 1 (Fable): over_311 of the four only_* bots moved from 90 to 50 - they rest without a strategy and the heavier fatigue slowed them; the pace targets now sit on disciplined_*. The S lower bounds of bad_boy and addict are open until the NPC lines and the remaining opportunities are in (user: S is not expected to be reachable yet; the lines only have to come apart).",
  "strategies": {
   "disciplined": {
    "rest_share": [30, 35],
@@ -26,7 +26,7 @@
    "cash_y2": [2000, 4000],
    "cash_end": [6000, 10000],
    "cash_end_p10": [null, 1000],
-   "pct_S": [15, 20],
+   "pct_S": [null, 20],
    "pct_A": [25, 30],
    "pct_B": [20, 25],
    "c_or_less": [25, 35],
@@ -43,7 +43,7 @@
    "cash_y2": [null, 800],
    "cash_end": [1000, 3000],
    "cash_end_p10": [null, 0],
-   "pct_S": [30, 35],
+   "pct_S": [null, 35],
    "pct_A": [10, 15],
    "pct_B": [8, 12],
    "c_or_less": [40, 45],
