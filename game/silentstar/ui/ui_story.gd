@@ -86,7 +86,7 @@ func film_period(st, i: int, f, days: Array) -> void:
 	var d0: int = f["shoot_days"]
 	var k0: int = f["ok_days"]
 	super(st, i, f, days)
-	ui.period_done(st, i, "shooting", {"film": f["roles"]["name"], "days": f["shoot_days"] - d0, "ok": f["ok_days"] - k0})
+	ui.period_done(st, i, "shooting", {"film": f["roles"]["name"], "size": f["size"], "days": f["shoot_days"] - d0, "ok": f["ok_days"] - k0})
 
 
 ## Every question of the script is a blocking prompt in the UI (ask runs on the game thread and waits for the screen).

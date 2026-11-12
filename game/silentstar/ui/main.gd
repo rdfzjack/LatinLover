@@ -22,6 +22,7 @@ const Story = preload("res://core/story.gd")
 const State = preload("res://core/state.gd")
 const UiStory = preload("res://ui/ui_story.gd")
 const Fx = preload("res://ui/fx.gd")
+const Explain = preload("res://ui/explain.gd")
 const Assets = preload("res://ui/assets.gd")
 const SaveSlots = preload("res://ui/save_slots.gd")
 const Locale = preload("res://core/locale.gd")
@@ -39,6 +40,7 @@ const SIZE_KEY := {"small": "ui.size.small", "medium": "ui.size.medium", "big": 
 const KIND_KEY := {"self_written": "ui.script_kind.self_written", "duv_written": "ui.script_kind.duv_written", "co_written": "ui.script_kind.co_written"}
 
 var d
+var explain                # explain.gd: why a day succeeds or fails
 var fx                     # fx.gd: sounds and effects, announced by cue()
 var g                      # Month
 var st
@@ -113,6 +115,7 @@ func _ready() -> void:
 		return
 	_index_names(d.t)
 	_build_frame()
+	explain = Explain.new(self)
 	fx = Fx.new()
 	fx.host = body
 	fx.enabled = shot_path == ""
@@ -289,12 +292,14 @@ func entry_effect(e: String) -> String:
 			gs.append(nm(x["stat"]) + rng_txt(pl[0], pl[1]))
 		t.append(tr("ui.main.entry_effect.1"))
 		t.append(tr("ui.main.entry_effect.2") + " ".join(gs))
+		t.append(explain.practice_text(st.val("stamina"), st.val("fatigue")))
 		t.append(tr("ui.main.entry_effect.3") % int(c.get("fatigue_per_day", 1)))
 		t.append(tr("ui.main.entry_effect.4") % [int(c["fee"][lv - 1]), lv])
 	elif kind == "book":
 		var b: Dictionary = d.books[iid]
 		t.append(tr("ui.main.entry_effect.1"))
 		t.append(tr("ui.main.entry_effect.5") % [nm(b["skills"]), rng_txt(b["gain"][0], b["gain"][1])])
+		t.append(explain.practice_text(st.val("stamina"), st.val("fatigue")))
 		t.append(tr("ui.main.entry_effect.3") % int(b.get("fatigue_per_day", 1)))
 		if st.books.has(iid):
 			t.append(tr("ui.main.entry_effect.6") % int(st.books[iid]))
@@ -307,11 +312,7 @@ func entry_effect(e: String) -> String:
 		for x in j["daily_effect"]:
 			gs.append(nm(x["stat"]) + rng_txt(x["add"][0], x["add"][1]))
 		t.append(tr("ui.main.entry_effect.8") + " ".join(gs))
-		var ls := PackedStringArray()
-		for x in Schedule.job_lines(st, j):
-			ls.append(tr("ui.main.entry_effect.9") % [nm(x[0]), str(x[1])])
-		if not ls.is_empty():
-			t.append(tr("ui.main.entry_effect.10") + tr("ui.main.entry_effect.11").join(ls))
+		t.append(explain.work_text(Schedule.job_lines(st, j), st.val("fatigue"), Schedule.job_slacks(st, j)))
 	else:
 		var r: Dictionary = d.rests[iid]
 		if pe[2] != null:
@@ -387,7 +388,7 @@ func refresh_status() -> void:
 	elif st.status["sick"]:
 		flags.append(tr("ui.main.refresh_status.4"))
 	if st.status["reckless"]:
-		flags.append(tr("ui.main.refresh_status.5"))
+		flags.append(tr("ui.main.refresh_status.5") + tr("ui.main.refresh_status.11") % explain.slack_pct())
 	if st.status["in_love"]:
 		flags.append(tr("ui.main.refresh_status.6"))
 	if st.status["long_contract"]:
@@ -397,9 +398,12 @@ func refresh_status() -> void:
 	var stock := int(st.flags.get("drug_stock", 0))
 	if stock > 0:
 		flags.append(tr("ui.main.refresh_status.9") % stock)
-	status_label.text = tr("ui.main.refresh_status.10") % [
+	var head: String = tr("ui.main.refresh_status.10") % [
 		st.date(), st.money, tier["name"], mail, nm(st.lifestyle), "  ".join(a), "   ".join(r),
 		st.idx["sick_index"], st.idx["reckless_index"], " ".join(flags)]
+	status_label.text = head
+	status_label.tooltip_text = explain.index_text()
+	status_label.mouse_filter = Control.MOUSE_FILTER_STOP
 
 
 func snapshot() -> Dictionary:
@@ -858,6 +862,9 @@ func period_done(_st, i: int, entry: String, out: Dictionary) -> void:
 			rep.append(tr("ui.main.period_done.9") % int(out["cost"]))
 		elif pe.size() > 0 and pe[0] == "rest":
 			rep.append(tr("ui.main.period_done.10"))
+	var why_text := explain_period(entry, out, int(last_snap["attr"]["fatigue"]))
+	if why_text != "":
+		rep.append(why_text)
 	var lines := diff_lines(last_snap, now)
 	var evt := PackedStringArray()
 	for e in evs:
@@ -865,6 +872,48 @@ func period_done(_st, i: int, entry: String, out: Dictionary) -> void:
 	last_snap = now
 	note(tr("ui.main.period_done.11") % [head, what, diff_text(last_snap, now) if false else tr("ui.main.entry_effect.14").join(rep)])
 	ask("period", {"head": head, "what": what, "cg": cg, "cg_keys": cg_keys, "report": "\n".join(rep), "lines": lines, "events": evt})
+
+
+## Why the days of this period went the way they did (numbers as they were when the period began).
+func explain_period(entry: String, out: Dictionary, fatigue: int) -> String:
+	var pe := Schedule.parse_entry(entry)
+	if entry == "shooting":
+		var size := str(out.get("size", "medium"))
+		var t: String = tr("ui.main.explain_period.1") + explain.shoot_text(size, fatigue)
+		if int(out.get("ok", 0)) == 0:
+			t += tr("ui.main.explain_period.2") + _worst_reason(["stamina"], [int(d.role_cfg["shoot"]["success_lines"][size])], fatigue, true)
+		return t
+	if pe.is_empty():
+		return ""
+	if pe[0] == "job":
+		var j: Dictionary = d.jobs[pe[1]]
+		var lines: Array = Schedule.job_lines(st, j)
+		var t: String = tr("ui.main.explain_period.1") + explain.work_text(lines, fatigue, Schedule.job_slacks(st, j))
+		if int(out.get("ok_days", 0)) == 0:
+			var stats := []
+			var vals := []
+			for x in lines:
+				stats.append(x[0])
+				vals.append(int(x[1]))
+			t += tr("ui.main.explain_period.3") + _worst_reason(stats, vals, fatigue, Schedule.job_slacks(st, j))
+		return t
+	if pe[0] == "class" or pe[0] == "book":
+		return tr("ui.main.explain_period.1") + explain.practice_text(st.val("stamina"), fatigue)
+	return ""
+
+
+## The main reason a period of work or shooting had no successful day.
+func _worst_reason(stats: Array, lines: Array, fatigue: int, job: bool) -> String:
+	if job and explain.slack_pct() >= 40:
+		return tr("ui.main.worst_reason.1") % [st.idx["reckless_index"], explain.slack_pct()]
+	if st.status["in_love"]:
+		return tr("ui.main.worst_reason.2")
+	for k in stats.size():
+		var stat: int = st.val(stats[k])
+		var pl: float = explain.p_line(stat, lines[k], fatigue)
+		if pl < 0.5:
+			return tr("ui.main.worst_reason.3") % [nm(stats[k]), stat, lines[k], fatigue, explain.pct(pl)]
+	return tr("ui.main.worst_reason.4")
 
 
 func ac() -> Dictionary:
@@ -1246,6 +1295,10 @@ func _show_month_start() -> void:
 	if not era.is_empty():
 		label(tr("ui.common.wide_space") + tr("ui.main.entry_effect.11").join(era))
 	label(tr("ui.main.show_month_start.6"))
+	for i in 3:      # the shooting periods of this month and how likely a good day is
+		var f = g.hooks.locked(st, i)
+		if f != null and not st.void_periods.has(st.ym * 3 + i):
+			label(tr("ui.main.show_month_start.13") % [i + 1, str(f["roles"]["name"]), explain.shoot_text(str(f["size"]), st.val("fatigue"))], null, Color(1, 0.85, 0.4))
 	var hb2 := HBoxContainer.new()
 	body.add_child(hb2)
 	label(tr("ui.main.show_month_start.7"), hb2)
@@ -1526,6 +1579,8 @@ func _hint_text(h: Array) -> String:
 
 func _fill_status(box: VBoxContainer) -> void:
 	var b: Dictionary = st.bonus()
+	heading(tr("ui.main.fill_status.10"), box)
+	label(explain.index_text(), box)
 	heading(tr("ui.main.update_alloc_info.3"), box)
 	for r in d.roads:
 		var t := PackedStringArray()
