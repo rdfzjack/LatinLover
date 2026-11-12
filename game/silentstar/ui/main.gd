@@ -19,6 +19,7 @@ const Events = preload("res://core/events.gd")
 const Film = preload("res://core/film.gd")
 const Audition = preload("res://core/audition.gd")
 const Story = preload("res://core/story.gd")
+const State = preload("res://core/state.gd")
 const UiStory = preload("res://ui/ui_story.gd")
 
 const SAVE_PATH := "user://autosave.json"
@@ -32,6 +33,7 @@ var thread: Thread
 var sem := Semaphore.new()
 var answer = null
 var auto := false
+var title_shot := ""
 var shot_kind := "plan"
 var shot_path := ""         # --shot=file.png: saves a picture of the first screen that waits for the player, then quits
 var uitest := false         # --uitest: builds every screen for real, then presses the buttons itself
@@ -64,6 +66,8 @@ func _ready() -> void:
 	for a in args:
 		if a == "--auto":
 			auto = true
+		elif a.begins_with("--titleshot="):
+			title_shot = a.substr(12)
 		elif a.begins_with("--shotkind="):
 			shot_kind = a.substr(11)
 		elif a.begins_with("--shot="):
@@ -82,7 +86,14 @@ func _ready() -> void:
 		return
 	_index_names(d.t)
 	_build_frame()
-	if auto or uitest:
+	if title_shot != "":
+		_title()
+		_roll()
+		for _i in 4:
+			await get_tree().process_frame
+		get_viewport().get_texture().get_image().save_png(title_shot)
+		get_tree().quit()
+	elif auto or uitest:
 		_start_game(seed_n, [0, 0, 0])
 	else:
 		_title()
@@ -104,7 +115,7 @@ func _build_frame() -> void:
 	add_child(root)
 	status_label = Label.new()
 	status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	status_label.custom_minimum_size = Vector2(0, 70)
+	status_label.custom_minimum_size = Vector2(0, 100)
 	root.add_child(status_label)
 	var split := HSplitContainer.new()
 	split.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -187,6 +198,60 @@ func rival_name(o: Dictionary) -> String:
 	return "无名对手" if n == "" or n.begins_with("unnamed") else n
 
 
+func rng_txt(a: int, b: int) -> String:
+	if a == b:
+		return "%+d" % a
+	return "%+d~%+d" % [a, b]
+
+
+## What one period of this entry does, in words and numbers (shown in brackets in the schedule menus).
+func entry_effect(e: String) -> String:
+	var pe := Schedule.parse_entry(e)
+	if pe.is_empty():
+		return ""
+	var kind: String = pe[0]
+	var iid: String = pe[1]
+	var t := PackedStringArray()
+	if kind == "class":
+		var c: Dictionary = d.classes[iid]
+		var lv := Schedule.class_level(st, iid)
+		var gs := PackedStringArray()
+		for x in c["gain"]:
+			var pl: Array = x["per_level"][lv - 1]
+			gs.append(nm(x["stat"]) + rng_txt(pl[0], pl[1]))
+		t.append("成功日条件：体力/2+随机(0~体力/2)≥随机(0~疲劳)")
+		t.append("成功日：" + " ".join(gs))
+		t.append("每天疲劳%+d" % int(c.get("fatigue_per_day", 1)))
+		t.append("学费 $%d/天（第 %d 级）" % [int(c["fee"][lv - 1]), lv])
+	elif kind == "book":
+		var b: Dictionary = d.books[iid]
+		t.append("成功日条件：体力/2+随机(0~体力/2)≥随机(0~疲劳)")
+		t.append("成功日：%s%s" % [nm(b["skills"]), rng_txt(b["gain"][0], b["gain"][1])])
+		t.append("每天疲劳%+d" % int(b.get("fatigue_per_day", 1)))
+		if st.books.has(iid):
+			t.append("书还剩 %d 点" % int(st.books[iid]))
+	elif kind == "job":
+		var j: Dictionary = d.jobs[iid]
+		t.append("成功的日子日薪 $%d" % Schedule.wage_of(st, iid))
+		var gs := PackedStringArray()
+		for x in j["daily_effect"]:
+			gs.append(nm(x["stat"]) + rng_txt(x["add"][0], x["add"][1]))
+		t.append("每天：" + " ".join(gs))
+		var ls := PackedStringArray()
+		for x in Schedule.job_lines(st, j):
+			ls.append("%s−随机(0~疲劳)≥%s" % [nm(x[0]), str(x[1])])
+		if not ls.is_empty():
+			t.append("成功日条件：" + "，".join(ls))
+	else:
+		var r: Dictionary = d.rests[iid]
+		if pe[2] != null:
+			var pl: Dictionary = d.places[pe[2]]
+			t.append("每天疲劳%+d，花 $%d/天，旬内发生一件事" % [int(pl["fatigue_per_day"]), Schedule.place_cost(st, pe[2])])
+		else:
+			t.append("每天疲劳%+d，免费，%s" % [int(r["fatigue_per_day"]), pretty(r.get("period_effect", ""))])
+	return "；".join(t)
+
+
 func clear_body() -> void:
 	for c in body.get_children():
 		c.queue_free()
@@ -241,7 +306,10 @@ func refresh_status() -> void:
 		a.append("%s %d" % [nm(k), st.val(k, b)])
 	var r := PackedStringArray()
 	for k in d.roads:
-		r.append("%s %d" % [nm(k), st.rep(k, b)])
+		var sk := PackedStringArray()
+		for x in d.road_skills[k]:
+			sk.append("%s %d" % [nm(x), st.val(x, b)])
+		r.append("%s %d（%s）" % [nm(k), st.rep(k, b), " ".join(sk)])
 	var flags := PackedStringArray()
 	if st.status["very_sick"]:
 		flags.append("重病")
@@ -258,8 +326,8 @@ func refresh_status() -> void:
 	var stock := int(st.flags.get("drug_stock", 0))
 	if stock > 0:
 		flags.append("药 %d 份" % stock)
-	status_label.text = "%s   金钱 $%d   名气：%s（本月来信约 %d 封）   生活：%s\n%s\n声望：%s   生病指数 %d  失控指数 %d   %s" % [
-		st.date(), st.money, tier["name"], mail, nm(st.lifestyle), "  ".join(a), "  ".join(r),
+	status_label.text = "%s   金钱 $%d   名气：%s（本月来信约 %d 封）   生活：%s\n%s\n声望（技能）：%s\n生病指数 %d  失控指数 %d   %s" % [
+		st.date(), st.money, tier["name"], mail, nm(st.lifestyle), "  ".join(a), "   ".join(r),
 		st.idx["sick_index"], st.idx["reckless_index"], " ".join(flags)]
 
 
@@ -306,41 +374,158 @@ func new_events() -> PackedStringArray:
 
 # ================= title =================
 
+const POOL_ATTRS := ["stamina", "education", "loyalty", "looks", "discipline"]
+var alloc := {}            # starting values the player settled on (attributes and skills)
+var base_vals := {}        # the same, as the origin answers leave them (the "default")
+var alloc_box: VBoxContainer
+var alloc_info: Label
+var start_btn: Button
+var origin_picks: Array = []
+var roll_rng := RandomNumberGenerator.new()
+
+
+## Rule of the starting values: the total of each pool stays what the three origin answers made it (pool 1: the five attributes,
+## pool 2: the twelve skills), so a random start and a hand-made start are worth the same as the default; they only differ in shape.
+## Each value may go down to half of its default and up to 150% of it (attributes: at least 60; skills: at least +15).
+func _limits(id: String) -> Array:
+	var v: int = base_vals[id]
+	if POOL_ATTRS.has(id):
+		return [v / 2, maxi(60, v * 3 / 2)]
+	return [0, mini(100, maxi(v + 15, v * 3 / 2))]
+
+
+func _pool_of(id: String) -> Array:
+	return POOL_ATTRS if POOL_ATTRS.has(id) else d.skills
+
+
+func _read_origin() -> void:
+	var o := []
+	for p in origin_picks:
+		o.append(p.selected)
+	var tmp = State.new(d)
+	tmp.start(1, o)
+	base_vals = {}
+	for k in POOL_ATTRS:
+		base_vals[k] = tmp.attr[k]
+	for k in d.skills:
+		base_vals[k] = tmp.skill[k]
+	alloc = base_vals.duplicate()
+
+
+func _roll() -> void:
+	roll_rng.randomize()
+	alloc = base_vals.duplicate()
+	for pool in [POOL_ATTRS, d.skills]:
+		var step: int = 10 if pool == POOL_ATTRS else 2
+		for _n in 120:
+			var a: String = pool[roll_rng.randi() % pool.size()]
+			var c: String = pool[roll_rng.randi() % pool.size()]
+			if a == c:
+				continue
+			if alloc[a] - step >= _limits(a)[0] and alloc[c] + step <= _limits(c)[1]:
+				alloc[a] -= step
+				alloc[c] += step
+	_rebuild_alloc()
+
+
+func _rebuild_alloc() -> void:
+	for c in alloc_box.get_children():
+		c.queue_free()
+	for pool in [POOL_ATTRS, d.skills]:
+		var grid := GridContainer.new()
+		grid.columns = 6 if pool == POOL_ATTRS else 6
+		alloc_box.add_child(grid)
+		for id in pool:
+			label(nm(id), grid)
+			var sb := SpinBox.new()
+			var lim := _limits(id)
+			sb.min_value = lim[0]
+			sb.max_value = lim[1]
+			sb.step = 1
+			sb.value = alloc[id]
+			var ii: String = id
+			sb.value_changed.connect(func(v):
+				alloc[ii] = int(v)
+				_update_alloc_info())
+			grid.add_child(sb)
+	_update_alloc_info()
+
+
+func _update_alloc_info() -> void:
+	var t := PackedStringArray()
+	var okk := true
+	for pool in [POOL_ATTRS, d.skills]:
+		var sum := 0
+		var tot := 0
+		for id in pool:
+			sum += alloc[id]
+			tot += base_vals[id]
+		var left: int = tot - sum
+		t.append("%s：还剩 %d 点要分%s" % ["属性" if pool == POOL_ATTRS else "技能", left, "" if left != 0 else "（已分完）"])
+		if left != 0:
+			okk = false
+	alloc_info.text = "　".join(t) + "（多出来的要从别处减掉；每项范围见输入框）"
+	start_btn.disabled = not okk
+
+
 func _title() -> void:
 	st = null
 	refresh_status()
 	clear_body()
 	heading("无声之星")
-	label("三个问题决定出身（可以直接开始）：")
-	var picks: Array = []
+	label("三个问题决定出身：")
+	origin_picks = []
 	for q in d.origins:
 		label(q["question"])
 		var ob := OptionButton.new()
 		for o in q["options"]:
 			ob.add_item(o["text"])
 		body.add_child(ob)
-		picks.append(ob)
+		origin_picks.append(ob)
+		ob.item_selected.connect(func(_i):
+			_read_origin()
+			_rebuild_alloc())
+	heading("起始数值")
+	label("总点数由出身决定，可以重新分配：点“随机”掷一个新的，或者自己填。不动就是默认值。")
+	var hb0 := HBoxContainer.new()
+	body.add_child(hb0)
+	button("随机一个", func(): _roll(), hb0)
+	button("恢复默认", func():
+		alloc = base_vals.duplicate()
+		_rebuild_alloc(), hb0)
+	alloc_box = VBoxContainer.new()
+	body.add_child(alloc_box)
+	alloc_info = label("", null, Color(1, 0.85, 0.4))
+	_read_origin()
+	_rebuild_alloc()
 	var hb := HBoxContainer.new()
 	body.add_child(hb)
 	label("随机种子（留空 = 随机）：", hb)
 	var seed_edit := LineEdit.new()
 	seed_edit.custom_minimum_size = Vector2(160, 0)
 	hb.add_child(seed_edit)
-	button("新游戏", func():
+	start_btn = button("新游戏", func():
 		var o := []
-		for p in picks:
+		for p in origin_picks:
 			o.append(p.selected)
 		var sd: int = int(seed_edit.text) if seed_edit.text.strip_edges() != "" else randi() % 1000000 + 1
-		_start_game(sd, o))
+		_start_game(sd, o, alloc))
 	if FileAccess.file_exists(SAVE_PATH):
 		button("继续上次的存档（每月结算后自动存）", func(): _continue_game())
+	_update_alloc_info()
 
 
-func _start_game(seed_n: int, origin: Array) -> void:
+func _start_game(seed_n: int, origin: Array, start_vals := {}) -> void:
 	var agent = UiStory.UiAgent.new(self)
 	var story = UiStory.new(agent, self)
 	g = Month.new(d, seed_n, origin, story)
 	st = g.st
+	for k in start_vals:
+		if POOL_ATTRS.has(k):
+			st.attr[k] = start_vals[k]
+		else:
+			st.skill[k] = start_vals[k]
+	st.update_indices()
 	prev_plan = []
 	_run_thread()
 
@@ -445,6 +630,61 @@ func period_done(_st, i: int, entry: String, out: Dictionary) -> void:
 		skip_playback = true
 
 
+func ac() -> Dictionary:
+	return d.t["habits"]["audition"]
+
+
+func rules_text() -> String:
+	var c := ac()
+	var order: Array = c["color_order"]
+	var ring := []
+	for n in order:
+		ring.append("%s克%s" % [nm(n), nm(c["counters"][n])])
+	return "【算法】每张牌的点数 = 同色第 k 张：等级−k（最低 0）。比较时 v = 点数×100，然后：\n　① 牌色 = 本场场风色：v × %d%%\n　② 我的色克对方的色，且对方的牌不是场风色：我 v × %d%%，对方 v × %d%%（对方克我同理）\n　③ 场风色不受克制。克制环：%s\n　④ v 大的赢这一轮；相等则名气高的赢；再相等对手赢。先赢 %d 轮的赢这场。" % [
+		int(c["style_pct"]), int(c["counter_pct"]), int(c["countered_pct"]), "、".join(ring), int(c["rounds_to_win"])]
+
+
+## One card's value with the reason, e.g. "硬汉 3 → 300 ×130%（场风）= 390"
+func card_text(card: Array, other: Array, field: int) -> String:
+	var v: Array = Audition.effective(d, card, other, field)
+	var base: int = card[1] * 100
+	var why := []
+	if card[0] == field:
+		why.append("场风 ×%d%%" % int(ac()["style_pct"]))
+	var bt := Audition.beats(d)
+	if card[0] != field and other[0] != field:
+		if bt[card[0]] == other[0]:
+			why.append("克制对方 ×%d%%" % int(ac()["counter_pct"]))
+		elif bt[other[0]] == card[0]:
+			why.append("被克制 ×%d%%" % int(ac()["countered_pct"]))
+	return "%s %d点 = %d%s → %d" % [nm(d.roads[card[0]]), card[1], base, ("（" + "，".join(why) + "）") if not why.is_empty() else "", v[0]]
+
+
+func audition_text(role: Dictionary, res: Dictionary) -> String:
+	var t := PackedStringArray()
+	t.append("试镜《%s》[%s]" % [role["name"], SIZE_NAME.get(role["size"], role["size"])])
+	var k := 1
+	for m in res["rounds"]:
+		t.append("　第 %d 场 %d : %d" % [k, m["score_line"][0], m["score_line"][1]])
+		k += 1
+	var r: String = res["result"]
+	var verdict := ""
+	match r:
+		"won":
+			verdict = "赢了！" + ("全胜，导演记住了你的路数。" if res.get("remembered", false) else "") + "拿下了这个角色，下个月开拍。"
+		"narrow_loss":
+			if res.get("support", false):
+				verdict = "险败（2:3），但你接了同片的配角，下个月开拍（酬金少、拍的旬少）。"
+			else:
+				verdict = "险败（2:3），没拿到角色。"
+		"botched":
+			verdict = "惨败，一分没得，名气下降" + ("，还上了小报。" if res.get("reported", false) else "。")
+		_:
+			verdict = "输了，没拿到角色。"
+	t.append(verdict)
+	return "\n".join(t)
+
+
 # ================= automatic answers (test mode) =================
 
 func _auto_answer(kind: String, payload):
@@ -500,6 +740,10 @@ func _show_request(kind: String, payload) -> void:
 		"annual": _show_annual(payload)
 		"family": _show_family()
 		"period": _show_period(payload)
+		"notice":
+			_wait_screen("结果")
+			label(str(payload))
+			button("继续", func(): reply(null))
 		"summary": _show_summary()
 		"ending": _show_ending()
 		_:
@@ -649,6 +893,12 @@ func _show_deck(ctx: Dictionary) -> void:
 	label("你的等级：" + "  ".join(t))
 	var o = ctx["opponents"]
 	label("对手：" + rival_name(o) + "　（第 %d 场）" % (int(ctx["rounds"]) + 1))
+	label(rules_text())
+	if ctx["roles"]["style_probs"] != null:
+		var sp := PackedStringArray()
+		for c in 4:
+			sp.append("%s %d%%" % [nm(d.roads[c]), int(ctx["roles"]["style_probs"][c])])
+		label("本场场风概率：" + "  ".join(sp))
 	label("组 5 张牌（同色第 k 张点数 = 等级 − k，后面的牌更弱）：")
 	var order := [0, 1, 2, 3]
 	order.sort_custom(func(a, b): return lv[a] > lv[b] if lv[a] != lv[b] else a < b)
@@ -674,13 +924,26 @@ func _show_play(ctx: Dictionary) -> void:
 	_wait_screen("试镜：第 %d 轮" % (int(ctx["round"]) + 1))
 	var sl: Array = ctx["score_line"]
 	label("比分 %d : %d　本场风格：%s" % [sl[0], sl[1], nm(d.roads[ctx["style"]])])
+	label(rules_text())
+	var n := 1
 	for h in ctx["history"]:
-		label("　上一轮：你出 %s %d，对手出 %s %d　→ %s" % [nm(d.roads[h[0][0]]), h[0][1], nm(d.roads[h[1][0]]), h[1][1], "赢" if h[2] else "输"])
-	label("对手还剩 %d 张牌。出哪张？" % ctx["rival_hand"].size())
+		var v: Array = Audition.effective(d, h[0], h[1], ctx["style"])
+		label("第 %d 轮：你 %s\n　　　对手 %s\n　　　%d %s %d → %s" % [n, card_text(h[0], h[1], ctx["style"]), card_text(h[1], h[0], ctx["style"]),
+			v[0], ">" if v[0] > v[1] else ("<" if v[0] < v[1] else "="), v[1], "你赢" if h[2] else "你输"])
+		n += 1
+	label("对手还剩 %d 张牌（不知道他出哪张）。你的每张牌在不同情况下的有效点数：" % ctx["rival_hand"].size())
 	var hand: Array = ctx["hand"]
 	for i in hand.size():
 		var ii: int = i
-		button("%s　点数 %d" % [nm(d.roads[hand[i][0]]), hand[i][1]], func(): reply(ii))
+		var c: Array = hand[i]
+		var plain: int = c[1] * 100
+		var inf: int = plain * int(ac()["style_pct"]) / 100 if c[0] == ctx["style"] else plain
+		var txt := "%s　点数 %d　基础 %d" % [nm(d.roads[c[0]]), c[1], plain]
+		if c[0] == ctx["style"]:
+			txt += "　场风 ×%d%% = %d" % [int(ac()["style_pct"]), inf]
+		else:
+			txt += "　克制对方时 %d，被克制时 %d" % [plain * int(ac()["counter_pct"]) / 100, plain * int(ac()["countered_pct"]) / 100]
+		button(txt, func(): reply(ii))
 
 
 # ================= the month plan =================
@@ -715,7 +978,7 @@ func _show_plan() -> void:
 
 
 func _fill_schedule(box: VBoxContainer) -> void:
-	label("上月的安排已经预填。要改的旬点开下拉；不改直接按「开始本月」。", box)
+	label("上月的安排已经预填。要改的旬点开下拉；不改直接按「开始本月」。括号里是这一旬每天的效果和成功条件（疲劳 + 是变累，− 是恢复；「随机(0~X)」是每天掷一个 0 到 X 的数）。恋爱中每天另有 20% 失败；失控时打工另有偷懒。", box)
 	var m: Dictionary = st.month()
 	var era := PackedStringArray()
 	if Schedule.truthy(m.get("board")):
@@ -744,19 +1007,23 @@ func _fill_schedule(box: VBoxContainer) -> void:
 			label(head + "　拍摄中：" + str(f["roles"]["name"]), box)
 			plan_btns.append(null)
 			continue
-		var hb := HBoxContainer.new()
+		var hb := VBoxContainer.new()
 		box.add_child(hb)
 		label(head, hb)
 		var ob := OptionButton.new()
-		ob.custom_minimum_size = Vector2(360, 0)
 		var sel := 0
 		for k in opts.size():
-			ob.add_item(entry_name(opts[k]))
+			ob.add_item("%s（%s）" % [entry_name(opts[k]), entry_effect(opts[k])])
 			ob.set_item_metadata(k, opts[k])
 			if opts[k] == good[i]:
 				sel = k
 		ob.select(sel)
+		ob.clip_text = true
+		ob.custom_minimum_size = Vector2(300, 0)
+		ob.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		hb.add_child(ob)
+		var full := label("　" + ob.get_item_text(sel), hb, Color(0.8, 0.9, 1))
+		ob.item_selected.connect(func(ix): full.text = "　" + ob.get_item_text(ix))
 		plan_btns.append(ob)
 	var hb2 := HBoxContainer.new()
 	box.add_child(hb2)

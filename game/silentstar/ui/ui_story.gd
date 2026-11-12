@@ -13,6 +13,60 @@ func _init(ag = null, ui_node = null) -> void:
 	ui = ui_node
 
 
+## The board: same flow as Board.run, but every audition ends with a result screen.
+func board(st) -> void:
+	Board.make(st)
+	var out := []
+	while true:
+		var b: Dictionary = Board.board(st)
+		var ok := []
+		for i in b["roles"].size():
+			if Board.can_try(st, i) == "":
+				ok.append(i)
+		if ok.is_empty():
+			break
+		var pick = agent.pick_role(st, b, ok)
+		if pick == null:
+			break
+		var res: Dictionary = Board.try_role(st, pick, agent)
+		out.append(res)
+		ui.ask("notice", ui.audition_text(b["roles"][pick], res))
+	boards.append({"month": st.date(), "audition": out})
+
+
+## Swap role / steal role happen inside Events.period_start; tell the player how the match went.
+func period_start(st, i: int, entry: String) -> void:
+	var films: Array = st.story["films"]
+	var n0: int = films.size()
+	var l0: int = event_log.size()
+	var stolen0 := 0
+	var first_name := ""
+	for f in films:
+		if f["status"] == "stolen":
+			stolen0 += 1
+	for f in films:
+		if f["status"] == "to_shoot":
+			first_name = str(f["roles"]["name"])
+			break
+	super(st, i, entry)
+	for k in range(l0, event_log.size()):
+		var id: String = event_log[k]["id"]
+		if id == "evt_swap_role":
+			if films.size() > n0:
+				ui.ask("notice", "临时换角的试镜：赢了！接下了《%s》，下一旬去拍。" % films[films.size() - 1]["roles"]["name"])
+			else:
+				ui.ask("notice", "临时换角的试镜：输了，没拿到。")
+		elif id == "evt_steal_role":
+			var stolen1 := 0
+			for f in films:
+				if f["status"] == "stolen":
+					stolen1 += 1
+			if stolen1 > stolen0:
+				ui.ask("notice", "有人来抢《%s》的角色，你输了，角色被抢走了，片约作废。" % first_name)
+			else:
+				ui.ask("notice", "有人来抢《%s》的角色，你赢了，角色保住了。" % first_name)
+
+
 func film_period(st, i: int, f, days: Array) -> void:
 	super(st, i, f, days)
 	ui.period_done(st, i, "shooting", {"film": f["roles"]["name"]})
