@@ -1013,7 +1013,7 @@ class Bad:
 	extends StratBot
 
 	var crime_periods := 1      # tier-2 crime job in the first N periods of every month
-	var cap60 := true           # keep the month-end reckless_index below 60
+	var reckless_cap := 60      # keep the month-end reckless_index below this (60: jobs refused, evt_missing; 100: evt_arrest)
 
 	func _init(sd := 1) -> void:
 		super(sd)
@@ -1067,14 +1067,15 @@ class Bad:
 			return rest_choice(g, P, i)
 		# step 12c c3: keep the month-end reckless_index below 60 (refused jobs; at 100 he is arrested), as BALANCE_LOG describes:
 		# before the last period, work only if the rest he can afford in the last period brings it back under 60
-		if cap60 and i < 2:
+		if i < 2:
 			var rc := rest_choice(g, P, 2)
-			if after + delta(g, P, 2, rc)[0] >= 60:
+			if after + delta(g, P, 2, rc)[0] >= reckless_cap:
 				return rest_choice(g, P, i)
 		return e
 
 
-## Bold (step 12c c3 round 4): the bad boy who takes risks. He does not keep the month-end reckless_index below 60 and works his
+## Bold (step 12c c3 round 4): the bad boy who takes risks. He lets the month-end reckless_index go past 60 (jobs refused, he may
+## go missing) and only keeps it below 100 (a sure arrest); he works his
 ## tier-2 crime job in the first two periods of every month, so his downside (refused jobs, arrests, scandals) shows in the report.
 class Bold:
 	extends Bad
@@ -1083,7 +1084,7 @@ class Bold:
 		super(sd)
 		strategy = "bold"
 		crime_periods = 2
-		cap60 = false
+		reckless_cap = 100
 
 
 ## Addict (step 12c c3 round 3): plays like the disciplined bot (rests at home, not at the church) and buys from the dealer
