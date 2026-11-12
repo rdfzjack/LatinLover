@@ -493,7 +493,7 @@ static func report(res: Dictionary, lo: int, hi: int, smart: bool, nobuy: Dictio
 		var dm := strategy_metrics(res, "disciplined")
 		if not dm.is_empty():
 			var parts := PackedStringArray()
-			for sname in ["bad_boy", "addict", "quit", "shoot", "allin"]:
+			for sname in ["bad_boy", "wild", "addict", "quit", "shoot", "allin"]:
 				var m2 := strategy_metrics(res, sname)
 				if not m2.is_empty():
 					parts.append("%s %s" % [sname, ff(m2["grade_mean"] - dm["grade_mean"], 2)])

@@ -300,11 +300,11 @@
     "addicted_add_pct": 20,
     "stock": 2,
     "price": [
-     60,
-     200
+     20,
+     190
     ],
-    "price_depth_pct": 35,
-    "price_cap_pct": 300,
+    "price_depth_pct": 15,
+    "price_cap_pct": 200,
     "note": "probability = prob_pct + crime / crime_step x crime_add_pct (cap prob_cap_pct), + addicted_add_pct when addicted; each dose costs r(price) x (100 + price_depth_pct x depth)% (cap price_cap_pct)"
    },
    "dose_effect": "fatigue-40",
@@ -315,7 +315,7 @@
    },
    "divine_gain_mult": 2,
    "divine_perf_add": 150,
-   "divine_rep_bonus": 0,
+   "divine_rep_bonus": 30,
    "side_effect": "stamina-5",
    "side_fail_pct": 50,
    "hook_base_pct": 12,

@@ -1129,6 +1129,41 @@ class Allin:
 		policy = "allin"
 
 
+## Wild (step 12c c3 round 3): the bad boy who also buys from the dealer whenever he is around (he has the money and, with his
+## crime, meets the dealer more often). Takes a dose when tired; never goes to detox by himself.
+class Wild:
+	extends Bad
+
+	func _init(sd := 1) -> void:
+		super(sd)
+		strategy = "wild"
+		pref["flag.drug_stock"] = 100.0
+
+	func stock(st) -> int:
+		return int(st.flags.get("drug_stock", 0))
+
+	func month_start(story, st) -> void:
+		super(story, st)
+		var n: int = int(st.flags.get("dealer_stock", 0))
+		var price: int = int(st.flags.get("dealer_price", 0))
+		while n > 0 and st.money - price * n < living(st):
+			n -= 1
+		if n > 0:
+			story.buy_drug(st, n)
+
+	func before_period(story, st, i: int) -> void:
+		if stock(st) > 0 and st.val("fatigue") >= 40 and Events.boost_reason(st, i) == "":
+			story.boost(st, i)
+
+	func pick(g, P: Dictionary, i: int) -> String:
+		var st = g.st
+		var have: int = stock(st) - P.get("dose", 0)
+		if have > 0 and (st.drug_points > 0 or P["fat"] >= 40):
+			P["fat"] = maxi(0, P["fat"] - 40)
+			P["dose"] = P.get("dose", 0) + 1
+		return super(g, P, i)
+
+
 const BOTS := {
 	"only_tough": Hard,
 	"only_lover": Lover,
@@ -1145,6 +1180,9 @@ const BOTS := {
 	"bad_boy_tough": [Bad, "tough"],
 	"bad_boy_lover": [Bad, "lover"],
 	"bad_boy_savvy": [Bad, "savvy"],
+	"wild_tough": [Wild, "tough"],
+	"wild_lover": [Wild, "lover"],
+	"wild_savvy": [Wild, "savvy"],
 	"addict_tough": [Addict, "tough"],
 	"addict_lover": [Addict, "lover"],
 	"addict_culture": [Addict, "culture"],
@@ -1163,7 +1201,7 @@ const BOTS := {
 	"allin_savvy": [Allin, "savvy"],
 }
 const PURE := ["only_tough", "only_lover", "only_culture", "only_savvy"]
-const STRATEGIES := ["disciplined", "bad_boy", "addict", "quit", "shoot", "allin"]
+const STRATEGIES := ["disciplined", "bad_boy", "wild", "addict", "quit", "shoot", "allin"]
 
 
 ## A bot from a BOTS value: a class, or [class, road] for the step-12c bots.
