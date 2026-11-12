@@ -7,7 +7,7 @@
    "name": "入门",
    "education_gate": 100,
    "skill_cap": 40,
-   "points": 28,
+   "points": 35,
    "gain": [
     1,
     2
@@ -21,10 +21,10 @@
    "name": "进阶",
    "education_gate": 200,
    "skill_cap": 70,
-   "points": 28,
+   "points": 35,
    "gain": [
     1,
-    3
+    2
    ],
    "price": 60,
    "fatigue_per_day": 2
@@ -35,10 +35,10 @@
    "name": "专著",
    "education_gate": 300,
    "skill_cap": 100,
-   "points": 28,
+   "points": 35,
    "gain": [
     1,
-    3
+    2
    ],
    "price": 150,
    "fatigue_per_day": 2
@@ -52,7 +52,7 @@
    "tier": 1,
    "education_gate": 100,
    "skill_cap": 40,
-   "points": 28,
+   "points": 35,
    "gain": [
     1,
     2
@@ -68,10 +68,10 @@
    "tier": 2,
    "education_gate": 200,
    "skill_cap": 70,
-   "points": 28,
+   "points": 35,
    "gain": [
     1,
-    3
+    2
    ],
    "price": 60,
    "finish_event": null,
@@ -84,10 +84,10 @@
    "tier": 3,
    "education_gate": 300,
    "skill_cap": 100,
-   "points": 28,
+   "points": 35,
    "gain": [
     1,
-    3
+    2
    ],
    "price": 150,
    "finish_event": null,
@@ -100,7 +100,7 @@
    "tier": 1,
    "education_gate": 100,
    "skill_cap": 40,
-   "points": 28,
+   "points": 35,
    "gain": [
     1,
     2
@@ -116,10 +116,10 @@
    "tier": 2,
    "education_gate": 200,
    "skill_cap": 70,
-   "points": 28,
+   "points": 35,
    "gain": [
     1,
-    3
+    2
    ],
    "price": 60,
    "finish_event": null,
@@ -132,10 +132,10 @@
    "tier": 3,
    "education_gate": 300,
    "skill_cap": 100,
-   "points": 28,
+   "points": 35,
    "gain": [
     1,
-    3
+    2
    ],
    "price": 150,
    "finish_event": null,
@@ -148,7 +148,7 @@
    "tier": 1,
    "education_gate": 100,
    "skill_cap": 40,
-   "points": 28,
+   "points": 35,
    "gain": [
     1,
     2
@@ -164,10 +164,10 @@
    "tier": 2,
    "education_gate": 200,
    "skill_cap": 70,
-   "points": 28,
+   "points": 35,
    "gain": [
     1,
-    3
+    2
    ],
    "price": 60,
    "finish_event": null,
@@ -181,10 +181,10 @@
    "tier": 3,
    "education_gate": 300,
    "skill_cap": 100,
-   "points": 28,
+   "points": 35,
    "gain": [
     1,
-    3
+    2
    ],
    "price": 150,
    "finish_event": null,
@@ -198,7 +198,7 @@
    "tier": 1,
    "education_gate": 100,
    "skill_cap": 40,
-   "points": 28,
+   "points": 35,
    "gain": [
     1,
     2
@@ -214,10 +214,10 @@
    "tier": 2,
    "education_gate": 200,
    "skill_cap": 70,
-   "points": 28,
+   "points": 35,
    "gain": [
     1,
-    3
+    2
    ],
    "price": 60,
    "finish_event": null,
@@ -230,7 +230,7 @@
    "tier": 1,
    "education_gate": 100,
    "skill_cap": 40,
-   "points": 28,
+   "points": 35,
    "gain": [
     1,
     2
@@ -246,10 +246,10 @@
    "tier": 2,
    "education_gate": 200,
    "skill_cap": 70,
-   "points": 28,
+   "points": 35,
    "gain": [
     1,
-    3
+    2
    ],
    "price": 60,
    "finish_event": null,
@@ -262,7 +262,7 @@
    "tier": 1,
    "education_gate": 100,
    "skill_cap": 40,
-   "points": 28,
+   "points": 35,
    "gain": [
     1,
     2
@@ -278,7 +278,7 @@
    "tier": 1,
    "education_gate": 100,
    "skill_cap": 40,
-   "points": 28,
+   "points": 35,
    "gain": [
     1,
     2
