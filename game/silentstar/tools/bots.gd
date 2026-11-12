@@ -905,6 +905,10 @@ class Random:
 
 # ---------- step 12c: three strategies, each on the four roads ----------
 
+const DOCK_OUTINGS := 3        # step 12c c3: dock outings the tough strategy bots make (opp_expedition)
+const BAD_SAVE_EXTRA := 1500   # step 12c c3: once his tier-2 crime job is open, the bad boy takes it below resort period + a month
+                               # of living + this (with only tier 1 open the extra would starve the training its lines need)
+
 ## Road setup of the pure bots: [second road, origin].
 const ROAD_SETUP := {"tough": ["lover", [0, 0, 3]], "lover": ["tough", [3, 2, 3]], "culture": ["lover", [4, 1, 3]],
 	"savvy": ["lover", [1, 1, 3]]}
@@ -940,6 +944,15 @@ class StratBot:
 	func sick_after(g, P: Dictionary, i: int, e: String) -> bool:
 		return P["fat"] + delta(g, P, i, e)[0] - g.st.val("stamina") >= 0
 
+	## Step 12c c3: the tough road rests at the dock until it has gone out there 3 times (the expedition opportunity needs it,
+	## like only_tough); otherwise `other`. go_personally is already always yes (SimpleAgent).
+	func rest_or_dock(g, P: Dictionary, i: int, other: String) -> String:
+		var st = g.st
+		if road == "tough" and st.cnt("count.outing.place_dock") < DOCK_OUTINGS and not Schedule.truthy(st.status["sick"]) \
+				and P["money"] - Schedule.place_cost(st, "place_dock") * H.alldays(st, i) >= living(st):
+			return "rest_outing@place_dock"
+		return other
+
 
 ## Disciplined: carries fatigue on discipline. reckless_index >= 10 (after this period) -> church volunteering, or rest at home
 ## when fatigue is high or the church is not possible. Never boosts, never takes crime jobs.
@@ -960,14 +973,14 @@ class Disc:
 		var after: int = P["fat"] + delta(g, P, i, e)[0]
 		if after - st.val("discipline") >= 10 or sick_after(g, P, i, e):
 			if P["fat"] >= 40 or P["fat"] - st.val("stamina") >= -20 or not H.can_do_job(st, "job_church", 0):
-				return "rest_home"
+				return rest_or_dock(g, P, i, "rest_home")
 			return "job_church"
 		return e
 
 
 ## Bad boy: earns with his road's crime jobs and buys the fatigue off at the resort. Never boosts.
 ## The reckless_index that counts is the one at month end, so: the first two periods work (his road's crime job when short of money,
-## i.e. less than a resort period plus a month of living costs; otherwise training); the last period is the resort (home when the
+## i.e. less than a resort period plus a month of living costs plus BAD_SAVE_EXTRA; otherwise training); the last period is the resort (home when the
 ## money is not there) whenever working it would end the month with reckless_index >= 10. Crime jobs take his discipline to 0,
 ## so that is most months. Also rests when a period would make him sick. Culture has no crime jobs yet, so there is no
 ## bad_boy_culture (BOTS).
@@ -1000,6 +1013,9 @@ class Bad:
 
 	func rest_choice(g, P: Dictionary, i: int) -> String:
 		var st = g.st
+		var dock := rest_or_dock(g, P, i, "")
+		if dock != "":
+			return dock
 		if not Schedule.truthy(st.status["sick"]) and P["money"] - H.resort_cost(st, i) >= living(st):
 			return "rest_outing@place_resort"
 		return "rest_home"
@@ -1007,16 +1023,25 @@ class Bad:
 	func pick(g, P: Dictionary, i: int) -> String:
 		var st = g.st
 		var e = null
-		if P["money"] < H.resort_cost(st, i) + living(st):
-			e = crime_job(g)
+		var cj = crime_job(g)
+		var extra: int = BAD_SAVE_EXTRA if cj != null and g.d.jobs[cj]["crime_tier"] == 2 else 0
+		if P["money"] < H.resort_cost(st, i) + living(st) + extra:
+			e = cj
 		if e == null:
 			e = work(g, P, i)
 		if e == null:
 			e = crime_job(g)
 		if e == null or sick_after(g, P, i, e):
 			return rest_choice(g, P, i)
-		if i == 2 and P["fat"] + delta(g, P, i, e)[0] - st.val("discipline") >= 10:
+		var after: int = P["fat"] + delta(g, P, i, e)[0] - st.val("discipline")
+		if i == 2 and after >= 10:
 			return rest_choice(g, P, i)
+		# step 12c c3: keep the month-end reckless_index below 60 (refused jobs; at 100 he is arrested), as BALANCE_LOG describes:
+		# before the last period, work only if the rest he can afford in the last period brings it back under 60
+		if i < 2:
+			var rc := rest_choice(g, P, 2)
+			if after + delta(g, P, 2, rc)[0] >= 60:
+				return rest_choice(g, P, i)
 		return e
 
 
@@ -1053,10 +1078,10 @@ class Addict:
 			P["money"] -= dr["boost_price"]
 		var e = work(g, P, i)
 		if e == null or sick_after(g, P, i, e):
-			return "rest_home"
+			return rest_or_dock(g, P, i, "rest_home")
 		# without the boost yet: keep reckless_index below 60 (missing, refused jobs) like any careful player
 		if not can_boost(st) and P["fat"] + delta(g, P, i, e)[0] - st.val("discipline") >= 60:
-			return "rest_home"
+			return rest_or_dock(g, P, i, "rest_home")
 		return e
 
 

@@ -169,13 +169,14 @@ static func place_cost(st, place: String) -> int:
 
 # ---------- checks ----------
 
-## in_love 20% (classes, books, jobs and shooting all have it); reckless slacking only for jobs and shooting (GDD 5.1). Returns true when the day fails.
-static func extra_fail(st, job: bool) -> bool:
+## in_love 20% (classes, books, jobs and shooting all have it); reckless slacking only for jobs and shooting (GDD 5.1),
+## and not for crime jobs whose tier has reckless_slack false (step 12c c3). Returns true when the day fails.
+static func extra_fail(st, job: bool, slack := true) -> bool:
 	var g = st.rng.logic
 	var fail := false
 	if st.status["in_love"] and g.chance(20, 100):
 		fail = true
-	if job:
+	if job and slack:
 		var w: int = st.idx["reckless_index"]
 		if w >= 30:
 			var c: bool = g.chance(80, 100)     # always rolled, like the Python "x or fail"
@@ -210,7 +211,7 @@ static func job_lines(st, j: Dictionary) -> Array:
 	return lines
 
 
-static func job_day_ok(st, lines: Array) -> bool:
+static func job_day_ok(st, lines: Array, slack := true) -> bool:
 	var g = st.rng.logic
 	var b: Dictionary = st.bonus()
 	var tired: int = st.val("fatigue", b)
@@ -218,7 +219,14 @@ static func job_day_ok(st, lines: Array) -> bool:
 	for kv in lines:
 		if st.val(kv[0], b) - g.r0(tired) < kv[1]:
 			ok = false
-	return (not extra_fail(st, true)) and ok
+	return (not extra_fail(st, true, slack)) and ok
+
+
+## Whether reckless slacking applies on this job: false for a crime job whose tier says reckless_slack false (step 12c c3).
+static func job_slacks(st, j: Dictionary) -> bool:
+	if not j.has("crime_tier"):
+		return true
+	return st.d.job_rules["crime_tiers"][str(j["crime_tier"])].get("reckless_slack", true)
 
 
 ## Daily wage = base x raise tier, rounded down; the raise tier is by the periods that succeeded before this one (GDD 5.4).
@@ -313,6 +321,7 @@ static func run_job(st, jid: String, days: Array, hooks) -> Dictionary:
 	var g = st.rng.logic
 	var lines := job_lines(st, j)
 	var wage := wage_of(st, jid)
+	var slack := job_slacks(st, j)
 	var work := 0
 	var ok_days := 0
 	for dd in days:
@@ -321,7 +330,7 @@ static func run_job(st, jid: String, days: Array, hooks) -> Dictionary:
 		work += 1
 		for e in j["daily_effect"]:
 			add_stat(st, e["stat"], g.r(e["add"][0], e["add"][1]))
-		if job_day_ok(st, lines):
+		if job_day_ok(st, lines, slack):
 			ok_days += 1
 	var pay := wage * ok_days
 	if work > 0 and ok_days == work:

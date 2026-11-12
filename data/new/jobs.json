@@ -858,7 +858,7 @@
      ]
     ]
    ],
-   "daily_wage": 40,
+   "daily_wage": 50,
    "success_lines": [
     {
      "stat": "stamina",
@@ -1140,7 +1140,7 @@
      ]
     ]
    ],
-   "daily_wage": 40,
+   "daily_wage": 50,
    "success_lines": [
     {
      "stat": "looks",
@@ -1298,7 +1298,7 @@
      ]
     ]
    ],
-   "daily_wage": 40,
+   "daily_wage": 50,
    "success_lines": [
     {
      "stat": "education",
@@ -1396,10 +1396,11 @@
     1,
     30
    ],
-   "raid_line": 40
+   "raid_line": 40,
+   "reckless_slack": false
   },
   "2": {
-   "daily_wage": 40,
+   "daily_wage": 50,
    "earliest": "1927-01",
    "prereq_periods": 3,
    "daily": {
@@ -1426,7 +1427,8 @@
     1,
     20
    ],
-   "raid_line": 60
+   "raid_line": 60,
+   "reckless_slack": false
   }
  }
 }

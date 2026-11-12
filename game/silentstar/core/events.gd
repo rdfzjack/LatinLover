@@ -475,14 +475,15 @@ static func job_period(story, st, jid: String, good: bool) -> void:
 
 
 ## Crime-job search (step 12c): once per period, probability raid_prob x (1 + crime / raid_crime_div); then
-## raid_skill displayed + r0(20) >= raid_line, failing means arrest (the detention takes the next period).
+## r0(raid_skill displayed) + raid_check_add >= raid_line (step 12c c3), failing means arrest (the detention takes the next periods).
 static func raid(story, st, j: Dictionary) -> void:
 	var div: int = st.d.t["stats"]["arrest"]["raid_crime_div"]
 	var p: Array = j["raid_prob"]
 	if not st.rng.logic.chance(p[0] * (div + maxi(0, st.val("crime"))), p[1] * div):
 		return
 	st.inc("count.raid")
-	if not Rules.check(st, {"check": j["raid_skill"], "line": j["raid_line"]}):
+	var add: int = st.d.t["stats"]["arrest"]["raid_check_add"]
+	if st.rng.logic.r0(st.val(j["raid_skill"])) + add < j["raid_line"]:
 		fire(story, st, "evt_arrest")
 
 

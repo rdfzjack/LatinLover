@@ -309,8 +309,10 @@
   "note": "Step 12c. fine = max(fine_min, money x fine_pct%), never more than the money held (not below 0); the next detain_periods periods are void (detention)",
   "fine_min": 200,
   "fine_pct": 30,
-  "detain_periods": 1,
+  "detain_periods": 2,
   "raid_crime_div": 100,
-  "raid_note": "search probability of a crime job = prob x (1 + crime / raid_crime_div)"
+  "raid_note": "search probability of a crime job = prob x (1 + crime / raid_crime_div)",
+  "raid_check_add": 20,
+  "raid_check_note": "Step 12c c3: when searched, r0(raid_skill displayed) + raid_check_add >= raid_line passes; otherwise arrest"
  }
 }
