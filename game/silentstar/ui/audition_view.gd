@@ -40,12 +40,12 @@ func show_deck(main, ctx: Dictionary) -> void:
 	var t := PackedStringArray()
 	for c in 4:
 		t.append("%s Lv%d" % [m.nm(d.roads[c]), lv[c]])
-	m.label(tr("ui.audition.show_deck.5") + tr("ui.audition.show_deck.6").join(t), self)
+	m.label(tr("ui.audition.show_deck.5") + tr("ui.common.wide_space").join(t), self)
 	if role["style_probs"] != null:
 		var sp := PackedStringArray()
 		for c in 4:
 			sp.append("%s %d%%" % [m.nm(d.roads[c]), int(role["style_probs"][c])])
-		m.label(tr("ui.audition.show_deck.7") + tr("ui.audition.show_deck.6").join(sp), self)
+		m.label(tr("ui.audition.show_deck.7") + tr("ui.common.wide_space").join(sp), self)
 	m.label(m.rules_text(), self)
 	m.label(tr("ui.audition.show_deck.8"), self, Color(1, 0.85, 0.4))
 

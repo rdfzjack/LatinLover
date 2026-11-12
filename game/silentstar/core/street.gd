@@ -170,6 +170,13 @@ static func church(st) -> String:
 	return ""
 
 
+## "" when the hospital can be used now (sick), otherwise the reason. Does not change anything.
+static func hospital_check(st) -> String:
+	if not Rules.cond(st, st.d.street["hospital"]["cond"]):
+		return "not sick"
+	return ""
+
+
 ## Only usable when sick. Cost sick_index x 2 (discounted), fatigue -(sick_index+1).
 static func hospital(st) -> String:
 	if not Rules.cond(st, st.d.street["hospital"]["cond"]):

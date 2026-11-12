@@ -12,7 +12,7 @@ How the screens are organised and where to plug in art, sound and effects. Nothi
 | `audition_view.gd` `.tscn` | deck pick, round, reveal |
 | `cg_view.gd` `.tscn` | a picture slot (placeholder until a picture exists) |
 | `ending_view.gd` `.tscn` | the ending page |
-| `inventory_view.gd`, `journal_view.gd` | items and gear; the diary (schedule book of the people met, events so far) |
+| `inventory_view.gd`, `journal_view.gd`, `shop_view.gd` | items and gear (equip, use); the diary (schedule book of the people met, events so far); the city shops, pawn shop, restaurant, church (free actions, no period used) |
 | `assets.gd` | finds pictures by kind and key |
 | `fx.gd` | announces cues, plays sounds, default effects |
 | `save_slots.gd` | save files |
@@ -22,7 +22,7 @@ How the screens are organised and where to plug in art, sound and effects. Nothi
 No text in code. Every string a player can read is `tr("ui.<file>.<function>.<n>")` with its Chinese in `data/locale/ui.csv`
 (`key,zh_CN,en`; an empty cell shows the key). Names of things (items, jobs, places ...) come from the `name` fields of the data tables.
 `python3 tools/check_ui_text.py` (also step 5 of `tools/check.py`) fails when a string literal in `ui/*.gd` contains Chinese or a key is missing.
-When you add text: write `tr("ui.main.my_function.1")` and add the row to `ui.csv`.
+When you add text: write it in Chinese in the code, then run `python3 tools/ui_text_import.py [--prune]`: it replaces the literals by `tr("key")` and adds the rows.
 
 ## Pictures
 

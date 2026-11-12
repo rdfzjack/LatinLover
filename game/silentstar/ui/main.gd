@@ -27,6 +27,7 @@ const SaveSlots = preload("res://ui/save_slots.gd")
 const Locale = preload("res://core/locale.gd")
 const CgScene = preload("res://ui/cg_view.tscn")
 const InventoryView = preload("res://ui/inventory_view.gd")
+const ShopView = preload("res://ui/shop_view.gd")
 const JournalView = preload("res://ui/journal_view.gd")
 const EndingScene = preload("res://ui/ending_view.tscn")
 
@@ -189,7 +190,31 @@ func pretty(s) -> String:
 	return out
 
 
+## What a book does, for the shop, the home menu and the inventory.
+func book_text(bid: String) -> String:
+	var b: Dictionary = d.books[bid]
+	return tr("ui.main.book_text.1") % [
+		nm(b["skills"]), rng_txt(b["gain"][0], b["gain"][1]), int(b["points"]), nm(b["skills"]), int(b["skill_cap"]),
+		int(b["education_gate"]), st.val("education"), int(b.get("fatigue_per_day", 1))]
+
+
+## Why an entry cannot be picked, in words the player can act on.
+func block_reason(e: String, raw: String) -> String:
+	var pe := Schedule.parse_entry(e)
+	if not pe.is_empty() and pe[0] == "book" and raw == "education below the gate":
+		return tr("ui.main.block_reason.1") % [int(d.books[pe[1]]["education_gate"]), st.val("education")]
+	return why(raw)
+
+
+func shop_title(entry: String) -> String:
+	return tr("ui.main.shop_title.1") if entry == "pawn" else nm(entry)
+
+
 func entry_name(e: String) -> String:
+	if e == "act_hospital":
+		return tr("ui.main.entry_name.6")
+	if e == "act_script":
+		return tr("ui.main.entry_name.7")
 	var pe := Schedule.parse_entry(e)
 	if pe.is_empty():
 		return e
@@ -231,6 +256,8 @@ func rng_txt(a: int, b: int) -> String:
 
 ## What one period of this entry does, in words and numbers (shown in brackets in the schedule menus).
 func entry_effect(e: String) -> String:
+	if e.begins_with("act_"):
+		return ""
 	var pe := Schedule.parse_entry(e)
 	if pe.is_empty():
 		return ""
@@ -506,7 +533,7 @@ func _update_alloc_info() -> void:
 		t.append(tr("ui.main.update_alloc_info.1") % [tr("ui.main.update_alloc_info.2") if pool == POOL_ATTRS else tr("ui.main.update_alloc_info.3"), left, "" if left != 0 else tr("ui.main.update_alloc_info.4")])
 		if left != 0:
 			okk = false
-	alloc_info.text = tr("ui.audition.show_deck.6").join(t) + tr("ui.main.update_alloc_info.5")
+	alloc_info.text = tr("ui.common.wide_space").join(t) + tr("ui.main.update_alloc_info.5")
 	if start_btn != null:
 		start_btn.disabled = not okk
 
@@ -644,7 +671,7 @@ func _worker() -> void:
 
 func _auto_done() -> void:
 	thread.wait_to_finish()
-	print("auto run finished: %s, %d fired events, ending %s" % [st.date(), st.fired.size(), str(st.ended)])
+	print("auto run finished: %s, %d fired events, ending %s, hospital periods %d" % [st.date(), st.fired.size(), str(st.ended), st.cnt("count.period.act_hospital")])
 	get_tree().quit()
 
 
@@ -690,6 +717,10 @@ func period_done(_st, i: int, entry: String, out: Dictionary) -> void:
 			rep.append(tr("ui.main.period_done.7") % [int(out["work_days"]), int(out["ok_days"]), int(out["pay"])])
 		elif out.has("ok_days"):
 			rep.append(tr("ui.main.period_done.8") % int(out["ok_days"]))
+		elif out.get("act") == "act_hospital":
+			rep.append(tr("ui.main.period_done.12"))
+		elif out.get("act") == "act_script":
+			rep.append(tr("ui.main.period_done.13"))
 		elif out.has("cost"):
 			rep.append(tr("ui.main.period_done.9") % int(out["cost"]))
 		elif pe.size() > 0 and pe[0] == "rest":
@@ -856,6 +887,20 @@ func _uitest_answer(kind: String, payload) -> void:
 		for loc in ["home", "school", "work", "city", "boat"]:
 			_show_location(int(payload), loc)
 			await get_tree().process_frame
+		for shop in ["clothing_store", "general_store", "bookstore", "pawn", "restaurant", "church"]:
+			_show_shop(int(payload), shop)
+			await get_tree().process_frame
+		_show_inventory(int(payload))
+		await get_tree().process_frame
+		if st.ym == 2 and int(payload) == 0:      # the hospital visit: make him sick on purpose and press the last button of the city menu
+			st.idx["sick_index"] = 30
+			st.status["sick"] = 1
+			_show_location(int(payload), "city")
+			await get_tree().process_frame
+			var hb: Array = []
+			_collect_buttons(body, hb)
+			hb[hb.size() - 1].pressed.emit()
+			return
 		_show_map(int(payload))
 	if kind == "play" or kind == "deck":      # press the real buttons: the first card, then "next" / "confirm the deck"
 		var bs: Array = []
@@ -949,7 +994,7 @@ func _show_event(p: Dictionary) -> void:
 		label(tr("ui.main.show_event.3"))
 	else:
 		for x in p["lines"]:
-			label(tr("ui.audition.show_deck.6") + x)
+			label(tr("ui.common.wide_space") + x)
 	button(tr("ui.main.show_notice.2"), func(): reply(null))
 
 
@@ -1001,7 +1046,7 @@ func _show_period(p: Dictionary) -> void:
 	else:
 		label(tr("ui.main.show_period.2"))
 		for x in p["lines"]:
-			label(tr("ui.audition.show_deck.6") + x)
+			label(tr("ui.common.wide_space") + x)
 	for e in p["events"]:
 		label(tr("ui.main.show_option.1") + e, null, Color(1, 0.85, 0.4))
 	button(tr("ui.main.show_notice.2"), func(): reply("ok"))
@@ -1049,7 +1094,7 @@ func _show_month_start() -> void:
 	if st.void_next:
 		era.append(tr("ui.main.show_month_start.5"))
 	if not era.is_empty():
-		label(tr("ui.audition.show_deck.6") + tr("ui.main.entry_effect.11").join(era))
+		label(tr("ui.common.wide_space") + tr("ui.main.entry_effect.11").join(era))
 	label(tr("ui.main.show_month_start.6"))
 	var hb2 := HBoxContainer.new()
 	body.add_child(hb2)
@@ -1160,6 +1205,7 @@ func _show_map(i: int) -> void:
 		var ll: String = loc
 		b.pressed.connect(func(): _show_location(i, ll))
 		map.add_child(b)
+	button(tr("ui.main.show_map.3"), func(): _show_inventory(i))
 
 
 func _show_location(i: int, loc: String) -> void:
@@ -1178,9 +1224,81 @@ func _show_location(i: int, loc: String) -> void:
 			button(tr("ui.main.show_location.4") + entry_name(e), func(): reply(ee))
 			label(tr("ui.main.show_location.5") + entry_effect(e), null, Color(0.8, 0.9, 1))
 		elif loc != "work" or not why_not.begins_with("not unlocked"):
-			label(tr("ui.main.show_location.6") % [entry_name(e), why(why_not)], null, Color(0.6, 0.6, 0.6))
-	if not any:
+			label(tr("ui.main.show_location.6") % [entry_name(e), block_reason(e, why_not)], null, Color(1, 0.7, 0.7))
+	if loc == "city":
+		_city_extras(i)
+	elif loc == "home":
+		_home_extras()
+	elif not any:
 		label(tr("ui.main.show_location.7"))
+
+
+## The things of the city that do not use a period (shops, pawn shop, restaurant, church) and the hospital, which does.
+func _city_extras(i: int) -> void:
+	heading(tr("ui.main.city_extras.1"))
+	for shop in ["clothing_store", "general_store", "bookstore", "pawn", "restaurant", "church"]:
+		var sh: String = shop
+		button(shop_title(shop), func(): _show_shop(i, sh))
+	heading(tr("ui.main.city_extras.2"))
+	var can: String = Street.hospital_check(st)
+	if can == "":
+		var idx: int = st.idx["sick_index"]
+		var price: int = Street.price(st, "hospital", idx * 2)
+		button(tr("ui.main.city_extras.3") % [price, idx + 1], func():
+			var r: String = Street.hospital(st)
+			if r == "":
+				note(tr("ui.main.city_extras.4"))
+				reply("act_hospital")
+			else:
+				label(tr("ui.main.act.1") + why(r), null, Color(1, 0.7, 0.7)))
+	else:
+		label(tr("ui.main.city_extras.5") + why(can), null, Color(0.6, 0.6, 0.6))
+
+
+## Writing a script uses a period at home; it is offered when the script rules allow it.
+func _home_extras() -> void:
+	heading(tr("ui.main.home_extras.1"))
+	label(tr("ui.main.home_extras.2"))
+	var any := false
+	for kind in ["self_written", "duv_written", "co_written"]:
+		if not Board.script_ok(st, kind):
+			continue
+		any = true
+		var hb := HBoxContainer.new()
+		body.add_child(hb)
+		label(tr(KIND_KEY[kind]), hb)
+		var cb := OptionButton.new()
+		for c in 4:
+			cb.add_item(tr("ui.main.fill_street.18") + nm(d.roads[c]))
+		hb.add_child(cb)
+		var kk: String = kind
+		button(tr("ui.main.home_extras.3"), func():
+			var r: String = g.hooks.write_script(st, kk, cb.selected)
+			if r == "":
+				note(tr("ui.main.home_extras.4"))
+				reply("act_script")
+			else:
+				label(tr("ui.main.act.1") + why(r), null, Color(1, 0.7, 0.7)), hb)
+	if not any:
+		label(tr("ui.main.home_extras.5"), null, Color(0.6, 0.6, 0.6))
+
+
+func _show_shop(i: int, entry: String) -> void:
+	clear_body()
+	var v = ShopView.new()
+	body.add_child(v)
+	v.show_entry(self, entry, func(): _show_location(i, "city"))
+
+
+func _show_inventory(i: int) -> void:
+	clear_body()
+	button(tr("ui.main.show_location.2"), func(): _show_map(i))
+	var box := VBoxContainer.new()
+	body.add_child(box)
+	var rebuild := func(): _show_inventory(i)
+	var v := InventoryView.new()
+	box.add_child(v)
+	v.build(self, rebuild)
 
 
 # ---------- street ----------
@@ -1188,6 +1306,15 @@ func _show_location(i: int, loc: String) -> void:
 func smsg(text: String) -> void:
 	street_msg.text = text
 	note(text)
+
+
+## Tells the player (message line and log) how a free action went; returns true when it worked.
+func report(result: String, ok_text: String) -> bool:
+	var text: String = ok_text if result == "" else tr("ui.main.act.1") + why(result)
+	if street_msg != null and is_instance_valid(street_msg):
+		street_msg.text = text
+	note(text)
+	return result == ""
 
 
 func act(result: String, ok_text: String) -> void:
@@ -1203,7 +1330,7 @@ func _fill_inventory() -> void:
 		c.queue_free()
 	var v := InventoryView.new()
 	inv_box.add_child(v)
-	v.build(self)
+	v.build(self, Callable(self, "_fill_street"))
 
 
 func _fill_street() -> void:
@@ -1213,50 +1340,10 @@ func _fill_street() -> void:
 	var box := street_box
 	street_msg = label("", box, Color(0.6, 1, 0.6))
 	label(tr("ui.main.fill_street.1") % st.money, box)
-	# stores
-	for entry in ["clothing_store", "general_store", "bookstore"]:
-		heading(nm(entry), box)
-		for iid in Street.shelf(st, entry):
-			var base: int = d.books[iid]["price"] if d.books.has(iid) else d.items[iid]["price"]
-			var p := Street.price(st, entry, base)
-			var eff: String = (tr("ui.audition.show_deck.6") + pretty(d.items[iid]["effect"])) if d.items.has(iid) else ""
-			var hb := HBoxContainer.new()
-			box.add_child(hb)
-			label(tr("ui.main.fill_street.2") % [nm(iid), p, eff], hb)
-			var e: String = entry
-			var ii: String = iid
-			button(tr("ui.main.fill_street.3"), func(): act(Street.buy(st, e, ii), tr("ui.main.fill_street.4") + nm(ii)), hb)
-	# services
-	heading(tr("ui.main.fill_street.5"), box)
-	var hr := HBoxContainer.new()
-	box.add_child(hr)
-	for s in d.street["restaurant"]["services"]:
-		var sid: String = s["id"]
-		button(tr("ui.main.fill_street.6") % [nm(sid) if names.has(sid) else s["name"], Street.price(st, "restaurant", s["price"]), pretty(s["effect"])],
-			func(): act(Street.restaurant(st, sid), tr("ui.main.fill_street.7") + sid), hr)
-	heading(tr("ui.main.fill_street.8"), box)
-	var hc := HBoxContainer.new()
-	box.add_child(hc)
-	button(tr("ui.main.fill_street.9"), func(): act(Street.church(st), tr("ui.main.fill_street.10")), hc)
-	button(tr("ui.main.fill_street.11"), func(): act(Street.hospital(st), tr("ui.main.fill_street.12")), hc)
 	heading(tr("ui.main.fill_street.13"), box)
 	var hint := Street.sil_hint(st)
 	label(tr("ui.main.fill_street.14") + _hint_text(hint), box)
 	button(tr("ui.main.fill_street.15"), func(): act(Street.sil_persuade(st), tr("ui.main.fill_street.16")), box)
-	# scripts etc.
-	heading(tr("ui.main.fill_street.17"), box)
-	for kind in ["self_written", "duv_written", "co_written"]:
-		if not Board.script_ok(st, kind):
-			continue
-		var hb := HBoxContainer.new()
-		box.add_child(hb)
-		label(tr(KIND_KEY[kind]), hb)
-		var cb := OptionButton.new()
-		for c in 4:
-			cb.add_item(tr("ui.main.fill_street.18") + nm(d.roads[c]))
-		hb.add_child(cb)
-		var kk: String = kind
-		button(tr("ui.main.fill_street.19"), func(): act(g.hooks.write_script(st, kk, cb.selected), tr("ui.main.fill_street.20")), hb)
 	if st.drug >= 1:
 		heading(tr("ui.main.fill_street.21"), box)
 		button(tr("ui.main.fill_street.22"), func(): act(g.hooks.send_detox(st), tr("ui.main.fill_street.23")), box)
@@ -1290,7 +1377,7 @@ func _fill_status(box: VBoxContainer) -> void:
 		var t := PackedStringArray()
 		for s in d.road_skills[r]:
 			t.append("%s %d" % [nm(s), st.val(s, b)])
-		label(tr("ui.main.fill_status.1") % [nm(r), st.rep(r, b), tr("ui.audition.show_deck.6").join(t)], box)
+		label(tr("ui.main.fill_status.1") % [nm(r), st.rep(r, b), tr("ui.common.wide_space").join(t)], box)
 	heading(tr("ui.main.fill_status.2"), box)
 	for n in st.known:
 		label(tr("ui.main.fill_status.3") % [nm(n), st.favor.get(n, 0)], box)
@@ -1321,7 +1408,7 @@ func _show_summary() -> void:
 	if not evs.is_empty():
 		heading(tr("ui.main.show_summary.4"))
 		for e in evs:
-			label(tr("ui.audition.show_deck.6") + e)
+			label(tr("ui.common.wide_space") + e)
 	var rel := 0
 	for f in st.story["films"]:
 		if f["status"] == "released" and f["result"] != null and f["result"].get("month", -1) == st.ym - 1:

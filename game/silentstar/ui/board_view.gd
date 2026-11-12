@@ -37,7 +37,7 @@ func show_board(m, p: Dictionary) -> void:
 		for x in r["wants"]:
 			var have: int = st.val(x["stat"])
 			w.append(tr("ui.board.show_board.7") % [m.nm(x["stat"]), int(x["target"]), have])
-		m.label(tr("ui.board.show_board.8") + tr("ui.audition.show_deck.6").join(w), box)
+		m.label(tr("ui.board.show_board.8") + tr("ui.common.wide_space").join(w), box)
 		if r["intel"].get("tags", false) and not r["tags"].is_empty():
 			var tg := PackedStringArray()
 			for x in r["tags"]:
@@ -47,7 +47,7 @@ func show_board(m, p: Dictionary) -> void:
 			var sp := PackedStringArray()
 			for c in 4:
 				sp.append("%s %d%%" % [m.nm(d.roads[c]), int(r["style_probs"][c])])
-			var t := tr("ui.board.show_board.10") + tr("ui.audition.show_deck.6").join(sp)
+			var t := tr("ui.board.show_board.10") + tr("ui.common.wide_space").join(sp)
 			if r["intel"].has("excluded"):
 				t += tr("ui.board.show_board.11") % m.nm(d.roads[r["intel"]["excluded"]])
 			m.label(t, box)

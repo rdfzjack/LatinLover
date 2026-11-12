@@ -1,10 +1,11 @@
 extends VBoxContainer
-## Items and gear: equip, unequip, use, sell. Every action goes through core/street.gd and reports through the main screen.
+## Items and gear: equip, unequip, use. Selling is done at the pawn shop (shop_view.gd). Every action goes through core/street.gd;
+## on_change is called after each action so that the host screen can redraw.
 
 const Street = preload("res://core/street.gd")
 
 
-func build(m) -> void:
+func build(m, on_change := Callable()) -> void:
 	var d = m.d
 	var st = m.st
 	m.heading(tr("ui.inventory.build.1"), self)
@@ -22,17 +23,19 @@ func build(m) -> void:
 		var ii: String = iid
 		if it.get("slot") == "outfit" or it.get("slot") == "accessory":
 			if eq:
-				m.button(tr("ui.inventory.build.6"), func(): m.act(Street.unequip(st, ii), tr("ui.inventory.build.7") + m.nm(ii)), hb)
+				m.button(tr("ui.inventory.build.6"), func(): _do(m, on_change, Street.unequip(st, ii), tr("ui.inventory.build.7") + m.nm(ii)), hb)
 			else:
-				m.button(tr("ui.inventory.build.8"), func(): m.act(Street.equip(st, ii), tr("ui.inventory.build.9") + m.nm(ii)), hb)
+				m.button(tr("ui.inventory.build.8"), func(): _do(m, on_change, Street.equip(st, ii), tr("ui.inventory.build.9") + m.nm(ii)), hb)
 		if it["class"] == "consumable":
-			m.button(tr("ui.inventory.build.10"), func(): m.act(Street.use(st, ii), tr("ui.inventory.build.11") + m.nm(ii)), hb)
-		m.button(tr("ui.inventory.build.12") % (int(it["price"]) / 2), func(): m.act(Street.sell(st, ii), tr("ui.inventory.build.13") + m.nm(ii)), hb)
+			m.button(tr("ui.inventory.build.10"), func(): _do(m, on_change, Street.use(st, ii), tr("ui.inventory.build.11") + m.nm(ii)), hb)
 	for bid in st.books:
-		m.label(tr("ui.inventory.build.14") % [m.nm(bid), int(st.books[bid])], self)
+		m.label(tr("ui.inventory.build.16") % [m.nm(bid), int(st.books[bid]), m.book_text(bid)], self)
 	for bid in st.read_books:
-		var hb := HBoxContainer.new()
-		add_child(hb)
-		m.label(tr("ui.inventory.build.15") % m.nm(bid), hb)
-		var bb: String = bid
-		m.button(tr("ui.inventory.build.12") % (int(d.books[bid]["price"]) / 2), func(): m.act(Street.sell(st, bb), tr("ui.inventory.build.13") + m.nm(bb)), hb)
+		m.label(tr("ui.inventory.build.15") % m.nm(bid), self)
+
+
+func _do(m, on_change: Callable, result: String, ok_text: String) -> void:
+	m.report(result, ok_text)
+	if on_change.is_valid():
+		on_change.call()
+	m.refresh_status()

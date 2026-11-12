@@ -316,7 +316,7 @@ static func month_end(story, st) -> void:
 # ---------- period start (11.1) ----------
 
 static func period_start(story, st, i: int, entry: String) -> void:
-	if entry.begins_with("rest_"):
+	if entry.begins_with("rest_") or entry.begins_with("act_"):
 		return
 	var d = st.d
 	var e: Dictionary = d.events["evt_swap_role"]

@@ -30,6 +30,8 @@ static func truthy(v) -> bool:
 
 
 ## "rest_outing@place_dock" -> ["rest", "rest_outing", "place_dock"]; returns [] for an unknown entry.
+## Entries "act_<name>" (step 15b: hospital visit, writing a script) use up a period and do nothing by themselves: the screen performs the
+## action when it is picked. They are never in options(), so the bots never choose them.
 static func parse_entry(e: String) -> Array:
 	var base := e
 	var place := ""
@@ -38,7 +40,7 @@ static func parse_entry(e: String) -> Array:
 		base = e.substr(0, i)
 		place = e.substr(i + 1)
 	var kind := base.split("_")[0]
-	if not (kind in ["class", "book", "job", "rest"]):
+	if not (kind in ["class", "book", "job", "rest", "act"]):
 		return []
 	return [kind, base, place if place != "" else null]
 
@@ -103,6 +105,8 @@ static func validate(st, e: String) -> String:
 	var iid: String = pe[1]
 	var place = pe[2]
 	var d = st.d
+	if kind == "act":
+		return ""
 	if kind == "class":
 		return "" if d.classes.has(iid) else "no such class %s" % iid
 	if kind == "book":
@@ -416,7 +420,9 @@ static func run_period(st, i: int, e: String, hooks) -> Dictionary:
 	var place = pe[2]
 	st.inc("count.period." + iid)
 	var out: Dictionary
-	if kind == "class":
+	if kind == "act":
+		out = {"act": iid}
+	elif kind == "class":
 		out = run_class(st, iid, days, hooks)
 	elif kind == "book":
 		out = run_book(st, iid, days, hooks)
