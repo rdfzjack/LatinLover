@@ -73,7 +73,7 @@ python3 -m sim.story --seed 1 --origin 0,1,2 --plan class_acting,job_dock,rest_h
 godot --headless --path game/silentstar --script res://tools/report.gd -- --n=200 --bots=all
 ```
 
-第三条是冻结的 Python 试算器（读 12b 时的表），只作历史参考。Godot 报告另有 `--coverage`（每个事件触发几次、从没触发的事件）、`--guard=design/targets.json`（逐条 PASS/FAIL）、`--random-options`；整份 200 局约 20 分钟，按 `--seeds` 分 4 个进程跑再 `--merge`。`--n` 改局数，`--bots` 选机器人，`--no-buy` 不买装备。第四条用固定日程跑一局，每月一行状态。Godot 报告的参数和第三条一致（`--n` `--bots` `--no-buy`），另有 `--seeds=a-b`（分段跑）、`--dump` `--merge`（分段结果合并），见 `design/IMPL_NOTES.md` 的 Godot 一节。Godot 对账命令也在那一节。`python3 -m sim.month` 只跑日程，`python3 -m sim.audition` 重算 GDD 7.7 的胜率表。
+第三条是冻结的 Python 试算器（读 12b 时的表），只作历史参考。Godot 报告另有 `--coverage`（每个事件触发几次、从没触发的事件）、`--guard=design/targets.json`（逐条 PASS/FAIL）、`--random-options`；整份 200 局（23 组机器人）4 核分 4 个进程约 5 分钟，按 `--seeds` 分段跑再 `--merge`。`--n` 改局数，`--bots` 选机器人，`--no-buy` 不买装备。第四条用固定日程跑一局，每月一行状态。Godot 报告的参数和第三条一致（`--n` `--bots` `--no-buy`），另有 `--seeds=a-b`（分段跑）、`--dump` `--merge`（分段结果合并），见 `design/IMPL_NOTES.md` 的 Godot 一节。Godot 对账命令也在那一节。`python3 -m sim.month` 只跑日程，`python3 -m sim.audition` 重算 GDD 7.7 的胜率表。
 
 ## 用户定过的事（不要改）
 

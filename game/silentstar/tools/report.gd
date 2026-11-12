@@ -120,7 +120,7 @@ func _init() -> void:
 		lines.append_array(coverage(res))
 	var failed := 0
 	if args.has("guard"):
-		var tg = Jsonx.read_file(_abs(root, args["guard"]))
+		var tg = JSON.parse_string(FileAccess.get_file_as_string(_abs(root, args["guard"])))    # fractions allowed here (not Jsonx)
 		if tg == null:
 			push_error("cannot read %s" % args["guard"])
 			quit(1)
