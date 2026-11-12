@@ -143,6 +143,8 @@ static func shoot(st, i: int, f: Dictionary, days: Array) -> void:
 	var t: String = f["size"]
 	f["status"] = "shooting"
 	update_status(st)
+	if int(st.status.get("drug_high", 0)) == 2:     # a divine dose on a shooting period (GDD 5.8.1)
+		f["divine"] = 1
 	for dd in days:
 		if dd[1]:
 			continue
@@ -153,6 +155,9 @@ static func shoot(st, i: int, f: Dictionary, days: Array) -> void:
 		var ok: bool = st.val("stamina", b) - g.r0(st.val("fatigue", b)) >= c["success_lines"][t]
 		if Schedule.extra_fail(st, true):
 			ok = false
+		var dg := Schedule.drug_day(st)      # the dose of this period (GDD 5.8.1)
+		if dg != 0:
+			ok = dg > 0
 		if ok:
 			f["ok_days"] += 1
 		if f["stunt_self"]:
@@ -173,6 +178,8 @@ static func performance(st, f: Dictionary) -> int:
 	p += Rules.fdiv(st.val(f["roles"]["bonus_skill"]) * 1000, 500)
 	if f["stunt_self"]:
 		p += c["stunt_self"]["perf_add"]
+	if f.get("divine", 0):
+		p += int(st.d.t["stats"]["drug"]["divine_perf_add"])
 	return maxi(c["perf_min"], mini(c["perf_max"], p))
 
 
@@ -315,6 +322,9 @@ static func release_one(st, f: Dictionary) -> Dictionary:
 	var corr := 0
 	if not flop:
 		corr = Rules.fdiv(c["rep_bonus"][t] * (2 if hit else 1) * k, 100)
+		if f.get("divine", 0) and not f["support"]:      # a lead shot on a divine dose (GDD 5.8.1)
+			corr += int(st.d.t["stats"]["drug"]["divine_rep_bonus"])
+			st.inc("count.divine_film")
 		st.corr[role["road"]] += corr
 	for tag in role["tags"]:
 		st.tags[tag] = st.tags.get(tag, 0) + 1
@@ -328,6 +338,9 @@ static func release_one(st, f: Dictionary) -> Dictionary:
 	st.inc("count.release")
 	if hit:
 		st.inc("count.hit")
+		if f.get("divine", 0) and not f["support"]:      # the "divine" achievement: a lead shot on a divine dose is a hit
+			st.inc("count.divine_hit")
+			st.flags["divine_star"] = 1
 		if role["tags"].has("romance") or role["tags"].has("exotic_lover"):
 			st.inc("count.romance_hits")
 	if flop:

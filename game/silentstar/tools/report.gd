@@ -467,10 +467,33 @@ static func report(res: Dictionary, lo: int, hi: int, smart: bool, nobuy: Dictio
 			var m := strategy_metrics(res, sname)
 			if not m.is_empty():
 				L.append(strat_line("= " + sname + " (mean of roads)", m, []))
+		var dl := PackedStringArray()
+		for nm in strat_names:
+			var rs: Array = res[nm]
+			var tot := {}
+			var any := 0
+			var star := 0
+			for r in rs:
+				for ck in ["count.boost", "count.dealer", "count.attack_months", "count.divine", "count.drug_side", "count.detox"]:
+					tot[ck] = tot.get(ck, 0) + int(r.get(ck, 0))
+				if int(r.get("count.hooked", 0)) > 0:
+					any += 1
+				if int(r.get("count.divine_hit", 0)) > 0:
+					star += 1
+			if tot["count.boost"] == 0:
+				continue
+			var gn := float(rs.size())
+			dl.append("%s doses %s | dealer months %s | addicted in %s%% of games | attack months %s | divine %s side %s | detox %s | divine hit film in %s%% of games" % [
+				nm.rpad(19), ff(tot["count.boost"] / gn, 1), ff(tot["count.dealer"] / gn, 1), f0(100.0 * any / gn),
+				ff(tot["count.attack_months"] / gn, 1), ff(tot["count.divine"] / gn, 1), ff(tot["count.drug_side"] / gn, 1),
+				ff(tot["count.detox"] / gn, 1), f0(100.0 * star / gn)])
+		if not dl.is_empty():
+			L.append("-- drugs (step 12c c3 round 3), mean per game")
+			L.append_array(dl)
 		var dm := strategy_metrics(res, "disciplined")
 		if not dm.is_empty():
 			var parts := PackedStringArray()
-			for sname in ["bad_boy", "addict"]:
+			for sname in ["bad_boy", "addict", "quit", "shoot", "allin"]:
 				var m2 := strategy_metrics(res, sname)
 				if not m2.is_empty():
 					parts.append("%s %s" % [sname, ff(m2["grade_mean"] - dm["grade_mean"], 2)])

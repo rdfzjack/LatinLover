@@ -401,7 +401,7 @@ Crime jobs come in two tiers with a fixed shape (`crime_tiers` at the top of `jo
 | `books.json` each tier and book | `fatigue_per_day` | fatigue per reading day (2); a book must match its tier |
 | `places.json` | `fatigue_per_day` | negative; town places −3, resort −20 |
 | `annual.json` | `attend_effect` | effect of attending the annual event (`fatigue+15`) |
-| `stats.json` → `drug` | `boost_price`, `boost_effect`, `points_per_boost`, `stage_lines`, `refuse_discipline`, `stage2_no_use_effect`, `stage3_monthly_effect` | the boost action and the drug stages; `stage_lines` are the drug points for stages 1, 2, 3 |
+| `stats.json` → `drug` | `dealer` (probability, stock, price), `dose_effect`, `outcome_weights` (high / divine / side), `divine_gain_mult`, `divine_perf_add`, `divine_rep_bonus`, `side_effect`, `side_fail_pct`, `hook_*_pct`, `attack`, `stage_lines`, `refuse_discipline`, `deep_monthly_effect` | the dealer, the dose and the addiction (GDD 5.8.1); `stage_lines` are the depths for stages 1, 2, 3 |
 | `stats.json` → `arrest` | `fine_min`, `fine_pct`, `detain_periods`, `raid_crime_div` | fine = max(fine_min, money × fine_pct%); periods lost to detention; search probability × (1 + crime / raid_crime_div) |
 | `roles.json` → `defaults.board` | `morals_months` | months without big films after an arrest or a scandal |
 | `rest.json` → `forced` | `discharge_effect`, `discharge_event` | what leaving the sanatorium does |

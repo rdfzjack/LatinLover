@@ -959,6 +959,8 @@ class StratBot:
 class Disc:
 	extends StratBot
 
+	var no_church := false     # the addict bots rest at home instead (discipline >= refuse_discipline would turn the dealer away)
+
 	func _init(sd := 1) -> void:
 		super(sd)
 		strategy = "disciplined"
@@ -972,7 +974,7 @@ class Disc:
 			return "rest_home"
 		var after: int = P["fat"] + delta(g, P, i, e)[0]
 		if after - st.val("discipline") >= 10 or sick_after(g, P, i, e):
-			if P["fat"] >= 40 or P["fat"] - st.val("stamina") >= -20 or not H.can_do_job(st, "job_church", 0):
+			if no_church or P["fat"] >= 40 or P["fat"] - st.val("stamina") >= -20 or not H.can_do_job(st, "job_church", 0):
 				return rest_or_dock(g, P, i, "rest_home")
 			return "job_church"
 		return e
@@ -1046,44 +1048,85 @@ class Bad:
 		return e
 
 
-## Addict: pushes through with the boost. No crime jobs. Before any period: boost when fatigue >= 40.
-## Rests only to avoid getting sick. Sends himself to detox the month before stage 3.
+## Addict (step 12c c3 round 3): plays like the disciplined bot (rests at home, not at the church) and buys from the dealer
+## whenever he is around; takes a dose when tired. No crime jobs. Four ways to play it (policy):
+##   always - buys what the dealer has (keeping a month of living costs); sends himself to detox when deep (stage 3)
+##   quit   - the same until the first attack tells him he is addicted; then stops buying and goes to detox, and never buys again
+##   shoot  - buys, but takes a dose only before a shooting period (for the divine roll) until he is addicted
+##   allin  - like always, never goes to detox by himself
 class Addict:
-	extends StratBot
+	extends Disc
+
+	var policy := "always"
 
 	func _init(sd := 1) -> void:
 		super(sd)
 		strategy = "addict"
-		pref["flag.drug_access"] = 100.0
-		pref["fatigue"] = -0.4
+		no_church = false
+		pref["flag.drug_stock"] = 100.0
+		pref["discipline"] = 0.0
 
-	func can_boost(st) -> bool:
-		var dr: Dictionary = st.d.t["stats"]["drug"]
-		return Schedule.truthy(st.flags.get(dr["unlock_flag"])) and st.val("discipline") < dr["refuse_discipline"]
+	func stock(st) -> int:
+		return int(st.flags.get("drug_stock", 0))
 
-	func before_period(story, st, i: int) -> void:
-		if st.val("fatigue") >= 40 and Events.boost_reason(st, i) == "":
-			story.boost(st, i)
+	func known(st) -> bool:
+		return int(st.flags.get("drug_known", 0)) > 0
 
 	func month_start(story, st) -> void:
 		super(story, st)
-		var lines: Array = st.d.t["stats"]["drug"]["stage_lines"]
-		if st.drug >= 2 and st.drug_points >= lines[2] - 3:
+		if policy == "quit" and (known(st) or st.cnt("count.detox") > 0 or st.cnt("count.clean") > 0):
+			if st.drug >= 1 and known(st):
+				story.send_detox(st)
+			return
+		if policy == "always" and st.drug >= 3:
 			story.send_detox(st)
+		var n: int = int(st.flags.get("dealer_stock", 0))
+		var price: int = int(st.flags.get("dealer_price", 0))
+		while n > 0 and st.money - price * n < living(st):
+			n -= 1
+		if n > 0:
+			story.buy_drug(st, n)
+
+	func wants_dose(story, st, i: int) -> bool:
+		if policy == "shoot":
+			return story.locked(st, i) != null
+		return st.val("fatigue") >= 40
+
+	func before_period(story, st, i: int) -> void:
+		if stock(st) > 0 and wants_dose(story, st, i) and Events.boost_reason(st, i) == "":
+			story.boost(st, i)
 
 	func pick(g, P: Dictionary, i: int) -> String:
 		var st = g.st
-		var dr: Dictionary = st.d.t["stats"]["drug"]
-		if can_boost(st) and P["fat"] >= 40 and P["money"] >= dr["boost_price"]:
+		var have: int = stock(st) - P.get("dose", 0)
+		if have > 0 and (st.drug_points > 0 or (policy != "shoot" and P["fat"] >= 40)):
 			P["fat"] = maxi(0, P["fat"] - 40)
-			P["money"] -= dr["boost_price"]
-		var e = work(g, P, i)
-		if e == null or sick_after(g, P, i, e):
-			return rest_or_dock(g, P, i, "rest_home")
-		# without the boost yet: keep reckless_index below 60 (missing, refused jobs) like any careful player
-		if not can_boost(st) and P["fat"] + delta(g, P, i, e)[0] - st.val("discipline") >= 60:
-			return rest_or_dock(g, P, i, "rest_home")
-		return e
+			P["dose"] = P.get("dose", 0) + 1
+		return super(g, P, i)
+
+
+class Quit:
+	extends Addict
+	func _init(sd := 1) -> void:
+		super(sd)
+		strategy = "quit"
+		policy = "quit"
+
+
+class Shoot:
+	extends Addict
+	func _init(sd := 1) -> void:
+		super(sd)
+		strategy = "shoot"
+		policy = "shoot"
+
+
+class Allin:
+	extends Addict
+	func _init(sd := 1) -> void:
+		super(sd)
+		strategy = "allin"
+		policy = "allin"
 
 
 const BOTS := {
@@ -1106,9 +1149,21 @@ const BOTS := {
 	"addict_lover": [Addict, "lover"],
 	"addict_culture": [Addict, "culture"],
 	"addict_savvy": [Addict, "savvy"],
+	"quit_tough": [Quit, "tough"],
+	"quit_lover": [Quit, "lover"],
+	"quit_culture": [Quit, "culture"],
+	"quit_savvy": [Quit, "savvy"],
+	"shoot_tough": [Shoot, "tough"],
+	"shoot_lover": [Shoot, "lover"],
+	"shoot_culture": [Shoot, "culture"],
+	"shoot_savvy": [Shoot, "savvy"],
+	"allin_tough": [Allin, "tough"],
+	"allin_lover": [Allin, "lover"],
+	"allin_culture": [Allin, "culture"],
+	"allin_savvy": [Allin, "savvy"],
 }
 const PURE := ["only_tough", "only_lover", "only_culture", "only_savvy"]
-const STRATEGIES := ["disciplined", "bad_boy", "addict"]
+const STRATEGIES := ["disciplined", "bad_boy", "addict", "quit", "shoot", "allin"]
 
 
 ## A bot from a BOTS value: a class, or [class, road] for the step-12c bots.
@@ -1245,7 +1300,8 @@ static func summarize(g) -> Dictionary:
 		ranks.append(a.get("rank"))
 	rec["annual_rank"] = ranks
 	# step 12c: fatigue strategies
-	for k in ["count.detox", "count.sanatorium", "count.boost", "count.raid", "count.void.detained", "count.void.detox",
+	for k in ["count.detox", "count.sanatorium", "count.boost", "count.raid", "count.dealer", "count.hooked", "count.attack_months",
+			"count.divine", "count.divine_hit", "count.drug_side", "count.clean", "count.void.detained", "count.void.detox",
 			"count.void.missing", "count.void.sanatorium", "count.period.rest_home", "count.period.rest_outing", "count.period.job_church",
 			"count.outing.place_resort"]:
 		rec[k] = c.get(k, 0)

@@ -145,6 +145,7 @@ func board(st) -> void:
 
 
 func month_start(st) -> void:
+	Events.dealer_month(st)
 	agent.month_start(self, st)
 
 
@@ -154,17 +155,22 @@ func write_script(st, kind: String, color := -1) -> String:
 	return Board.write_script(st, kind, color)
 
 
-## Send to detox: allowed at drug_stage >= 2; the withdrawal event fires at the end of that month.
+## Send to detox: allowed once he is addicted (drug_stage >= 1); the withdrawal event fires at the end of that month.
 func send_detox(st) -> String:
-	if st.drug < 2:
-		return "drug_stage below 2"
+	if st.drug < 1:
+		return "not addicted"
 	st.flags["detox_sent"] = 1
 	return ""
 
 
-## Boost (step 12c, stats.drug): a free action before period i; returns "" or the reason.
+## Take a dose (step 12c c3, stats.drug): a free action before period i; returns "" or the reason.
 func boost(st, i: int) -> String:
 	return Events.boost(st, i)
+
+
+## Buy n doses from the dealer when he is around this month (month start); returns "" or the reason.
+func buy_drug(st, n: int) -> String:
+	return Events.buy_drug(st, n)
 
 
 ## Newspaper line favor 80: one news leak per year, fame +10%, counts as exposure.
@@ -194,7 +200,9 @@ func film_breach(st) -> void:
 
 func before_period(st, i: int) -> void:
 	cur_period = i
+	st.status["drug_high"] = 0
 	agent.before_period(self, st, i)
+	Events.drug_period(st, i)
 
 
 func period_start(st, i: int, entry: String) -> void:

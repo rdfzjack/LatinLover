@@ -115,11 +115,20 @@ if stats['levels']['gate'] != [5*l*(l+1) for l in range(10)]: err(f, 'class_step
 for k in ('monthly_decay_pct', 'monthly_decay_min'):
     if not isinstance(stats['fame_rules'].get(k), int): err(f, f'fame_rules is missing the integer field {k}')
 dr = stats.get('drug', {})
-for k in ('boost_price', 'points_per_boost', 'refuse_discipline'):
+for k in ('divine_gain_mult', 'divine_perf_add', 'divine_rep_bonus', 'side_fail_pct', 'hook_base_pct', 'hook_step_pct', 'hook_cap_pct', 'refuse_discipline'):
     if not isinstance(dr.get(k), int): err(f, f'drug is missing the integer field {k}')
-for k in ('boost_effect', 'stage2_no_use_effect', 'stage3_monthly_effect'):
+for k in ('dose_effect', 'side_effect', 'deep_monthly_effect'):
     if k not in dr: err(f, f'drug is missing {k}')
     else: parse_effect(f, dr[k], 'drug ' + k)
+for k in ('prob_pct', 'crime_step', 'crime_add_pct', 'prob_cap_pct', 'addicted_add_pct', 'stock', 'price_depth_pct', 'price_cap_pct'):
+    if not isinstance(dr.get('dealer', {}).get(k), int): err(f, f'drug.dealer is missing the integer field {k}')
+pr = dr.get('dealer', {}).get('price')
+if not (isinstance(pr, list) and len(pr) == 2 and pr[0] <= pr[1]): err(f, 'drug.dealer.price must be [low, high]')
+for k in ('fail_base_pct', 'fail_step_pct', 'fail_cap_pct', 'fatigue_base', 'fatigue_step', 'depth_drop'):
+    if not isinstance(dr.get('attack', {}).get(k), int): err(f, f'drug.attack is missing the integer field {k}')
+ow = dr.get('outcome_weights', {})
+if sorted(ow) != ['divine', 'high', 'side'] or not all(isinstance(v, int) and v >= 0 for v in ow.values()):
+    err(f, 'drug.outcome_weights must have the integer weights high, divine, side')
 if not (isinstance(dr.get('stage_lines'), list) and len(dr['stage_lines']) == 3 and dr['stage_lines'] == sorted(dr['stage_lines'])):
     err(f, 'drug stage_lines must be 3 increasing numbers (stages 1, 2, 3)')
 for k in ('fine_min', 'fine_pct', 'detain_periods', 'raid_crime_div'):

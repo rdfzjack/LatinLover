@@ -187,8 +187,29 @@ static func extra_fail(st, job: bool, slack := true) -> bool:
 	return fail
 
 
+## The dose of this period (step 12c c3, GDD 5.8.1): 1 = this day succeeds whatever the dice say (high), -1 = it fails
+## (the side effect of the last dose or an attack, by status.drug_fail_pct), 0 = no change.
+static func drug_day(st) -> int:
+	if int(st.status.get("drug_high", 0)) > 0:
+		return 1
+	var p: int = int(st.status.get("drug_fail_pct", 0))
+	if p > 0 and st.rng.logic.chance(p, 100):
+		return -1
+	return 0
+
+
+## Gains of practice are multiplied on a divine dose (stats.drug.divine_gain_mult).
+static func drug_gain(st, v: int) -> int:
+	if int(st.status.get("drug_high", 0)) == 2:
+		return v * int(st.d.t["stats"]["drug"]["divine_gain_mult"])
+	return v
+
+
 ## stamina/2 + r0(stamina/2) >= r0(fatigue) (GDD 5.1).
 static func practice_ok(st) -> bool:
+	var dg := drug_day(st)
+	if dg != 0:
+		return dg > 0
 	var g = st.rng.logic
 	var b: Dictionary = st.bonus()
 	var line: int = g.r0(st.val("fatigue", b))
@@ -212,6 +233,9 @@ static func job_lines(st, j: Dictionary) -> Array:
 
 
 static func job_day_ok(st, lines: Array, slack := true) -> bool:
+	var dg := drug_day(st)
+	if dg != 0:
+		return dg > 0
 	var g = st.rng.logic
 	var b: Dictionary = st.bonus()
 	var tired: int = st.val("fatigue", b)
@@ -269,7 +293,7 @@ static func run_class(st, cid: String, days: Array, hooks) -> Dictionary:
 				if e.has("cond") and not Rules.cond(st, e["cond"]):
 					continue
 				var pl: Array = e["per_level"][lv - 1]
-				add_stat(st, e["stat"], g.r(pl[0], pl[1]))
+				add_stat(st, e["stat"], drug_gain(st, g.r(pl[0], pl[1])))
 			if talk and accent_on(st):
 				add_stat(st, "speech", 1)
 		add_stat(st, "fatigue", c.get("fatigue_per_day", 1))
@@ -301,7 +325,7 @@ static func run_book(st, bid: String, days: Array, hooks) -> Dictionary:
 			var left: int = st.books.get(bid, 0)
 			var room: int = b["skill_cap"] - st.skill[sk]
 			if left > 0 and room > 0:
-				var v: int = mini(mini(g.r(b["gain"][0], b["gain"][1]), left), room)
+				var v: int = mini(mini(drug_gain(st, g.r(b["gain"][0], b["gain"][1])), left), room)
 				add_stat(st, sk, v)
 				st.books[bid] = left - v
 			if sk == "speech" and accent_on(st):

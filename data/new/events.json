@@ -1038,7 +1038,7 @@
    "freq": null,
    "effect": "",
    "code": false,
-   "note": "Someone on the set hands over a \"pick-me-up\". Accepting unlocks the boost action (stats.drug, step 12c)",
+   "note": "Someone on the set hands over a \"pick-me-up\". Accepting gives one free dose (stats.drug, step 12c c3)",
    "source": "[inferred N13]",
    "body": null,
    "order": 14,
@@ -1052,7 +1052,7 @@
     {
      "text": "接受",
      "check": null,
-     "success_effect": "fatigue-30 flag.drug_access=1",
+     "success_effect": "flag.drug_stock+1 flag.drug_access=1",
      "fail_effect": ""
     }
    ],
@@ -1092,7 +1092,7 @@
      [
       "drug_stage",
       ">=",
-      2
+      1
      ],
      [
       "flag.detox_sent",
@@ -1103,9 +1103,9 @@
    ],
    "prob": null,
    "freq": null,
-   "effect": "stamina-20 fatigue=0 drug_points=0 drug_stage=0 flag.detox_sent=0",
+   "effect": "stamina-20 fatigue=0 drug_points=0 drug_stage=0 flag.detox_sent=0 flag.drug_stock=0 flag.drug_known=0",
    "code": true,
-   "note": "A story that takes the whole next month. Write it seriously, not as a joke. With Sil present, Sil favor +10. Step 12c: Sil or Duv step in at stage 3; the player can send him at stage 2",
+   "note": "A story that takes the whole next month. Write it seriously, not as a joke. With Sil present, Sil favor +10. Step 12c: Sil or Duv step in at stage 3; the player can send him once he is addicted (stage 1); the doses he holds are thrown away",
    "source": "[user][inferred N13]",
    "body": null,
    "order": 16,

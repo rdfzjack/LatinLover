@@ -487,45 +487,133 @@ static func raid(story, st, j: Dictionary) -> void:
 		fire(story, st, "evt_arrest")
 
 
-# ---------- drugs (step 12c) ----------
+# ---------- drugs (step 12c c3 round 3) ----------
+# The dealer shows up by a roll at month start with a small stock at a rolled price; a dose is used before a period.
+# drug_points is the depth of the addiction (0 = not addicted); drug_stage follows it (stats.drug.stage_lines).
+# Player-side numbers live in st.flags: drug_stock, dealer_stock, dealer_price, drug_side_next, drug_known.
 
-## Whether the boost can be taken now; "" or the reason. Unlocked by the drug offer, at most once per period, not with high discipline.
-static func boost_reason(st, i: int) -> String:
+## Month start: is the dealer on the street this month, with how many doses and at what price each.
+static func dealer_month(st) -> void:
 	var dr: Dictionary = st.d.t["stats"]["drug"]
-	if not Schedule.truthy(st.flags.get(dr["unlock_flag"])):
-		return "not available"
-	if st.val("discipline") >= dr["refuse_discipline"]:
+	var g = st.rng.logic
+	var dl: Dictionary = dr["dealer"]
+	var p: int = dl["prob_pct"] + Rules.fdiv(maxi(0, st.val("crime")), dl["crime_step"]) * dl["crime_add_pct"]
+	p = mini(p, dl["prob_cap_pct"])
+	if st.drug_points > 0:
+		p += dl["addicted_add_pct"]
+	st.flags["dealer_stock"] = 0
+	st.flags["dealer_price"] = 0
+	if not g.chance(p, 100):
+		return
+	st.inc("count.dealer")
+	st.flags["dealer_stock"] = dl["stock"]
+	var mult: int = mini(100 + dl["price_depth_pct"] * st.drug_points, dl["price_cap_pct"])
+	st.flags["dealer_price"] = Rules.fdiv(g.r(dl["price"][0], dl["price"][1]) * mult, 100)
+
+
+## Buy n doses from the dealer (month start). "" or the reason.
+static func buy_drug(st, n: int) -> String:
+	var dr: Dictionary = st.d.t["stats"]["drug"]
+	if n <= 0 or int(st.flags.get("dealer_stock", 0)) < n:
+		return "the dealer does not have that many"
+	if st.drug_points == 0 and st.val("discipline") >= dr["refuse_discipline"]:
 		return "discipline too high, he will not touch it"
-	if st.month_used.has("boost.%d" % i):
-		return "already used this period"
-	if st.money < dr["boost_price"]:
+	var cost: int = int(st.flags["dealer_price"]) * n
+	if st.money < cost:
 		return "if_broke"
+	st.money -= cost
+	st.track("drug", "money", -cost)
+	st.flags["dealer_stock"] -= n
+	st.flags["drug_stock"] = int(st.flags.get("drug_stock", 0)) + n
+	st.inc("count.drug_bought", n)
 	return ""
 
 
-## The boost: costs boost_price, applies boost_effect, drug_points + points_per_boost, the stage follows the points.
+## Whether a dose can be taken before period i; "" or the reason. At most one per period.
+static func boost_reason(st, i: int) -> String:
+	if int(st.flags.get("drug_stock", 0)) <= 0:
+		return "no dose"
+	if st.month_used.has("boost.%d" % i):
+		return "already used this period"
+	return ""
+
+
+## Takes a dose: dose_effect, then one of the outcomes by weight (high: every day of this period succeeds; divine: also gains x
+## divine_gain_mult and a better shoot; side: side_effect now and side_fail_pct on the next period). Not addicted yet: a hidden roll,
+## hook_base + hook_step x doses taken before (cap hook_cap), makes him addicted (depth 1). Addicted: depth +1.
 static func boost(st, i: int) -> String:
 	var r := boost_reason(st, i)
 	if r != "":
 		return r
 	var dr: Dictionary = st.d.t["stats"]["drug"]
-	st.money -= dr["boost_price"]
+	var g = st.rng.logic
+	st.flags["drug_stock"] -= 1
 	st.month_used["boost.%d" % i] = 1
 	st.month_used["boost"] = st.month_used.get("boost", 0) + 1
-	Rules.apply_effect(st, dr["boost_effect"], "drug")
-	st.drug_points += dr["points_per_boost"]
-	st.drug = maxi(st.drug, st.drug_stage_of(st.drug_points))
+	Rules.apply_effect(st, dr["dose_effect"], "drug")
+	var w: Dictionary = dr["outcome_weights"]
+	var roll: int = g.r0(w["high"] + w["divine"] + w["side"])
+	if roll < w["high"]:
+		st.status["drug_high"] = 1
+	elif roll < w["high"] + w["divine"]:
+		st.status["drug_high"] = 2
+		st.inc("count.divine")
+	else:
+		Rules.apply_effect(st, dr["side_effect"], "drug")
+		st.flags["drug_side_next"] = 1
+		st.inc("count.drug_side")
+	var life: int = st.cnt("count.boost")
 	st.inc("count.boost")
+	if st.drug_points > 0:
+		st.drug_points += 1
+	elif g.chance(mini(dr["hook_base_pct"] + dr["hook_step_pct"] * life, dr["hook_cap_pct"]), 100):
+		st.drug_points = 1
+		st.inc("count.hooked")
+	st.drug = st.drug_stage_of(st.drug_points)
 	return ""
 
 
-## Month end, before the month-end events: stage 2 without a boost this month gets withdrawal; stage 3 wears the body down.
+## Before period i, after the player's own free actions: an addict with a dose in hand takes it himself; then this period's
+## drug state: status.drug_high (0, 1 high, 2 divine) and status.drug_fail_pct (side effect of the last dose, or an attack:
+## addicted and no dose yet this month).
+static func drug_period(st, i: int) -> void:
+	var dr: Dictionary = st.d.t["stats"]["drug"]
+	var side: bool = int(st.flags.get("drug_side_next", 0)) > 0
+	st.flags["drug_side_next"] = 0
+	if st.drug_points > 0 and not st.month_used.has("boost.%d" % i):
+		boost(st, i)
+	var fail := 0
+	if side:
+		fail = dr["side_fail_pct"]
+	if st.drug_points > 0 and not st.month_used.has("boost"):
+		fail = maxi(fail, attack_pct(st))
+		st.inc("count.attack_periods")
+	st.status["drug_fail_pct"] = fail
+
+
+static func attack_pct(st) -> int:
+	var at: Dictionary = st.d.t["stats"]["drug"]["attack"]
+	return mini(at["fail_base_pct"] + at["fail_step_pct"] * st.drug_points, at["fail_cap_pct"])
+
+
+## Month end, before the month-end events. Addicted and not one dose this month: the attack (fatigue, and now he knows), and the
+## depth drops; at 0 he is clean. Deep (stage 3): the body wears down.
 static func drug_month(st) -> void:
 	var dr: Dictionary = st.d.t["stats"]["drug"]
-	if st.drug == 2 and not st.month_used.has("boost"):
-		Rules.apply_effect(st, dr["stage2_no_use_effect"], "drug")
+	st.status["drug_high"] = 0
+	st.status["drug_fail_pct"] = 0
+	if st.drug_points > 0 and not st.month_used.has("boost"):
+		var at: Dictionary = dr["attack"]
+		Schedule.add_stat(st, "fatigue", at["fatigue_base"] + at["fatigue_step"] * st.drug_points)
+		st.inc("count.attack_months")
+		st.flags["drug_known"] = 1
+		st.drug_points = maxi(0, st.drug_points - at["depth_drop"])
+		if st.drug_points == 0:
+			st.flags["drug_known"] = 0
+			st.inc("count.clean")
+	st.drug = st.drug_stage_of(st.drug_points)
 	if st.drug >= 3:
-		Rules.apply_effect(st, dr["stage3_monthly_effect"], "drug")
+		Rules.apply_effect(st, dr["deep_monthly_effect"], "drug")
 
 
 ## Discharge from the sanatorium: roll the discharge event of rest.json forced.
