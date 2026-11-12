@@ -73,8 +73,9 @@ static func _clampi(v: int, lo: int, hi: int) -> int:
 
 
 ## Applies one effect line and returns the ids of the events to trigger next.
-## source "event" (events, opportunities, item use ...): a positive favor gain is +1 more when loyalty >= 200 (GDD 10.1);
-## "schedule" (fixed per-period or per-period favor in schedules) and "origin" do not get the bonus.
+## source "event" (events, item use ...) and "opportunity": a positive favor gain is +1 more when loyalty >= 200 (GDD 10.1);
+## "schedule" (fixed per-period or per-period favor in schedules), "origin" and "annual" do not get the bonus.
+## Step 12c: the change of every attribute, skill, money and rep_bonus is added to st.src[source] (report only).
 static func apply_effect(st, text, source := "event") -> Array:
 	var trig := []
 	var d = st.d
@@ -90,12 +91,22 @@ static func apply_effect(st, text, source := "event") -> Array:
 			trig.append(op)
 		elif st.attr.has(n):
 			var rg: Array = d.attr_range[n]
+			var old: int = st.attr[n]
 			st.attr[n] = _clampi(_delta(st.attr[n], op, v, pct), rg[0], rg[1])
+			st.track(source, n, st.attr[n] - old)
 		elif st.skill.has(n):
 			var rg: Array = d.skill_range[n]
+			var old: int = st.skill[n]
 			st.skill[n] = _clampi(_delta(st.skill[n], op, v, pct), rg[0], rg[1])
+			st.track(source, n, st.skill[n] - old)
 		elif n == "money":
+			var old: int = st.money
 			st.money = mini(_delta(st.money, op, v, pct), d.money_cap)
+			st.track(source, n, st.money - old)
+			if st.money > old:
+				st.src["income"] = st.src.get("income", 0) + st.money - old
+		elif n == "drug_points":
+			st.drug_points = maxi(0, _delta(st.drug_points, op, v, pct))
 		elif n == "drug_stage":
 			st.drug = _clampi(_delta(st.drug, op, v, pct), 0, 3)
 		elif n == "debt_months":
@@ -103,11 +114,13 @@ static func apply_effect(st, text, source := "event") -> Array:
 		elif head == "favor":
 			var cur: int = st.favor.get(k, 0)
 			var nv := _delta(cur, op, v, pct)
-			if source == "event" and nv > cur and st.val("loyalty") >= 200:
+			if (source == "event" or source == "opportunity") and nv > cur and st.val("loyalty") >= 200:
 				nv += 1
 			st.favor[k] = _clampi(nv, 0, 100)
 		elif head == "rep_bonus":
+			var old: int = st.corr[k]
 			st.corr[k] = _delta(st.corr[k], op, v, pct)
+			st.track(source, n, st.corr[k] - old)
 		elif head == "weight":
 			st.weights[k] = _delta(st.weights.get(k, 0), op, v, pct)
 		elif head == "item":
@@ -188,6 +201,8 @@ static func get_var(st, name: String):
 		return hi - lo
 	if name == "drug_stage":
 		return st.drug
+	if name == "drug_points":
+		return st.drug_points
 	if name == "debt_months":
 		return st.debt_months
 	if name == "top_base_attr":

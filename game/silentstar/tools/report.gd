@@ -14,6 +14,10 @@ extends SceneTree
 ##   --dump=<file>        write the game records (JSON) instead of printing a report
 ##   --merge=<f1,f2,...>  read record files written by --dump (in this order) and print the report of all of them
 ##   --data=<data/new folder>
+##   --random-options     bots pick event options at random (worst case) instead of by their preference table
+##   --coverage           also print how often each event fired and each option was picked (events never fired are listed)
+##   --guard=<file>       also print PASS / FAIL for every target in that file (design/targets.json); exit code 2 when any fails
+##   --widen=10           widen every guard range by this percent of its bounds (check.py uses 10 with 30 games)
 ## The report has at most 60 lines. The brackets hold the targets of PLAN step 8.
 ## Full training = the target road's three training values sum to >= 300 (random_pick, crime_line and books_culture take whichever
 ## of the four roads is full first). Main road = the road with the highest final reputation. "Full training plus plain releases" =
@@ -26,6 +30,8 @@ const Rules = preload("res://core/rules.gd")
 const Bots = preload("res://tools/bots.gd")
 
 const NAN_VALUE := NAN
+
+var random_options := false
 
 
 func _init() -> void:
@@ -41,6 +47,7 @@ func _init() -> void:
 	var data_dir: String = _abs(root, args.get("data", "data/new"))
 	var smart = false if args.has("random-play") else null
 	var no_buy: bool = args.has("no-buy")
+	random_options = args.has("random-options")
 
 	var res := {}
 	var nobuy: Dictionary = {}
@@ -109,6 +116,20 @@ func _init() -> void:
 			return
 
 	var lines := report(res, lo, hi, smart == null, nobuy)
+	if args.has("coverage"):
+		lines.append_array(coverage(res))
+	var failed := 0
+	if args.has("guard"):
+		var tg = Jsonx.read_file(_abs(root, args["guard"]))
+		if tg == null:
+			push_error("cannot read %s" % args["guard"])
+			quit(1)
+			return
+		var gl := guard(res, tg, float(args.get("widen", "0")))
+		for x in gl:
+			if x.begins_with("FAIL"):
+				failed += 1
+		lines.append_array(gl)
 	for line in lines:
 		print(line)
 	if args.has("out"):
@@ -117,7 +138,7 @@ func _init() -> void:
 		var f2 := FileAccess.open(p2, FileAccess.WRITE)
 		f2.store_string("\n".join(lines) + "\n")
 		f2.close()
-	quit(0)
+	quit(2 if failed > 0 else 0)
 
 
 func _abs(root: String, p: String) -> String:
@@ -133,7 +154,7 @@ func run(d, lo: int, hi: int, names: Array, smart, buy) -> Dictionary:
 		out[nm] = []
 	for nm in names:
 		for sd in range(lo, hi + 1):
-			out[nm].append(Bots.play(Bots.BOTS[nm], sd, d, smart, buy))
+			out[nm].append(Bots.play(Bots.BOTS[nm], sd, d, smart, buy, Callable(), random_options))
 			printerr("%s seed %d done" % [nm, sd])
 	return out
 
@@ -418,7 +439,237 @@ static func report(res: Dictionary, lo: int, hi: int, smart: bool, nobuy: Dictio
 				max_reps.append(r["max_rep"])
 			L.append("%s %s / %s | %s | %s" % [nm.rpad(8), ff(float(med(end)), 0, 7, true), ff(float(pct(end, 0.9)), 0, 7, true),
 				f0(med(max_reps)), grades(rs)])
+	L.append("-- from events, median per game: main-road rep from events (skills + rep_bonus) [<=30] | event money net, % of all money gained [+-10%] | event fatigue net per year [+-60] | opportunity rep")
+	for nm in res:
+		var rs: Array = res[nm]
+		var rep := []
+		var mon := []
+		var share := []
+		var fat := []
+		var opp := []
+		for r in rs:
+			rep.append(r.get("src_event_rep", 0))
+			mon.append(r.get("src_event_money", 0))
+			share.append(100.0 * float(r.get("src_event_money", 0)) / float(maxi(1, int(r.get("income", 0)))))
+			fat.append(float(r.get("src_event_fatigue", 0)) / 4.0)
+			opp.append(r.get("src_opp_rep", 0))
+		L.append("%s ev rep %s | money %s (%s%%) | fatigue/yr %s | opp rep %s" % [nm.rpad(8), f0(med(rep)).lpad(3), ff(float(med(mon)), 0, 6, true),
+			ff(float(med(share)), 1, 5), ff(float(med(fat)), 0, 4), f0(med(opp))])
+	var strat_names := []
+	for nm in res:
+		if String(res[nm][0].get("strategy", "")) != "":
+			strat_names.append(nm)
+	if not strat_names.is_empty():
+		L.append("-- step 12c strategies, median per game: rest% (home+outing+church of 144) resort% | void periods (detained/detox/missing/sanatorium means) | arrests detox sanatorium boosts crime-job periods | full month | cash y2 / end / end p10 | S/A/B/C-/collapse% | grade mean")
+		for nm in strat_names:
+			L.append(strat_line(nm, bot_metrics(res[nm]), res[nm]))
+		for sname in Bots.STRATEGIES:
+			var m := strategy_metrics(res, sname)
+			if not m.is_empty():
+				L.append(strat_line("= " + sname + " (mean of roads)", m, []))
+		var dm := strategy_metrics(res, "disciplined")
+		if not dm.is_empty():
+			var parts := PackedStringArray()
+			for sname in ["bad_boy", "addict"]:
+				var m2 := strategy_metrics(res, sname)
+				if not m2.is_empty():
+					parts.append("%s %s" % [sname, ff(m2["grade_mean"] - dm["grade_mean"], 2)])
+			var bs := strategy_metrics(res, "bad_boy")
+			if not bs.is_empty():
+				parts.append("bad_boy S spread across roads %s pp [<=8]" % f0(bs["s_spread"]))
+			L.append("   grade mean vs disciplined [+-0.3]: " + ", ".join(parts))
 	return L
+
+
+# ---------- step 12c: strategy metrics, coverage, guard ----------
+
+const GRADE_SCORE := {"S": 4, "A": 3, "B": 2, "C": 1, "D": 0}
+
+
+## The metrics of one bot (the names are the keys of design/targets.json).
+static func bot_metrics(rs: Array) -> Dictionary:
+	var k := rs.size()
+	var m := {}
+	var rest := []
+	var resort := []
+	var void_ := []
+	var keys := {"arrests": "count.arrest", "detox": "count.detox", "sanatorium": "count.sanatorium", "boosts": "count.boost",
+		"crime_periods": "crime_job_periods"}
+	var vals := {}
+	for key in keys:
+		vals[key] = []
+	var fulls := []
+	var y2 := []
+	var end := []
+	var gc := {"S": 0, "A": 0, "B": 0, "C-": 0, "collapse": 0}
+	var gsum := 0
+	var vparts := {"count.void.detained": 0, "count.void.detox": 0, "count.void.missing": 0, "count.void.sanatorium": 0}
+	for r in rs:
+		rest.append(100.0 * float(int(r["count.period.rest_home"]) + int(r["count.period.rest_outing"]) + int(r["count.period.job_church"])) / 144.0)
+		resort.append(100.0 * float(r["count.outing.place_resort"]) / 144.0)
+		var v := 0
+		for vk in vparts:
+			v += int(r[vk])
+			vparts[vk] += int(r[vk])
+		void_.append(v)
+		for key in keys:
+			vals[key].append(r[keys[key]])
+		var fm = full_month(r)
+		if fm != null:
+			fulls.append(fm)
+		y2.append(r["money"][mini(23, r["money"].size() - 1)])
+		end.append(r["money"][r["money"].size() - 1])
+		if r["ending"] == "end_collapse":
+			gc["collapse"] += 1
+		elif r["grade"] in ["S", "A", "B"]:
+			gc[r["grade"]] += 1
+			gsum += GRADE_SCORE[r["grade"]]
+		else:
+			gc["C-"] += 1
+			gsum += GRADE_SCORE.get(r["grade"], 0)
+	m["rest_share"] = float(med(rest))
+	m["resort_share"] = float(med(resort))
+	m["void_periods"] = float(med(void_))
+	for key in keys:
+		m[key] = float(med(vals[key]))
+	m["full_month"] = float(med(fulls)) if float(fulls.size()) >= k * 0.5 else 99.0
+	m["cash_y2"] = float(med(y2))
+	m["cash_end"] = float(med(end))
+	m["cash_end_p10"] = float(pct(end, 0.1))
+	for g in gc:
+		m["pct_" + g] = 100.0 * float(gc[g]) / float(k)
+	m["c_or_less"] = m["pct_C-"] + m["pct_collapse"]
+	m["grade_mean"] = float(gsum) / float(k)
+	for vk in vparts:
+		m["mean_" + vk.replace("count.void.", "void_")] = float(vparts[vk]) / float(k)
+	return m
+
+
+## Mean over the road bots of one strategy; bad_boy also gets s_spread (max - min of the roads' S%).
+static func strategy_metrics(res: Dictionary, sname: String) -> Dictionary:
+	var ms := []
+	for nm in res:
+		if String(res[nm][0].get("strategy", "")) == sname:
+			ms.append(bot_metrics(res[nm]))
+	if ms.is_empty():
+		return {}
+	var out := {}
+	for key in ms[0]:
+		var s := 0.0
+		for m in ms:
+			s += m[key]
+		out[key] = s / ms.size()
+	var lo := 999.0
+	var hi := -999.0
+	for m in ms:
+		lo = minf(lo, m["pct_S"])
+		hi = maxf(hi, m["pct_S"])
+	out["s_spread"] = hi - lo
+	return out
+
+
+static func strat_line(nm: String, m: Dictionary, _rs: Array) -> String:
+	return "%s rest %s%% resort %s%% | void %s (%s/%s/%s/%s) | arr %s detox %s sana %s boost %s crimeP %s | full %s | %s / %s / %s | %s/%s/%s/%s/%s | %s" % [
+		nm.rpad(19), ff(m["rest_share"], 0, 2), ff(m["resort_share"], 0, 2), ff(m["void_periods"], 0, 2),
+		ff(m["mean_void_detained"], 1), ff(m["mean_void_detox"], 1), ff(m["mean_void_missing"], 1), ff(m["mean_void_sanatorium"], 1),
+		ff(m["arrests"], 0), ff(m["detox"], 0), ff(m["sanatorium"], 0), ff(m["boosts"], 0, 2), ff(m["crime_periods"], 0, 2),
+		ff(m["full_month"], 0, 2), ff(m["cash_y2"], 0, 6, true), ff(m["cash_end"], 0, 6, true), ff(m["cash_end_p10"], 0, 6, true),
+		f0(m["pct_S"]), f0(m["pct_A"]), f0(m["pct_B"]), f0(m["pct_C-"]), f0(m["pct_collapse"]), ff(m["grade_mean"], 2)]
+
+
+## --coverage: events fired per game (all bots together), options picked, and the events that never fired.
+func coverage(res: Dictionary) -> Array:
+	var L := []
+	var n := 0
+	var ev := {}
+	var op := {}
+	for nm in res:
+		for r in res[nm]:
+			n += 1
+			for k in r.get("events", {}):
+				ev[k] = ev.get(k, 0) + int(r["events"][k])
+			for k in r.get("options", {}):
+				op[k] = op.get(k, 0) + int(r["options"][k])
+	L.append("-- coverage over %d games: event fires per game (options picked: index x times)" % n)
+	var d = Data.new()
+	var never := []
+	var row := PackedStringArray()
+	for eid in d.events:
+		if not ev.has(eid):
+			never.append(eid)
+			continue
+		var o := PackedStringArray()
+		var e: Dictionary = d.events[eid]
+		for k in e.get("options", []).size():
+			var key: String = "%s#%d" % [eid, k]
+			if op.has(key):
+				o.append("%dx%d" % [k + 1, op[key]])
+		row.append("%s %s%s" % [eid, ff(float(ev[eid]) / n, 2), (" [" + " ".join(o) + "]") if o.size() > 0 else ""])
+		if row.size() == 4:
+			L.append("   " + " | ".join(row))
+			row = PackedStringArray()
+	if row.size() > 0:
+		L.append("   " + " | ".join(row))
+	L.append("never fired (%d): %s" % [never.size(), " ".join(never)])
+	return L
+
+
+## --guard: compares design/targets.json with the run. Every target is [lo, hi] (null = open); the range is widened by widen%.
+## "strategies" are checked on the mean of the roads, "bots" on that bot; "grade_mean_vs_disciplined" is the difference to the
+## disciplined strategy. Returns lines "PASS ..." / "FAIL ..." / "SKIP ..." (bot not in this run).
+static func guard(res: Dictionary, tg: Dictionary, widen: float) -> Array:
+	var L := ["-- guard (targets widened by %s%%)" % ff(widen, 0)]
+	var dm := strategy_metrics(res, "disciplined")
+	for sect in ["strategies", "bots"]:
+		for who in tg.get(sect, {}):
+			var m := {}
+			if sect == "strategies":
+				m = strategy_metrics(res, who)
+				if not m.is_empty() and not dm.is_empty():
+					m["grade_mean_vs_disciplined"] = m["grade_mean"] - dm["grade_mean"]
+			elif res.has(who):
+				m = bot_metrics(res[who])
+				m.merge(extra_metrics(res[who]))
+			for key in tg[sect][who]:
+				if key == "note":
+					continue
+				var rg: Array = tg[sect][who][key]
+				if m.is_empty() or not m.has(key):
+					L.append("SKIP %s %s (not in this run)" % [who, key])
+					continue
+				var lo = rg[0]
+				var hi = rg[1]
+				var span := 0.0
+				if lo != null and hi != null:
+					span = float(hi) - float(lo)
+				var wlo = null if lo == null else float(lo) - maxf(absf(float(lo)), span) * widen / 100.0
+				var whi = null if hi == null else float(hi) + maxf(absf(float(hi)), span) * widen / 100.0
+				var v: float = m[key]
+				var ok: bool = (wlo == null or v >= wlo) and (whi == null or v <= whi)
+				L.append("%s %s %s %s [%s, %s]" % ["PASS" if ok else "FAIL", who, key, ff(v, 1), "-" if wlo == null else ff(wlo, 1),
+					"-" if whi == null else ff(whi, 1)])
+	return L
+
+
+## The step-8 metrics of one bot for the guard (keys of targets.json "bots").
+static func extra_metrics(rs: Array) -> Dictionary:
+	var k := rs.size()
+	var plain := []
+	var over := 0
+	var y1 := []
+	var end := []
+	var kinds := {}
+	for r in rs:
+		var p: int = r["breakdown"]["training"] + r["breakdown"]["release"]
+		plain.append(p)
+		if p >= 311:
+			over += 1
+		y1.append(r["money"][mini(11, r["money"].size() - 1)])
+		end.append(r["money"][r["money"].size() - 1])
+		kinds[r["ending"]] = true
+	return {"plain_rep": float(med(plain)), "over_311": 100.0 * over / k, "cash_y1": float(med(y1)),
+		"cash_end_p90": float(pct(end, 0.9)), "big_win": ratio(sum_key(rs, "count.audition_won.big"), sum_key(rs, "count.audition.big")),
+		"hit_rate": ratio(sum_key(rs, "count.hit"), sum_key(rs, "count.release")), "ending_kinds": float(kinds.size())}
 
 
 static func Rules_truthy(v) -> bool:

@@ -22,7 +22,9 @@ const Film = preload("res://core/film.gd")
 const Audition = preload("res://core/audition.gd")
 const Story = preload("res://core/story.gd")
 
-const CRIME_JOBS := ["job_bootleg", "job_escort", "job_bar"]    # jobs excluded first when earning money
+const Events = preload("res://core/events.gd")
+
+const OLD_CRIME_JOBS := ["job_bootleg", "job_escort", "job_bar"]    # before step 12c; now every job with crime_tier counts (H.is_crime)
 const THRESH := {"big": 0.12, "medium": 0.2, "small": 0.0}      # Choosing a role: do not go if the win-rate estimate is below this line
 const ROAD_PLACE := {"tough": "place_dock", "lover": "place_downtown", "culture": "place_downtown", "savvy": "place_studio"}
 const ROAD_JOBS := {"culture": ["job_news", "job_model_art"]}   # When short of money, first take jobs of the own road
@@ -110,6 +112,32 @@ class H:
 
 
 	# ---------- scheduling helpers ----------
+
+	## Step 12c: a crime job is a job with crime_tier in jobs.json (or one of the jobs that were crime jobs before).
+	static func is_crime(d, jid: String) -> bool:
+		return d.jobs[jid].has("crime_tier") or OLD_CRIME_JOBS.has(jid)
+
+	## The crime jobs of a road, tier 2 first: [job id, ...].
+	static func road_crime_jobs(d, road: String) -> Array:
+		var out := []
+		for t in [2, 1]:
+			for jid in d.jobs:
+				var j: Dictionary = d.jobs[jid]
+				if j.get("crime_tier") == t and j.get("road") == road:
+					out.append(jid)
+		return out
+
+	static func resort_cost(st, i: int) -> int:
+		return Schedule.place_cost(st, "place_resort") * alldays(st, i)
+
+	## Probability that a check passes (GDD 11.0): a gate is 0 or 1; a dice check is displayed + r0(20) >= line.
+	static func check_p(st, c) -> float:
+		if c == null:
+			return 1.0
+		if typeof(c) == TYPE_DICTIONARY:
+			var need: int = int(c["line"]) - st.val(c["check"])
+			return clampf(float(21 - maxi(0, need)) / 21.0, 0.0, 1.0)
+		return 1.0 if Rules.test(st, c) else 0.0
 
 	static func est_of(d) -> Est:
 		if d.has_meta("bots_est"):
@@ -305,6 +333,11 @@ class Bot:
 	var roads := []               # Two
 	var rnd                       # The bot's own random stream, not the game's
 	var seed := 1
+	var strategy := ""            # step 12c: "disciplined" / "bad_boy" / "addict" for the new bots, "" for the old ones
+	## Step 12c: weights for picking event options (BALANCE_WORKFLOW.md). "main" = a skill or rep_bonus of the bot's road.
+	var pref := {"main": 1.0, "skill": 0.3, "attr": 0.1, "discipline": 0.1, "crime": -0.3, "fatigue": -0.2, "money": 0.02,
+		"fame": 0.2, "favor": 0.05, "flag.drug_access": -100.0, "status.in_love": -3.0, "bad_event": -20.0}
+	var random_options := false   # pick options at random (worst case; report --random-options)
 
 	func _init(sd := 1) -> void:
 		rnd = BotRng.new(sd)
@@ -377,6 +410,54 @@ class Bot:
 				return -bni
 		return null
 
+	# ---------- event options (step 12c) ----------
+	## Value of one effect line for this bot: the sum of term x weight; a trigger of a "bad" tier event costs bad_event.
+	func effect_value(st, text) -> float:
+		var d = st.d
+		var v := 0.0
+		for e in Rules.parse_effect(text):
+			var n: String = e[0]
+			if n == "trigger":
+				if d.events.has(e[1]) and d.events[e[1]].get("tier") == "bad":
+					v += pref["bad_event"]
+				continue
+			var amt := float(e[2]) * (-1.0 if e[1] == "-" else 1.0)
+			if e[1] == "=":
+				if pref.has(n):
+					v += pref[n] * (1.0 if e[2] != 0 else -1.0)
+				continue
+			if e[3] != "":
+				amt = amt * float(Rules.get_var(st, n) if st.attr.has(n) else 0) / 100.0
+			var w := 0.0
+			if pref.has(n):
+				w = pref[n]
+			elif st.skill.has(n):
+				w = pref["main"] if road != null and d.skill_road[n] == road else pref["skill"]
+			elif n.begins_with("rep_bonus."):
+				w = pref["main"] * 1.5 if road != null and n.substr(10) == road else pref["skill"]
+			elif n.begins_with("favor."):
+				w = pref["favor"]
+			elif st.attr.has(n):
+				w = pref["attr"]
+			v += w * amt
+		return v
+
+	## Picks the option with the best expected value (checks weighted by their chance); ties go to the first.
+	func option(st, ev: Dictionary, avail: Array) -> int:
+		if random_options:
+			return rnd.choice(avail)
+		var best := -1
+		var bv := 0.0
+		for k in avail:
+			var o: Dictionary = ev["options"][k]
+			var ck = o.get("check") if Schedule.truthy(o.get("check")) else null
+			var p := H.check_p(st, ck)
+			var v: float = p * effect_value(st, o.get("success_effect", "")) + (1.0 - p) * effect_value(st, o.get("fail_effect", ""))
+			if best < 0 or v > bv:
+				best = k
+				bv = v
+		return best
+
 	# ---------- buying gear ----------
 	## Buy gear of the own road at the start of the month: each time pick the item that adds the most reputation per coin,
 	## keeping two months of living costs plus 200.
@@ -446,9 +527,9 @@ class Bot:
 			for s in d.class_steps:
 				if k > s:
 					L += 1
-			return [w, -int(d.classes[iid]["fee"][L - 1]) * w]
+			return [w * int(d.classes[iid].get("fatigue_per_day", 1)), -int(d.classes[iid]["fee"][L - 1]) * w]
 		if kind == "book":
-			return [w, 0]
+			return [w * int(d.books[iid].get("fatigue_per_day", 1)), 0]
 		if kind == "job":
 			return [w * H.job_fat(d.jobs[iid]), int(Schedule.wage_of(st, iid) * w * 0.7)]
 		if iid == "rest_outing":
@@ -517,7 +598,7 @@ class Bot:
 			var j: Dictionary = d.jobs[jid]
 			if not H.can_do_job(st, jid):
 				continue
-			if not crime_ok and CRIME_JOBS.has(jid) and jid != "job_bar":
+			if not crime_ok and H.is_crime(d, jid) and jid != "job_bar":
 				continue
 			var parts := []
 			for e in j["daily_effect"]:
@@ -547,7 +628,7 @@ class Bot:
 					return jid
 		var best = null
 		for jid in d.jobs:
-			if CRIME_JOBS.has(jid) and not crime:
+			if H.is_crime(d, jid) and not crime:
 				continue
 			if not H.can_do_job(st, jid):
 				continue
@@ -822,6 +903,163 @@ class Random:
 		return rnd.chance(1, 2)
 
 
+# ---------- step 12c: three strategies, each on the four roads ----------
+
+## Road setup of the pure bots: [second road, origin].
+const ROAD_SETUP := {"tough": ["lover", [0, 0, 3]], "lover": ["tough", [3, 2, 3]], "culture": ["lover", [4, 1, 3]],
+	"savvy": ["lover", [1, 1, 3]]}
+
+
+## Trains one road (like the pure bots); the three strategies differ in how they deal with fatigue.
+class StratBot:
+	extends RoadBot
+
+	func setup(rd: String) -> void:
+		road = rd
+		second = ROAD_SETUP[rd][0]
+		origin = ROAD_SETUP[rd][1].duplicate()
+		place = ROAD_PLACE[rd]
+		gear_road = rd
+		name = "%s_%s" % [strategy, rd]
+
+	## The work of this period (training first, a job when short of money, like Bot.pick); null = nothing to do.
+	func work(g, P: Dictionary, i: int):
+		var st = g.st
+		var e = want(g, P, i)
+		if e == null:
+			e = money_job(g, P)
+		if e == null:
+			return null
+		if Schedule.parse_entry(e)[0] == "class":
+			var reserve: int = living(st) if i == 2 else 0
+			if P["money"] + delta(g, P, i, e)[1] < reserve:
+				e = money_job(g, P)
+		return e
+
+	## Would this period make him sick (sick_index >= 10 is the sick status)?
+	func sick_after(g, P: Dictionary, i: int, e: String) -> bool:
+		return P["fat"] + delta(g, P, i, e)[0] - g.st.val("stamina") >= 0
+
+
+## Disciplined: carries fatigue on discipline. reckless_index >= 10 (after this period) -> church volunteering, or rest at home
+## when fatigue is high or the church is not possible. Never boosts, never takes crime jobs.
+class Disc:
+	extends StratBot
+
+	func _init(sd := 1) -> void:
+		super(sd)
+		strategy = "disciplined"
+		pref["discipline"] = 0.3
+		pref["crime"] = -1.0
+
+	func pick(g, P: Dictionary, i: int) -> String:
+		var st = g.st
+		var e = work(g, P, i)
+		if e == null:
+			return "rest_home"
+		var after: int = P["fat"] + delta(g, P, i, e)[0]
+		if after - st.val("discipline") >= 10 or sick_after(g, P, i, e):
+			if P["fat"] >= 40 or P["fat"] - st.val("stamina") >= -20 or not H.can_do_job(st, "job_church", 0):
+				return "rest_home"
+			return "job_church"
+		return e
+
+
+## Bad boy: earns with his road's crime jobs and buys the fatigue off at the resort. Never boosts.
+## The reckless_index that counts is the one at month end, so: the first two periods work (his road's crime job when short of money,
+## i.e. less than a resort period plus a month of living costs; otherwise training); the last period is the resort (home when the
+## money is not there) whenever working it would end the month with reckless_index >= 10. Crime jobs take his discipline to 0,
+## so that is most months. Also rests when a period would make him sick. Culture has no crime jobs yet, so there is no
+## bad_boy_culture (BOTS).
+class Bad:
+	extends StratBot
+
+	func _init(sd := 1) -> void:
+		super(sd)
+		strategy = "bad_boy"
+		crime = true
+		pref["crime"] = 0.0
+		pref["money"] = 0.05
+		pref["discipline"] = 0.0
+
+	func crime_job(g):
+		for jid in H.road_crime_jobs(g.d, road):
+			if H.can_do_job(g.st, jid):
+				return jid
+		return null
+
+	## His road's crime jobs; an ordinary job only while none of them can be done (before it unlocks, or its line is out of reach).
+	func money_job(g, P: Dictionary):
+		var j = crime_job(g)
+		if j != null:
+			return j
+		crime = false
+		j = super(g, P)
+		crime = true
+		return j
+
+	func rest_choice(g, P: Dictionary, i: int) -> String:
+		var st = g.st
+		if not Schedule.truthy(st.status["sick"]) and P["money"] - H.resort_cost(st, i) >= living(st):
+			return "rest_outing@place_resort"
+		return "rest_home"
+
+	func pick(g, P: Dictionary, i: int) -> String:
+		var st = g.st
+		var e = null
+		if P["money"] < H.resort_cost(st, i) + living(st):
+			e = crime_job(g)
+		if e == null:
+			e = work(g, P, i)
+		if e == null:
+			e = crime_job(g)
+		if e == null or sick_after(g, P, i, e):
+			return rest_choice(g, P, i)
+		if i == 2 and P["fat"] + delta(g, P, i, e)[0] - st.val("discipline") >= 10:
+			return rest_choice(g, P, i)
+		return e
+
+
+## Addict: pushes through with the boost. No crime jobs. Before any period: boost when fatigue >= 40.
+## Rests only to avoid getting sick. Sends himself to detox the month before stage 3.
+class Addict:
+	extends StratBot
+
+	func _init(sd := 1) -> void:
+		super(sd)
+		strategy = "addict"
+		pref["flag.drug_access"] = 100.0
+		pref["fatigue"] = -0.4
+
+	func can_boost(st) -> bool:
+		var dr: Dictionary = st.d.t["stats"]["drug"]
+		return Schedule.truthy(st.flags.get(dr["unlock_flag"])) and st.val("discipline") < dr["refuse_discipline"]
+
+	func before_period(story, st, i: int) -> void:
+		if st.val("fatigue") >= 40 and Events.boost_reason(st, i) == "":
+			story.boost(st, i)
+
+	func month_start(story, st) -> void:
+		super(story, st)
+		var lines: Array = st.d.t["stats"]["drug"]["stage_lines"]
+		if st.drug >= 2 and st.drug_points >= lines[2] - 3:
+			story.send_detox(st)
+
+	func pick(g, P: Dictionary, i: int) -> String:
+		var st = g.st
+		var dr: Dictionary = st.d.t["stats"]["drug"]
+		if can_boost(st) and P["fat"] >= 40 and P["money"] >= dr["boost_price"]:
+			P["fat"] = maxi(0, P["fat"] - 40)
+			P["money"] -= dr["boost_price"]
+		var e = work(g, P, i)
+		if e == null or sick_after(g, P, i, e):
+			return "rest_home"
+		# without the boost yet: keep reckless_index below 60 (missing, refused jobs) like any careful player
+		if not can_boost(st) and P["fat"] + delta(g, P, i, e)[0] - st.val("discipline") >= 60:
+			return "rest_home"
+		return e
+
+
 const BOTS := {
 	"only_tough": Hard,
 	"only_lover": Lover,
@@ -831,8 +1069,29 @@ const BOTS := {
 	"crime_line": Crime,
 	"books_culture": BookCulture,
 	"random_pick": Random,
+	"disciplined_tough": [Disc, "tough"],
+	"disciplined_lover": [Disc, "lover"],
+	"disciplined_culture": [Disc, "culture"],
+	"disciplined_savvy": [Disc, "savvy"],
+	"bad_boy_tough": [Bad, "tough"],
+	"bad_boy_lover": [Bad, "lover"],
+	"bad_boy_savvy": [Bad, "savvy"],
+	"addict_tough": [Addict, "tough"],
+	"addict_lover": [Addict, "lover"],
+	"addict_culture": [Addict, "culture"],
+	"addict_savvy": [Addict, "savvy"],
 }
 const PURE := ["only_tough", "only_lover", "only_culture", "only_savvy"]
+const STRATEGIES := ["disciplined", "bad_boy", "addict"]
+
+
+## A bot from a BOTS value: a class, or [class, road] for the step-12c bots.
+static func make_bot(spec, sd: int):
+	if spec is Array:
+		var b = spec[0].new(sd)
+		b.setup(spec[1])
+		return b
+	return spec.new(sd)
 
 
 # ---------- playing one game ----------
@@ -840,8 +1099,9 @@ const PURE := ["only_tough", "only_lover", "only_culture", "only_savvy"]
 ## Plays one game and returns a record. Array indexes in the record = month index (the value after month end).
 ## on_month(g, date), if valid, is called after each month with the date the month started (reconciliation uses it).
 ## smart_play / buy: null = the bot's own setting.
-static func play(cls, sd: int, data, smart_play = null, buy_gear = null, on_month := Callable()) -> Dictionary:
-	var bot = cls.new(sd)
+static func play(cls, sd: int, data, smart_play = null, buy_gear = null, on_month := Callable(), random_options := false) -> Dictionary:
+	var bot = make_bot(cls, sd)
+	bot.random_options = random_options
 	if smart_play != null:
 		bot.smart_play = smart_play
 	if buy_gear != null:
@@ -874,6 +1134,17 @@ static func play(cls, sd: int, data, smart_play = null, buy_gear = null, on_mont
 		if on_month.is_valid():
 			on_month.call(g, date)
 	rec.merge(summarize(g))
+	rec["strategy"] = bot.strategy
+	rec["road"] = bot.road
+	var ev := {}
+	var op := {}
+	for x in g.hooks.event_log:
+		ev[x["id"]] = ev.get(x["id"], 0) + 1
+		if x.has("options") and x["options"] != null:
+			var k: String = "%s#%d" % [x["id"], x["options"]]
+			op[k] = op.get(k, 0) + 1
+	rec["events"] = ev
+	rec["options"] = op
 	return rec
 
 
@@ -947,4 +1218,26 @@ static func summarize(g) -> Dictionary:
 	for a in g.hooks.annuals:
 		ranks.append(a.get("rank"))
 	rec["annual_rank"] = ranks
+	# step 12c: fatigue strategies
+	for k in ["count.detox", "count.sanatorium", "count.boost", "count.raid", "count.void.detained", "count.void.detox",
+			"count.void.missing", "count.void.sanatorium", "count.period.rest_home", "count.period.rest_outing", "count.period.job_church",
+			"count.outing.place_resort"]:
+		rec[k] = c.get(k, 0)
+	var crime_p := 0
+	for jid in d.jobs:
+		if d.jobs[jid].has("crime_tier"):
+			crime_p += c.get("count.period." + jid, 0)
+	rec["crime_job_periods"] = crime_p
+	rec["drug_stage_end"] = st.drug
+	# effects by source: events (main-road reputation = its skills + rep_bonus; money; fatigue), all money gained
+	var evs: Dictionary = st.src.get("event", {})
+	var main_rep := 0
+	for s in d.road_skills[top]:
+		main_rep += evs.get(s, 0)
+	main_rep += evs.get("rep_bonus." + top, 0)
+	rec["src_event_rep"] = main_rep
+	rec["src_event_money"] = evs.get("money", 0)
+	rec["src_event_fatigue"] = evs.get("fatigue", 0)
+	rec["src_opp_rep"] = st.src.get("opportunity", {}).get("rep_bonus." + top, 0)
+	rec["income"] = st.src.get("income", 0)
 	return rec

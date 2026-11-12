@@ -1,0 +1,284 @@
+{
+ "attrs": [
+  {
+   "id": "stamina",
+   "name": "体力",
+   "range": [
+    0,
+    999
+   ],
+   "init": 80,
+   "usage": "Schedule success checks, sick_index, job success lines, fight bonus"
+  },
+  {
+   "id": "education",
+   "name": "教育",
+   "range": [
+    0,
+    999
+   ],
+   "init": 5,
+   "usage": "Book gates, job success lines, contract, self-written scripts, ending branches"
+  },
+  {
+   "id": "loyalty",
+   "name": "义气",
+   "range": [
+    0,
+    999
+   ],
+   "init": 40,
+   "usage": "Whether anyone helps when trouble hits, favor gains, role fit, ending branches, destiny"
+  },
+  {
+   "id": "looks",
+   "name": "相貌",
+   "range": [
+    0,
+    999
+   ],
+   "init": 120,
+   "usage": "Role fit, job success lines, encounters, destiny"
+  },
+  {
+   "id": "discipline",
+   "name": "自律",
+   "range": [
+    0,
+    999
+   ],
+   "init": 40,
+   "usage": "reckless_index, ending categories and branches"
+  },
+  {
+   "id": "crime",
+   "name": "犯罪",
+   "range": [
+    0,
+    999
+   ],
+   "init": 10,
+   "usage": "Exposure probability, morals clause, dark endings"
+  },
+  {
+   "id": "fatigue",
+   "name": "疲劳",
+   "range": [
+    0,
+    999
+   ],
+   "init": 0,
+   "usage": "Success checks, the two indices"
+  },
+  {
+   "id": "fame",
+   "name": "名气",
+   "range": [
+    0,
+    999
+   ],
+   "init": 120,
+   "usage": "Role gates, audition ties, living-cost tier, ending categories"
+  }
+ ],
+ "money": {
+  "id": "money",
+  "name": "金钱",
+  "init": 500,
+  "max": 99999999,
+  "may_be_negative": "Only living costs may push money negative; any other expense you cannot afford cannot be chosen"
+ },
+ "roads": [
+  {
+   "id": "tough",
+   "name": "硬汉",
+   "skills": [
+    "fight",
+    "riding",
+    "nerve"
+   ]
+  },
+  {
+   "id": "lover",
+   "name": "情人",
+   "skills": [
+    "acting",
+    "grooming",
+    "physique"
+   ]
+  },
+  {
+   "id": "culture",
+   "name": "文化",
+   "skills": [
+    "writing",
+    "taste",
+    "speech"
+   ]
+  },
+  {
+   "id": "savvy",
+   "name": "手腕",
+   "skills": [
+    "negotiation",
+    "connections",
+    "business"
+   ]
+  }
+ ],
+ "rep_rules": {
+  "range": [
+   0,
+   999
+  ],
+  "formula": "sum of the road's three skill displayed values + rep_bonus",
+  "rep_bonus_rule": "changed only by releases, annual events, opportunities and events",
+  "ending_grade_lines": [
+   451,
+   381,
+   311,
+   211
+  ]
+ },
+ "levels": {
+  "formula": "5*L*(L+1)",
+  "range": [
+   0,
+   9
+  ],
+  "gate": [
+   0,
+   10,
+   30,
+   60,
+   100,
+   150,
+   210,
+   280,
+   360,
+   450
+  ]
+ },
+ "fame_tiers": [
+  {
+   "id": "unknown",
+   "name": "无名",
+   "min": 0,
+   "max": 49
+  },
+  {
+   "id": "familiar",
+   "name": "眼熟",
+   "min": 50,
+   "max": 149
+  },
+  {
+   "id": "famous",
+   "name": "有名",
+   "min": 150,
+   "max": 299
+  },
+  {
+   "id": "hot",
+   "name": "当红",
+   "min": 300,
+   "max": 499
+  },
+  {
+   "id": "superstar",
+   "name": "巨星",
+   "min": 500,
+   "max": 999
+  }
+ ],
+ "fame_rules": {
+  "mail_count": "fame/5 ±20%",
+  "monthly_decay": "if there was no exposure this month, fame -= max(1, fame*2/100)",
+  "monthly_decay_pct": 2,
+  "monthly_decay_min": 1
+ },
+ "indices": {
+  "sick_index": {
+   "formula": "fatigue - stamina",
+   "range": [
+    0,
+    100
+   ],
+   "status_line": 10,
+   "very_sick_line": 90,
+   "collapse": "=100 for 2 months in a row"
+  },
+  "reckless_index": {
+   "formula": "fatigue - discipline",
+   "range": [
+    0,
+    100
+   ],
+   "status_line": 10
+  }
+ },
+ "hidden": [
+  {
+   "id": "favor",
+   "name": "好感",
+   "note": "one per function NPC and romance line, 0-100",
+   "range": [
+    0,
+    100
+   ]
+  },
+  {
+   "id": "drug_stage",
+   "name": "药瘾阶段",
+   "range": [
+    0,
+    3
+   ],
+   "note": "changed only by story, enters no schedule formula"
+  },
+  {
+   "id": "debt_months",
+   "name": "负债月数",
+   "range": [
+    0,
+    999
+   ],
+   "note": "+1 if money <0 at month end, otherwise reset; at 3 months the creditor event fires"
+  },
+  {
+   "id": "tag_counts",
+   "name": "标签计数",
+   "note": "one counter for each of the 17 film tags"
+  },
+  {
+   "id": "flags",
+   "name": "旗标",
+   "note": "boolean marker"
+  },
+  {
+   "id": "counters",
+   "name": "计数器",
+   "note": "periods per class, book periods, successful periods per job, outings per place, duel counts, numbers of small/medium/big films"
+  }
+ ],
+ "contract": {
+  "education_below": 100,
+  "fee_coef_pct": 85,
+  "exempt_cond": [
+   [
+    [
+     "favor.sil",
+     ">=",
+     50
+    ]
+   ]
+  ],
+  "long_contract": {
+   "note": "GDD 11.2 long contract: monthly pay; a few random roles per board are marked house roles and only those may be signed; house roles give the player's main color +n style points; after a refusal it returns a quarter later",
+   "monthly_pay": 150,
+   "house_roles": 3,
+   "house_style_add": 10,
+   "refuse_months": 3
+  }
+ }
+}

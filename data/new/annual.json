@@ -1,5 +1,5 @@
 {
- "note": "Dec 31, takes no schedule slot. Pick one of four occasions to attend, or rest (fatigue reset). The only play mode for now is \"ranking\"",
+ "note": "Dec 31, takes no schedule slot. Pick one of four occasions to attend, or rest (fatigue reset). The only play mode for now is \"ranking\". Attending applies attend_effect (fatigue +15, step 12c); resting resets fatigue",
  "ranking": {
   "my_score": "road reputation + r0(50)",
   "opponents": "the 5 named rivals present that year with the highest level on the road",
@@ -55,5 +55,6 @@
    "play": "ranking",
    "rewards": "same_as_ranking"
   }
- ]
+ ],
+ "attend_effect": "fatigue+15"
 }

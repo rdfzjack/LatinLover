@@ -25,7 +25,6 @@ const Board = preload("res://core/board.gd")
 const Film = preload("res://core/film.gd")
 
 const SCANDAL_PAY := 200       # Newspaper line: pay 200 to suppress a scandal (5.4)
-const ARREST_FINE := 500       # Cap on the arrest fine (11.2)
 const HELP_LOYALTY := 150      # loyalty >= 150: someone helps (10.1)
 const HELP_COST := 30
 const SCANDAL_LOYALTY := 200
@@ -120,16 +119,12 @@ static func fame_pct(st, pct: int) -> void:
 static func _code(story, st, eid: String, choice) -> Array:
 	match eid:
 		"evt_missing": _missing(st)
-		"evt_arrest": _arrest(st)
+		"evt_arrest": _arrest(story, st)
 		"evt_scandal": _scandal(story, st)
 		"evt_contract":
 			if choice == 1:
 				st.story["contract_refused"] = st.ym
 		"evt_creditor": _creditor(st)
-		"evt_drug_deeper":
-			if st.drug >= 3:
-				Schedule.add_stat(st, "stamina", -30)
-				Schedule.add_stat(st, "crime", 20)
 		"evt_detox": _detox(st)
 		"outing_duv_tip":     # Duv's tip-off: a random medium or big role on the next board shows its full style and tags
 			if Schedule.truthy(st.flags.get("tipoff")):
@@ -144,18 +139,22 @@ static func _code(story, st, eid: String, choice) -> Array:
 ## Missing: next month's schedule is void, and the four rep_bonus values each lose 10% of the current reputation.
 static func _missing(st) -> void:
 	st.void_next = 1
+	st.inc("count.void.missing", 3)
 	var b: Dictionary = st.bonus()
 	for r in st.d.roads:
 		st.corr[r] -= Rules.fdiv(st.rep(r, b) * 10, 100)
 	Film.breach_month(st, st.ym + 1)
 
 
-## Arrest: fine min(money, 500), crime +20, exposure. With loyalty >= 150 someone bails him out (fine halved, no exposure,
-## loyalty -30); the bar owner's milestone also halves the fine (the two do not stack). A sick player is not arrested (GDD 10).
-static func _arrest(st) -> void:
+## Arrest (step 12c): fine max(fine_min, money x fine_pct%), at most the money held (never below 0); the next detain_periods
+## periods are void (detention; a shoot locked there breaches); crime +20, exposure; no big film for morals_months.
+## With loyalty >= 150 someone bails him out (fine halved, no exposure, loyalty -30); the bar owner's milestone also halves the
+## fine (the two do not stack). A sick player is not arrested (GDD 10). The detention starts after story.cur_period (3 = month end).
+static func _arrest(story, st) -> void:
 	if st.status["sick"]:
 		return
-	var fine := maxi(0, mini(st.money, ARREST_FINE))
+	var a: Dictionary = st.d.t["stats"]["arrest"]
+	var fine := mini(maxi(st.money, 0), maxi(a["fine_min"], Rules.fdiv(st.money * a["fine_pct"], 100)))
 	var bail: bool = st.val("loyalty") >= HELP_LOYALTY
 	if bail or Schedule.truthy(st.flags.get("bail_half")):
 		fine = Rules.fdiv(fine, 2)
@@ -166,6 +165,16 @@ static func _arrest(st) -> void:
 	else:
 		st.exposed = 1
 	st.inc("count.arrest")
+	var start: int = st.ym * 3 + story.cur_period + 1
+	for k in a["detain_periods"]:
+		if not st.void_periods.has(start + k):
+			st.void_periods.append(start + k)
+	morals(st)
+
+
+## Morals clause (step 12c): no big film on the next morals_months boards.
+static func morals(st) -> void:
+	st.flags["morals_until"] = st.ym + Board.cfg(st.d)["morals_months"]
 
 
 ## Scandal exposure: the newspaper line can suppress it (free once a year / pay 200); villain + crime >= 3: fame +10%,
@@ -184,6 +193,7 @@ static func _scandal(story, st) -> void:
 		return
 	st.exposed = 1
 	st.inc("count.scandal")
+	morals(st)
 	if st.tags.get("villain", 0) + st.tags.get("crime", 0) >= 3:
 		fame_pct(st, 10)
 		return
@@ -231,6 +241,8 @@ static func _detox(st) -> void:
 	if st.favor.get("sil", 0) >= 60:
 		Rules.apply_effect(st, "favor.sil+10", "event")
 	st.void_next = 1
+	st.inc("count.detox")
+	st.inc("count.void.detox", 3)
 	Film.breach_month(st, st.ym + 1)
 
 
@@ -282,7 +294,7 @@ static func month_end(story, st) -> void:
 			if not Rules.prob(st, e["monthly_prob"]):
 				continue
 			fire(story, st, e["story"])
-			Rules.apply_effect(st, e["effect"], "event")    # the opportunities' effects are in opportunities.json; the story event only handles the story
+			Rules.apply_effect(st, e["effect"], "opportunity")    # the opportunities' effects are in opportunities.json; the story event only handles the story
 			st.inc("count.opportunity")
 			if e["takes_month"]:
 				st.void_next = 1
@@ -454,10 +466,72 @@ static func job_period(story, st, jid: String, good: bool) -> void:
 	for r in j["period_random"]:
 		if st.rng.logic.chance(r["prob"][0], r["prob"][1]):
 			fire(story, st, r["event"])
+	if j.has("raid_prob"):
+		raid(story, st, j)
 	for m in j["milestones"]:
 		var eid: String = m["event"]
 		if not Schedule.truthy(st.fired.get(eid)) and Rules.cond(st, m["cond"]):
 			fire(story, st, eid)
+
+
+## Crime-job search (step 12c): once per period, probability raid_prob x (1 + crime / raid_crime_div); then
+## raid_skill displayed + r0(20) >= raid_line, failing means arrest (the detention takes the next period).
+static func raid(story, st, j: Dictionary) -> void:
+	var div: int = st.d.t["stats"]["arrest"]["raid_crime_div"]
+	var p: Array = j["raid_prob"]
+	if not st.rng.logic.chance(p[0] * (div + maxi(0, st.val("crime"))), p[1] * div):
+		return
+	st.inc("count.raid")
+	if not Rules.check(st, {"check": j["raid_skill"], "line": j["raid_line"]}):
+		fire(story, st, "evt_arrest")
+
+
+# ---------- drugs (step 12c) ----------
+
+## Whether the boost can be taken now; "" or the reason. Unlocked by the drug offer, at most once per period, not with high discipline.
+static func boost_reason(st, i: int) -> String:
+	var dr: Dictionary = st.d.t["stats"]["drug"]
+	if not Schedule.truthy(st.flags.get(dr["unlock_flag"])):
+		return "not available"
+	if st.val("discipline") >= dr["refuse_discipline"]:
+		return "discipline too high, he will not touch it"
+	if st.month_used.has("boost.%d" % i):
+		return "already used this period"
+	if st.money < dr["boost_price"]:
+		return "if_broke"
+	return ""
+
+
+## The boost: costs boost_price, applies boost_effect, drug_points + points_per_boost, the stage follows the points.
+static func boost(st, i: int) -> String:
+	var r := boost_reason(st, i)
+	if r != "":
+		return r
+	var dr: Dictionary = st.d.t["stats"]["drug"]
+	st.money -= dr["boost_price"]
+	st.month_used["boost.%d" % i] = 1
+	st.month_used["boost"] = st.month_used.get("boost", 0) + 1
+	Rules.apply_effect(st, dr["boost_effect"], "drug")
+	st.drug_points += dr["points_per_boost"]
+	st.drug = maxi(st.drug, st.drug_stage_of(st.drug_points))
+	st.inc("count.boost")
+	return ""
+
+
+## Month end, before the month-end events: stage 2 without a boost this month gets withdrawal; stage 3 wears the body down.
+static func drug_month(st) -> void:
+	var dr: Dictionary = st.d.t["stats"]["drug"]
+	if st.drug == 2 and not st.month_used.has("boost"):
+		Rules.apply_effect(st, dr["stage2_no_use_effect"], "drug")
+	if st.drug >= 3:
+		Rules.apply_effect(st, dr["stage3_monthly_effect"], "drug")
+
+
+## Discharge from the sanatorium: roll the discharge event of rest.json forced.
+static func discharge(story, st) -> void:
+	var de = st.d.rest_forced[0].get("discharge_event")
+	if Schedule.truthy(de) and Rules.prob(st, de["prob"]):
+		fire(story, st, de["event"])
 
 
 # ---------- birthday ----------
@@ -516,6 +590,8 @@ static func annual(story, st) -> Dictionary:
 		if x["id"] == pick:
 			occ = x
 			break
+	if Schedule.truthy(a.get("attend_effect")):          # step 12c: attending is tiring
+		Rules.apply_effect(st, a["attend_effect"], "annual")
 	var g = st.rng.logic
 	var me: int = st.rep(occ["road"]) + g.r0(50)
 	var rank := 1
@@ -527,6 +603,7 @@ static func annual(story, st) -> Dictionary:
 	for rw in a["ranking"]["rewards"]:
 		if rw["rank"] == rank:
 			st.corr[occ["road"]] += rw["rep_bonus"]
+			st.track("annual", "rep_bonus." + occ["road"], rw["rep_bonus"])
 			st.add_money(rw["prize"])
 	st.inc("count.annual_rank.%d" % rank)
 	story.annuals.append(rec)

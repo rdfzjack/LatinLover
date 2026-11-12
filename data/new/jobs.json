@@ -7,7 +7,9 @@
   "job_period_effect": "settled once for each successful period",
   "period_random": "prob [numerator, denominator], once per period",
   "prereq": "a cond, format in data/new/README.md",
-  "success_line_mods": "when the cond holds, add value to that stat's success line (a negative value lowers it)"
+  "success_line_mods": "when the cond holds, add value to that stat's success line (a negative value lowers it)",
+  "crime_tier": "step 12c: 1 or 2. A crime job must match crime_tiers exactly (wage, crime, discipline, stamina, fatigue, search); only the skills, the success-line stats and the name may differ",
+  "raid_prob": "search per successful-or-not period: prob x (1 + crime/100); then raid_skill displayed + r0(20) >= raid_line, failing means arrest"
  },
  "raise_tiers": [
   {
@@ -402,6 +404,13 @@
      ]
     },
     {
+     "stat": "stamina",
+     "add": [
+      1,
+      1
+     ]
+    },
+    {
      "stat": "fatigue",
      "add": [
       4,
@@ -413,16 +422,7 @@
    "original_shape": "lumber camp",
    "npc": "bar_owner",
    "job_period_effect": null,
-   "period_random": [
-    {
-     "prob": [
-      1,
-      30
-     ],
-     "event": "job_bar_r1",
-     "note": "A police search: nerve check line 40, failing means arrest"
-    }
-   ],
+   "period_random": [],
    "milestones": [
     {
      "event": "job_bar_m1",
@@ -450,7 +450,15 @@
      ],
      "note": "Halves the fine when arrested; roles with the crime tag get +1 board weight"
     }
-   ]
+   ],
+   "crime_tier": 1,
+   "road": "tough",
+   "raid_prob": [
+    1,
+    30
+   ],
+   "raid_line": 40,
+   "raid_skill": "nerve"
   },
   {
    "id": "job_studio",
@@ -646,15 +654,11 @@
    "name": "舞厅伴舞",
    "earliest": "1926-07",
    "prereq": [],
-   "daily_wage": 7,
+   "daily_wage": 8,
    "success_lines": [
     {
-     "stat": "stamina",
-     "value": 60
-    },
-    {
      "stat": "looks",
-     "value": 50
+     "value": 60
     }
    ],
    "daily_effect": [
@@ -673,6 +677,13 @@
      ]
     },
     {
+     "stat": "crime",
+     "add": [
+      1,
+      1
+     ]
+    },
+    {
      "stat": "discipline",
      "add": [
       -1,
@@ -680,10 +691,17 @@
      ]
     },
     {
+     "stat": "stamina",
+     "add": [
+      1,
+      1
+     ]
+    },
+    {
      "stat": "fatigue",
      "add": [
-      5,
-      5
+      4,
+      4
      ]
     }
    ],
@@ -709,7 +727,7 @@
        [
         "job_periods.job_ballroom",
         ">=",
-        5
+        3
        ]
       ]
      ],
@@ -741,7 +759,15 @@
      ],
      "note": "Invests in a film: the next board gets an extra medium role"
     }
-   ]
+   ],
+   "crime_tier": 1,
+   "road": "lover",
+   "raid_prob": [
+    1,
+    30
+   ],
+   "raid_line": 40,
+   "raid_skill": "acting"
   },
   {
    "id": "job_stunt",
@@ -839,7 +865,7 @@
      ]
     ]
    ],
-   "daily_wage": 30,
+   "daily_wage": 40,
    "success_lines": [
     {
      "stat": "stamina",
@@ -880,6 +906,13 @@
      ]
     },
     {
+     "stat": "stamina",
+     "add": [
+      1,
+      1
+     ]
+    },
+    {
      "stat": "fatigue",
      "add": [
       8,
@@ -891,16 +924,7 @@
    "original_shape": "big nightclub",
    "npc": "bar_owner",
    "job_period_effect": null,
-   "period_random": [
-    {
-     "prob": [
-      1,
-      20
-     ],
-     "event": "job_bootleg_r1",
-     "note": "Car inspection, nerve check line 60, failing means arrest"
-    }
-   ],
+   "period_random": [],
    "milestones": [
     {
      "event": "job_bootleg_m1",
@@ -915,7 +939,15 @@
      ],
      "note": "\"Join the crew\" invitation, sets a flag (underworld emperor line)"
     }
-   ]
+   ],
+   "crime_tier": 2,
+   "road": "tough",
+   "raid_prob": [
+    1,
+    20
+   ],
+   "raid_line": 60,
+   "raid_skill": "nerve"
   },
   {
    "id": "job_magazine",
@@ -1105,40 +1137,33 @@
   {
    "id": "job_escort",
    "name": "私人男伴",
-   "earliest": "1928-04",
+   "earliest": "1927-01",
    "prereq": [
     [
      [
       "job_periods.job_ballroom",
       ">=",
-      5
+      3
      ]
     ]
    ],
-   "daily_wage": 35,
+   "daily_wage": 40,
    "success_lines": [
     {
      "stat": "looks",
-     "value": 150
+     "value": 70
     },
     {
      "stat": "physique",
-     "value": 50
+     "value": 30
     }
    ],
    "daily_effect": [
     {
-     "stat": "looks",
+     "stat": "physique",
      "add": [
-      2,
-      2
-     ]
-    },
-    {
-     "stat": "discipline",
-     "add": [
-      -3,
-      -3
+      0,
+      1
      ]
     },
     {
@@ -1149,10 +1174,31 @@
      ]
     },
     {
+     "stat": "crime",
+     "add": [
+      2,
+      2
+     ]
+    },
+    {
+     "stat": "discipline",
+     "add": [
+      -2,
+      -2
+     ]
+    },
+    {
+     "stat": "stamina",
+     "add": [
+      1,
+      1
+     ]
+    },
+    {
      "stat": "fatigue",
      "add": [
-      12,
-      12
+      8,
+      8
      ]
     }
    ],
@@ -1170,7 +1216,224 @@
      "note": "Caught by the tabloids, settled as scandal exposure"
     }
    ],
-   "milestones": []
+   "milestones": [],
+   "crime_tier": 2,
+   "road": "lover",
+   "raid_prob": [
+    1,
+    20
+   ],
+   "raid_line": 60,
+   "raid_skill": "acting"
+  },
+  {
+   "id": "job_numbers",
+   "name": "地下赌档记账",
+   "placeholder": true,
+   "earliest": "1926-01",
+   "prereq": [],
+   "daily_wage": 8,
+   "success_lines": [
+    {
+     "stat": "education",
+     "value": 60
+    }
+   ],
+   "daily_effect": [
+    {
+     "stat": "business",
+     "add": [
+      0,
+      1
+     ]
+    },
+    {
+     "stat": "crime",
+     "add": [
+      1,
+      1
+     ]
+    },
+    {
+     "stat": "discipline",
+     "add": [
+      -1,
+      -1
+     ]
+    },
+    {
+     "stat": "stamina",
+     "add": [
+      1,
+      1
+     ]
+    },
+    {
+     "stat": "fatigue",
+     "add": [
+      4,
+      4
+     ]
+    }
+   ],
+   "exposure": false,
+   "original_shape": null,
+   "npc": null,
+   "job_period_effect": null,
+   "period_random": [],
+   "milestones": [],
+   "crime_tier": 1,
+   "road": "savvy",
+   "raid_prob": [
+    1,
+    30
+   ],
+   "raid_line": 40,
+   "raid_skill": "negotiation"
+  },
+  {
+   "id": "job_fixer",
+   "name": "黑市掮客",
+   "placeholder": true,
+   "earliest": "1927-01",
+   "prereq": [
+    [
+     [
+      "job_periods.job_numbers",
+      ">=",
+      3
+     ]
+    ]
+   ],
+   "daily_wage": 40,
+   "success_lines": [
+    {
+     "stat": "education",
+     "value": 70
+    },
+    {
+     "stat": "negotiation",
+     "value": 30
+    }
+   ],
+   "daily_effect": [
+    {
+     "stat": "negotiation",
+     "add": [
+      0,
+      1
+     ]
+    },
+    {
+     "stat": "connections",
+     "add": [
+      0,
+      1
+     ]
+    },
+    {
+     "stat": "crime",
+     "add": [
+      2,
+      2
+     ]
+    },
+    {
+     "stat": "discipline",
+     "add": [
+      -2,
+      -2
+     ]
+    },
+    {
+     "stat": "stamina",
+     "add": [
+      1,
+      1
+     ]
+    },
+    {
+     "stat": "fatigue",
+     "add": [
+      8,
+      8
+     ]
+    }
+   ],
+   "exposure": false,
+   "original_shape": null,
+   "npc": null,
+   "job_period_effect": null,
+   "period_random": [],
+   "milestones": [],
+   "crime_tier": 2,
+   "road": "savvy",
+   "raid_prob": [
+    1,
+    20
+   ],
+   "raid_line": 60,
+   "raid_skill": "negotiation"
   }
- ]
+ ],
+ "crime_tiers": {
+  "1": {
+   "daily_wage": 8,
+   "latest_earliest": "1926-07",
+   "daily": {
+    "crime": [
+     1,
+     1
+    ],
+    "discipline": [
+     -1,
+     -1
+    ],
+    "stamina": [
+     1,
+     1
+    ],
+    "fatigue": [
+     4,
+     4
+    ]
+   },
+   "success_lines": 1,
+   "raid_prob": [
+    1,
+    30
+   ],
+   "raid_line": 40
+  },
+  "2": {
+   "daily_wage": 40,
+   "earliest": "1927-01",
+   "prereq_periods": 3,
+   "daily": {
+    "crime": [
+     2,
+     2
+    ],
+    "discipline": [
+     -2,
+     -2
+    ],
+    "stamina": [
+     1,
+     1
+    ],
+    "fatigue": [
+     8,
+     8
+    ]
+   },
+   "success_lines": 2,
+   "skill_line": 30,
+   "raid_prob": [
+    1,
+    20
+   ],
+   "raid_line": 60
+  }
+ }
 }

@@ -1,0 +1,675 @@
+{
+ "note": "GDD 6.3's 8 examples plus 1 tutorial role; 20 big and 40 medium/small roles are added in PLAN steps 16-17. Style order tough/lover/culture/savvy, sums to 100, a single color at most 60 and at least 5. All film titles are placeholders. talkie: true always has it, false never, null is decided by the defaults.talkie ratio when the board is built (GDD 6.4)",
+ "tags": [
+  {
+   "id": "action_adventure",
+   "name": "动作冒险"
+  },
+  {
+   "id": "exotic_lover",
+   "name": "异国情人"
+  },
+  {
+   "id": "costume",
+   "name": "古装"
+  },
+  {
+   "id": "western",
+   "name": "西部"
+  },
+  {
+   "id": "crime",
+   "name": "犯罪"
+  },
+  {
+   "id": "villain",
+   "name": "反派"
+  },
+  {
+   "id": "arthouse",
+   "name": "文艺"
+  },
+  {
+   "id": "tragic",
+   "name": "悲情"
+  },
+  {
+   "id": "religious",
+   "name": "宗教"
+  },
+  {
+   "id": "romance",
+   "name": "浪漫"
+  },
+  {
+   "id": "war",
+   "name": "战争"
+  },
+  {
+   "id": "musical",
+   "name": "歌舞"
+  },
+  {
+   "id": "horror",
+   "name": "恐怖"
+  },
+  {
+   "id": "underground",
+   "name": "地下片"
+  },
+  {
+   "id": "comedy",
+   "name": "喜剧"
+  },
+  {
+   "id": "noble",
+   "name": "贵族"
+  }
+ ],
+ "roles": [
+  {
+   "id": "role_tutorial",
+   "name": "替补演员",
+   "film_title": "（占位）",
+   "size": "small",
+   "fame_gate": 0,
+   "style_probs": null,
+   "wants": [
+    {
+     "stat": "looks",
+     "target": 120
+    }
+   ],
+   "tags": [
+    "action_adventure"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 300,
+   "years_active": [
+    1926,
+    1929
+   ],
+   "tutorial": true,
+   "style_rule": "60% on the player's current highest-reputation road, the other three colors share the rest; the rival is a level-2 unnamed actor",
+   "note": "The fixed tutorial role of the first board (GDD 3.3); name, wants and tags are placeholders"
+  },
+  {
+   "id": "role_sheikh_son",
+   "name": "沙漠酋长之子",
+   "film_title": "（占位）",
+   "size": "big",
+   "fame_gate": 250,
+   "style_probs": [
+    15,
+    60,
+    10,
+    15
+   ],
+   "wants": [
+    {
+     "stat": "looks",
+     "target": 300
+    },
+    {
+     "stat": "physique",
+     "target": 70
+    }
+   ],
+   "tags": [
+    "exotic_lover"
+   ],
+   "opponents": [
+    {
+     "unnamed": true,
+     "main_level": 7
+    },
+    {
+     "named": "rival_valen"
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 2500,
+   "years_active": [
+    1926,
+    1929
+   ]
+  },
+  {
+   "id": "role_swordsman",
+   "name": "剑客",
+   "film_title": "（占位）",
+   "size": "big",
+   "fame_gate": 250,
+   "style_probs": [
+    55,
+    25,
+    5,
+    15
+   ],
+   "wants": [
+    {
+     "stat": "stamina",
+     "target": 300
+    },
+    {
+     "stat": "looks",
+     "target": 200
+    }
+   ],
+   "tags": [
+    "action_adventure",
+    "costume"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    },
+    {
+     "named": "rival_fanban"
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 2500,
+   "years_active": [
+    1926,
+    1929
+   ]
+  },
+  {
+   "id": "role_ranch_hand",
+   "name": "沉默的牧场帮工",
+   "film_title": "（占位）",
+   "size": "medium",
+   "fame_gate": 100,
+   "style_probs": [
+    50,
+    20,
+    20,
+    10
+   ],
+   "wants": [
+    {
+     "stat": "stamina",
+     "target": 200
+    }
+   ],
+   "tags": [
+    "western"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 800,
+   "years_active": [
+    1926,
+    1929
+   ]
+  },
+  {
+   "id": "role_casino_owner",
+   "name": "赌场老板",
+   "film_title": "（占位）",
+   "size": "medium",
+   "fame_gate": 100,
+   "style_probs": [
+    20,
+    15,
+    15,
+    50
+   ],
+   "wants": [
+    {
+     "stat": "negotiation",
+     "target": 60
+    },
+    {
+     "stat": "crime",
+     "target": 100
+    }
+   ],
+   "tags": [
+    "crime",
+    "villain"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 800,
+   "years_active": [
+    1926,
+    1929
+   ]
+  },
+  {
+   "id": "role_pianist",
+   "name": "落魄的钢琴师",
+   "film_title": "（占位）",
+   "size": "medium",
+   "fame_gate": 100,
+   "style_probs": [
+    5,
+    35,
+    55,
+    5
+   ],
+   "wants": [
+    {
+     "stat": "taste",
+     "target": 60
+    },
+    {
+     "stat": "education",
+     "target": 200
+    }
+   ],
+   "tags": [
+    "arthouse",
+    "tragic"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 800,
+   "years_active": [
+    1926,
+    1929
+   ]
+  },
+  {
+   "id": "role_martyr",
+   "name": "殉道的修士",
+   "film_title": "（占位）",
+   "size": "medium",
+   "fame_gate": 100,
+   "style_probs": [
+    5,
+    20,
+    60,
+    15
+   ],
+   "wants": [
+    {
+     "stat": "discipline",
+     "target": 200
+    }
+   ],
+   "tags": [
+    "religious"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 800,
+   "years_active": [
+    1926,
+    1929
+   ]
+  },
+  {
+   "id": "role_stranger",
+   "name": "舞厅里的陌生人",
+   "film_title": "（占位）",
+   "size": "small",
+   "fame_gate": 0,
+   "style_probs": [
+    10,
+    60,
+    10,
+    20
+   ],
+   "wants": [
+    {
+     "stat": "looks",
+     "target": 150
+    }
+   ],
+   "tags": [
+    "romance"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 300,
+   "years_active": [
+    1926,
+    1929
+   ]
+  },
+  {
+   "id": "role_boxer",
+   "name": "街头拳手",
+   "film_title": "（占位）",
+   "size": "small",
+   "fame_gate": 0,
+   "style_probs": [
+    55,
+    5,
+    5,
+    35
+   ],
+   "wants": [
+    {
+     "stat": "stamina",
+     "target": 120
+    },
+    {
+     "stat": "loyalty",
+     "target": 80
+    }
+   ],
+   "tags": [
+    "crime"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 300,
+   "years_active": [
+    1926,
+    1929
+   ]
+  }
+ ],
+ "defaults": {
+  "fame_gate": {
+   "small": 0,
+   "medium": 100,
+   "big": 250
+  },
+  "fee": {
+   "small": 300,
+   "medium": 800,
+   "big": 2500
+  },
+  "speech_line": {
+   "small": 30,
+   "medium": 50,
+   "big": 70
+  },
+  "bonus_skill": "acting",
+  "shoot_periods": {
+   "small": 1,
+   "medium": 2,
+   "big": 3
+  },
+  "board": {
+   "note": "GDD 6.1, 3.3, 11.3",
+   "per_board": {
+    "big": 1,
+    "medium": 2,
+    "small": 2
+   },
+   "connections_extra_medium": 50,
+   "connections_extra_big": 80,
+   "audition_tries": 2,
+   "same_role_cap": {
+    "small": 2,
+    "medium": 2,
+    "big": 1
+   },
+   "weight_cap": 2,
+   "morals_crime": 300,
+   "lowbudget_big_gate_add": 50,
+   "transition_boards": 3,
+   "after_valen_extra": {
+    "tags": [
+     "exotic_lover",
+     "romance"
+    ],
+    "size": "small",
+    "until": "1928-12"
+   },
+   "intel": {
+    "tag_taste": 50,
+    "habit_duels": 2,
+    "habit_connections": 60,
+    "exclude_color_connections": 80
+   }
+  },
+  "talkie": {
+   "note": "GDD 6.4: 1 role on the 1927-10 board; 30% of roles in 1928; 80% in 1929",
+   "start": "1927-10",
+   "ratio": [
+    {
+     "from": "1927-10",
+     "count": 1
+    },
+    {
+     "from": "1928-01",
+     "pct": 30
+    },
+    {
+     "from": "1929-01",
+     "pct": 80
+    }
+   ]
+  },
+  "shoot": {
+   "note": "GDD 5.6. Performance P is an integer scaled x1000: 500 + successful days x 500 / shooting days + bonus skill x 2 (+ stunt_self), clamped to 500-1200",
+   "fatigue": {
+    "small": 2,
+    "medium": 3,
+    "big": 4
+   },
+   "success_lines": {
+    "small": 20,
+    "medium": 30,
+    "big": 40
+   },
+   "perf_min": 500,
+   "perf_max": 1200,
+   "negotiation_div": 600,
+   "stunt_self": {
+    "tags": [
+     "western",
+     "action_adventure",
+     "war"
+    ],
+    "nerve_line": 60,
+    "nerve_line_flag": {
+     "flags": "stunt_line_50",
+     "line": 50
+    },
+    "fee_pct": 130,
+    "perf_add": 100,
+    "injury_prob": [
+     1,
+     40
+    ],
+    "injury_effect": "stamina-30 fatigue+20"
+   },
+   "swap_role": {
+    "size": "medium",
+    "period_count": 1
+   }
+  },
+  "release": {
+   "note": "GDD 8. S is an integer scaled x1000: B x P x F x T / 10^6",
+   "delay_months": 2,
+   "box_base": {
+    "small": 40,
+    "medium": 100,
+    "big": 250
+   },
+   "fit": {
+    "floor": 600,
+    "coef": 400,
+    "item_cap_pct": 150
+   },
+   "tag_familiarity": {
+    "per_tag": 30,
+    "cap_count": 5
+   },
+   "typed_line": 3,
+   "untyped_pct": 90,
+   "fame_pct": 30,
+   "dividend_mult": 2,
+   "rep_bonus": {
+    "small": 2,
+    "medium": 4,
+    "big": 8
+   },
+   "hit_pct": 140,
+   "flop_pct": 70,
+   "talkie_penalty_pct": 60,
+   "radio_speech_line_cut": 10,
+   "lowbudget": {
+    "delta": {
+     "small": 1,
+     "medium": -1,
+     "big": -2
+    },
+    "typed_line": 4
+   },
+   "undefined_kinds": 6,
+   "lead_favor": 8
+  },
+  "placeholder_gen": {
+   "note": "Placeholder roles generated when the role pool runs out (rarely needed once PLAN steps 16-17 fill the pool). Style: main color 55, others 15; wants = one random skill of the main color's road; tag = a random tag of the main color's set; the big film's second-round named rival is drawn by weight from the 3 highest-level present rivals of the main color",
+   "main_style": 55,
+   "other_style": 15,
+   "wants_target": {
+    "small": 40,
+    "medium": 60,
+    "big": 80
+   },
+   "tags_by_color": {
+    "tough": [
+     "western",
+     "action_adventure",
+     "war",
+     "costume",
+     "horror"
+    ],
+    "lover": [
+     "romance",
+     "exotic_lover",
+     "musical"
+    ],
+    "culture": [
+     "arthouse",
+     "tragic",
+     "religious",
+     "underground"
+    ],
+    "savvy": [
+     "villain",
+     "crime",
+     "comedy",
+     "noble"
+    ]
+   },
+   "big_named_rivals": {
+    "take_top": 3,
+    "weight": [
+     5,
+     3,
+     2
+    ]
+   }
+  },
+  "script": {
+   "note": "GDD 6.5",
+   "self_written": {
+    "cond": [
+     [
+      [
+       "writing",
+       ">=",
+       80
+      ],
+      [
+       "education",
+       ">=",
+       300
+      ]
+     ]
+    ],
+    "size": "medium"
+   },
+   "duv_written": {
+    "cond": [
+     [
+      [
+       "flag.duv_writes_script",
+       "==",
+       1
+      ]
+     ]
+    ],
+    "size": "medium",
+    "wants_pct": 80,
+    "favor": "favor.duv+3"
+   },
+   "co_written": {
+    "cond": [
+     [
+      [
+       "writing",
+       ">=",
+       80
+      ],
+      [
+       "education",
+       ">=",
+       300
+      ],
+      [
+       "flag.duv_writes_script",
+       "==",
+       1
+      ],
+      [
+       "favor.duv",
+       ">=",
+       80
+      ]
+     ]
+    ],
+    "size": "big"
+   },
+   "main_style": 60
+  }
+ }
+}

@@ -13,6 +13,7 @@ extends RefCounted
 const State = preload("res://core/state.gd")
 const Rules = preload("res://core/rules.gd")
 const Schedule = preload("res://core/schedule.gd")
+const Film = preload("res://core/film.gd")
 
 
 ## The parts implemented in step 12. Every method gets the state and may change it. A subclass overrides what it needs.
@@ -24,6 +25,7 @@ class Hooks:
 		return null
 	func film_period(_st, _i: int, _film, _days: Array) -> void: pass    # shooting period
 	func film_breach(_st) -> void: pass                   # very sick: the shoots already locked for next month breach
+	func before_period(_st, _i: int) -> void: pass        # step 12c: before period i (not void, not detained), shooting or not: free actions such as the boost
 	func period_start(_st, _i: int, _entry: String) -> void: pass        # period-start checks: swap role, steal role (11.1)
 	func period_end(_st, _i: int, _entry: String, _out: Dictionary) -> void: pass   # after a period's schedule is done
 	func day(_st, _day: int) -> void: pass                # per-day events such as birthdays
@@ -37,6 +39,7 @@ class Hooks:
 	func annual(_st) -> void: pass                        # annual event in December
 	func era(_st, _ids) -> void: pass                     # era events
 	func ending(_st) -> void: pass                        # ending resolution in 1929-12
+	func discharge(_st) -> void: pass                     # step 12c: after a month with a sanatorium period (discharge event)
 
 
 var d
@@ -118,11 +121,20 @@ func run_month(plan: Array) -> Array:
 	st.forced_rest = 0
 	st.void_next = 0
 	last = []
+	var sanatorium := false
 	for i in 3:
 		var days := Schedule.days_of(st, i)
 		if void_:
 			last.append({"schedule": "void"})
 			continue
+		var ab: int = st.ym * 3 + i
+		if st.void_periods.has(ab):          # detention (step 12c): this period is void; a shoot locked here breaches
+			st.void_periods.erase(ab)
+			Film.breach_period(st, st.ym, i)
+			st.inc("count.void.detained")
+			last.append({"schedule": "detained"})
+			continue
+		hooks.before_period(st, i)
 		var film = hooks.locked(st, i)
 		if film != null:
 			st.status["shooting_period"] = 1
@@ -132,10 +144,19 @@ func run_month(plan: Array) -> Array:
 			last.append({"schedule": "shooting"})
 			continue
 		var e: String = plan[i] if not forced else _forced_entry(i)
+		if e == "rest_sanatorium":
+			sanatorium = true
+			st.inc("count.void.sanatorium")
 		hooks.period_start(st, i, e)
 		var out := Schedule.run_period(st, i, e, hooks)
 		hooks.period_end(st, i, e, out)
 		last.append(out)
+	if sanatorium:                       # discharge (step 12c): side effects, then the discharge event roll
+		st.inc("count.sanatorium")
+		var f: Dictionary = d.rest_forced[0]
+		if Schedule.truthy(f.get("discharge_effect")):
+			Rules.apply_effect(st, f["discharge_effect"], "schedule")
+		hooks.discharge(st)
 	if st.flags.get("accent_period", 0) > 0:      # 4-month bonus after the accent event, one less after each month
 		st.flags["accent_period"] -= 1
 	hooks.month_events(st)

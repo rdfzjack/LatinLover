@@ -35,7 +35,8 @@
     "job_dock",
     "job_church",
     "job_model_art",
-    "job_bar"
+    "job_bar",
+    "job_numbers"
    ],
    "era_events": [],
    "annual": false,
@@ -433,7 +434,9 @@
    ],
    "board": true,
    "job_unlocks": [
-    "job_bootleg"
+    "job_bootleg",
+    "job_escort",
+    "job_fixer"
    ],
    "era_events": [],
    "annual": false,
@@ -930,9 +933,7 @@
     29
    ],
    "board": true,
-   "job_unlocks": [
-    "job_escort"
-   ],
+   "job_unlocks": [],
    "era_events": [],
    "annual": false,
    "rival_growth": false,

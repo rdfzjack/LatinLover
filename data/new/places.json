@@ -21,7 +21,7 @@
     "audition_intel",
     "negotiation"
    ],
-   "fatigue_per_day": -10
+   "fatigue_per_day": -3
   },
   {
    "id": "place_downtown",
@@ -47,7 +47,7 @@
     "taste",
     "speech"
    ],
-   "fatigue_per_day": -10
+   "fatigue_per_day": -3
   },
   {
    "id": "place_seaside",
@@ -73,7 +73,7 @@
     "encounter",
     "taste"
    ],
-   "fatigue_per_day": -10
+   "fatigue_per_day": -3
   },
   {
    "id": "place_dock",
@@ -103,7 +103,7 @@
     "loyalty",
     "crime"
    ],
-   "fatigue_per_day": -10
+   "fatigue_per_day": -3
   },
   {
    "id": "place_resort",
@@ -115,7 +115,7 @@
     18,
     30
    ],
-   "fatigue_per_day": -30,
+   "fatigue_per_day": -20,
    "residents": [],
    "random_table": [
     {
@@ -128,6 +128,10 @@
     },
     {
      "event": "vac_3",
+     "weight": 1
+    },
+    {
+     "event": "vac_overdo",
      "weight": 1
     }
    ],

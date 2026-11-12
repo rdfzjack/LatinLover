@@ -449,7 +449,6 @@
     "big": 1
    },
    "weight_cap": 2,
-   "morals_crime": 300,
    "lowbudget_big_gate_add": 50,
    "transition_boards": 3,
    "after_valen_extra": {
@@ -465,7 +464,9 @@
     "habit_duels": 2,
     "habit_connections": 60,
     "exclude_color_connections": 80
-   }
+   },
+   "morals_months": 3,
+   "morals_note": "step 12c: no big film for morals_months months after an arrest or an unsuppressed scandal"
   },
   "talkie": {
    "note": "GDD 6.4: 1 role on the 1927-10 board; 30% of roles in 1928; 80% in 1929",

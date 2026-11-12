@@ -234,7 +234,16 @@
     0,
     3
    ],
-   "note": "changed only by story, enters no schedule formula"
+   "note": "derived from drug_points (stage_lines of stats.drug); detox resets both"
+  },
+  {
+   "id": "drug_points",
+   "name": "药瘾点数",
+   "range": [
+    0,
+    999
+   ],
+   "note": "+1 per boost; drug_stage = number of stage_lines reached"
   },
   {
    "id": "debt_months",
@@ -280,5 +289,28 @@
    "house_style_add": 10,
    "refuse_months": 3
   }
+ },
+ "drug": {
+  "note": "Step 12c. The boost is a free action before any period (at most once per period), unlocked by accepting evt_offer_drug (flag unlock_flag). Not allowed when discipline >= refuse_discipline",
+  "unlock_flag": "drug_access",
+  "boost_price": 20,
+  "boost_effect": "fatigue-40 discipline-5",
+  "points_per_boost": 1,
+  "stage_lines": [
+   1,
+   5,
+   10
+  ],
+  "refuse_discipline": 150,
+  "stage2_no_use_effect": "fatigue+20",
+  "stage3_monthly_effect": "stamina-5 looks-3"
+ },
+ "arrest": {
+  "note": "Step 12c. fine = max(fine_min, money x fine_pct%), never more than the money held (not below 0); the next detain_periods periods are void (detention)",
+  "fine_min": 200,
+  "fine_pct": 30,
+  "detain_periods": 1,
+  "raid_crime_div": 100,
+  "raid_note": "search probability of a crime job = prob x (1 + crime / raid_crime_div)"
  }
 }

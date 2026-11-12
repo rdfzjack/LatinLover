@@ -1,7 +1,7 @@
 # data/new: data tables of the new game
 
-The rules and numbers live here; the Python simulator (`sim/`) and Godot read the same files. To change a number, change only the JSON.
-Validation: `python3 tools/check.py` (format, duplicates, content and a bot playthrough together; exit code 1 on errors). The step-by-step guide for editing tables is `data/USER_GUIDE.md`.
+The rules and numbers live here; the game (Godot, `game/silentstar/core/`) reads them. The Python simulator `sim/` is frozen since step 12b and no longer follows them. To change a number, change only the JSON.
+Validation: `python3 tools/check.py` (format, duplicates, content, event budget, and with Godot a bot playthrough with the balance guard; exit code 1 on errors). The step-by-step guide for editing tables is `data/USER_GUIDE.md`.
 
 ## Conventions
 
@@ -37,14 +37,16 @@ Variables:
 | `count.<id>` | free counters, e.g. `count.stunt_self`, `count.outing.place_dock` |
 | `tag.<id>` | count of a film tag |
 | `duels.<rival id>` | number of auditions against that rival |
-| `max_rep` `month` `year` `drug_stage` `debt_months` | derived values |
+| `max_rep` `month` `year` `drug_stage` `drug_points` `debt_months` | derived values |
 | `grade` `top_tag_family` `undefined` `lowbudget_typed` `talkie_count` `top_base_attr` `top_savvy_skill` `max_job_periods` `rep_spread` `top_road` | derived values used by the endings |
 
 ## Effects
 
 One line of text, terms separated by spaces, each term `name+n`, `name-n`, `name=n` (set to n) or `name+n%` (percentage of the current value), e.g. `stamina+20 discipline-15`. `trigger.<event id>` triggers another event next and has no number.
-A name can be a base attribute, a skill, `money`, `drug_stage`, `debt_months`, `favor.<npc>`, `rep_bonus.<road>` (reputation bonus), `weight.<tag>` (board weight +1), `item.<item id>` (=1 gains, =0 loses), `status.<id>`, `flag.<id>`.
+A name can be a base attribute, a skill, `money`, `drug_stage`, `drug_points`, `debt_months`, `favor.<npc>`, `rep_bonus.<road>` (reputation bonus), `weight.<tag>` (board weight +1), `item.<item id>` (=1 gains, =0 loses), `status.<id>`, `flag.<id>`.
 `success_line_mods` of a job: `[{cond, stat, value}]`; when the cond holds, that stat's success line gets `value` added (e.g. flag `diploma` lowers the education line by 20).
+
+Every event (`events.json`, `outing.json`) has a `tier`: `small`, `medium`, `large` or `bad`; each outcome must stay inside the tier's caps (`data/USER_GUIDE.md`, "Event budget"; checked by `tools/check_data.py`), unless the event has a `budget_note`.
 
 Fields named `*_formula` hold a formula string interpreted by the code. `code: true` on an event means the logic is complex: the data only gives cond, prob and simple effects and the code implements the rest following the `note`.
 
@@ -56,12 +58,12 @@ Fields named `*_formula` hold a formula string interpreted by the code. `code: t
 
 | File | Content | GDD |
 |---|---|---|
-| `stats.json` | attributes, money, roads, levels, fame tiers, indices, hidden values | 2 |
+| `stats.json` | attributes, money, roads, levels, fame tiers, indices, hidden values; `drug` (boost action, drug stages) and `arrest` (fine, detention, search scaling), step 12c | 2, 5.8, 11.2 |
 | `skills.json` | the 12 skills | 2.2 |
-| `classes.json` | the 6 classes | 5.3.1 |
-| `books.json` | book tiers and the book list | 5.3.2 |
-| `jobs.json` | the 15 jobs, with unlocks, raises and hooks | 5.4 |
-| `rest.json` | rests: at home (Sil keeps company), outing; the sanatorium is forced only when very sick (`player_choice: false`) | 5.5 |
+| `classes.json` | the 6 classes; `fatigue_per_day` per class | 5.3.1 |
+| `books.json` | book tiers and the book list; `fatigue_per_day` (a book matches its tier) | 5.3.2 |
+| `jobs.json` | the 17 jobs, with unlocks, raises and hooks; crime jobs carry `crime_tier`, `road`, `raid_prob`, `raid_line`, `raid_skill` and must match `crime_tiers` | 5.4, 5.4.1 |
+| `rest.json` | rests: at home (Sil keeps company), outing; the sanatorium is forced only when very sick (`player_choice: false`); `forced` has `discharge_effect` and `discharge_event` | 5.5 |
 | `places.json` | outing places: cost (or by fame tier), fatigue change per day, residents, random table. One more row is one more place | 5.5.1 |
 | `lifestyle.json` | lifestyles | 5.7 |
 | `street.json` | street entries, shelves, services, discounts | 5.8 |
@@ -76,7 +78,7 @@ Fields named `*_formula` hold a formula string interpreted by the code. `code: t
 | `romance.json` | the 4 romance lines and 8 function NPCs | 13 |
 | `npc_schedule.json` | NPC schedule | 5.5.2 |
 | `npc_chains.json` | order of chain and resident events | 5.5.2 |
-| `annual.json` | annual events | 12.1 |
+| `annual.json` | annual events; `attend_effect` applies when attending | 12.1 |
 | `opportunities.json` | opportunities | 12.2 |
 | `endings.json` | forced, special, categories, endings, destiny, scoring (`character_tiers`: an ending may write `character: [{cond, tier}]`, otherwise the default tier is used) | 15 |
 

@@ -56,7 +56,7 @@ def ref_event(f, e):
     if EVENT_IDS is None: pending_events.add(e)
     elif e not in EVENT_IDS: err(f, f'event does not exist {e}')
 
-DERIVED = {'max_rep','month','year','drug_stage','debt_months','grade','top_tag_family','undefined','lowbudget_typed','talkie_count',
+DERIVED = {'max_rep','month','year','drug_stage','drug_points','debt_months','grade','top_tag_family','undefined','lowbudget_typed','talkie_count',
            'top_base_attr','top_savvy_skill','max_job_periods','rep_spread','top_road'}
 PREFIX = ('status.','count.','tag.','road_periods.','flag.','duels.')
 def var_ok(v):
@@ -82,7 +82,7 @@ def check_cond(f, c, where=''):
             elif not isinstance(t[2], (int, str)): err(f, f'{where} cond value {t[2]}')
 EFF = re.compile(r'^(.+?)([+\-=])(\d+)(%?)$')
 def eff_name_ok(n):
-    if n in ATTRS or n in SK or n in ('money','drug_stage','debt_months'): return True
+    if n in ATTRS or n in SK or n in ('money','drug_stage','drug_points','debt_months'): return True
     if n.startswith('favor.'): return n.split('.', 1)[1] in NPC
     if n.startswith('rep_bonus.'): return n.split('.', 1)[1] in ROADS
     if n.startswith('weight.'): return n.split('.', 1)[1] in TAGS
@@ -114,6 +114,16 @@ if len(stats['fame_tiers']) != 5: err(f, 'fame_tiers must have 5 tiers')
 if stats['levels']['gate'] != [5*l*(l+1) for l in range(10)]: err(f, 'class_steps does not match 5L(L+1)')
 for k in ('monthly_decay_pct', 'monthly_decay_min'):
     if not isinstance(stats['fame_rules'].get(k), int): err(f, f'fame_rules is missing the integer field {k}')
+dr = stats.get('drug', {})
+for k in ('boost_price', 'points_per_boost', 'refuse_discipline'):
+    if not isinstance(dr.get(k), int): err(f, f'drug is missing the integer field {k}')
+for k in ('boost_effect', 'stage2_no_use_effect', 'stage3_monthly_effect'):
+    if k not in dr: err(f, f'drug is missing {k}')
+    else: parse_effect(f, dr[k], 'drug ' + k)
+if not (isinstance(dr.get('stage_lines'), list) and len(dr['stage_lines']) == 3 and dr['stage_lines'] == sorted(dr['stage_lines'])):
+    err(f, 'drug stage_lines must be 3 increasing numbers (stages 1, 2, 3)')
+for k in ('fine_min', 'fine_pct', 'detain_periods', 'raid_crime_div'):
+    if not isinstance(stats.get('arrest', {}).get(k), int): err(f, f'arrest is missing the integer field {k}')
 # skills
 f = 'skills.json'
 if len(SK) != 12 or len(set(SK)) != 12: err(f, 'skills must have 12 entries with unique ids')
@@ -132,6 +142,7 @@ for c in classes['classes']:
         if len(e['per_level']) != 4 or not all(is_range(r) for r in e['per_level']): err(f, f"{c['id']} {e['stat']} per_level format")
         if 'cond' in e: check_cond(f, e['cond'], c['id'])
     if 'period_effect' in c: parse_effect(f, c['period_effect'], c['id'])
+    if not (isinstance(c.get('fatigue_per_day'), int) and c['fatigue_per_day'] >= 0): err(f, f"{c['id']} fatigue_per_day must be an integer >= 0")
     if 'duv' in c.get('story_chain', {}).values() and 'duv' not in NPC: err(f, 'duv is not in the NPC table')
 # books
 f = 'books.json'
@@ -144,6 +155,7 @@ for b in books['books']:
     for k in ('education_gate','skill_cap','points','gain','price'):
         if b[k] != t[k]: err(f, f"{b['id']} {k} does not match the tier table")
     ref_event(f, b['finish_event'])
+    if not (isinstance(b.get('fatigue_per_day'), int) and b['fatigue_per_day'] >= 0): err(f, f"{b['id']} fatigue_per_day must be an integer >= 0")
 if len(set(BOOK_IDS)) != len(BOOK_IDS): err(f, 'duplicate id')
 if not BOOK_IDS: err(f, 'need at least one book')
 for s in ('fight','riding','nerve','physique','connections'):
@@ -175,6 +187,30 @@ for j in jobs['jobs']:
     for m in j['milestones']:
         check_cond(f, m['cond'], w + ' milestones'); ev_ids.append(m['event']); ref_event(f, m['event'])
 if len(set(ev_ids)) != len(ev_ids): err(f, 'duplicate event id')
+# crime jobs (step 12c): every job with crime_tier must have exactly the shape of crime_tiers; only skills, success-line stats and the name may differ
+CT = jobs.get('crime_tiers', {})
+for j in jobs['jobs']:
+    w = j['id']
+    if 'crime_tier' not in j:
+        if any(k in j for k in ('raid_prob', 'raid_line', 'raid_skill')): err(f, f'{w} has raid_* fields but no crime_tier')
+        continue
+    t = CT.get(str(j['crime_tier']))
+    if t is None: err(f, f"{w} crime_tier must be 1 or 2 (a key of crime_tiers), got {j['crime_tier']}"); continue
+    if j['daily_wage'] != t['daily_wage']: err(f, f"{w} crime_tier {j['crime_tier']}: daily_wage must be {t['daily_wage']}, got {j['daily_wage']}")
+    eff = {e['stat']: e['add'] for e in j['daily_effect']}
+    for k, v in t['daily'].items():
+        if eff.get(k) != v: err(f, f"{w} crime_tier {j['crime_tier']}: daily_effect {k} must be {v}, got {eff.get(k)}")
+    for k, v in eff.items():
+        if k not in t['daily'] and k in ATTRS: err(f, f"{w} crime_tier {j['crime_tier']}: daily_effect may only change skills besides {sorted(t['daily'])}, not the attribute {k}")
+    if len(j['success_lines']) != t['success_lines']: err(f, f"{w} crime_tier {j['crime_tier']}: needs {t['success_lines']} success lines")
+    if 'skill_line' in t and not any(c['stat'] in SK and c['value'] == t['skill_line'] for c in j['success_lines']):
+        err(f, f"{w} crime_tier {j['crime_tier']}: one success line must be a skill at {t['skill_line']}")
+    if j.get('raid_prob') != t['raid_prob'] or j.get('raid_line') != t['raid_line']:
+        err(f, f"{w} crime_tier {j['crime_tier']}: raid_prob must be {t['raid_prob']} and raid_line {t['raid_line']}")
+    if j.get('raid_skill') not in SK: err(f, f"{w} raid_skill must be a skill, got {j.get('raid_skill')}")
+    if j.get('road') not in ROADS: err(f, f"{w} road must be one of {ROADS}")
+    if 'earliest' in t and j['earliest'] < t['earliest']: err(f, f"{w} crime_tier 2 cannot start before {t['earliest']}")
+    if 'latest_earliest' in t and j['earliest'] > t['latest_earliest']: err(f, f"{w} crime_tier 1 must be available by {t['latest_earliest']}")
 # the unlocks in the calendar agree with jobs
 for m in cal_['months']:
     want = sorted(j['id'] for j in jobs['jobs'] if j['earliest'] == m['month'])
@@ -189,6 +225,8 @@ for fo in rest['forced']:
     check_cond(f, fo['cond'], 'forced')
     for k in ('schedule','if_broke_switch'):
         if fo[k] not in rest_ids: err(f, f'forced {k} refers to a missing {fo[k]}')
+    if fo.get('discharge_effect'): parse_effect(f, fo['discharge_effect'], 'forced discharge_effect')
+    if fo.get('discharge_event'): ref_event(f, fo['discharge_event']['event'])
 for r in rest['rests']:
     for k in ('daily_effect', 'period_effect'):
         if r.get(k): parse_effect(f, r[k], r['id'])
@@ -316,6 +354,7 @@ if 'shoot' in df:
         if t not in TAGS: err(f, f'stunt_self tags {t}')
     parse_effect(f, df['shoot']['stunt_self']['injury_effect'], 'stunt_self')
 if 'board' in df:
+    if not isinstance(df['board'].get('morals_months'), int): err(f, 'board is missing the integer field morals_months')
     for t in df['board']['after_valen_extra']['tags']:
         if t not in TAGS: err(f, f'tag {t} added after Valen dies')
 # items
@@ -383,6 +422,58 @@ for p in places['places']:
     for r in p['random_table']:
         if r['event'] not in {e['id'] for e in outing['events']}: err('places.json', f"random_table event is not in outing.json: {r['event']}")
     if len(p['random_table']) < 1: err('places.json', f"{p['id']} random_table is empty")
+# event budget (design/BALANCE_WORKFLOW.md, step 12c): every event has a tier; each option's effect stays inside the tier's caps
+BUDGET = {
+    'small':  {'attr': 5, 'skill': 3, 'money': 50, 'fatigue': 10, 'favor': 5, 'fame': 5, 'rep_bonus': 0, 'fame_pct': 0},
+    'medium': {'attr': 15, 'skill': 8, 'money': 200, 'fatigue': 20, 'favor': 10, 'fame': 15, 'rep_bonus': 0, 'fame_pct': 0},
+    'large':  {'attr': 30, 'skill': 16, 'money': 500, 'fatigue': 40, 'favor': 20, 'fame': 30, 'rep_bonus': 10, 'fame_pct': 10},
+}
+TIERS = list(BUDGET) + ['bad']
+def effect_lines(e):
+    """Every effect a player can end up with from one event: [(label, effect text), ...]. The event-level effect is added to each."""
+    base = e.get('effect') or ''
+    out = []
+    if e.get('check'):
+        out += [('success', base + ' ' + (e.get('success_effect') or '')), ('fail', base + ' ' + (e.get('fail_effect') or ''))]
+    for i, b in enumerate(e.get('branches') or []):
+        out.append((f'branch {i + 1}', base + ' ' + (b.get('effect') or '')))
+    for i, o in enumerate(e.get('options') or []):
+        for k in ('success_effect', 'fail_effect'):
+            if o.get(k) is not None:
+                out.append((f'option {i + 1} {k.split("_")[0]}', base + ' ' + (o.get(k) or '')))
+    if not out:
+        out.append(('effect', base))
+    return out
+def over_budget(tier, text):
+    """The terms of one effect line that exceed the tier's caps: [message, ...]."""
+    cap = BUDGET[tier]
+    bad = []
+    for tok in text.split():
+        m = EFF.match(tok)
+        if not m or tok.startswith('trigger.'): continue
+        n, op, v, pct = m.group(1), m.group(2), int(m.group(3)), m.group(4)
+        if op == '=': continue
+        if pct:
+            kind = 'fame_pct' if n == 'fame' else None
+        elif n in ('fatigue', 'fame', 'money'): kind = n
+        elif n in ATTRS: kind = 'attr'
+        elif n in SK: kind = 'skill'
+        elif n.startswith('favor.'): kind = 'favor'
+        elif n.startswith('rep_bonus.'): kind = 'rep_bonus'
+        else: continue
+        if kind is None or v > cap[kind]: bad.append(f'{tok} (cap {cap.get(kind, 0)}{"%" if pct else ""})')
+    return bad
+budget_notes = []
+for fname, evs_ in (('events.json', events_t['events']), ('outing.json', outing['events'])):
+    for e in evs_:
+        t = e.get('tier')
+        if t not in TIERS: err(fname, f"{e['id']} tier must be one of {TIERS}, got {t}"); continue
+        if e.get('budget_note'): budget_notes.append(f"{e['id']} ({t}): {e['budget_note']}")
+        if t == 'bad' or e.get('budget_note'): continue
+        for label, text in effect_lines(e):
+            b = over_budget(t, text)
+            if b: err(fname, f"{e['id']} tier {t} {label} is over budget: {', '.join(b)}. Lower it, pick a bigger tier, or add budget_note with the reason")
+for n_ in budget_notes: notes.append('budget_note ' + n_)
 # romance / schedule / chains
 f = 'romance.json'
 if len(NPC) != len(romance['npcs']): err(f, 'duplicate NPC')
@@ -412,6 +503,7 @@ for c in classes['classes']:
     if ch and ch['chain'] not in CH: err('classes.json', f"story_chain does not exist {ch['chain']}")
 # annual / opportunities
 f = 'annual.json'
+if annual.get('attend_effect'): parse_effect(f, annual['attend_effect'], 'attend_effect')
 if len(annual['occasions']) != 4 or {x['road'] for x in annual['occasions']} != set(ROADS): err(f, 'annual needs exactly one occasion per road')
 f = 'opportunities.json'
 for o in opps['opportunities']:

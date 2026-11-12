@@ -8,7 +8,8 @@ In order:
 3. Content: all checks of tools/check_data.py (fields complete, referenced things exist, conditions and effects well written).
 4. Text: data/locale/text.csv is regenerated from the display fields (tools/extract_text.py); missing Chinese, duplicate or extra keys,
    stray Chinese outside the display fields and stale English are errors.
-5. Playthrough: several bots each play a whole game to make sure the game does not crash.
+5. Playthrough and guard (Godot, from step 12c): every bot plays 30 games; a crash is an error; design/targets.json is checked
+   (PASS / FAIL per target, widened by 10%). FAIL lines are printed but do not fail the check. Skipped when Godot is not found.
 """
 import json
 import os
@@ -186,20 +187,35 @@ def _where():
     return ''
 
 
+def find_godot():
+    """The Godot 4 executable: $GODOT, or godot / godot4 on the PATH; None when there is none."""
+    import shutil
+    for c in (os.environ.get('GODOT'), shutil.which('godot'), shutil.which('godot4')):
+        if c and os.path.exists(c):
+            return c
+    return None
+
+
 def step_play():
-    from sim import bots
-    problems = []
-    for cls in (bots.Hard, bots.Lover, bots.Culture, bots.Wrist, bots.Crime, bots.Random):
-        for seed in (1, 2):
-            try:
-                bots.play(cls, seed)
-            except Exception as e:
-                tb = traceback.extract_tb(sys.exc_info()[2])
-                fr = [f for f in tb if os.sep + 'sim' + os.sep in f.filename]
-                at = f'{os.path.relpath(fr[-1].filename, ROOT)} line {fr[-1].lineno}' if fr else '?'
-                problems.append(f'bot "{cls.name}" crashed in game {seed}: {type(e).__name__}: {e} ({at})')
-                break
-    return problems
+    """Step 5 (from step 12c, sim/ is frozen): Godot plays 30 games per bot and checks design/targets.json (the guard).
+    Returns (crash problems, guard lines). Without Godot the step is skipped with a note."""
+    import subprocess
+    godot = find_godot()
+    if godot is None:
+        return None, ['note: Godot was not found (set GODOT or put godot on the PATH), so the bot playthrough and the guard were skipped']
+    out = os.path.join(ROOT, 'work', 'check_guard.txt')
+    cmd = [godot, '--headless', '--path', os.path.join(ROOT, 'game', 'silentstar'), '--script', 'res://tools/report.gd', '--',
+           '--n=30', '--bots=all', '--no-buy', '--guard=design/targets.json', '--widen=10', '--out=work/check_guard.txt']
+    try:
+        r = subprocess.run(cmd, capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=3600)
+    except subprocess.TimeoutExpired:
+        return ['the Godot playthrough did not finish within an hour'], []
+    errs = [x for x in (r.stderr or '').split('\n') if 'SCRIPT ERROR' in x or 'ERROR:' in x]
+    if r.returncode not in (0, 2) or not os.path.exists(out):
+        return [f'the game crashed while the bots were playing (exit code {r.returncode}):'] + errs[:10], []
+    with open(out, encoding='utf-8') as f:
+        lines = [x for x in f.read().split('\n') if x.startswith(('PASS', 'FAIL'))]
+    return (errs[:10] if errs else []), lines
 
 
 def main():
@@ -229,12 +245,23 @@ def main():
         print('\n'.join(problems))
         print('\nFAILED: fix the problems above, then run again.')
         return 1
-    print('5/5 bot playthrough...')
-    problems = step_play()
+    print('5/5 bot playthrough and guard (Godot, 30 games per bot; takes a few minutes)...')
+    problems, guard = step_play()
+    if problems is None:
+        print('\n'.join(guard))
+        print('\nAll checks passed (without the playthrough), ready to commit.')
+        return 0
     if problems:
         print('\n'.join(problems))
         print('\nFAILED: the tables are fine but the game crashed while running. Most likely newly added content uses something the code does not support yet; send the text above to the model.')
         return 1
+    fails = [x for x in guard if x.startswith('FAIL')]
+    print(f'guard: {len(guard) - len(fails)} PASS, {len(fails)} FAIL (full report in work/check_guard.txt)')
+    if fails:
+        print('\n'.join(fails))
+        print('\nThe tables are fine, but some balance targets are off. If you only added content, halve the effects of this batch and run again;'
+              ' if they still fail, leave it to a balance round (design/BALANCE_WORKFLOW.md). Do not change other numbers to make them pass.')
+        return 0
     print('\nAll checks passed, ready to commit.')
     return 0
 

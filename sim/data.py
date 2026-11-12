@@ -2,7 +2,8 @@
 import json
 import os
 
-DEFAULT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'data', 'new')
+# sim/ is frozen since step 12b: it reads the snapshot of the tables it was written for (data/new as of step 12b), not data/new.
+DEFAULT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data_12b')
 TABLES = ['stats', 'skills', 'classes', 'books', 'jobs', 'rest', 'places', 'lifestyle', 'street',
           'origins', 'calendar', 'habits', 'rivals', 'roles', 'items', 'events', 'outing', 'romance',
           'npc_schedule', 'npc_chains', 'annual', 'opportunities', 'endings']

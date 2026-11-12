@@ -6,7 +6,7 @@ extends RefCounted
 ## hooks is any object with the methods of month.gd's Hooks (class_chain, book_done, job_period, outing, day).
 ##
 ## Random-number order (copied from the Python side, the reconciliation checks it):
-## - Class, book: each class day first r0(fatigue), then r0(stamina/2); in_love rolls one more 20%; on a successful day the gains are rolled in table order.
+## - Class, book: fatigue per day from the table (fatigue_per_day, step 12c). Each class day first r0(fatigue), then r0(stamina/2); in_love rolls one more 20%; on a successful day the gains are rolled in table order.
 ## - Job: each work day first rolls the daily effects in table order (fatigue included), then r0(fatigue) once per success line in order,
 ##   then in_love 20% and reckless slacking 40%/80% (each only rolled in that state).
 
@@ -264,7 +264,7 @@ static func run_class(st, cid: String, days: Array, hooks) -> Dictionary:
 				add_stat(st, e["stat"], g.r(pl[0], pl[1]))
 			if talk and accent_on(st):
 				add_stat(st, "speech", 1)
-		add_stat(st, "fatigue", 1)
+		add_stat(st, "fatigue", c.get("fatigue_per_day", 1))
 		st.money -= fee
 	if went > 0:
 		st.inc("class_periods." + cid)
@@ -298,7 +298,7 @@ static func run_book(st, bid: String, days: Array, hooks) -> Dictionary:
 				st.books[bid] = left - v
 			if sk == "speech" and accent_on(st):
 				add_stat(st, "speech", 1)
-		add_stat(st, "fatigue", 1)
+		add_stat(st, "fatigue", b.get("fatigue_per_day", 1))
 	st.inc("count.book_periods")
 	st.inc("road_periods." + st.d.skill_road[sk])
 	if st.books.get(bid, 1) <= 0:

@@ -17,7 +17,7 @@ const SAVE_VERSION := 2
 const SAVE_KEYS := ["ym", "attr", "skill", "money", "corr", "favor", "known", "flags", "count", "tags", "weights",
 	"books", "read_books", "items", "equip", "lifestyle", "idx", "status", "romance_months",
 	"debt_months", "drug", "collapse_months", "forced_rest", "void_next", "exposed",
-	"month_used", "fired", "ended", "finished", "story"]
+	"month_used", "fired", "ended", "finished", "story", "drug_points", "void_periods"]
 
 var d                          # core/data.gd
 var rng
@@ -41,10 +41,12 @@ var idx := {"sick_index": 0, "reckless_index": 0}   # computed at month end, kep
 var status := {}
 var romance_months := 0
 var debt_months := 0
-var drug := 0
+var drug := 0                  # drug_stage 0-3; from step 12c derived from drug_points (stats.drug.stage_lines)
+var drug_points := 0           # step 12c: +1 per boost, 0 after detox
 var collapse_months := 0       # months in a row with sick_index = 100
 var forced_rest := 0           # 1 = the sanatorium is forced next month (very sick)
 var void_next := 0             # 1 = next month's schedule is void
+var void_periods := []         # step 12c: absolute periods (ym * 3 + i) that are void (detention after an arrest)
 var exposed := 0               # whether there was exposure this month
 var month_used := {}           # limited services already used this month
 var fired := {}                # fired events: id -> times
@@ -52,6 +54,7 @@ var ended = null               # ending id
 var finished := 0              # 1 after the 1929-12 month settlement
 var story := {}                # step 6: board, film contracts, event records, ending (see new_story)
 var debug_log := []            # for debugging, not saved (called log in Python)
+var src := {}                  # not saved: effect totals by source, src[source][name] (Rules.apply_effect); "income" = all money gained
 
 
 ## The state of step 6, all directly storable in JSON. The fields are explained in new_story of sim/state.py.
@@ -246,7 +249,28 @@ func update_indices() -> void:
 # ---------- money ----------
 
 func add_money(n: int) -> void:
+	var before := money
 	money = mini(money + n, d.money_cap)
+	if money > before:
+		src["income"] = src.get("income", 0) + money - before
+
+
+## Adds to the per-source totals (report only, not saved).
+func track(source: String, name: String, delta: int) -> void:
+	if delta == 0:
+		return
+	if not src.has(source):
+		src[source] = {}
+	src[source][name] = src[source].get(name, 0) + delta
+
+
+## drug_stage from drug_points (stats.drug.stage_lines).
+func drug_stage_of(points: int) -> int:
+	var s := 0
+	for line in d.t["stats"]["drug"]["stage_lines"]:
+		if points >= line:
+			s += 1
+	return s
 
 
 # ---------- save ----------

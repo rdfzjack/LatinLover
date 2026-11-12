@@ -1,0 +1,388 @@
+{
+ "note": "Level order: tough/lover/culture/savvy; a stage takes effect from its `from` month, and if fame is omitted the previous stage's is kept",
+ "named": [
+  {
+   "id": "rival_valen",
+   "name": "鲁道夫·瓦伦",
+   "present": [
+    "1926-01",
+    "1927-08"
+   ],
+   "stages": [
+    {
+     "from": "1926-01",
+     "levels": [
+      5,
+      9,
+      2,
+      3
+     ],
+     "fame": 700
+    }
+   ],
+   "habit": "habit_finish",
+   "k": 5
+  },
+  {
+   "id": "rival_fanban",
+   "name": "道格·范班克",
+   "present": [
+    "1926-01",
+    "1929-12"
+   ],
+   "stages": [
+    {
+     "from": "1926-01",
+     "levels": [
+      9,
+      5,
+      3,
+      8
+     ],
+     "fame": 750
+    },
+    {
+     "from": "1929-01",
+     "levels": [
+      8,
+      5,
+      3,
+      8
+     ]
+    }
+   ],
+   "habit": "habit_lead",
+   "k": 4
+  },
+  {
+   "id": "rival_jilbo",
+   "name": "约翰·吉尔伯",
+   "present": [
+    "1926-01",
+    "1929-12"
+   ],
+   "stages": [
+    {
+     "from": "1926-01",
+     "levels": [
+      4,
+      7,
+      3,
+      2
+     ],
+     "fame": 500
+    },
+    {
+     "from": "1927-01",
+     "levels": [
+      4,
+      8,
+      3,
+      2
+     ],
+     "fame": 650
+    },
+    {
+     "from": "1929-01",
+     "levels": [
+      4,
+      6,
+      2,
+      2
+     ],
+     "fame": 400
+    }
+   ],
+   "habit": "habit_score",
+   "k": 4
+  },
+  {
+   "id": "rival_nova",
+   "name": "拉蒙·诺瓦",
+   "present": [
+    "1926-01",
+    "1929-12"
+   ],
+   "stages": [
+    {
+     "from": "1926-01",
+     "levels": [
+      5,
+      7,
+      4,
+      2
+     ],
+     "fame": 450
+    },
+    {
+     "from": "1927-09",
+     "levels": [
+      5,
+      8,
+      4,
+      2
+     ],
+     "fame": 550
+    },
+    {
+     "from": "1929-01",
+     "levels": [
+      5,
+      9,
+      4,
+      2
+     ]
+    }
+   ],
+   "habit": "habit_follow",
+   "k": 3
+  },
+  {
+   "id": "rival_barry",
+   "name": "约翰·巴里",
+   "present": [
+    "1926-01",
+    "1929-12"
+   ],
+   "stages": [
+    {
+     "from": "1926-01",
+     "levels": [
+      3,
+      7,
+      8,
+      4
+     ],
+     "fame": 600
+    },
+    {
+     "from": "1929-01",
+     "levels": [
+      3,
+      7,
+      9,
+      4
+     ]
+    }
+   ],
+   "habit": "habit_finish",
+   "k": 3
+  },
+  {
+   "id": "rival_channing",
+   "name": "朗·钱宁",
+   "present": [
+    "1926-01",
+    "1929-12"
+   ],
+   "stages": [
+    {
+     "from": "1926-01",
+     "levels": [
+      6,
+      2,
+      7,
+      3
+     ],
+     "fame": 550
+    }
+   ],
+   "habit": "habit_random",
+   "k": 4
+  },
+  {
+   "id": "rival_cooper",
+   "name": "加里·库普",
+   "present": [
+    "1926-01",
+    "1929-12"
+   ],
+   "stages": [
+    {
+     "from": "1926-01",
+     "levels": [
+      4,
+      3,
+      1,
+      2
+     ],
+     "fame": 100
+    },
+    {
+     "from": "1927-01",
+     "levels": [
+      5,
+      4,
+      1,
+      2
+     ],
+     "fame": 250
+    },
+    {
+     "from": "1928-01",
+     "levels": [
+      7,
+      5,
+      2,
+      2
+     ],
+     "fame": 400
+    },
+    {
+     "from": "1929-01",
+     "levels": [
+      9,
+      5,
+      2,
+      3
+     ],
+     "fame": 550
+    }
+   ],
+   "habit": "habit_lead",
+   "k": 5
+  },
+  {
+   "id": "rival_jolson",
+   "name": "艾尔·乔森",
+   "present": [
+    "1927-10",
+    "1929-12"
+   ],
+   "stages": [
+    {
+     "from": "1927-10",
+     "levels": [
+      1,
+      4,
+      6,
+      8
+     ],
+     "fame": 600
+    },
+    {
+     "from": "1929-01",
+     "levels": [
+      1,
+      4,
+      6,
+      9
+     ]
+    }
+   ],
+   "habit": "habit_open",
+   "k": 4
+  },
+  {
+   "id": "rival_rintin",
+   "name": "任丁丁",
+   "present": [
+    "1926-01",
+    "1929-12"
+   ],
+   "stages": [
+    {
+     "from": "1926-01",
+     "levels": [
+      7,
+      1,
+      1,
+      1
+     ],
+     "fame": 500
+    }
+   ],
+   "habit": "habit_random",
+   "k": 5,
+   "note": "Easter egg: appears in a single role only; takes no part in the annual ranking or unnamed-rival replacement",
+   "easter_egg": true
+  }
+ ],
+ "replace": [
+  {
+   "from": "1927-09",
+   "old": "rival_valen",
+   "new": [
+    "rival_nova",
+    "rival_jilbo"
+   ]
+  }
+ ],
+ "unnamed": {
+  "note": "main_level = base + number of level_up_months passed + r(random); h in fame = number of half-years since 1926-01 (first half of 1926 is 0); main color = the color with the highest style probability, second color = counter of counter (level main - second_gap), the other two colors level 1",
+  "tier": [
+   {
+    "size": "small",
+    "rounds": "single",
+    "main_level": {
+     "base": 2,
+     "level_up_months": [
+      "1927-07",
+      "1929-01"
+     ],
+     "random": [
+      -1,
+      0
+     ]
+    },
+    "second_gap": 2,
+    "fame": {
+     "base": 40,
+     "per_half_year": 15
+    },
+    "k": 3,
+    "habit": "random"
+   },
+   {
+    "size": "medium",
+    "rounds": "single",
+    "main_level": {
+     "base": 4,
+     "level_up_months": [
+      "1926-10",
+      "1927-07",
+      "1928-07"
+     ],
+     "random": [
+      -1,
+      1
+     ]
+    },
+    "second_gap": 2,
+    "fame": {
+     "base": 150,
+     "per_half_year": 15
+    },
+    "k": 3,
+    "habit": "random"
+   },
+   {
+    "size": "big",
+    "rounds": "first",
+    "main_level": {
+     "base": 5,
+     "level_up_months": [
+      "1926-10",
+      "1927-07",
+      "1928-07"
+     ],
+     "random": [
+      0,
+      1
+     ]
+    },
+    "second_gap": 2,
+    "fame": {
+     "base": 300,
+     "per_half_year": 15
+    },
+    "k": 3,
+    "habit": "random"
+   }
+  ]
+ },
+ "tutorial": {
+  "note": "Rival for the tutorial role on the first board of 1926-01",
+  "main_level": 2
+ }
+}

@@ -1,0 +1,142 @@
+{
+ "note": "displayed value = training value + gear bonus + display_bonus",
+ "skills": [
+  {
+   "id": "fight",
+   "name": "打斗",
+   "road": "tough",
+   "train_range": [
+    0,
+    100
+   ],
+   "init": 10,
+   "fixed_use": "Event checks (brawl, creditor, mugging); bodyguard success line",
+   "display_bonus": {
+    "attr": "stamina",
+    "div": 30,
+    "max": 10
+   }
+  },
+  {
+   "id": "riding",
+   "name": "骑马驾驶",
+   "road": "tough",
+   "train_range": [
+    0,
+    100
+   ],
+   "init": 10,
+   "fixed_use": "Bootlegging success line"
+  },
+  {
+   "id": "nerve",
+   "name": "胆识",
+   "road": "tough",
+   "train_range": [
+    0,
+    100
+   ],
+   "init": 5,
+   "fixed_use": "Stunt double success line; \"stunt_self\"; crime event checks"
+  },
+  {
+   "id": "acting",
+   "name": "演技",
+   "road": "lover",
+   "train_range": [
+    0,
+    100
+   ],
+   "init": 20,
+   "fixed_use": "Default bonus skill for shooting performance"
+  },
+  {
+   "id": "grooming",
+   "name": "打扮",
+   "road": "lover",
+   "train_range": [
+    0,
+    100
+   ],
+   "init": 10,
+   "fixed_use": "Outfit bonus coefficient; pinup model success line"
+  },
+  {
+   "id": "physique",
+   "name": "体态",
+   "road": "lover",
+   "train_range": [
+    0,
+    100
+   ],
+   "init": 20,
+   "fixed_use": "Ballroom dancer and private male companion success lines; bonus skill for musical roles; event checks"
+  },
+  {
+   "id": "writing",
+   "name": "创作",
+   "road": "culture",
+   "train_range": [
+    0,
+    100
+   ],
+   "init": 0,
+   "fixed_use": "Self-written scripts; event checks"
+  },
+  {
+   "id": "taste",
+   "name": "审美",
+   "road": "culture",
+   "train_range": [
+    0,
+    100
+   ],
+   "init": 5,
+   "fixed_use": "At >=50 the board shows each role's tag; event checks"
+  },
+  {
+   "id": "speech",
+   "name": "谈吐",
+   "road": "culture",
+   "train_range": [
+    0,
+    100
+   ],
+   "init": 5,
+   "fixed_use": "Radio success line; talkie speech line; event checks"
+  },
+  {
+   "id": "negotiation",
+   "name": "谈判",
+   "road": "savvy",
+   "train_range": [
+    0,
+    100
+   ],
+   "init": 10,
+   "fixed_use": "Film fee x(1+negotiation/400); event checks"
+  },
+  {
+   "id": "connections",
+   "name": "人脉",
+   "road": "savvy",
+   "train_range": [
+    0,
+    100
+   ],
+   "init": 10,
+   "fixed_use": "Audition intel; the board shows extra roles; street discounts; NPC schedule"
+  },
+  {
+   "id": "business",
+   "name": "生意",
+   "road": "savvy",
+   "train_range": [
+    0,
+    100
+   ],
+   "init": 0,
+   "fixed_use": "To be filled in once the user updates the job types"
+  }
+ ]
+}

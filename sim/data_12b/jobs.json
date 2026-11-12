@@ -1,0 +1,1176 @@
+{
+ "note": {
+  "daily_wage": "Base amount; multiplied by the raise tier and rounded down; pay only on successful days",
+  "raise_tiers": "by the number of periods this job was successful",
+  "success_lines": "each line: attribute - r0(fatigue) >= value; skills use the displayed value",
+  "daily_effect": "settled whether or not the day succeeds; add:[a,b] means r(a,b)",
+  "job_period_effect": "settled once for each successful period",
+  "period_random": "prob [numerator, denominator], once per period",
+  "prereq": "a cond, format in data/new/README.md",
+  "success_line_mods": "when the cond holds, add value to that stat's success line (a negative value lowers it)"
+ },
+ "raise_tiers": [
+  {
+   "periods_below": 5,
+   "bonus_pct": 0
+  },
+  {
+   "periods_below": 15,
+   "bonus_pct": 20
+  },
+  {
+   "periods_below": 30,
+   "bonus_pct": 44
+  },
+  {
+   "periods_below": 45,
+   "bonus_pct": 73
+  },
+  {
+   "periods_below": 999999,
+   "bonus_pct": 108
+  }
+ ],
+ "full_attendance_bonus_pct": 50,
+ "refuse": {
+  "cond": [
+   [
+    [
+     "reckless_index",
+     ">=",
+     60
+    ]
+   ]
+  ],
+  "except": [
+   "job_church",
+   "job_assistant",
+   "job_bar"
+  ]
+ },
+ "jobs": [
+  {
+   "id": "job_assistant",
+   "name": "明星助理",
+   "earliest": "1926-01",
+   "prereq": [],
+   "daily_wage": 3,
+   "success_lines": [
+    {
+     "stat": "stamina",
+     "value": 5
+    }
+   ],
+   "daily_effect": [
+    {
+     "stat": "negotiation",
+     "add": [
+      0,
+      1
+     ]
+    },
+    {
+     "stat": "connections",
+     "add": [
+      0,
+      1
+     ]
+    },
+    {
+     "stat": "business",
+     "add": [
+      0,
+      1
+     ]
+    },
+    {
+     "stat": "fatigue",
+     "add": [
+      1,
+      1
+     ]
+    }
+   ],
+   "exposure": false,
+   "original_shape": "housekeeping",
+   "npc": "actress",
+   "job_period_effect": null,
+   "period_random": [
+    {
+     "prob": [
+      1,
+      5
+     ],
+     "event": "job_assistant_r1",
+     "note": "Small event, actress favor +3"
+    }
+   ],
+   "milestones": [
+    {
+     "event": "job_assistant_m1",
+     "cond": [
+      [
+       [
+        "job_periods.job_assistant",
+        ">=",
+        4
+       ]
+      ]
+     ],
+     "note": "May lead to the actress bodyguard job"
+    }
+   ]
+  },
+  {
+   "id": "job_waiter",
+   "name": "餐厅侍者",
+   "earliest": "1926-01",
+   "prereq": [],
+   "daily_wage": 5,
+   "success_lines": [
+    {
+     "stat": "stamina",
+     "value": 20
+    }
+   ],
+   "daily_effect": [
+    {
+     "stat": "negotiation",
+     "add": [
+      0,
+      1
+     ]
+    },
+    {
+     "stat": "fatigue",
+     "add": [
+      2,
+      2
+     ]
+    }
+   ],
+   "exposure": false,
+   "original_shape": "restaurant",
+   "npc": null,
+   "job_period_effect": null,
+   "period_random": [
+    {
+     "prob": [
+      1,
+      10
+     ],
+     "event": "job_waiter_r1",
+     "note": "The customer is in the business, connections +2"
+    }
+   ],
+   "milestones": [
+    {
+     "event": "job_waiter_m1",
+     "cond": [
+      [
+       [
+        "job_periods.job_waiter",
+        ">=",
+        5
+       ]
+      ]
+     ],
+     "note": "Each board shows the rival's play habit for one random role"
+    }
+   ]
+  },
+  {
+   "id": "job_dock",
+   "name": "码头搬货",
+   "earliest": "1926-01",
+   "prereq": [],
+   "daily_wage": 6,
+   "success_lines": [
+    {
+     "stat": "stamina",
+     "value": 30
+    }
+   ],
+   "daily_effect": [
+    {
+     "stat": "stamina",
+     "add": [
+      1,
+      1
+     ]
+    },
+    {
+     "stat": "loyalty",
+     "add": [
+      0,
+      1
+     ]
+    },
+    {
+     "stat": "looks",
+     "add": [
+      -1,
+      -1
+     ]
+    },
+    {
+     "stat": "fatigue",
+     "add": [
+      3,
+      3
+     ]
+    }
+   ],
+   "exposure": false,
+   "original_shape": "farm",
+   "npc": "foreman",
+   "job_period_effect": null,
+   "period_random": [],
+   "milestones": [
+    {
+     "event": "job_dock_m1",
+     "cond": [
+      [
+       [
+        "job_periods.job_dock",
+        ">=",
+        4
+       ]
+      ]
+     ],
+     "note": "On the creditor event the countryman steps in once, costing no loyalty; smuggling events are added to the dock random table"
+    }
+   ]
+  },
+  {
+   "id": "job_church",
+   "name": "教堂义工",
+   "earliest": "1926-01",
+   "prereq": [],
+   "daily_wage": 1,
+   "success_lines": [
+    {
+     "stat": "stamina",
+     "value": 10
+    }
+   ],
+   "daily_effect": [
+    {
+     "stat": "discipline",
+     "add": [
+      2,
+      2
+     ]
+    },
+    {
+     "stat": "crime",
+     "add": [
+      -2,
+      -2
+     ]
+    },
+    {
+     "stat": "loyalty",
+     "add": [
+      0,
+      1
+     ]
+    },
+    {
+     "stat": "fatigue",
+     "add": [
+      1,
+      1
+     ]
+    }
+   ],
+   "exposure": false,
+   "original_shape": "church",
+   "npc": "priest",
+   "job_period_effect": null,
+   "period_random": [],
+   "milestones": [
+    {
+     "event": "job_church_m1",
+     "cond": [
+      [
+       [
+        "job_periods.job_church",
+        ">=",
+        5
+       ]
+      ]
+     ],
+     "note": "On the \"official visit\" the priest vouches, counting as discipline met; roles with the religious tag get +1 board weight"
+    }
+   ]
+  },
+  {
+   "id": "job_model_art",
+   "name": "艺术家模特",
+   "earliest": "1926-01",
+   "prereq": [],
+   "daily_wage": 3,
+   "success_lines": [
+    {
+     "stat": "stamina",
+     "value": 20
+    }
+   ],
+   "daily_effect": [
+    {
+     "stat": "taste",
+     "add": [
+      0,
+      1
+     ]
+    },
+    {
+     "stat": "fatigue",
+     "add": [
+      3,
+      3
+     ]
+    }
+   ],
+   "exposure": false,
+   "original_shape": "orphanage",
+   "npc": "painter",
+   "job_period_effect": null,
+   "period_random": [],
+   "milestones": [
+    {
+     "event": "job_model_art_m1",
+     "cond": [
+      [
+       [
+        "job_periods.job_model_art",
+        ">=",
+        4
+       ]
+      ]
+     ],
+     "note": "Roles with the arthouse and underground tags get +1 board weight"
+    },
+    {
+     "event": "job_model_art_m2",
+     "cond": [
+      [
+       [
+        "job_periods.job_model_art",
+        ">=",
+        8
+       ]
+      ]
+     ],
+     "note": "Art show event (taste +5, fame +10)"
+    }
+   ]
+  },
+  {
+   "id": "job_bar",
+   "name": "酒吧看场子",
+   "earliest": "1926-01",
+   "prereq": [],
+   "daily_wage": 8,
+   "success_lines": [
+    {
+     "stat": "stamina",
+     "value": 60
+    }
+   ],
+   "daily_effect": [
+    {
+     "stat": "nerve",
+     "add": [
+      0,
+      1
+     ]
+    },
+    {
+     "stat": "crime",
+     "add": [
+      1,
+      1
+     ]
+    },
+    {
+     "stat": "discipline",
+     "add": [
+      -1,
+      -1
+     ]
+    },
+    {
+     "stat": "fatigue",
+     "add": [
+      4,
+      4
+     ]
+    }
+   ],
+   "exposure": false,
+   "original_shape": "lumber camp",
+   "npc": "bar_owner",
+   "job_period_effect": null,
+   "period_random": [
+    {
+     "prob": [
+      1,
+      30
+     ],
+     "event": "job_bar_r1",
+     "note": "A police search: nerve check line 40, failing means arrest"
+    }
+   ],
+   "milestones": [
+    {
+     "event": "job_bar_m1",
+     "cond": [
+      [
+       [
+        "job_periods.job_bar",
+        ">=",
+        3
+       ]
+      ]
+     ],
+     "note": "Unlocks bootlegging"
+    },
+    {
+     "event": "job_bar_m2",
+     "cond": [
+      [
+       [
+        "job_periods.job_bar",
+        ">=",
+        5
+       ]
+      ]
+     ],
+     "note": "Halves the fine when arrested; roles with the crime tag get +1 board weight"
+    }
+   ]
+  },
+  {
+   "id": "job_studio",
+   "name": "片厂办公室",
+   "earliest": "1926-04",
+   "prereq": [],
+   "daily_wage": 6,
+   "success_lines": [
+    {
+     "stat": "education",
+     "value": 60
+    }
+   ],
+   "daily_effect": [
+    {
+     "stat": "business",
+     "add": [
+      0,
+      1
+     ]
+    },
+    {
+     "stat": "connections",
+     "add": [
+      1,
+      1
+     ]
+    },
+    {
+     "stat": "fatigue",
+     "add": [
+      4,
+      4
+     ]
+    }
+   ],
+   "exposure": false,
+   "original_shape": "cemetery",
+   "npc": "studio_boss",
+   "job_period_effect": "favor.studio_boss+2",
+   "period_random": [],
+   "milestones": [
+    {
+     "event": "job_studio_m1",
+     "cond": [
+      [
+       [
+        "favor.studio_boss",
+        ">=",
+        30
+       ]
+      ]
+     ],
+     "note": "Doubles the long-contract probability"
+    },
+    {
+     "event": "job_studio_m2",
+     "cond": [
+      [
+       [
+        "favor.studio_boss",
+        ">=",
+        50
+       ]
+      ]
+     ],
+     "note": "\"Backs transition\": the next 3 boards each get an extra medium role of the tag family the player picks"
+    },
+    {
+     "event": "job_studio_m3",
+     "cond": [
+      [
+       [
+        "favor.studio_boss",
+        ">=",
+        80
+       ]
+      ]
+     ],
+     "note": "Ending hook (producer line)"
+    }
+   ],
+   "success_line_mods": [
+    {
+     "cond": [
+      [
+       [
+        "flag.diploma",
+        "==",
+        1
+       ]
+      ]
+     ],
+     "stat": "education",
+     "value": -20,
+     "note": "Flag from opening question 1, \"agriculture student\" (GDD 3.2)"
+    }
+   ]
+  },
+  {
+   "id": "job_news",
+   "name": "报馆帮工",
+   "earliest": "1926-04",
+   "prereq": [],
+   "daily_wage": 5,
+   "success_lines": [
+    {
+     "stat": "education",
+     "value": 60
+    }
+   ],
+   "daily_effect": [
+    {
+     "stat": "writing",
+     "add": [
+      0,
+      1
+     ]
+    },
+    {
+     "stat": "fatigue",
+     "add": [
+      3,
+      3
+     ]
+    }
+   ],
+   "exposure": false,
+   "original_shape": "cemetery",
+   "npc": "editor",
+   "job_period_effect": "favor.editor+2",
+   "period_random": [],
+   "milestones": [
+    {
+     "event": "job_news_m1",
+     "cond": [
+      [
+       [
+        "favor.editor",
+        ">=",
+        30
+       ]
+      ]
+     ],
+     "note": "Learns of a scandal a month early and may pay 200 to suppress it"
+    },
+    {
+     "event": "job_news_m2",
+     "cond": [
+      [
+       [
+        "favor.editor",
+        ">=",
+        50
+       ]
+      ]
+     ],
+     "note": "One free cover-up per year"
+    },
+    {
+     "event": "job_news_m3",
+     "cond": [
+      [
+       [
+        "favor.editor",
+        ">=",
+        80
+       ]
+      ]
+     ],
+     "note": "May leak one piece of news per year, fame +10%"
+    }
+   ],
+   "success_line_mods": [
+    {
+     "cond": [
+      [
+       [
+        "flag.diploma",
+        "==",
+        1
+       ]
+      ]
+     ],
+     "stat": "education",
+     "value": -20,
+     "note": "Flag from opening question 1, \"agriculture student\" (GDD 3.2)"
+    }
+   ]
+  },
+  {
+   "id": "job_ballroom",
+   "name": "舞厅伴舞",
+   "earliest": "1926-07",
+   "prereq": [],
+   "daily_wage": 7,
+   "success_lines": [
+    {
+     "stat": "stamina",
+     "value": 60
+    },
+    {
+     "stat": "looks",
+     "value": 50
+    }
+   ],
+   "daily_effect": [
+    {
+     "stat": "physique",
+     "add": [
+      0,
+      1
+     ]
+    },
+    {
+     "stat": "negotiation",
+     "add": [
+      0,
+      1
+     ]
+    },
+    {
+     "stat": "discipline",
+     "add": [
+      -1,
+      -1
+     ]
+    },
+    {
+     "stat": "fatigue",
+     "add": [
+      5,
+      5
+     ]
+    }
+   ],
+   "exposure": false,
+   "original_shape": "hotel",
+   "npc": "rich_widow",
+   "job_period_effect": null,
+   "period_random": [
+    {
+     "prob": [
+      1,
+      8
+     ],
+     "event": "job_ballroom_r1",
+     "note": "Meets the rich widow, rich_widow favor +5"
+    }
+   ],
+   "milestones": [
+    {
+     "event": "job_ballroom_m1",
+     "cond": [
+      [
+       [
+        "job_periods.job_ballroom",
+        ">=",
+        5
+       ]
+      ]
+     ],
+     "note": "Unlocks the private male companion job"
+    },
+    {
+     "event": "job_ballroom_m2",
+     "cond": [
+      [
+       [
+        "favor.rich_widow",
+        ">=",
+        50
+       ]
+      ]
+     ],
+     "note": "Sponsors one outfit"
+    },
+    {
+     "event": "job_ballroom_m3",
+     "cond": [
+      [
+       [
+        "favor.rich_widow",
+        ">=",
+        80
+       ]
+      ]
+     ],
+     "note": "Invests in a film: the next board gets an extra medium role"
+    }
+   ]
+  },
+  {
+   "id": "job_stunt",
+   "name": "替身",
+   "earliest": "1926-07",
+   "prereq": [],
+   "daily_wage": 10,
+   "success_lines": [
+    {
+     "stat": "stamina",
+     "value": 80
+    },
+    {
+     "stat": "nerve",
+     "value": 30
+    }
+   ],
+   "daily_effect": [
+    {
+     "stat": "stamina",
+     "add": [
+      2,
+      2
+     ]
+    },
+    {
+     "stat": "looks",
+     "add": [
+      -1,
+      -1
+     ]
+    },
+    {
+     "stat": "nerve",
+     "add": [
+      0,
+      1
+     ]
+    },
+    {
+     "stat": "fatigue",
+     "add": [
+      3,
+      3
+     ]
+    }
+   ],
+   "exposure": false,
+   "original_shape": "construction site",
+   "npc": "action_director",
+   "job_period_effect": null,
+   "period_random": [
+    {
+     "prob": [
+      1,
+      40
+     ],
+     "event": "job_stunt_r1",
+     "note": "Injury (stamina -30, fatigue +20)"
+    }
+   ],
+   "milestones": [
+    {
+     "event": "job_stunt_m1",
+     "cond": [
+      [
+       [
+        "job_periods.job_stunt",
+        ">=",
+        4
+       ]
+      ]
+     ],
+     "note": "The \"stunt_self\" nerve line drops from 60 to 50; roles with the western and action_adventure tags get +1 board weight"
+    }
+   ]
+  },
+  {
+   "id": "job_bootleg",
+   "name": "运私酒",
+   "earliest": "1927-01",
+   "prereq": [
+    [
+     [
+      "job_periods.job_bar",
+      ">=",
+      3
+     ]
+    ],
+    [
+     [
+      "flag.smuggling",
+      "==",
+      1
+     ]
+    ]
+   ],
+   "daily_wage": 30,
+   "success_lines": [
+    {
+     "stat": "stamina",
+     "value": 70
+    },
+    {
+     "stat": "riding",
+     "value": 30
+    }
+   ],
+   "daily_effect": [
+    {
+     "stat": "crime",
+     "add": [
+      2,
+      2
+     ]
+    },
+    {
+     "stat": "discipline",
+     "add": [
+      -2,
+      -2
+     ]
+    },
+    {
+     "stat": "nerve",
+     "add": [
+      0,
+      1
+     ]
+    },
+    {
+     "stat": "business",
+     "add": [
+      0,
+      1
+     ]
+    },
+    {
+     "stat": "fatigue",
+     "add": [
+      8,
+      8
+     ]
+    }
+   ],
+   "exposure": false,
+   "original_shape": "big nightclub",
+   "npc": "bar_owner",
+   "job_period_effect": null,
+   "period_random": [
+    {
+     "prob": [
+      1,
+      20
+     ],
+     "event": "job_bootleg_r1",
+     "note": "Car inspection, nerve check line 60, failing means arrest"
+    }
+   ],
+   "milestones": [
+    {
+     "event": "job_bootleg_m1",
+     "cond": [
+      [
+       [
+        "job_periods.job_bootleg",
+        ">=",
+        4
+       ]
+      ]
+     ],
+     "note": "\"Join the crew\" invitation, sets a flag (underworld emperor line)"
+    }
+   ]
+  },
+  {
+   "id": "job_magazine",
+   "name": "画报模特",
+   "earliest": "1927-04",
+   "prereq": [],
+   "daily_wage": 12,
+   "success_lines": [
+    {
+     "stat": "grooming",
+     "value": 40
+    }
+   ],
+   "daily_effect": [
+    {
+     "stat": "looks",
+     "add": [
+      1,
+      1
+     ]
+    },
+    {
+     "stat": "fatigue",
+     "add": [
+      3,
+      3
+     ]
+    }
+   ],
+   "exposure": true,
+   "original_shape": "beauty salon",
+   "npc": null,
+   "job_period_effect": null,
+   "period_random": [],
+   "milestones": [
+    {
+     "event": "job_magazine_m1",
+     "cond": [
+      [
+       [
+        "job_periods.job_magazine",
+        ">=",
+        4
+       ]
+      ]
+     ],
+     "note": "Cover story (fame +15); roles with the romance and exotic_lover tags get +1 board weight"
+    }
+   ]
+  },
+  {
+   "id": "job_bodyguard",
+   "name": "女明星保镖",
+   "earliest": "1927-04",
+   "prereq": [
+    [
+     [
+      "job_periods.job_assistant",
+      ">=",
+      4
+     ],
+     [
+      "favor.actress",
+      ">=",
+      30
+     ]
+    ]
+   ],
+   "daily_wage": 12,
+   "success_lines": [
+    {
+     "stat": "stamina",
+     "value": 80
+    },
+    {
+     "stat": "fight",
+     "value": 30
+    }
+   ],
+   "daily_effect": [
+    {
+     "stat": "nerve",
+     "add": [
+      0,
+      1
+     ]
+    },
+    {
+     "stat": "loyalty",
+     "add": [
+      1,
+      1
+     ]
+    },
+    {
+     "stat": "fatigue",
+     "add": [
+      3,
+      3
+     ]
+    }
+   ],
+   "exposure": false,
+   "original_shape": "construction site",
+   "npc": "actress",
+   "job_period_effect": "favor.actress+2",
+   "period_random": [
+    {
+     "prob": [
+      1,
+      20
+     ],
+     "event": "job_bodyguard_r1",
+     "note": "\"Took the hit\" (stamina -20, actress favor +10, loyalty +10, fame +10)"
+    }
+   ],
+   "milestones": []
+  },
+  {
+   "id": "job_radio",
+   "name": "电台播音",
+   "earliest": "1927-10",
+   "prereq": [
+    [
+     [
+      "job_periods.job_news",
+      ">=",
+      3
+     ]
+    ]
+   ],
+   "daily_wage": 10,
+   "success_lines": [
+    {
+     "stat": "education",
+     "value": 120
+    },
+    {
+     "stat": "speech",
+     "value": 30
+    }
+   ],
+   "daily_effect": [
+    {
+     "stat": "speech",
+     "add": [
+      0,
+      1
+     ]
+    },
+    {
+     "stat": "discipline",
+     "add": [
+      1,
+      1
+     ]
+    },
+    {
+     "stat": "fatigue",
+     "add": [
+      7,
+      7
+     ]
+    }
+   ],
+   "exposure": true,
+   "original_shape": "tutoring",
+   "npc": "editor",
+   "job_period_effect": null,
+   "period_random": [],
+   "milestones": [
+    {
+     "event": "job_radio_m1",
+     "cond": [
+      [
+       [
+        "job_periods.job_radio",
+        ">=",
+        4
+       ]
+      ]
+     ],
+     "note": "From then on talkie roles' speech line -10"
+    }
+   ]
+  },
+  {
+   "id": "job_escort",
+   "name": "私人男伴",
+   "earliest": "1928-04",
+   "prereq": [
+    [
+     [
+      "job_periods.job_ballroom",
+      ">=",
+      5
+     ]
+    ]
+   ],
+   "daily_wage": 35,
+   "success_lines": [
+    {
+     "stat": "looks",
+     "value": 150
+    },
+    {
+     "stat": "physique",
+     "value": 50
+    }
+   ],
+   "daily_effect": [
+    {
+     "stat": "looks",
+     "add": [
+      2,
+      2
+     ]
+    },
+    {
+     "stat": "discipline",
+     "add": [
+      -3,
+      -3
+     ]
+    },
+    {
+     "stat": "connections",
+     "add": [
+      0,
+      1
+     ]
+    },
+    {
+     "stat": "fatigue",
+     "add": [
+      12,
+      12
+     ]
+    }
+   ],
+   "exposure": false,
+   "original_shape": "tavern",
+   "npc": "rich_widow",
+   "job_period_effect": null,
+   "period_random": [
+    {
+     "prob": [
+      1,
+      20
+     ],
+     "event": "job_escort_r1",
+     "note": "Caught by the tabloids, settled as scandal exposure"
+    }
+   ],
+   "milestones": []
+  }
+ ]
+}

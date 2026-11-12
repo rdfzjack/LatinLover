@@ -1,0 +1,61 @@
+{
+ "note": "Charged at the start of the month by fame tier, may go into debt; month_end_effect applies at month end",
+ "fame_tier_order": [
+  "unknown",
+  "familiar",
+  "famous",
+  "hot",
+  "superstar"
+ ],
+ "forced_note": "When stamina <15 and the lifestyle is not \"fine\", it is forced back to \"fine\"",
+ "lifestyles": [
+  {
+   "id": "life_normal",
+   "name": "普通",
+   "monthly_cost": [
+    100,
+    150,
+    220,
+    400,
+    700
+   ],
+   "month_end_effect": ""
+  },
+  {
+   "id": "life_fine",
+   "name": "讲究",
+   "monthly_cost": [
+    250,
+    380,
+    550,
+    1000,
+    1750
+   ],
+   "month_end_effect": "stamina+10"
+  },
+  {
+   "id": "life_thrift",
+   "name": "节俭",
+   "monthly_cost": [
+    50,
+    75,
+    110,
+    200,
+    350
+   ],
+   "month_end_effect": "stamina-5"
+  },
+  {
+   "id": "life_diet",
+   "name": "节食",
+   "monthly_cost": [
+    40,
+    60,
+    90,
+    160,
+    280
+   ],
+   "month_end_effect": "stamina-20 looks+3"
+  }
+ ]
+}

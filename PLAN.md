@@ -27,7 +27,7 @@
 
 第 1–12 步和 8b、9b、9c、12b 已完成（详见 `README.md`）。第 9 步的对账在 Godot 4.3 里跑过，和 Python 逐字节一致。
 
-9c-1（英文 id 和字段名，Python 侧）和 9c-2（语言文件、Godot 侧、用户指南）已完成，Godot 对账已通过。第 10 步（日程和月结）已完成，对账一致。第 11 步（试镜）已完成，1000 场逐轮一致。第 12 步（选片板、拍摄、上映、事件、结局）已完成，38 局机器人录像在 Godot 里回放，每月状态和结局一致。下一步第 13 步；开工前用户先和 Fable 讨论平衡、体验和可能的新系统（交接 `design/HANDOFF_FABLE.md`）。9c 的规格在 `design/STEP9C_IDS_AND_LOCALE.md`。9c 要在 10 之前做：越往后移植到 Godot 的代码越多，改名越贵。第 8 步可以重复做：读 `design/BALANCE_LOG.md` 的“没解决的”，改完重跑报告。
+9c-1（英文 id 和字段名，Python 侧）和 9c-2（语言文件、Godot 侧、用户指南）已完成，Godot 对账已通过。第 10 步（日程和月结）已完成，对账一致。第 11 步（试镜）已完成，1000 场逐轮一致。第 12 步（选片板、拍摄、上映、事件、结局）已完成，38 局机器人录像在 Godot 里回放，每月状态和结局一致。12b（机器人和报告搬进 Godot）已完成；12c 的 c1（规则）、c2（新机器人、报告、护栏）已完成，下一步 c3（Fable 看报告定数），然后第 13 步。9c 的规格在 `design/STEP9C_IDS_AND_LOCALE.md`。9c 要在 10 之前做：越往后移植到 Godot 的代码越多，改名越贵。第 8 步可以重复做：读 `design/BALANCE_LOG.md` 的“没解决的”，改完重跑报告。
 
 用户的修改意见记在 `design/CHANGE.md`，每条后面写了在哪一步处理。
 
@@ -67,7 +67,7 @@ Godot 4.3，GDScript。工程在 `game/silentstar/`。逻辑和界面分开：`g
 | 11 | 移植试镜（**已完成，对账一致**） | `sim/audition.py` | `game/silentstar/core/audition.gd` | 同种子 1000 场试镜逐轮一致 | 小 | Sonnet |
 | 12 | 移植选片板、拍摄、上映、事件、结局（**已完成，对账一致**） | `sim/board.py` `film.py` `events.py` `ending.py` | `game/silentstar/core/` 对应脚本 | 机器人的决策录成文件后在 Godot 里回放，整局每月状态和结局与 Python 一致。**拆法同第 6 步** | 大 | Opus |
 | 12b | 把机器人和报告搬进 Godot，之后 `sim/` 冻结（**已完成，对账无差异，报告 `diff` 为空**）。**规格见 `design/STEP12B_12C_BALANCE.md`** | 规格里列的文件 | `game/silentstar/tools/bots.gd` `report.gd` | 对账无差异；Godot 报告和 Python 基准 `diff` 为空 | 中 | Sonnet |
-| 12c | 第二轮平衡：疲劳、毒品、被捕、疗养院的规则改动，三个新机器人，按目标表调数。**规格同上** | 规格里列的 GDD 小节 | 改 `core/`、`data/new/`、GDD、`BALANCE_LOG.md` | 规格里的目标表达标 | 大（c1、c2 一个对话，c3 一个对话） | Opus 写，Fable 看报告 |
+| 12c | 第二轮平衡：疲劳、毒品、被捕、疗养院的规则改动，三个新机器人，按目标表调数。**规格同上**（c1、c2 **已完成**；c3 待做） | 规格里列的 GDD 小节 | 改 `core/`、`data/new/`、GDD、`BALANCE_LOG.md` | 规格里的目标表达标 | 大（c1、c2 一个对话，c3 一个对话） | Opus 写，Fable 看报告 |
 
 ### D. Godot 界面（无美术，占位）
 

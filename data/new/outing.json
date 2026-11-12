@@ -21,7 +21,8 @@
     }
    ],
    "note": "",
-   "body": null
+   "body": null,
+   "tier": "small"
   },
   {
    "id": "outing_old_bookshop",
@@ -43,7 +44,8 @@
     }
    ],
    "note": "",
-   "body": null
+   "body": null,
+   "tier": "small"
   },
   {
    "id": "outing_pickup",
@@ -69,7 +71,8 @@
     }
    ],
    "note": "[orig EVENT021]",
-   "body": null
+   "body": null,
+   "tier": "medium"
   },
   {
    "id": "outing_salon",
@@ -90,7 +93,8 @@
     }
    ],
    "note": "",
-   "body": null
+   "body": null,
+   "tier": "small"
   },
   {
    "id": "outing_romance",
@@ -126,7 +130,8 @@
     }
    ],
    "note": "Meets someone and enters the in_love state; schedule days fail 20% of the time, and the four romance lines lose 2 favor per month [orig]",
-   "body": null
+   "body": null,
+   "tier": "small"
   },
   {
    "id": "outing_driver",
@@ -154,7 +159,8 @@
     }
    ],
    "note": "",
-   "body": null
+   "body": null,
+   "tier": "medium"
   },
   {
    "id": "outing_countryman",
@@ -181,7 +187,8 @@
     }
    ],
    "note": "",
-   "body": null
+   "body": null,
+   "tier": "medium"
   },
   {
    "id": "outing_backdoor",
@@ -202,7 +209,8 @@
     }
    ],
    "note": "",
-   "body": null
+   "body": null,
+   "tier": "medium"
   },
   {
    "id": "outing_actress_dressing",
@@ -220,7 +228,8 @@
     }
    ],
    "note": "When the actress is present (chain event)",
-   "body": null
+   "body": null,
+   "tier": "medium"
   },
   {
    "id": "outing_duv_script",
@@ -246,7 +255,8 @@
     }
    ],
    "note": "Fires when he is met in tutoring class or downtown (6.5)",
-   "body": null
+   "body": null,
+   "tier": "medium"
   },
   {
    "id": "outing_duv_tip",
@@ -272,7 +282,8 @@
     }
    ],
    "note": "Picks a random medium/big role on the current or next board and shows its full style probabilities and tags (6.5)",
-   "body": null
+   "body": null,
+   "tier": "small"
   },
   {
    "id": "outing_duv_chat",
@@ -290,7 +301,8 @@
     }
    ],
    "note": "6.5",
-   "body": null
+   "body": null,
+   "tier": "small"
   },
   {
    "id": "outing_duv_class_1",
@@ -301,7 +313,8 @@
    "once": true,
    "options": [],
    "note": "Always happens in tutoring period 1 (5.3.1)",
-   "body": null
+   "body": null,
+   "tier": "medium"
   },
   {
    "id": "outing_duv_class_2",
@@ -312,7 +325,8 @@
    "once": true,
    "options": [],
    "note": "tutoring period 4",
-   "body": null
+   "body": null,
+   "tier": "medium"
   },
   {
    "id": "outing_duv_class_3",
@@ -323,7 +337,8 @@
    "once": true,
    "options": [],
    "note": "tutoring period 7",
-   "body": null
+   "body": null,
+   "tier": "medium"
   },
   {
    "id": "outing_duv_class_4",
@@ -334,7 +349,8 @@
    "once": true,
    "options": [],
    "note": "tutoring period 10",
-   "body": null
+   "body": null,
+   "tier": "medium"
   },
   {
    "id": "vac_1",
@@ -346,7 +362,8 @@
    "options": [],
    "effect": "",
    "note": "Placeholder: content for the user to supply",
-   "body": null
+   "body": null,
+   "tier": "small"
   },
   {
    "id": "vac_2",
@@ -358,7 +375,8 @@
    "options": [],
    "effect": "",
    "note": "Placeholder: content for the user to supply",
-   "body": null
+   "body": null,
+   "tier": "small"
   },
   {
    "id": "vac_3",
@@ -370,7 +388,22 @@
    "options": [],
    "effect": "",
    "note": "Placeholder: content for the user to supply",
-   "body": null
+   "body": null,
+   "tier": "small"
+  },
+  {
+   "id": "vac_overdo",
+   "name": "玩过头",
+   "place": "place_resort",
+   "weight": 1,
+   "cond": [],
+   "once": false,
+   "options": [],
+   "effect": "fatigue+15",
+   "tier": "bad",
+   "note": "Placeholder: he overdid it at the resort (step 12c)",
+   "body": null,
+   "placeholder": true
   }
  ]
 }

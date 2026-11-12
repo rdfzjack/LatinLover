@@ -1,0 +1,60 @@
+{
+ "note": "Guard targets (design/BALANCE_WORKFLOW.md). Every target is [low, high]; null = open. Only Fable changes this file, in a balance round (C). 'strategies' are checked on the mean over the road bots of a strategy (bad_boy: tough, lover, savvy), 'bots' on one bot. Sources: the step-12c target table of design/STEP12B_12C_BALANCE.md and the step-8 table of design/BALANCE_LOG.md. check.py runs 30 games per bot and widens every range by 10%.",
+ "strategies": {
+  "disciplined": {
+   "rest_share": [30, 35],
+   "void_periods": [null, 3],
+   "arrests": [0, 0],
+   "detox": [0, 0],
+   "full_month": [21, 26],
+   "cash_y2": [null, 1000],
+   "cash_end": [2000, 4000],
+   "cash_end_p10": [0, null],
+   "pct_S": [null, 2],
+   "pct_A": [30, 45],
+   "pct_B": [45, 60],
+   "c_or_less": [null, 10],
+   "pct_collapse": [null, 1],
+   "grade_mean": [2.0, 2.6]
+  },
+  "bad_boy": {
+   "rest_share": [20, 25],
+   "void_periods": [6, 10],
+   "arrests": [3, 5],
+   "detox": [0, 0],
+   "full_month": [19, 24],
+   "cash_y2": [2000, 4000],
+   "cash_end": [6000, 10000],
+   "cash_end_p10": [null, 1000],
+   "pct_S": [15, 20],
+   "pct_A": [25, 30],
+   "pct_B": [20, 25],
+   "c_or_less": [25, 35],
+   "pct_collapse": [null, 2],
+   "grade_mean_vs_disciplined": [-0.3, 0.3],
+   "s_spread": [null, 8]
+  },
+  "addict": {
+   "rest_share": [10, 15],
+   "void_periods": [6, 10],
+   "arrests": [0, 1],
+   "detox": [2, 3],
+   "full_month": [16, 21],
+   "cash_y2": [null, 800],
+   "cash_end": [1000, 3000],
+   "cash_end_p10": [null, 0],
+   "pct_S": [30, 35],
+   "pct_A": [10, 15],
+   "pct_B": [8, 12],
+   "c_or_less": [40, 45],
+   "pct_collapse": [12, 18],
+   "grade_mean_vs_disciplined": [-0.3, 0.3]
+  }
+ },
+ "bots": {
+  "only_tough": {"plain_rep": [311, 340], "over_311": [90, null], "cash_y1": [null, 1000], "cash_y2": [null, 1000], "cash_end": [null, 10000], "cash_end_p90": [null, 10000], "big_win": [10, 35], "hit_rate": [5, 15], "ending_kinds": [3, null]},
+  "only_lover": {"plain_rep": [311, 340], "over_311": [90, null], "cash_y1": [null, 1000], "cash_y2": [null, 1000], "cash_end": [null, 10000], "cash_end_p90": [null, 10000], "big_win": [10, 35], "hit_rate": [5, 15], "ending_kinds": [3, null]},
+  "only_culture": {"plain_rep": [311, 340], "over_311": [90, null], "cash_y1": [null, 1000], "cash_y2": [null, 1000], "cash_end": [null, 10000], "cash_end_p90": [null, 10000], "big_win": [10, 35], "hit_rate": [5, 15], "ending_kinds": [3, null]},
+  "only_savvy": {"plain_rep": [311, 340], "over_311": [90, null], "cash_y1": [null, 1000], "cash_y2": [null, 1000], "cash_end": [null, 10000], "cash_end_p90": [null, 10000], "big_win": [10, 35], "hit_rate": [5, 15], "ending_kinds": [3, null]}
+ }
+}

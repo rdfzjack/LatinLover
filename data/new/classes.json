@@ -79,7 +79,8 @@
       ]
      ]
     }
-   ]
+   ],
+   "fatigue_per_day": 3
   },
   {
    "id": "class_riding",
@@ -133,7 +134,8 @@
       ]
      ]
     }
-   ]
+   ],
+   "fatigue_per_day": 3
   },
   {
    "id": "class_acting",
@@ -187,7 +189,8 @@
       ]
      ]
     }
-   ]
+   ],
+   "fatigue_per_day": 3
   },
   {
    "id": "class_dance",
@@ -262,7 +265,8 @@
       ]
      ]
     }
-   ]
+   ],
+   "fatigue_per_day": 3
   },
   {
    "id": "class_etiquette",
@@ -316,7 +320,8 @@
       ]
      ]
     }
-   ]
+   ],
+   "fatigue_per_day": 3
   },
   {
    "id": "class_tutor",
@@ -390,7 +395,9 @@
      7,
      10
     ]
-   }
+   },
+   "fatigue_per_day": 3
   }
- ]
+ ],
+ "fatigue_note": "fatigue_per_day: fatigue added on every class day, whether or not the day succeeds (step 12c: 1 -> 3)"
 }

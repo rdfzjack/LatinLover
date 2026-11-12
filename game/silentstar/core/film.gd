@@ -226,6 +226,20 @@ static func breach_month(st, ym: int) -> Array:
 	return out
 
 
+## The film contract locking period i of month ym breaches (detention, step 12c). Same penalty as breach_month.
+static func breach_period(st, ym: int, i: int) -> Array:
+	var out := []
+	var pct: int = -st.d.rest_forced[0]["shoot_breach"]["fame_pct"]
+	for f in films(st):
+		if _active(f) and _has_lock(f, ym, i):
+			f["status"] = "breached"
+			st.attr["fame"] = maxi(0, st.attr["fame"] - Rules.fdiv(st.attr["fame"] * pct, 100))
+			st.inc("count.breach")
+			out.append(f)
+	update_status(st)
+	return out
+
+
 # ---------- release ----------
 
 ## Fit F x1000 = 600 + 400 x average(min(value/target, 1.5)).

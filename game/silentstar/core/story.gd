@@ -58,6 +58,10 @@ class Agent:
 	func month_start(_story, _st) -> void:
 		pass
 
+	## Step 12c: free actions just before period i (not void, not detained; shooting periods included): story.boost(st, i).
+	func before_period(_story, _st, _i: int) -> void:
+		pass
+
 
 ## The simplest player, for tests:
 ##   deck: main color (highest level) 3 cards + the color with the second-highest level 2 cards; plays at random with the logic stream;
@@ -158,6 +162,11 @@ func send_detox(st) -> String:
 	return ""
 
 
+## Boost (step 12c, stats.drug): a free action before period i; returns "" or the reason.
+func boost(st, i: int) -> String:
+	return Events.boost(st, i)
+
+
 ## Newspaper line favor 80: one news leak per year, fame +10%, counts as exposure.
 func leak_news(st) -> String:
 	var y: int = Rules.fdiv(st.ym, 12) + 1
@@ -181,6 +190,11 @@ func film_period(st, i: int, f, days: Array) -> void:
 
 func film_breach(st) -> void:
 	Film.breach_month(st, st.ym + 1)
+
+
+func before_period(st, i: int) -> void:
+	cur_period = i
+	agent.before_period(self, st, i)
 
 
 func period_start(st, i: int, entry: String) -> void:
@@ -215,7 +229,13 @@ func job_period(st, jid: String, good: bool) -> void:
 # ---------- month end, settlement ----------
 
 func month_events(st) -> void:
+	cur_period = 3          # an arrest at month end detains the first period of next month
+	Events.drug_month(st)
 	Events.month_end(self, st)
+
+
+func discharge(st) -> void:
+	Events.discharge(self, st)
 
 
 func release(st) -> void:

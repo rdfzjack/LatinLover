@@ -61,7 +61,8 @@
    "code": true,
    "note": "An actor in some film is in trouble and the director needs a stand-in. Play a medium audition at once; a win takes the next period for shooting",
    "source": "[orig dojo challenge][inferred N40]",
-   "body": null
+   "body": null,
+   "tier": "medium"
   },
   {
    "id": "evt_steal_role",
@@ -91,7 +92,8 @@
    "code": true,
    "note": "An unnamed rival turns up to take this role. Play an audition; on a loss the role goes to him",
    "source": "[orig dojo kicked in][inferred N40]",
-   "body": null
+   "body": null,
+   "tier": "medium"
   },
   {
    "id": "evt_missing",
@@ -127,7 +129,8 @@
    "note": "He disappears for a month. Next month's schedule is void; the four rep_bonus values each lose 10% of the current reputation",
    "source": "[orig]",
    "body": null,
-   "order": 1
+   "order": 1,
+   "tier": "bad"
   },
   {
    "id": "evt_arrest",
@@ -152,10 +155,11 @@
    "freq": null,
    "effect": "",
    "code": true,
-   "note": "Detained, fine min(money, 500), crime +20, exposure. With loyalty >=150 someone bails him out: fine halved, no exposure, loyalty -30. Also triggered by failing the check in bar bouncer / bootlegging jobs",
+   "note": "Detained: fine max(200, 30% of money) (never below 0), the next period is void, crime +20, exposure, no big film for 3 months. With loyalty >=150 someone bails him out: fine halved, no exposure, loyalty -30. Also triggered by failing a crime-job search (jobs.json raid_*)",
    "source": "[orig EVENT045]",
    "body": null,
-   "order": 2
+   "order": 2,
+   "tier": "bad"
   },
   {
    "id": "evt_scandal",
@@ -174,10 +178,11 @@
    "freq": null,
    "effect": "",
    "code": true,
-   "note": "The paper prints a story. villain + crime tag counts >=3: fame +10%; otherwise fame -15%. Counts as exposure. The newspaper line can suppress it; loyalty >=200 halves the penalty",
+   "note": "The paper prints a story. villain + crime tag counts >=3: fame +10%; otherwise fame -15%. Counts as exposure. The newspaper line can suppress it; loyalty >=200 halves the penalty. Step 12c: an unsuppressed scandal also bars big films for 3 months",
    "source": "[inferred N39]",
    "body": null,
-   "order": 3
+   "order": 3,
+   "tier": "bad"
   },
   {
    "id": "evt_heatstroke",
@@ -206,7 +211,8 @@
    "note": "",
    "source": "[orig, magnitude inferred]",
    "body": null,
-   "order": 4
+   "order": 4,
+   "tier": "bad"
   },
   {
    "id": "evt_cold",
@@ -235,7 +241,8 @@
    "note": "",
    "source": "[orig, magnitude inferred]",
    "body": null,
-   "order": 5
+   "order": 5,
+   "tier": "bad"
   },
   {
    "id": "evt_deposit_1000",
@@ -258,7 +265,8 @@
    "note": "A salesman comes to the door selling special goods",
    "source": "[orig EVENT006]",
    "body": null,
-   "order": 6
+   "order": 6,
+   "tier": "medium"
   },
   {
    "id": "evt_deposit_2000",
@@ -304,7 +312,8 @@
      "success_effect": "loyalty-5",
      "fail_effect": ""
     }
-   ]
+   ],
+   "tier": "large"
   },
   {
    "id": "evt_senior_yinghan_1",
@@ -352,7 +361,8 @@
      "success_effect": "nerve+5",
      "fail_effect": ""
     }
-   ]
+   ],
+   "tier": "medium"
   },
   {
    "id": "evt_senior_yinghan_2",
@@ -380,7 +390,8 @@
    "note": "Gives a piece of gear",
    "source": "[orig EVENT015, four tiers]",
    "body": null,
-   "order": 9
+   "order": 9,
+   "tier": "medium"
   },
   {
    "id": "evt_senior_yinghan_3",
@@ -408,7 +419,8 @@
    "note": "Gives one opportunity (the \"senior's opportunity\" in opportunities.json reads this flag)",
    "source": "[orig EVENT015, four tiers]",
    "body": null,
-   "order": 9
+   "order": 9,
+   "tier": "large"
   },
   {
    "id": "evt_senior_yinghan_4",
@@ -436,7 +448,8 @@
    "note": "Gives the best gear: GDD 14.2 lists only 4 senior gear items and this tier's gear is undefined; user to decide",
    "source": "[orig EVENT015, four tiers]",
    "body": null,
-   "order": 9
+   "order": 9,
+   "tier": "large"
   },
   {
    "id": "evt_senior_qingren_1",
@@ -484,7 +497,8 @@
      "success_effect": "physique+5",
      "fail_effect": ""
     }
-   ]
+   ],
+   "tier": "medium"
   },
   {
    "id": "evt_senior_qingren_2",
@@ -512,7 +526,8 @@
    "note": "Gives a piece of gear",
    "source": "[orig EVENT015, four tiers]",
    "body": null,
-   "order": 9
+   "order": 9,
+   "tier": "medium"
   },
   {
    "id": "evt_senior_qingren_3",
@@ -540,7 +555,8 @@
    "note": "Gives one opportunity (the \"senior's opportunity\" in opportunities.json reads this flag)",
    "source": "[orig EVENT015, four tiers]",
    "body": null,
-   "order": 9
+   "order": 9,
+   "tier": "large"
   },
   {
    "id": "evt_senior_qingren_4",
@@ -568,7 +584,8 @@
    "note": "Gives the best gear: GDD 14.2 lists only 4 senior gear items and this tier's gear is undefined; user to decide",
    "source": "[orig EVENT015, four tiers]",
    "body": null,
-   "order": 9
+   "order": 9,
+   "tier": "large"
   },
   {
    "id": "evt_senior_wenhua_1",
@@ -616,7 +633,8 @@
      "success_effect": "speech+5",
      "fail_effect": ""
     }
-   ]
+   ],
+   "tier": "medium"
   },
   {
    "id": "evt_senior_wenhua_2",
@@ -644,7 +662,8 @@
    "note": "Gives a piece of gear",
    "source": "[orig EVENT015, four tiers]",
    "body": null,
-   "order": 9
+   "order": 9,
+   "tier": "medium"
   },
   {
    "id": "evt_senior_wenhua_3",
@@ -672,7 +691,8 @@
    "note": "Gives one opportunity (the \"senior's opportunity\" in opportunities.json reads this flag)",
    "source": "[orig EVENT015, four tiers]",
    "body": null,
-   "order": 9
+   "order": 9,
+   "tier": "large"
   },
   {
    "id": "evt_senior_wenhua_4",
@@ -700,7 +720,8 @@
    "note": "Gives the best gear: GDD 14.2 lists only 4 senior gear items and this tier's gear is undefined; user to decide",
    "source": "[orig EVENT015, four tiers]",
    "body": null,
-   "order": 9
+   "order": 9,
+   "tier": "large"
   },
   {
    "id": "evt_senior_shouwan_1",
@@ -748,7 +769,8 @@
      "success_effect": "business+5",
      "fail_effect": ""
     }
-   ]
+   ],
+   "tier": "medium"
   },
   {
    "id": "evt_senior_shouwan_2",
@@ -776,7 +798,8 @@
    "note": "Gives a piece of gear",
    "source": "[orig EVENT015, four tiers]",
    "body": null,
-   "order": 9
+   "order": 9,
+   "tier": "medium"
   },
   {
    "id": "evt_senior_shouwan_3",
@@ -804,7 +827,8 @@
    "note": "Gives one opportunity (the \"senior's opportunity\" in opportunities.json reads this flag)",
    "source": "[orig EVENT015, four tiers]",
    "body": null,
-   "order": 9
+   "order": 9,
+   "tier": "large"
   },
   {
    "id": "evt_senior_shouwan_4",
@@ -832,7 +856,8 @@
    "note": "Gives the best gear: GDD 14.2 lists only 4 senior gear items and this tier's gear is undefined; user to decide",
    "source": "[orig EVENT015, four tiers]",
    "body": null,
-   "order": 9
+   "order": 9,
+   "tier": "large"
   },
   {
    "id": "evt_contract",
@@ -902,7 +927,8 @@
      "success_effect": "",
      "fail_effect": ""
     }
-   ]
+   ],
+   "tier": "large"
   },
   {
    "id": "evt_terminate",
@@ -930,7 +956,8 @@
    "note": "The studio invokes the morals clause",
    "source": "[inferred N39]",
    "body": null,
-   "order": 11
+   "order": 11,
+   "tier": "bad"
   },
   {
    "id": "evt_creditor",
@@ -953,7 +980,8 @@
    "note": "First check for help (loyalty >=150: a friend covers it, money is topped up to 0, debt cleared, loyalty -30; or the dock countryman); otherwise fight >=50 drives him off (crime +10); otherwise the most expensive item is taken as payment, and with no items fame -10% and exposure",
    "source": "[inferred N11]",
    "body": null,
-   "order": 12
+   "order": 12,
+   "tier": "bad"
   },
   {
    "id": "evt_accent",
@@ -976,7 +1004,8 @@
    "note": "A critic mocks his accent. For the next 4 months speech gets an extra +1 on every successful day in acting class, etiquette class and speech books",
    "source": "[inferred N3]",
    "body": null,
-   "order": 13
+   "order": 13,
+   "tier": "medium"
   },
   {
    "id": "evt_offer_drug",
@@ -996,7 +1025,7 @@
       1
      ],
      [
-      "drug_stage",
+      "flag.drug_access",
       "==",
       0
      ]
@@ -1009,7 +1038,7 @@
    "freq": null,
    "effect": "",
    "code": false,
-   "note": "Someone on the set hands over a \"pick-me-up\"",
+   "note": "Someone on the set hands over a \"pick-me-up\". Accepting unlocks the boost action (stats.drug, step 12c)",
    "source": "[inferred N13]",
    "body": null,
    "order": 14,
@@ -1023,46 +1052,11 @@
     {
      "text": "接受",
      "check": null,
-     "success_effect": "fatigue-30 drug_stage=1",
+     "success_effect": "fatigue-30 flag.drug_access=1",
      "fail_effect": ""
     }
-   ]
-  },
-  {
-   "id": "evt_drug_deeper",
-   "name": "加深",
-   "class": "month_end",
-   "timing": "month_end",
-   "cond": [
-    [
-     [
-      "drug_stage",
-      ">=",
-      1
-     ],
-     [
-      "drug_stage",
-      "<=",
-      2
-     ],
-     [
-      "fatigue",
-      ">=",
-      60
-     ]
-    ]
    ],
-   "prob": [
-    1,
-    4
-   ],
-   "freq": null,
-   "effect": "fatigue-30 drug_stage+1",
-   "code": true,
-   "note": "He goes looking for it himself. At stage 3: stamina -30, crime +20",
-   "source": "[inferred N13]",
-   "body": null,
-   "order": 15
+   "tier": "large"
   },
   {
    "id": "evt_detox",
@@ -1074,7 +1068,7 @@
      [
       "drug_stage",
       ">=",
-      2
+      3
      ],
      [
       "favor.sil",
@@ -1086,7 +1080,7 @@
      [
       "drug_stage",
       ">=",
-      2
+      3
      ],
      [
       "favor.duv",
@@ -1109,12 +1103,13 @@
    ],
    "prob": null,
    "freq": null,
-   "effect": "stamina-20 fatigue=0 drug_stage=0 flag.detox_sent=0",
+   "effect": "stamina-20 fatigue=0 drug_points=0 drug_stage=0 flag.detox_sent=0",
    "code": true,
-   "note": "A story that takes the whole next month. Write it seriously, not as a joke. With Sil present, Sil favor +10",
+   "note": "A story that takes the whole next month. Write it seriously, not as a joke. With Sil present, Sil favor +10. Step 12c: Sil or Duv step in at stage 3; the player can send him at stage 2",
    "source": "[user][inferred N13]",
    "body": null,
-   "order": 16
+   "order": 16,
+   "tier": "bad"
   },
   {
    "id": "evt_official",
@@ -1167,7 +1162,8 @@
      "cond": [],
      "effect": "flag.warning=1"
     }
-   ]
+   ],
+   "tier": "bad"
   },
   {
    "id": "evt_newyear",
@@ -1190,7 +1186,8 @@
    "note": "Sil hands over the year's fan-mail statistics and a magazine's remark about him (generated from tag counts)",
    "source": "[orig EVENT044]",
    "body": null,
-   "order": 18
+   "order": 18,
+   "tier": "small"
   },
   {
    "id": "evt_birthday",
@@ -1206,7 +1203,8 @@
    "source": "[orig EVENT042/043]",
    "body": null,
    "order": 19,
-   "date": null
+   "date": null,
+   "tier": "small"
   },
   {
    "id": "evt_berlin",
@@ -1256,7 +1254,8 @@
      "success_effect": "",
      "fail_effect": ""
     }
-   ]
+   ],
+   "tier": "large"
   },
   {
    "id": "era_sound_short",
@@ -1270,7 +1269,8 @@
    "code": false,
    "note": "A premiere with synchronized score and a few spoken shorts. No numeric effect; Duv or Sil says \"maybe we'll all have to talk someday\", and the bookstore stocks the advanced speech books (books.json already handles it by date)",
    "source": "[inferred N61]",
-   "body": null
+   "body": null,
+   "tier": "large"
   },
   {
    "id": "era_academy",
@@ -1302,7 +1302,8 @@
      "cond": [],
      "effect": ""
     }
-   ]
+   ],
+   "tier": "large"
   },
   {
    "id": "era_valen_death",
@@ -1316,7 +1317,8 @@
    "code": true,
    "note": "Funeral scene. Valen is removed from the rival table; from then on boards get +1 role with the \"exotic_lover\" or \"romance\" tag (until the end of 1928)",
    "source": "[user][inferred N61]",
-   "body": null
+   "body": null,
+   "tier": "large"
   },
   {
    "id": "era_talkie",
@@ -1330,7 +1332,8 @@
    "code": true,
    "note": "A talking picture is released. Talkie roles start to appear (6.4); Jolson joins the rival table; radio announcing opens (jobs.json and rivals.json already handle it by date)",
    "source": "[inferred N61]",
-   "body": null
+   "body": null,
+   "tier": "large"
   },
   {
    "id": "era_all_sound",
@@ -1362,7 +1365,8 @@
      "cond": [],
      "effect": "fame-5% flag.accent_pending=1"
     }
-   ]
+   ],
+   "tier": "large"
   },
   {
    "id": "era_awards",
@@ -1399,7 +1403,8 @@
      "cond": [],
      "effect": ""
     }
-   ]
+   ],
+   "tier": "large"
   },
   {
    "id": "era_crash",
@@ -1413,7 +1418,8 @@
    "code": false,
    "note": "Story: the stock market crash. Period backdrop, no numeric effect",
    "source": "[inferred N61]",
-   "body": null
+   "body": null,
+   "tier": "large"
   },
   {
    "id": "job_assistant_r1",
@@ -1427,7 +1433,8 @@
    "code": false,
    "note": "Small event, actress favor +3",
    "source": "[user] star assistant hook",
-   "body": null
+   "body": null,
+   "tier": "small"
   },
   {
    "id": "job_assistant_m1",
@@ -1441,7 +1448,8 @@
    "code": false,
    "note": "May lead to the actress bodyguard job",
    "source": "[user] star assistant hook",
-   "body": null
+   "body": null,
+   "tier": "medium"
   },
   {
    "id": "job_waiter_r1",
@@ -1455,7 +1463,8 @@
    "code": false,
    "note": "The customer is in the business, connections +2",
    "source": "[user] restaurant waiter hook",
-   "body": null
+   "body": null,
+   "tier": "small"
   },
   {
    "id": "job_waiter_m1",
@@ -1469,7 +1478,8 @@
    "code": false,
    "note": "Each board shows the rival's play habit for one random role",
    "source": "[user] restaurant waiter hook",
-   "body": null
+   "body": null,
+   "tier": "medium"
   },
   {
    "id": "job_dock_m1",
@@ -1483,7 +1493,8 @@
    "code": false,
    "note": "On the creditor event the countryman steps in once, costing no loyalty; smuggling events are added to the dock random table",
    "source": "[user] dock hauling hook",
-   "body": null
+   "body": null,
+   "tier": "medium"
   },
   {
    "id": "job_church_m1",
@@ -1497,7 +1508,8 @@
    "code": false,
    "note": "On the \"official visit\" the priest vouches, counting as discipline met; roles with the religious tag get +1 board weight",
    "source": "[user] church volunteer hook",
-   "body": null
+   "body": null,
+   "tier": "medium"
   },
   {
    "id": "job_model_art_m1",
@@ -1511,7 +1523,8 @@
    "code": false,
    "note": "Roles with the arthouse and underground tags get +1 board weight",
    "source": "[user] artist model hook",
-   "body": null
+   "body": null,
+   "tier": "medium"
   },
   {
    "id": "job_model_art_m2",
@@ -1525,27 +1538,8 @@
    "code": false,
    "note": "Art show event (taste +5, fame +10)",
    "source": "[user] artist model hook",
-   "body": null
-  },
-  {
-   "id": "job_bar_r1",
-   "name": "遇上搜查，胆识判定线 40，不过则被捕",
-   "class": "job",
-   "timing": "during_job",
-   "cond": [],
-   "prob": null,
-   "freq": null,
-   "effect": "",
-   "code": false,
-   "note": "A police search: nerve check line 40, failing means arrest",
-   "source": "[user] bar bouncer hook",
    "body": null,
-   "check": {
-    "check": "nerve",
-    "line": 40
-   },
-   "success_effect": "",
-   "fail_effect": "trigger.evt_arrest"
+   "tier": "medium"
   },
   {
    "id": "job_bar_m1",
@@ -1559,7 +1553,8 @@
    "code": false,
    "note": "Unlocks bootlegging",
    "source": "[user] bar bouncer hook",
-   "body": null
+   "body": null,
+   "tier": "medium"
   },
   {
    "id": "job_bar_m2",
@@ -1573,7 +1568,8 @@
    "code": false,
    "note": "Halves the fine when arrested; roles with the crime tag get +1 board weight",
    "source": "[user] bar bouncer hook",
-   "body": null
+   "body": null,
+   "tier": "medium"
   },
   {
    "id": "job_studio_m1",
@@ -1587,7 +1583,8 @@
    "code": true,
    "note": "Doubles the long-contract probability",
    "source": "[user] studio office hook",
-   "body": null
+   "body": null,
+   "tier": "medium"
   },
   {
    "id": "job_studio_m2",
@@ -1601,7 +1598,8 @@
    "code": true,
    "note": "\"Backs transition\": the next 3 boards each get an extra medium role of the tag family the player picks",
    "source": "[user] studio office hook",
-   "body": null
+   "body": null,
+   "tier": "medium"
   },
   {
    "id": "job_studio_m3",
@@ -1615,7 +1613,8 @@
    "code": false,
    "note": "Ending hook (producer line)",
    "source": "[user] studio office hook",
-   "body": null
+   "body": null,
+   "tier": "medium"
   },
   {
    "id": "job_news_m1",
@@ -1629,7 +1628,8 @@
    "code": false,
    "note": "Learns of a scandal a month early and may pay 200 to suppress it",
    "source": "[user] newspaper helper hook",
-   "body": null
+   "body": null,
+   "tier": "medium"
   },
   {
    "id": "job_news_m2",
@@ -1643,7 +1643,8 @@
    "code": false,
    "note": "One free cover-up per year",
    "source": "[user] newspaper helper hook",
-   "body": null
+   "body": null,
+   "tier": "medium"
   },
   {
    "id": "job_news_m3",
@@ -1657,7 +1658,8 @@
    "code": false,
    "note": "May leak one piece of news per year, fame +10%",
    "source": "[user] newspaper helper hook",
-   "body": null
+   "body": null,
+   "tier": "medium"
   },
   {
    "id": "job_ballroom_r1",
@@ -1671,7 +1673,8 @@
    "code": false,
    "note": "Meets the rich widow, rich_widow favor +5",
    "source": "[user] ballroom dancer hook",
-   "body": null
+   "body": null,
+   "tier": "small"
   },
   {
    "id": "job_ballroom_m1",
@@ -1685,7 +1688,8 @@
    "code": false,
    "note": "Unlocks the private male companion job",
    "source": "[user] ballroom dancer hook",
-   "body": null
+   "body": null,
+   "tier": "medium"
   },
   {
    "id": "job_ballroom_m2",
@@ -1699,7 +1703,8 @@
    "code": false,
    "note": "Sponsors one outfit",
    "source": "[user] ballroom dancer hook",
-   "body": null
+   "body": null,
+   "tier": "medium"
   },
   {
    "id": "job_ballroom_m3",
@@ -1713,7 +1718,8 @@
    "code": false,
    "note": "Invests in a film: the next board gets an extra medium role",
    "source": "[user] ballroom dancer hook",
-   "body": null
+   "body": null,
+   "tier": "medium"
   },
   {
    "id": "job_stunt_r1",
@@ -1727,7 +1733,8 @@
    "code": false,
    "note": "Injury (stamina -30, fatigue +20)",
    "source": "[user] stunt double hook",
-   "body": null
+   "body": null,
+   "tier": "bad"
   },
   {
    "id": "job_stunt_m1",
@@ -1741,27 +1748,8 @@
    "code": false,
    "note": "The \"stunt_self\" nerve line drops from 60 to 50; roles with the western and action_adventure tags get +1 board weight",
    "source": "[user] stunt double hook",
-   "body": null
-  },
-  {
-   "id": "job_bootleg_r1",
-   "name": "查车，胆识判定线 60，不过则被捕",
-   "class": "job",
-   "timing": "during_job",
-   "cond": [],
-   "prob": null,
-   "freq": null,
-   "effect": "",
-   "code": false,
-   "note": "Car inspection, nerve check line 60, failing means arrest",
-   "source": "[user] bootlegging hook",
    "body": null,
-   "check": {
-    "check": "nerve",
-    "line": 60
-   },
-   "success_effect": "",
-   "fail_effect": "trigger.evt_arrest"
+   "tier": "medium"
   },
   {
    "id": "job_bootleg_m1",
@@ -1775,7 +1763,8 @@
    "code": false,
    "note": "\"Join the crew\" invitation, sets a flag (underworld emperor line)",
    "source": "[user] bootlegging hook",
-   "body": null
+   "body": null,
+   "tier": "medium"
   },
   {
    "id": "job_magazine_m1",
@@ -1789,7 +1778,8 @@
    "code": false,
    "note": "Cover story (fame +15); roles with the romance and exotic_lover tags get +1 board weight",
    "source": "[user] pinup model hook",
-   "body": null
+   "body": null,
+   "tier": "medium"
   },
   {
    "id": "job_bodyguard_r1",
@@ -1803,7 +1793,8 @@
    "code": false,
    "note": "\"Took the hit\" (stamina -20, actress favor +10, loyalty +10, fame +10)",
    "source": "[user] actress bodyguard hook",
-   "body": null
+   "body": null,
+   "tier": "large"
   },
   {
    "id": "job_radio_m1",
@@ -1817,7 +1808,8 @@
    "code": false,
    "note": "From then on talkie roles' speech line -10",
    "source": "[user] radio announcer hook",
-   "body": null
+   "body": null,
+   "tier": "medium"
   },
   {
    "id": "job_escort_r1",
@@ -1831,7 +1823,8 @@
    "code": false,
    "note": "Caught by the tabloids, settled as scandal exposure",
    "source": "[user] private male companion hook",
-   "body": null
+   "body": null,
+   "tier": "bad"
   },
   {
    "id": "opp_accident",
@@ -1845,7 +1838,8 @@
    "code": false,
    "note": "Story left blank (GDD 12.2 placeholder)",
    "source": "[user][inferred N7]",
-   "body": null
+   "body": null,
+   "tier": "large"
   },
   {
    "id": "opp_expedition",
@@ -1859,7 +1853,8 @@
    "code": false,
    "note": "Story left blank (GDD 12.2 placeholder)",
    "source": "[user][inferred N7]",
-   "body": null
+   "body": null,
+   "tier": "large"
   },
   {
    "id": "opp_tango",
@@ -1873,7 +1868,8 @@
    "code": false,
    "note": "Story left blank (GDD 12.2 placeholder)",
    "source": "[user][inferred N7]",
-   "body": null
+   "body": null,
+   "tier": "large"
   },
   {
    "id": "opp_valen_seat",
@@ -1887,7 +1883,8 @@
    "code": false,
    "note": "Story left blank (GDD 12.2 placeholder)",
    "source": "[user][inferred N7]",
-   "body": null
+   "body": null,
+   "tier": "large"
   },
   {
    "id": "opp_article",
@@ -1901,7 +1898,8 @@
    "code": false,
    "note": "Story left blank (GDD 12.2 placeholder)",
    "source": "[user][inferred N7]",
-   "body": null
+   "body": null,
+   "tier": "large"
   },
   {
    "id": "opp_painting",
@@ -1915,7 +1913,8 @@
    "code": false,
    "note": "Story left blank (GDD 12.2 placeholder)",
    "source": "[user][inferred N7]",
-   "body": null
+   "body": null,
+   "tier": "large"
   },
   {
    "id": "opp_fixer",
@@ -1929,7 +1928,8 @@
    "code": false,
    "note": "Story left blank (GDD 12.2 placeholder)",
    "source": "[user][inferred N7]",
-   "body": null
+   "body": null,
+   "tier": "large"
   },
   {
    "id": "opp_investment",
@@ -1943,7 +1943,8 @@
    "code": false,
    "note": "Story left blank (GDD 12.2 placeholder)",
    "source": "[user][inferred N7]",
-   "body": null
+   "body": null,
+   "tier": "large"
   },
   {
    "id": "opp_senior_yinghan",
@@ -1957,7 +1958,8 @@
    "code": false,
    "note": "Always fires after the senior-approval 300 tier",
    "source": "[user][inferred N7]",
-   "body": null
+   "body": null,
+   "tier": "large"
   },
   {
    "id": "opp_senior_qingren",
@@ -1971,7 +1973,8 @@
    "code": false,
    "note": "Always fires after the senior-approval 300 tier",
    "source": "[user][inferred N7]",
-   "body": null
+   "body": null,
+   "tier": "large"
   },
   {
    "id": "opp_senior_wenhua",
@@ -1985,7 +1988,8 @@
    "code": false,
    "note": "Always fires after the senior-approval 300 tier",
    "source": "[user][inferred N7]",
-   "body": null
+   "body": null,
+   "tier": "large"
   },
   {
    "id": "opp_senior_shouwan",
@@ -1999,7 +2003,24 @@
    "code": false,
    "note": "Always fires after the senior-approval 300 tier",
    "source": "[user][inferred N7]",
-   "body": null
+   "body": null,
+   "tier": "large"
+  },
+  {
+   "id": "evt_sanatorium_people",
+   "name": "疗养院里的人",
+   "class": "rest",
+   "timing": "discharge",
+   "cond": [],
+   "prob": null,
+   "freq": null,
+   "effect": "favor.sil-10 favor.duv-10 flag.sanatorium_people=1",
+   "code": false,
+   "tier": "medium",
+   "note": "Placeholder (step 12c): after a sanatorium month, 1 in 3. Someone he met there; Sil and Duv favor -10; the flag is for later story",
+   "source": "[user 12c]",
+   "body": null,
+   "placeholder": true
   }
  ],
  "month_end_cap": 2

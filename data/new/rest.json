@@ -48,7 +48,16 @@
    "shoot_breach": {
     "fee": 0,
     "fame_pct": -10
-   }
+   },
+   "discharge_effect": "looks-10 physique-10",
+   "discharge_event": {
+    "prob": [
+     1,
+     3
+    ],
+    "event": "evt_sanatorium_people"
+   },
+   "discharge_note": "step 12c: after a month with at least one sanatorium period"
   }
  ]
 }

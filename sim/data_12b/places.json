@@ -1,0 +1,139 @@
+{
+ "note": "Outing places. cost is money per day (or cost_by_fame_tier: five tiers from unknown to superstar); fatigue_per_day is how much fatigue drops each day. random_table is a list of event ids (outing.json). Add a place by adding a row",
+ "places": [
+  {
+   "id": "place_studio",
+   "name": "片厂区",
+   "cost": 8,
+   "residents": [
+    "actress",
+    "studio_boss",
+    "action_director"
+   ],
+   "random_table": [
+    {
+     "event": "outing_director_lunch",
+     "weight": 3
+    }
+   ],
+   "bias": [
+    "connections",
+    "audition_intel",
+    "negotiation"
+   ],
+   "fatigue_per_day": -10
+  },
+  {
+   "id": "place_downtown",
+   "name": "市中心",
+   "cost": 3,
+   "residents": [
+    "duv",
+    "editor"
+   ],
+   "random_table": [
+    {
+     "event": "outing_old_bookshop",
+     "weight": 3
+    },
+    {
+     "event": "outing_pickup",
+     "weight": 2
+    }
+   ],
+   "bias": [
+    "education",
+    "writing",
+    "taste",
+    "speech"
+   ],
+   "fatigue_per_day": -10
+  },
+  {
+   "id": "place_seaside",
+   "name": "海滨大道",
+   "cost": 10,
+   "residents": [
+    "rich_widow",
+    "painter"
+   ],
+   "random_table": [
+    {
+     "event": "outing_salon",
+     "weight": 3
+    },
+    {
+     "event": "outing_romance",
+     "weight": 6
+    }
+   ],
+   "bias": [
+    "looks",
+    "physique",
+    "encounter",
+    "taste"
+   ],
+   "fatigue_per_day": -10
+  },
+  {
+   "id": "place_dock",
+   "name": "码头",
+   "cost": 2,
+   "residents": [
+    "foreman",
+    "bar_owner"
+   ],
+   "random_table": [
+    {
+     "event": "outing_driver",
+     "weight": 3
+    },
+    {
+     "event": "outing_countryman",
+     "weight": 3
+    },
+    {
+     "event": "outing_backdoor",
+     "weight": 2
+    }
+   ],
+   "bias": [
+    "fight",
+    "nerve",
+    "loyalty",
+    "crime"
+   ],
+   "fatigue_per_day": -10
+  },
+  {
+   "id": "place_resort",
+   "name": "度假村",
+   "cost_by_fame_tier": [
+    6,
+    8,
+    12,
+    18,
+    30
+   ],
+   "fatigue_per_day": -30,
+   "residents": [],
+   "random_table": [
+    {
+     "event": "vac_1",
+     "weight": 1
+    },
+    {
+     "event": "vac_2",
+     "weight": 1
+    },
+    {
+     "event": "vac_3",
+     "weight": 1
+    }
+   ],
+   "bias": [
+    "fatigue"
+   ]
+  }
+ ]
+}

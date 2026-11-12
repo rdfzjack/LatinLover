@@ -317,12 +317,13 @@ static func fame_gate(st, e: Dictionary) -> int:
 	return g
 
 
-## Whether the role can be signed: fame high enough, morals clause, long contract allows only house roles.
+## Whether the role can be signed: fame high enough, morals clause (step 12c: no big film for morals_months after an arrest or an
+## unsuppressed scandal, flag morals_until = last blocked month index), long contract allows only house roles.
 ## Returns "" or the reason.
 static func eligible(st, e: Dictionary) -> String:
 	if st.attr["fame"] < fame_gate(st, e):
 		return "out_of_reach"
-	if e["size"] == "big" and st.val("crime") >= cfg(st.d)["morals_crime"]:
+	if e["size"] == "big" and st.flags.has("morals_until") and st.ym <= st.flags["morals_until"]:
 		return "morals"
 	if st.status["long_contract"] and not e["house"]:
 		return "not a house role"

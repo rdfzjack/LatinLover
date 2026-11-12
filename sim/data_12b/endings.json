@@ -1,0 +1,1352 @@
+{
+ "note": "Resolution order: forced -> special -> category -> grade -> character tier -> destiny -> comment and total score. Within a category the ending list takes the first whose cond holds, by `order`; an empty cond is the fallback",
+ "forced": [
+  {
+   "id": "end_collapse",
+   "name": "倒下",
+   "cond": [
+    [
+     [
+      "sick_index",
+      "==",
+      100
+     ]
+    ]
+   ],
+   "note": "sick_index stays 100 for 2 months in a row (can trigger mid-game). He did not survive; write it seriously",
+   "body": null
+  }
+ ],
+ "special": [
+  {
+   "id": "end_underworld",
+   "name": "地下皇帝",
+   "cond": [
+    [
+     [
+      "crime",
+      ">=",
+      500
+     ],
+     [
+      "tough",
+      ">=",
+      300
+     ],
+     [
+      "savvy",
+      ">=",
+      200
+     ]
+    ]
+   ],
+   "note": "Bad but strong: all the bootleg liquor in town passes through his hands [orig Demon King]",
+   "body": null
+  },
+  {
+   "id": "end_idol",
+   "name": "帝国银幕偶像",
+   "cond": [
+    [
+     [
+      "fame",
+      ">=",
+      500
+     ],
+     [
+      "loyalty",
+      "<",
+      50
+     ],
+     [
+      "flag.berlin_invite",
+      "==",
+      1
+     ]
+    ]
+   ],
+   "note": "Went to Germany and became an idol there; the Sil line breaks here [user material]",
+   "body": null
+  }
+ ],
+ "categories": [
+  {
+   "id": "dark",
+   "name": "黑暗",
+   "cond": [
+    [
+     [
+      "discipline",
+      "==",
+      0
+     ],
+     [
+      "crime",
+      ">=",
+      100
+     ]
+    ],
+    [
+     [
+      "discipline",
+      "<",
+      30
+     ],
+     [
+      "crime",
+      ">=",
+      250
+     ]
+    ],
+    [
+     [
+      "crime",
+      ">=",
+      400
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "actor",
+   "name": "演员",
+   "cond": [
+    [
+     [
+      "fame",
+      ">=",
+      300
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "all",
+   "name": "万能",
+   "cond": [
+    [
+     [
+      "rep_spread",
+      "<",
+      50
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "tough",
+   "name": "硬汉",
+   "cond": [
+    [
+     [
+      "top_road",
+      "==",
+      "tough"
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "lover",
+   "name": "情人",
+   "cond": [
+    [
+     [
+      "top_road",
+      "==",
+      "lover"
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "culture",
+   "name": "文化",
+   "cond": [
+    [
+     [
+      "top_road",
+      "==",
+      "culture"
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "savvy",
+   "name": "手腕",
+   "cond": [
+    [
+     [
+      "top_road",
+      "==",
+      "savvy"
+     ]
+    ]
+   ]
+  }
+ ],
+ "category_note": "Take the first that matches; ties on top_road go by tough, lover, culture, savvy",
+ "grade_lines": {
+  "S": 451,
+  "A": 381,
+  "B": 311,
+  "C": 211,
+  "D": 0
+ },
+ "tag_families": {
+  "lover_family": [
+   "romance",
+   "exotic_lover",
+   "musical"
+  ],
+  "action_family": [
+   "western",
+   "action_adventure",
+   "war",
+   "costume"
+  ],
+  "persona_family": [
+   "villain",
+   "crime",
+   "horror"
+  ],
+  "art_family": [
+   "arthouse",
+   "tragic",
+   "religious",
+   "underground"
+  ],
+  "comedy_noble_family": [
+   "comedy",
+   "noble"
+  ]
+ },
+ "tag_families_note": "Top tag family = the family with the largest sum of tag counts; ties follow the order of this table",
+ "endings": [
+  {
+   "id": "act_legend",
+   "name": "银幕传奇",
+   "category": "actor",
+   "order": 1,
+   "cond": [
+    [
+     [
+      "grade",
+      "in",
+      [
+       "S"
+      ]
+     ]
+    ]
+   ],
+   "content": "进了 1930 年代仍是头牌",
+   "body": null
+  },
+  {
+   "id": "act_lowbudget",
+   "name": "低成本片之王",
+   "category": "actor",
+   "order": 2,
+   "cond": [
+    [
+     [
+      "lowbudget_typed",
+      "==",
+      1
+     ]
+    ]
+   ],
+   "content": "小厂的招牌，一年拍八部 [推N56]",
+   "body": null
+  },
+  {
+   "id": "act_undefined",
+   "name": "无法定义的人",
+   "category": "actor",
+   "order": 3,
+   "cond": [
+    [
+     [
+      "undefined",
+      "==",
+      1
+     ],
+     [
+      "grade",
+      "in",
+      [
+       "S",
+       "A",
+       "B"
+      ]
+     ]
+    ]
+   ],
+   "content": "泰山、圣徒、禁片都演过，没人知道怎么写他 [用素材]",
+   "body": null
+  },
+  {
+   "id": "act_voice",
+   "name": "有声片的新声音",
+   "category": "actor",
+   "order": 4,
+   "cond": [
+    [
+     [
+      "grade",
+      "in",
+      [
+       "A",
+       "B"
+      ]
+     ],
+     [
+      "speech",
+      ">=",
+      80
+     ],
+     [
+      "talkie_count",
+      ">=",
+      3
+     ]
+    ]
+   ],
+   "content": "口音成了招牌",
+   "body": null
+  },
+  {
+   "id": "act_lover",
+   "name": "一代情人",
+   "category": "actor",
+   "order": 5,
+   "cond": [
+    [
+     [
+      "grade",
+      "in",
+      [
+       "A",
+       "B"
+      ]
+     ],
+     [
+      "top_tag_family",
+      "==",
+      "lover_family"
+     ]
+    ]
+   ],
+   "content": "接过了瓦伦的位置",
+   "body": null
+  },
+  {
+   "id": "act_action",
+   "name": "动作明星",
+   "category": "actor",
+   "order": 6,
+   "cond": [
+    [
+     [
+      "grade",
+      "in",
+      [
+       "A",
+       "B"
+      ]
+     ],
+     [
+      "top_tag_family",
+      "==",
+      "action_family"
+     ]
+    ]
+   ],
+   "content": "自己上马的那种明星",
+   "body": null
+  },
+  {
+   "id": "act_character",
+   "name": "性格演员",
+   "category": "actor",
+   "order": 7,
+   "cond": [
+    [
+     [
+      "grade",
+      "in",
+      [
+       "A",
+       "B"
+      ]
+     ],
+     [
+      "top_tag_family",
+      "==",
+      "persona_family"
+     ]
+    ]
+   ],
+   "content": "观众怕他，导演爱他",
+   "body": null
+  },
+  {
+   "id": "act_art",
+   "name": "艺术片的脸",
+   "category": "actor",
+   "order": 8,
+   "cond": [
+    [
+     [
+      "grade",
+      "in",
+      [
+       "A",
+       "B"
+      ]
+     ],
+     [
+      "top_tag_family",
+      "==",
+      "art_family"
+     ]
+    ]
+   ],
+   "content": "钱不多，影评人记得他",
+   "body": null
+  },
+  {
+   "id": "act_comedy",
+   "name": "喜剧和贵族",
+   "category": "actor",
+   "order": 9,
+   "cond": [
+    [
+     [
+      "grade",
+      "in",
+      [
+       "A",
+       "B"
+      ]
+     ],
+     [
+      "top_tag_family",
+      "==",
+      "comedy_noble_family"
+     ]
+    ]
+   ],
+   "content": "轻喜剧里的常客",
+   "body": null
+  },
+  {
+   "id": "act_silent",
+   "name": "默片的遗物",
+   "category": "actor",
+   "order": 10,
+   "cond": [
+    [
+     [
+      "grade",
+      "in",
+      [
+       "D"
+      ]
+     ]
+    ],
+    [
+     [
+      "speech",
+      "<",
+      30
+     ]
+    ]
+   ],
+   "content": "电影开口说话以后没人找他了",
+   "body": null
+  },
+  {
+   "id": "act_second",
+   "name": "二线",
+   "category": "actor",
+   "order": 11,
+   "cond": [
+    [
+     [
+      "grade",
+      "in",
+      [
+       "C"
+      ]
+     ]
+    ]
+   ],
+   "content": "名字在海报第三行",
+   "body": null
+  },
+  {
+   "id": "act_fallback",
+   "name": "二线（其余）",
+   "category": "actor",
+   "order": 99,
+   "cond": [],
+   "content": "演员大类里没有被前面任何一条接住的局，落到这里",
+   "body": null,
+   "note": "Gap filler, not in the GDD"
+  },
+  {
+   "id": "tough_adventurer",
+   "name": "冒险家",
+   "category": "tough",
+   "order": 1,
+   "cond": [
+    [
+     [
+      "grade",
+      "in",
+      [
+       "S",
+       "A"
+      ]
+     ],
+     [
+      "discipline",
+      ">=",
+      30
+     ]
+    ]
+   ],
+   "content": "到处走，偶尔寄回明信片 [用素材]",
+   "body": null
+  },
+  {
+   "id": "tough_stunt",
+   "name": "特技指导",
+   "category": "tough",
+   "order": 2,
+   "cond": [
+    [
+     [
+      "grade",
+      "in",
+      [
+       "B"
+      ]
+     ],
+     [
+      "loyalty",
+      ">=",
+      150
+     ],
+     [
+      "discipline",
+      ">=",
+      30
+     ]
+    ]
+   ],
+   "content": "教别人怎么摔",
+   "body": null
+  },
+  {
+   "id": "tough_rider",
+   "name": "马术教练",
+   "category": "tough",
+   "order": 3,
+   "cond": [
+    [
+     [
+      "grade",
+      "in",
+      [
+       "B"
+      ]
+     ],
+     [
+      "loyalty",
+      "<",
+      150
+     ],
+     [
+      "discipline",
+      ">=",
+      30
+     ]
+    ]
+   ],
+   "content": "",
+   "body": null
+  },
+  {
+   "id": "tough_gym",
+   "name": "拳馆教练",
+   "category": "tough",
+   "order": 4,
+   "cond": [
+    [
+     [
+      "grade",
+      "in",
+      [
+       "C"
+      ]
+     ],
+     [
+      "discipline",
+      ">=",
+      30
+     ]
+    ]
+   ],
+   "content": "开了一间小拳馆",
+   "body": null
+  },
+  {
+   "id": "tough_double",
+   "name": "只拍枪战的替身",
+   "category": "tough",
+   "order": 5,
+   "cond": [
+    [
+     [
+      "grade",
+      "in",
+      [
+       "D"
+      ]
+     ],
+     [
+      "discipline",
+      ">=",
+      50
+     ]
+    ]
+   ],
+   "content": "脸从不出现在片子里",
+   "body": null
+  },
+  {
+   "id": "tough_thug",
+   "name": "打手",
+   "category": "tough",
+   "order": 99,
+   "cond": [],
+   "content": "给人看场子 [原 奖金猎人/佣兵]",
+   "body": null
+  },
+  {
+   "id": "lover_darling",
+   "name": "上流社会的宠儿",
+   "category": "lover",
+   "order": 1,
+   "cond": [
+    [
+     [
+      "grade",
+      "in",
+      [
+       "S"
+      ]
+     ]
+    ],
+    [
+     [
+      "grade",
+      "in",
+      [
+       "A"
+      ]
+     ],
+     [
+      "looks",
+      ">=",
+      500
+     ]
+    ]
+   ],
+   "content": "每张请柬上都有他 [原 宠妃/王妃]",
+   "body": null
+  },
+  {
+   "id": "lover_salon",
+   "name": "沙龙主人",
+   "category": "lover",
+   "order": 2,
+   "cond": [
+    [
+     [
+      "grade",
+      "in",
+      [
+       "A",
+       "B"
+      ]
+     ],
+     [
+      "education",
+      ">=",
+      "@looks"
+     ]
+    ]
+   ],
+   "content": "[原 伯爵夫人]",
+   "body": null,
+   "note": "GDD's B row; A with looks <500 also lands here (gap filler)"
+  },
+  {
+   "id": "lover_widow",
+   "name": "富孀的伴侣",
+   "category": "lover",
+   "order": 3,
+   "cond": [
+    [
+     [
+      "grade",
+      "in",
+      [
+       "A",
+       "B"
+      ]
+     ]
+    ]
+   ],
+   "content": "[原 富豪之妻]",
+   "body": null
+  },
+  {
+   "id": "lover_dance_teacher",
+   "name": "舞蹈教师",
+   "category": "lover",
+   "order": 4,
+   "cond": [
+    [
+     [
+      "grade",
+      "in",
+      [
+       "C"
+      ]
+     ],
+     [
+      "education",
+      ">=",
+      "@looks"
+     ]
+    ]
+   ],
+   "content": "[原 商人之妻]",
+   "body": null
+  },
+  {
+   "id": "lover_dance_hall",
+   "name": "舞厅老板",
+   "category": "lover",
+   "order": 5,
+   "cond": [
+    [
+     [
+      "grade",
+      "in",
+      [
+       "C"
+      ]
+     ]
+    ]
+   ],
+   "content": "[原 农家之妻]",
+   "body": null
+  },
+  {
+   "id": "lover_pinup",
+   "name": "画报上的人",
+   "category": "lover",
+   "order": 6,
+   "cond": [
+    [
+     [
+      "grade",
+      "in",
+      [
+       "D"
+      ]
+     ],
+     [
+      "looks",
+      ">=",
+      150
+     ]
+    ]
+   ],
+   "content": "[原 地主的爱人]",
+   "body": null
+  },
+  {
+   "id": "lover_gigolo",
+   "name": "舞男",
+   "category": "lover",
+   "order": 99,
+   "cond": [],
+   "content": "[原 离婚的女人]",
+   "body": null
+  },
+  {
+   "id": "cult_writer",
+   "name": "作家",
+   "category": "culture",
+   "order": 1,
+   "cond": [
+    [
+     [
+      "grade",
+      "in",
+      [
+       "S",
+       "A"
+      ]
+     ],
+     [
+      "writing",
+      ">=",
+      "@taste"
+     ],
+     [
+      "discipline",
+      ">=",
+      50
+     ]
+    ]
+   ],
+   "content": "[用素材]",
+   "body": null
+  },
+  {
+   "id": "cult_photog",
+   "name": "摄影家",
+   "category": "culture",
+   "order": 2,
+   "cond": [
+    [
+     [
+      "grade",
+      "in",
+      [
+       "S",
+       "A"
+      ]
+     ],
+     [
+      "discipline",
+      ">=",
+      50
+     ]
+    ]
+   ],
+   "content": "[用素材]",
+   "body": null
+  },
+  {
+   "id": "cult_screenwriter",
+   "name": "编剧",
+   "category": "culture",
+   "order": 3,
+   "cond": [
+    [
+     [
+      "grade",
+      "in",
+      [
+       "S",
+       "A",
+       "B"
+      ]
+     ],
+     [
+      "discipline",
+      ">=",
+      50
+     ]
+    ]
+   ],
+   "content": "",
+   "body": null
+  },
+  {
+   "id": "cult_tabloid",
+   "name": "小报写手",
+   "category": "culture",
+   "order": 4,
+   "cond": [
+    [
+     [
+      "grade",
+      "in",
+      [
+       "S",
+       "A",
+       "B"
+      ]
+     ]
+    ]
+   ],
+   "content": "",
+   "body": null
+  },
+  {
+   "id": "cult_editor",
+   "name": "报馆编辑",
+   "category": "culture",
+   "order": 5,
+   "cond": [
+    [
+     [
+      "grade",
+      "in",
+      [
+       "C"
+      ]
+     ]
+    ]
+   ],
+   "content": "",
+   "body": null
+  },
+  {
+   "id": "cult_letter",
+   "name": "写信的人",
+   "category": "culture",
+   "order": 6,
+   "cond": [
+    [
+     [
+      "grade",
+      "in",
+      [
+       "D"
+      ]
+     ],
+     [
+      "loyalty",
+      ">=",
+      100
+     ]
+    ]
+   ],
+   "content": "替不识字的同乡写信",
+   "body": null
+  },
+  {
+   "id": "cult_street_photo",
+   "name": "街头照相的",
+   "category": "culture",
+   "order": 99,
+   "cond": [],
+   "content": "",
+   "body": null
+  },
+  {
+   "id": "biz_producer",
+   "name": "制片人",
+   "category": "savvy",
+   "order": 1,
+   "cond": [
+    [
+     [
+      "grade",
+      "in",
+      [
+       "S"
+      ]
+     ]
+    ],
+    [
+     [
+      "grade",
+      "in",
+      [
+       "A"
+      ]
+     ],
+     [
+      "favor.studio_boss",
+      ">=",
+      80
+     ]
+    ]
+   ],
+   "content": "别人的片子由他点头",
+   "body": null
+  },
+  {
+   "id": "biz_agent",
+   "name": "经纪人",
+   "category": "savvy",
+   "order": 2,
+   "cond": [
+    [
+     [
+      "grade",
+      "in",
+      [
+       "A"
+      ]
+     ]
+    ]
+   ],
+   "content": "手里有十几个演员",
+   "body": null
+  },
+  {
+   "id": "biz_dealer",
+   "name": "生意人",
+   "category": "savvy",
+   "order": 3,
+   "cond": [
+    [
+     [
+      "grade",
+      "in",
+      [
+       "B"
+      ]
+     ],
+     [
+      "top_savvy_skill",
+      "==",
+      "business"
+     ]
+    ]
+   ],
+   "content": "",
+   "body": null
+  },
+  {
+   "id": "biz_broker",
+   "name": "掮客",
+   "category": "savvy",
+   "order": 4,
+   "cond": [
+    [
+     [
+      "grade",
+      "in",
+      [
+       "B"
+      ]
+     ]
+    ]
+   ],
+   "content": "",
+   "body": null
+  },
+  {
+   "id": "biz_boss",
+   "name": "小老板",
+   "category": "savvy",
+   "order": 5,
+   "cond": [
+    [
+     [
+      "grade",
+      "in",
+      [
+       "C"
+      ]
+     ]
+    ]
+   ],
+   "content": "一间餐馆或一间酒吧",
+   "body": null
+  },
+  {
+   "id": "biz_sales",
+   "name": "推销员",
+   "category": "savvy",
+   "order": 99,
+   "cond": [],
+   "content": "",
+   "body": null
+  },
+  {
+   "id": "all_studio",
+   "name": "片厂老板",
+   "category": "all",
+   "order": 1,
+   "cond": [
+    [
+     [
+      "grade",
+      "in",
+      [
+       "S"
+      ]
+     ]
+    ]
+   ],
+   "content": "[原 女王/宰相]",
+   "body": null
+  },
+  {
+   "id": "all_director",
+   "name": "导演",
+   "category": "all",
+   "order": 2,
+   "cond": [
+    [
+     [
+      "grade",
+      "in",
+      [
+       "A",
+       "B"
+      ]
+     ]
+    ]
+   ],
+   "content": "什么都会一点的人去当了导演",
+   "body": null
+  },
+  {
+   "id": "all_job_formal",
+   "name": "以{top_job}为业",
+   "category": "all",
+   "order": 3,
+   "cond": [
+    [
+     [
+      "grade",
+      "in",
+      [
+       "C"
+      ]
+     ],
+     [
+      "max_job_periods",
+      ">=",
+      5
+     ]
+    ]
+   ],
+   "content": "正式 [原 HEAVY_WORKING，10 期的一半]",
+   "body": null,
+   "dynamic_name": "top_job"
+  },
+  {
+   "id": "all_job_temp",
+   "name": "暂以{top_job}为生",
+   "category": "all",
+   "order": 4,
+   "cond": [
+    [
+     [
+      "grade",
+      "in",
+      [
+       "D"
+      ]
+     ],
+     [
+      "max_job_periods",
+      ">=",
+      5
+     ]
+    ]
+   ],
+   "content": "临时",
+   "body": null,
+   "dynamic_name": "top_job"
+  },
+  {
+   "id": "all_naples",
+   "name": "回那不勒斯",
+   "category": "all",
+   "order": 99,
+   "cond": [],
+   "content": "一张回程船票",
+   "body": null,
+   "note": "GDD says \"C/D with no job reaching 5 periods\"; fallback, any other run that falls through is also filed here (gap filler)"
+  },
+  {
+   "id": "dark_boss",
+   "name": "黑帮头目",
+   "category": "dark",
+   "order": 1,
+   "cond": [
+    [
+     [
+      "tough",
+      ">=",
+      210
+     ],
+     [
+      "loyalty",
+      ">=",
+      200
+     ]
+    ]
+   ],
+   "content": "有人愿意跟他 [原 黑街老大]",
+   "body": null
+  },
+  {
+   "id": "dark_thug_boss",
+   "name": "打手头子",
+   "category": "dark",
+   "order": 2,
+   "cond": [
+    [
+     [
+      "tough",
+      ">=",
+      210
+     ],
+     [
+      "loyalty",
+      "<",
+      200
+     ]
+    ]
+   ],
+   "content": "[原 流氓]",
+   "body": null
+  },
+  {
+   "id": "dark_marry",
+   "name": "骗婚的人",
+   "category": "dark",
+   "order": 3,
+   "cond": [
+    [
+     [
+      "speech",
+      ">=",
+      70
+     ],
+     [
+      "negotiation",
+      ">=",
+      70
+     ],
+     [
+      "looks",
+      ">=",
+      200
+     ],
+     [
+      "connections",
+      ">=",
+      70
+     ]
+    ]
+   ],
+   "content": "[原 高级妓女的条件形状]",
+   "body": null
+  },
+  {
+   "id": "dark_con",
+   "name": "骗子",
+   "category": "dark",
+   "order": 4,
+   "cond": [
+    [
+     [
+      "looks",
+      "<",
+      200
+     ],
+     [
+      "negotiation",
+      ">=",
+      70
+     ]
+    ]
+   ],
+   "content": "[原 诈欺师]",
+   "body": null
+  },
+  {
+   "id": "dark_prison",
+   "name": "入狱",
+   "category": "dark",
+   "order": 99,
+   "cond": [],
+   "content": "",
+   "body": null
+  }
+ ],
+ "destiny": {
+  "special": "Section 13: the four lines' destiny conditions (romance.json) take priority",
+  "ordinary": {
+   "mode": [
+    {
+     "cond": [
+      [
+       [
+        "discipline",
+        ">=",
+        30
+       ]
+      ]
+     ],
+     "mode": 1,
+     "good_destiny_line": [
+      "looks",
+      200
+     ]
+    },
+    {
+     "cond": [
+      [
+       [
+        "looks",
+        ">",
+        "@loyalty"
+       ]
+      ]
+     ],
+     "mode": 2,
+     "good_destiny_line": [
+      "looks",
+      200
+     ]
+    },
+    {
+     "cond": [],
+     "mode": 3,
+     "good_destiny_line": [
+      "loyalty",
+      200
+     ]
+    }
+   ]
+  },
+  "stacking": "The destiny is played after the career ending"
+ },
+ "scoring": {
+  "total": "(stamina+education+loyalty+looks+discipline+fame)/6 - crime + ending_score + character_score + destiny_score",
+  "ending_score": {
+   "S": 500,
+   "A": 400,
+   "B": 300,
+   "C": 100,
+   "D": 50
+  },
+  "character_score": "Keeps the original's 300/100/-10 three tiers",
+  "destiny_score": {
+   "special": 200,
+   "ordinary_good": 40,
+   "ordinary": 20
+  },
+  "comment": "One line each for the class attended most often (reading counts as one class) and the job done most often",
+  "character_tiers": {
+   "note": "Original TENMATSU_HYOKA: pine 300, bamboo 100, plum -10. Of the original's 74 endings only 4 are graded by attributes, the rest are all plum. Which new endings get a tier is undecided, so all use default_tier for now (an ending may add character: [{cond, tier}] to override); user to decide",
+   "score": {
+    "1": 300,
+    "2": 100,
+    "3": -10
+   },
+   "default_tier": 3
+  }
+ }
+}

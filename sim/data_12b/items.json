@@ -1,0 +1,227 @@
+{
+ "rules": {
+  "hold_cap": 50,
+  "outfit_slots": 1,
+  "accessory_slots": 2,
+  "outfit_bonus": "displayed value = base + outfit value x (0.5 + grooming displayed value/100), rounded down",
+  "exclusive": "Within one exclusive group only the highest-priced item takes effect",
+  "books": "Book data lives in books.json; only special books that do not come from the bookstore are listed here"
+ },
+ "items": [
+  {
+   "id": "senior_gear_lover",
+   "name": "前辈的装备·情人",
+   "class": "outfit",
+   "price": 0,
+   "effect": "acting+10 physique+5",
+   "slot": "outfit",
+   "sellable": false,
+   "note": "Given at senior-approval tier 200; class and skill are placeholders (GDD only says \"+10 to one skill of the road, +5 to another\")"
+  },
+  {
+   "id": "senior_gear_savvy",
+   "name": "前辈的装备·手腕",
+   "class": "accessory",
+   "price": 0,
+   "effect": "negotiation+10 connections+5",
+   "slot": "accessory",
+   "sellable": false,
+   "note": "Given at senior-approval tier 200; class and skill are placeholders (GDD only says \"+10 to one skill of the road, +5 to another\")"
+  },
+  {
+   "id": "senior_gear_culture",
+   "name": "前辈的装备·文化",
+   "class": "held",
+   "price": 0,
+   "effect": "writing+10 taste+5",
+   "slot": null,
+   "sellable": false,
+   "note": "Given at senior-approval tier 200; class and skill are placeholders (GDD only says \"+10 to one skill of the road, +5 to another\")"
+  },
+  {
+   "id": "senior_gear_tough",
+   "name": "前辈的装备·硬汉",
+   "class": "accessory",
+   "price": 0,
+   "effect": "fight+10 nerve+5",
+   "slot": "accessory",
+   "sellable": false,
+   "note": "Given at senior-approval tier 200; class and skill are placeholders (GDD only says \"+10 to one skill of the road, +5 to another\")"
+  },
+  {
+   "id": "makeup_case",
+   "name": "化妆箱",
+   "class": "held",
+   "price": 25,
+   "effect": "grooming+5",
+   "slot": null,
+   "sellable": true
+  },
+  {
+   "id": "slave_bracelet",
+   "name": "奴隶手镯",
+   "class": "accessory",
+   "price": 150,
+   "effect": "looks+20",
+   "slot": "accessory",
+   "sellable": true
+  },
+  {
+   "id": "suit_custom",
+   "name": "定制西装",
+   "class": "outfit",
+   "price": 90,
+   "effect": "looks+30",
+   "slot": "outfit",
+   "sellable": true
+  },
+  {
+   "id": "gold_watch",
+   "name": "怀表",
+   "class": "accessory",
+   "price": 40,
+   "effect": "negotiation+5",
+   "slot": "accessory",
+   "sellable": true
+  },
+  {
+   "id": "typewriter",
+   "name": "打字机",
+   "class": "held",
+   "price": 60,
+   "effect": "writing+6",
+   "slot": null,
+   "sellable": true
+  },
+  {
+   "id": "boxing_gloves",
+   "name": "拳套",
+   "class": "accessory",
+   "price": 6,
+   "effect": "fight+5",
+   "slot": "accessory",
+   "sellable": true
+  },
+  {
+   "id": "old_book",
+   "name": "旧书",
+   "class": "book",
+   "price": 0,
+   "effect": "",
+   "slot": null,
+   "sellable": false,
+   "note": "Item for the third opening question; education gate 300, finish event left blank; the skill is for the user to decide, so it is not in books.json"
+  },
+  {
+   "id": "suit_old",
+   "name": "旧西装",
+   "class": "outfit",
+   "price": 15,
+   "effect": "looks+10",
+   "slot": "outfit",
+   "sellable": true
+  },
+  {
+   "id": "evening_gown",
+   "name": "晚礼服",
+   "class": "outfit",
+   "price": 200,
+   "effect": "looks+40 speech+5",
+   "slot": "outfit",
+   "sellable": true
+  },
+  {
+   "id": "phonograph",
+   "name": "留声机",
+   "class": "held",
+   "price": 100,
+   "effect": "physique+5 speech+3",
+   "slot": null,
+   "sellable": true
+  },
+  {
+   "id": "fur_white",
+   "name": "白色皮草",
+   "class": "outfit",
+   "price": 800,
+   "effect": "looks+60 discipline-10",
+   "slot": "outfit",
+   "sellable": true
+  },
+  {
+   "id": "camera",
+   "name": "相机",
+   "class": "held",
+   "price": 60,
+   "effect": "taste+6",
+   "slot": null,
+   "sellable": true
+  },
+  {
+   "id": "social_register",
+   "name": "社交名录",
+   "class": "held",
+   "price": 30,
+   "effect": "connections+5",
+   "slot": null,
+   "sellable": true
+  },
+  {
+   "id": "car_ford",
+   "name": "福特车",
+   "class": "held",
+   "price": 300,
+   "effect": "riding+3",
+   "slot": null,
+   "sellable": true,
+   "exclusive_group": "car"
+  },
+  {
+   "id": "dance_shoes",
+   "name": "舞鞋",
+   "class": "accessory",
+   "price": 12,
+   "effect": "physique+5",
+   "slot": "accessory",
+   "sellable": true
+  },
+  {
+   "id": "tonic",
+   "name": "补药",
+   "class": "consumable",
+   "price": 1,
+   "effect": "stamina+2",
+   "slot": null,
+   "sellable": true
+  },
+  {
+   "id": "car_sports",
+   "name": "跑车",
+   "class": "held",
+   "price": 1500,
+   "effect": "riding+5 connections+5",
+   "slot": null,
+   "sellable": true,
+   "exclusive_group": "car"
+  },
+  {
+   "id": "car_luxury",
+   "name": "进口豪车",
+   "class": "held",
+   "price": 6000,
+   "effect": "riding+8 connections+10 looks+20",
+   "slot": null,
+   "sellable": true,
+   "exclusive_group": "car"
+  },
+  {
+   "id": "riding_habit",
+   "name": "骑装",
+   "class": "outfit",
+   "price": 70,
+   "effect": "riding+5 looks+10",
+   "slot": "outfit",
+   "sellable": true
+  }
+ ]
+}
