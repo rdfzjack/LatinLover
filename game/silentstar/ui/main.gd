@@ -34,15 +34,17 @@ var sem := Semaphore.new()
 var answer = null
 var auto := false
 var title_shot := ""
-var shot_kind := "plan"
+var shot_kind := "pick_period"
+var shot_loc := ""
 var shot_path := ""         # --shot=file.png: saves a picture of the first screen that waits for the player, then quits
 var uitest := false         # --uitest: builds every screen for real, then presses the buttons itself
 var auto_months := 9999
 var quitting := false
 var names := {}
 
-var prev_plan: Array = []
-var skip_playback := false
+var cur_plan: Array = ["rest_home", "rest_home", "rest_home"]   # filled one period at a time by the map
+var month_forced := false
+var cur_period_hint := 0
 var snap := {}             # state at the start of the month (for the settlement summary)
 var last_snap := {}        # state after the previous period (for the playback)
 var ev_seen := 0           # how many records of story.event_log were already shown
@@ -51,8 +53,6 @@ var ev_seen := 0           # how many records of story.event_log were already sh
 var status_label: Label
 var body: VBoxContainer
 var log_box: RichTextLabel
-var plan_btns: Array = []
-var plan_info: Label
 var street_box: VBoxContainer
 var street_msg: Label
 var sel_color := 0
@@ -68,6 +68,8 @@ func _ready() -> void:
 			auto = true
 		elif a.begins_with("--titleshot="):
 			title_shot = a.substr(12)
+		elif a.begins_with("--shotloc="):
+			shot_loc = a.substr(10)
 		elif a.begins_with("--shotkind="):
 			shot_kind = a.substr(11)
 		elif a.begins_with("--shot="):
@@ -256,7 +258,6 @@ func clear_body() -> void:
 	for c in body.get_children():
 		c.queue_free()
 	body.add_child(Control.new())   # keeps the container non-empty while the old children are freed
-	plan_btns = []
 
 
 func label(text: String, parent = null, color := Color(1, 1, 1)) -> Label:
@@ -354,6 +355,22 @@ func diff_text(a: Dictionary, b: Dictionary) -> String:
 			if a[grp][k] != b[grp][k]:
 				out.append("%s %+d" % [nm(k), b[grp][k] - a[grp][k]])
 	return "，".join(out) if not out.is_empty() else "没有变化"
+
+
+func diff_lines(a: Dictionary, b: Dictionary) -> PackedStringArray:
+	var out := PackedStringArray()
+	if a["money"] != b["money"]:
+		out.append("金钱　$%d → $%d（%+d）" % [a["money"], b["money"], b["money"] - a["money"]])
+	for grp in ["attr", "skill"]:
+		for k in b[grp]:
+			if k == "fame":
+				continue
+			if a[grp][k] != b[grp][k]:
+				out.append("%s　%d → %d（%+d）" % [nm(k), a[grp][k], b[grp][k], b[grp][k] - a[grp][k]])
+	for k in b["rep"]:
+		if a["rep"][k] != b["rep"][k]:
+			out.append("声望·%s　%d → %d（%+d）" % [nm(k), a["rep"][k], b["rep"][k], b["rep"][k] - a["rep"][k]])
+	return out
 
 
 func new_events() -> PackedStringArray:
@@ -526,7 +543,6 @@ func _start_game(seed_n: int, origin: Array, start_vals := {}) -> void:
 		else:
 			st.skill[k] = start_vals[k]
 	st.update_indices()
-	prev_plan = []
 	_run_thread()
 
 
@@ -540,7 +556,6 @@ func _continue_game() -> void:
 		return
 	g = m
 	st = g.st
-	prev_plan = []
 	_run_thread()
 
 
@@ -560,18 +575,18 @@ func _worker() -> void:
 		g.start_month()
 		last_snap = snapshot()
 		snap = last_snap
-		skip_playback = false
 		ev_seen = g.hooks.event_log.size()
-		var plan: Array = ask("plan", null)
+		ask("month_start", null)
 		if quitting:
 			return
-		var errs: Array = g.run_month(plan)
+		last_snap = snapshot()      # the street is over: the period reports count from here
+		month_forced = st.forced_rest != 0
+		cur_plan = ["rest_home", "rest_home", "rest_home"]
+		var errs: Array = g.run_month(cur_plan)
 		if not errs.is_empty():
-			note("日程不能用：" + str(errs))
-			g.started = true     # start_month already ran; try again after a new plan
-			continue
+			push_error("run_month refused the plan: " + str(errs))
+			return
 		months += 1
-		prev_plan = plan
 		if not st.finished:
 			var s: String = g.save()
 			var f := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
@@ -607,27 +622,41 @@ func reply(v) -> void:
 	sem.post()
 
 
-## Called by UiStory (game thread) after each period has been settled.
+## Called by UiStory (game thread) after each period has been settled: CG placeholder, a short report, every stat that changed.
 func period_done(_st, i: int, entry: String, out: Dictionary) -> void:
 	var now := snapshot()
 	var evs := new_events()
 	var days := Schedule.days_of(st, i)
 	var span := "%d–%d 日" % [days[0][0], days[days.size() - 1][0]]
-	var title: String = ["上旬", "中旬", "下旬"][i]
-	var what: String = "拍摄：" + str(out.get("film", "")) if entry == "shooting" else entry_name(entry)
-	var lines := PackedStringArray()
-	lines.append("%s（%s）：%s" % [title, span, what])
-	lines.append("　" + diff_text(last_snap, now))
+	var head: String = "%s　%s（%s）" % [st.date(), ["上旬", "中旬", "下旬"][i], span]
+	var what := ""
+	var cg := ""
+	var rep := PackedStringArray()
+	if entry == "shooting":
+		what = "拍摄《%s》" % str(out.get("film", ""))
+		cg = "片场拍摄"
+		rep.append("这一旬拍了 %d 天，其中 %d 天顺利。" % [int(out.get("days", 0)), int(out.get("ok", 0))])
+	else:
+		what = entry_name(entry)
+		var pe := Schedule.parse_entry(entry)
+		cg = what
+		if out.has("class_days"):
+			rep.append("上课 %d 天，其中 %d 天有长进。" % [int(out["class_days"]), int(out["ok_days"])])
+		elif out.has("work_days"):
+			rep.append("工作 %d 天，其中 %d 天顺利，收入 $%d。" % [int(out["work_days"]), int(out["ok_days"]), int(out["pay"])])
+		elif out.has("ok_days"):
+			rep.append("看书：%d 天有长进。" % int(out["ok_days"]))
+		elif out.has("cost"):
+			rep.append("花了 $%d。" % int(out["cost"]))
+		elif pe.size() > 0 and pe[0] == "rest":
+			rep.append("休息。")
+	var lines := diff_lines(last_snap, now)
+	var evt := PackedStringArray()
 	for e in evs:
-		lines.append("　事件：" + e)
-	var text := "\n".join(lines)
+		evt.append(e)
 	last_snap = now
-	note(text)
-	if skip_playback:
-		return
-	var r = ask("period", {"text": text, "i": i})
-	if r == "skip":
-		skip_playback = true
+	note("%s：%s\n　%s" % [head, what, diff_text(last_snap, now) if false else "；".join(rep)])
+	ask("period", {"head": head, "what": what, "cg": cg, "report": "\n".join(rep), "lines": lines, "events": evt})
 
 
 func ac() -> Dictionary:
@@ -687,18 +716,22 @@ func audition_text(role: Dictionary, res: Dictionary) -> String:
 
 # ================= automatic answers (test mode) =================
 
+func _auto_pick() -> String:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = st.ym * 3 + cur_period_hint + 1
+	var ok := []
+	for e in Schedule.options(st):
+		if Schedule.validate(st, e) == "":
+			ok.append(e)
+	return ok[rng.randi() % ok.size()]
+
+
 func _auto_answer(kind: String, payload):
 	match kind:
-		"plan":
-			var plan := []
-			var opts := Schedule.options(st)
-			var rng := RandomNumberGenerator.new()
-			rng.seed = st.ym + 1
-			for i in 3:
-				var e: String = opts[rng.randi() % opts.size()]
-				plan.append(e)
-			var fixed := Story.fit_plan(g, plan)
-			return fixed
+		"month_start":
+			return null
+		"pick_period":
+			return _auto_pick()
 		"deck":
 			var lv: Array = payload["levels"]
 			var order := [0, 1, 2, 3]
@@ -728,7 +761,8 @@ func _auto_answer(kind: String, payload):
 func _show_request(kind: String, payload) -> void:
 	refresh_status()
 	match kind:
-		"plan": _show_plan()
+		"month_start": _show_month_start()
+		"pick_period": _show_map(int(payload))
 		"pick_role": _show_board(payload)
 		"deck": _show_deck(payload)
 		"play": _show_play(payload)
@@ -752,6 +786,8 @@ func _show_request(kind: String, payload) -> void:
 	if uitest:
 		await get_tree().process_frame
 		if shot_path != "" and (kind == shot_kind):
+			if shot_loc != "":
+				_show_location(int(payload), shot_loc)
 			for _i in 3:
 				await get_tree().process_frame
 			get_viewport().get_texture().get_image().save_png(shot_path)
@@ -762,16 +798,17 @@ func _show_request(kind: String, payload) -> void:
 
 ## --uitest: press every button of the street once, then answer the question as the automatic player would.
 func _uitest_answer(kind: String, payload) -> void:
-	if kind == "plan" and st.ym < 3:
+	if kind == "month_start" and st.ym < 3:
 		var btns: Array = []
 		_collect_buttons(street_box, btns)
 		for b in btns:
 			if is_instance_valid(b) and b.get_parent() != null:
 				b.pressed.emit()
-		var plan: Array = _current_plan()
-		if g.plan_errors(plan).is_empty():
-			reply(plan)
-			return
+	if kind == "pick_period" and st.ym < 3:
+		for loc in ["home", "school", "work", "city", "boat"]:
+			_show_location(int(payload), loc)
+			await get_tree().process_frame
+		_show_map(int(payload))
 	reply(_auto_answer(kind, payload))
 
 
@@ -830,13 +867,36 @@ func _show_family() -> void:
 		button(nm(k), func(): reply(kk))
 
 
+func cg_panel(text: String) -> void:
+	var pc := PanelContainer.new()
+	pc.custom_minimum_size = Vector2(0, 240)
+	var sb := StyleBoxFlat.new()
+	sb.bg_color = Color.from_hsv(float(hash(text) % 360) / 360.0, 0.35, 0.35)
+	pc.add_theme_stylebox_override("panel", sb)
+	var l := Label.new()
+	l.text = "【CG 占位】\n" + text
+	l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	l.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	l.add_theme_font_size_override("font_size", 28)
+	pc.add_child(l)
+	body.add_child(pc)
+
+
 func _show_period(p: Dictionary) -> void:
-	_wait_screen("本月进行中")
-	label(str(p["text"]))
-	var hb := HBoxContainer.new()
-	body.add_child(hb)
-	button("继续", func(): reply("ok"), hb)
-	button("跳过本月剩下的播放", func(): reply("skip"), hb)
+	clear_body()
+	heading(str(p["head"]) + "：" + str(p["what"]))
+	cg_panel(str(p["cg"]))
+	if str(p["report"]) != "":
+		label(str(p["report"]))
+	if p["lines"].is_empty():
+		label("数值没有变化。")
+	else:
+		label("数值变化：")
+		for x in p["lines"]:
+			label("　" + x)
+	for e in p["events"]:
+		label("事件：" + e, null, Color(1, 0.85, 0.4))
+	button("继续", func(): reply("ok"))
 
 
 # ---------- the board and auditions ----------
@@ -946,18 +1006,43 @@ func _show_play(ctx: Dictionary) -> void:
 		button(txt, func(): reply(ii))
 
 
-# ================= the month plan =================
+# ================= the month: street first, then the map, one period at a time =================
 
-func _show_plan() -> void:
+func _show_month_start() -> void:
 	clear_body()
-	heading("%s　排本月的日程" % st.date())
+	heading("%s　月初" % st.date())
+	var m: Dictionary = st.month()
+	var era := PackedStringArray()
+	if Schedule.truthy(m.get("board")):
+		era.append("选片板已经过了")
+	if Schedule.truthy(m.get("annual")):
+		era.append("本月有年度大事")
+	if st.forced_rest:
+		era.append("重病之后，这个月强制进疗养院")
+	if st.void_next:
+		era.append("这个月的日程作废")
+	if not era.is_empty():
+		label("　" + "，".join(era))
+	label("月初可以在街道和谈话里买卖东西、吃饭、看病、投稿剧本（不占日程）。准备好了就开始上旬；之后每旬在地图上选一个地点。")
+	var hb2 := HBoxContainer.new()
+	body.add_child(hb2)
+	label("生活方式（从下个月起扣）：", hb2)
+	var lb := OptionButton.new()
+	var li := 0
+	var k := 0
+	for lid in d.lifestyles:
+		lb.add_item("%s（月费 $%d）" % [nm(lid), d.lifestyles[lid]["monthly_cost"][st.fame_tier()]])
+		lb.set_item_metadata(k, lid)
+		if lid == st.lifestyle:
+			li = k
+		k += 1
+	lb.select(li)
+	lb.item_selected.connect(func(idx): g.set_lifestyle(lb.get_item_metadata(idx)))
+	hb2.add_child(lb)
+	button("开始本月 →", func(): reply(null))
 	var tabs := TabContainer.new()
-	tabs.custom_minimum_size = Vector2(0, 560)
-	tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	tabs.custom_minimum_size = Vector2(0, 520)
 	body.add_child(tabs)
-	var t1 := VBoxContainer.new()
-	t1.name = "日程"
-	tabs.add_child(t1)
 	var t2 := ScrollContainer.new()
 	t2.name = "街道和谈话"
 	t2.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
@@ -972,96 +1057,87 @@ func _show_plan() -> void:
 	var sbox := VBoxContainer.new()
 	sbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	t3.add_child(sbox)
-	_fill_schedule(t1)
 	_fill_street()
 	_fill_status(sbox)
 
 
-func _fill_schedule(box: VBoxContainer) -> void:
-	label("上月的安排已经预填。要改的旬点开下拉；不改直接按「开始本月」。括号里是这一旬每天的效果和成功条件（疲劳 + 是变累，− 是恢复；「随机(0~X)」是每天掷一个 0 到 X 的数）。恋爱中每天另有 20% 失败；失控时打工另有偷懒。", box)
-	var m: Dictionary = st.month()
-	var era := PackedStringArray()
-	if Schedule.truthy(m.get("board")):
-		era.append("本月有选片板")
-	if Schedule.truthy(m.get("annual")):
-		era.append("本月有年度大事")
-	if not era.is_empty():
-		label("　" + "，".join(era), box)
-	var opts := Schedule.options(st)
-	var good: Array = Story.fit_plan(g, prev_plan) if prev_plan.size() == 3 else ["rest_home", "rest_home", "rest_home"]
-	plan_btns = []
-	for i in 3:
-		var days := Schedule.days_of(st, i)
-		var head: String = "%s（%d–%d 日）" % [["上旬", "中旬", "下旬"][i], days[0][0], days[days.size() - 1][0]]
-		var f = g.hooks.locked(st, i)
-		var ab: int = st.ym * 3 + i
-		if st.forced_rest or st.void_next:
-			label(head + "　" + ("重病后强制疗养" if st.forced_rest else "本月日程作废"), box)
-			plan_btns.append(null)
-			continue
-		if st.void_periods.has(ab):
-			label(head + "　被拘留（作废）", box)
-			plan_btns.append(null)
-			continue
-		if f != null:
-			label(head + "　拍摄中：" + str(f["roles"]["name"]), box)
-			plan_btns.append(null)
-			continue
-		var hb := VBoxContainer.new()
-		box.add_child(hb)
-		label(head, hb)
-		var ob := OptionButton.new()
-		var sel := 0
-		for k in opts.size():
-			ob.add_item("%s（%s）" % [entry_name(opts[k]), entry_effect(opts[k])])
-			ob.set_item_metadata(k, opts[k])
-			if opts[k] == good[i]:
-				sel = k
-		ob.select(sel)
-		ob.clip_text = true
-		ob.custom_minimum_size = Vector2(300, 0)
-		ob.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		hb.add_child(ob)
-		var full := label("　" + ob.get_item_text(sel), hb, Color(0.8, 0.9, 1))
-		ob.item_selected.connect(func(ix): full.text = "　" + ob.get_item_text(ix))
-		plan_btns.append(ob)
-	var hb2 := HBoxContainer.new()
-	box.add_child(hb2)
-	label("生活方式（从下个月起扣）：", hb2)
-	var lb := OptionButton.new()
-	var li := 0
-	var k := 0
-	for lid in d.lifestyles:
-		lb.add_item("%s（月费 $%d）" % [nm(lid), d.lifestyles[lid]["monthly_cost"][st.fame_tier()]])
-		lb.set_item_metadata(k, lid)
-		if lid == st.lifestyle:
-			li = k
-		k += 1
-	lb.select(li)
-	lb.item_selected.connect(func(idx): g.set_lifestyle(lb.get_item_metadata(idx)))
-	hb2.add_child(lb)
-	plan_info = label("", box, Color(1, 0.5, 0.5))
-	button("开始本月", func(): _submit_plan(), box)
+## The places on the map: id -> [name, position, size, hint]. A place groups several schedule entries.
+const LOCATIONS := {
+	"home": ["家", Vector2(40, 40), Vector2(200, 90), "休息（Sil 陪着）、看书、家教"],
+	"school": ["训练场·教室", Vector2(330, 30), Vector2(240, 90), "上课"],
+	"work": ["工作", Vector2(650, 60), Vector2(200, 90), "打工"],
+	"city": ["汽车：进城", Vector2(90, 220), Vector2(240, 90), "片厂区、市中心、海滨、码头"],
+	"boat": ["码头的小船：度假", Vector2(500, 240), Vector2(280, 90), "去度假村"],
+}
 
 
-func _current_plan() -> Array:
-	var plan := []
-	for i in 3:
-		var ob = plan_btns[i]
-		plan.append(ob.get_item_metadata(ob.selected) if ob != null else "rest_home")
-	return plan
+func loc_entries(loc: String) -> Array:
+	var out := []
+	match loc:
+		"home":
+			out.append("rest_home")
+			for b in st.books:
+				out.append(b)
+			if d.classes.has("class_tutor"):
+				out.append("class_tutor")
+		"school":
+			for c in d.classes:
+				if c != "class_tutor":
+					out.append(c)
+		"work":
+			for j in d.jobs:
+				out.append(j)
+		"city":
+			for p in d.places:
+				if p != "place_resort":
+					out.append("rest_outing@" + p)
+		"boat":
+			out.append("rest_outing@place_resort")
+	return out
 
 
-func _submit_plan() -> void:
-	var plan: Array = _current_plan()
-	var errs: Array = g.plan_errors(plan)
-	if not errs.is_empty():
-		var t := PackedStringArray()
-		for e in errs:
-			t.append("第 %d 旬：%s" % [int(e[0]) + 1, str(e[1])])
-		plan_info.text = "不能这样排：" + "；".join(t)
-		return
-	reply(plan)
+func _show_map(i: int) -> void:
+	cur_period_hint = i
+	clear_body()
+	var days := Schedule.days_of(st, i)
+	heading("%s　%s（%d–%d 日）" % [st.date(), ["上旬", "中旬", "下旬"][i], days[0][0], days[days.size() - 1][0]])
+	label("点一个地点，再选做什么。（拍摄中的旬会自动去片场。）")
+	var map := Control.new()
+	map.custom_minimum_size = Vector2(900, 380)
+	body.add_child(map)
+	var bg := ColorRect.new()
+	bg.color = Color(0.16, 0.26, 0.2)
+	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
+	map.add_child(bg)
+	for loc in LOCATIONS:
+		var info: Array = LOCATIONS[loc]
+		var b := Button.new()
+		b.text = "%s\n%s" % [info[0], info[3]]
+		b.position = info[1]
+		b.size = info[2]
+		var ll: String = loc
+		b.pressed.connect(func(): _show_location(i, ll))
+		map.add_child(b)
+
+
+func _show_location(i: int, loc: String) -> void:
+	clear_body()
+	var info: Array = LOCATIONS[loc]
+	heading("%s　%s：%s" % [st.date(), ["上旬", "中旬", "下旬"][i], info[0]])
+	button("← 回地图", func(): _show_map(i))
+	var any := false
+	for e in loc_entries(loc):
+		var why_not: String = Schedule.validate(st, e)
+		var txt := "%s（%s）" % [entry_name(e), entry_effect(e)]
+		if why_not == "":
+			any = true
+			var ee: String = e
+			button("选：" + entry_name(e), func(): reply(ee))
+			label("　效果：" + entry_effect(e), null, Color(0.8, 0.9, 1))
+		elif loc != "work" or not why_not.begins_with("not unlocked"):
+			label("（不能选）%s：%s" % [entry_name(e), why(why_not)], null, Color(0.6, 0.6, 0.6))
+	if not any:
+		label("这里现在没有能做的事。")
 
 
 # ---------- street ----------

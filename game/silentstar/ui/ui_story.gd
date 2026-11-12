@@ -68,8 +68,10 @@ func period_start(st, i: int, entry: String) -> void:
 
 
 func film_period(st, i: int, f, days: Array) -> void:
+	var d0: int = f["shoot_days"]
+	var k0: int = f["ok_days"]
 	super(st, i, f, days)
-	ui.period_done(st, i, "shooting", {"film": f["roles"]["name"]})
+	ui.period_done(st, i, "shooting", {"film": f["roles"]["name"], "days": f["shoot_days"] - d0, "ok": f["ok_days"] - k0})
 
 
 func period_end(st, i: int, entry: String, out: Dictionary) -> void:
@@ -113,6 +115,9 @@ class UiAgent:
 		return ui.ask("suppress", kind)
 
 	func before_period(story, st, i: int) -> void:
+		# the activity of this period is picked now, one period at a time (run_month reads plan[i] right after this hook)
+		if story.locked(st, i) == null and not ui.month_forced:
+			ui.cur_plan[i] = ui.ask("pick_period", i)
 		if Events.boost_reason(st, i) == "" and ui.ask("boost", i):
 			var why: String = story.boost(st, i)
 			if why != "":
