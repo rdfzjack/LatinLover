@@ -43,7 +43,14 @@ var fx                     # fx.gd: sounds and effects, announced by cue()
 var g                      # Month
 var st
 var thread: Thread
-var sem := Semaphore.new()
+var session := {"sem": Semaphore.new()}   # one per game thread: an abandoned thread (after a load) stays blocked on its own
+var abandoned: Array = []                # threads left blocked by a load
+var waiting := false                     # the game thread is waiting for an answer
+var can_save := false                    # the screen is at a point where the game can be resumed
+var save_phase := "between"              # "month_start", "period" (before period cur_period_hint) or "between"
+var slot_panel: PanelContainer
+var load_tested := false
+var load_test_dump := ""
 var answer = null
 var auto := false
 var title_shot := ""
@@ -137,10 +144,17 @@ func _build_frame() -> void:
 	var root := VBoxContainer.new()
 	root.set_anchors_preset(Control.PRESET_FULL_RECT)
 	add_child(root)
+	var top := HBoxContainer.new()
+	root.add_child(top)
 	status_label = Label.new()
 	status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	status_label.custom_minimum_size = Vector2(0, 100)
-	root.add_child(status_label)
+	status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	top.add_child(status_label)
+	var bar := VBoxContainer.new()
+	top.add_child(bar)
+	button(tr("ui.main.build_frame.1"), func(): _open_slots(true), bar)
+	button(tr("ui.main.build_frame.2"), func(): _open_slots(false), bar)
 	var split := HSplitContainer.new()
 	split.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	root.add_child(split)
@@ -584,7 +598,7 @@ func _title() -> void:
 		if SaveSlots.exists(slot):
 			var meta: Dictionary = SaveSlots.read(slot).get("meta", {})
 			var sl: String = slot
-			button(tr("ui.main.title.8") % [slot_name(slot), str(meta.get("date", "?")), str(meta.get("money", "?"))], func(): _continue_game(sl))
+			button(tr("ui.main.title.8") % [slot_name(slot), str(meta.get("date", "?")), str(meta.get("money", "?"))], func(): load_slot(sl))
 	_update_alloc_info()
 
 
@@ -603,21 +617,37 @@ func _start_game(seed_n: int, origin: Array, start_vals := {}) -> void:
 
 
 func save_meta() -> Dictionary:
-	return {"date": st.date(), "money": st.money}
+	return {"date": st.date(), "money": st.money, "phase": "between"}
 
 
 func slot_name(slot: String) -> String:
 	return tr("ui.main.slot_name.1") if slot == "auto" else tr("ui.main.slot_name.2") + slot
 
 
-func save_slot(slot: String) -> void:
-	var text: String = g.save()
-	if text != "" and SaveSlots.write(slot, text, save_meta()):
+## Saves the game as it is now. Allowed at the points where it can be resumed: the month start, the map and the shops of a period, the month summary.
+func save_now(slot: String) -> bool:
+	if not can_save or g == null or slot == "auto":
+		return false
+	var meta := save_meta()
+	meta["phase"] = save_phase
+	if save_phase == "period":
+		meta["period"] = cur_period_hint
+		meta["carry"] = g.carry()
+		meta["plan"] = cur_plan
+		meta["forced"] = month_forced
+		meta["snap"] = snap
+	var text: String = st.dumps()
+	if SaveSlots.write(slot, text, meta):
 		fx.cue("save", {"slot": slot})
 		note(tr("ui.main.save_slot.1") + slot_name(slot))
+		return true
+	return false
 
 
-func _continue_game(slot: String) -> void:
+func load_slot(slot: String) -> void:
+	if thread != null and thread.is_alive() and not waiting:
+		note(tr("ui.main.load_slot.1"))
+		return
 	var rec := SaveSlots.read(slot)
 	var agent = UiStory.UiAgent.new(self)
 	var story = UiStory.new(agent, self)
@@ -625,36 +655,123 @@ func _continue_game(slot: String) -> void:
 	if m == null:
 		_log(tr("ui.main.continue_game.1"))
 		return
+	var meta: Dictionary = rec.get("meta", {})
+	_retire_thread()
 	fx.cue("load", {"slot": slot})
 	g = m
 	st = g.st
-	_run_thread()
+	var phase: String = str(meta.get("phase", "between"))
+	g.started = phase != "between"
+	_close_slots()
+	_run_thread(meta)
 
 
-func _run_thread() -> void:
+## A running game thread cannot be stopped from outside (it waits inside the core): leave it blocked on its own semaphore.
+func _retire_thread() -> void:
+	if thread != null:
+		if thread.is_alive():
+			abandoned.append(thread)
+		elif thread.is_started():
+			thread.wait_to_finish()
+	session = {"sem": Semaphore.new()}
+	waiting = false
+	can_save = false
+	event_snaps = []
+
+
+func _run_thread(resume := {}) -> void:
 	ev_seen = 0
 	clear_body()
 	note(tr("ui.main.run_thread.1"))
 	thread = Thread.new()
-	thread.start(_worker)
+	thread.start(_worker.bind(resume))
+
+
+# ---------- the save / load panel (always reachable from the top bar) ----------
+
+func _close_slots() -> void:
+	if slot_panel != null and is_instance_valid(slot_panel):
+		slot_panel.queue_free()
+	slot_panel = null
+
+
+func _phase_text(phase: String) -> String:
+	match phase:
+		"month_start":
+			return tr("ui.main.phase_text.1")
+		"period":
+			return tr("ui.main.phase_text.2")
+	return tr("ui.main.phase_text.3")
+
+
+func _open_slots(saving: bool) -> void:
+	_close_slots()
+	slot_panel = PanelContainer.new()
+	add_child(slot_panel)
+	var sb := StyleBoxFlat.new()
+	sb.bg_color = Color(0.12, 0.12, 0.14)
+	sb.set_content_margin_all(12)
+	slot_panel.add_theme_stylebox_override("panel", sb)
+	slot_panel.position = Vector2(200, 100)
+	slot_panel.custom_minimum_size = Vector2(640, 0)
+	var box := VBoxContainer.new()
+	slot_panel.add_child(box)
+	heading(tr("ui.main.build_frame.1") if saving else tr("ui.main.build_frame.2"), box)
+	if saving and (g == null or not can_save):
+		label(tr("ui.main.open_slots.1"), box, Color(1, 0.7, 0.7))
+	for slot in SaveSlots.SLOTS:
+		if saving and slot == "auto":
+			continue
+		var hb := HBoxContainer.new()
+		box.add_child(hb)
+		var rec := SaveSlots.read(slot)
+		var meta: Dictionary = rec.get("meta", {})
+		var info := tr("ui.main.open_slots.2") if rec.is_empty() else tr("ui.main.open_slots.3") % [str(meta.get("date", "?")), str(meta.get("money", "?")), _phase_text(str(meta.get("phase", "between")))]
+		var l := label(tr("ui.main.open_slots.4") % [slot_name(slot), info], hb)
+		l.custom_minimum_size = Vector2(380, 0)
+		var sl: String = slot
+		if saving:
+			var b := button(tr("ui.main.open_slots.5"), func():
+				if save_now(sl):
+					_close_slots(), hb)
+			b.disabled = g == null or not can_save
+		else:
+			var b := button(tr("ui.main.open_slots.6"), func(): load_slot(sl), hb)
+			b.disabled = rec.is_empty()
+	button(tr("ui.main.open_slots.7"), func(): _close_slots(), box)
 
 
 # ================= the game thread =================
 
-func _worker() -> void:
+func _worker(resume: Dictionary) -> void:
 	var months := 0
+	var first := true
 	while not st.finished and not quitting and months < auto_months:
-		g.start_month()
-		last_snap = snapshot()
-		snap = last_snap
-		ev_seen = g.hooks.event_log.size()
-		ask("month_start", null)
-		if quitting:
-			return
-		last_snap = snapshot()      # the street is over: the period reports count from here
-		month_forced = st.forced_rest != 0
-		cur_plan = ["rest_home", "rest_home", "rest_home"]
-		var errs: Array = g.run_month(cur_plan)
+		var phase := str(resume.get("phase", "between")) if first else "between"
+		first = false
+		var from := 0
+		var carried := {}
+		if phase == "period":
+			from = int(resume["period"])
+			carried = resume["carry"]
+			cur_plan = resume["plan"]
+			month_forced = bool(resume["forced"])
+			snap = resume["snap"]
+			last_snap = snapshot()
+			ev_seen = g.hooks.event_log.size()
+		else:
+			if phase != "month_start":
+				g.start_month()
+			last_snap = snapshot()
+			snap = last_snap
+			ev_seen = g.hooks.event_log.size()
+			ask("month_start", null)
+			if quitting:
+				return
+			last_snap = snapshot()      # the street is over: the period reports count from here
+			month_forced = st.forced_rest != 0
+			cur_plan = ["rest_home", "rest_home", "rest_home"]
+		var errs: Array = g.run_month(cur_plan, from, carried)
 		if not errs.is_empty():
 			push_error("run_month refused the plan: " + str(errs))
 			return
@@ -682,14 +799,17 @@ func ask(kind: String, payload):
 	if auto:
 		return _auto_answer(kind, payload)
 	answer = null
+	var my_sem: Semaphore = session["sem"]
 	call_deferred("_show_request", kind, payload)
-	sem.wait()
+	my_sem.wait()
 	return answer
 
 
 func reply(v) -> void:
 	answer = v
-	sem.post()
+	waiting = false
+	can_save = false
+	session["sem"].post()
 
 
 ## Called by UiStory (game thread) after each period has been settled: CG placeholder, a short report, every stat that changed.
@@ -834,6 +954,8 @@ func _auto_answer(kind: String, payload):
 # ================= the questions on screen =================
 
 func _show_request(kind: String, payload) -> void:
+	waiting = true
+	can_save = false
 	refresh_status()
 	fx.cue(KIND_CUE.get(kind, kind), {"kind": kind})
 	match kind:
@@ -865,6 +987,8 @@ func _show_request(kind: String, payload) -> void:
 				var bs: Array = []
 				_collect_buttons(body, bs)
 				bs[0].pressed.emit()
+			elif shot_loc == "slots":
+				_open_slots(true)
 			elif shot_loc != "":
 				_show_location(int(payload), shot_loc)
 			for _i in 3:
@@ -877,6 +1001,16 @@ func _show_request(kind: String, payload) -> void:
 
 ## --uitest: press every button of the street once, then answer the question as the automatic player would.
 func _uitest_answer(kind: String, payload) -> void:
+	if kind == "pick_period":
+		if load_test_dump != "":
+			print("load check: ", "OK" if st.dumps() == load_test_dump else "DIFFERENT")
+			load_test_dump = ""
+		elif st.ym >= 4 and int(payload) >= 1 and not load_tested:     # save in the middle of a month, load it, check the state is the same
+			load_tested = true
+			load_test_dump = st.dumps()
+			print("save: ", save_now("1"))
+			load_slot("1")
+			return
 	if kind == "month_start" and st.ym < 3:
 		var btns: Array = []
 		_collect_buttons(street_box, btns)
@@ -1082,6 +1216,8 @@ func _show_play(ctx: Dictionary) -> void:
 # ================= the month: street first, then the map, one period at a time =================
 
 func _show_month_start() -> void:
+	can_save = true
+	save_phase = "month_start"
 	clear_body()
 	heading(tr("ui.main.show_month_start.1") % st.date())
 	var m: Dictionary = st.month()
@@ -1186,6 +1322,8 @@ func loc_entries(loc: String) -> Array:
 
 func _show_map(i: int) -> void:
 	cur_period_hint = i
+	can_save = true
+	save_phase = "period"
 	clear_body()
 	var days := Schedule.days_of(st, i)
 	heading(tr("ui.main.show_map.1") % [st.date(), [tr("ui.period.early"), tr("ui.period.mid"), tr("ui.period.late")][i], days[0][0], days[days.size() - 1][0]])
@@ -1400,6 +1538,8 @@ func _fill_status(box: VBoxContainer) -> void:
 # ================= month summary and ending =================
 
 func _show_summary() -> void:
+	can_save = true
+	save_phase = "between"
 	refresh_status()
 	clear_body()
 	var now := snapshot()
@@ -1415,16 +1555,7 @@ func _show_summary() -> void:
 		if f["status"] == "released" and f["result"] != null and f["result"].get("month", -1) == st.ym - 1:
 			rel += 1
 			label(tr("ui.main.show_summary.5") % [f["roles"]["name"], size_name(f["size"]), tr("ui.main.fill_status.9") if f["result"].get("hit", false) else tr("ui.main.show_summary.6")])
-	if st.finished:
-		button(tr("ui.main.show_summary.7"), func(): reply(null))
-	else:
-		var hs := HBoxContainer.new()
-		body.add_child(hs)
-		label(tr("ui.main.show_summary.8"), hs)
-		for slot in ["1", "2", "3"]:
-			var sl: String = slot
-			button(slot_name(slot), func(): save_slot(sl), hs)
-		button(tr("ui.main.show_summary.9"), func(): reply(null))
+	button(tr("ui.main.show_summary.7") if st.finished else tr("ui.main.show_summary.9"), func(): reply(null))
 
 
 func _show_ending() -> void:
