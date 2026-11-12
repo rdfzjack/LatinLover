@@ -315,6 +315,7 @@
    },
    "divine_gain_mult": 2,
    "divine_perf_add": 200,
+   "side_perf_add": 0,
    "side_effect": "stamina-5",
    "side_fail_pct": 50,
    "hook_base_pct": 12,

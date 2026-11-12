@@ -1412,6 +1412,13 @@ static func summarize(g) -> Dictionary:
 		if Schedule.truthy(f.get("result")):
 			fee += f.get("fee", 0)
 	rec["fee"] = fee
+	# step 12c c3 round 5: every released film [size, support, release month, S, B, divine, side]
+	var fx := []
+	for f in st.story["films"]:
+		if Schedule.truthy(f.get("result")):
+			fx.append([f["size"], 1 if f["support"] else 0, f["result"]["month"], f["result"]["S"], f["result"]["B"],
+				int(f.get("divine", 0)), int(f.get("side", 0))])
+	rec["films_x"] = fx
 	var ranks := []
 	for a in g.hooks.annuals:
 		ranks.append(a.get("rank"))

@@ -546,13 +546,31 @@
    "untyped_pct": 90,
    "fame_pct": 30,
    "dividend_mult": 2,
-   "rep_bonus": {
-    "small": 2,
-    "medium": 4,
-    "big": 8
+   "rep_table_note": "Step 12c c3 round 5 (GDD 8, on trial, values not fixed): X = S / B; hit X >= hit_pct%, normal X >= fail_pct%, poor X >= flop_pct%, flop below; the reputation change of the film's road by band and size (support x release_pct). The values here give the same results as before round 5 (fail_pct = flop_pct, so there is no poor band)",
+   "rep_table": {
+    "hit": {
+     "small": 4,
+     "medium": 8,
+     "big": 16
+    },
+    "normal": {
+     "small": 2,
+     "medium": 4,
+     "big": 8
+    },
+    "poor": {
+     "small": 0,
+     "medium": 0,
+     "big": 0
+    },
+    "flop": {
+     "small": 0,
+     "medium": 0,
+     "big": 0
+    }
    },
    "hit_pct": 140,
-   "hit_mult": 2,
+   "fail_pct": 70,
    "flop_pct": 70,
    "talkie_penalty_pct": 60,
    "radio_speech_line_cut": 10,

@@ -561,6 +561,7 @@ static func boost(st, i: int) -> String:
 	else:
 		Rules.apply_effect(st, dr["side_effect"], "drug")
 		st.flags["drug_side_next"] = 1
+		st.month_used["drug_side.%d" % i] = 1      # a film shot in this period gets side_perf_add (film.gd)
 		st.inc("count.drug_side")
 	var life: int = st.cnt("count.boost")
 	st.inc("count.boost")
