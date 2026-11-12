@@ -6,7 +6,7 @@ extends RefCounted
 ## hooks is any object with the methods of month.gd's Hooks (class_chain, book_done, job_period, outing, day).
 ##
 ## Random-number order (copied from the Python side, the reconciliation checks it):
-## - Class, book: each class day first r0(fatigue), then r0(stamina/2); in_love rolls one more 20%; on a successful day the gains are rolled in table order.
+## - Class, book: fatigue per day from the table (fatigue_per_day, step 12c). Each class day first r0(fatigue), then r0(stamina/2); in_love rolls one more 20%; on a successful day the gains are rolled in table order.
 ## - Job: each work day first rolls the daily effects in table order (fatigue included), then r0(fatigue) once per success line in order,
 ##   then in_love 20% and reckless slacking 40%/80% (each only rolled in that state).
 
@@ -169,13 +169,14 @@ static func place_cost(st, place: String) -> int:
 
 # ---------- checks ----------
 
-## in_love 20% (classes, books, jobs and shooting all have it); reckless slacking only for jobs and shooting (GDD 5.1). Returns true when the day fails.
-static func extra_fail(st, job: bool) -> bool:
+## in_love 20% (classes, books, jobs and shooting all have it); reckless slacking only for jobs and shooting (GDD 5.1),
+## and not for crime jobs whose tier has reckless_slack false (step 12c c3). Returns true when the day fails.
+static func extra_fail(st, job: bool, slack := true) -> bool:
 	var g = st.rng.logic
 	var fail := false
 	if st.status["in_love"] and g.chance(20, 100):
 		fail = true
-	if job:
+	if job and slack:
 		var w: int = st.idx["reckless_index"]
 		if w >= 30:
 			var c: bool = g.chance(80, 100)     # always rolled, like the Python "x or fail"
@@ -186,8 +187,29 @@ static func extra_fail(st, job: bool) -> bool:
 	return fail
 
 
+## The dose of this period (step 12c c3, GDD 5.8.1): 1 = this day succeeds whatever the dice say (high), -1 = it fails
+## (the side effect of the last dose or an attack, by status.drug_fail_pct), 0 = no change.
+static func drug_day(st) -> int:
+	if int(st.status.get("drug_high", 0)) > 0:
+		return 1
+	var p: int = int(st.status.get("drug_fail_pct", 0))
+	if p > 0 and st.rng.logic.chance(p, 100):
+		return -1
+	return 0
+
+
+## Gains of practice are multiplied on a divine dose (stats.drug.divine_gain_mult).
+static func drug_gain(st, v: int) -> int:
+	if int(st.status.get("drug_high", 0)) == 2:
+		return v * int(st.d.t["stats"]["drug"]["divine_gain_mult"])
+	return v
+
+
 ## stamina/2 + r0(stamina/2) >= r0(fatigue) (GDD 5.1).
 static func practice_ok(st) -> bool:
+	var dg := drug_day(st)
+	if dg != 0:
+		return dg > 0
 	var g = st.rng.logic
 	var b: Dictionary = st.bonus()
 	var line: int = g.r0(st.val("fatigue", b))
@@ -210,7 +232,10 @@ static func job_lines(st, j: Dictionary) -> Array:
 	return lines
 
 
-static func job_day_ok(st, lines: Array) -> bool:
+static func job_day_ok(st, lines: Array, slack := true) -> bool:
+	var dg := drug_day(st)
+	if dg != 0:
+		return dg > 0
 	var g = st.rng.logic
 	var b: Dictionary = st.bonus()
 	var tired: int = st.val("fatigue", b)
@@ -218,7 +243,14 @@ static func job_day_ok(st, lines: Array) -> bool:
 	for kv in lines:
 		if st.val(kv[0], b) - g.r0(tired) < kv[1]:
 			ok = false
-	return (not extra_fail(st, true)) and ok
+	return (not extra_fail(st, true, slack)) and ok
+
+
+## Whether reckless slacking applies on this job: false for a crime job whose tier says reckless_slack false (step 12c c3).
+static func job_slacks(st, j: Dictionary) -> bool:
+	if not j.has("crime_tier"):
+		return true
+	return st.d.job_rules["crime_tiers"][str(j["crime_tier"])].get("reckless_slack", true)
 
 
 ## Daily wage = base x raise tier, rounded down; the raise tier is by the periods that succeeded before this one (GDD 5.4).
@@ -261,10 +293,10 @@ static func run_class(st, cid: String, days: Array, hooks) -> Dictionary:
 				if e.has("cond") and not Rules.cond(st, e["cond"]):
 					continue
 				var pl: Array = e["per_level"][lv - 1]
-				add_stat(st, e["stat"], g.r(pl[0], pl[1]))
+				add_stat(st, e["stat"], drug_gain(st, g.r(pl[0], pl[1])))
 			if talk and accent_on(st):
 				add_stat(st, "speech", 1)
-		add_stat(st, "fatigue", 1)
+		add_stat(st, "fatigue", c.get("fatigue_per_day", 1))
 		st.money -= fee
 	if went > 0:
 		st.inc("class_periods." + cid)
@@ -293,12 +325,12 @@ static func run_book(st, bid: String, days: Array, hooks) -> Dictionary:
 			var left: int = st.books.get(bid, 0)
 			var room: int = b["skill_cap"] - st.skill[sk]
 			if left > 0 and room > 0:
-				var v: int = mini(mini(g.r(b["gain"][0], b["gain"][1]), left), room)
+				var v: int = mini(mini(drug_gain(st, g.r(b["gain"][0], b["gain"][1])), left), room)
 				add_stat(st, sk, v)
 				st.books[bid] = left - v
 			if sk == "speech" and accent_on(st):
 				add_stat(st, "speech", 1)
-		add_stat(st, "fatigue", 1)
+		add_stat(st, "fatigue", b.get("fatigue_per_day", 1))
 	st.inc("count.book_periods")
 	st.inc("road_periods." + st.d.skill_road[sk])
 	if st.books.get(bid, 1) <= 0:
@@ -313,6 +345,7 @@ static func run_job(st, jid: String, days: Array, hooks) -> Dictionary:
 	var g = st.rng.logic
 	var lines := job_lines(st, j)
 	var wage := wage_of(st, jid)
+	var slack := job_slacks(st, j)
 	var work := 0
 	var ok_days := 0
 	for dd in days:
@@ -321,7 +354,7 @@ static func run_job(st, jid: String, days: Array, hooks) -> Dictionary:
 		work += 1
 		for e in j["daily_effect"]:
 			add_stat(st, e["stat"], g.r(e["add"][0], e["add"][1]))
-		if job_day_ok(st, lines):
+		if job_day_ok(st, lines, slack):
 			ok_days += 1
 	var pay := wage * ok_days
 	if work > 0 and ok_days == work:

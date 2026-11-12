@@ -1,0 +1,273 @@
+{
+ "note": "On a successful day: skill training value += gain and the book's points are used up; no tuition, fatigue +1 per day, no reading on Sundays",
+ "tiers": [
+  {
+   "id": "beginner",
+   "tier": 1,
+   "name": "入门",
+   "education_gate": 100,
+   "skill_cap": 40,
+   "points": 35,
+   "gain": [
+    1,
+    2
+   ],
+   "price": 15
+  },
+  {
+   "id": "advanced",
+   "tier": 2,
+   "name": "进阶",
+   "education_gate": 200,
+   "skill_cap": 70,
+   "points": 35,
+   "gain": [
+    1,
+    3
+   ],
+   "price": 60
+  },
+  {
+   "id": "monograph",
+   "tier": 3,
+   "name": "专著",
+   "education_gate": 300,
+   "skill_cap": 100,
+   "points": 35,
+   "gain": [
+    1,
+    3
+   ],
+   "price": 150
+  }
+ ],
+ "books": [
+  {
+   "id": "book_chuangzuo_1",
+   "name": "创作入门",
+   "skills": "writing",
+   "tier": 1,
+   "education_gate": 100,
+   "skill_cap": 40,
+   "points": 35,
+   "gain": [
+    1,
+    2
+   ],
+   "price": 15,
+   "finish_event": null
+  },
+  {
+   "id": "book_chuangzuo_2",
+   "name": "创作进阶",
+   "skills": "writing",
+   "tier": 2,
+   "education_gate": 200,
+   "skill_cap": 70,
+   "points": 35,
+   "gain": [
+    1,
+    3
+   ],
+   "price": 60,
+   "finish_event": null
+  },
+  {
+   "id": "book_chuangzuo_3",
+   "name": "创作专著",
+   "skills": "writing",
+   "tier": 3,
+   "education_gate": 300,
+   "skill_cap": 100,
+   "points": 35,
+   "gain": [
+    1,
+    3
+   ],
+   "price": 150,
+   "finish_event": null
+  },
+  {
+   "id": "book_shenmei_1",
+   "name": "审美入门",
+   "skills": "taste",
+   "tier": 1,
+   "education_gate": 100,
+   "skill_cap": 40,
+   "points": 35,
+   "gain": [
+    1,
+    2
+   ],
+   "price": 15,
+   "finish_event": null
+  },
+  {
+   "id": "book_shenmei_2",
+   "name": "审美进阶",
+   "skills": "taste",
+   "tier": 2,
+   "education_gate": 200,
+   "skill_cap": 70,
+   "points": 35,
+   "gain": [
+    1,
+    3
+   ],
+   "price": 60,
+   "finish_event": null
+  },
+  {
+   "id": "book_shenmei_3",
+   "name": "审美专著",
+   "skills": "taste",
+   "tier": 3,
+   "education_gate": 300,
+   "skill_cap": 100,
+   "points": 35,
+   "gain": [
+    1,
+    3
+   ],
+   "price": 150,
+   "finish_event": null
+  },
+  {
+   "id": "book_tantu_1",
+   "name": "谈吐入门",
+   "skills": "speech",
+   "tier": 1,
+   "education_gate": 100,
+   "skill_cap": 40,
+   "points": 35,
+   "gain": [
+    1,
+    2
+   ],
+   "price": 15,
+   "finish_event": null
+  },
+  {
+   "id": "book_tantu_2",
+   "name": "谈吐进阶",
+   "skills": "speech",
+   "tier": 2,
+   "education_gate": 200,
+   "skill_cap": 70,
+   "points": 35,
+   "gain": [
+    1,
+    3
+   ],
+   "price": 60,
+   "finish_event": null,
+   "on_shelf": "1926-08"
+  },
+  {
+   "id": "book_tantu_3",
+   "name": "谈吐专著",
+   "skills": "speech",
+   "tier": 3,
+   "education_gate": 300,
+   "skill_cap": 100,
+   "points": 35,
+   "gain": [
+    1,
+    3
+   ],
+   "price": 150,
+   "finish_event": null,
+   "on_shelf": "1926-08"
+  },
+  {
+   "id": "book_tanpan_1",
+   "name": "谈判入门",
+   "skills": "negotiation",
+   "tier": 1,
+   "education_gate": 100,
+   "skill_cap": 40,
+   "points": 35,
+   "gain": [
+    1,
+    2
+   ],
+   "price": 15,
+   "finish_event": null
+  },
+  {
+   "id": "book_tanpan_2",
+   "name": "谈判进阶",
+   "skills": "negotiation",
+   "tier": 2,
+   "education_gate": 200,
+   "skill_cap": 70,
+   "points": 35,
+   "gain": [
+    1,
+    3
+   ],
+   "price": 60,
+   "finish_event": null
+  },
+  {
+   "id": "book_shengyi_1",
+   "name": "生意入门",
+   "skills": "business",
+   "tier": 1,
+   "education_gate": 100,
+   "skill_cap": 40,
+   "points": 35,
+   "gain": [
+    1,
+    2
+   ],
+   "price": 15,
+   "finish_event": null
+  },
+  {
+   "id": "book_shengyi_2",
+   "name": "生意进阶",
+   "skills": "business",
+   "tier": 2,
+   "education_gate": 200,
+   "skill_cap": 70,
+   "points": 35,
+   "gain": [
+    1,
+    3
+   ],
+   "price": 60,
+   "finish_event": null
+  },
+  {
+   "id": "book_yanji_1",
+   "name": "演技入门",
+   "skills": "acting",
+   "tier": 1,
+   "education_gate": 100,
+   "skill_cap": 40,
+   "points": 35,
+   "gain": [
+    1,
+    2
+   ],
+   "price": 15,
+   "finish_event": null
+  },
+  {
+   "id": "book_daban_1",
+   "name": "打扮入门",
+   "skills": "grooming",
+   "tier": 1,
+   "education_gate": 100,
+   "skill_cap": 40,
+   "points": 35,
+   "gain": [
+    1,
+    2
+   ],
+   "price": 15,
+   "finish_event": null
+  }
+ ]
+}

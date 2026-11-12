@@ -1,0 +1,280 @@
+{
+ "note": "Judged in the month-end events after \"senior approval\"; each opportunity at most once per game. The effect is written here (`story` is an event in events.json that holds only the story text)",
+ "opportunities": [
+  {
+   "id": "opp_accident",
+   "name": "一场真的事故",
+   "road": "tough",
+   "cond": [
+    [
+     [
+      "count.stunt_self",
+      ">=",
+      4
+     ]
+    ]
+   ],
+   "monthly_prob": [
+    1,
+    12
+   ],
+   "story": "opp_accident",
+   "effect": "rep_bonus.tough+25",
+   "takes_month": 0
+  },
+  {
+   "id": "opp_expedition",
+   "name": "探险队的邀请",
+   "road": "tough",
+   "cond": [
+    [
+     [
+      "tough",
+      ">=",
+      350
+     ],
+     [
+      "count.outing.place_dock",
+      ">=",
+      3
+     ]
+    ]
+   ],
+   "monthly_prob": [
+    1,
+    16
+   ],
+   "story": "opp_expedition",
+   "effect": "rep_bonus.tough+30",
+   "takes_month": 1
+  },
+  {
+   "id": "opp_tango",
+   "name": "一支探戈",
+   "road": "lover",
+   "cond": [
+    [
+     [
+      "physique",
+      ">=",
+      100
+     ],
+     [
+      "count.romance_hits",
+      ">=",
+      1
+     ]
+    ]
+   ],
+   "monthly_prob": [
+    1,
+    12
+   ],
+   "story": "opp_tango",
+   "effect": "rep_bonus.lover+25",
+   "takes_month": 0
+  },
+  {
+   "id": "opp_valen_seat",
+   "name": "瓦伦留下的位置",
+   "road": "lover",
+   "cond": [
+    [
+     [
+      "date",
+      ">=",
+      "1927-09"
+     ],
+     [
+      "lover",
+      ">=",
+      330
+     ]
+    ]
+   ],
+   "monthly_prob": [
+    1,
+    16
+   ],
+   "story": "opp_valen_seat",
+   "effect": "rep_bonus.lover+30",
+   "takes_month": 0
+  },
+  {
+   "id": "opp_article",
+   "name": "一篇被转载的文章",
+   "road": "culture",
+   "cond": [
+    [
+     [
+      "job_periods.job_news",
+      ">=",
+      7
+     ],
+     [
+      "writing",
+      ">=",
+      60
+     ]
+    ]
+   ],
+   "monthly_prob": [
+    1,
+    12
+   ],
+   "story": "opp_article",
+   "effect": "rep_bonus.culture+25",
+   "takes_month": 0
+  },
+  {
+   "id": "opp_painting",
+   "name": "一幅画进了展览",
+   "road": "culture",
+   "cond": [
+    [
+     [
+      "job_periods.job_model_art",
+      ">=",
+      8
+     ],
+     [
+      "taste",
+      ">=",
+      80
+     ]
+    ]
+   ],
+   "monthly_prob": [
+    1,
+    16
+   ],
+   "story": "opp_painting",
+   "effect": "rep_bonus.culture+30",
+   "takes_month": 0
+  },
+  {
+   "id": "opp_fixer",
+   "name": "替片厂摆平一件事",
+   "road": "savvy",
+   "cond": [
+    [
+     [
+      "connections",
+      ">=",
+      100
+     ],
+     [
+      "negotiation",
+      ">=",
+      80
+     ]
+    ]
+   ],
+   "monthly_prob": [
+    1,
+    12
+   ],
+   "story": "opp_fixer",
+   "effect": "rep_bonus.savvy+25 crime+10",
+   "takes_month": 0
+  },
+  {
+   "id": "opp_investment",
+   "name": "一笔早到的投资",
+   "road": "savvy",
+   "cond": [
+    [
+     [
+      "business",
+      ">=",
+      80
+     ],
+     [
+      "money",
+      ">=",
+      2000
+     ]
+    ]
+   ],
+   "monthly_prob": [
+    1,
+    16
+   ],
+   "story": "opp_investment",
+   "effect": "rep_bonus.savvy+30",
+   "takes_month": 0
+  },
+  {
+   "id": "opp_senior_yinghan",
+   "name": "前辈的机遇·硬汉",
+   "road": "tough",
+   "cond": [
+    [
+     [
+      "flag.senior_tier3_tough",
+      "==",
+      1
+     ]
+    ]
+   ],
+   "monthly_prob": null,
+   "story": "opp_senior_yinghan",
+   "effect": "rep_bonus.tough+10",
+   "takes_month": 0
+  },
+  {
+   "id": "opp_senior_qingren",
+   "name": "前辈的机遇·情人",
+   "road": "lover",
+   "cond": [
+    [
+     [
+      "flag.senior_tier3_lover",
+      "==",
+      1
+     ]
+    ]
+   ],
+   "monthly_prob": null,
+   "story": "opp_senior_qingren",
+   "effect": "rep_bonus.lover+10",
+   "takes_month": 0
+  },
+  {
+   "id": "opp_senior_wenhua",
+   "name": "前辈的机遇·文化",
+   "road": "culture",
+   "cond": [
+    [
+     [
+      "flag.senior_tier3_culture",
+      "==",
+      1
+     ]
+    ]
+   ],
+   "monthly_prob": null,
+   "story": "opp_senior_wenhua",
+   "effect": "rep_bonus.culture+10",
+   "takes_month": 0
+  },
+  {
+   "id": "opp_senior_shouwan",
+   "name": "前辈的机遇·手腕",
+   "road": "savvy",
+   "cond": [
+    [
+     [
+      "flag.senior_tier3_savvy",
+      "==",
+      1
+     ]
+    ]
+   ],
+   "monthly_prob": null,
+   "story": "opp_senior_shouwan",
+   "effect": "rep_bonus.savvy+10",
+   "takes_month": 0
+  }
+ ]
+}

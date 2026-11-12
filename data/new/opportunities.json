@@ -19,7 +19,7 @@
     12
    ],
    "story": "opp_accident",
-   "effect": "rep_bonus.tough+25",
+   "effect": "rep_bonus.tough+15",
    "takes_month": 0
   },
   {
@@ -45,7 +45,7 @@
     16
    ],
    "story": "opp_expedition",
-   "effect": "rep_bonus.tough+30",
+   "effect": "rep_bonus.tough+15",
    "takes_month": 1
   },
   {
@@ -71,7 +71,7 @@
     12
    ],
    "story": "opp_tango",
-   "effect": "rep_bonus.lover+25",
+   "effect": "rep_bonus.lover+15",
    "takes_month": 0
   },
   {
@@ -97,7 +97,7 @@
     16
    ],
    "story": "opp_valen_seat",
-   "effect": "rep_bonus.lover+30",
+   "effect": "rep_bonus.lover+15",
    "takes_month": 0
   },
   {
@@ -123,7 +123,7 @@
     12
    ],
    "story": "opp_article",
-   "effect": "rep_bonus.culture+25",
+   "effect": "rep_bonus.culture+15",
    "takes_month": 0
   },
   {
@@ -149,7 +149,7 @@
     16
    ],
    "story": "opp_painting",
-   "effect": "rep_bonus.culture+30",
+   "effect": "rep_bonus.culture+15",
    "takes_month": 0
   },
   {
@@ -175,7 +175,7 @@
     12
    ],
    "story": "opp_fixer",
-   "effect": "rep_bonus.savvy+25 crime+10",
+   "effect": "rep_bonus.savvy+15 crime+10",
    "takes_month": 0
   },
   {
@@ -201,7 +201,7 @@
     16
    ],
    "story": "opp_investment",
-   "effect": "rep_bonus.savvy+30",
+   "effect": "rep_bonus.savvy+15",
    "takes_month": 0
   },
   {

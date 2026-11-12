@@ -1,0 +1,54 @@
+{
+ "note": "Rest has only two kinds (user decision): at home (Sil keeps him company, free) and outing (pick a place, spend money, meet people and things). The sanatorium is forced only when very sick and the player cannot pick it. Each takes one period, settled day by day. Resting on a Sunday counts as ordinary rest",
+ "rests": [
+  {
+   "id": "rest_home",
+   "name": "在家休息",
+   "cost": 0,
+   "fatigue_per_day": -5,
+   "sick_allowed": true,
+   "note": "Sil keeps him company",
+   "period_effect": "favor.sil+2",
+   "player_choice": true
+  },
+  {
+   "id": "rest_outing",
+   "name": "外出",
+   "cost": "place",
+   "fatigue_per_day": "place",
+   "if_broke": "counts as resting at home for that day",
+   "event": "exactly one event fires at the chosen place during the period",
+   "sick_allowed": false,
+   "player_choice": true
+  },
+  {
+   "id": "rest_sanatorium",
+   "name": "疗养院",
+   "cost": 8,
+   "fatigue_per_day": -11,
+   "if_broke": "no effect that day",
+   "sick_allowed": true,
+   "player_choice": false
+  }
+ ],
+ "forced": [
+  {
+   "cond": [
+    [
+     [
+      "sick_index",
+      ">=",
+      90
+     ]
+    ]
+   ],
+   "schedule": "rest_sanatorium",
+   "if_broke_switch": "rest_home",
+   "applies_to": "next_month_schedule",
+   "shoot_breach": {
+    "fee": 0,
+    "fame_pct": -10
+   }
+  }
+ ]
+}

@@ -58,6 +58,10 @@ class Agent:
 	func month_start(_story, _st) -> void:
 		pass
 
+	## Step 12c: free actions just before period i (not void, not detained; shooting periods included): story.boost(st, i).
+	func before_period(_story, _st, _i: int) -> void:
+		pass
+
 
 ## The simplest player, for tests:
 ##   deck: main color (highest level) 3 cards + the color with the second-highest level 2 cards; plays at random with the logic stream;
@@ -141,6 +145,7 @@ func board(st) -> void:
 
 
 func month_start(st) -> void:
+	Events.dealer_month(st)
 	agent.month_start(self, st)
 
 
@@ -150,12 +155,22 @@ func write_script(st, kind: String, color := -1) -> String:
 	return Board.write_script(st, kind, color)
 
 
-## Send to detox: allowed at drug_stage >= 2; the withdrawal event fires at the end of that month.
+## Send to detox: allowed once he is addicted (drug_stage >= 1); the withdrawal event fires at the end of that month.
 func send_detox(st) -> String:
-	if st.drug < 2:
-		return "drug_stage below 2"
+	if st.drug < 1:
+		return "not addicted"
 	st.flags["detox_sent"] = 1
 	return ""
+
+
+## Take a dose (step 12c c3, stats.drug): a free action before period i; returns "" or the reason.
+func boost(st, i: int) -> String:
+	return Events.boost(st, i)
+
+
+## Buy n doses from the dealer when he is around this month (month start); returns "" or the reason.
+func buy_drug(st, n: int) -> String:
+	return Events.buy_drug(st, n)
 
 
 ## Newspaper line favor 80: one news leak per year, fame +10%, counts as exposure.
@@ -181,6 +196,13 @@ func film_period(st, i: int, f, days: Array) -> void:
 
 func film_breach(st) -> void:
 	Film.breach_month(st, st.ym + 1)
+
+
+func before_period(st, i: int) -> void:
+	cur_period = i
+	st.status["drug_high"] = 0
+	agent.before_period(self, st, i)
+	Events.drug_period(st, i)
 
 
 func period_start(st, i: int, entry: String) -> void:
@@ -215,7 +237,13 @@ func job_period(st, jid: String, good: bool) -> void:
 # ---------- month end, settlement ----------
 
 func month_events(st) -> void:
+	cur_period = 3          # an arrest at month end detains the first period of next month
+	Events.drug_month(st)
 	Events.month_end(self, st)
+
+
+func discharge(st) -> void:
+	Events.discharge(self, st)
 
 
 func release(st) -> void:

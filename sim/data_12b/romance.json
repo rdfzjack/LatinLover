@@ -1,0 +1,225 @@
+{
+ "note": "favor 0-100; four romance lines; function NPCs hang off the job hooks (5.4)",
+ "npcs": [
+  {
+   "id": "sil",
+   "name": "Sil",
+   "class": "romance",
+   "favor_init": 0,
+   "known_at_start": true,
+   "gender": "male",
+   "identity": "秘书",
+   "favor_sources": "+2 per period resting at home; +2 when he persuades; +3 on New Year and birthday; +2 after a botched audition; +10 for the withdrawal story",
+   "destiny_cond": [
+    [
+     [
+      "favor.sil",
+      "==",
+      100
+     ],
+     [
+      "looks",
+      ">=",
+      200
+     ],
+     [
+      "discipline",
+      ">=",
+      100
+     ]
+    ]
+   ],
+   "original": "Butler (the feeling condition replaced by discipline) [inferred N42]"
+  },
+  {
+   "id": "duv",
+   "name": "Duv",
+   "class": "romance",
+   "favor_init": 0,
+   "known_at_start": false,
+   "gender": "male",
+   "identity": "家教",
+   "met_via": "tutor_period_1",
+   "favor_sources": "+2 per tutoring period; +5 each when education passes 100/200/300; downtown chain events and chats; +3 when asked to write a script",
+   "destiny_cond": [
+    [
+     [
+      "favor.duv",
+      ">=",
+      90
+     ],
+     [
+      "education",
+      ">=",
+      300
+     ],
+     [
+      "speech",
+      ">=",
+      60
+     ],
+     [
+      "crime",
+      "<",
+      100
+     ]
+    ]
+   ],
+   "original": "Same shape as the Prince [inferred N42]",
+   "education_milestones": {
+    "line": [
+     100,
+     200,
+     300
+    ],
+    "effect": "favor.duv+5"
+   }
+  },
+  {
+   "id": "actress",
+   "name": "女明星",
+   "class": "romance",
+   "favor_init": 0,
+   "known_at_start": true,
+   "gender": "female",
+   "identity": "同行，好友，出身也穷（名字占位）",
+   "favor_sources": "+8 per co-starring film (roles mark lead=actress in their data); star assistant, bodyguard; studio-area chain events; +3 on birthday",
+   "destiny_cond": [
+    [
+     [
+      "favor.actress",
+      ">=",
+      90
+     ],
+     [
+      "looks",
+      ">=",
+      200
+     ],
+     [
+      "loyalty",
+      ">=",
+      200
+     ],
+     [
+      "discipline",
+      ">=",
+      30
+     ],
+     [
+      "crime",
+      "<",
+      100
+     ]
+    ]
+   ],
+   "original": "Prince"
+  },
+  {
+   "id": "fourth",
+   "name": "第四人",
+   "class": "romance",
+   "favor_init": 0,
+   "known_at_start": false,
+   "gender": "female",
+   "identity": null,
+   "favor_sources": "Hook left blank (the rich widow is a function NPC; the user decides whether she becomes the fourth)",
+   "destiny_cond": null,
+   "placeholder": true
+  },
+  {
+   "id": "foreman",
+   "name": "同乡工头",
+   "class": "function",
+   "favor_init": 0,
+   "known_at_start": false,
+   "met_via": "job_dock"
+  },
+  {
+   "id": "priest",
+   "name": "神父",
+   "class": "function",
+   "favor_init": 0,
+   "known_at_start": false,
+   "met_via": "job_church"
+  },
+  {
+   "id": "painter",
+   "name": "画家",
+   "class": "function",
+   "favor_init": 0,
+   "known_at_start": false,
+   "met_via": "job_model_art"
+  },
+  {
+   "id": "bar_owner",
+   "name": "酒吧老板",
+   "class": "function",
+   "favor_init": 0,
+   "known_at_start": false,
+   "met_via": "job_bar"
+  },
+  {
+   "id": "studio_boss",
+   "name": "片厂老板",
+   "class": "function",
+   "favor_init": 0,
+   "known_at_start": false,
+   "met_via": "job_studio"
+  },
+  {
+   "id": "editor",
+   "name": "编辑",
+   "class": "function",
+   "favor_init": 0,
+   "known_at_start": false,
+   "met_via": "job_news"
+  },
+  {
+   "id": "rich_widow",
+   "name": "富婆",
+   "class": "function",
+   "favor_init": 0,
+   "known_at_start": false,
+   "met_via": "job_ballroom"
+  },
+  {
+   "id": "action_director",
+   "name": "动作片导演",
+   "class": "function",
+   "favor_init": 0,
+   "known_at_start": false,
+   "met_via": "job_stunt"
+  }
+ ],
+ "rules": {
+  "favor_range": [
+   0,
+   100
+  ],
+  "loyalty_bonus": {
+   "cond": [
+    [
+     [
+      "loyalty",
+      ">=",
+      200
+     ]
+    ]
+   ],
+   "note": "Positive favor gains from events get +1 each time (fixed \"+1 per period\" gains in schedules do not count)"
+  },
+  "love_state": {
+   "duration_months": 3,
+   "end_cond": "Ends automatically after 3 months when looks is not the highest base attribute",
+   "monthly_favor": -2,
+   "lines": [
+    "sil",
+    "duv",
+    "actress",
+    "fourth"
+   ]
+  },
+  "destiny_priority": "When several hold, the one with the highest favor; ties go by sil, duv, actress, fourth"
+ }
+}

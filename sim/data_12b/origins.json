@@ -1,0 +1,171 @@
+{
+ "note": "Three opening questions, pick one option each; effect syntax as for items (14.1)",
+ "questions": [
+  {
+   "id": "origin_past",
+   "question": "来美国前做什么",
+   "options": [
+    {
+     "text": "逃兵",
+     "effect": "stamina+20 fight+10 nerve+5 discipline-15",
+     "tag_counts": {},
+     "flags": [
+      "deserter"
+     ],
+     "items": [],
+     "flag_note": "An event where the consulate comes looking; war-film fit bonus"
+    },
+    {
+     "text": "走私",
+     "effect": "riding+5 negotiation+5 business+5 crime+30",
+     "tag_counts": {},
+     "flags": [
+      "smuggling"
+     ],
+     "items": [],
+     "flag_note": "Periods bootlegging can skip the bar-bouncer requirement"
+    },
+    {
+     "text": "黑道跑腿",
+     "effect": "loyalty+20 fight+5 nerve+10 crime+40",
+     "tag_counts": {},
+     "flags": [
+      "old_friend"
+     ],
+     "items": [],
+     "flag_note": "An event where people from over there come looking"
+    },
+    {
+     "text": "男妓",
+     "effect": "looks+15 physique+10 negotiation+5 discipline-10",
+     "tag_counts": {},
+     "flags": [
+      "old_client"
+     ],
+     "items": [],
+     "flag_note": "An event where he is recognized; the rich widow line comes earlier"
+    },
+    {
+     "text": "农学院学生",
+     "effect": "education+40 riding+5 loyalty-10",
+     "tag_counts": {},
+     "flags": [
+      "diploma"
+     ],
+     "items": [],
+     "flag_note": "Education line -20 for the newspaper and studio office jobs"
+    }
+   ]
+  },
+  {
+   "id": "origin_fame",
+   "question": "之前靠什么红的",
+   "options": [
+    {
+     "text": "硬汉派",
+     "effect": "fight+10 riding+10 nerve+10",
+     "tag_counts": {
+      "action_adventure": 1,
+      "western": 1
+     },
+     "flags": [],
+     "items": []
+    },
+    {
+     "text": "演技派",
+     "effect": "acting+20 speech+5 writing+5 fame-20",
+     "tag_counts": {
+      "tragic": 1,
+      "arthouse": 1
+     },
+     "flags": [],
+     "items": []
+    },
+    {
+     "text": "大众情人",
+     "effect": "physique+10 grooming+10 looks+10 fame+20",
+     "tag_counts": {
+      "romance": 1,
+      "exotic_lover": 1
+     },
+     "flags": [],
+     "items": []
+    },
+    {
+     "text": "色情电影",
+     "effect": "looks+20 physique+10 fame+30 crime+20",
+     "tag_counts": {
+      "underground": 1,
+      "romance": 1
+     },
+     "flags": [
+      "old_film"
+     ],
+     "items": [],
+     "flag_note": "A scandal event from a leaked copy"
+    }
+   ]
+  },
+  {
+   "id": "origin_keepsake",
+   "question": "手里留着什么",
+   "options": [
+    {
+     "text": "一点存款",
+     "effect": "money+300",
+     "tag_counts": {},
+     "flags": [],
+     "items": []
+    },
+    {
+     "text": "一套旧西装",
+     "effect": "",
+     "tag_counts": {},
+     "flags": [],
+     "items": [
+      "suit_old"
+     ]
+    },
+    {
+     "text": "一个欠他人情的人",
+     "effect": "connections+10",
+     "tag_counts": {},
+     "flags": [
+      "owed_favor"
+     ],
+     "items": []
+    },
+    {
+     "text": "一枚不知是谁的戒指",
+     "effect": "",
+     "tag_counts": {},
+     "flags": [
+      "ring"
+     ],
+     "items": []
+    },
+    {
+     "text": "一张回那不勒斯的船票",
+     "effect": "",
+     "tag_counts": {},
+     "flags": [
+      "ship_ticket"
+     ],
+     "items": []
+    },
+    {
+     "text": "一本看不懂的书",
+     "effect": "",
+     "tag_counts": {},
+     "flags": [
+      "old_book"
+     ],
+     "items": [
+      "old_book"
+     ],
+     "flag_note": "education gate 300, finish event left blank"
+    }
+   ]
+  }
+ ]
+}

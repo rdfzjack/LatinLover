@@ -1,0 +1,93 @@
+{
+ "note": "Chain events go in order, each seen once; when the chain is used up or its cond fails, resident events fire (repeatable). Duv's tip-off and chat are 1/2 each. Except Duv and the actress the content is blank, user to supply",
+ "chains": [
+  {
+   "id": "chain_duv_class",
+   "npc": "duv",
+   "trigger": "tutoring",
+   "chain": [
+    "outing_duv_class_1",
+    "outing_duv_class_2",
+    "outing_duv_class_3",
+    "outing_duv_class_4"
+   ],
+   "resident": []
+  },
+  {
+   "id": "chain_duv_town",
+   "npc": "duv",
+   "trigger": "outing",
+   "chain": [
+    "outing_duv_script"
+   ],
+   "resident": [
+    {
+     "weight": 1,
+     "event": "outing_duv_tip"
+    },
+    {
+     "weight": 1,
+     "event": "outing_duv_chat"
+    }
+   ]
+  },
+  {
+   "id": "chain_actress",
+   "npc": "actress",
+   "trigger": "outing",
+   "chain": [
+    "outing_actress_dressing"
+   ],
+   "resident": []
+  },
+  {
+   "id": "chain_editor",
+   "npc": "editor",
+   "trigger": "outing",
+   "chain": [],
+   "resident": []
+  },
+  {
+   "id": "chain_studio_boss",
+   "npc": "studio_boss",
+   "trigger": "outing",
+   "chain": [],
+   "resident": []
+  },
+  {
+   "id": "chain_rich_widow",
+   "npc": "rich_widow",
+   "trigger": "outing",
+   "chain": [],
+   "resident": []
+  },
+  {
+   "id": "chain_painter",
+   "npc": "painter",
+   "trigger": "outing",
+   "chain": [],
+   "resident": []
+  },
+  {
+   "id": "chain_foreman",
+   "npc": "foreman",
+   "trigger": "outing",
+   "chain": [],
+   "resident": []
+  },
+  {
+   "id": "chain_bar_owner",
+   "npc": "bar_owner",
+   "trigger": "outing",
+   "chain": [],
+   "resident": []
+  },
+  {
+   "id": "chain_action_director",
+   "npc": "action_director",
+   "trigger": "outing",
+   "chain": [],
+   "resident": []
+  }
+ ]
+}

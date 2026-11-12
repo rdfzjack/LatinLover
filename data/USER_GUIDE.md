@@ -1,6 +1,6 @@
 # Editing the game data yourself: user guide
 
-Items, roles, events, outing places, NPCs, the opening questions, prices ... all live in the JSON files of `data/new/`. The Python simulator and Godot read the same files: change them here and both follow, no code to touch.
+Items, roles, events, outing places, NPCs, the opening questions, prices ... all live in the JSON files of `data/new/`. The game (Godot) reads these files directly: change them here and the game follows, no code to touch. (The old Python simulator `sim/` is frozen since step 12b and no longer follows the tables.)
 
 This guide covers what to open them with, how to write JSON, the common changes, and how to check your work.
 
@@ -19,6 +19,8 @@ This guide covers what to open them with, how to write JSON, the common changes,
 **2. Install Python 3** (the checker needs it): python.org, tick **"Add Python to PATH"** when installing.
 
 **3. Check after every edit.** Double-click **`check_data.bat`** in the repository root (or run `python3 tools/check.py`). If the last line says `All checks passed, ready to commit.` all is well; otherwise it names the file, the record and the problem. You can also tell the model "run the check".
+
+Step 5 of the check lets the bots play 30 games each in Godot and compares the result with the balance targets (`design/targets.json`). It needs Godot 4.3 (godotengine.org; put it on the PATH as `godot`, or set the environment variable `GODOT` to the program). Without Godot that step is skipped with a note; the rest of the check still runs.
 
 **4. Commit** the way you usually do (GitHub Desktop and so on), or tell the model "commit this".
 
@@ -206,6 +208,7 @@ On an outing period you meet something at the place. Add it to `"events"` of `ou
  "weight": 2,
  "cond": [],
  "once": false,
+ "tier": "small",
  "options": [
   {
    "text": "去唱一首",
@@ -230,6 +233,7 @@ Then **hang it on the place's random table**: add `{"event": "outing_church_1", 
 - `once: true`: at most once per game.
 - An option may carry a `"cond"`: the option is hidden when it does not hold (for example no money, no "borrow").
 - `body` is the text shown in the event; `null` for now is fine.
+- `tier` is required on every event: how big its effects may be (see "Event budget" below).
 
 ### 5. Make a person appear somewhere and give them a story
 
@@ -279,6 +283,7 @@ Add to `"events"` of `events.json`:
  "prob": [1, 6],
  "freq": "once_per_year",
  "effect": "fatigue+5",
+ "tier": "small",
  "code": false,
  "note": "",
  "source": "",
@@ -291,6 +296,22 @@ Add to `"events"` of `events.json`:
 - `order`: month-end events are judged from the smallest number up and **at most 2 happen per month**, so earlier ones take the slots. Put unimportant events at a larger number (the largest now is 20).
 - You can give it `"options"` as in item 4.
 - Write `"code": false`. An event with `true` has part of its logic in code; ask the model before editing those.
+
+### Event budget: `tier`
+
+So that adding events does not need a new balance round each time, every event (in `events.json` and `outing.json`) has a `tier`, and every possible outcome of it (each option's success and failure, each branch, the plain effect) must stay inside that tier's caps:
+
+| tier | for | caps per outcome |
+|---|---|---|
+| `small` | small things that repeat (random tables, job random events) | base attribute ±5; skill ±3; money ±50; fatigue ±10; favor ±5; fame ±5; no rep_bonus, no fame % |
+| `medium` | a few times a game (milestones, NPC story steps) | base attribute ±15; skill ±8; money ±200; fatigue ±20; favor ±10; fame ±15; no rep_bonus, no fame % |
+| `large` | once a game, with a precondition | rep_bonus ±10; money ±500; fame ±10%; base attribute ±30; skill ±16; fatigue ±40; favor ±20; fame ±30 |
+| `bad` | bad things (arrest, scandal, injury, illness) | no caps; their cost shows up in the report (void periods, arrests) |
+
+- The event-level `effect` counts as part of every outcome. Terms with `=` (like `fatigue=0`) and flags are not capped.
+- A `small` event should give something and take something (+skill with +fatigue or −money); nothing for free. The checker does not check this; it is on you.
+- Over the cap on purpose: add `"budget_note": "why"`. The checker then skips the caps and lists every event with a `budget_note`.
+- Whatever the tiers, the sum of all events is watched in the report (line "from events"): main-road reputation from events ≤ 30 per game, event money within ±10% of all money gained, event fatigue within ±60 a year. When over, cut events, not classes, jobs or fees.
 
 ### 7. Add a role (a part on the casting board)
 
@@ -361,7 +382,33 @@ Two places:
 
 `items` takes item ids, for example `["suit_old"]`; `flags` takes flag names, for example `["smuggling"]`. Do not delete the questions themselves.
 
-### 10. Delete something
+### 10. Add a crime job
+
+Crime jobs come in two tiers with a fixed shape (`crime_tiers` at the top of `jobs.json`). A job with `crime_tier` must have exactly that tier's daily wage, crime, discipline, stamina and fatigue, number of success lines, and search numbers; only the skills, the success-line stats and the name may differ. That way adding or removing one cannot break the balance. Copy an existing one (`job_numbers` for tier 1, `job_fixer` for tier 2) and change:
+
+- `id`, `name` (mark it `"placeholder": true` while the name is temporary), `road` (`tough`, `lover`, `culture`, `savvy`: whose bad-boy bot uses it);
+- the skill in `daily_effect` (one road skill `+0/1`; extra skills allowed, extra attributes not);
+- `success_lines` (tier 1: one attribute at 60; tier 2: two lines, one of them a skill at 30);
+- `raid_skill`: the skill that gets him through a police search (`raid_prob`, `raid_line` must stay as in `crime_tiers`).
+- tier 2 needs `"prereq": [[["job_periods.<the tier-1 job>", ">=", 3]]]` and `earliest` 1927-01 or later; tier 1 must be available by 1926-07.
+- Add the id to `job_unlocks` of its `earliest` month in `calendar.json`.
+
+### 11. Fatigue, drugs, arrest numbers (step 12c)
+
+| Where | Field | Meaning |
+|---|---|---|
+| `classes.json` each class | `fatigue_per_day` | fatigue per class day (3) |
+| `books.json` each tier and book | `fatigue_per_day` | fatigue per reading day (2); a book must match its tier |
+| `places.json` | `fatigue_per_day` | negative; town places −3, resort −20 |
+| `annual.json` | `attend_effect` | effect of attending the annual event (`fatigue+15`) |
+| `stats.json` → `drug` | `dealer` (probability, stock, price), `dose_effect`, `outcome_weights` (high / divine / side), `divine_gain_mult`, `divine_perf_add`, `side_perf_add`, `side_effect`, `side_fail_pct`, `hook_*_pct`, `attack`, `stage_lines`, `refuse_discipline`, `deep_monthly_effect` | the dealer, the dose and the addiction (GDD 5.8.1); `stage_lines` are the depths for stages 1, 2, 3 |
+| `stats.json` → `arrest` | `fine_min`, `fine_pct`, `detain_periods`, `raid_crime_div` | fine = max(fine_min, money × fine_pct%); periods lost to detention; search probability × (1 + crime / raid_crime_div) |
+| `roles.json` → `defaults.board` | `morals_months` | months without big films after an arrest or a scandal |
+| `rest.json` → `forced` | `discharge_effect`, `discharge_event` | what leaving the sanatorium does |
+
+In effects, `drug_points+1` and `drug_stage=0` work like any other name.
+
+### 12. Delete something
 
 1. `Ctrl+Shift+F` for its id to see where else it is used (shop shelves, random tables, chains, conditions, effects, `trigger.` of other events).
 2. Remove those places, then the thing itself.
@@ -415,6 +462,10 @@ Every field of every table is described in `data/new/README.md`.
 | duplicate key | two records of one category share an id |
 | extra key in text.csv | a record was deleted; run `python3 tools/extract_text.py --prune` |
 | stale translation | the Chinese changed; see section 6 |
-| bot "xxx" crashed in game N | the tables are well formed but the game fails when running them; send the message to the model |
+| the game crashed while the bots were playing | the tables are well formed but the game fails when running them; send the message to the model |
+| xxx tier small option 1 success is over budget: ... | an event outcome is bigger than its `tier` allows; lower it, pick a bigger tier, or add `budget_note` |
+| crime_tier 1: daily_wage must be 8 ... | a crime job does not have its tier's shape; copy the numbers from `crime_tiers` |
+| FAIL bad_boy rest_share 31.0 [18.0, 27.5] | a balance target is off after your change (the check still passes). If you only added content, halve the effects of this batch and run again; still failing: leave it for a balance round, do not change other numbers |
+| Godot was not found | step 5 was skipped; install Godot or ignore |
 
 To undo a bad edit: in GitHub Desktop right-click the file → "Discard changes" and it returns to the last commit.

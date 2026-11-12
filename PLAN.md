@@ -23,15 +23,60 @@
 
 ## 进度
 
-**12b 完成后，上面“两条线的分工”作废**：规则只在 Godot 改，`sim/` 冻结，批量试算也在 Godot 跑。之后所有步骤（含第 13–18 步）按 `design/BALANCE_WORKFLOW.md` 做。
+### 现在在哪
+第 12c 步 c3（平衡）。下一步是第 13 步（界面）。这一节是唯一的交接：每个会话结束前把“旧记录”以上的部分重写成最新的，不往下堆。
 
-第 1–12 步和 8b、9b 已完成（详见 `README.md`）。第 9 步的对账在 Godot 4.3 里跑过，和 Python 逐字节一致。
+### 第 5 轮定下来的（用户定）
+- 上映按片子得分（表现 × 契合 × 戏路）分四段：1.55 以上大卖，1.0–1.55 正常，0.7–1.0 不行，0.7 以下惨败。
+- 声望（小/中/大片）：大卖 +10/+20/+64，正常 +4/+8/+16，不行 −4/−8/−16，惨败 −10/−20/−64。
+- 药只改表现：神仙附体 +0.4，副作用 −0.5。
+- 结果（200 局，S/A/B/C 以下/倒下 %，均分）：自律（2.9/51.8/44.0/1.4/0，2.56），坏孩子（3.3/54.7/40.3/1.7/0，2.60），赌徒（1.8/38.1/53.2/6.9/0，2.34）。不过的护栏（15 条）：
+  - 自律 S 2.9%（≤2）、A 51.8%（30–45）、B 44.0%（45–60）
+  - 坏孩子 A 54.7%（25–30）、B 40.3%（20–25）、C 以下 1.7%（25–35）、期末现金最低一成 2,087（≤1,000）、S 档三路相差 10（≤8）
+  - 专练硬汉、情人、文化、手腕大卖率 2.4% / 4.1% / 1.5% / 1.2%（5–15）
+  - 专练文化：练满加普通上映 302（311–340）、过 311 的局 30.5%（≥50）
+  - 专练手腕第 2 年末现金 1,353（<1,000）
 
-9c-1（英文 id 和字段名，Python 侧）和 9c-2（语言文件、Godot 侧、用户指南）已完成，Godot 对账已通过。第 10 步（日程和月结）已完成，对账一致。第 11 步（试镜）已完成，1000 场逐轮一致。第 12 步（选片板、拍摄、上映、事件、结局）已完成，38 局机器人录像在 Godot 里回放，每月状态和结局一致。下一步第 13 步；开工前用户先和 Fable 讨论平衡、体验和可能的新系统（交接 `design/HANDOFF_FABLE.md`）。9c 的规格在 `design/STEP9C_IDS_AND_LOCALE.md`。9c 要在 10 之前做：越往后移植到 Godot 的代码越多，改名越贵。第 8 步可以重复做：读 `design/BALANCE_LOG.md` 的“没解决的”，改完重跑报告。
+### 搁置（用户没提就不要重提）
+- 用药、坏孩子打法的两头（S 和 C 以下）现在出不来。原因：声望表把分量放在大片上，现在一局主演大片约 0.1 部，机器人估计赢不了所以不去试，不是名气门槛的问题。用户：等道具和事件加进来、大片有竞争力以后再验；现在不为它调数，不再试算。
+- 大卖率按路不平（情人路高）：用户说先不解决。
+- 赌徒现在均分比自律低 0.22（2.34 对 2.56），等于“不吸更好”。原因同上一条：没有大片可赌，只剩副作用。大片有竞争力以后要回头看这一条；“不做道德审判”的原则在 `design/BALANCE_LOG.md` 开头。
+
+### 没做完的小项
+- bold_*（肯冒险的坏孩子）还不能用：两旬犯罪工挤掉了练习。
+- --coverage 里从没触发的事件：job_studio_m1/m2/m3、job_ballroom_m2/m3、job_bodyguard_r1、job_radio_m1、opp_painting。
+- 成就“神仙附体影帝”只有标记，没有成就表。
+- 随机数不进存档，做成开关（design/CHANGE.md）。
+- gambler_* 在 design/targets.json 里还没有条目。
+
+### 等用户定（不急，都不挡第 13 步）
+- 药的事要不要给玩家看：药贩在不在、神仙附体和副作用的概率、有没有上瘾。规则是按“上瘾断药才知道、副作用旬末才揭晓”写的，要等有界面再定。
+- “自律 ≥150 不买药”：旧规则留下来的，新规则里没讨论过要不要留。
+- 占位的数：药贩每次 2 份、单价 20–190、神仙附体 30%。
+
+### 已完成的步骤（旧记录）
+
+**12b 已完成，上面“两条线的分工”作废**：规则只在 Godot 改，`sim/` 冻结，批量试算也在 Godot 跑。之后所有步骤（含第 13–18 步）按 `design/BALANCE_WORKFLOW.md` 做。
+
+第 1–12 步和 8b、9b、9c、12b 已完成（详见 `README.md`）。第 9 步的对账在 Godot 4.3 里跑过，和 Python 逐字节一致。
+
+9c-1（英文 id 和字段名，Python 侧）和 9c-2（语言文件、Godot 侧、用户指南）已完成，Godot 对账已通过。第 10 步（日程和月结）已完成，对账一致。第 11 步（试镜）已完成，1000 场逐轮一致。第 12 步（选片板、拍摄、上映、事件、结局）已完成，38 局机器人录像在 Godot 里回放，每月状态和结局一致。12b（机器人和报告搬进 Godot）已完成；12c 的 c1（规则）、c2（新机器人、报告、护栏）已完成，下一步 c3（Fable 看报告定数），然后第 13 步。9c 要在 10 之前做：越往后移植到 Godot 的代码越多，改名越贵。第 8 步可以重复做：读 `design/BALANCE_LOG.md` 的“没解决的”，改完重跑报告。
 
 用户的修改意见记在 `design/CHANGE.md`，每条后面写了在哪一步处理。
 
 用户要到第 13、14 步有界面以后才能自己试玩。最短的路是 9c → 10 → 11 → 13 → 14（只有日程和试镜的可玩版本），第 12、15 步之后补。
+
+- **PLAN 第 1–12 步和 8b、9b、9c、12b 已完成；第 12c 步做完了 c1（规则）和 c2（三个新机器人、报告、护栏），c3 的数已定，第 4 轮把机器人改得会玩并重跑了整份报告、试算了大卖收益（`design/BALANCE_LOG.md` 开头的“现在”），下一步是 Fable 出大卖方案（交接在本节最上面），Opus 照着改表重跑**，再到第 13 步（界面）。12c 的目标在 `design/BALANCE_LOG.md` 开头的“现在”。**从 12b 起 `sim/` 冻结：不再改规则，只留作历史参考；规则只改 `game/silentstar/core/`，机器人和报告在 `game/silentstar/tools/bots.gd` `report.gd`；之后的规矩见 `design/BALANCE_WORKFLOW.md`。**数据、`sim/` 和 Godot 的 `core/` 里的 id、字段名全是英文（对照表 `design/GLOSSARY.md`），中文只在数据表的显示字段里；`data/locale/text.csv` 由 `tools/extract_text.py` 生成（`tools/check.py` 会跑它），`data/USER_GUIDE.md` 已按新写法用英文重写。Godot 对账（命令在 `design/IMPL_NOTES.md` 的 Godot 一节）已通过。
+- 用户会自己改 `data/new/` 的表（指南 `data/USER_GUIDE.md`）。开工先跑 `python3 tools/check.py`，不通过先告诉用户。
+- 第 12 步：`core/` 加了 `board.gd` `film.gd` `street.gd`（12-1）和 `events.gd` `ending.gd` `story.gd`（12-2；`story.gd` 是 `Month.Hooks` 的子类，内含 `Agent` 和 `SimpleAgent`）。对账：`tools/record_game.py` 把机器人一整局的每个决定录下来（`--extras` 再加剧本、戒毒、放消息、餐厅等月初动作和一份“偏爱的打工”），`tools/trace.py` 录 `trace_cases.json` 的 `games` 段 38 局到 `work/games/`，Godot 回放；每月状态（含整份存档的 md5）、触发过的事件、每块板的试镜和结局逐字节一致。改了表以后，`python3 tools/record_game.py --coverage` 看各机器人还走得到哪些路径。
+- 第 12c 步（c1、c2）：疲劳成了约束（上课每天 +3、看书 +2、城里外出只 −3、度假村 −20 带“玩过头”、年度大事 +15）；毒品变成街道动作“提神”（药瘾点数定阶段，阶段 2、3 有后果，“加深”事件删除）；被捕罚款 `max(200, 30%)`、拘留作废下一旬、搜查概率随犯罪升高；道德条款改成被捕或丑闻后 3 个月不能报大片；硬汉、情人、手腕各有两级犯罪工（`crime_tier`，形状由 `check_data.py` 核对）；疗养院出院有副作用；结局“演员”排在“黑暗”前。新机器人 `disciplined_*` `bad_boy_*` `addict_*`；所有机器人按偏好表选事件选项；报告加了“来自事件”和“12c 策略”两段、`--coverage`、`--guard`；`design/targets.json` 是护栏，`tools/check.py` 第 5 步用 Godot 跑 30 局对它（没有 Godot 就跳过）；事件都有了 `tier`，`check_data.py` 查预算。`sim/` 改读 `sim/data_12b/`（12b 时的表），Python 和 Godot 不再对账。细节见 `design/IMPL_NOTES.md` 的 Step 12c 一节。
+- 第 12b 步：机器人和报告搬进了 Godot（`tools/bots.gd` `tools/report.gd`），没改任何规则和数值。先把 Python 机器人的随机数换成 PCG32（单独一条流，序号 3），再移植；`trace_cases.json` 的 `bots` 段让 8 种机器人各跑 5 个种子（每月存档 md5 + `summarize` 的 JSON），Godot 和 Python 逐字节一致；`report.gd --n=200 --bots=all` 的输出和 `python3 -m sim.report` 逐字符相同（基准是 `design/BALANCE_LOG.md`“现在的报告”）。耗时和移植时发现的 Python 侧问题见 `design/IMPL_NOTES.md`。
+- 第 11 步：`core/audition.gd` 移植了试镜（组牌、有效点数、对手习惯、对手组牌、结果档、`audition()`）；`trace_cases.json` 的 `audition` 段跑 1000 场（月份、名气、声望、场风、有名和无名对手、大片两场、被记住、搞砸都有），Godot 和 Python 逐轮一致。
+- 第 10 步：`core/schedule.gd`、`month.gd` 移植了日程和月结（钩子为空，选片板等第 12 步接）；`tools/trace_cases.json` 的 `month` 段跑 7 组 48 个月的固定日程（含外出、看书、病倒、疗养院、崩溃结局、存读档），Godot 和 Python 逐字节一致。
+- 第 9 步：Godot 工程 `game/silentstar/` 有了数据加载、随机数、状态、条件和效果、存读档，和 Python 对账逐字节一致（命令在 `design/IMPL_NOTES.md` 的 Godot 一节）。
+- 股票系统已删；休息只剩在家（Sil 陪着）和外出（选去处）两种（`design/CHANGE.md`）。
+- `sim/`（Python 试算器）能从开局跑到结局，数值调过一轮（第 8 步）；之后的数值都在 Godot 里调，现状见 `design/BALANCE_LOG.md` 开头的“现在”。
+- 用户要等第 13、14 步有界面以后才能自己试玩。角色、事件、NPC、文本大多是占位（第 16–18 步补）。
 
 ## 步骤
 
@@ -62,12 +107,12 @@ Godot 4.3，GDScript。工程在 `game/silentstar/`。逻辑和界面分开：`g
 |---|---|---|---|---|---|---|
 | 9 | 工程骨架：数据加载、随机数、状态、条件和效果解释器、存读档（**已完成，对账一致**） | `sim/rng.py` `state.py` `rules.py`；GDD 16 节；`design/IMPL_NOTES.md` | `game/silentstar/core/` 对应脚本；`game/silentstar/tools/trace.gd`；`tools/trace.py` `trace_cases.json` `compare_trace.py` | 无界面运行，输出随机数序列和存档往返，与 Python 逐字节一致 | 中 | Opus |
 | 9b | 让用户自己改数据（`design/CHANGE.md` 第 3 条）。用户选了直接改 JSON，不做 Excel（**已完成**） | `data/new/README.md`；`tools/check_data.py` | `data/USER_GUIDE.md`（中文指南）；`tools/check.py` 一键检查（格式、重复、类型、内容、机器人试玩，报错用大白话）；`check_data.bat` | 指南里每个例子照抄进表都能通过检查、试玩时会触发 | 中 | Opus |
-| 9c | 英文 id 和多语言：数据结构和代码只用英文 id，玩家看得到的文字搬到 `data/locale/text.csv`（用户定：要做多语言）。**规格见 `design/STEP9C_IDS_AND_LOCALE.md`** | `design/STEP9C_IDS_AND_LOCALE.md`；`data/new/README.md`；`design/IMPL_NOTES.md` | `design/GLOSSARY.md`、`tools/i18n_map.json`、`tools/migrate_ids.py`；改好的表、`sim/`、测试、检查脚本、`game/silentstar/core/`；`data/locale/text.csv`；新版 `data/USER_GUIDE.md` | 见规格：报告数字和改之前完全相同；测试、检查、Godot 对账通过；代码和数据里没有中文 id。**拆法**：9c-1 改 id 和字段名（Python 侧，**已完成**）；9c-2 抽语言文件、Godot、用户指南（**已完成**） | 大 | Opus |
+| 9c | 英文 id 和多语言：数据结构和代码只用英文 id，玩家看得到的文字搬到 `data/locale/text.csv`（用户定：要做多语言）。规则见 `README.md`“用户定过的事” | `data/new/README.md`；`design/IMPL_NOTES.md` | `design/GLOSSARY.md`、`tools/i18n_map.json`、`tools/migrate_ids.py`；改好的表、`sim/`、测试、检查脚本、`game/silentstar/core/`；`data/locale/text.csv`；新版 `data/USER_GUIDE.md` | 报告数字和改之前完全相同；测试、检查、Godot 对账通过；代码和数据里没有中文 id。**拆法**：9c-1 改 id 和字段名（Python 侧，**已完成**）；9c-2 抽语言文件、Godot、用户指南（**已完成**） | 大 | Opus |
 | 10 | 移植日程和月结（**已完成，对账一致**） | `sim/schedule.py` `month.py` | `game/silentstar/core/schedule.gd` `month.gd` | 同种子、同日程，每月状态与 Python 一致（对账脚本 `tools/compare_trace.py`） | 中 | Sonnet |
 | 11 | 移植试镜（**已完成，对账一致**） | `sim/audition.py` | `game/silentstar/core/audition.gd` | 同种子 1000 场试镜逐轮一致 | 小 | Sonnet |
 | 12 | 移植选片板、拍摄、上映、事件、结局（**已完成，对账一致**） | `sim/board.py` `film.py` `events.py` `ending.py` | `game/silentstar/core/` 对应脚本 | 机器人的决策录成文件后在 Godot 里回放，整局每月状态和结局与 Python 一致。**拆法同第 6 步** | 大 | Opus |
-| 12b | 把机器人和报告搬进 Godot，之后 `sim/` 冻结。**规格见 `design/STEP12B_12C_BALANCE.md`** | 规格里列的文件 | `game/silentstar/tools/bots.gd` `report.gd` | 对账无差异；Godot 报告和 Python 基准 `diff` 为空 | 中 | Sonnet |
-| 12c | 第二轮平衡：疲劳、毒品、被捕、疗养院的规则改动，三个新机器人，按目标表调数。**规格同上** | 规格里列的 GDD 小节 | 改 `core/`、`data/new/`、GDD、`BALANCE_LOG.md` | 规格里的目标表达标 | 大（c1、c2 一个对话，c3 一个对话） | Opus 写，Fable 看报告 |
+| 12b | 把机器人和报告搬进 Godot，之后 `sim/` 冻结（**已完成，对账无差异，报告 `diff` 为空**）。12c 的目标见 `design/BALANCE_LOG.md` 开头的“现在” | `design/IMPL_NOTES.md` 的 Godot 一节 | `game/silentstar/tools/bots.gd` `report.gd` | 对账无差异；Godot 报告和 Python 基准 `diff` 为空 | 中 | Sonnet |
+| 12c | 第二轮平衡：疲劳、毒品、被捕、疗养院的规则改动，三个新机器人，按目标表调数。**规格同上**（c1、c2 **已完成**；c3 待做） | 规格里列的 GDD 小节 | 改 `core/`、`data/new/`、GDD、`BALANCE_LOG.md` | 规格里的目标表达标 | 大（c1、c2 一个对话，c3 一个对话） | Opus 写，Fable 看报告 |
 
 ### D. Godot 界面（无美术，占位）
 

@@ -1,0 +1,396 @@
+{
+ "class_steps": [
+  3,
+  6,
+  9
+ ],
+ "level_note": "Periods already spent in a class: <=3 is level 1, <=6 level 2, <=9 level 3, after that level 4",
+ "classes": [
+  {
+   "id": "class_boxing",
+   "name": "拳馆",
+   "fee": [
+    9,
+    12,
+    15,
+    18
+   ],
+   "gain": [
+    {
+     "stat": "fight",
+     "per_level": [
+      [
+       1,
+       1
+      ],
+      [
+       1,
+       1
+      ],
+      [
+       1,
+       2
+      ],
+      [
+       1,
+       3
+      ]
+     ]
+    },
+    {
+     "stat": "nerve",
+     "per_level": [
+      [
+       0,
+       0
+      ],
+      [
+       0,
+       1
+      ],
+      [
+       0,
+       1
+      ],
+      [
+       0,
+       1
+      ]
+     ]
+    },
+    {
+     "stat": "stamina",
+     "per_level": [
+      [
+       1,
+       1
+      ],
+      [
+       1,
+       1
+      ],
+      [
+       1,
+       1
+      ],
+      [
+       1,
+       1
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "id": "class_riding",
+   "name": "马术训练",
+   "fee": [
+    14,
+    22,
+    30,
+    40
+   ],
+   "gain": [
+    {
+     "stat": "riding",
+     "per_level": [
+      [
+       1,
+       1
+      ],
+      [
+       1,
+       2
+      ],
+      [
+       1,
+       3
+      ],
+      [
+       1,
+       4
+      ]
+     ]
+    },
+    {
+     "stat": "nerve",
+     "per_level": [
+      [
+       0,
+       1
+      ],
+      [
+       0,
+       1
+      ],
+      [
+       0,
+       1
+      ],
+      [
+       0,
+       1
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "id": "class_acting",
+   "name": "表演课",
+   "fee": [
+    8,
+    11,
+    14,
+    17
+   ],
+   "gain": [
+    {
+     "stat": "acting",
+     "per_level": [
+      [
+       1,
+       1
+      ],
+      [
+       1,
+       2
+      ],
+      [
+       1,
+       3
+      ],
+      [
+       2,
+       4
+      ]
+     ]
+    },
+    {
+     "stat": "speech",
+     "per_level": [
+      [
+       0,
+       1
+      ],
+      [
+       0,
+       1
+      ],
+      [
+       0,
+       1
+      ],
+      [
+       0,
+       1
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "id": "class_dance",
+   "name": "舞蹈教室",
+   "fee": [
+    6,
+    9,
+    12,
+    15
+   ],
+   "gain": [
+    {
+     "stat": "physique",
+     "per_level": [
+      [
+       1,
+       1
+      ],
+      [
+       1,
+       2
+      ],
+      [
+       1,
+       3
+      ],
+      [
+       2,
+       4
+      ]
+     ]
+    },
+    {
+     "stat": "looks",
+     "per_level": [
+      [
+       0,
+       1
+      ],
+      [
+       0,
+       1
+      ],
+      [
+       0,
+       2
+      ],
+      [
+       1,
+       2
+      ]
+     ]
+    },
+    {
+     "stat": "stamina",
+     "per_level": [
+      [
+       1,
+       1
+      ],
+      [
+       1,
+       1
+      ],
+      [
+       1,
+       1
+      ],
+      [
+       1,
+       1
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "id": "class_etiquette",
+   "name": "礼仪课",
+   "fee": [
+    6,
+    9,
+    12,
+    15
+   ],
+   "gain": [
+    {
+     "stat": "grooming",
+     "per_level": [
+      [
+       1,
+       1
+      ],
+      [
+       1,
+       2
+      ],
+      [
+       1,
+       3
+      ],
+      [
+       2,
+       4
+      ]
+     ]
+    },
+    {
+     "stat": "speech",
+     "per_level": [
+      [
+       0,
+       1
+      ],
+      [
+       0,
+       1
+      ],
+      [
+       0,
+       1
+      ],
+      [
+       0,
+       1
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "id": "class_tutor",
+   "name": "家教",
+   "fee": [
+    6,
+    9,
+    12,
+    15
+   ],
+   "gain": [
+    {
+     "stat": "education",
+     "per_level": [
+      [
+       1,
+       4
+      ],
+      [
+       2,
+       6
+      ],
+      [
+       3,
+       8
+      ],
+      [
+       4,
+       12
+      ]
+     ]
+    },
+    {
+     "stat": "writing",
+     "per_level": [
+      [
+       0,
+       1
+      ],
+      [
+       1,
+       2
+      ],
+      [
+       1,
+       3
+      ],
+      [
+       1,
+       4
+      ]
+     ],
+     "cond": [
+      [
+       [
+        "education",
+        ">=",
+        100
+       ]
+      ]
+     ]
+    }
+   ],
+   "period_effect": "favor.duv+2",
+   "story_chain": {
+    "npc": "duv",
+    "chain": "chain_duv_class",
+    "trigger_periods": [
+     1,
+     4,
+     7,
+     10
+    ]
+   }
+  }
+ ]
+}

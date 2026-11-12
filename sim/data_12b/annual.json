@@ -1,0 +1,59 @@
+{
+ "note": "Dec 31, takes no schedule slot. Pick one of four occasions to attend, or rest (fatigue reset). The only play mode for now is \"ranking\"",
+ "ranking": {
+  "my_score": "road reputation + r0(50)",
+  "opponents": "the 5 named rivals present that year with the highest level on the road",
+  "opponent_score": "5*L*(L+1) + r0(50)",
+  "rewards": [
+   {
+    "rank": 1,
+    "rep_bonus": 20,
+    "prize": 500
+   },
+   {
+    "rank": 2,
+    "rep_bonus": 10,
+    "prize": 250
+   },
+   {
+    "rank": 3,
+    "rep_bonus": 5,
+    "prize": 100
+   }
+  ]
+ },
+ "occasions": [
+  {
+   "id": "annual_yinghan",
+   "name": "硬汉场合",
+   "road": "tough",
+   "cond": [],
+   "play": "ranking",
+   "rewards": "same_as_ranking"
+  },
+  {
+   "id": "annual_qingren",
+   "name": "情人场合",
+   "road": "lover",
+   "cond": [],
+   "play": "ranking",
+   "rewards": "same_as_ranking"
+  },
+  {
+   "id": "annual_wenhua",
+   "name": "文化场合",
+   "road": "culture",
+   "cond": [],
+   "play": "ranking",
+   "rewards": "same_as_ranking"
+  },
+  {
+   "id": "annual_shouwan",
+   "name": "手腕场合",
+   "road": "savvy",
+   "cond": [],
+   "play": "ranking",
+   "rewards": "same_as_ranking"
+  }
+ ]
+}

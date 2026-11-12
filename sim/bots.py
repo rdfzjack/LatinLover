@@ -18,11 +18,32 @@ Auditions: deck building and role choice use a fast win-rate estimate (win rate 
 cards are played greedily by "how many of the rival's cards can this beat" (random when `smart_play=False`).
 """
 import itertools
-import random
 
 from . import audition, rules, schedule, street
+from .rng import PCG32
 from .story import SimpleAgent, fit_plan, new_game
 from . import film
+
+# ---------- the bot's own random numbers (PCG32, integers only, so Godot can copy them line by line) ----------
+class BotRng:
+    """The bot's own stream: PCG32 with sequence number 3 (the game uses 1 and 2), seeded with seed * 1000003 + 17.
+    Everything is built on below(n); there is no float random. Every call consumes exactly one number."""
+
+    def __init__(self, seed):
+        self.g = PCG32(seed * 1000003 + 17, 3)
+
+    def below(self, n):
+        """0..n-1 (n >= 1)."""
+        return self.g.below(n)
+
+    def choice(self, seq):
+        """One item of a non-empty list: seq[below(len(seq))]."""
+        return seq[self.g.below(len(seq))]
+
+    def chance(self, p, q):
+        """True with probability p / q: below(q) < p."""
+        return self.g.below(q) < p
+
 
 # ---------- fast audition estimate ----------
 _PERMS = list(itertools.permutations(range(5)))
@@ -154,7 +175,7 @@ class Bot(SimpleAgent):
     gear_road = None            # Which road's gear to buy; None = buy nothing
 
     def __init__(self, seed=1):
-        self.rnd = random.Random(seed * 1000003 + 17)   # The bot's own random stream, not the game's
+        self.rnd = BotRng(seed)   # The bot's own random stream (PCG32, sequence 3), not the game's
         self.seed = seed
 
     # ---------- auditions ----------
@@ -515,7 +536,7 @@ class Random(Bot):
 
     def __init__(self, seed=1):
         super().__init__(seed)
-        self.origin = tuple(self.rnd.randrange(n) for n in (5, 4, 6))
+        self.origin = tuple(self.rnd.below(n) for n in (5, 4, 6))
         self.smart_play = False
 
     def plan(self, g):
@@ -524,19 +545,19 @@ class Random(Bot):
         return [self.rnd.choice(ops) for _ in range(3)]
 
     def deck(self, st, ctx):
-        return [self.rnd.randrange(4) for _ in range(5)]
+        return [self.rnd.below(4) for _ in range(5)]
 
     def play(self, st, ctx):
-        return self.rnd.randrange(len(ctx['hand']))
+        return self.rnd.below(len(ctx['hand']))
 
     def pick_role(self, st, b, ok):
-        return self.rnd.choice(ok) if self.rnd.random() < 0.6 else None
+        return self.rnd.choice(ok) if self.rnd.chance(3, 5) else None
 
     def accept_support(self, st, role):
-        return self.rnd.random() < 0.5
+        return self.rnd.chance(1, 2)
 
     def go_personally(self, st, role):
-        return self.rnd.random() < 0.5
+        return self.rnd.chance(1, 2)
 
     def option(self, st, ev, avail):
         return self.rnd.choice(avail)
@@ -545,7 +566,7 @@ class Random(Bot):
         return self.rnd.choice([None] + [x['id'] for x in opts])
 
     def suppress(self, st, kind):
-        return self.rnd.random() < 0.5
+        return self.rnd.chance(1, 2)
 
 
 BOTS = {c.name: c for c in (Hard, Lover, Culture, Wrist, Two, Crime, BookCulture, Random)}
@@ -553,8 +574,9 @@ PURE = ('only_tough', 'only_lover', 'only_culture', 'only_savvy')
 
 
 # ---------- playing one game ----------
-def play(cls, seed, data=None, smart_play=None, buy=None):
-    """Plays one game and returns a record. Array indexes in the record = month index (the value after month end)."""
+def play(cls, seed, data=None, smart_play=None, buy=None, on_month=None):
+    """Plays one game and returns a record. Array indexes in the record = month index (the value after month end).
+    on_month(g, date), if given, is called after each month with the date the month started (reconciliation uses it)."""
     bot = cls(seed)
     if smart_play is not None:
         bot.smart_play = smart_play
@@ -565,6 +587,7 @@ def play(cls, seed, data=None, smart_play=None, buy=None):
     rec = {'bot': cls.name, 'seed': seed, 'origin': bot.origin,
            'train': [], 'rep': [], 'money': [], 'fame': [], 'debt': 0}
     while not st.finished:
+        date = st.date
         g.start_month()
         g.run_month(fit_plan(g, bot.plan(g)))
         rec['train'].append([sum(st.skill[s] for s in d.road_skills[r]) for r in d.roads])
@@ -573,6 +596,8 @@ def play(cls, seed, data=None, smart_play=None, buy=None):
         rec['money'].append(st.money)
         rec['fame'].append(st.attr['fame'])
         rec['debt'] += st.money < 0
+        if on_month:
+            on_month(g, date)
     rec.update(summarize(g))
     return rec
 

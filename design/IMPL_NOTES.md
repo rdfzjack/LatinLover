@@ -1,5 +1,7 @@
 # Implementation notes: structure, interfaces and details added in `sim/` and Godot
 
+**From step 12b `sim/` is frozen: it no longer gets rule changes and is kept only as a historical reference (and for the reconciliation tools). Rules change only in `game/silentstar/core/`; bots and reports live in `game/silentstar/tools/bots.gd` and `report.gd`; later work follows `design/BALANCE_WORKFLOW.md`.**
+
 For whoever ports Godot (PLAN steps 9-12) or edits `sim/`. The rules are in `design/GDD.md`; this file records what the GDD does not say and what was filled in while writing the code. Godot must match `sim/` byte for byte, so copy these details exactly. Chinese names used in the design documents are looked up in `design/GLOSSARY.md`.
 
 ## Identifiers and ordering (step 9c-1)
@@ -154,7 +156,9 @@ Godot 4.3, GDScript. The project is in `game/silentstar/`; the logic is in `core
 | `core/events.gd` | `events.py` | event executor, month-end events and opportunities, period start, outings and the NPC schedule, Duv, job hooks, eras, annual events; all static. The code events are one `match` in `_code` |
 | `core/ending.gd` | `ending.py` | ending resolution; `register()` adds `grade`, `top_tag_family`, `undefined`, `lowbudget_typed` to `Rules.extra_vars` (Story calls it; Python does it on import) |
 | `core/story.gd` | `story.py` | the script itself extends `Month.Hooks` (= Python `Story`); inner classes `Agent` (extends `Audition.Player`) and `SimpleAgent`; static `new_game(data, seed, origin, agent)` and `fit_plan`. Python's `Story.log` is `event_log`. `send_detox`, `leak_news` and `write_script` return "" or the reason |
-| `tools/trace.gd` | `tools/trace.py` | prints the reconciliation text for `tools/trace_cases.json`; inner class `ReplayAgent` replays the step-12 recordings |
+| `tools/trace.gd` | `tools/trace.py` | prints the reconciliation text for `tools/trace_cases.json`; inner class `ReplayAgent` replays the step-12 recordings; the `bots` section (step 12b) plays the bots live |
+| `tools/bots.gd` | `sim/bots.py` | step 12b. Inner classes `H` (helpers and the functions Python gets from its library), `BotRng`, `Est`, `Bot` and the eight bots (`Hard` `Lover` `Culture` `Wrist` `Two` `Crime` `BookCulture` `Random`, names as in Python), constant `BOTS` (name -> class, same order as Python), static `play` and `summarize` |
+| `tools/report.gd` | `sim/report.py` | step 12b. The batch report; output character for character the same as `python3 -m sim.report`. Arguments below |
 
 **Porting conventions**
 - Scripts refer to each other with `preload("res://core/xxx.gd")`, not `class_name`: with `--script` in headless mode the global classes may not be registered yet.
@@ -184,6 +188,64 @@ python3 tools/compare_trace.py work/trace_py.txt work/trace_godot.txt
 - The base `Story.Agent` answers with harmless defaults (decline, rest, first option) instead of raising `NotImplementedError`.
 
 **Step 12 reconciliation: recorded bot games.** `tools/record_game.py` plays a bot game (`sim/bots.py`) and writes down every `Agent` answer in order (deck, play, pick_role, accept_support, go_personally, option, annual, family, suppress, month_start) plus each month's plan and the actions taken while scheduling (the bots buy books then). Month-start actions are recorded as action lists: `buy` (captured by wrapping `street.buy`), `equip` (the final gear after the bot's `best_equip`), `count` (`count.gear_spend`), and with `--extras` also `script`, `detox`, `leak`, `restaurant`, `church`, `hospital`, `persuade`, `use`, `sell`; extras also put a favourite job (drawn per seed) into the middle period, which reaches the studio, ballroom and radio paths. A recorded answer may not consume the game's random stream (the recorder refuses). `tools/trace.py` records the `games` cases of `trace_cases.json` (38 games: one per bot, then seeds picked by `record_game.py --coverage` so that the events, the endings and the crime, arrest, scandal, creditor, collapse, detox, transition and script paths are all reached) and prints the Python replay; `trace.gd` replays the same files. Per month: the reconciliation line plus the md5 of the whole save; at the end: the ending, the fired event ids, the annual events, every audition of every board, the final save. Not reached in 40 seeds of any bot: `evt_birthday` (no date yet), `job_studio_m3`, `job_news_m3`, `job_ballroom_m2`, `job_ballroom_m3` (so the widow-invested board role is not covered), `job_bootleg_m1`, `job_bodyguard_r1`, `job_escort_r1`. `python3 tools/record_game.py --coverage --seeds 40 [--extras]` lists what each bot reaches; re-run it after changing the tables if a path drops out.
+
+**Step 12b: bots and report in Godot.**
+
+Commands (from the repository root; Godot 4.3):
+
+```
+godot --headless --path game/silentstar --script res://tools/report.gd -- --n=200 --bots=all
+godot --headless --path game/silentstar --script res://tools/report.gd -- --seeds=1-50 --bots=all --dump=work/seg_1-50.json
+godot --headless --path game/silentstar --script res://tools/report.gd -- --merge=work/seg_1-50.json,work/seg_51-100.json --out=work/report_godot.txt
+```
+
+`report.gd` arguments: `--n` (games per bot, seeds 1..n), `--bots` (`all` or a comma-separated list; the order of the list is the order of the lines), `--no-buy`, `--random-play` (these four are the Python options), `--seeds=a-b` (seeds a..b instead of 1..n), `--out=<file>` (also write the report to a file), `--dump=<file>` (write the game records as JSON instead of printing), `--merge=<f1,f2,...>` (print the report of the records in those files; the bot order is the one saved in the first file). A full run is split by seeds into several processes (one per core), dumped, and merged; the merged report is identical to a single run. Progress goes to stderr; the report to stdout (the Godot banner is also on stdout, so use `--out` for diffing).
+
+Reconciliation: `tools/trace_cases.json` has a `bots` section (8 bots x seeds 1-5). Both traces play these games live (no recording) and print, per game, a header, one line per month (the date the month started and the md5 of the save) and the JSON of `summarize()`; the three commands above (Python trace, Godot trace, `compare_trace.py`) must report no difference. The 200-game report is the second check: `diff` of the Godot report against the Python `python3 -m sim.report` output (= the "现在的报告" block in `design/BALANCE_LOG.md`) must be empty.
+
+What changed on the Python side (rules and strategies untouched):
+- `Bot.rnd` is now `BotRng` (`sim/bots.py`): PCG32 with sequence number 3 (the game's streams use 1 and 2), seed `seed * 1000003 + 17`, built only on `below(n)`; `choice(seq)` is `seq[below(len)]`; `random() < 0.6` became `chance(3, 5)` and `random() < 0.5` became `chance(1, 2)`. Only `random_pick` draws from it. This changed `random_pick`'s numbers slightly; the other seven bots' output is unchanged.
+- `play(..., on_month=None)`: an optional callback `(g, date)` after each month, used by the trace.
+
+Conventions of the port:
+- Inner classes of a GDScript file cannot call the outer script's static functions by name, so the helpers (`est_of`, `workdays`, `alldays`, `job_fat`, `can_do_job`, `best_equip`, and the library functions below) are static functions of the inner class `H`.
+- **Python 3.12+ `sum()` of floats is a compensated (Neumaier) sum**, not a plain left-to-right sum. It matters in `Est.best` (a weighted sum of win rates, whose last bit decides which deck is "best" on near-ties) and `job_for`. `H.fsum` copies the algorithm. A Python older than 3.12 would give different (slightly less accurate) sums and may move the baseline.
+- `sorted()` stability: `H.stable_order` (index as the tie-breaker) for `Two.want` and `BookCulture.want`; `max()` on `(p, -i)` tuples is "largest p, then smallest index"; `Counter.most_common(4)` is "descending count, ties in order of first appearance".
+- `itertools.combinations` / `permutations` are `H.combinations` / `H.permutations`; `audition.candidate_decks` (Python-only so far) is `H.candidate_decks`, in `bots.gd`, not in `core/`. No change was made to `core/` in step 12b.
+- The estimator cache lives on the `Data` object (metadata `bots_est`) and holds `Data` only weakly (a strong reference would be a cycle and Godot reports a leaked resource at exit). The cache key is a string of the same parts as Python's tuple key.
+- `Bot.seed` shadows the built-in `seed()`, which is harmless. `Bot.name` is the bot's name as in Python.
+- Float formatting: GDScript has no thousands separator and no `nan` formatting like Python's, so `report.gd` formats numbers itself (`ff`: exact decimal value of the double, round half to even, optional width and thousands separators; checked against Python's `format` on 6000 values, ties and negatives included; GDScript's own `%.1f` agreed on the same values, so this is not a workaround for a rounding bug). `nan` is printed as `nan` like Python (for example the big-audition win rate of `crime_line`).
+- Not ported: `--workers` (use several processes with `--seeds`).
+
+Timing (4 cores, GDScript headless): one process, `--n=200 --bots=all --no-buy` (200 games x 8 bots = 1600 games) took 231 s (about 0.15 s per game), far below the 10-minute limit of the step. The full report (adds the 800 no-buy games of the four pure bots, 2400 games) split into 4 processes by seeds took about 3 minutes wall. Python `python3 -m sim.report` takes about 46 s on the same 4 cores (about 3 CPU-minutes), so GDScript is roughly 1.3x slower in CPU. The no-buy single run was also diffed against `python3 -m sim.report --no-buy`: identical.
+
+Things seen on the Python side and left alone (not fixed, as the step requires):
+- The "现在的报告" block of `design/BALANCE_LOG.md` was older than the code before this step (it still showed numbers from before step 8b for the two-roads and savvy bots and was in Chinese); it was replaced by the new baseline.
+- `random_pick` ignores `forced_rest` / `void_next` in `plan` (the game then replaces the entries anyway).
+- `Bot.play` with `smart_play=False` (the `--random-play` option) draws from the game's logic stream, so such games cannot be recorded by `tools/record_game.py`. Not used by the trace.
+- `summarize` writes `months_played` as `len(boards) and st.ym`, which is 0 for a game without boards; harmless.
+
+**Step 12c: second balance round (rules only in `core/` from now on).** `sim/` is frozen and reads a snapshot of the tables as of step 12b (`sim/data_12b/`, set in `sim/data.py`), so `tests/new/`, `python3 -m sim.report` and `tools/trace.py` keep working as a historical reference. The Python/Godot reconciliation (`tools/trace.py` + `trace.gd` + `compare_trace.py`) is retired: Godot now follows `data/new/`, Python the snapshot, so they differ by design. Do not "fix" `sim/`.
+
+What changed in `core/` (rules: GDD sections marked [12c]):
+- `schedule.gd`: class and book days add `fatigue_per_day` from the table (default 1 when missing).
+- `state.gd`: new saved fields `drug_points`, `void_periods` (absolute periods `ym * 3 + i` that are void: detention). Not saved: `src` (effect totals by source, report only), `track()`, `drug_stage_of()`. `add_money` adds to `src.income`. Old saves without the new keys load (defaults).
+- `rules.gd`: effect name and variable `drug_points`; `apply_effect` adds every attribute / skill / money / rep_bonus change to `st.src[source]`. Sources now: `schedule`, `event`, `opportunity` (opportunity effects; gets the loyalty favor bonus like `event`), `origin`, `annual`, `drug`.
+- `month.gd`: `Hooks.before_period(st, i)` before every period that is not void or detained (shooting periods included; Story calls `agent.before_period`, where the boost is taken); detained periods (`void_periods`) breach a shoot locked there (`Film.breach_period`) and count `count.void.detained`; a month with a sanatorium period applies `rest.forced[0].discharge_effect`, counts `count.sanatorium` and calls `Hooks.discharge` (Story rolls `discharge_event`). Forced sanatorium periods count `count.void.sanatorium`.
+- `events.gd`: `_arrest(story, st)` new fine, detention after `story.cur_period` (Story sets it to 3 at month end, so a month-end arrest detains period 0 of next month), `morals()` sets `flag.morals_until = ym + morals_months`; an unsuppressed scandal calls `morals()` too. `raid()` replaces the bar / bootleg random events (`job_bar_r1`, `job_bootleg_r1` deleted): jobs with `raid_prob` roll `chance(p * (div + crime), q * div)` after `period_random`, then `Rules.check({check: raid_skill, line: raid_line})`; counts `count.raid`. `boost_reason` / `boost` (Story.boost), `drug_month` (Story.month_events, before the month-end events), `discharge`. `evt_drug_deeper` is deleted; `_detox` and `_missing` count `count.detox`, `count.void.detox` / `count.void.missing` (3 each). The annual event applies `attend_effect` when attending (source `annual`).
+- `board.gd`: the morals clause reads `flag.morals_until` (`st.ym <= morals_until` blocks big roles); `morals_crime` is gone from `roles.json`.
+- `film.gd`: `breach_period(st, ym, i)`.
+- Ending categories: only the order in `endings.json` changed (actor before dark).
+
+Random-number order added in 12c (logic stream): a crime-job period rolls its search after `period_random` (one `chance`, then the check's `r0(20)` when searched); the discharge event rolls its `prob` after the discharge effect; nothing else consumes numbers (the boost and the drug month-end are deterministic).
+
+Bots (`tools/bots.gd`):
+- New: `Disc`, `Bad`, `Addict` (subclasses of `StratBot`, a `RoadBot` set up per road by `setup(road)`); `BOTS` maps `disciplined_<road>`, `bad_boy_<road>` (no culture: it has no crime jobs), `addict_<road>` to `[class, road]`; `make_bot(spec, seed)` builds either kind. Their rules are in the class comments. Deviations from the spec's one-line rules, both because the literal rule makes the bot stall: the bad boy rests only in the last period of a month (its reckless_index at month end is what counts, and at discipline 0 a per-period check rests every other period); the bad boy and the addict without the boost also rest when a period would take reckless_index to 60. The bad boy falls back to an ordinary job while none of its road's crime jobs can be done.
+- All bots except `random_pick` now pick event options by a preference table (`pref`, `option()`, `effect_value()`; a check is weighted by its pass chance, `H.check_p`). Before 12c they always took the first option. `--random-options` of the report picks at random.
+- Crime jobs are recognised by `crime_tier` (`H.is_crime`); the old list stays for the jobs that were crime jobs before. The planner's fatigue estimate (`delta`) reads `fatigue_per_day` of classes and books. Both change the old bots' games a little (their strategies are unchanged).
+- `play()` adds to the record: `strategy`, `road`, `events` (fires per id), `options` (`id#index` -> times); `summarize()` adds the 12c counters, `crime_job_periods`, `drug_stage_end`, and the source totals (`src_event_rep` = main-road skills + rep_bonus from events, `src_event_money`, `src_event_fatigue`, `src_opp_rep`, `income`).
+
+Report (`tools/report.gd`) new arguments: `--random-options`, `--coverage` (fires per game of every event, options picked, events never fired), `--guard=design/targets.json` (PASS / FAIL / SKIP per target; exit code 2 when a target fails), `--widen=<percent>`. New sections: "from events" (one line per bot) and "step 12c strategies" (one line per strategy bot, one per strategy as the mean over its roads, and the grade-mean difference to the disciplined line). The guard's metrics are `bot_metrics` / `strategy_metrics` / `extra_metrics`. `tools/check.py` step 5 runs it with `--n=30 --no-buy --widen=10` (needs Godot on the PATH or `GODOT`).
 
 **When exporting**: the data tables live outside the project, so `data/new/` must be copied into the project before export (handled in step 13).
 

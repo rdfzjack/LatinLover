@@ -1,0 +1,376 @@
+{
+ "note": "Random-table events for outings, NPC chain and resident events, tutor-chain events. Option check: null / gate [attr, comparator, value] / {check: skill, line: n} (success if skill displayed value + r0(20) >= line). Content is mostly GDD 11.4 examples; text is for PLAN step 18",
+ "events": [
+  {
+   "id": "outing_director_lunch",
+   "name": "导演的午饭桌",
+   "place": "place_studio",
+   "weight": 3,
+   "cond": [],
+   "once": false,
+   "options": [
+    {
+     "text": "搭话",
+     "check": [
+      "negotiation",
+      ">=",
+      30
+     ],
+     "success_effect": "connections+3 flag.knows_director=1",
+     "fail_effect": ""
+    }
+   ],
+   "note": "",
+   "body": null
+  },
+  {
+   "id": "outing_old_bookshop",
+   "name": "旧书店",
+   "place": "place_downtown",
+   "weight": 3,
+   "cond": [],
+   "once": false,
+   "options": [
+    {
+     "text": "翻翻看",
+     "check": [
+      "education",
+      ">=",
+      100
+     ],
+     "success_effect": "writing+2",
+     "fail_effect": "taste+1"
+    }
+   ],
+   "note": "",
+   "body": null
+  },
+  {
+   "id": "outing_pickup",
+   "name": "搭讪",
+   "place": "place_downtown",
+   "weight": 2,
+   "cond": [
+    [
+     [
+      "top_base_attr",
+      "==",
+      "looks"
+     ]
+    ]
+   ],
+   "once": true,
+   "options": [
+    {
+     "text": "接受",
+     "check": "",
+     "success_effect": "looks+5",
+     "fail_effect": ""
+    }
+   ],
+   "note": "[orig EVENT021]",
+   "body": null
+  },
+  {
+   "id": "outing_salon",
+   "name": "沙龙的请柬",
+   "place": "place_seaside",
+   "weight": 3,
+   "cond": [],
+   "once": false,
+   "options": [
+    {
+     "text": "赴约",
+     "check": {
+      "check": "speech",
+      "line": 40
+     },
+     "success_effect": "connections+3 business+1",
+     "fail_effect": "speech+1"
+    }
+   ],
+   "note": "",
+   "body": null
+  },
+  {
+   "id": "outing_romance",
+   "name": "艳遇",
+   "place": "place_seaside",
+   "weight": 6,
+   "cond": [
+    [
+     [
+      "top_base_attr",
+      "==",
+      "looks"
+     ],
+     [
+      "fame",
+      ">=",
+      150
+     ],
+     [
+      "status.in_love",
+      "==",
+      0
+     ]
+    ]
+   ],
+   "once": false,
+   "options": [
+    {
+     "text": "上前搭话",
+     "check": "",
+     "success_effect": "status.in_love=1",
+     "fail_effect": ""
+    }
+   ],
+   "note": "Meets someone and enters the in_love state; schedule days fail 20% of the time, and the four romance lines lose 2 favor per month [orig]",
+   "body": null
+  },
+  {
+   "id": "outing_driver",
+   "name": "有人要找司机",
+   "place": "place_dock",
+   "weight": 3,
+   "cond": [],
+   "once": false,
+   "options": [
+    {
+     "text": "接",
+     "check": [
+      "riding",
+      ">=",
+      30
+     ],
+     "success_effect": "money+60 crime+5",
+     "fail_effect": ""
+    },
+    {
+     "text": "不接",
+     "check": "",
+     "success_effect": "discipline+2",
+     "fail_effect": ""
+    }
+   ],
+   "note": "",
+   "body": null
+  },
+  {
+   "id": "outing_countryman",
+   "name": "同乡被人欺负",
+   "place": "place_dock",
+   "weight": 3,
+   "cond": [],
+   "once": false,
+   "options": [
+    {
+     "text": "帮",
+     "check": {
+      "check": "fight",
+      "line": 40
+     },
+     "success_effect": "loyalty+8 connections+2",
+     "fail_effect": "loyalty+4 stamina-10 fatigue+10"
+    },
+    {
+     "text": "不帮",
+     "check": "",
+     "success_effect": "loyalty-5",
+     "fail_effect": ""
+    }
+   ],
+   "note": "",
+   "body": null
+  },
+  {
+   "id": "outing_backdoor",
+   "name": "酒吧后门的生意",
+   "place": "place_dock",
+   "weight": 2,
+   "cond": [],
+   "once": false,
+   "options": [
+    {
+     "text": "做",
+     "check": {
+      "check": "nerve",
+      "line": 50
+     },
+     "success_effect": "money+100 crime+8",
+     "fail_effect": "trigger.evt_arrest"
+    }
+   ],
+   "note": "",
+   "body": null
+  },
+  {
+   "id": "outing_actress_dressing",
+   "name": "女明星的化妆间",
+   "place": "(chain)",
+   "weight": 1,
+   "cond": [],
+   "once": true,
+   "options": [
+    {
+     "text": "陪她聊聊",
+     "check": "",
+     "success_effect": "favor.actress+3",
+     "fail_effect": ""
+    }
+   ],
+   "note": "When the actress is present (chain event)",
+   "body": null
+  },
+  {
+   "id": "outing_duv_script",
+   "name": "Duv 开始写剧本",
+   "place": "(chain)",
+   "weight": 1,
+   "cond": [
+    [
+     [
+      "favor.duv",
+      ">=",
+      50
+     ]
+    ]
+   ],
+   "once": true,
+   "options": [
+    {
+     "text": "请他写",
+     "check": "",
+     "success_effect": "flag.duv_writes_script=1 favor.duv+3",
+     "fail_effect": ""
+    }
+   ],
+   "note": "Fires when he is met in tutoring class or downtown (6.5)",
+   "body": null
+  },
+  {
+   "id": "outing_duv_tip",
+   "name": "Duv 的告密",
+   "place": "(resident)",
+   "weight": 1,
+   "cond": [
+    [
+     [
+      "favor.duv",
+      ">=",
+      30
+     ]
+    ]
+   ],
+   "once": false,
+   "options": [
+    {
+     "text": "听他说",
+     "check": "",
+     "success_effect": "flag.tipoff=1",
+     "fail_effect": ""
+    }
+   ],
+   "note": "Picks a random medium/big role on the current or next board and shows its full style probabilities and tags (6.5)",
+   "body": null
+  },
+  {
+   "id": "outing_duv_chat",
+   "name": "Duv 的闲谈",
+   "place": "(resident)",
+   "weight": 1,
+   "cond": [],
+   "once": false,
+   "options": [
+    {
+     "text": "聊聊",
+     "check": "",
+     "success_effect": "favor.duv+1",
+     "fail_effect": ""
+    }
+   ],
+   "note": "6.5",
+   "body": null
+  },
+  {
+   "id": "outing_duv_class_1",
+   "name": "Duv 登场",
+   "place": "(tutor_chain)",
+   "weight": 1,
+   "cond": [],
+   "once": true,
+   "options": [],
+   "note": "Always happens in tutoring period 1 (5.3.1)",
+   "body": null
+  },
+  {
+   "id": "outing_duv_class_2",
+   "name": "Duv 后续一",
+   "place": "(tutor_chain)",
+   "weight": 1,
+   "cond": [],
+   "once": true,
+   "options": [],
+   "note": "tutoring period 4",
+   "body": null
+  },
+  {
+   "id": "outing_duv_class_3",
+   "name": "Duv 后续二",
+   "place": "(tutor_chain)",
+   "weight": 1,
+   "cond": [],
+   "once": true,
+   "options": [],
+   "note": "tutoring period 7",
+   "body": null
+  },
+  {
+   "id": "outing_duv_class_4",
+   "name": "Duv 后续三",
+   "place": "(tutor_chain)",
+   "weight": 1,
+   "cond": [],
+   "once": true,
+   "options": [],
+   "note": "tutoring period 10",
+   "body": null
+  },
+  {
+   "id": "vac_1",
+   "name": "度假村 1",
+   "place": "place_resort",
+   "weight": 1,
+   "cond": [],
+   "once": false,
+   "options": [],
+   "effect": "",
+   "note": "Placeholder: content for the user to supply",
+   "body": null
+  },
+  {
+   "id": "vac_2",
+   "name": "度假村 2",
+   "place": "place_resort",
+   "weight": 1,
+   "cond": [],
+   "once": false,
+   "options": [],
+   "effect": "",
+   "note": "Placeholder: content for the user to supply",
+   "body": null
+  },
+  {
+   "id": "vac_3",
+   "name": "度假村 3",
+   "place": "place_resort",
+   "weight": 1,
+   "cond": [],
+   "once": false,
+   "options": [],
+   "effect": "",
+   "note": "Placeholder: content for the user to supply",
+   "body": null
+  }
+ ]
+}

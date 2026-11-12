@@ -143,6 +143,12 @@ static func shoot(st, i: int, f: Dictionary, days: Array) -> void:
 	var t: String = f["size"]
 	f["status"] = "shooting"
 	update_status(st)
+	if int(st.status.get("drug_high", 0)) == 2:     # a divine dose on a shooting period (GDD 5.8.1)
+		f["divine"] = 1
+	if st.month_used.has("drug_side.%d" % i):      # a dose with the side effect on a shooting period (GDD 5.8.1)
+		f["side"] = 1
+	if st.month_used.has("boost.%d" % i):          # any dose on a shooting period (report only)
+		f["dosed"] = 1
 	for dd in days:
 		if dd[1]:
 			continue
@@ -153,6 +159,9 @@ static func shoot(st, i: int, f: Dictionary, days: Array) -> void:
 		var ok: bool = st.val("stamina", b) - g.r0(st.val("fatigue", b)) >= c["success_lines"][t]
 		if Schedule.extra_fail(st, true):
 			ok = false
+		var dg := Schedule.drug_day(st)      # the dose of this period (GDD 5.8.1)
+		if dg != 0:
+			ok = dg > 0
 		if ok:
 			f["ok_days"] += 1
 		if f["stunt_self"]:
@@ -165,7 +174,8 @@ static func shoot(st, i: int, f: Dictionary, days: Array) -> void:
 		finish(st, f)
 
 
-## P x1000: 500 + ok_days x 500 / shoot_days + bonus skill x 2 (stunt_self +100), clamped to 500-1200.
+## P x1000: 500 + ok_days x 500 / shoot_days + bonus skill x 2 (stunt_self +100), clamped to 500-1200; then each shooting period
+## on a divine dose adds divine_perf_add once and on a side effect side_perf_add once (stats.drug; both may apply, not clamped).
 static func performance(st, f: Dictionary) -> int:
 	var c := shoot_cfg(st.d)
 	var days: int = f["shoot_days"]
@@ -173,7 +183,13 @@ static func performance(st, f: Dictionary) -> int:
 	p += Rules.fdiv(st.val(f["roles"]["bonus_skill"]) * 1000, 500)
 	if f["stunt_self"]:
 		p += c["stunt_self"]["perf_add"]
-	return maxi(c["perf_min"], mini(c["perf_max"], p))
+	p = maxi(c["perf_min"], mini(c["perf_max"], p))
+	var dr: Dictionary = st.d.t["stats"]["drug"]
+	if f.get("divine", 0):      # a divine dose on a shooting period goes above the usual top (GDD 5.8.1)
+		p += int(dr["divine_perf_add"])
+	if f.get("side", 0):        # a side effect on a shooting period (GDD 5.8.1)
+		p += int(dr["side_perf_add"])
+	return p
 
 
 ## Fee = base x (stunt_self 130%) x (support 40%) x (400+negotiation)/400 x contract coefficient, rounded down at each step.
@@ -218,6 +234,20 @@ static func breach_month(st, ym: int) -> Array:
 			if x[0] == ym:
 				hit = true
 		if hit:
+			f["status"] = "breached"
+			st.attr["fame"] = maxi(0, st.attr["fame"] - Rules.fdiv(st.attr["fame"] * pct, 100))
+			st.inc("count.breach")
+			out.append(f)
+	update_status(st)
+	return out
+
+
+## The film contract locking period i of month ym breaches (detention, step 12c). Same penalty as breach_month.
+static func breach_period(st, ym: int, i: int) -> Array:
+	var out := []
+	var pct: int = -st.d.rest_forced[0]["shoot_breach"]["fame_pct"]
+	for f in films(st):
+		if _active(f) and _has_lock(f, ym, i):
 			f["status"] = "breached"
 			st.attr["fame"] = maxi(0, st.attr["fame"] - Rules.fdiv(st.attr["fame"] * pct, 100))
 			st.inc("count.breach")
@@ -288,8 +318,10 @@ static func release_one(st, f: Dictionary) -> Dictionary:
 			S = Rules.fdiv(S * c["talkie_penalty_pct"], 100)
 			accent = true
 			st.flags["accent_pending"] = 1
+	# four bands by X = S / B (GDD 8): hit >= hit_pct, normal >= fail_pct, poor >= flop_pct, flop below
 	var hit: bool = S >= B * c["hit_pct"] * 10
 	var flop: bool = S < B * c["flop_pct"] * 10
+	var band := "hit" if hit else ("flop" if flop else ("normal" if S >= B * c["fail_pct"] * 10 else "poor"))
 	var k: int = d.t["habits"]["audition"]["result"]["narrow_loss"]["release_pct"] if f["support"] else 100
 	var fame: int = Rules.fdiv(S * c["fame_pct"], 100000)
 	if flop:
@@ -298,10 +330,8 @@ static func release_one(st, f: Dictionary) -> Dictionary:
 	var money: int = Rules.fdiv(Rules.fdiv(S * c["dividend_mult"], 1000) * k, 100)
 	Schedule.add_stat(st, "fame", fame)
 	st.add_money(money)
-	var corr := 0
-	if not flop:
-		corr = Rules.fdiv(c["rep_bonus"][t] * (2 if hit else 1) * k, 100)
-		st.corr[role["road"]] += corr
+	var corr: int = Rules.fdiv(int(c["rep_table"][band][t]) * k, 100)      # may be negative (a poor film or a flop)
+	st.corr[role["road"]] += corr
 	for tag in role["tags"]:
 		st.tags[tag] = st.tags.get(tag, 0) + 1
 	if not f["support"]:
@@ -314,6 +344,9 @@ static func release_one(st, f: Dictionary) -> Dictionary:
 	st.inc("count.release")
 	if hit:
 		st.inc("count.hit")
+		if f.get("divine", 0) and not f["support"]:      # the "divine" achievement: a lead shot on a divine dose is a hit
+			st.inc("count.divine_hit")
+			st.flags["divine_star"] = 1
 		if role["tags"].has("romance") or role["tags"].has("exotic_lover"):
 			st.inc("count.romance_hits")
 	if flop:
@@ -321,7 +354,7 @@ static func release_one(st, f: Dictionary) -> Dictionary:
 	st.exposed = 1
 	f["status"] = "released"
 	f["result"] = {"S": S, "B": B, "P": P, "F": F, "T": T, "untyped": off, "accent": accent, "hit": hit,
-		"flop": flop, "fame": fame, "dividend": money, "rep_bonus": corr, "month": st.ym}
+		"flop": flop, "band": band, "fame": fame, "dividend": money, "rep_bonus": corr, "month": st.ym}
 	return f["result"]
 
 

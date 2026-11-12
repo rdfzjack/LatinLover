@@ -1,0 +1,134 @@
+{
+ "note": "Each round follows the habit with probability follow_prob%, otherwise a uniformly random card from those left; \"big/small\" is ranked by effective points against the current style (counters not counted)",
+ "follow_prob": 80,
+ "habits": [
+  {
+   "id": "habit_lead",
+   "name": "抢先",
+   "play_order": "largest to smallest"
+  },
+  {
+   "id": "habit_finish",
+   "name": "压轴",
+   "play_order": "smallest to largest"
+  },
+  {
+   "id": "habit_open",
+   "name": "开门红",
+   "play_order": "largest in round 1, then smallest to largest"
+  },
+  {
+   "id": "habit_follow",
+   "name": "跟牌",
+   "play_order": "middle card in round 1; afterwards the smallest card that beats the player's previous card, or the smallest if none does"
+  },
+  {
+   "id": "habit_score",
+   "name": "看比分",
+   "play_order": "largest when behind or tied, smallest when ahead"
+  },
+  {
+   "id": "habit_random",
+   "name": "随性",
+   "play_order": "always uniformly random"
+  }
+ ],
+ "intel": [
+  {
+   "cond": [
+    [
+     [
+      "duels.opponent",
+      ">=",
+      2
+     ]
+    ],
+    [
+     [
+      "connections",
+      ">=",
+      60
+     ]
+    ]
+   ],
+   "shows": "the rival's habit and main-color card count k"
+  },
+  {
+   "cond": [
+    [
+     [
+      "connections",
+      ">=",
+      80
+     ]
+    ]
+   ],
+   "shows": "exclude the lowest-style-probability color before building the deck"
+  },
+  {
+   "source": "Duv tip-off",
+   "shows": "the full style probabilities and tags of one role"
+  },
+  {
+   "source": "waiter milestone",
+   "shows": "each board shows the rival's habit for one role"
+  }
+ ],
+ "audition": {
+  "note": "The numbers of GDD 7.1-7.5. Effective points are integers scaled by x100; multipliers are integer percentages",
+  "cards": 5,
+  "rounds_to_win": 3,
+  "color_order": [
+   "tough",
+   "lover",
+   "culture",
+   "savvy"
+  ],
+  "counters": {
+   "tough": "lover",
+   "lover": "culture",
+   "culture": "savvy",
+   "savvy": "tough"
+  },
+  "style_pct": 130,
+  "counter_pct": 130,
+  "countered_pct": 80,
+  "rival_deck": {
+   "note": "main color = the color with the largest level x (100 + coef x style probability%/100); the other 5-k cards take the \"counter of counter\" (whoever counters the color that counters the main color), to avoid being countered",
+   "style_factor_pct": 30,
+   "second_color": "counter_of_counter"
+  },
+  "result": {
+   "remembered": {
+    "score_line": [
+     3,
+     0
+    ],
+    "main_style_add_pts": 10
+   },
+   "narrow_loss": {
+    "score_line": [
+     2,
+     3
+    ],
+    "shoot_periods_cut": 1,
+    "shoot_periods_min": 1,
+    "fee_pct": 40,
+    "release_pct": 30
+   },
+   "botched": {
+    "score_line": [
+     0,
+     3
+    ],
+    "effect": "fame-5%",
+    "report_prob": [
+     1,
+     5
+    ],
+    "report_effect": "fame-5%",
+    "favor": "favor.sil+2"
+   }
+  }
+ }
+}

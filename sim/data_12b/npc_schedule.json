@@ -1,0 +1,206 @@
+{
+ "note": "An NPC is present this period when place, year and month match and the cond holds (5.5.2). Once the player has met someone at a place, the schedule book records that entry; with connections >= schedule_full_view_line every known NPC is shown",
+ "schedule_full_view_line": 40,
+ "schedule": [
+  {
+   "npc": "duv",
+   "place": "place_downtown",
+   "years": [
+    1926,
+    1929
+   ],
+   "months": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ],
+   "periods": [
+    "late"
+   ],
+   "cond": [],
+   "met_via": "tutor_period_1"
+  },
+  {
+   "npc": "editor",
+   "place": "place_downtown",
+   "years": [
+    1926,
+    1929
+   ],
+   "months": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ],
+   "periods": [
+    "early"
+   ],
+   "cond": [],
+   "met_via": "job_news"
+  },
+  {
+   "npc": "actress",
+   "place": "place_studio",
+   "years": [
+    1926,
+    1929
+   ],
+   "months": [
+    3,
+    6,
+    9,
+    12
+   ],
+   "periods": [
+    "mid"
+   ],
+   "cond": [],
+   "met_via": "known_at_start"
+  },
+  {
+   "npc": "studio_boss",
+   "place": "place_studio",
+   "years": [
+    1926,
+    1929
+   ],
+   "months": [
+    1,
+    4,
+    7,
+    10
+   ],
+   "periods": [
+    "early"
+   ],
+   "cond": [],
+   "met_via": "job_studio"
+  },
+  {
+   "npc": "rich_widow",
+   "place": "place_seaside",
+   "years": [
+    1926,
+    1929
+   ],
+   "months": [
+    5,
+    6,
+    7,
+    8,
+    9
+   ],
+   "periods": [
+    "early"
+   ],
+   "cond": [],
+   "met_via": "job_ballroom"
+  },
+  {
+   "npc": "painter",
+   "place": "place_seaside",
+   "years": [
+    1926,
+    1929
+   ],
+   "months": [
+    10,
+    11,
+    12,
+    1,
+    2,
+    3,
+    4
+   ],
+   "periods": [
+    "late"
+   ],
+   "cond": [],
+   "met_via": "job_model_art"
+  },
+  {
+   "npc": "foreman",
+   "place": "place_dock",
+   "years": [
+    1926,
+    1929
+   ],
+   "months": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ],
+   "periods": [
+    "mid"
+   ],
+   "cond": [],
+   "met_via": "job_dock"
+  },
+  {
+   "npc": "bar_owner",
+   "place": "place_dock",
+   "years": [
+    1926,
+    1929
+   ],
+   "months": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ],
+   "periods": [
+    "mid"
+   ],
+   "cond": [],
+   "met_via": "job_bar"
+  },
+  {
+   "npc": "fourth",
+   "place": null,
+   "years": [
+    1926,
+    1929
+   ],
+   "months": [],
+   "periods": [],
+   "cond": [],
+   "met_via": null
+  }
+ ]
+}

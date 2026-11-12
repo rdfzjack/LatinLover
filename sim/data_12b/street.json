@@ -1,0 +1,174 @@
+{
+ "discount": {
+  "connections_per": 20,
+  "cut_pct_per_step": 5,
+  "cap_pct": 25,
+  "rounding": "rounded up after the discount",
+  "applies": [
+   "clothing_store",
+   "general_store",
+   "bookstore",
+   "restaurant",
+   "hospital"
+  ]
+ },
+ "entries": [
+  {
+   "id": "clothing_store",
+   "name": "服装店",
+   "shelf": [
+    "suit_old",
+    "suit_custom",
+    "evening_gown",
+    "fur_white",
+    "riding_habit",
+    "gold_watch",
+    "slave_bracelet",
+    "boxing_gloves",
+    "dance_shoes"
+   ],
+   "services": [],
+   "note": "Buy outfits and accessories; any item can be sold at half price, equipped items cannot be sold"
+  },
+  {
+   "id": "general_store",
+   "name": "杂货店",
+   "shelf": [
+    "makeup_case",
+    "phonograph",
+    "camera",
+    "typewriter",
+    "social_register",
+    "car_ford",
+    "car_sports",
+    "car_luxury",
+    "tonic"
+   ],
+   "services": [],
+   "note": "Buy held items and consumables; any item can be sold at half price, equipped items cannot be sold"
+  },
+  {
+   "id": "bookstore",
+   "name": "书店",
+   "shelf": [
+    "book_chuangzuo_1",
+    "book_chuangzuo_2",
+    "book_chuangzuo_3",
+    "book_shenmei_1",
+    "book_shenmei_2",
+    "book_shenmei_3",
+    "book_tantu_1",
+    "book_tantu_2",
+    "book_tantu_3",
+    "book_tanpan_1",
+    "book_tanpan_2",
+    "book_shengyi_1",
+    "book_shengyi_2",
+    "book_yanji_1",
+    "book_daban_1"
+   ],
+   "services": [],
+   "note": "Buy books; books already read are bought back at half price; shelf dates are in books.json"
+  },
+  {
+   "id": "restaurant",
+   "name": "餐厅",
+   "shelf": [],
+   "limit": {
+    "range": "month",
+    "times": 1,
+    "shared": true
+   },
+   "when_sick": "no effect",
+   "services": [
+    {
+     "id": "dessert",
+     "name": "点心",
+     "price": 5,
+     "effect": "fatigue-15"
+    },
+    {
+     "id": "nightclub_dinner",
+     "name": "夜总会晚餐",
+     "price": 20,
+     "effect": "fatigue-30"
+    },
+    {
+     "id": "steak",
+     "name": "牛排",
+     "price": 10,
+     "effect": "stamina+3"
+    }
+   ]
+  },
+  {
+   "id": "church",
+   "name": "教堂",
+   "shelf": [],
+   "services": [
+    {
+     "id": "donation",
+     "name": "捐款",
+     "price": 100,
+     "effect": "crime-10",
+     "limit": {
+      "range": "month",
+      "times": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "hospital",
+   "name": "医院",
+   "shelf": [],
+   "cond": [
+    [
+     [
+      "sick_index",
+      ">=",
+      10
+     ]
+    ]
+   ],
+   "services": [
+    {
+     "id": "treatment",
+     "name": "诊疗",
+     "price_formula": "sick_index*2",
+     "effect_formula": "fatigue-(sick_index+1)"
+    }
+   ]
+  },
+  {
+   "id": "sil_talk",
+   "name": "和 Sil 谈话",
+   "shelf": [],
+   "services": [
+    {
+     "id": "status_hint",
+     "name": "近况",
+     "note": "One status hint, picked in the order sick, reckless, favor, fatigue, top attribute"
+    },
+    {
+     "id": "persuade",
+     "name": "劝说",
+     "cond": [
+      [
+       [
+        "reckless_index",
+        ">=",
+        10
+       ]
+      ]
+     ],
+     "effect_formula": "fatigue-(favor.sil/2) favor.sil+2",
+     "limit": {
+      "range": "month",
+      "times": 1
+     }
+    }
+   ]
+  }
+ ]
+}

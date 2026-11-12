@@ -1,5 +1,5 @@
 {
- "note": "On a successful day: skill training value += gain and the book's points are used up; no tuition, fatigue +1 per day, no reading on Sundays",
+ "note": "On a successful day: skill training value += gain and the book's points are used up; no tuition, fatigue +fatigue_per_day per day (2), no reading on Sundays",
  "tiers": [
   {
    "id": "beginner",
@@ -12,7 +12,8 @@
     1,
     2
    ],
-   "price": 15
+   "price": 15,
+   "fatigue_per_day": 2
   },
   {
    "id": "advanced",
@@ -23,9 +24,10 @@
    "points": 35,
    "gain": [
     1,
-    3
+    2
    ],
-   "price": 60
+   "price": 60,
+   "fatigue_per_day": 2
   },
   {
    "id": "monograph",
@@ -36,9 +38,10 @@
    "points": 35,
    "gain": [
     1,
-    3
+    2
    ],
-   "price": 150
+   "price": 150,
+   "fatigue_per_day": 2
   }
  ],
  "books": [
@@ -55,7 +58,8 @@
     2
    ],
    "price": 15,
-   "finish_event": null
+   "finish_event": null,
+   "fatigue_per_day": 2
   },
   {
    "id": "book_chuangzuo_2",
@@ -67,10 +71,11 @@
    "points": 35,
    "gain": [
     1,
-    3
+    2
    ],
    "price": 60,
-   "finish_event": null
+   "finish_event": null,
+   "fatigue_per_day": 2
   },
   {
    "id": "book_chuangzuo_3",
@@ -82,10 +87,11 @@
    "points": 35,
    "gain": [
     1,
-    3
+    2
    ],
    "price": 150,
-   "finish_event": null
+   "finish_event": null,
+   "fatigue_per_day": 2
   },
   {
    "id": "book_shenmei_1",
@@ -100,7 +106,8 @@
     2
    ],
    "price": 15,
-   "finish_event": null
+   "finish_event": null,
+   "fatigue_per_day": 2
   },
   {
    "id": "book_shenmei_2",
@@ -112,10 +119,11 @@
    "points": 35,
    "gain": [
     1,
-    3
+    2
    ],
    "price": 60,
-   "finish_event": null
+   "finish_event": null,
+   "fatigue_per_day": 2
   },
   {
    "id": "book_shenmei_3",
@@ -127,10 +135,11 @@
    "points": 35,
    "gain": [
     1,
-    3
+    2
    ],
    "price": 150,
-   "finish_event": null
+   "finish_event": null,
+   "fatigue_per_day": 2
   },
   {
    "id": "book_tantu_1",
@@ -145,7 +154,8 @@
     2
    ],
    "price": 15,
-   "finish_event": null
+   "finish_event": null,
+   "fatigue_per_day": 2
   },
   {
    "id": "book_tantu_2",
@@ -157,11 +167,12 @@
    "points": 35,
    "gain": [
     1,
-    3
+    2
    ],
    "price": 60,
    "finish_event": null,
-   "on_shelf": "1926-08"
+   "on_shelf": "1926-08",
+   "fatigue_per_day": 2
   },
   {
    "id": "book_tantu_3",
@@ -173,11 +184,12 @@
    "points": 35,
    "gain": [
     1,
-    3
+    2
    ],
    "price": 150,
    "finish_event": null,
-   "on_shelf": "1926-08"
+   "on_shelf": "1926-08",
+   "fatigue_per_day": 2
   },
   {
    "id": "book_tanpan_1",
@@ -192,7 +204,8 @@
     2
    ],
    "price": 15,
-   "finish_event": null
+   "finish_event": null,
+   "fatigue_per_day": 2
   },
   {
    "id": "book_tanpan_2",
@@ -204,10 +217,11 @@
    "points": 35,
    "gain": [
     1,
-    3
+    2
    ],
    "price": 60,
-   "finish_event": null
+   "finish_event": null,
+   "fatigue_per_day": 2
   },
   {
    "id": "book_shengyi_1",
@@ -222,7 +236,8 @@
     2
    ],
    "price": 15,
-   "finish_event": null
+   "finish_event": null,
+   "fatigue_per_day": 2
   },
   {
    "id": "book_shengyi_2",
@@ -234,10 +249,11 @@
    "points": 35,
    "gain": [
     1,
-    3
+    2
    ],
    "price": 60,
-   "finish_event": null
+   "finish_event": null,
+   "fatigue_per_day": 2
   },
   {
    "id": "book_yanji_1",
@@ -252,7 +268,8 @@
     2
    ],
    "price": 15,
-   "finish_event": null
+   "finish_event": null,
+   "fatigue_per_day": 2
   },
   {
    "id": "book_daban_1",
@@ -267,7 +284,8 @@
     2
    ],
    "price": 15,
-   "finish_event": null
+   "finish_event": null,
+   "fatigue_per_day": 2
   }
  ]
 }
