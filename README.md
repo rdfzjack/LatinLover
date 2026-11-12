@@ -97,6 +97,8 @@ godot --headless --path game/silentstar --script res://tools/report.gd -- --n=20
 - 用户自己直接改 JSON（不做 Excel），按 `data/USER_GUIDE.md`；改了表的写法要同步更新指南。
 - 要做多语言。**技术性的东西一律英文**（字段名、id、枚举值、效果和条件、存档的键、代码和注释、开发者备注、检查脚本的输出、`data/new/README.md`、`design/IMPL_NOTES.md`、`data/USER_GUIDE.md`、`design/GLOSSARY.md`）；**中文原文只放在数据表的显示字段里**（`name`、`text`、`body`、`question`、`film_title`、`content`、`identity`），每条记录一个英文 `id`，加内容只写一处；`data/locale/text.csv` 由 `tools/extract_text.py` 从数据表生成。设计文档（GDD、DESIGN_NOTES、BALANCE_LOG、PLAN、README、CHANGE）和交接文本保持中文。
 - 只把必须用户定的设计决策列出来问；占位内容、模型能自己检查的细节不要列给用户。
+- 现在到不了 S 是正常的（NPC 线、机遇还没加），不为出 S 调数。现阶段平衡只看线和线之间平不平。
+- 各路、各线的玩法要有区别，不要为了平衡做成一样（不给每条路各配一个表现 P 的加分技能）。大卖率按路不平先不解决。
 
 ## 等用户定的事
 
