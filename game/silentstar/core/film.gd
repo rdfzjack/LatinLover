@@ -147,6 +147,8 @@ static func shoot(st, i: int, f: Dictionary, days: Array) -> void:
 		f["divine"] = 1
 	if st.month_used.has("drug_side.%d" % i):      # a dose with the side effect on a shooting period (GDD 5.8.1)
 		f["side"] = 1
+	if st.month_used.has("boost.%d" % i):          # any dose on a shooting period (report only)
+		f["dosed"] = 1
 	for dd in days:
 		if dd[1]:
 			continue

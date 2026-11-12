@@ -20,6 +20,7 @@ const Schedule = preload("res://core/schedule.gd")
 const Street = preload("res://core/street.gd")
 const Film = preload("res://core/film.gd")
 const Audition = preload("res://core/audition.gd")
+const Board = preload("res://core/board.gd")
 const Story = preload("res://core/story.gd")
 
 const Events = preload("res://core/events.gd")
@@ -385,8 +386,33 @@ class Bot:
 			p *= est.best(lv, rv, e["style_probs"], st.attr["fame"])[0]
 		return p
 
+	## Report only (round 5 follow-up): what happened to the big role of each board, counted on the first pick of the board.
+	var extra := {}
+
+	func note_big(st, b: Dictionary, ok: Array) -> void:
+		extra["board_months"] = extra.get("board_months", 0) + 1
+		for i in b["roles"].size():
+			var e: Dictionary = b["roles"][i]
+			if e["size"] != "big":
+				continue
+			var why: String = Board.eligible(st, e)
+			var k := "big_other_" + why.replace(" ", "_")
+			if why == "out_of_reach":
+				k = "big_fame_gate"
+			elif why == "morals":
+				k = "big_morals"
+			elif why == "" and ok.has(i):
+				k = "big_try" if role_p(st, e) >= THRESH["big"] else "big_low_p"
+			extra[k] = extra.get(k, 0) + 1
+			if k == "big_fame_gate":
+				extra["big_gate_gap"] = extra.get("big_gate_gap", []) + [Board.fame_gate(st, e) - st.attr["fame"]]
+			return
+		extra["big_none"] = extra.get("big_none", 0) + 1
+
 	## From the biggest size down: go for the best role if its win rate clears the line, otherwise drop one size.
 	func pick_role(st, b: Dictionary, ok: Array):
+		if b["tried"].is_empty():
+			note_big(st, b, ok)
 		var by := {}
 		for i in ok:
 			var sz: String = b["roles"][i]["size"]
@@ -1113,6 +1139,9 @@ class Addict:
 
 	func month_start(story, st) -> void:
 		super(story, st)
+		if policy == "gambler":
+			gambler_buy(story, st)
+			return
 		if policy == "quit" and (known(st) or st.cnt("count.detox") > 0 or st.cnt("count.clean") > 0):
 			if st.drug >= 1 and known(st):
 				story.send_detox(st)
@@ -1126,6 +1155,9 @@ class Addict:
 			n -= 1
 		if n > 0:
 			story.buy_drug(st, n)
+
+	func gambler_buy(_story, _st) -> void:      # Gambler
+		pass
 
 	## Round 4: the tuition of the class he would take this month (three periods of his road's first class that is not full, at
 	## its current fee level); 0 when his road has no class left. Kept on top of a month of living costs before buying.
@@ -1175,6 +1207,59 @@ class Addict:
 			P["fat"] = maxi(0, P["fat"] - 40)
 			P["dose"] = P.get("dose", 0) + 1
 		return super(g, P, i)
+
+
+## Gambler (round 5 follow-up, the user's "smart gambler"): plays like the disciplined bot (church included, same option
+## preferences); buys when the dealer is around (keeping a month of living costs and this month's tuition) and keeps the doses;
+## takes one only before a shooting period of a lead medium or big film in the last two years. Once addicted the rules make him
+## take his own doses; at the deepest stage he goes to detox and buys nothing that month (like wild).
+## Report only: extra.dealer_blocked = months the dealer was there but discipline >= refuse_discipline turned him away;
+## extra.dealer_poor = months he could not afford one; extra.max_stock = the most doses he held.
+class Gambler:
+	extends Addict
+
+	func _init(sd := 1) -> void:
+		super(sd)
+		strategy = "gambler"
+		policy = "gambler"
+		pref["discipline"] = 0.3      # the disciplined bot's preferences
+		pref["flag.drug_stock"] = 0.0
+
+	func gambler_buy(story, st) -> void:
+		if st.drug >= 3:
+			story.send_detox(st)
+			return
+		var n: int = int(st.flags.get("dealer_stock", 0))
+		if n <= 0:
+			return
+		if st.drug_points == 0 and st.val("discipline") >= int(st.d.t["stats"]["drug"]["refuse_discipline"]):
+			extra["dealer_blocked"] = extra.get("dealer_blocked", 0) + 1
+			return
+		var price: int = int(st.flags.get("dealer_price", 0))
+		var reserve: int = living(st) + tuition(st)
+		while n > 0 and st.money - price * n < reserve:
+			n -= 1
+		if n > 0:
+			story.buy_drug(st, n)
+		else:
+			extra["dealer_poor"] = extra.get("dealer_poor", 0) + 1
+		extra["max_stock"] = maxi(int(extra.get("max_stock", 0)), stock(st))
+
+	func bet_film(story, st, i: int) -> bool:
+		var f = story.locked(st, i)
+		return f != null and st.ym >= 24 and not f["support"] and (f["size"] == "medium" or f["size"] == "big")
+
+	func before_period(story, st, i: int) -> void:
+		if stock(st) > 0 and bet_film(story, st, i) and Events.boost_reason(st, i) == "":
+			story.boost(st, i)
+
+	## Planning: like the disciplined bot; only the doses the rules make him take once addicted lower the fatigue.
+	func pick(g, P: Dictionary, i: int) -> String:
+		var st = g.st
+		if stock(st) - P.get("dose", 0) > 0 and st.drug_points > 0:
+			P["fat"] = maxi(0, P["fat"] - 40)
+			P["dose"] = P.get("dose", 0) + 1
+		return disc_pick(g, P, i, no_church)
 
 
 class Quit:
@@ -1278,9 +1363,13 @@ const BOTS := {
 	"allin_lover": [Allin, "lover"],
 	"allin_culture": [Allin, "culture"],
 	"allin_savvy": [Allin, "savvy"],
+	"gambler_tough": [Gambler, "tough"],
+	"gambler_lover": [Gambler, "lover"],
+	"gambler_culture": [Gambler, "culture"],
+	"gambler_savvy": [Gambler, "savvy"],
 }
 const PURE := ["only_tough", "only_lover", "only_culture", "only_savvy"]
-const STRATEGIES := ["disciplined", "bad_boy", "bold", "wild", "addict", "quit", "shoot", "allin"]
+const STRATEGIES := ["disciplined", "bad_boy", "bold", "wild", "addict", "quit", "shoot", "allin", "gambler"]
 
 
 ## A bot from a BOTS value: a class, or [class, road] for the step-12c bots.
@@ -1332,6 +1421,7 @@ static func play(cls, sd: int, data, smart_play = null, buy_gear = null, on_mont
 		if on_month.is_valid():
 			on_month.call(g, date)
 	rec.merge(summarize(g))
+	rec.merge(bot.extra.duplicate(true))
 	rec["strategy"] = bot.strategy
 	rec["road"] = bot.road
 	var ev := {}
@@ -1416,9 +1506,13 @@ static func summarize(g) -> Dictionary:
 	var fx := []
 	for f in st.story["films"]:
 		if Schedule.truthy(f.get("result")):
-			fx.append([f["size"], 1 if f["support"] else 0, f["result"]["month"], f["result"]["S"], f["result"]["B"],
-				int(f.get("divine", 0)), int(f.get("side", 0))])
-	rec["films_x"] = fx
+			var rr: Dictionary = f["result"]
+			fx.append([f["size"], 1 if f["support"] else 0, rr["month"], rr["S"], rr["B"],
+				int(f.get("divine", 0)), int(f.get("side", 0)),
+				rr["P"], rr["F"], rr["T"], 1 if rr["untyped"] else 0, 1 if rr["accent"] else 0,
+				f["ok_days"], f["shoot_days"], f["roles"]["road"], int(f.get("dosed", 0))])
+	rec["films_x"] = fx      # [size, support, month, S, B, divine, side, P, F, T, untyped, accent, ok_days, shoot_days, road, dosed]
+	rec["top_road"] = top
 	var ranks := []
 	for a in g.hooks.annuals:
 		ranks.append(a.get("rank"))
