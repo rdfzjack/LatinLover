@@ -34,6 +34,12 @@ func board(st) -> void:
 	boards.append({"month": st.date(), "audition": out})
 
 
+## Month-end releases: the films' results change the reputation bonus; the screen writes down how much and why.
+func release(st) -> void:
+	super(st)
+	ui.after_release()
+
+
 func event_begin(_st, eid: String) -> void:
 	ui.event_started(eid)
 
@@ -45,6 +51,7 @@ func event_end(_st, rec: Dictionary) -> void:
 ## December: the result page of the annual event.
 func annual(st) -> void:
 	super(st)
+	ui.log_corr(tr("ui.main.show_annual_result.1"))
 	ui.ask("annual_result", annuals.back())
 
 

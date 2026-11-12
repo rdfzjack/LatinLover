@@ -135,27 +135,14 @@
   {
    "id": "evt_arrest",
    "name": "被捕",
-   "class": "month_end",
-   "timing": "month_end",
-   "cond": [
-    [
-     [
-      "reckless_index",
-      "==",
-      100
-     ],
-     [
-      "status.sick",
-      "==",
-      0
-     ]
-    ]
-   ],
+   "class": "job",
+   "timing": "during_job",
+   "cond": [],
    "prob": null,
    "freq": null,
    "effect": "",
    "code": true,
-   "note": "Detained: fine max(200, 30% of money) (never below 0), the next period is void, crime +20, exposure, no big film for 3 months. With loyalty >=150 someone bails him out: fine halved, no exposure, loyalty -30. Also triggered by failing a crime-job search (jobs.json raid_*)",
+   "note": "Detained: fine max(200, 30% of money) (never below 0), the next period is void, crime +20, exposure, no big film for 3 months. With loyalty >=150 someone bails him out: fine halved, no exposure, loyalty -30. Only fired by failing a crime-job search (jobs.json raid_*), never by being reckless or by other jobs (user, step 15f)",
    "source": "[orig EVENT045]",
    "body": null,
    "order": 2,

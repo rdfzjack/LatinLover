@@ -73,6 +73,11 @@ var ev_seen := 0           # how many records of story.event_log were already sh
 
 # widgets
 var status_label: Label
+var rep_row: HBoxContainer
+var idx_label: Label
+var rep_log: Array = []      # why the reputation bonus changed: {date, road, delta, why}
+var corr_seen: Dictionary = {}
+var rep_mark := 0            # index in rep_log where this month began
 var body: VBoxContainer
 var log_box: RichTextLabel
 var street_box: VBoxContainer
@@ -151,9 +156,22 @@ func _build_frame() -> void:
 	root.add_child(top)
 	status_label = Label.new()
 	status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	status_label.custom_minimum_size = Vector2(0, 100)
+	status_label.custom_minimum_size = Vector2(0, 52)
 	status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	top.add_child(status_label)
+	var left := VBoxContainer.new()
+	left.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	top.add_child(left)
+	left.add_child(status_label)
+	rep_row = HBoxContainer.new()
+	left.add_child(rep_row)
+	for k in 4:
+		var rl := Label.new()
+		rl.mouse_filter = Control.MOUSE_FILTER_STOP
+		rl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		rep_row.add_child(rl)
+	idx_label = Label.new()
+	idx_label.mouse_filter = Control.MOUSE_FILTER_STOP
+	left.add_child(idx_label)
 	var bar := VBoxContainer.new()
 	top.add_child(bar)
 	button(tr("ui.main.build_frame.1"), func(): _open_slots(true), bar)
@@ -367,6 +385,9 @@ func _log(text: String) -> void:
 func refresh_status() -> void:
 	if st == null:
 		status_label.text = tr("ui.main.refresh_status.1")
+		for l in rep_row.get_children():
+			l.text = ""
+		idx_label.text = ""
 		return
 	var b: Dictionary = st.bonus()
 	var tier: Dictionary = d.t["stats"]["fame_tiers"][st.fame_tier()]
@@ -376,19 +397,23 @@ func refresh_status() -> void:
 	var a := PackedStringArray()
 	for k in ["stamina", "education", "loyalty", "looks", "discipline", "crime", "fatigue"]:
 		a.append("%s %d" % [nm(k), st.val(k, b)])
-	var r := PackedStringArray()
-	for k in d.roads:
+	status_label.text = tr("ui.main.refresh_status.12") % [
+		st.date(), st.money, tier["name"], mail, nm(st.lifestyle), "  ".join(a)]
+	for k in d.roads.size():
+		var road: String = d.roads[k]
 		var sk := PackedStringArray()
-		for x in d.road_skills[k]:
+		for x in d.road_skills[road]:
 			sk.append("%s %d" % [nm(x), st.val(x, b)])
-		r.append(tr("ui.main.refresh_status.2") % [nm(k), st.rep(k, b), " ".join(sk)])
+		var rl: Label = rep_row.get_child(k)
+		rl.text = tr("ui.main.refresh_status.13") % [nm(road), st.rep(road, b), " ".join(sk)]
+		rl.tooltip_text = rep_tooltip(road)
 	var flags := PackedStringArray()
 	if st.status["very_sick"]:
 		flags.append(tr("ui.main.refresh_status.3"))
 	elif st.status["sick"]:
 		flags.append(tr("ui.main.refresh_status.4"))
 	if st.status["reckless"]:
-		flags.append(tr("ui.main.refresh_status.5") + tr("ui.main.refresh_status.11") % explain.slack_pct())
+		flags.append(tr("ui.main.refresh_status.14") % explain.slack_pct())
 	if st.status["in_love"]:
 		flags.append(tr("ui.main.refresh_status.6"))
 	if st.status["long_contract"]:
@@ -398,12 +423,101 @@ func refresh_status() -> void:
 	var stock := int(st.flags.get("drug_stock", 0))
 	if stock > 0:
 		flags.append(tr("ui.main.refresh_status.9") % stock)
-	var head: String = tr("ui.main.refresh_status.10") % [
-		st.date(), st.money, tier["name"], mail, nm(st.lifestyle), "  ".join(a), "   ".join(r),
+	idx_label.text = tr("ui.main.refresh_status.15") % [
 		st.idx["sick_index"], st.idx["reckless_index"], " ".join(flags)]
-	status_label.text = head
-	status_label.tooltip_text = explain.index_text()
-	status_label.mouse_filter = Control.MOUSE_FILTER_STOP
+	idx_label.tooltip_text = explain.index_text()
+
+
+## Where a road's reputation comes from: the trained skills, the gear and the table bonus, and the recent changes of the bonus.
+func rep_tooltip(road: String) -> String:
+	var b: Dictionary = st.bonus()
+	var trained := 0
+	var shown := 0
+	var sk := PackedStringArray()
+	for x in d.road_skills[road]:
+		trained += st.skill[x]
+		shown += st.val(x, b)
+		sk.append("%s %d" % [nm(x), st.val(x, b)])
+	var t := tr("ui.main.rep_tooltip.1") % nm(road)
+	t += tr("ui.main.rep_tooltip.2") % [" + ".join(sk), shown, trained, shown - trained]
+	t += tr("ui.main.rep_tooltip.3") % st.corr[road]
+	t += tr("ui.main.rep_tooltip.4") % [st.rep(road, b), int(d.rep_range[0]), int(d.rep_range[1])]
+	t += tr("ui.main.rep_tooltip.5")
+	var shown_n := 0
+	var i := rep_log.size() - 1
+	var lines := PackedStringArray()
+	while i >= 0 and shown_n < 8:
+		var e: Dictionary = rep_log[i]
+		if e["road"] == road:
+			lines.append(tr("ui.main.rep_tooltip.6") % [e["date"], int(e["delta"]), e["why"]])
+			shown_n += 1
+		i -= 1
+	if lines.is_empty():
+		t += tr("ui.main.rep_tooltip.7")
+	else:
+		t += tr("ui.main.rep_tooltip.8") + "\n".join(lines)
+	return t
+
+
+## Writes down every change of the reputation bonus since the last call, with the reason. Returns the new entries.
+func log_corr(why_text: String) -> Array:
+	var added := []
+	for road in d.roads:
+		var delta: int = st.corr[road] - int(corr_seen.get(road, 0))
+		if delta != 0:
+			var e := {"date": st.date(), "road": road, "delta": delta, "why": why_text}
+			rep_log.append(e)
+			added.append(e)
+			corr_seen[road] = st.corr[road]
+	if rep_log.size() > 80:
+		rep_log = rep_log.slice(rep_log.size() - 80)
+	return added
+
+
+## Called by UiStory (game thread) right after the releases of the month: the film results say how much each road got or lost.
+func after_release() -> void:
+	for f in st.story["films"]:
+		if f["status"] == "released" and f["result"] != null and int(f["result"].get("month", -1)) == st.ym:
+			var r: Dictionary = f["result"]
+			var road: String = str(f["roles"]["road"])
+			var delta := int(r["rep_bonus"])
+			if delta != 0:
+				rep_log.append({"date": st.date(), "road": road, "delta": delta,
+					"why": tr("ui.main.after_release.1") % [str(f["roles"]["name"]), band_name(str(r.get("band", "")))]})
+				corr_seen[road] = int(corr_seen.get(road, 0)) + delta
+	log_corr(tr("ui.main.after_release.2"))
+
+
+func band_name(band: String) -> String:
+	match band:
+		"hit":
+			return tr("ui.main.fill_status.9")
+		"normal":
+			return tr("ui.main.band_name.1")
+		"poor":
+			return tr("ui.main.band_name.2")
+		"flop":
+			return tr("ui.main.band_name.3")
+	return band
+
+
+## Red lines for the roads whose reputation went down between two snapshots: the reasons we know of.
+func rep_drop_lines(before: Dictionary, after: Dictionary, added: Array) -> PackedStringArray:
+	var out := PackedStringArray()
+	for road in d.roads:
+		var drop: int = after["rep"][road] - before["rep"][road]
+		if drop >= 0:
+			continue
+		var reasons := PackedStringArray()
+		for e in added:
+			if e["road"] == road and e["delta"] < 0:
+				reasons.append(tr("ui.main.rep_drop_lines.1") % [e["why"], int(e["delta"])])
+		for sk in d.road_skills[road]:
+			var dv: int = after["skill"][sk] - before["skill"][sk]
+			if dv < 0:
+				reasons.append("%s %+d" % [nm(sk), dv])
+		out.append(tr("ui.main.rep_drop_lines.2") % [nm(road), drop, tr("ui.main.entry_effect.14").join(reasons) if not reasons.is_empty() else tr("ui.main.rep_drop_lines.3")])
+	return out
 
 
 func snapshot() -> Dictionary:
@@ -614,6 +728,7 @@ func _start_game(seed_n: int, origin: Array, start_vals := {}) -> void:
 	var agent = UiStory.UiAgent.new(self)
 	var story = UiStory.new(agent, self)
 	g = Month.new(d, seed_n, origin, story)
+	rep_log = []
 	st = g.st
 	for k in start_vals:
 		if POOL_ATTRS.has(k):
@@ -625,7 +740,7 @@ func _start_game(seed_n: int, origin: Array, start_vals := {}) -> void:
 
 
 func save_meta() -> Dictionary:
-	return {"date": st.date(), "money": st.money, "phase": "between"}
+	return {"date": st.date(), "money": st.money, "phase": "between", "rep_log": rep_log}
 
 
 func slot_name(slot: String) -> String:
@@ -669,6 +784,8 @@ func load_slot(slot: String) -> void:
 	g = m
 	st = g.st
 	var phase: String = str(meta.get("phase", "between"))
+	rep_log = meta.get("rep_log", [])
+	rep_mark = rep_log.size()
 	g.started = phase != "between"
 	_close_slots()
 	_run_thread(meta)
@@ -754,6 +871,7 @@ func _open_slots(saving: bool) -> void:
 func _worker(resume: Dictionary) -> void:
 	var months := 0
 	var first := true
+	corr_seen = st.corr.duplicate()
 	while not st.finished and not quitting and months < auto_months:
 		var phase := str(resume.get("phase", "between")) if first else "between"
 		first = false
@@ -773,6 +891,7 @@ func _worker(resume: Dictionary) -> void:
 			last_snap = snapshot()
 			snap = last_snap
 			ev_seen = g.hooks.event_log.size()
+			rep_mark = rep_log.size()
 			ask("month_start", null)
 			if quitting:
 				return
@@ -866,12 +985,14 @@ func period_done(_st, i: int, entry: String, out: Dictionary) -> void:
 	if why_text != "":
 		rep.append(why_text)
 	var lines := diff_lines(last_snap, now)
+	var added: Array = log_corr(what)
+	var rep_lines := rep_drop_lines(last_snap, now, added)
 	var evt := PackedStringArray()
 	for e in evs:
 		evt.append(e)
 	last_snap = now
 	note(tr("ui.main.period_done.11") % [head, what, diff_text(last_snap, now) if false else tr("ui.main.entry_effect.14").join(rep)])
-	ask("period", {"head": head, "what": what, "cg": cg, "cg_keys": cg_keys, "report": "\n".join(rep), "lines": lines, "events": evt})
+	ask("period", {"head": head, "what": what, "cg": cg, "cg_keys": cg_keys, "report": "\n".join(rep), "lines": lines, "events": evt, "rep_lines": rep_lines})
 
 
 ## Why the days of this period went the way they did (numbers as they were when the period began).
@@ -1173,7 +1294,7 @@ func event_ended(rec: Dictionary) -> void:
 	if rec.get("check") != null:
 		check = tr("ui.main.new_events.3") if rec["check"] else tr("ui.main.new_events.4")
 	var payload := {"id": rec["id"], "name": str(ev["name"]), "class": str(ev.get("class", "")), "body": ev.get("body"),
-		"picked": picked, "check": check, "lines": diff_lines(before, snapshot())}
+		"picked": picked, "check": check, "lines": diff_lines(before, snapshot()), "rep_lines": rep_drop_lines(before, snapshot(), log_corr(str(ev["name"])))}
 	ask("event", payload)
 
 
@@ -1187,6 +1308,8 @@ func _show_event(p: Dictionary) -> void:
 		label(tr("ui.main.show_event.1") + str(p["picked"]))
 	if str(p["check"]) != "":
 		label(tr("ui.main.show_event.2") + str(p["check"]))
+	for x in p.get("rep_lines", []):
+		label(x, null, Color(1, 0.5, 0.5))
 	if p["lines"].is_empty():
 		label(tr("ui.main.show_event.3"))
 	else:
@@ -1238,6 +1361,8 @@ func _show_period(p: Dictionary) -> void:
 	add_cg("cg", p["cg_keys"], str(p["cg"]))
 	if str(p["report"]) != "":
 		label(str(p["report"]))
+	for x in p.get("rep_lines", []):
+		label(x, null, Color(1, 0.5, 0.5))
 	if p["lines"].is_empty():
 		label(tr("ui.main.show_event.3"))
 	else:
@@ -1615,16 +1740,19 @@ func _show_summary() -> void:
 	var now := snapshot()
 	heading(tr("ui.main.show_summary.1") % d.months[st.ym - 1]["month"] if st.ym > 0 else tr("ui.main.show_summary.2"))
 	label(tr("ui.main.show_summary.3") + diff_text(snap, now))
+	var month_entries: Array = rep_log.slice(maxi(0, rep_mark))
+	for x in rep_drop_lines(snap, now, month_entries):
+		label(x, null, Color(1, 0.5, 0.5))
 	var evs := new_events()
 	if not evs.is_empty():
 		heading(tr("ui.main.show_summary.4"))
 		for e in evs:
 			label(tr("ui.common.wide_space") + e)
-	var rel := 0
 	for f in st.story["films"]:
 		if f["status"] == "released" and f["result"] != null and f["result"].get("month", -1) == st.ym - 1:
-			rel += 1
-			label(tr("ui.main.show_summary.5") % [f["roles"]["name"], size_name(f["size"]), tr("ui.main.fill_status.9") if f["result"].get("hit", false) else tr("ui.main.show_summary.6")])
+			var r: Dictionary = f["result"]
+			label(tr("ui.main.show_summary.10") % [f["roles"]["name"], size_name(f["size"]), band_name(str(r.get("band", ""))), int(r["rep_bonus"]), nm(f["roles"]["road"])],
+				null, Color(1, 0.5, 0.5) if int(r["rep_bonus"]) < 0 else Color(0.6, 1, 0.6))
 	button(tr("ui.main.show_summary.7") if st.finished else tr("ui.main.show_summary.9"), func(): reply(null))
 
 
