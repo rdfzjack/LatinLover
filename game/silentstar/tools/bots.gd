@@ -714,14 +714,64 @@ class Bot:
 
 
 ## Trains one road, then the second road once the first is full.
+## Step 12c c3 (round 4): the pure bots (only_*) rest like the disciplined line (disc_rest); before that they rested only at
+## fatigue >= 45 and could not keep training once fatigue started to bite.
 class RoadBot:
 	extends Bot
+
+	var disc_rest := false
 
 	func want(g, P: Dictionary, _i: int):
 		var w = want_road(g, P, road)
 		if w != null and w != "":
 			return w
 		return want_road(g, P, second)
+
+	func pick(g, P: Dictionary, i: int) -> String:
+		if disc_rest:
+			return disc_pick(g, P, i, false)
+		return super(g, P, i)
+
+	## The work of this period (training first, a job when short of money, like Bot.pick); null = nothing to do.
+	func work(g, P: Dictionary, i: int):
+		var st = g.st
+		var e = want(g, P, i)
+		if e == null:
+			e = money_job(g, P)
+		if e == null:
+			return null
+		if Schedule.parse_entry(e)[0] == "class":
+			var reserve: int = living(st) if i == 2 else 0
+			if P["money"] + delta(g, P, i, e)[1] < reserve:
+				e = money_job(g, P)
+		return e
+
+	## Would this period make him sick (sick_index >= 10 is the sick status)?
+	func sick_after(g, P: Dictionary, i: int, e: String) -> bool:
+		return P["fat"] + delta(g, P, i, e)[0] - g.st.val("stamina") >= 0
+
+	## Step 12c c3: the tough road rests at the dock until it has gone out there 3 times (the expedition opportunity needs it,
+	## like only_tough); otherwise `other`. go_personally is already always yes (SimpleAgent).
+	func rest_or_dock(g, P: Dictionary, i: int, other: String) -> String:
+		var st = g.st
+		if road == "tough" and st.cnt("count.outing.place_dock") < DOCK_OUTINGS and not Schedule.truthy(st.status["sick"]) \
+				and P["money"] - Schedule.place_cost(st, "place_dock") * H.alldays(st, i) >= living(st):
+			return "rest_outing@place_dock"
+		return other
+
+	## The disciplined rest rule: reckless_index >= 10 (after this period) or sick -> church volunteering, or rest at home when
+	## fatigue is high or the church is not possible (or no_church).
+	func disc_pick(g, P: Dictionary, i: int, no_church: bool) -> String:
+		var st = g.st
+		var e = work(g, P, i)
+		if e == null:
+			return "rest_home"
+		var after: int = P["fat"] + delta(g, P, i, e)[0]
+		if after - st.val("discipline") >= 10 or sick_after(g, P, i, e):
+			if no_church or P["fat"] >= 40 or P["fat"] - st.val("stamina") >= -20 or not H.can_do_job(st, "job_church", 0):
+				return rest_or_dock(g, P, i, "rest_home")
+			return "job_church"
+		return e
 
 
 class Hard:
@@ -730,6 +780,7 @@ class Hard:
 	func _init(sd := 1) -> void:
 		super(sd)
 		name = "only_tough"
+		disc_rest = true
 		road = "tough"
 		second = "lover"
 		origin = [0, 0, 3]
@@ -743,6 +794,7 @@ class Lover:
 	func _init(sd := 1) -> void:
 		super(sd)
 		name = "only_lover"
+		disc_rest = true
 		road = "lover"
 		second = "tough"
 		origin = [3, 2, 3]
@@ -756,6 +808,7 @@ class Culture:
 	func _init(sd := 1) -> void:
 		super(sd)
 		name = "only_culture"
+		disc_rest = true
 		road = "culture"
 		second = "lover"
 		origin = [4, 1, 3]
@@ -769,6 +822,7 @@ class Wrist:
 	func _init(sd := 1) -> void:
 		super(sd)
 		name = "only_savvy"
+		disc_rest = true
 		road = "savvy"
 		second = "lover"
 		origin = [1, 1, 3]
@@ -909,6 +963,10 @@ const DOCK_OUTINGS := 3        # step 12c c3: dock outings the tough strategy bo
 const BAD_CRIME_PERIODS := 1  # step 12c c3: once his tier-2 crime job is open, the bad boy works it in the first N periods of every
                                # month (a steady side income, not a savings line: his cash is then a result, not a setting)
 
+const TUITION_DAYS := 26      # round 4: three periods of class days, for the addict bots' tuition reserve
+const ROAD_CLASSES := {"tough": ["class_boxing", "class_riding"], "lover": ["class_acting", "class_etiquette", "class_dance"],
+	"culture": ["class_tutor"], "savvy": ["class_tutor"]}
+
 ## Road setup of the pure bots: [second road, origin].
 const ROAD_SETUP := {"tough": ["lover", [0, 0, 3]], "lover": ["tough", [3, 2, 3]], "culture": ["lover", [4, 1, 3]],
 	"savvy": ["lover", [1, 1, 3]]}
@@ -926,33 +984,6 @@ class StratBot:
 		gear_road = rd
 		name = "%s_%s" % [strategy, rd]
 
-	## The work of this period (training first, a job when short of money, like Bot.pick); null = nothing to do.
-	func work(g, P: Dictionary, i: int):
-		var st = g.st
-		var e = want(g, P, i)
-		if e == null:
-			e = money_job(g, P)
-		if e == null:
-			return null
-		if Schedule.parse_entry(e)[0] == "class":
-			var reserve: int = living(st) if i == 2 else 0
-			if P["money"] + delta(g, P, i, e)[1] < reserve:
-				e = money_job(g, P)
-		return e
-
-	## Would this period make him sick (sick_index >= 10 is the sick status)?
-	func sick_after(g, P: Dictionary, i: int, e: String) -> bool:
-		return P["fat"] + delta(g, P, i, e)[0] - g.st.val("stamina") >= 0
-
-	## Step 12c c3: the tough road rests at the dock until it has gone out there 3 times (the expedition opportunity needs it,
-	## like only_tough); otherwise `other`. go_personally is already always yes (SimpleAgent).
-	func rest_or_dock(g, P: Dictionary, i: int, other: String) -> String:
-		var st = g.st
-		if road == "tough" and st.cnt("count.outing.place_dock") < DOCK_OUTINGS and not Schedule.truthy(st.status["sick"]) \
-				and P["money"] - Schedule.place_cost(st, "place_dock") * H.alldays(st, i) >= living(st):
-			return "rest_outing@place_dock"
-		return other
-
 
 ## Disciplined: carries fatigue on discipline. reckless_index >= 10 (after this period) -> church volunteering, or rest at home
 ## when fatigue is high or the church is not possible. Never boosts, never takes crime jobs.
@@ -968,16 +999,7 @@ class Disc:
 		pref["crime"] = -1.0
 
 	func pick(g, P: Dictionary, i: int) -> String:
-		var st = g.st
-		var e = work(g, P, i)
-		if e == null:
-			return "rest_home"
-		var after: int = P["fat"] + delta(g, P, i, e)[0]
-		if after - st.val("discipline") >= 10 or sick_after(g, P, i, e):
-			if no_church or P["fat"] >= 40 or P["fat"] - st.val("stamina") >= -20 or not H.can_do_job(st, "job_church", 0):
-				return rest_or_dock(g, P, i, "rest_home")
-			return "job_church"
-		return e
+		return disc_pick(g, P, i, no_church)
 
 
 ## Bad boy: earns with his road's crime jobs and buys the fatigue off at the resort. Never boosts.
@@ -990,10 +1012,14 @@ class Disc:
 class Bad:
 	extends StratBot
 
+	var crime_periods := 1      # tier-2 crime job in the first N periods of every month
+	var cap60 := true           # keep the month-end reckless_index below 60
+
 	func _init(sd := 1) -> void:
 		super(sd)
 		strategy = "bad_boy"
 		crime = true
+		crime_periods = BAD_CRIME_PERIODS
 		pref["crime"] = 0.0
 		pref["money"] = 0.05
 		pref["discipline"] = 0.0
@@ -1027,7 +1053,7 @@ class Bad:
 		var st = g.st
 		var e = null
 		var cj = crime_job(g)
-		var steady: bool = cj != null and g.d.jobs[cj]["crime_tier"] == 2 and i < BAD_CRIME_PERIODS
+		var steady: bool = cj != null and g.d.jobs[cj]["crime_tier"] == 2 and i < crime_periods
 		if steady or P["money"] < H.resort_cost(st, i) + living(st):
 			e = cj
 		if e == null:
@@ -1041,11 +1067,23 @@ class Bad:
 			return rest_choice(g, P, i)
 		# step 12c c3: keep the month-end reckless_index below 60 (refused jobs; at 100 he is arrested), as BALANCE_LOG describes:
 		# before the last period, work only if the rest he can afford in the last period brings it back under 60
-		if i < 2:
+		if cap60 and i < 2:
 			var rc := rest_choice(g, P, 2)
 			if after + delta(g, P, 2, rc)[0] >= 60:
 				return rest_choice(g, P, i)
 		return e
+
+
+## Bold (step 12c c3 round 4): the bad boy who takes risks. He does not keep the month-end reckless_index below 60 and works his
+## tier-2 crime job in the first two periods of every month, so his downside (refused jobs, arrests, scandals) shows in the report.
+class Bold:
+	extends Bad
+
+	func _init(sd := 1) -> void:
+		super(sd)
+		strategy = "bold"
+		crime_periods = 2
+		cap60 = false
 
 
 ## Addict (step 12c c3 round 3): plays like the disciplined bot (rests at home, not at the church) and buys from the dealer
@@ -1082,15 +1120,48 @@ class Addict:
 			story.send_detox(st)
 		var n: int = int(st.flags.get("dealer_stock", 0))
 		var price: int = int(st.flags.get("dealer_price", 0))
-		while n > 0 and st.money - price * n < living(st):
+		var reserve: int = living(st) + tuition(st)
+		while n > 0 and st.money - price * n < reserve:
 			n -= 1
 		if n > 0:
 			story.buy_drug(st, n)
 
+	## Round 4: the tuition of the class he would take this month (three periods of his road's first class that is not full, at
+	## its current fee level); 0 when his road has no class left. Kept on top of a month of living costs before buying.
+	func tuition(st) -> int:
+		var d = st.d
+		for cid in ROAD_CLASSES.get(road, []):
+			var c: Dictionary = d.classes[cid]
+			var full := true
+			for gn in c["gain"]:
+				if gn.get("cond") == null and st.skill.has(gn["stat"]) and st.skill[gn["stat"]] < 100:
+					full = false
+			if cid == "class_tutor" and st.val("education") < 300:
+				full = false
+			if full:
+				continue
+			var k: int = st.cnt("class_periods." + cid) + 1
+			var L := 1
+			for s in d.class_steps:
+				if k > s:
+					L += 1
+			return int(c["fee"][mini(L, c["fee"].size()) - 1]) * TUITION_DAYS
+		return 0
+
+	## Shooting periods of this month after period i (round 4: the doses in hand are kept for them).
+	func shoots_after(hooks, st, i: int) -> int:
+		var n := 0
+		for j in range(i + 1, 3):
+			if hooks.locked(st, j) != null:
+				n += 1
+		return n
+
 	func wants_dose(story, st, i: int) -> bool:
+		if story.locked(st, i) != null:
+			return true
 		if policy == "shoot":
-			return story.locked(st, i) != null
-		return st.val("fatigue") >= 40
+			return false
+		return st.val("fatigue") >= 40 and stock(st) > shoots_after(story, st, i)
 
 	func before_period(story, st, i: int) -> void:
 		if stock(st) > 0 and wants_dose(story, st, i) and Events.boost_reason(st, i) == "":
@@ -1098,7 +1169,7 @@ class Addict:
 
 	func pick(g, P: Dictionary, i: int) -> String:
 		var st = g.st
-		var have: int = stock(st) - P.get("dose", 0)
+		var have: int = stock(st) - P.get("dose", 0) - shoots_after(g.hooks, st, i)
 		if have > 0 and (st.drug_points > 0 or (policy != "shoot" and P["fat"] >= 40)):
 			P["fat"] = maxi(0, P["fat"] - 40)
 			P["dose"] = P.get("dose", 0) + 1
@@ -1130,7 +1201,8 @@ class Allin:
 
 
 ## Wild (step 12c c3 round 3): the bad boy who also buys from the dealer whenever he is around (he has the money and, with his
-## crime, meets the dealer more often). Takes a dose when tired; never goes to detox by himself.
+## crime, meets the dealer more often). Takes a dose when tired. Round 4: at the deepest stage (stage 3) he goes to detox and buys
+## nothing that month.
 class Wild:
 	extends Bad
 
@@ -1144,6 +1216,9 @@ class Wild:
 
 	func month_start(story, st) -> void:
 		super(story, st)
+		if st.drug >= 3:            # round 4: at the deepest stage he goes to detox and buys nothing that month
+			story.send_detox(st)
+			return
 		var n: int = int(st.flags.get("dealer_stock", 0))
 		var price: int = int(st.flags.get("dealer_price", 0))
 		while n > 0 and st.money - price * n < living(st):
@@ -1180,6 +1255,9 @@ const BOTS := {
 	"bad_boy_tough": [Bad, "tough"],
 	"bad_boy_lover": [Bad, "lover"],
 	"bad_boy_savvy": [Bad, "savvy"],
+	"bold_tough": [Bold, "tough"],
+	"bold_lover": [Bold, "lover"],
+	"bold_savvy": [Bold, "savvy"],
 	"wild_tough": [Wild, "tough"],
 	"wild_lover": [Wild, "lover"],
 	"wild_savvy": [Wild, "savvy"],
@@ -1201,7 +1279,7 @@ const BOTS := {
 	"allin_savvy": [Allin, "savvy"],
 }
 const PURE := ["only_tough", "only_lover", "only_culture", "only_savvy"]
-const STRATEGIES := ["disciplined", "bad_boy", "wild", "addict", "quit", "shoot", "allin"]
+const STRATEGIES := ["disciplined", "bad_boy", "bold", "wild", "addict", "quit", "shoot", "allin"]
 
 
 ## A bot from a BOTS value: a class, or [class, road] for the step-12c bots.

@@ -322,7 +322,7 @@ static func release_one(st, f: Dictionary) -> Dictionary:
 	st.add_money(money)
 	var corr := 0
 	if not flop:
-		corr = Rules.fdiv(c["rep_bonus"][t] * (2 if hit else 1) * k, 100)
+		corr = Rules.fdiv(c["rep_bonus"][t] * (int(c["hit_mult"]) if hit else 1) * k, 100)
 		st.corr[role["road"]] += corr
 	for tag in role["tags"]:
 		st.tags[tag] = st.tags.get(tag, 0) + 1

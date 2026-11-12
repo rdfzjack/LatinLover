@@ -552,6 +552,7 @@
     "big": 8
    },
    "hit_pct": 140,
+   "hit_mult": 2,
    "flop_pct": 70,
    "talkie_penalty_pct": 60,
    "radio_speech_line_cut": 10,
