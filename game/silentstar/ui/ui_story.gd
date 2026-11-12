@@ -132,4 +132,3 @@ class UiAgent:
 			var why: String = story.boost(st, i)
 			if why != "":
 				ui.note(tr("ui.story.before_period.1") + why)
-		ui.defer_events = true      # from here to the report of the period, the events are held back and shown after it
