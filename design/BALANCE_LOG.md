@@ -174,151 +174,191 @@ c1、c2 做完后的 200 局报告在下面。护栏（`design/targets.json`，�
 - 码头事件“酒吧后门的生意”只有一个选项“做”（胆识 50，不过就被捕），去码头的人都可能被捕。自律硬汉为了探险队去码头以后平均被捕 0.2 次，护栏 `disciplined arrests [0,0]` 因此不过。这是内容问题，要不要加一个“不做”的选项由用户定。
 - 坏孩子线和自律线现在几乎一样好（均分差 −0.04），A 都在六成以上。
 
+### 第 12c 步 c3 第 1 轮复核（Fable，这次装了 Godot，数都是跑出来的）
+
+先原样复跑了 Opus 的 200 局，和上一版报告逐项相同。然后做了几组对照，结论和改动：
+
+| 改了什么 | 原来 | 现在 | 为什么 |
+|---|---|---|---|
+| 坏孩子机器人挣钱的办法（`bots.gd` `BAD_CRIME_PERIODS`） | 钱低于“度假村一旬 + 一月生活费 + 1,500”才做犯罪工 | 二级犯罪工开放后每月第一旬固定做；缺钱时照旧 | 期末现金 2.6k 是存钱线卡出来的：过了线他就去上副路的课，钱永远停在线上。改成固定时间以后，现金是结果不是设定 |
+| 码头事件“酒吧后门的生意”（`outing.json`） | 只有“做” | 加“不做”（无效果） | 去码头是探险队机遇的条件，自律硬汉因此中位被捕 1 次。风险要由玩家自己选 |
+| 搜查概率 `arrest.raid_crime_div` | 100 | 70 | 码头不再白抓人以后被捕 2.3 次，低于 3；这是 C3_ROUND1 写好的后手 |
+| 第 2 轮（度假村 ×3） | 待做 | **取消** | 见下 |
+
+对照实验（各 100 局，只换一样）：
+
+| 实验 | 结果 |
+|---|---|
+| 坏孩子每月一旬犯罪工，度假村现价 / ×2 / ×3 | 期末现金 5.9k / 3.9k / 2.4k，练满月 27 / 29 / 31。涨一档大约吃掉 2k |
+| 自律线疲劳 ≥50 时改去度假村，现价 / ×2 / ×3 | 练满月 30 → 32 / 34 / 34，均分 2.67 → 2.59 / 2.54 / 2.49。**现价下去度假村已经是亏的**：第 0 轮学费 ×1.5 以后自律线缺的是钱，不是旬数 |
+| 坏孩子月末失控指数到 30 / 55 才歇（原来 10） | 休息 32% → 32% / 31%，没有变化 |
+| 度假村每天 −20 → −25 / −30 | 休息 32%，没有变化 |
+
+- 第 2 轮涨价的理由是“自律线也去得起，花钱买疲劳不是坏孩子专属”。第 0 轮之后这个理由不成立了，再涨只会和坏孩子的现金目标对着干，所以取消。
+- 坏孩子休息 32% 是月节奏：自律 0，一旬犯罪工加一旬课就是疲劳 +110，月末一定要歇一旬，和度假村的价格、效果都无关。护栏从 20–25% 挪到 28–34%。他和自律线的区别在钱（5.4k 对 1.5k）和练满月（28 对 30），不在旬数。
+
+前后对比（200 局，Opus 第 1 轮 → 复核后）：
+
+| | Opus 第 1 轮 | 复核后 | 目标（护栏已挪） |
+|---|---|---|---|
+| 坏孩子第 2 年末 / 期末现金 | 1,821 / 2,653 | 2,119 / 5,408 | 2k–4k / 5k–10k |
+| 被捕 / 作废的旬（均值） | 3 / 6.6（硬汉 5 / 9.6） | 3.3 / 6.9（硬汉 3、情人 3、手腕 4） | 3–5 / 6–10 |
+| 坏孩子练满月（硬汉/情人/手腕） | 36 / 25 / 31 | 27 / 25 / 31 | 24–30 |
+| 坏孩子 S/A/B/C 以下，均分差 | 0 / 65 / 34 / 1，−0.04 | 0 / 73 / 26 / 2，+0.02 | 均分差 ±0.3 |
+| 自律线被捕 | 0.2（硬汉中位 1） | 0 | 0 |
+| 专练硬汉练满 | 42 个月，42% 的局 | 39 个月，全部练满 | — |
+
+护栏（`targets.json`）挪了五处：练满月自律 21–26 → 27–33、坏孩子 19–24 → 24–30（第 0 轮整体后移；嗑药线等第 3 轮）；自律线期末现金 2k–4k → 1k–3k（学费 ×1.5）；坏孩子休息 20–25% → 28–34%；坏孩子期末现金 6k–10k → 5k–10k。
+
+还不过、也不打算现在修的：
+- 自律线和坏孩子线都是 A 七成、B 三成，两条线的分布几乎一样。坏孩子现在多出来的 4k 没有地方换成声望，被捕 3 次也没把谁打到 C（期末现金 p10 还有 2k）。上行要等 Duv 的线和别的“钱换声望”的出口，这一轮不硬调。
+- 嗑药线（均分差 −0.69，倒下 0%，文化路练不满）整条等第 3 轮。
+
 ## 现在的报告
 
-第 12c 步 c3 第 0、1 轮之后，Godot `report.gd --n=200 --bots=all`（4 个进程分段再 `--merge`，约 5 分钟）。护栏的逐条结果用 `--guard=design/targets.json` 看。
+第 12c 步 c3 第 0、1 轮和 Fable 复核之后，Godot `report.gd --n=200 --bots=all`（4 个进程分段再 `--merge`，约 7 分钟）。护栏的逐条结果用 `--guard=design/targets.json` 看；现在不过的 21 条：自律线和坏孩子线的档次分布 7 条（等 NPC 线和机遇）、嗑药线 9 条（等第 3 轮）、专练机器人 5 条。
 
 ```
 == each bot 200 games (seeds 1-200), cards played greedy; targets: PLAN step 8 ==
 -- full-training month median (10%-90%) [target 16-21] | months with rep >= 210 | main-road rep median at months 12/24/36/48
-only_tough full 42(34–48)[42%] 210:34(23–44)    115/156/245/350
+only_tough full 39(33–45)      210:22(18–28)    151/251/350/378
 only_lover full 42(36–47)[77%] 210:25(19–36)    154/205/299/373
 only_culture full 39(33–46)[25%] 210:29(19–45)[67%] 130/167/218/255
 only_savvy full 33(29–36)      210:20(18–21)    112/294/366/376
 two_roads full —              210:43(35–48)[14%] 99/142/161/191
-crime_line full —              210:27(22–34)    131/208/235/248
+crime_line full —              210:24(22–34)    138/210/237/247
 books_culture full 37(31–43)      210:20(16–25)    140/273/353/370
-random_pick full —              210:43(36–48)[20%] 84/109/144/181
-disciplined_tough full 32(27–39)      210:21(16–26)    152/276/367/389
+random_pick full —              210:44(36–47)[22%] 84/112/144/180
+disciplined_tough full 30(25–35)      210:18(15–22)    163/300/371/392
 disciplined_lover full 30(25–40)      210:19(14–27)    170/277/369/393
 disciplined_culture full 31(26–42)      210:21(15–27)    137/267/372/389
 disciplined_savvy full 27(24–30)      210:19(17–21)    99/325/368/385
-bad_boy_tough full 36(29–43)      210:13(11–15)    208/290/360/383
-bad_boy_lover full 25(24–30)      210:14(13–17)    196/340/382/398
-bad_boy_savvy full 31(28–36)      210:22(19–27)    95/265/368/389
-addict_tough full 36(27–43)[44%] 210:22(15–33)[85%] 149/227/292/317
+bad_boy_tough full 27(22–32)      210:12(11–14)    217/343/372/393
+bad_boy_lover full 25(22–28)      210:14(12–16)    197/353/381/401
+bad_boy_savvy full 31(28–36)      210:21(19–25)    95/281/371/394
+addict_tough full 35(28–42)[51%] 210:21(15–33)    152/244/321/349
 addict_lover full 33(27–42)[81%] 210:20(14–34)    165/253/353/378
 addict_culture full 34(25–45)[41%] 210:27(16–40)[77%] 130/162/248/301
 addict_savvy full 26(23–30)      210:18(16–21)    115/335/369/385
 -- final main-road rep breakdown (mean): training+gear and stamina+releases+annual+opportunities | full training plus plain releases (no gear) median [311-340], over 311 [90%] | grade S/A/B/C/D %
-only_tough 267+30+10+ 6+10 = 350 | 300 over 311  26% | 0/15/54/19/12
+only_tough 299+35+15+11+17 = 378 | 314 over 311  68% | 0/45/54/0/0
 only_lover 291+35+14+ 6+17 = 373 | 311 over 311  52% | 0/29/60/11/0
 only_culture 215+20+10+ 6+18 = 255 | 212 over 311  15% | 0/13/20/33/33
 only_savvy 300+27+13+13+24 = 376 | 312 over 311  58% | 0/35/64/0/0
 two_roads 175+ 8+ 7+ 6+ 0 = 191 | 179 over 311   0% | 0/0/0/14/85
-crime_line 224+10+ 7+ 7+-0 = 248 | 231 over 311   0% | 0/0/0/99/0
+crime_line 224+10+ 6+ 7+ 0 = 247 | 230 over 311   0% | 0/0/0/100/0
 books_culture 299+32+15+13+10 = 370 | 314 over 311  69% | 0/13/85/1/0
-random_pick 182+ 0+ 2+ 1+-8 = 181 | 185 over 311   0% | 0/0/0/19/80
-disciplined_tough 300+39+18+12+20 = 389 | 316 over 311  80% | 0/70/30/0/0
+random_pick 185+ 0+ 2+ 1+-8 = 180 | 186 over 311   0% | 0/0/0/21/79
+disciplined_tough 300+40+19+13+21 = 392 | 317 over 311  79% | 0/75/24/0/0
 disciplined_lover 300+37+20+10+26 = 393 | 318 over 311  78% | 1/69/29/0/0
 disciplined_culture 297+34+15+14+24 = 389 | 313 over 311  64% | 0/71/26/2/0
 disciplined_savvy 300+30+15+13+28 = 385 | 314 over 311  70% | 0/59/40/0/0
-bad_boy_tough 299+40+14+14+12 = 383 | 312 over 311  60% | 0/53/45/1/0
-bad_boy_lover 300+37+23+13+25 = 398 | 322 over 311  90% | 0/79/20/0/0
-bad_boy_savvy 298+30+15+13+27 = 389 | 312 over 311  60% | 0/62/35/0/1
-addict_tough 256+28+ 7+ 9+ 2 = 317 | 288 over 311  18% | 0/21/31/30/17
+bad_boy_tough 300+42+18+15+12 = 393 | 316 over 311  77% | 0/70/28/1/0
+bad_boy_lover 300+37+25+14+23 = 401 | 324 over 311  89% | 0/76/23/0/0
+bad_boy_savvy 298+34+13+13+28 = 394 | 312 over 311  56% | 0/72/25/1/1
+addict_tough 264+30+ 7+ 9+ 0 = 349 | 302 over 311  20% | 0/21/38/26/14
 addict_lover 287+33+13+ 8+17 = 378 | 312 over 311  52% | 0/42/43/11/3
 addict_culture 239+21+ 8+ 8+19 = 301 | 258 over 311  24% | 0/24/25/28/22
 addict_savvy 298+30+13+14+27 = 385 | 314 over 311  66% | 0/61/37/2/0
 -- cash at each year end, median (years 1-4) [first two years <1000] | final p90 [<10k] | final >10k | debt months | film fees total, gear spend (mean)
-only_tough 141 / 237 / 367 / 653            p90   1,227  >10k   0%  debt  2.3 |  5,869   290
+only_tough 225 / 477 / 621 / 811            p90   1,460  >10k   0%  debt  0.1 |  7,896   459
 only_lover 147 / 221 / 444 / 966            p90   2,290  >10k   0%  debt  0.4 |  8,030   122
 only_culture 214 / 170 / 208 / 314            p90     847  >10k   0%  debt  0.3 |  5,988   161
 only_savvy 402 / 655 / 900 / 767            p90   1,926  >10k   0%  debt  0.3 |  9,651   578
 two_roads 198 / 264 / 231 / 309            p90     517  >10k   0%  debt  0.0 |  6,089   118
-crime_line 501 / 1,115 / 1,749 / 2,920      p90   4,026  >10k   0%  debt  0.3 |  4,582     0
+crime_line 823 / 1,010 / 1,242 / 1,983      p90   3,102  >10k   0%  debt  0.0 |  4,884     0
 books_culture 342 / 418 / 798 / 2,546          p90   4,398  >10k   0%  debt  0.1 |  8,455   402
-random_pick -687 / -1,420 / -1,856 / -1,971  p90    -420  >10k   0%  debt 43.6 |  1,914     0
-disciplined_tough 270 / 545 / 746 / 1,276          p90   2,734  >10k   0%  debt  0.1 |  9,671   921
+random_pick -694 / -1,407 / -1,802 / -1,994  p90    -168  >10k   0%  debt 43.8 |  1,927     0
+disciplined_tough 307 / 607 / 830 / 1,295          p90   2,465  >10k   0%  debt  0.0 | 10,018   966
 disciplined_lover 244 / 404 / 832 / 1,089          p90   3,108  >10k   0%  debt  0.1 | 10,376   150
 disciplined_culture 351 / 380 / 723 / 841            p90   2,615  >10k   0%  debt  0.1 |  8,137   390
 disciplined_savvy 484 / 1,433 / 1,407 / 2,669      p90   4,812  >10k   0%  debt  0.0 | 10,880 1,613
-bad_boy_tough 397 / 1,009 / 2,059 / 2,410      p90   3,172  >10k   0%  debt  1.1 |  7,627 1,864
-bad_boy_lover 322 / 2,224 / 2,513 / 2,750      p90   3,735  >10k   0%  debt  0.2 |  9,877   184
-bad_boy_savvy 349 / 2,230 / 2,821 / 2,799      p90   4,336  >10k   0%  debt  1.2 |  9,151 1,974
-addict_tough 172 / 224 / 227 / 108            p90     920  >10k   0%  debt 12.9 |  6,948   315
+bad_boy_tough 409 / 925 / 2,607 / 3,644        p90   6,236  >10k   0%  debt  0.4 |  8,705 4,048
+bad_boy_lover 316 / 3,224 / 5,597 / 6,286      p90  10,259  >10k  10%  debt  0.2 | 10,099   166
+bad_boy_savvy 349 / 2,209 / 3,573 / 6,294      p90   9,905  >10k   9%  debt  0.8 |  8,961 5,563
+addict_tough 196 / 286 / 264 / 193            p90   1,018  >10k   0%  debt 12.0 |  6,997   339
 addict_lover 198 / 262 / 538 / 652            p90   1,752  >10k   0%  debt  4.6 |  9,051   131
 addict_culture 252 / 186 / 287 / 347            p90   1,334  >10k   0%  debt  4.3 |  6,038   195
 addict_savvy 413 / 1,269 / 1,426 / 2,247      p90   4,468  >10k   0%  debt  0.8 | 10,292 1,404
 -- auditions per game, won% small/medium/big [big 10-35%] | releases per game, hit% [10%] flop% | leads small/medium/big | supports, breaches
-only_tough 17.9 games 100/47/0% (big 0.0 games) | release 14.1 hit   4% flop  34% | 9.1/3.1/0.0 | 1.9 0.8
+only_tough 18.1 games 100/57/21% (big 0.2 games) | release 15.1 hit   3% flop  39% | 5.5/6.6/0.0 | 3.0 0.1
 only_lover 19.0 games 100/53/22% (big 0.4 games) | release 15.1 hit  10% flop  20% | 5.5/6.7/0.1 | 2.8 0.0
 only_culture 17.9 games 100/42/23% (big 0.1 games) | release 15.0 hit   4% flop  25% | 10.3/2.8/0.0 | 1.9 0.0
 only_savvy 18.7 games 100/60/13% (big 0.3 games) | release 15.4 hit   2% flop  28% | 5.5/7.5/0.0 | 2.4 0.0
 two_roads 19.1 games 100/38/nan% (big 0.0 games) | release 14.7 hit   9% flop  24% | 9.5/3.1/0.0 | 2.1 0.0
-crime_line 17.2 games 100/40/nan% (big 0.0 games) | release 14.0 hit   2% flop  64% | 10.9/1.7/0.0 | 1.4 1.0
+crime_line 17.8 games 100/39/nan% (big 0.0 games) | release 14.3 hit   1% flop  67% | 10.2/2.3/0.0 | 1.8 0.5
 books_culture 18.5 games 100/53/18% (big 0.2 games) | release 15.3 hit   4% flop  26% | 6.6/6.0/0.0 | 2.7 0.0
-random_pick 10.0 games 84/10/nan% (big 0.0 games) | release  7.0 hit   1% flop  55% | 6.6/0.1/0.0 | 0.3 0.4
-disciplined_tough 18.4 games 100/61/26% (big 0.5 games) | release 15.7 hit   5% flop  29% | 5.3/7.8/0.1 | 2.5 0.2
+random_pick 10.0 games 84/11/nan% (big 0.0 games) | release  7.1 hit   0% flop  58% | 6.6/0.1/0.0 | 0.4 0.4
+disciplined_tough 18.4 games 100/63/18% (big 0.8 games) | release 15.7 hit   6% flop  28% | 4.6/8.4/0.1 | 2.5 0.2
 disciplined_lover 19.0 games 100/60/21% (big 1.5 games) | release 15.7 hit  11% flop  21% | 3.9/8.5/0.2 | 3.0 0.0
 disciplined_culture 18.5 games 100/55/14% (big 0.5 games) | release 15.5 hit   4% flop  32% | 6.4/6.5/0.0 | 2.6 0.0
 disciplined_savvy 18.5 games 100/64/14% (big 1.2 games) | release 16.0 hit   5% flop  24% | 5.0/8.4/0.1 | 2.4 0.0
-bad_boy_tough 18.0 games 100/63/0% (big 0.0 games) | release 14.8 hit   4% flop  49% | 5.3/7.4/0.0 | 2.1 1.2
-bad_boy_lover 18.4 games 100/71/16% (big 0.9 games) | release 15.8 hit  13% flop  19% | 2.7/10.7/0.1 | 2.3 0.7
-bad_boy_savvy 17.9 games 100/62/23% (big 0.4 games) | release 15.6 hit   7% flop  21% | 7.3/6.5/0.1 | 1.8 0.5
-addict_tough 18.1 games 100/56/12% (big 0.0 games) | release 13.9 hit   1% flop  71% | 6.6/5.1/0.0 | 2.2 1.5
+bad_boy_tough 17.7 games 100/66/21% (big 0.2 games) | release 15.5 hit   6% flop  42% | 4.3/8.8/0.0 | 2.4 0.7
+bad_boy_lover 18.3 games 100/71/20% (big 0.8 games) | release 16.0 hit  14% flop  20% | 2.6/11.0/0.1 | 2.2 0.7
+bad_boy_savvy 18.1 games 100/60/5% (big 0.1 games) | release 15.5 hit   5% flop  24% | 7.2/6.4/0.0 | 1.9 0.4
+addict_tough 18.1 games 100/57/0% (big 0.0 games) | release 13.7 hit   1% flop  71% | 6.1/5.3/0.0 | 2.3 1.6
 addict_lover 18.9 games 100/58/16% (big 0.7 games) | release 15.0 hit   5% flop  42% | 4.4/7.7/0.1 | 2.8 0.7
 addict_culture 17.7 games 99/48/10% (big 0.1 games) | release 14.7 hit   3% flop  51% | 9.9/3.1/0.0 | 1.6 0.5
 addict_savvy 17.9 games 100/68/14% (big 0.6 games) | release 15.5 hit   3% flop  37% | 5.3/8.1/0.0 | 2.0 0.4
 -- median fame at each year end | final fame tier unknown/familiar/famous/hot/superstar % | mean annual rank (years 1-4) | collapse% | endings (kinds [>=3]; top four)
-only_tough 134/150/161/178  0/31/66/2/0    rank 4.8/3.6/3.1/2.8  collapse 0%  endings 10 kinds: tough_stunt30% tough_rider23% tough_gym19% tough_adventurer13%
+only_tough 145/177/200/231  0/0/84/16/0    rank 4.0/2.3/2.1/2.3  collapse 0%  endings 8 kinds: tough_stunt42% tough_adventurer30% act_action12% tough_rider11%
 only_lover 162/207/282/352  0/0/28/67/4    rank 5.5/4.0/3.1/2.1  collapse 0%  endings 12 kinds: act_lover35% lover_widow19% act_art17% lover_dance_hall9%
 only_culture 124/155/172/197  0/1/96/3/0     rank 3.2/3.7/3.1/2.9  collapse 0%  endings 5 kinds: cult_editor33% cult_street_photo33% cult_tabloid30% act_voice2%
 only_savvy 122/156/186/245  0/1/79/20/0    rank 2.4/3.0/2.0/2.3  collapse 0%  endings 7 kinds: biz_broker61% biz_agent19% act_voice8% act_character6%
 two_roads 162/191/205/235  0/0/94/5/0     rank 4.8/3.1/3.2/3.2  collapse 0%  endings 7 kinds: biz_sales69% tough_thug13% biz_boss7% act_second5%
-crime_line 114/107/90/83    16/63/17/3/0   rank 4.8/2.6/3.1/3.1  collapse 0%  endings 4 kinds: dark_thug_boss65% dark_boss31% act_lowbudget3% dark_prison0%
+crime_line 125/120/106/97   8/66/24/1/0    rank 4.5/2.6/3.2/3.0  collapse 0%  endings 4 kinds: dark_thug_boss60% dark_boss39% act_lowbudget0% act_silent0%
 books_culture 124/160/211/253  0/0/75/24/0    rank 3.1/2.8/1.9/2.0  collapse 0%  endings 5 kinds: cult_tabloid74% act_voice19% act_art4% act_lowbudget1%
-random_pick 94/63/42/25      93/6/0/0/0     rank 5.6/5.3/5.0/5.1  collapse 0%  endings 6 kinds: biz_sales45% dark_prison26% dark_con13% biz_boss13%
-disciplined_tough 144/178/212/285  0/2/54/42/1    rank 4.0/2.2/2.0/2.1  collapse 0%  endings 7 kinds: tough_adventurer30% act_voice29% tough_rider26% act_action9%
+random_pick 95/62/41/24      95/4/0/0/0     rank 5.5/5.3/5.2/5.0  collapse 0%  endings 7 kinds: biz_sales42% dark_prison26% dark_con14% biz_boss14%
+disciplined_tough 144/182/219/312  0/1/43/53/2    rank 3.7/2.0/2.0/2.1  collapse 0%  endings 9 kinds: act_voice40% tough_adventurer27% tough_rider17% act_action8%
 disciplined_lover 161/219/316/413  0/0/9/74/16    rank 5.3/3.6/2.0/2.0  collapse 0%  endings 10 kinds: act_lover43% act_art17% act_voice11% lover_widow9%
 disciplined_culture 122/151/196/249  0/0/74/25/0    rank 3.1/2.8/1.6/2.0  collapse 0%  endings 6 kinds: cult_writer46% cult_screenwriter26% act_voice21% act_art3%
 disciplined_savvy 120/157/218/324  0/0/32/68/0    rank 2.7/2.9/2.0/2.2  collapse 0%  endings 7 kinds: act_voice53% biz_broker19% biz_agent13% act_undefined4%
-bad_boy_tough 130/147/139/170  2/41/42/13/0   rank 2.5/2.0/2.0/2.3  collapse 0%  endings 6 kinds: dark_thug_boss86% act_action5% act_art2% act_voice2%
-bad_boy_lover 164/202/288/345  0/6/33/42/18   rank 5.0/2.7/1.6/2.0  collapse 0%  endings 12 kinds: dark_thug_boss38% act_lover28% act_voice9% idol9%
-bad_boy_savvy 117/119/158/253  1/19/42/31/6   rank 2.9/3.0/1.9/2.3  collapse 0%  endings 10 kinds: dark_con61% act_voice23% act_character4% act_art3%
-addict_tough 128/141/139/142  2/55/39/3/0    rank 4.0/2.7/2.6/2.8  collapse 0%  endings 11 kinds: tough_thug46% dark_thug_boss25% dark_con21% act_voice2%
+bad_boy_tough 131/154/156/195  0/24/55/18/2   rank 2.5/2.0/2.0/2.2  collapse 0%  endings 7 kinds: dark_thug_boss80% act_voice11% act_action5% act_undefined1%
+bad_boy_lover 165/209/281/318  0/1/45/34/19   rank 5.0/2.4/1.7/1.9  collapse 0%  endings 10 kinds: dark_thug_boss41% act_lover25% idol8% act_character7%
+bad_boy_savvy 115/127/146/219  1/25/43/29/1   rank 2.8/2.9/1.9/2.2  collapse 0%  endings 10 kinds: dark_con68% act_voice9% act_lover7% act_character4%
+addict_tough 128/139/136/140  4/55/37/3/0    rank 3.9/2.5/2.5/2.7  collapse 0%  endings 13 kinds: tough_thug52% dark_thug_boss20% dark_con19% act_voice2%
 addict_lover 149/190/249/289  0/5/51/42/1    rank 5.3/3.7/2.5/2.2  collapse 0%  endings 16 kinds: lover_widow37% act_lover25% act_voice9% lover_dance_hall9%
 addict_culture 107/126/140/152  1/46/46/6/0    rank 3.2/3.6/2.8/2.7  collapse 0%  endings 7 kinds: cult_tabloid43% cult_editor28% cult_street_photo22% act_voice4%
 addict_savvy 109/136/186/274  0/10/54/35/0   rank 2.3/2.8/1.9/2.2  collapse 0%  endings 11 kinds: biz_agent32% biz_broker30% act_voice25% act_lover5%
 -- without buying gear: final cash median / p90 | final main-road rep median | grade S/A/B/C/D %
-only_tough     516 /   1,069 | 328 | 0/0/63/24/12
+only_tough     588 /   1,467 | 341 | 0/0/97/2/0
 only_lover     802 /   1,410 | 326 | 0/0/76/23/0
 only_culture     313 /     916 | 264 | 0/0/36/27/36
 only_savvy     582 /   1,367 | 345 | 0/0/100/0/0
 -- from events, median per game: main-road rep from events (skills + rep_bonus) [<=30] | event money net, % of all money gained [+-10%] | event fatigue net per year [+-60] | opportunity rep
-only_tough ev rep   5 | money    400 (  3.1%) | fatigue/yr   10 | opp rep 10
+only_tough ev rep   5 | money      0 (  0.0%) | fatigue/yr   10 | opp rep 10
 only_lover ev rep   5 | money      0 (  0.0%) | fatigue/yr   10 | opp rep 10
 only_culture ev rep  12 | money      0 (  0.0%) | fatigue/yr   10 | opp rep 15
 only_savvy ev rep  43 | money      0 (  0.0%) | fatigue/yr   10 | opp rep 25
 two_roads ev rep  66 | money      0 (  0.0%) | fatigue/yr    8 | opp rep 0
-crime_line ev rep   5 | money  1,500 ( 11.2%) | fatigue/yr   10 | opp rep 0
+crime_line ev rep   5 | money      0 (  0.0%) | fatigue/yr   10 | opp rep 0
 books_culture ev rep  25 | money      0 (  0.0%) | fatigue/yr   10 | opp rep 10
-random_pick ev rep  14 | money      0 (  0.0%) | fatigue/yr   12 | opp rep 0
+random_pick ev rep  15 | money      0 (  0.0%) | fatigue/yr   12 | opp rep 0
 disciplined_tough ev rep   5 | money      0 (  0.0%) | fatigue/yr   10 | opp rep 25
 disciplined_lover ev rep   5 | money      0 (  0.0%) | fatigue/yr    8 | opp rep 25
 disciplined_culture ev rep   5 | money      0 (  0.0%) | fatigue/yr    8 | opp rep 25
 disciplined_savvy ev rep   9 | money      0 (  0.0%) | fatigue/yr    8 | opp rep 25
 bad_boy_tough ev rep   5 | money      0 (  0.0%) | fatigue/yr   31 | opp rep 25
-bad_boy_lover ev rep   5 | money      0 (  0.0%) | fatigue/yr   40 | opp rep 25
-bad_boy_savvy ev rep   5 | money      0 (  0.0%) | fatigue/yr   39 | opp rep 25
-addict_tough ev rep   5 | money      0 (  0.0%) | fatigue/yr  -14 | opp rep 10
+bad_boy_lover ev rep   5 | money      0 (  0.0%) | fatigue/yr   38 | opp rep 25
+bad_boy_savvy ev rep   5 | money      0 (  0.0%) | fatigue/yr   39 | opp rep 40
+addict_tough ev rep   5 | money      0 (  0.0%) | fatigue/yr  -15 | opp rep 10
 addict_lover ev rep   5 | money      0 (  0.0%) | fatigue/yr  -11 | opp rep 25
 addict_culture ev rep   5 | money      0 (  0.0%) | fatigue/yr  -12 | opp rep 15
 addict_savvy ev rep   7 | money      0 (  0.0%) | fatigue/yr   -8 | opp rep 25
 -- step 12c strategies, median per game: rest% (home+outing+church of 144) resort% | void periods (detained/detox/missing/sanatorium means) | arrests detox sanatorium boosts crime-job periods | full month | cash y2 / end / end p10 | S/A/B/C-/collapse% | grade mean
-disciplined_tough   rest 33% resort  0% | void  2 (1.5/0.0/0.0/0.0) | arr 1 detox 0 sana 0 boost  0 crimeP  0 | full 32 |    545 /  1,276 /    560 | 0/70/30/0/0 | 2.70
+disciplined_tough   rest 34% resort  0% | void  0 (0.0/0.0/0.0/0.0) | arr 0 detox 0 sana 0 boost  0 crimeP  0 | full 30 |    607 /  1,295 /    608 | 0/75/24/0/0 | 2.76
 disciplined_lover   rest 34% resort  0% | void  0 (0.1/0.0/0.0/0.0) | arr 0 detox 0 sana 0 boost  0 crimeP  0 | full 30 |    404 /  1,089 /    620 | 1/70/30/0/0 | 2.71
 disciplined_culture rest 34% resort  0% | void  0 (0.0/0.0/0.0/0.0) | arr 0 detox 0 sana 0 boost  0 crimeP  0 | full 31 |    380 /    841 /    388 | 0/72/26/2/0 | 2.69
 disciplined_savvy   rest 33% resort  0% | void  0 (0.0/0.0/0.0/0.0) | arr 0 detox 0 sana 0 boost  0 crimeP  0 | full 27 |  1,433 /  2,669 /  1,148 | 0/60/40/0/0 | 2.60
-bad_boy_tough       rest 32% resort 18% | void 10 (9.6/0.0/0.6/0.0) | arr 5 detox 0 sana 0 boost  0 crimeP 36 | full 36 |  1,009 /  2,410 /  1,804 | 0/54/46/1/0 | 2.52
-bad_boy_lover       rest 33% resort 24% | void  4 (4.7/0.0/0.4/0.0) | arr 2 detox 0 sana 0 boost  0 crimeP 24 | full 25 |  2,224 /  2,750 /  1,874 | 0/80/20/0/0 | 2.81
-bad_boy_savvy       rest 32% resort 24% | void  4 (5.4/0.0/0.5/0.0) | arr 2 detox 0 sana 0 boost  0 crimeP 24 | full 31 |  2,230 /  2,799 /  1,968 | 0/62/36/2/0 | 2.59
-addict_tough        rest 17% resort  0% | void 17 (15.4/4.4/1.4/0.0) | arr 3 detox 1 sana 0 boost 11 crimeP  0 | full 99 |    224 /    108 / -1,864 | 0/21/32/48/0 | 1.56
+bad_boy_tough       rest 33% resort 18% | void  6 (6.8/0.0/0.8/0.0) | arr 3 detox 0 sana 0 boost  0 crimeP 31 | full 27 |    925 /  3,644 /  1,769 | 0/70/28/2/0 | 2.69
+bad_boy_lover       rest 31% resort 22% | void  6 (6.3/0.0/0.6/0.0) | arr 3 detox 0 sana 0 boost  0 crimeP 28 | full 25 |  3,224 /  6,286 /  1,679 | 0/76/24/0/0 | 2.75
+bad_boy_savvy       rest 31% resort 23% | void  8 (7.5/0.0/0.5/0.0) | arr 4 detox 0 sana 0 boost  0 crimeP 32 | full 31 |  2,209 /  6,294 /  2,754 | 0/72/26/2/0 | 2.69
+addict_tough        rest 17% resort  0% | void 15 (13.1/4.9/1.6/0.0) | arr 2 detox 1 sana 0 boost 12 crimeP  0 | full 35 |    286 /    193 / -1,592 | 0/21/38/40/0 | 1.66
 addict_lover        rest 26% resort  0% | void  5 (1.0/4.6/0.3/0.0) | arr 0 detox 1 sana 0 boost 13 crimeP  0 | full 33 |    262 /    652 /   -367 | 0/42/43/14/0 | 2.25
 addict_culture      rest 33% resort  0% | void  6 (0.0/4.1/0.1/0.0) | arr 0 detox 2 sana 0 boost 15 crimeP  0 | full 99 |    186 /    347 /   -327 | 0/24/25/50/0 | 1.51
 addict_savvy        rest 31% resort  0% | void  3 (0.0/3.9/0.1/0.0) | arr 0 detox 1 sana 0 boost 17 crimeP  0 | full 26 |  1,269 /  2,247 /    748 | 0/61/37/2/0 | 2.59
-= disciplined (mean of roads) rest 34% resort  0% | void  0 (0.4/0.0/0.0/0.0) | arr 0 detox 0 sana 0 boost  0 crimeP  0 | full 30 |    690 /  1,469 /    679 | 0/68/32/0/0 | 2.68
-= bad_boy (mean of roads) rest 32% resort 22% | void  6 (6.6/0.0/0.5/0.0) | arr 3 detox 0 sana 0 boost  0 crimeP 28 | full 31 |  1,821 /  2,653 /  1,882 | 0/65/34/1/0 | 2.64
-= addict (mean of roads) rest 27% resort  0% | void  8 (4.1/4.2/0.4/0.0) | arr 1 detox 1 sana 0 boost 14 crimeP  0 | full 64 |    485 /    838 /   -452 | 0/37/34/29/0 | 1.98
-   grade mean vs disciplined [+-0.3]: bad_boy -0.04, addict -0.70, bad_boy S spread across roads 0 pp [<=8]
+= disciplined (mean of roads) rest 34% resort  0% | void  0 (0.0/0.0/0.0/0.0) | arr 0 detox 0 sana 0 boost  0 crimeP  0 | full 30 |    706 /  1,474 /    691 | 0/69/30/0/0 | 2.69
+= bad_boy (mean of roads) rest 32% resort 21% | void  7 (6.9/0.0/0.6/0.0) | arr 3 detox 0 sana 0 boost  0 crimeP 30 | full 28 |  2,119 /  5,408 /  2,067 | 0/73/26/2/0 | 2.71
+= addict (mean of roads) rest 27% resort  0% | void  7 (3.5/4.4/0.5/0.0) | arr 0 detox 1 sana 0 boost 14 crimeP  0 | full 48 |    501 /    860 /   -384 | 0/37/36/27/0 | 2.00
+   grade mean vs disciplined [+-0.3]: bad_boy 0.02, addict -0.69, bad_boy S spread across roads 0 pp [<=8]
 ```

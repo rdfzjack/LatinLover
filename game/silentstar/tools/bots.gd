@@ -906,8 +906,8 @@ class Random:
 # ---------- step 12c: three strategies, each on the four roads ----------
 
 const DOCK_OUTINGS := 3        # step 12c c3: dock outings the tough strategy bots make (opp_expedition)
-const BAD_SAVE_EXTRA := 1500   # step 12c c3: once his tier-2 crime job is open, the bad boy takes it below resort period + a month
-                               # of living + this (with only tier 1 open the extra would starve the training its lines need)
+const BAD_CRIME_PERIODS := 1  # step 12c c3: once his tier-2 crime job is open, the bad boy works it in the first N periods of every
+                               # month (a steady side income, not a savings line: his cash is then a result, not a setting)
 
 ## Road setup of the pure bots: [second road, origin].
 const ROAD_SETUP := {"tough": ["lover", [0, 0, 3]], "lover": ["tough", [3, 2, 3]], "culture": ["lover", [4, 1, 3]],
@@ -979,8 +979,9 @@ class Disc:
 
 
 ## Bad boy: earns with his road's crime jobs and buys the fatigue off at the resort. Never boosts.
-## The reckless_index that counts is the one at month end, so: the first two periods work (his road's crime job when short of money,
-## i.e. less than a resort period plus a month of living costs plus BAD_SAVE_EXTRA; otherwise training); the last period is the resort (home when the
+## The reckless_index that counts is the one at month end, so: the first two periods work (his road's crime job in the first
+## BAD_CRIME_PERIODS periods once tier 2 is open, and whenever he is short of money, i.e. has less than a resort period plus a month
+## of living costs; otherwise training); the last period is the resort (home when the
 ## money is not there) whenever working it would end the month with reckless_index >= 10. Crime jobs take his discipline to 0,
 ## so that is most months. Also rests when a period would make him sick. Culture has no crime jobs yet, so there is no
 ## bad_boy_culture (BOTS).
@@ -1024,8 +1025,8 @@ class Bad:
 		var st = g.st
 		var e = null
 		var cj = crime_job(g)
-		var extra: int = BAD_SAVE_EXTRA if cj != null and g.d.jobs[cj]["crime_tier"] == 2 else 0
-		if P["money"] < H.resort_cost(st, i) + living(st) + extra:
+		var steady: bool = cj != null and g.d.jobs[cj]["crime_tier"] == 2 and i < BAD_CRIME_PERIODS
+		if steady or P["money"] < H.resort_cost(st, i) + living(st):
 			e = cj
 		if e == null:
 			e = work(g, P, i)

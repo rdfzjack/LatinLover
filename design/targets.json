@@ -1,14 +1,14 @@
 {
- "note": "Guard targets (design/BALANCE_WORKFLOW.md). Every target is [low, high]; null = open. Only Fable changes this file, in a balance round (C). 'strategies' are checked on the mean over the road bots of a strategy (bad_boy: tough, lover, savvy), 'bots' on one bot. Sources: the step-12c target table of design/STEP12B_12C_BALANCE.md and the step-8 table of design/BALANCE_LOG.md. check.py runs 30 games per bot and widens every range by 10%. c3 round 1 (Fable): over_311 of the four only_* bots moved from 90 to 50 - they rest without a strategy and the heavier fatigue slowed them; the pace targets now sit on disciplined_*. The S lower bounds of bad_boy and addict are open until the NPC lines and the remaining opportunities are in (user: S is not expected to be reachable yet; the lines only have to come apart).",
+ "note": "Guard targets (design/BALANCE_WORKFLOW.md). Every target is [low, high]; null = open. Only Fable changes this file, in a balance round (C). 'strategies' are checked on the mean over the road bots of a strategy (bad_boy: tough, lover, savvy), 'bots' on one bot. Sources: the step-12c target table of design/STEP12B_12C_BALANCE.md and the step-8 table of design/BALANCE_LOG.md. check.py runs 30 games per bot and widens every range by 10%. c3 round 1 (Fable): over_311 of the four only_* bots moved from 90 to 50 - they rest without a strategy and the heavier fatigue slowed them; the pace targets now sit on disciplined_*. The S lower bounds of bad_boy and addict are open until the NPC lines and the remaining opportunities are in (user: S is not expected to be reachable yet; the lines only have to come apart). c3 review after rounds 0-1 (Fable, measured in Godot): full_month moved with round 0 (classes about -20%, tuition x1.5): disciplined 21-26 -> 27-33, bad_boy 19-24 -> 24-30; addict stays until round 3. disciplined cash_end 2000-4000 -> 1000-3000 (tuition x1.5). bad_boy rest_share 20-25 -> 28-34: with discipline 0 the last period of every month is the resort whatever the resort costs or restores (tested -20/-25/-30 per day and x1/x2/x3 price), so the share is the month rhythm, and what sets the line apart is resort (not home) and money. bad_boy cash_end 6000-10000 -> 5000-10000. Round 2 (resort price x3) is cancelled: a disciplined bot that uses the resort does worse at today's price already (full month 30 -> 32, grade mean 2.67 -> 2.59), so the resort is no longer a free win for that line.",
  "strategies": {
   "disciplined": {
    "rest_share": [30, 35],
    "void_periods": [null, 3],
    "arrests": [0, 0],
    "detox": [0, 0],
-   "full_month": [21, 26],
+   "full_month": [27, 33],
    "cash_y2": [null, 1000],
-   "cash_end": [2000, 4000],
+   "cash_end": [1000, 3000],
    "cash_end_p10": [0, null],
    "pct_S": [null, 2],
    "pct_A": [30, 45],
@@ -18,13 +18,13 @@
    "grade_mean": [2.0, 2.6]
   },
   "bad_boy": {
-   "rest_share": [20, 25],
+   "rest_share": [28, 34],
    "void_periods": [6, 10],
    "arrests": [3, 5],
    "detox": [0, 0],
-   "full_month": [19, 24],
+   "full_month": [24, 30],
    "cash_y2": [2000, 4000],
-   "cash_end": [6000, 10000],
+   "cash_end": [5000, 10000],
    "cash_end_p10": [null, 1000],
    "pct_S": [null, 20],
    "pct_A": [25, 30],

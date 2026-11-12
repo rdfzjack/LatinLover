@@ -206,6 +206,12 @@
      },
      "success_effect": "money+100 crime+8",
      "fail_effect": "trigger.evt_arrest"
+    },
+    {
+     "text": "不做",
+     "check": "",
+     "success_effect": "",
+     "fail_effect": ""
     }
    ],
    "note": "",
