@@ -59,7 +59,8 @@
    ],
    "price": 15,
    "finish_event": null,
-   "fatigue_per_day": 2
+   "fatigue_per_day": 2,
+   "disabled": true
   },
   {
    "id": "book_chuangzuo_2",
@@ -75,7 +76,8 @@
    ],
    "price": 60,
    "finish_event": null,
-   "fatigue_per_day": 2
+   "fatigue_per_day": 2,
+   "disabled": true
   },
   {
    "id": "book_chuangzuo_3",
@@ -91,7 +93,8 @@
    ],
    "price": 150,
    "finish_event": null,
-   "fatigue_per_day": 2
+   "fatigue_per_day": 2,
+   "disabled": true
   },
   {
    "id": "book_shenmei_1",
@@ -107,7 +110,8 @@
    ],
    "price": 15,
    "finish_event": null,
-   "fatigue_per_day": 2
+   "fatigue_per_day": 2,
+   "disabled": true
   },
   {
    "id": "book_shenmei_2",
@@ -123,7 +127,8 @@
    ],
    "price": 60,
    "finish_event": null,
-   "fatigue_per_day": 2
+   "fatigue_per_day": 2,
+   "disabled": true
   },
   {
    "id": "book_shenmei_3",
@@ -139,7 +144,8 @@
    ],
    "price": 150,
    "finish_event": null,
-   "fatigue_per_day": 2
+   "fatigue_per_day": 2,
+   "disabled": true
   },
   {
    "id": "book_tantu_1",
@@ -155,7 +161,8 @@
    ],
    "price": 15,
    "finish_event": null,
-   "fatigue_per_day": 2
+   "fatigue_per_day": 2,
+   "disabled": true
   },
   {
    "id": "book_tantu_2",
@@ -172,7 +179,8 @@
    "price": 60,
    "finish_event": null,
    "on_shelf": "1926-08",
-   "fatigue_per_day": 2
+   "fatigue_per_day": 2,
+   "disabled": true
   },
   {
    "id": "book_tantu_3",
@@ -189,7 +197,8 @@
    "price": 150,
    "finish_event": null,
    "on_shelf": "1926-08",
-   "fatigue_per_day": 2
+   "fatigue_per_day": 2,
+   "disabled": true
   },
   {
    "id": "book_tanpan_1",
@@ -205,7 +214,8 @@
    ],
    "price": 15,
    "finish_event": null,
-   "fatigue_per_day": 2
+   "fatigue_per_day": 2,
+   "disabled": true
   },
   {
    "id": "book_tanpan_2",
@@ -221,7 +231,8 @@
    ],
    "price": 60,
    "finish_event": null,
-   "fatigue_per_day": 2
+   "fatigue_per_day": 2,
+   "disabled": true
   },
   {
    "id": "book_shengyi_1",
@@ -237,7 +248,8 @@
    ],
    "price": 15,
    "finish_event": null,
-   "fatigue_per_day": 2
+   "fatigue_per_day": 2,
+   "disabled": true
   },
   {
    "id": "book_shengyi_2",
@@ -253,7 +265,8 @@
    ],
    "price": 60,
    "finish_event": null,
-   "fatigue_per_day": 2
+   "fatigue_per_day": 2,
+   "disabled": true
   },
   {
    "id": "book_yanji_1",
@@ -269,7 +282,8 @@
    ],
    "price": 15,
    "finish_event": null,
-   "fatigue_per_day": 2
+   "fatigue_per_day": 2,
+   "disabled": true
   },
   {
    "id": "book_daban_1",
@@ -285,7 +299,9 @@
    ],
    "price": 15,
    "finish_event": null,
-   "fatigue_per_day": 2
+   "fatigue_per_day": 2,
+   "disabled": true
   }
- ]
+ ],
+ "disabled_note": "disabled: true = not sold and cannot be read (all books are off for now: cheap taste training breaks the single slow source)"
 }

@@ -19,7 +19,7 @@ const Film = preload("res://core/film.gd")
 ## The parts implemented in step 12. Every method gets the state and may change it. A subclass overrides what it needs.
 class Hooks:
 	extends RefCounted
-	func board(_st) -> void: pass                         # the board in months 1, 4, 7, 10
+	func board(_st) -> void: pass                         # the board in the audition months (board_month)
 	func month_start(_st) -> void: pass                   # before the free actions of the month (write script, send to detox ...)
 	func locked(_st, _i: int):                            # returns the film contract when period i is locked by shooting, else null
 		return null
@@ -80,10 +80,18 @@ func start_month() -> void:
 	if st.val("stamina") < 15 and st.lifestyle != "life_fine":
 		st.lifestyle = "life_fine"
 	var life: Dictionary = d.lifestyles[st.lifestyle]
-	st.money -= life["monthly_cost"][st.fame_tier()]      # may go negative
-	if Schedule.truthy(st.month()["board"]):
+	st.money = maxi(0, st.money - life["monthly_cost"][st.fame_tier()])      # six-year swap: money stops at 0
+	if board_month(st):
 		hooks.board(st)
 	hooks.month_start(st)
+
+
+## Six-year swap: 2 boards a year (calendar `board`), 3 a year once fame reaches stats.board_famous_tier (calendar `board_famous`).
+static func board_month(st) -> bool:
+	var m: Dictionary = st.month()
+	if st.fame_tier() >= int(st.d.t["stats"].get("board_famous_tier", 99)):
+		return Schedule.truthy(m.get("board_famous", false))
+	return Schedule.truthy(m["board"])
 
 
 ## Changes the lifestyle before scheduling at month start; takes effect when it is charged next month.

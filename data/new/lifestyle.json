@@ -1,5 +1,5 @@
 {
- "note": "Charged at the start of the month by fame tier, may go into debt; month_end_effect applies at month end",
+ "note": "Charged at the start of the month (same at every fame tier, from the original diets, 2G = $1); money cannot go below 0; month_end_effect applies at month end",
  "fame_tier_order": [
   "unknown",
   "familiar",
@@ -13,11 +13,11 @@
    "id": "life_normal",
    "name": "普通",
    "monthly_cost": [
-    100,
-    150,
-    220,
-    400,
-    700
+    15,
+    15,
+    15,
+    15,
+    15
    ],
    "month_end_effect": ""
   },
@@ -25,11 +25,11 @@
    "id": "life_fine",
    "name": "讲究",
    "monthly_cost": [
-    250,
-    380,
-    550,
-    1000,
-    1750
+    40,
+    40,
+    40,
+    40,
+    40
    ],
    "month_end_effect": "stamina+10"
   },
@@ -37,11 +37,11 @@
    "id": "life_thrift",
    "name": "节俭",
    "monthly_cost": [
-    50,
-    75,
-    110,
-    200,
-    350
+    5,
+    5,
+    5,
+    5,
+    5
    ],
    "month_end_effect": "stamina-5"
   },
@@ -49,11 +49,11 @@
    "id": "life_diet",
    "name": "节食",
    "monthly_cost": [
-    40,
-    60,
-    90,
-    160,
-    280
+    3,
+    3,
+    3,
+    3,
+    3
    ],
    "month_end_effect": "stamina-20 looks+3"
   }

@@ -238,6 +238,15 @@ func block_reason(e: String, raw: String) -> String:
 	var pe := Schedule.parse_entry(e)
 	if not pe.is_empty() and pe[0] == "book" and raw == "skill at the book cap":
 		return tr("ui.main.block_reason.2") % [nm(d.books[pe[1]]["skills"]), int(d.books[pe[1]]["skill_cap"])]
+	if not pe.is_empty() and pe[0] == "job" and raw == "not unlocked yet":
+		var j: Dictionary = d.jobs[pe[1]]
+		var gates := PackedStringArray()
+		for grp in j["prereq"]:
+			var one := PackedStringArray()
+			for c in grp:
+				one.append("%s %s %s (%d)" % [nm(str(c[0])), str(c[1]), str(c[2]), st.val(str(c[0])) if d.attrs.has(str(c[0])) or d.skills.has(str(c[0])) else 0])
+			gates.append(" + ".join(one))
+		return tr("ui.main.block_reason.3") % [str(j["earliest"]), " / ".join(gates) if gates.size() > 0 else "-"]
 	if not pe.is_empty() and pe[0] == "book" and raw == "education below the gate":
 		return tr("ui.main.block_reason.1") % [int(d.books[pe[1]]["education_gate"]), st.val("education")]
 	return why(raw)
@@ -288,6 +297,9 @@ func rival_name(o: Dictionary) -> String:
 func rng_txt(a: int, b: int) -> String:
 	if a == b:
 		return "%+d" % a
+	if b - a == 1 and (a == 0 or b == 0):      # six-year swap: a 0-or-1 range is one chance (zero_one_prob)
+		var zp: Array = d.job_rules.get("zero_one_prob", [1, 2])
+		return tr("ui.main.rng_txt.1") % [a + b, int(zp[0]), int(zp[1])]
 	return "%+d~%+d" % [a, b]
 
 
@@ -313,6 +325,8 @@ func entry_effect(e: String) -> String:
 		t.append(explain.practice_text(st.val("stamina"), st.val("fatigue")))
 		t.append(tr("ui.main.entry_effect.3") % int(c.get("fatigue_per_day", 1)))
 		t.append(tr("ui.main.entry_effect.4") % [int(c["fee"][lv - 1]), lv])
+		if st.money < int(c["fee"][lv - 1]) * Schedule.days_of(st, cur_period_hint).filter(func(x): return not x[1]).size():
+			t.append(tr("ui.main.entry_effect.16"))
 	elif kind == "book":
 		var b: Dictionary = d.books[iid]
 		t.append(tr("ui.main.entry_effect.1"))
@@ -328,9 +342,12 @@ func entry_effect(e: String) -> String:
 		t.append(tr("ui.main.entry_effect.7") % Schedule.wage_of(st, iid))
 		var gs := PackedStringArray()
 		for x in j["daily_effect"]:
-			gs.append(nm(x["stat"]) + rng_txt(x["add"][0], x["add"][1]))
+			var who: String = nm(x["stat"])
+			if x.has("one_of"):
+				who = "/".join(PackedStringArray(x["one_of"].map(func(s): return nm(s))))
+			gs.append(who + rng_txt(x["add"][0], x["add"][1]))
 		t.append(tr("ui.main.entry_effect.8") + " ".join(gs))
-		t.append(explain.work_text(Schedule.job_lines(st, j), st.val("fatigue"), Schedule.job_slacks(st, j)))
+		t.append(explain.job_text(st.val("fatigue")))
 	else:
 		var r: Dictionary = d.rests[iid]
 		if pe[2] != null:
@@ -412,8 +429,6 @@ func refresh_status() -> void:
 		flags.append(tr("ui.main.refresh_status.3"))
 	elif st.status["sick"]:
 		flags.append(tr("ui.main.refresh_status.4"))
-	if st.status["reckless"]:
-		flags.append(tr("ui.main.refresh_status.14") % explain.slack_pct())
 	if st.status["in_love"]:
 		flags.append(tr("ui.main.refresh_status.6"))
 	if st.status["long_contract"]:
@@ -423,8 +438,7 @@ func refresh_status() -> void:
 	var stock := int(st.flags.get("drug_stock", 0))
 	if stock > 0:
 		flags.append(tr("ui.main.refresh_status.9") % stock)
-	idx_label.text = tr("ui.main.refresh_status.15") % [
-		st.idx["sick_index"], st.idx["reckless_index"], " ".join(flags)]
+	idx_label.text = tr("ui.main.refresh_status.15") % [st.idx["sick_index"], " ".join(flags)]
 	idx_label.tooltip_text = explain.index_text()
 
 
@@ -1007,17 +1021,12 @@ func explain_period(entry: String, out: Dictionary, fatigue: int) -> String:
 	if pe.is_empty():
 		return ""
 	if pe[0] == "job":
-		var j: Dictionary = d.jobs[pe[1]]
-		var lines: Array = Schedule.job_lines(st, j)
-		var t: String = tr("ui.main.explain_period.1") + explain.work_text(lines, fatigue, Schedule.job_slacks(st, j))
+		var t: String = tr("ui.main.explain_period.1") + explain.job_text(fatigue)
 		if int(out.get("ok_days", 0)) == 0:
-			var stats := []
-			var vals := []
-			for x in lines:
-				stats.append(x[0])
-				vals.append(int(x[1]))
-			t += tr("ui.main.explain_period.3") + _worst_reason(stats, vals, fatigue, Schedule.job_slacks(st, j))
+			t += tr("ui.main.explain_period.3") + _worst_reason([], [], fatigue, true)
 		return t
+	if pe[0] == "class" and out.get("broke", false):
+		return tr("ui.main.entry_effect.16")
 	if pe[0] == "class" or pe[0] == "book":
 		return tr("ui.main.explain_period.1") + explain.practice_text(st.val("stamina"), fatigue)
 	return ""
@@ -1034,6 +1043,8 @@ func _worst_reason(stats: Array, lines: Array, fatigue: int, job: bool) -> Strin
 		var pl: float = explain.p_line(stat, lines[k], fatigue)
 		if pl < 0.5:
 			return tr("ui.main.worst_reason.3") % [nm(stats[k]), stat, lines[k], fatigue, explain.pct(pl)]
+	if stats.is_empty() and fatigue >= 30:
+		return tr("ui.main.worst_reason.5") % [fatigue, mini(fatigue, 100)]
 	return tr("ui.main.worst_reason.4")
 
 
@@ -1409,7 +1420,7 @@ func _show_month_start() -> void:
 	heading(tr("ui.main.show_month_start.1") % st.date())
 	var m: Dictionary = st.month()
 	var era := PackedStringArray()
-	if Schedule.truthy(m.get("board")):
+	if Month.board_month(st):
 		era.append(tr("ui.main.show_month_start.2"))
 	if Schedule.truthy(m.get("annual")):
 		era.append(tr("ui.main.show_month_start.3"))
@@ -1675,7 +1686,6 @@ func _fill_street() -> void:
 	heading(tr("ui.main.fill_street.13"), box)
 	var hint := Street.sil_hint(st)
 	label(tr("ui.main.fill_street.14") + _hint_text(hint), box)
-	button(tr("ui.main.fill_street.15"), func(): act(Street.sil_persuade(st), tr("ui.main.fill_street.16")), box)
 	if st.drug >= 1:
 		heading(tr("ui.main.fill_street.21"), box)
 		button(tr("ui.main.fill_street.22"), func(): act(g.hooks.send_detox(st), tr("ui.main.fill_street.23")), box)

@@ -2,30 +2,35 @@
  "note": {
   "daily_wage": "Base amount; multiplied by the raise tier and rounded down; pay only on successful days",
   "raise_tiers": "by the number of periods this job was successful",
-  "success_lines": "each line: attribute - r0(fatigue) >= value; skills use the displayed value",
   "daily_effect": "settled whether or not the day succeeds; add:[a,b] means r(a,b)",
   "job_period_effect": "settled once for each successful period",
   "period_random": "prob [numerator, denominator], once per period",
   "prereq": "a cond, format in data/new/README.md",
   "success_line_mods": "when the cond holds, add value to that stat's success line (a negative value lowers it)",
   "crime_tier": "step 12c: 1 or 2. A crime job must match crime_tiers exactly (wage, crime, discipline, stamina, fatigue, search); only the skills, the success-line stats and the name may differ",
-  "raid_prob": "search per successful-or-not period: prob x (1 + crime/100); then raid_skill displayed + r0(20) >= raid_line, failing means arrest"
+  "raid_prob": "search per successful-or-not period: prob x (1 + crime/100); then raid_skill displayed + r0(20) >= raid_line, failing means arrest",
+  "wage_tiers": "Daily wage by raise tier (five tiers, dollars, 2G = $1 rounded up). The tier is picked by how many periods of this job succeeded (raise_tiers.periods_below: 8/23/45/68 = original 10/30/60/90 x 3/4). Jobs without wage_tiers use daily_wage x bonus_pct",
+  "zero_one_prob": "A daily_effect range of exactly [0,1] or [-1,0] gives the non-zero value with this probability (six-year run: x4/3 of a 0-or-1 gain)",
+  "bad_day": "Each work day goes bad with probability = fatigue% (capped at 100): no pay that day. success_lines are no longer rolled; attribute gates live in prereq (can the job be picked)",
+  "disabled": "true: the job is switched off (not offered, its events, milestones and NPC schedule never trigger)",
+  "one_of": "daily_effect entry with one_of: the gain goes to one of these stats, picked at random each day",
+  "site": "map place the job belongs to (placeholder until the user gives the locations); same site = the same place upgraded"
  },
  "raise_tiers": [
   {
-   "periods_below": 5,
+   "periods_below": 8,
    "bonus_pct": 0
   },
   {
-   "periods_below": 15,
+   "periods_below": 23,
    "bonus_pct": 20
   },
   {
-   "periods_below": 30,
+   "periods_below": 45,
    "bonus_pct": 44
   },
   {
-   "periods_below": 45,
+   "periods_below": 68,
    "bonus_pct": 73
   },
   {
@@ -34,23 +39,656 @@
   }
  ],
  "full_attendance_bonus_pct": 50,
- "refuse": {
-  "cond": [
-   [
-    [
-     "reckless_index",
-     ">=",
-     60
-    ]
-   ]
-  ],
-  "except": [
-   "job_church",
-   "job_assistant",
-   "job_bar"
-  ]
- },
  "jobs": [
+  {
+   "id": "job_runner",
+   "code": "S1",
+   "name": "片场打杂跑腿",
+   "site": "site_studio",
+   "original": "housekeeping",
+   "earliest": "1924-01",
+   "prereq": [],
+   "daily_wage": 0,
+   "wage_tiers": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "success_lines": [],
+   "daily_effect": [
+    {
+     "stat": "connections",
+     "add": [
+      0,
+      1
+     ]
+    },
+    {
+     "stat": "negotiation",
+     "add": [
+      0,
+      1
+     ]
+    },
+    {
+     "stat": "business",
+     "add": [
+      0,
+      1
+     ]
+    },
+    {
+     "stat": "loyalty",
+     "add": [
+      -3,
+      -3
+     ]
+    },
+    {
+     "stat": "fatigue",
+     "add": [
+      1,
+      1
+     ]
+    }
+   ],
+   "exposure": false,
+   "npc": null,
+   "job_period_effect": null,
+   "period_random": [],
+   "milestones": [],
+   "note": "savvy road: all three skills from one unpaid job; costs loyalty"
+  },
+  {
+   "id": "job_server",
+   "code": "S2",
+   "name": "服务员",
+   "site": "site_restaurant",
+   "original": "inn + restaurant",
+   "earliest": "1924-01",
+   "prereq": [],
+   "daily_wage": 4,
+   "wage_tiers": [
+    4,
+    5,
+    6,
+    7,
+    9
+   ],
+   "success_lines": [],
+   "daily_effect": [
+    {
+     "stat": "negotiation",
+     "add": [
+      0,
+      1
+     ],
+     "one_of": [
+      "negotiation",
+      "business"
+     ]
+    },
+    {
+     "stat": "fight",
+     "add": [
+      -1,
+      0
+     ]
+    },
+    {
+     "stat": "fatigue",
+     "add": [
+      2,
+      2
+     ]
+    }
+   ],
+   "exposure": false,
+   "npc": null,
+   "job_period_effect": null,
+   "period_random": [],
+   "milestones": [],
+   "note": "one of negotiation / business per day"
+  },
+  {
+   "id": "job_church_aid",
+   "code": "YI1",
+   "name": "教堂义工",
+   "site": "site_church",
+   "original": "church",
+   "earliest": "1924-01",
+   "prereq": [],
+   "daily_wage": 1,
+   "wage_tiers": [
+    1,
+    1,
+    2,
+    2,
+    3
+   ],
+   "success_lines": [],
+   "daily_effect": [
+    {
+     "stat": "discipline",
+     "add": [
+      4,
+      4
+     ]
+    },
+    {
+     "stat": "crime",
+     "add": [
+      -3,
+      -3
+     ]
+    },
+    {
+     "stat": "fatigue",
+     "add": [
+      1,
+      1
+     ]
+    }
+   ],
+   "exposure": false,
+   "npc": null,
+   "job_period_effect": null,
+   "period_random": [],
+   "milestones": [],
+   "note": "with Sil; no loyalty (user)"
+  },
+  {
+   "id": "job_dock1",
+   "code": "H-MONEY1-L1",
+   "name": "码头搬货",
+   "site": "site_dock",
+   "original": "farm",
+   "earliest": "1924-01",
+   "prereq": [
+    [
+     [
+      "stamina",
+      ">=",
+      30
+     ]
+    ]
+   ],
+   "daily_wage": 5,
+   "wage_tiers": [
+    5,
+    6,
+    8,
+    9,
+    11
+   ],
+   "success_lines": [],
+   "daily_effect": [
+    {
+     "stat": "stamina",
+     "add": [
+      1,
+      1
+     ]
+    },
+    {
+     "stat": "looks",
+     "add": [
+      -1,
+      -1
+     ]
+    },
+    {
+     "stat": "fatigue",
+     "add": [
+      3,
+      3
+     ]
+    }
+   ],
+   "exposure": false,
+   "npc": null,
+   "job_period_effect": null,
+   "period_random": [],
+   "milestones": [],
+   "note": "tough road tuition job, level 1"
+  },
+  {
+   "id": "job_dock2",
+   "code": "H-MONEY1-L2",
+   "name": "码头搬货（二级）",
+   "site": "site_dock",
+   "original": "construction",
+   "earliest": "1925-07",
+   "prereq": [
+    [
+     [
+      "stamina",
+      ">=",
+      80
+     ]
+    ]
+   ],
+   "daily_wage": 9,
+   "wage_tiers": [
+    9,
+    11,
+    13,
+    16,
+    19
+   ],
+   "success_lines": [],
+   "daily_effect": [
+    {
+     "stat": "stamina",
+     "add": [
+      3,
+      3
+     ]
+    },
+    {
+     "stat": "looks",
+     "add": [
+      -1,
+      -1
+     ]
+    },
+    {
+     "stat": "fatigue",
+     "add": [
+      3,
+      3
+     ]
+    }
+   ],
+   "exposure": false,
+   "npc": null,
+   "job_period_effect": null,
+   "period_random": [],
+   "milestones": [],
+   "note": "same site, level 2"
+  },
+  {
+   "id": "job_collector",
+   "code": "H-WILD",
+   "name": "收债",
+   "site": "site_collector",
+   "original": "hunting ground",
+   "earliest": "1925-07",
+   "prereq": [
+    [
+     [
+      "stamina",
+      ">=",
+      80
+     ],
+     [
+      "education",
+      ">=",
+      40
+     ]
+    ]
+   ],
+   "daily_wage": 4,
+   "wage_tiers": [
+    4,
+    5,
+    6,
+    7,
+    9
+   ],
+   "success_lines": [],
+   "daily_effect": [
+    {
+     "stat": "fight",
+     "add": [
+      0,
+      1
+     ]
+    },
+    {
+     "stat": "stamina",
+     "add": [
+      1,
+      1
+     ]
+    },
+    {
+     "stat": "looks",
+     "add": [
+      -1,
+      -1
+     ]
+    },
+    {
+     "stat": "crime",
+     "add": [
+      0,
+      1
+     ]
+    },
+    {
+     "stat": "fatigue",
+     "add": [
+      3,
+      3
+     ]
+    }
+   ],
+   "exposure": false,
+   "npc": null,
+   "job_period_effect": null,
+   "period_random": [],
+   "milestones": [],
+   "note": ""
+  },
+  {
+   "id": "job_c_slow",
+   "code": "C-SLOW",
+   "name": "工 C-慢",
+   "site": "site_c_slow",
+   "original": "graveyard",
+   "earliest": "1926-04",
+   "prereq": [
+    [
+     [
+      "discipline",
+      ">=",
+      10
+     ],
+     [
+      "stamina",
+      ">=",
+      10
+     ]
+    ]
+   ],
+   "daily_wage": 4,
+   "wage_tiers": [
+    4,
+    5,
+    6,
+    7,
+    9
+   ],
+   "success_lines": [],
+   "daily_effect": [
+    {
+     "stat": "taste",
+     "add": [
+      0,
+      1
+     ]
+    },
+    {
+     "stat": "loyalty",
+     "add": [
+      1,
+      1
+     ]
+    },
+    {
+     "stat": "looks",
+     "add": [
+      -1,
+      -1
+     ]
+    },
+    {
+     "stat": "fatigue",
+     "add": [
+      5,
+      5
+     ]
+    }
+   ],
+   "exposure": false,
+   "npc": null,
+   "job_period_effect": null,
+   "period_random": [],
+   "milestones": [],
+   "note": "culture slow skill (taste)"
+  },
+  {
+   "id": "job_c_money",
+   "code": "C-MONEY",
+   "name": "工 C-钱",
+   "site": "site_c_money",
+   "original": "tutor",
+   "earliest": "1927-01",
+   "prereq": [
+    [
+     [
+      "education",
+      ">=",
+      120
+     ]
+    ]
+   ],
+   "daily_wage": 10,
+   "wage_tiers": [
+    10,
+    12,
+    15,
+    18,
+    21
+   ],
+   "success_lines": [],
+   "daily_effect": [
+    {
+     "stat": "discipline",
+     "add": [
+      1,
+      1
+     ]
+    },
+    {
+     "stat": "stamina",
+     "add": [
+      -1,
+      -1
+     ]
+    },
+    {
+     "stat": "fatigue",
+     "add": [
+      7,
+      7
+     ]
+    }
+   ],
+   "exposure": false,
+   "npc": null,
+   "job_period_effect": null,
+   "period_random": [],
+   "milestones": [],
+   "note": "original motherhood +N has no counterpart"
+  },
+  {
+   "id": "job_l_day",
+   "code": "L-DAY",
+   "name": "工 L 白班",
+   "site": "site_l",
+   "original": "beauty salon",
+   "earliest": "1924-10",
+   "prereq": [
+    [
+     [
+      "grooming",
+      ">=",
+      25
+     ]
+    ]
+   ],
+   "daily_wage": 10,
+   "wage_tiers": [
+    10,
+    12,
+    15,
+    18,
+    21
+   ],
+   "success_lines": [],
+   "daily_effect": [
+    {
+     "stat": "loyalty",
+     "add": [
+      1,
+      1
+     ]
+    },
+    {
+     "stat": "fatigue",
+     "add": [
+      3,
+      3
+     ]
+    }
+   ],
+   "exposure": false,
+   "npc": null,
+   "job_period_effect": null,
+   "period_random": [],
+   "milestones": [],
+   "note": "same site as the night shift"
+  },
+  {
+   "id": "job_l_night",
+   "code": "L-EVE",
+   "name": "工 L 晚班",
+   "site": "site_l",
+   "original": "hotel bar",
+   "earliest": "1927-01",
+   "prereq": [
+    [
+     [
+      "stamina",
+      ">=",
+      60
+     ],
+     [
+      "looks",
+      ">=",
+      50
+     ]
+    ]
+   ],
+   "daily_wage": 6,
+   "wage_tiers": [
+    6,
+    8,
+    9,
+    11,
+    13
+   ],
+   "success_lines": [],
+   "daily_effect": [
+    {
+     "stat": "business",
+     "add": [
+      0,
+      1
+     ]
+    },
+    {
+     "stat": "physique",
+     "add": [
+      0,
+      1
+     ]
+    },
+    {
+     "stat": "education",
+     "add": [
+      -3,
+      -3
+     ]
+    },
+    {
+     "stat": "fatigue",
+     "add": [
+      5,
+      5
+     ]
+    }
+   ],
+   "exposure": false,
+   "npc": null,
+   "job_period_effect": null,
+   "period_random": [],
+   "milestones": [],
+   "note": "lover slow skill (physique)"
+  },
+  {
+   "id": "job_l_late",
+   "code": "L-NIGHT",
+   "name": "工 L-夜",
+   "site": "site_l_late",
+   "original": "cabaret",
+   "earliest": "1927-10",
+   "prereq": [
+    [
+     [
+      "looks",
+      ">=",
+      70
+     ]
+    ]
+   ],
+   "daily_wage": 23,
+   "wage_tiers": [
+    23,
+    27,
+    33,
+    39,
+    47
+   ],
+   "success_lines": [],
+   "daily_effect": [
+    {
+     "stat": "looks",
+     "add": [
+      3,
+      3
+     ]
+    },
+    {
+     "stat": "crime",
+     "add": [
+      3,
+      3
+     ]
+    },
+    {
+     "stat": "discipline",
+     "add": [
+      -8,
+      -8
+     ]
+    },
+    {
+     "stat": "connections",
+     "add": [
+      -1,
+      0
+     ]
+    },
+    {
+     "stat": "fatigue",
+     "add": [
+      12,
+      12
+     ]
+    }
+   ],
+   "exposure": false,
+   "npc": null,
+   "job_period_effect": null,
+   "period_random": [],
+   "milestones": [],
+   "note": ""
+  },
   {
    "id": "job_assistant",
    "name": "明星助理",
@@ -114,7 +752,8 @@
      ],
      "note": "May lead to the actress bodyguard job"
     }
-   ]
+   ],
+   "disabled": true
   },
   {
    "id": "job_waiter",
@@ -172,7 +811,8 @@
      ],
      "note": "Each board shows the rival's play habit for one random role"
     }
-   ]
+   ],
+   "disabled": true
   },
   {
    "id": "job_dock",
@@ -235,7 +875,8 @@
      ],
      "note": "On the creditor event the countryman steps in once, costing no loyalty; smuggling events are added to the dock random table"
     }
-   ]
+   ],
+   "disabled": true
   },
   {
    "id": "job_church",
@@ -298,7 +939,8 @@
      ],
      "note": "On the \"official visit\" the priest vouches, counting as discipline met; roles with the religious tag get +1 board weight"
     }
-   ]
+   ],
+   "disabled": true
   },
   {
    "id": "job_model_art",
@@ -360,7 +1002,8 @@
      ],
      "note": "Art show event (taste +5, fame +10)"
     }
-   ]
+   ],
+   "disabled": true
   },
   {
    "id": "job_bar",
@@ -451,7 +1094,8 @@
     30
    ],
    "raid_line": 40,
-   "raid_skill": "nerve"
+   "raid_skill": "nerve",
+   "disabled": true
   },
   {
    "id": "job_studio",
@@ -549,7 +1193,8 @@
      "value": -20,
      "note": "Flag from opening question 1, \"agriculture student\" (GDD 3.2)"
     }
-   ]
+   ],
+   "disabled": true
   },
   {
    "id": "job_news",
@@ -640,7 +1285,8 @@
      "value": -20,
      "note": "Flag from opening question 1, \"agriculture student\" (GDD 3.2)"
     }
-   ]
+   ],
+   "disabled": true
   },
   {
    "id": "job_ballroom",
@@ -760,7 +1406,8 @@
     30
    ],
    "raid_line": 40,
-   "raid_skill": "acting"
+   "raid_skill": "acting",
+   "disabled": true
   },
   {
    "id": "job_stunt",
@@ -836,7 +1483,8 @@
      ],
      "note": "The \"stunt_self\" nerve line drops from 60 to 50; roles with the western and action_adventure tags get +1 board weight"
     }
-   ]
+   ],
+   "disabled": true
   },
   {
    "id": "job_bootleg",
@@ -940,7 +1588,8 @@
     20
    ],
    "raid_line": 60,
-   "raid_skill": "nerve"
+   "raid_skill": "nerve",
+   "disabled": true
   },
   {
    "id": "job_magazine",
@@ -989,7 +1638,8 @@
      ],
      "note": "Cover story (fame +15); roles with the romance and exotic_lover tags get +1 board weight"
     }
-   ]
+   ],
+   "disabled": true
   },
   {
    "id": "job_bodyguard",
@@ -1057,7 +1707,8 @@
      "note": "\"Took the hit\" (stamina -20, actress favor +10, loyalty +10, fame +10)"
     }
    ],
-   "milestones": []
+   "milestones": [],
+   "disabled": true
   },
   {
    "id": "job_radio",
@@ -1125,7 +1776,8 @@
      ],
      "note": "From then on talkie roles' speech line -10"
     }
-   ]
+   ],
+   "disabled": true
   },
   {
    "id": "job_escort",
@@ -1217,7 +1869,8 @@
     20
    ],
    "raid_line": 60,
-   "raid_skill": "acting"
+   "raid_skill": "acting",
+   "disabled": true
   },
   {
    "id": "job_numbers",
@@ -1282,7 +1935,8 @@
     30
    ],
    "raid_line": 40,
-   "raid_skill": "negotiation"
+   "raid_skill": "negotiation",
+   "disabled": true
   },
   {
    "id": "job_fixer",
@@ -1366,7 +2020,8 @@
     20
    ],
    "raid_line": 60,
-   "raid_skill": "negotiation"
+   "raid_skill": "negotiation",
+   "disabled": true
   }
  ],
  "crime_tiers": {
@@ -1430,5 +2085,13 @@
    "raid_line": 60,
    "reckless_slack": false
   }
+ },
+ "zero_one_prob": [
+  2,
+  3
+ ],
+ "bad_day": {
+  "formula": "fatigue %",
+  "cap": 100
  }
 }

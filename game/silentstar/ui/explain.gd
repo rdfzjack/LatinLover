@@ -1,10 +1,9 @@
 extends RefCounted
-## Explains the dice: why a day of class, work or shooting succeeds or fails, and what the two indices (sick, reckless) mean.
+## Explains the dice: why a day of class, work or shooting succeeds or fails, and what the sick index means.
+## Six-year swap: a class or work day goes bad with probability fatigue% (capped at 100); the reckless index is gone (slack_pct is 0).
 ## The formulas are the ones of core/schedule.gd (practice_ok, job_day_ok, extra_fail) and core/film.gd (shoot); they are only
-## read here, never changed. If the numbers in extra_fail change there, change SLACK_* and LOVE_FAIL_PCT here.
+## read here, never changed. If the numbers in extra_fail change there, change LOVE_FAIL_PCT here.
 
-const SLACK_HIGH := [30, 80]    # reckless index >= 30: 80% of the working and shooting days are skipped
-const SLACK_LOW := [10, 40]     # reckless index >= 10: 40%
 const LOVE_FAIL_PCT := 20       # in love: 20% of the days fail
 
 var m               # main.gd (names, state, data)
@@ -22,13 +21,9 @@ func p_line(stat: int, line: int, fatigue: int) -> float:
 	return float(mini(fatigue, room) + 1) / float(fatigue + 1)
 
 
-## P(stamina/2 + r0(stamina/2) >= r0(fatigue)).
-func p_practice(stamina: int, fatigue: int) -> float:
-	var half := stamina / 2
-	var total := 0.0
-	for a in range(half + 1):
-		total += float(mini(fatigue, half + a) + 1) / float(fatigue + 1)
-	return total / float(half + 1)
+## P(a class or work day is not bad) = 1 - fatigue% (six-year swap, schedule.gd bad_day).
+func p_practice(_stamina: int, fatigue: int) -> float:
+	return 1.0 - clampi(fatigue, 0, 100) / 100.0
 
 
 ## The chance that the day is not thrown away by being in love or being reckless (jobs and shooting only skip when reckless).
@@ -43,11 +38,6 @@ func p_no_extra_fail(job: bool) -> float:
 
 
 func slack_pct() -> int:
-	var w: int = m.st.idx["reckless_index"]
-	if w >= SLACK_HIGH[0]:
-		return SLACK_HIGH[1]
-	if w >= SLACK_LOW[0]:
-		return SLACK_LOW[1]
 	return 0
 
 
@@ -68,7 +58,17 @@ func extra_text(job: bool) -> String:
 ## Practice (class, book): one line with the chance per day and what it depends on.
 func practice_text(stamina: int, fatigue: int) -> String:
 	var p := p_practice(stamina, fatigue)
-	return tr("ui.explain.practice_text.1") % [pct(p * p_no_extra_fail(false)), stamina, fatigue]
+	return tr("ui.explain.practice_text.1") % [pct(p * p_no_extra_fail(false)), fatigue]
+
+
+## A work day: good unless the bad-day roll hits (fatigue%).
+func job_text(fatigue: int) -> String:
+	var p := p_practice(0, fatigue)
+	var t := tr("ui.explain.job_text.1") % [pct(p * p_no_extra_fail(true)), fatigue]
+	var extra := extra_text(true)
+	if extra != "":
+		t += tr("ui.main.entry_effect.14") + extra
+	return t
 
 
 ## Work and shooting: lines = [[stat id, line], ...]. Each line is its own roll: stat - random(0~fatigue) >= line.
@@ -102,10 +102,7 @@ func index_text() -> String:
 	var b: Dictionary = st.bonus()
 	var f: int = st.val("fatigue", b)
 	var sick: int = st.idx["sick_index"]
-	var wild: int = st.idx["reckless_index"]
 	var s := tr("ui.explain.index_text.1") % [
 		f, st.val("stamina", b), sick, int(m.d.idx_rule["sick_index"]["status_line"]), int(m.d.idx_rule["sick_index"]["very_sick_line"])]
-	s += tr("ui.explain.index_text.2") % [
-		f, st.val("discipline", b), wild, int(m.d.idx_rule["reckless_index"]["status_line"]), SLACK_LOW[0], SLACK_LOW[1], SLACK_HIGH[0], SLACK_HIGH[1]]
 	s += tr("ui.explain.index_text.3")
 	return s

@@ -224,7 +224,13 @@ for j in jobs['jobs']:
 for m in cal_['months']:
     want = sorted(j['id'] for j in jobs['jobs'] if j['earliest'] == m['month'])
     if sorted(m['job_unlocks']) != want: err('calendar.json', f"{m['month']} job_unlocks does not match jobs.json")
-if not any(j['earliest'] == '1926-01' for j in jobs['jobs']): err(f, 'at least one job must be doable at the start (1926-01)')
+if not any(j['earliest'] == CAL_MONTHS[0] and not j.get('disabled') for j in jobs['jobs']): err(f, f'at least one job must be doable at the start ({CAL_MONTHS[0]})')
+for j in jobs['jobs']:
+    wt = j.get('wage_tiers')
+    if wt is not None and (len(wt) != len(jobs['raise_tiers']) or not all(isinstance(x, int) for x in wt)): err(f, f"{j['id']} wage_tiers must be {len(jobs['raise_tiers'])} integers")
+    for e in j['daily_effect']:
+        for x in e.get('one_of', []):
+            if x not in ATTRS and x not in SK: err(f, f"{j['id']} one_of stat does not exist {x}")
 # rest / places / lifestyle
 f = 'rest.json'
 rest_ids = [r['id'] for r in rest['rests']]
@@ -288,7 +294,7 @@ for qi, q in enumerate(origins['questions']):
 # calendar
 f = 'calendar.json'
 ms = cal_['months']
-if len(ms) != 48: err(f, f'need 48 months, got {len(ms)}')
+if len(ms) != 72: err(f, f'need 72 months (1924-01 to 1929-12), got {len(ms)}')
 for m in ms:
     y, mo = map(int, m['month'].split('-'))
     nd = cal.monthrange(y, mo)[1]
@@ -296,8 +302,9 @@ for m in ms:
     if m['sundays'] != [d for d in range(1, nd+1) if datetime.date(y, mo, d).weekday() == 6]: err(f, f"{m['month']} sundays")
     if m['periods'] != [[1,10],[11,20],[21,nd]]: err(f, f"{m['month']} periods")
     for e in m['era_events']: ref_event(f, e)
-if sum(1 for m in ms if m['board']) != 16: err(f, 'board must be 16 times')
-if sum(1 for m in ms if m['annual']) != 4: err(f, 'annual must be 4 times')
+if sum(1 for m in ms if m['board']) != 12: err(f, 'board must be 12 times (2 a year)')
+if sum(1 for m in ms if m.get('board_famous')) != 18: err(f, 'board_famous must be 18 times (3 a year)')
+if sum(1 for m in ms if m['annual']) != 6: err(f, 'annual must be 6 times')
 if sum(1 for m in ms if m['era_events']) != 7: err(f, 'era events must be 7 (GDD 11.3)')
 
 

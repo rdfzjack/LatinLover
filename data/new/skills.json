@@ -47,7 +47,7 @@
     0,
     100
    ],
-   "init": 20,
+   "init": 10,
    "fixed_use": "Default bonus skill for shooting performance"
   },
   {
@@ -69,7 +69,7 @@
     0,
     100
    ],
-   "init": 20,
+   "init": 5,
    "fixed_use": "Ballroom dancer and private male companion success lines; bonus skill for musical roles; event checks"
   },
   {

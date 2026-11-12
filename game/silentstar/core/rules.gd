@@ -101,7 +101,7 @@ static func apply_effect(st, text, source := "event") -> Array:
 			st.track(source, n, st.skill[n] - old)
 		elif n == "money":
 			var old: int = st.money
-			st.money = mini(_delta(st.money, op, v, pct), d.money_cap)
+			st.money = clampi(_delta(st.money, op, v, pct), 0, d.money_cap)    # six-year swap: money never goes below 0
 			st.track(source, n, st.money - old)
 			if st.money > old:
 				st.src["income"] = st.src.get("income", 0) + st.money - old

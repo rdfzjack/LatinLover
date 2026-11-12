@@ -415,6 +415,19 @@ In effects, `drug_points+1` and `drug_stage=0` work like any other name.
 3. Run the check. Anything missed is reported as "does not exist".
 4. If the check says `extra key in text.csv`, run `python3 tools/extract_text.py --prune` to drop the text lines of what you deleted.
 
+### 13. Jobs, classes, books and the calendar (six-year version)
+
+- **Switch something off without deleting it**: add `"disabled": true` to a job, a class or a book. It stays in the table (events and conditions that name it still pass the check) but the game does not offer it, and its job events never fire. Remove the line to switch it back on.
+- **Job wages** (`jobs.json`): `wage_tiers` is the daily wage at each raise tier, five whole numbers in dollars, e.g. `[4, 5, 6, 7, 9]`. The tier is picked by how many periods of that job succeeded: `raise_tiers` → `periods_below` (now 8 / 23 / 45 / 68). A full period with no bad day pays another `full_attendance_bonus_pct` (50%).
+- **Job gates**: `prereq` decides whether a job can be picked, e.g. `[[["stamina", ">=", 80], ["education", ">=", 40]]]` (both needed). `earliest` is the first month it is offered. `success_lines` is no longer used (leave it `[]`).
+- **Bad days**: every class or work day goes bad with probability = fatigue% (`jobs.json` → `bad_day.cap` is the ceiling, 100).
+- **0-or-1 gains**: a range of exactly `[0, 1]` (or `[-1, 0]`) in `daily_effect` or a class `per_level` gives the non-zero value with probability `zero_one_prob` (now `[2, 3]`, in both `jobs.json` and `classes.json`). Any other range `[a, b]` is a plain random number from a to b.
+- **One of two stats**: a `daily_effect` line with `"one_of": ["negotiation", "business"]` puts the gain on one of them, picked at random each day (`stat` must still be one of them).
+- **Class levels**: `classes.json` → `class_steps` `[4, 8, 11]`: up to 4 periods taken is level 1, up to 8 level 2, up to 11 level 3, then level 4. `fee` and every `per_level` have four entries, one per level.
+- **`code`, `site`, `original`** on the new jobs and classes are notes: the placeholder code from the plan, the map place it will belong to, and the original game's job or class. The game does not read them yet.
+- **Audition months** (`calendar.json`): `board: true` months have a casting board while the player is not famous (March and September); `board_famous: true` months once fame reaches tier `stats.json` → `board_famous_tier` (2 = 有名; March, July, November). The checker wants 12 `board` and 18 `board_famous` months.
+- **Living costs** (`lifestyle.json`): `monthly_cost` has five numbers (one per fame tier); they are all the same now. Money never goes below 0.
+
 ---
 
 ## 6. Names and translations: `data/locale/text.csv`

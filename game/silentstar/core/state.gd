@@ -21,7 +21,7 @@ const SAVE_KEYS := ["ym", "attr", "skill", "money", "corr", "favor", "known", "f
 
 var d                          # core/data.gd
 var rng
-var ym := 0                    # month index, 0 = 1926-01
+var ym := 0                    # month index, 0 = 1924-01
 var attr := {}                 # base attributes (base values, gear not included)
 var skill := {}                # skill training values
 var money := 0
@@ -231,8 +231,7 @@ func calc_indices() -> Array:
 	var b := bonus()
 	var tired := val("fatigue", b)
 	var sick := clampi(tired - val("stamina", b), 0, 100)
-	var wild := clampi(tired - val("discipline", b), 0, 100)
-	return [sick, wild]
+	return [sick, 0]       # six-year swap: the reckless index is gone (kept at 0 so saves and old conditions still read)
 
 
 ## Computes the two indices at month end and updates the status (GDD 10). The result is kept for the whole month.

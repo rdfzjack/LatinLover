@@ -1,11 +1,494 @@
 {
  "class_steps": [
-  3,
-  6,
-  9
+  4,
+  8,
+  11
  ],
- "level_note": "Periods already spent in a class: <=3 is level 1, <=6 level 2, <=9 level 3, after that level 4",
+ "level_note": "Periods already spent in a class: <=4 is level 1, <=8 level 2, <=11 level 3, after that level 4 (original 5/10/15 x 3/4)",
  "classes": [
+  {
+   "id": "class_h1",
+   "code": "H1",
+   "name": "课 H1",
+   "original": "fencing",
+   "fee": [
+    15,
+    20,
+    25,
+    30
+   ],
+   "gain": [
+    {
+     "stat": "fight",
+     "per_level": [
+      [
+       1,
+       1
+      ],
+      [
+       1,
+       1
+      ],
+      [
+       1,
+       3
+      ],
+      [
+       1,
+       4
+      ]
+     ]
+    },
+    {
+     "stat": "nerve",
+     "per_level": [
+      [
+       0,
+       0
+      ],
+      [
+       0,
+       1
+      ],
+      [
+       0,
+       1
+      ],
+      [
+       0,
+       1
+      ]
+     ]
+    }
+   ],
+   "fatigue_per_day": 1
+  },
+  {
+   "id": "class_h2",
+   "code": "H2",
+   "name": "课 H2",
+   "original": "swordsmanship",
+   "fee": [
+    20,
+    35,
+    65,
+    95
+   ],
+   "gain": [
+    {
+     "stat": "riding",
+     "per_level": [
+      [
+       1,
+       1
+      ],
+      [
+       1,
+       3
+      ],
+      [
+       1,
+       4
+      ],
+      [
+       1,
+       5
+      ]
+     ]
+    },
+    {
+     "stat": "nerve",
+     "per_level": [
+      [
+       0,
+       0
+      ],
+      [
+       0,
+       1
+      ],
+      [
+       0,
+       1
+      ],
+      [
+       0,
+       1
+      ]
+     ]
+    }
+   ],
+   "fatigue_per_day": 1
+  },
+  {
+   "id": "class_c1",
+   "code": "C1",
+   "name": "课 C1",
+   "original": "magic",
+   "fee": [
+    30,
+    35,
+    40,
+    45
+   ],
+   "gain": [
+    {
+     "stat": "writing",
+     "per_level": [
+      [
+       1,
+       1
+      ],
+      [
+       1,
+       3
+      ],
+      [
+       1,
+       4
+      ],
+      [
+       3,
+       5
+      ]
+     ]
+    },
+    {
+     "stat": "speech",
+     "per_level": [
+      [
+       0,
+       3
+      ],
+      [
+       0,
+       4
+      ],
+      [
+       0,
+       5
+      ],
+      [
+       0,
+       7
+      ]
+     ]
+    }
+   ],
+   "fatigue_per_day": 1
+  },
+  {
+   "id": "class_c3",
+   "code": "C3",
+   "name": "课 C3",
+   "original": "theology",
+   "fee": [
+    20,
+    30,
+    40,
+    45
+   ],
+   "gain": [
+    {
+     "stat": "education",
+     "per_level": [
+      [
+       1,
+       1
+      ],
+      [
+       1,
+       1
+      ],
+      [
+       1,
+       3
+      ],
+      [
+       1,
+       4
+      ]
+     ]
+    },
+    {
+     "stat": "discipline",
+     "per_level": [
+      [
+       1,
+       3
+      ],
+      [
+       1,
+       4
+      ],
+      [
+       1,
+       5
+      ],
+      [
+       1,
+       7
+      ]
+     ]
+    },
+    {
+     "stat": "taste",
+     "per_level": [
+      [
+       0,
+       1
+      ],
+      [
+       0,
+       1
+      ],
+      [
+       0,
+       1
+      ],
+      [
+       0,
+       1
+      ]
+     ]
+    }
+   ],
+   "fatigue_per_day": 1
+  },
+  {
+   "id": "class_yi",
+   "code": "YI",
+   "name": "课 义",
+   "original": "poetry",
+   "fee": [
+    20,
+    30,
+    40,
+    50
+   ],
+   "gain": [
+    {
+     "stat": "loyalty",
+     "per_level": [
+      [
+       1,
+       1
+      ],
+      [
+       1,
+       3
+      ],
+      [
+       1,
+       5
+      ],
+      [
+       3,
+       7
+      ]
+     ]
+    },
+    {
+     "stat": "education",
+     "per_level": [
+      [
+       0,
+       1
+      ],
+      [
+       0,
+       3
+      ],
+      [
+       0,
+       4
+      ],
+      [
+       0,
+       5
+      ]
+     ]
+    },
+    {
+     "stat": "grooming",
+     "per_level": [
+      [
+       0,
+       1
+      ],
+      [
+       0,
+       1
+      ],
+      [
+       0,
+       1
+      ],
+      [
+       0,
+       1
+      ]
+     ]
+    },
+    {
+     "stat": "looks",
+     "per_level": [
+      [
+       0,
+       1
+      ],
+      [
+       0,
+       1
+      ],
+      [
+       0,
+       1
+      ],
+      [
+       0,
+       1
+      ]
+     ]
+    }
+   ],
+   "fatigue_per_day": 1
+  },
+  {
+   "id": "class_l1",
+   "code": "L1",
+   "name": "课 L1",
+   "original": "etiquette",
+   "fee": [
+    20,
+    25,
+    30,
+    35
+   ],
+   "gain": [
+    {
+     "stat": "acting",
+     "per_level": [
+      [
+       1,
+       1
+      ],
+      [
+       1,
+       3
+      ],
+      [
+       1,
+       4
+      ],
+      [
+       3,
+       5
+      ]
+     ]
+    },
+    {
+     "stat": "looks",
+     "per_level": [
+      [
+       1,
+       1
+      ],
+      [
+       1,
+       3
+      ],
+      [
+       1,
+       4
+      ],
+      [
+       1,
+       5
+      ]
+     ]
+    }
+   ],
+   "fatigue_per_day": 1
+  },
+  {
+   "id": "class_l3",
+   "code": "L3",
+   "name": "课 L3",
+   "original": "dance",
+   "fee": [
+    25,
+    35,
+    45,
+    55
+   ],
+   "gain": [
+    {
+     "stat": "grooming",
+     "per_level": [
+      [
+       0,
+       1
+      ],
+      [
+       1,
+       1
+      ],
+      [
+       1,
+       3
+      ],
+      [
+       1,
+       4
+      ]
+     ]
+    },
+    {
+     "stat": "looks",
+     "per_level": [
+      [
+       0,
+       1
+      ],
+      [
+       0,
+       1
+      ],
+      [
+       0,
+       3
+      ],
+      [
+       1,
+       3
+      ]
+     ]
+    },
+    {
+     "stat": "stamina",
+     "per_level": [
+      [
+       1,
+       1
+      ],
+      [
+       1,
+       1
+      ],
+      [
+       1,
+       1
+      ],
+      [
+       1,
+       1
+      ]
+     ]
+    }
+   ],
+   "fatigue_per_day": 1
+  },
   {
    "id": "class_boxing",
    "name": "拳馆",
@@ -80,7 +563,8 @@
      ]
     }
    ],
-   "fatigue_per_day": 3
+   "fatigue_per_day": 3,
+   "disabled": true
   },
   {
    "id": "class_riding",
@@ -135,7 +619,8 @@
      ]
     }
    ],
-   "fatigue_per_day": 3
+   "fatigue_per_day": 3,
+   "disabled": true
   },
   {
    "id": "class_acting",
@@ -190,7 +675,8 @@
      ]
     }
    ],
-   "fatigue_per_day": 3
+   "fatigue_per_day": 3,
+   "disabled": true
   },
   {
    "id": "class_dance",
@@ -266,7 +752,8 @@
      ]
     }
    ],
-   "fatigue_per_day": 3
+   "fatigue_per_day": 3,
+   "disabled": true
   },
   {
    "id": "class_etiquette",
@@ -321,7 +808,8 @@
      ]
     }
    ],
-   "fatigue_per_day": 3
+   "fatigue_per_day": 3,
+   "disabled": true
   },
   {
    "id": "class_tutor",
@@ -396,8 +884,16 @@
      10
     ]
    },
-   "fatigue_per_day": 3
+   "fatigue_per_day": 3,
+   "disabled": true
   }
  ],
- "fatigue_note": "fatigue_per_day: fatigue added on every class day, whether or not the day succeeds (step 12c: 1 -> 3)"
+ "fatigue_note": "fatigue_per_day: fatigue added on every class day, whether or not the day succeeds (step 12c: 1 -> 3)",
+ "zero_one_prob": [
+  2,
+  3
+ ],
+ "zero_one_note": "A per_level range of exactly [0,1] gives +1 with this probability (six-year run: x4/3 of a 0-or-1 gain)",
+ "bad_day_note": "Each class day goes bad with probability = fatigue% (capped at 100): no gains that day, the fee is still paid. If the money cannot pay the whole period, the period is wasted",
+ "disabled_note": "disabled: true = switched off (not offered)"
 }

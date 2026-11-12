@@ -36,7 +36,8 @@ var skill_bonus := {}
 var classes := {}
 var class_steps = null
 var books := {}
-var jobs := {}
+var jobs := {}                # enabled jobs only
+var jobs_all := {}            # every row of jobs.json, disabled ones included
 var job_rules := {}
 var rests := {}
 var rest_forced = null
@@ -109,13 +110,16 @@ func _init(path := "") -> void:
 		if s.has("display_bonus"):
 			skill_bonus[s["id"]] = s["display_bonus"]
 
-	for c in t["classes"]["classes"]:
-		classes[c["id"]] = c
+	for c in t["classes"]["classes"]:    # disabled rows stay in the table but are not loaded (six-year swap)
+		if not c.get("disabled", false):
+			classes[c["id"]] = c
 	class_steps = t["classes"]["class_steps"]
 	for b in t["books"]["books"]:
 		books[b["id"]] = b
 	for j in t["jobs"]["jobs"]:
-		jobs[j["id"]] = j
+		jobs_all[j["id"]] = j
+		if not j.get("disabled", false):
+			jobs[j["id"]] = j
 	job_rules = t["jobs"]
 	for r in t["rest"]["rests"]:
 		rests[r["id"]] = r

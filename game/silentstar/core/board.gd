@@ -10,7 +10,7 @@ extends RefCounted
 ##
 ## Random-number order when building a board (copied from the Python side):
 ##   1. Draw roles in the order big, medium, small: the base counts, plus the extra medium/big roles from connections; the second
-##      small slot of 1926-01 holds the tutorial role. Drawing from the pool: index below(sum of weights); if no suitable role is
+##      small slot of the first board holds the tutorial role. Drawing from the pool: index below(sum of weights); if no suitable role is
 ##      in the pool, a placeholder role is generated: main color below(4), wanted skill below(3), tag below(n).
 ##   2. The extra roles are, in order: pending_board (script), the widow-invested medium film, the transition medium film,
 ##      the small film after Valen's death.
@@ -241,7 +241,8 @@ static func compose(st) -> Array:
 		n["big"] += 1
 	var out := []
 	var taken := {}
-	var tut: bool = st.ym == 0
+	var tut: bool = int(st.flags.get("tutorial_board", 0)) == 0     # the first board of the game (six-year swap: 1924-03)
+	st.flags["tutorial_board"] = 1
 	for t in ["big", "medium", "small"]:
 		for k in int(n[t]):
 			var e: Dictionary

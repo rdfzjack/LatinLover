@@ -84,9 +84,9 @@
  "money": {
   "id": "money",
   "name": "金钱",
-  "init": 500,
+  "init": 250,
   "max": 99999999,
-  "may_be_negative": "Only living costs may push money negative; any other expense you cannot afford cannot be chosen"
+  "may_be_negative": "Never: money stops at 0. A living cost that cannot be paid takes the money to 0; a class that cannot be paid for the whole period wastes the period"
  },
  "roads": [
   {
@@ -291,53 +291,53 @@
   }
  },
  "drug": {
-   "note": "Step 12c c3 round 3 (GDD 5.8.1). The dealer is on the street by a roll at month start (dealer); a dose is a free action before any period (at most one per period). drug_points is the depth of the addiction (0 = not addicted), drug_stage follows it by stage_lines. All numbers are placeholders",
-   "dealer": {
-    "prob_pct": 30,
-    "crime_step": 50,
-    "crime_add_pct": 10,
-    "prob_cap_pct": 60,
-    "addicted_add_pct": 20,
-    "stock": 2,
-    "price": [
-     20,
-     190
-    ],
-    "price_depth_pct": 15,
-    "price_cap_pct": 200,
-    "note": "probability = prob_pct + crime / crime_step x crime_add_pct (cap prob_cap_pct), + addicted_add_pct when addicted; each dose costs r(price) x (100 + price_depth_pct x depth)% (cap price_cap_pct)"
-   },
-   "dose_effect": "fatigue-40",
-   "outcome_weights": {
-    "high": 50,
-    "divine": 30,
-    "side": 20
-   },
-   "divine_gain_mult": 2,
-   "divine_perf_add": 400,
-   "side_perf_add": -500,
-   "side_effect": "stamina-5",
-   "side_fail_pct": 50,
-   "hook_base_pct": 12,
-   "hook_step_pct": 3,
-   "hook_cap_pct": 50,
-   "attack": {
-    "fail_base_pct": 10,
-    "fail_step_pct": 5,
-    "fail_cap_pct": 60,
-    "fatigue_base": 10,
-    "fatigue_step": 5,
-    "depth_drop": 2,
-    "note": "a month without a dose while addicted: every day fails with fail_base_pct + fail_step_pct x depth (cap); at month end fatigue + fatigue_base + fatigue_step x depth and depth - depth_drop"
-   },
-   "stage_lines": [
-    1,
-    3,
-    6
+  "note": "Step 12c c3 round 3 (GDD 5.8.1). The dealer is on the street by a roll at month start (dealer); a dose is a free action before any period (at most one per period). drug_points is the depth of the addiction (0 = not addicted), drug_stage follows it by stage_lines. All numbers are placeholders",
+  "dealer": {
+   "prob_pct": 30,
+   "crime_step": 50,
+   "crime_add_pct": 10,
+   "prob_cap_pct": 60,
+   "addicted_add_pct": 20,
+   "stock": 2,
+   "price": [
+    20,
+    190
    ],
-   "refuse_discipline": 150,
-   "deep_monthly_effect": "stamina-5 looks-3"
+   "price_depth_pct": 15,
+   "price_cap_pct": 200,
+   "note": "probability = prob_pct + crime / crime_step x crime_add_pct (cap prob_cap_pct), + addicted_add_pct when addicted; each dose costs r(price) x (100 + price_depth_pct x depth)% (cap price_cap_pct)"
   },
+  "dose_effect": "fatigue-40",
+  "outcome_weights": {
+   "high": 50,
+   "divine": 30,
+   "side": 20
+  },
+  "divine_gain_mult": 2,
+  "divine_perf_add": 400,
+  "side_perf_add": -500,
+  "side_effect": "stamina-5",
+  "side_fail_pct": 50,
+  "hook_base_pct": 12,
+  "hook_step_pct": 3,
+  "hook_cap_pct": 50,
+  "attack": {
+   "fail_base_pct": 10,
+   "fail_step_pct": 5,
+   "fail_cap_pct": 60,
+   "fatigue_base": 10,
+   "fatigue_step": 5,
+   "depth_drop": 2,
+   "note": "a month without a dose while addicted: every day fails with fail_base_pct + fail_step_pct x depth (cap); at month end fatigue + fatigue_base + fatigue_step x depth and depth - depth_drop"
+  },
+  "stage_lines": [
+   1,
+   3,
+   6
+  ],
+  "refuse_discipline": 150,
+  "deep_monthly_effect": "stamina-5 looks-3"
+ },
  "arrest": {
   "note": "Step 12c. fine = max(fine_min, money x fine_pct%), never more than the money held (not below 0); the next detain_periods periods are void (detention)",
   "fine_min": 200,
@@ -347,5 +347,6 @@
   "raid_note": "search probability of a crime job = prob x (1 + crime / raid_crime_div)",
   "raid_check_add": 20,
   "raid_check_note": "Step 12c c3: when searched, r0(raid_skill displayed) + raid_check_add >= raid_line passes; otherwise arrest"
- }
+ },
+ "board_famous_tier": 2
 }
