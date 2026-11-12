@@ -115,7 +115,7 @@ if stats['levels']['gate'] != [5*l*(l+1) for l in range(10)]: err(f, 'class_step
 for k in ('monthly_decay_pct', 'monthly_decay_min'):
     if not isinstance(stats['fame_rules'].get(k), int): err(f, f'fame_rules is missing the integer field {k}')
 dr = stats.get('drug', {})
-for k in ('divine_gain_mult', 'divine_perf_add', 'divine_rep_bonus', 'side_fail_pct', 'hook_base_pct', 'hook_step_pct', 'hook_cap_pct', 'refuse_discipline'):
+for k in ('divine_gain_mult', 'divine_perf_add', 'side_fail_pct', 'hook_base_pct', 'hook_step_pct', 'hook_cap_pct', 'refuse_discipline'):
     if not isinstance(dr.get(k), int): err(f, f'drug is missing the integer field {k}')
 for k in ('dose_effect', 'side_effect', 'deep_monthly_effect'):
     if k not in dr: err(f, f'drug is missing {k}')

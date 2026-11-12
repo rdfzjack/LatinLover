@@ -170,7 +170,7 @@ static func shoot(st, i: int, f: Dictionary, days: Array) -> void:
 		finish(st, f)
 
 
-## P x1000: 500 + ok_days x 500 / shoot_days + bonus skill x 2 (stunt_self +100), clamped to 500-1200.
+## P x1000: 500 + ok_days x 500 / shoot_days + bonus skill x 2 (stunt_self +100), clamped to 500-1200; a divine dose adds on top.
 static func performance(st, f: Dictionary) -> int:
 	var c := shoot_cfg(st.d)
 	var days: int = f["shoot_days"]
@@ -178,9 +178,10 @@ static func performance(st, f: Dictionary) -> int:
 	p += Rules.fdiv(st.val(f["roles"]["bonus_skill"]) * 1000, 500)
 	if f["stunt_self"]:
 		p += c["stunt_self"]["perf_add"]
-	if f.get("divine", 0):
+	p = maxi(c["perf_min"], mini(c["perf_max"], p))
+	if f.get("divine", 0):      # a divine dose on a shooting period goes above the usual top (GDD 5.8.1)
 		p += int(st.d.t["stats"]["drug"]["divine_perf_add"])
-	return maxi(c["perf_min"], mini(c["perf_max"], p))
+	return p
 
 
 ## Fee = base x (stunt_self 130%) x (support 40%) x (400+negotiation)/400 x contract coefficient, rounded down at each step.
@@ -322,9 +323,6 @@ static func release_one(st, f: Dictionary) -> Dictionary:
 	var corr := 0
 	if not flop:
 		corr = Rules.fdiv(c["rep_bonus"][t] * (2 if hit else 1) * k, 100)
-		if f.get("divine", 0) and not f["support"]:      # a lead shot on a divine dose (GDD 5.8.1)
-			corr += int(st.d.t["stats"]["drug"]["divine_rep_bonus"])
-			st.inc("count.divine_film")
 		st.corr[role["road"]] += corr
 	for tag in role["tags"]:
 		st.tags[tag] = st.tags.get(tag, 0) + 1
