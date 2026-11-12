@@ -507,7 +507,8 @@ func _update_alloc_info() -> void:
 		if left != 0:
 			okk = false
 	alloc_info.text = tr("ui.audition.show_deck.6").join(t) + tr("ui.main.update_alloc_info.5")
-	start_btn.disabled = not okk
+	if start_btn != null:
+		start_btn.disabled = not okk
 
 
 func _title() -> void:
