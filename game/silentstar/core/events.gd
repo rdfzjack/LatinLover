@@ -116,7 +116,7 @@ static func fame_pct(st, pct: int) -> void:
 
 ## The events whose logic is code. Returns the ids to trigger (none of them triggers anything for now).
 ## The other `code: true` events only need the effects and flags in the data, read by other modules through the flags:
-##   evt_swap_role / evt_steal_role (period_start), evt_accent (flag), era_valen_death (board reads the flag),
+##   evt_swap_role / evt_steal_role (period_check), evt_accent (flag), era_valen_death (board reads the flag),
 ##   era_talkie (the date is already in the table), job_studio_m1 (the long-contract probability is tiered by favor in evt_contract).
 static func _code(story, st, eid: String, choice) -> Array:
 	match eid:
@@ -313,9 +313,9 @@ static func month_end(story, st) -> void:
 		n += 1
 
 
-# ---------- period start (11.1) ----------
+# ---------- period checks (11.1; run at the end of the period since step 15c) ----------
 
-static func period_start(story, st, i: int, entry: String) -> void:
+static func period_check(story, st, i: int, entry: String) -> void:
 	if entry.begins_with("rest_") or entry.begins_with("act_"):
 		return
 	var d = st.d

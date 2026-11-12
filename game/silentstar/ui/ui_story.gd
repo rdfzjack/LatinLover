@@ -48,8 +48,9 @@ func annual(st) -> void:
 	ui.ask("annual_result", annuals.back())
 
 
-## Swap role / steal role happen inside Events.period_start; tell the player how the match went.
-func period_start(st, i: int, entry: String) -> void:
+## End of a period: first the report of the period, then the checks of GDD 11.1 (swap role, steal role) with the result of the match.
+func after_period(st, i: int, entry: String, out: Dictionary) -> void:
+	ui.period_done(st, i, entry, out)
 	var films: Array = st.story["films"]
 	var n0: int = films.size()
 	var l0: int = event_log.size()
@@ -62,7 +63,7 @@ func period_start(st, i: int, entry: String) -> void:
 		if f["status"] == "to_shoot":
 			first_name = str(f["roles"]["name"])
 			break
-	super(st, i, entry)
+	super(st, i, entry, out)
 	for k in range(l0, event_log.size()):
 		var id: String = event_log[k]["id"]
 		if id == "evt_swap_role":
@@ -86,11 +87,6 @@ func film_period(st, i: int, f, days: Array) -> void:
 	var k0: int = f["ok_days"]
 	super(st, i, f, days)
 	ui.period_done(st, i, "shooting", {"film": f["roles"]["name"], "days": f["shoot_days"] - d0, "ok": f["ok_days"] - k0})
-
-
-func period_end(st, i: int, entry: String, out: Dictionary) -> void:
-	super(st, i, entry, out)
-	ui.period_done(st, i, entry, out)
 
 
 ## Every question of the script is a blocking prompt in the UI (ask runs on the game thread and waits for the screen).
@@ -136,3 +132,4 @@ class UiAgent:
 			var why: String = story.boost(st, i)
 			if why != "":
 				ui.note(tr("ui.story.before_period.1") + why)
+		ui.defer_events = true      # from here to the report of the period, the events are held back and shown after it

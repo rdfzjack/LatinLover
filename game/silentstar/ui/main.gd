@@ -68,6 +68,8 @@ var body: VBoxContainer
 var log_box: RichTextLabel
 var street_box: VBoxContainer
 var inv_box: VBoxContainer
+var defer_events := false       # true while a period runs: its events are shown after the period report
+var held_events: Array = []
 var event_snaps: Array = []   # state at the start of each event being settled (events nest)
 var street_msg: Label
 var sel_color := 0
@@ -694,6 +696,7 @@ func reply(v) -> void:
 
 ## Called by UiStory (game thread) after each period has been settled: CG placeholder, a short report, every stat that changed.
 func period_done(_st, i: int, entry: String, out: Dictionary) -> void:
+	defer_events = false
 	var now := snapshot()
 	var evs := new_events()
 	var days := Schedule.days_of(st, i)
@@ -732,6 +735,10 @@ func period_done(_st, i: int, entry: String, out: Dictionary) -> void:
 	last_snap = now
 	note(tr("ui.main.period_done.11") % [head, what, diff_text(last_snap, now) if false else tr("ui.main.entry_effect.14").join(rep)])
 	ask("period", {"head": head, "what": what, "cg": cg, "cg_keys": cg_keys, "report": "\n".join(rep), "lines": lines, "events": evt})
+	var held := held_events
+	held_events = []
+	for p in held:      # the events of this period, after its report
+		ask("event", p)
 
 
 func ac() -> Dictionary:
@@ -976,8 +983,12 @@ func event_ended(rec: Dictionary) -> void:
 	var check := ""
 	if rec.get("check") != null:
 		check = tr("ui.main.new_events.3") if rec["check"] else tr("ui.main.new_events.4")
-	ask("event", {"id": rec["id"], "name": str(ev["name"]), "class": str(ev.get("class", "")), "body": ev.get("body"),
-		"picked": picked, "check": check, "lines": diff_lines(before, snapshot())})
+	var payload := {"id": rec["id"], "name": str(ev["name"]), "class": str(ev.get("class", "")), "body": ev.get("body"),
+		"picked": picked, "check": check, "lines": diff_lines(before, snapshot())}
+	if defer_events:
+		held_events.append(payload)
+	else:
+		ask("event", payload)
 
 
 func _show_event(p: Dictionary) -> void:
