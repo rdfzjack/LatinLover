@@ -786,7 +786,11 @@ func _show_request(kind: String, payload) -> void:
 	if uitest:
 		await get_tree().process_frame
 		if shot_path != "" and (kind == shot_kind):
-			if shot_loc != "":
+			if shot_loc == "reveal":
+				var bs: Array = []
+				_collect_buttons(body, bs)
+				bs[0].pressed.emit()
+			elif shot_loc != "":
 				_show_location(int(payload), shot_loc)
 			for _i in 3:
 				await get_tree().process_frame
@@ -809,6 +813,16 @@ func _uitest_answer(kind: String, payload) -> void:
 			_show_location(int(payload), loc)
 			await get_tree().process_frame
 		_show_map(int(payload))
+	if kind == "play" or kind == "deck":      # press the real buttons: the first card, then "next" / "confirm the deck"
+		var bs: Array = []
+		_collect_buttons(body, bs)
+		if kind == "play":
+			bs[0].pressed.emit()
+			await get_tree().process_frame
+			bs = []
+			_collect_buttons(body, bs)
+		bs[bs.size() - 1].pressed.emit()
+		return
 	reply(_auto_answer(kind, payload))
 
 
@@ -902,108 +916,27 @@ func _show_period(p: Dictionary) -> void:
 # ---------- the board and auditions ----------
 
 func _show_board(p: Dictionary) -> void:
-	var b: Dictionary = p["board"]
-	var ok: Array = p["ok"]
-	_wait_screen("选片板（%s）" % st.date())
-	label("本月最多试两次，第二次要比第一次小一档。赢了的片约会锁定下个月的旬。")
-	for i in b["roles"].size():
-		var r: Dictionary = b["roles"][i]
-		var t := "%s　[%s]　名气要求 %d　酬金 $%s" % [r["name"], SIZE_NAME.get(r["size"], r["size"]), int(r["fame_gate"]), str(r["fee"])]
-		var w := PackedStringArray()
-		for x in r["wants"]:
-			w.append("%s≥%d" % [nm(x["stat"]), int(x["target"])])
-		t += "\n　要求：" + " ".join(w)
-		if r["intel"].get("tags", false) and not r["tags"].is_empty():
-			var tg := PackedStringArray()
-			for x in r["tags"]:
-				tg.append(nm(x))
-			t += "　内容：" + " ".join(tg)
-		if r["style_probs"] != null:
-			var sp := PackedStringArray()
-			for c in 4:
-				sp.append("%s %d%%" % [nm(d.roads[c]), int(r["style_probs"][c])])
-			t += "\n　戏路：" + " ".join(sp)
-			if r["intel"].has("excluded"):
-				t += "（探听到：不会出 %s）" % nm(d.roads[r["intel"]["excluded"]])
-		if r.get("talkie") != null and r["talkie"]:
-			t += "　有声片"
-		if r["house"]:
-			t += "　【厂约】"
-		if r["opponents"].size() > 0:
-			var on := PackedStringArray()
-			for o in r["opponents"]:
-				on.append(rival_name(o))
-			t += "\n　对手：" + "、".join(on)
-		label(t)
-		if ok.has(i):
-			var ii: int = i
-			button("报名：" + str(r["name"]), func(): reply(ii))
-		else:
-			label("　（不能报名：" + why(Board.can_try(st, i)) + "）", null, Color(0.6, 0.6, 0.6))
-	button("不试了", func(): reply(null))
+	clear_body()
+	var v = preload("res://ui/board.tscn").instantiate()
+	body.add_child(v)
+	v.picked.connect(func(i): reply(i))
+	v.show_board(self, p)
 
 
 func _show_deck(ctx: Dictionary) -> void:
-	var r: Dictionary = ctx["roles"]
-	_wait_screen("试镜：" + str(r["name"]))
-	var lv: Array = ctx["levels"]
-	var t := PackedStringArray()
-	for c in 4:
-		t.append("%s Lv%d" % [nm(d.roads[c]), lv[c]])
-	label("你的等级：" + "  ".join(t))
-	var o = ctx["opponents"]
-	label("对手：" + rival_name(o) + "　（第 %d 场）" % (int(ctx["rounds"]) + 1))
-	label(rules_text())
-	if ctx["roles"]["style_probs"] != null:
-		var sp := PackedStringArray()
-		for c in 4:
-			sp.append("%s %d%%" % [nm(d.roads[c]), int(ctx["roles"]["style_probs"][c])])
-		label("本场场风概率：" + "  ".join(sp))
-	label("组 5 张牌（同色第 k 张点数 = 等级 − k，后面的牌更弱）：")
-	var order := [0, 1, 2, 3]
-	order.sort_custom(func(a, b): return lv[a] > lv[b] if lv[a] != lv[b] else a < b)
-	var def := [order[0], order[0], order[0], order[1], order[1]]
-	var obs: Array = []
-	var hb := HBoxContainer.new()
-	body.add_child(hb)
-	for k in 5:
-		var ob := OptionButton.new()
-		for c in 4:
-			ob.add_item(nm(d.roads[c]))
-		ob.select(def[k])
-		hb.add_child(ob)
-		obs.append(ob)
-	button("确定牌组", func():
-		var cols := []
-		for ob in obs:
-			cols.append(ob.selected)
-		reply(cols))
+	clear_body()
+	var v = preload("res://ui/audition.tscn").instantiate()
+	body.add_child(v)
+	v.deck_done.connect(func(cols): reply(cols))
+	v.show_deck(self, ctx)
 
 
 func _show_play(ctx: Dictionary) -> void:
-	_wait_screen("试镜：第 %d 轮" % (int(ctx["round"]) + 1))
-	var sl: Array = ctx["score_line"]
-	label("比分 %d : %d　本场风格：%s" % [sl[0], sl[1], nm(d.roads[ctx["style"]])])
-	label(rules_text())
-	var n := 1
-	for h in ctx["history"]:
-		var v: Array = Audition.effective(d, h[0], h[1], ctx["style"])
-		label("第 %d 轮：你 %s\n　　　对手 %s\n　　　%d %s %d → %s" % [n, card_text(h[0], h[1], ctx["style"]), card_text(h[1], h[0], ctx["style"]),
-			v[0], ">" if v[0] > v[1] else ("<" if v[0] < v[1] else "="), v[1], "你赢" if h[2] else "你输"])
-		n += 1
-	label("对手还剩 %d 张牌（不知道他出哪张）。你的每张牌在不同情况下的有效点数：" % ctx["rival_hand"].size())
-	var hand: Array = ctx["hand"]
-	for i in hand.size():
-		var ii: int = i
-		var c: Array = hand[i]
-		var plain: int = c[1] * 100
-		var inf: int = plain * int(ac()["style_pct"]) / 100 if c[0] == ctx["style"] else plain
-		var txt := "%s　点数 %d　基础 %d" % [nm(d.roads[c[0]]), c[1], plain]
-		if c[0] == ctx["style"]:
-			txt += "　场风 ×%d%% = %d" % [int(ac()["style_pct"]), inf]
-		else:
-			txt += "　克制对方时 %d，被克制时 %d" % [plain * int(ac()["counter_pct"]) / 100, plain * int(ac()["countered_pct"]) / 100]
-		button(txt, func(): reply(ii))
+	clear_body()
+	var v = preload("res://ui/audition.tscn").instantiate()
+	body.add_child(v)
+	v.play_done.connect(func(i): reply(i))
+	v.show_play(self, ctx)
 
 
 # ================= the month: street first, then the map, one period at a time =================
