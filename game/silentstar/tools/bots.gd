@@ -1209,9 +1209,9 @@ class Addict:
 		return super(g, P, i)
 
 
-## Gambler (round 5 follow-up, the user's "smart gambler"): plays like the disciplined bot (church included, same option
-## preferences); buys when the dealer is around (keeping a month of living costs and this month's tuition) and keeps the doses;
-## takes one only before a shooting period of a lead medium or big film in the last two years. Once addicted the rules make him
+## Gambler (round 5 follow-up, the user's "smart gambler"; round 6 changes): plays like the disciplined bot (church included,
+## same option preferences); buys when the dealer is around (keeping a month of living costs) and keeps the doses;
+## takes one only before a shooting period of a lead medium or big film of his own road (any year). Once addicted the rules make him
 ## take his own doses; at the deepest stage he goes to detox and buys nothing that month (like wild).
 ## Report only: extra.dealer_blocked = months the dealer was there but discipline >= refuse_discipline turned him away;
 ## extra.dealer_poor = months he could not afford one; extra.max_stock = the most doses he held.
@@ -1236,7 +1236,7 @@ class Gambler:
 			extra["dealer_blocked"] = extra.get("dealer_blocked", 0) + 1
 			return
 		var price: int = int(st.flags.get("dealer_price", 0))
-		var reserve: int = living(st) + tuition(st)
+		var reserve: int = living(st)      # round 6: a month of living costs only, no tuition
 		while n > 0 and st.money - price * n < reserve:
 			n -= 1
 		if n > 0:
@@ -1247,7 +1247,7 @@ class Gambler:
 
 	func bet_film(story, st, i: int) -> bool:
 		var f = story.locked(st, i)
-		return f != null and st.ym >= 24 and not f["support"] and (f["size"] == "medium" or f["size"] == "big")
+		return f != null and not f["support"] and f["roles"]["road"] == road and (f["size"] == "medium" or f["size"] == "big")
 
 	func before_period(story, st, i: int) -> void:
 		if stock(st) > 0 and bet_film(story, st, i) and Events.boost_reason(st, i) == "":
