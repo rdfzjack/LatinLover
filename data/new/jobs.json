@@ -56,7 +56,7 @@
    "name": "明星助理",
    "earliest": "1926-01",
    "prereq": [],
-   "daily_wage": 3,
+   "daily_wage": 1,
    "success_lines": [
     {
      "stat": "stamina",
@@ -73,13 +73,6 @@
     },
     {
      "stat": "connections",
-     "add": [
-      0,
-      1
-     ]
-    },
-    {
-     "stat": "business",
      "add": [
       0,
       1

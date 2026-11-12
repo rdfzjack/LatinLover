@@ -1199,11 +1199,11 @@
    "freq": null,
    "effect": "favor.sil+3",
    "code": true,
-   "note": "Date is a placeholder (user to decide, format \"MM-DD\"; null = never fires). Letters and gifts arrive; each romance line with favor >=60 gets a small scene; actress favor +3",
+   "note": "Date: Aug 19 (user decided; format \"MM-DD\"). Letters and gifts arrive; each romance line with favor >=60 gets a small scene; actress favor +3",
    "source": "[orig EVENT042/043]",
    "body": null,
    "order": 19,
-   "date": null,
+   "date": "08-19",
    "tier": "small"
   },
   {
