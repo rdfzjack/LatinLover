@@ -4,17 +4,7 @@
 
 ## 现在做到哪
 
-- **PLAN 第 1–12 步和 8b、9b、9c、12b 已完成；第 12c 步做完了 c1（规则）和 c2（三个新机器人、报告、护栏），c3 的数已定，第 4 轮把机器人改得会玩并重跑了整份报告、试算了大卖收益（`design/C3_ROUND1.md`），下一步是 Fable 出大卖方案（`design/HANDOFF_FABLE.md`），Opus 照着改表重跑**，再到第 13 步（界面）。12b、12c 的规格在 `design/STEP12B_12C_BALANCE.md`。**从 12b 起 `sim/` 冻结：不再改规则，只留作历史参考；规则只改 `game/silentstar/core/`，机器人和报告在 `game/silentstar/tools/bots.gd` `report.gd`；之后的规矩见 `design/BALANCE_WORKFLOW.md`。**数据、`sim/` 和 Godot 的 `core/` 里的 id、字段名全是英文（对照表 `design/GLOSSARY.md`），中文只在数据表的显示字段里；`data/locale/text.csv` 由 `tools/extract_text.py` 生成（`tools/check.py` 会跑它），`data/USER_GUIDE.md` 已按新写法用英文重写。Godot 对账（命令在 `design/IMPL_NOTES.md` 的 Godot 一节）已通过。
-- 用户会自己改 `data/new/` 的表（指南 `data/USER_GUIDE.md`）。开工先跑 `python3 tools/check.py`，不通过先告诉用户。
-- 第 12 步：`core/` 加了 `board.gd` `film.gd` `street.gd`（12-1）和 `events.gd` `ending.gd` `story.gd`（12-2；`story.gd` 是 `Month.Hooks` 的子类，内含 `Agent` 和 `SimpleAgent`）。对账：`tools/record_game.py` 把机器人一整局的每个决定录下来（`--extras` 再加剧本、戒毒、放消息、餐厅等月初动作和一份“偏爱的打工”），`tools/trace.py` 录 `trace_cases.json` 的 `games` 段 38 局到 `work/games/`，Godot 回放；每月状态（含整份存档的 md5）、触发过的事件、每块板的试镜和结局逐字节一致。改了表以后，`python3 tools/record_game.py --coverage` 看各机器人还走得到哪些路径。
-- 第 12c 步（c1、c2）：疲劳成了约束（上课每天 +3、看书 +2、城里外出只 −3、度假村 −20 带“玩过头”、年度大事 +15）；毒品变成街道动作“提神”（药瘾点数定阶段，阶段 2、3 有后果，“加深”事件删除）；被捕罚款 `max(200, 30%)`、拘留作废下一旬、搜查概率随犯罪升高；道德条款改成被捕或丑闻后 3 个月不能报大片；硬汉、情人、手腕各有两级犯罪工（`crime_tier`，形状由 `check_data.py` 核对）；疗养院出院有副作用；结局“演员”排在“黑暗”前。新机器人 `disciplined_*` `bad_boy_*` `addict_*`；所有机器人按偏好表选事件选项；报告加了“来自事件”和“12c 策略”两段、`--coverage`、`--guard`；`design/targets.json` 是护栏，`tools/check.py` 第 5 步用 Godot 跑 30 局对它（没有 Godot 就跳过）；事件都有了 `tier`，`check_data.py` 查预算。`sim/` 改读 `sim/data_12b/`（12b 时的表），Python 和 Godot 不再对账。细节见 `design/IMPL_NOTES.md` 的 Step 12c 一节。
-- 第 12b 步：机器人和报告搬进了 Godot（`tools/bots.gd` `tools/report.gd`），没改任何规则和数值。先把 Python 机器人的随机数换成 PCG32（单独一条流，序号 3），再移植；`trace_cases.json` 的 `bots` 段让 8 种机器人各跑 5 个种子（每月存档 md5 + `summarize` 的 JSON），Godot 和 Python 逐字节一致；`report.gd --n=200 --bots=all` 的输出和 `python3 -m sim.report` 逐字符相同（基准是 `design/BALANCE_LOG.md`“现在的报告”）。耗时和移植时发现的 Python 侧问题见 `design/IMPL_NOTES.md`。
-- 第 11 步：`core/audition.gd` 移植了试镜（组牌、有效点数、对手习惯、对手组牌、结果档、`audition()`）；`trace_cases.json` 的 `audition` 段跑 1000 场（月份、名气、声望、场风、有名和无名对手、大片两场、被记住、搞砸都有），Godot 和 Python 逐轮一致。
-- 第 10 步：`core/schedule.gd`、`month.gd` 移植了日程和月结（钩子为空，选片板等第 12 步接）；`tools/trace_cases.json` 的 `month` 段跑 7 组 48 个月的固定日程（含外出、看书、病倒、疗养院、崩溃结局、存读档），Godot 和 Python 逐字节一致。
-- 第 9 步：Godot 工程 `game/silentstar/` 有了数据加载、随机数、状态、条件和效果、存读档，和 Python 对账逐字节一致（命令在 `design/IMPL_NOTES.md` 的 Godot 一节）。
-- 股票系统已删；休息只剩在家（Sil 陪着）和外出（选去处）两种（`design/CHANGE.md`）。
-- `sim/`（Python 试算器）能从开局跑到结局，数值调过一轮（第 8 步）；之后的数值都在 Godot 里调，现状见 `design/C3_ROUND1.md`。
-- 用户要等第 13、14 步有界面以后才能自己试玩。角色、事件、NPC、文本大多是占位（第 16–18 步补）。
+见 PLAN.md 的‘进度’。
 
 ## 文档各管什么
 
@@ -22,12 +12,12 @@
 |---|---|---|
 | `README.md` | 现状、文件地图、用户定过和待定的事 | 每次开工先读 |
 | `PLAN.md` | 分步计划，一步一个对话 | 找这一步要读什么、产出什么 |
+| PLAN.md 的‘进度’ | 唯一的交接 | 每次开工先读 |
 | `design/BALANCE_WORKFLOW.md` | 12b 之后的规矩：改哪里（规则只改 Godot，`sim/` 冻结）、加内容／加系统／调平衡各怎么做、事件预算、护栏 | 12b 完成后，每次开工先读 |
 | `design/CHANGE.md` | 用户的修改意见，和每条在哪一步处理 | 每次开工先读 |
 | `design/GDD.md` | 全部规则和数值，以它为准 | 只读这一步涉及的小节 |
 | `design/DESIGN_NOTES.md` | GDD 里每个 [推N…] 的理由 | 想改某条规则前查它为什么这样定 |
 | `design/BALANCE_LOG.md` | 数值调过什么、现在的报告、没解决的项 | 改数值前 |
-| `design/STEP9C_IDS_AND_LOCALE.md` | 第 9c 步的规格：英文 id、语言文件、规矩和完成标准 | 做 9c 时 |
 | `design/GLOSSARY.md` | 中文名 → 英文 id 对照表（英文文档，由 `tools/i18n_map.json` 生成） | 在设计文档里看到中文名、要找 id 时 |
 | `tools/extract_text.py` | 显示字段清单；生成 `data/locale/text.csv`（`key,zh_CN,en`）；`--prune` `--ack` | 加内容、改名、翻译时 |
 | `design/IMPL_NOTES.md` | `sim/` 和 Godot 的结构、接口、GDD 没写到的实现细节、对账命令 | 移植 Godot、改 `sim/` 时 |
