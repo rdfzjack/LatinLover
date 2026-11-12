@@ -215,6 +215,8 @@ func book_text(bid: String) -> String:
 ## Why an entry cannot be picked, in words the player can act on.
 func block_reason(e: String, raw: String) -> String:
 	var pe := Schedule.parse_entry(e)
+	if not pe.is_empty() and pe[0] == "book" and raw == "skill at the book cap":
+		return tr("ui.main.block_reason.2") % [nm(d.books[pe[1]]["skills"]), int(d.books[pe[1]]["skill_cap"])]
 	if not pe.is_empty() and pe[0] == "book" and raw == "education below the gate":
 		return tr("ui.main.block_reason.1") % [int(d.books[pe[1]]["education_gate"]), st.val("education")]
 	return why(raw)
@@ -1367,6 +1369,8 @@ func _show_location(i: int, loc: String) -> void:
 	var any := false
 	for e in loc_entries(loc):
 		var why_not: String = Schedule.validate(st, e)
+		if why_not == "" and d.books.has(e) and st.skill[d.books[e]["skills"]] >= int(d.books[e]["skill_cap"]):
+			why_not = "skill at the book cap"      # reading it would only add fatigue
 		var txt := tr("ui.main.show_location.3") % [entry_name(e), entry_effect(e)]
 		if why_not == "":
 			any = true
