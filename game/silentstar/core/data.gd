@@ -66,7 +66,11 @@ var chains = null
 var schedule_npc = null
 
 
+## In an exported game the tables are inside the package (res://data/new, copied there by tools/sync_data.sh before exporting);
+## in the repository they are read from data/new/ at the root.
 static func default_dir() -> String:
+	if FileAccess.file_exists("res://data/new/stats.json"):
+		return "res://data/new"
 	return ProjectSettings.globalize_path("res://").path_join("../../data/new").simplify_path()
 
 

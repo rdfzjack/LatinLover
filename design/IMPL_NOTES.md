@@ -254,3 +254,21 @@ Report (`tools/report.gd`) new arguments: `--random-options`, `--coverage` (fire
 - `tools/extract_text.py` holds the one list of display fields (`SPEC`) and writes `data/locale/text.csv` (`key,zh_CN,en`). Key: `<category>.<id>.<field>`; nested lists add `.option.<index>` (options have no id) or `.service.<id>`. `zh_CN` is regenerated on every run, `en` is kept. The Chinese an English line was written against is in `data/locale/en_basis.json`; if the Chinese differs the line is reported as a stale translation until `--ack`. `tools/check.py` runs the same code (step 4/5): missing Chinese, duplicate keys, keys without a record, stale English and Chinese outside the display fields are errors; lines without English are only counted.
 - Decisions: tag families (`tag_families` in `endings.json`) have no display name; the family choice of the transition is shown through the member tags (`tag.<id>.name`). Add a name when a screen needs one. Endings with `dynamic_name: top_job` carry the placeholder `{top_job}` in their `name`; `locale.gd` `ending_name` replaces it by the translated name of the job held by that variable.
 - `test_locale.py` covers the key format, stale / extra / duplicate keys and stray Chinese.
+
+
+## Step 13: main screen (`game/silentstar/ui/`)
+
+- `ui/main.tscn` + `main.gd` (one script, every widget is built in code), `ui/ui_story.gd` (`UiStory` = `Story` plus a call to the screen after each period; `UiStory.UiAgent` = the `Story.Agent` that turns every question into a prompt). Nothing in `core/` changed except that `Data.default_dir()` and `Locale.default_path()` first look in `res://data/` (the exported package) before the repository's `data/`.
+- **Threading.** `run_month` asks the player in the middle of the month (auditions, event options, annual event, scandal, doses), so the game runs on a worker thread (`_worker`). `ask(kind, payload)` posts the question to the screen (`call_deferred("_show_request")`) and blocks on a `Semaphore` until a button calls `reply(value)`. While the worker waits the screen may change the state directly: the street, items, scripts, detox and the dealer are used that way during the `plan` question. Questions: `plan`, `pick_role`, `deck`, `play`, `support`, `stunt`, `option`, `annual`, `family`, `suppress`, `boost`, `period`, `summary`, `ending`.
+- **Playback** is one step per period (`period_done` after `period_end` / `film_period`), because the core settles a whole period at once. "Skip" turns the rest of the month's playback off. The month summary compares the state at the start of the month with the end and lists the events fired (`event_log`).
+- **Save**: `user://autosave.json` after every settled month (`Month.save`); "continue" on the title screen restores it (`Month.restore`) with a `UiStory`.
+- **Test modes** (arguments after `--`): `--auto` plays the whole game on defaults without building any screen; `--uitest` builds every screen for real and presses the street buttons in the first 3 months, then answers like `--auto`; `--shot=file.png --shotkind=<question>` saves a picture of the first screen of that question (needs a display: `xvfb-run` with `--rendering-driver opengl3 --rendering-method gl_compatibility`); `--seed=N`, `--months=N`. Commands:
+
+```
+godot --path game/silentstar                                              # play
+godot --headless --path game/silentstar -- --auto --seed=1                # 48 months in about a second
+godot --headless --path game/silentstar -- --uitest --seed=2              # about 5 minutes (headless layout is slow)
+```
+- **Export**: `tools/sync_data.sh` copies `data/new` and `data/locale` into `game/silentstar/data/` (ignored by git); `export_presets.cfg` includes `data/*` and leaves `tools/*` out. Not exported for real yet (no export templates in the container).
+- Display names come from the `name` fields of the tables (collected by `nm(id)`), not from `text.csv`; Chinese only for now.
+- Checked: `--auto` seeds 1–3 and `--uitest` seeds 2 and 5 run 1926-01 to 1929-12 with no script error; screenshots of the schedule screen and the board look right.

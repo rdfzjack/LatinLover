@@ -11,6 +11,8 @@ const Rules = preload("res://core/rules.gd")
 
 
 static func default_path() -> String:
+	if FileAccess.file_exists("res://data/locale/text.csv"):
+		return "res://data/locale/text.csv"
 	return ProjectSettings.globalize_path("res://").path_join("../../data/locale/text.csv").simplify_path()
 
 
