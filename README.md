@@ -13,7 +13,7 @@
 - 第 10 步：`core/schedule.gd`、`month.gd` 移植了日程和月结（钩子为空，选片板等第 12 步接）；`tools/trace_cases.json` 的 `month` 段跑 7 组 48 个月的固定日程（含外出、看书、病倒、疗养院、崩溃结局、存读档），Godot 和 Python 逐字节一致。
 - 第 9 步：Godot 工程 `game/silentstar/` 有了数据加载、随机数、状态、条件和效果、存读档，和 Python 对账逐字节一致（命令在 `design/IMPL_NOTES.md` 的 Godot 一节）。
 - 股票系统已删；休息只剩在家（Sil 陪着）和外出（选去处）两种（`design/CHANGE.md`）。
-- `sim/`（Python 试算器）能从开局跑到结局，数值调过一轮。第 8 步还留了三处数值要修，见 `design/BALANCE_LOG.md` 的“下一轮要修的”。
+- `sim/`（Python 试算器）能从开局跑到结局，数值调过一轮（第 8 步）；之后的数值都在 Godot 里调，现状见 `design/C3_ROUND1.md`。
 - 用户要等第 13、14 步有界面以后才能自己试玩。角色、事件、NPC、文本大多是占位（第 16–18 步补）。
 
 ## 文档各管什么
