@@ -1,5 +1,5 @@
 {
- "note": "Guard targets (design/BALANCE_WORKFLOW.md). Every target is [low, high]; null = open. Only Fable changes this file, in a balance round (C). 'strategies' are checked on the mean over the road bots of a strategy (bad_boy: tough, lover, savvy), 'bots' on one bot. Sources: the step-12c target table of design/STEP12B_12C_BALANCE.md and the step-8 table of design/BALANCE_LOG.md. check.py runs 30 games per bot and widens every range by 10%.",
+ "note": "Guard targets (design/BALANCE_WORKFLOW.md). Every target is [low, high]; null = open. Only Fable changes this file, in a balance round (C). 'strategies' are checked on the mean over the road bots of a strategy (bad_boy: tough, lover, savvy), 'bots' on one bot. Sources: the step-12c target table of design/STEP12B_12C_BALANCE.md and the step-8 table of design/BALANCE_LOG.md. check.py runs 30 games per bot and widens every range by 10%. c3 round 1 (Fable): over_311 of the four only_* bots moved from 90 to 50 - they rest without a strategy and the heavier fatigue slowed them; the pace targets now sit on disciplined_*.",
  "strategies": {
   "disciplined": {
    "rest_share": [30, 35],
@@ -52,9 +52,9 @@
   }
  },
  "bots": {
-  "only_tough": {"plain_rep": [311, 340], "over_311": [90, null], "cash_y1": [null, 1000], "cash_y2": [null, 1000], "cash_end": [null, 10000], "cash_end_p90": [null, 10000], "big_win": [10, 35], "hit_rate": [5, 15], "ending_kinds": [3, null]},
-  "only_lover": {"plain_rep": [311, 340], "over_311": [90, null], "cash_y1": [null, 1000], "cash_y2": [null, 1000], "cash_end": [null, 10000], "cash_end_p90": [null, 10000], "big_win": [10, 35], "hit_rate": [5, 15], "ending_kinds": [3, null]},
-  "only_culture": {"plain_rep": [311, 340], "over_311": [90, null], "cash_y1": [null, 1000], "cash_y2": [null, 1000], "cash_end": [null, 10000], "cash_end_p90": [null, 10000], "big_win": [10, 35], "hit_rate": [5, 15], "ending_kinds": [3, null]},
-  "only_savvy": {"plain_rep": [311, 340], "over_311": [90, null], "cash_y1": [null, 1000], "cash_y2": [null, 1000], "cash_end": [null, 10000], "cash_end_p90": [null, 10000], "big_win": [10, 35], "hit_rate": [5, 15], "ending_kinds": [3, null]}
+  "only_tough": {"plain_rep": [311, 340], "over_311": [50, null], "cash_y1": [null, 1000], "cash_y2": [null, 1000], "cash_end": [null, 10000], "cash_end_p90": [null, 10000], "big_win": [10, 35], "hit_rate": [5, 15], "ending_kinds": [3, null]},
+  "only_lover": {"plain_rep": [311, 340], "over_311": [50, null], "cash_y1": [null, 1000], "cash_y2": [null, 1000], "cash_end": [null, 10000], "cash_end_p90": [null, 10000], "big_win": [10, 35], "hit_rate": [5, 15], "ending_kinds": [3, null]},
+  "only_culture": {"plain_rep": [311, 340], "over_311": [50, null], "cash_y1": [null, 1000], "cash_y2": [null, 1000], "cash_end": [null, 10000], "cash_end_p90": [null, 10000], "big_win": [10, 35], "hit_rate": [5, 15], "ending_kinds": [3, null]},
+  "only_savvy": {"plain_rep": [311, 340], "over_311": [50, null], "cash_y1": [null, 1000], "cash_y2": [null, 1000], "cash_end": [null, 10000], "cash_end_p90": [null, 10000], "big_win": [10, 35], "hit_rate": [5, 15], "ending_kinds": [3, null]}
  }
 }
