@@ -7,12 +7,12 @@
   "rewards": [
    {
     "rank": 1,
-    "rep_bonus": 10,
+    "rep_bonus": 8,
     "prize": 500
    },
    {
     "rank": 2,
-    "rep_bonus": 5,
+    "rep_bonus": 4,
     "prize": 250
    },
    {
