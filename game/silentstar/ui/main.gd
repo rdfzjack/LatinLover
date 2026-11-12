@@ -296,6 +296,8 @@ func entry_effect(e: String) -> String:
 		t.append(tr("ui.main.entry_effect.3") % int(b.get("fatigue_per_day", 1)))
 		if st.books.has(iid):
 			t.append(tr("ui.main.entry_effect.6") % int(st.books[iid]))
+		if st.skill[b["skills"]] >= int(b["skill_cap"]):
+			t.append(tr("ui.main.entry_effect.15") % [nm(b["skills"]), int(b["skill_cap"])])
 	elif kind == "job":
 		var j: Dictionary = d.jobs[iid]
 		t.append(tr("ui.main.entry_effect.7") % Schedule.wage_of(st, iid))
@@ -836,7 +838,16 @@ func period_done(_st, i: int, entry: String, out: Dictionary) -> void:
 		elif out.has("work_days"):
 			rep.append(tr("ui.main.period_done.7") % [int(out["work_days"]), int(out["ok_days"]), int(out["pay"])])
 		elif out.has("ok_days"):
-			rep.append(tr("ui.main.period_done.8") % int(out["ok_days"]))
+			var bk: Dictionary = d.books[entry]
+			var workdays := 0
+			for dd in Schedule.days_of(st, i):
+				if not dd[1]:
+					workdays += 1
+			rep.append(tr("ui.main.period_done.14") % [workdays, int(out["ok_days"])])
+			if int(out["ok_days"]) == 0:
+				rep.append(tr("ui.main.period_done.15") % [st.val("fatigue"), st.val("stamina")])
+			elif st.skill[bk["skills"]] >= int(bk["skill_cap"]):
+				rep.append(tr("ui.main.period_done.16") % [nm(bk["skills"]), int(bk["skill_cap"])])
 		elif out.get("act") == "act_hospital":
 			rep.append(tr("ui.main.period_done.12"))
 		elif out.get("act") == "act_script":
