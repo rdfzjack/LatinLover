@@ -29,7 +29,7 @@ func show_board(m, p: Dictionary) -> void:
 		pc.add_child(box)
 		var title := tr("ui.board.show_board.3") % [r["name"], m.size_name(r["size"]), tr("ui.board.show_board.4") if r["house"] else ""]
 		m.heading(title, box)
-		var line := tr("ui.board.show_board.5") % [int(r["fame_gate"]), str(r["fee"])]
+		var line := tr("ui.board.show_board.5") % str(r["fee"]) + tr("ui.common.wide_space") + m.gates_text(Board.fame_gate(st, r), r.get("gates", []))
 		if r.get("talkie") != null and r["talkie"]:
 			line += tr("ui.board.show_board.6")
 		m.label(line, box)

@@ -86,12 +86,9 @@ func start_month() -> void:
 	hooks.month_start(st)
 
 
-## Six-year swap: 2 boards a year (calendar `board`), 3 a year once fame reaches stats.board_famous_tier (calendar `board_famous`).
+## Fixed boards (user): the 15 audition months are the calendar's `board` months (the months of roles.json board_schedule).
 static func board_month(st) -> bool:
-	var m: Dictionary = st.month()
-	if st.fame_tier() >= int(st.d.t["stats"].get("board_famous_tier", 99)):
-		return Schedule.truthy(m.get("board_famous", false))
-	return Schedule.truthy(m["board"])
+	return Schedule.truthy(st.month()["board"])
 
 
 ## Changes the lifestyle before scheduling at month start; takes effect when it is charged next month.

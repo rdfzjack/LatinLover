@@ -302,8 +302,8 @@ for m in ms:
     if m['sundays'] != [d for d in range(1, nd+1) if datetime.date(y, mo, d).weekday() == 6]: err(f, f"{m['month']} sundays")
     if m['periods'] != [[1,10],[11,20],[21,nd]]: err(f, f"{m['month']} periods")
     for e in m['era_events']: ref_event(f, e)
-if sum(1 for m in ms if m['board']) != 12: err(f, 'board must be 12 times (2 a year)')
-if sum(1 for m in ms if m.get('board_famous')) != 18: err(f, 'board_famous must be 18 times (3 a year)')
+BS = roles.get('board_schedule', [])
+if sorted(m['month'] for m in ms if m['board']) != sorted(x['month'] for x in BS): err(f, 'the board months must be exactly the months of roles.json board_schedule')
 if sum(1 for m in ms if m['annual']) != 6: err(f, 'annual must be 6 times')
 if sum(1 for m in ms if m['era_events']) != 7: err(f, 'era events must be 7 (GDD 11.3)')
 
@@ -557,6 +557,22 @@ if pending_events: notes.append(f'{len(pending_events)} event references wait fo
 for n in notes: print('note: ' + n)
 if errs:
     print('\n'.join(errs)); print(f'failed: {len(errs)} problems'); sys.exit(1)
+# fixed boards (roles.json board_schedule, reserve_pool, gates)
+f = 'roles.json'
+RD = {r['id']: r for r in roles['roles']}
+for x in roles.get('board_schedule', []):
+    if x['month'] not in CAL_MONTHS: err(f, f"board_schedule month is not in the calendar {x['month']}")
+    for t in ('big', 'medium', 'small'):
+        r = RD.get(x.get(t))
+        if r is None: err(f, f"board_schedule {x['month']} {t} role does not exist {x.get(t)}")
+        elif r['size'] != t: err(f, f"board_schedule {x['month']} {t} role {r['id']} is size {r['size']}")
+for rid in roles.get('reserve_pool', []):
+    r = RD.get(rid)
+    if r is None: err(f, f'reserve_pool role does not exist {rid}')
+    elif r['size'] not in ('small', 'medium'): err(f, f'reserve_pool role {rid} must be small or medium')
+for r in roles['roles']:
+    if 'gates' in r: check_cond(f, r['gates'], r['id'] + ' gates')
+if not isinstance(roles['defaults']['board'].get('connections_extra'), int): err(f, 'defaults.board needs the integer connections_extra')
 # map (the places on the map and what each offers)
 f = 'map.json'
 seen = set()

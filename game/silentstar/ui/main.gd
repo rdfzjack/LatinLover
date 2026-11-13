@@ -1450,6 +1450,7 @@ func _show_month_start() -> void:
 	lb.select(li)
 	lb.item_selected.connect(func(idx): g.set_lifestyle(lb.get_item_metadata(idx)))
 	hb2.add_child(lb)
+	button(tr("ui.main.next_board.1"), func(): _show_next_board(func(): _show_month_start()))
 	button(tr("ui.main.show_month_start.9"), func(): reply(null))
 	var tabs := TabContainer.new()
 	tabs.custom_minimum_size = Vector2(0, 520)
@@ -1539,6 +1540,7 @@ func _show_map(i: int) -> void:
 		b.pressed.connect(func(): _show_location(i, ll))
 		map.add_child(b)
 	button(tr("ui.main.show_map.3"), func(): _show_inventory(i))
+	button(tr("ui.main.next_board.1"), func(): _show_next_board(func(): _show_map(i)))
 
 
 func _show_location(i: int, loc: String) -> void:
@@ -1628,6 +1630,33 @@ func _show_shop(i: int, entry: String, back := "loc_city") -> void:
 	var v = ShopView.new()
 	body.add_child(v)
 	v.show_entry(self, entry, func(): _show_location(i, back))
+
+
+## A role's sign-up conditions in words, with the player's current numbers: "名气 ≥ 150（你 120）  相貌 ≥ 80（你 120）".
+func gates_text(fame_need: int, gates: Array) -> String:
+	var parts := PackedStringArray()
+	parts.append(tr("ui.main.next_board.2") % [nm("fame"), fame_need, st.attr["fame"], "✓" if st.attr["fame"] >= fame_need else "✗"])
+	for grp in gates:
+		for c in grp:
+			var have: int = st.val(str(c[0])) if d.attrs.has(str(c[0])) or d.skills.has(str(c[0])) else 0
+			parts.append(tr("ui.main.next_board.2") % [nm(str(c[0])), int(c[2]), have, "✓" if Rules.test(st, c) else "✗"])
+	return tr("ui.common.wide_space").join(parts)
+
+
+## The next fixed board and what each of its roles needs to sign up (fixed boards, user). It moves on after each board.
+func _show_next_board(back: Callable) -> void:
+	clear_body()
+	button(tr("ui.main.show_location.2"), back)
+	var nb: Dictionary = Board.next_board(st)
+	if nb.is_empty():
+		label(tr("ui.main.next_board.3"))
+		return
+	heading(tr("ui.main.next_board.4") % str(nb["month"]))
+	for r in nb["roles"]:
+		var road: String = d.roads[Board.main_of(r["base_style"])] if r["base_style"] != null else ""
+		label(tr("ui.main.next_board.5") % [str(r["name"]), size_name(r["size"]), nm(road) if road != "" else "-"])
+		label(gates_text(Board.fame_gate(st, r), r["gates"]), null, Color(0.8, 0.9, 1))
+	label(tr("ui.main.next_board.6"), null, Color(0.7, 0.7, 0.7))
 
 
 func _show_inventory(i: int) -> void:

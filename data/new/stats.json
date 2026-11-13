@@ -347,6 +347,5 @@
   "raid_note": "search probability of a crime job = prob x (1 + crime / raid_crime_div)",
   "raid_check_add": 20,
   "raid_check_note": "Step 12c c3: when searched, r0(raid_skill displayed) + raid_check_add >= raid_line passes; otherwise arrest"
- },
- "board_famous_tier": 2
+ }
 }

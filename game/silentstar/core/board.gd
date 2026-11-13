@@ -62,7 +62,8 @@ static func snapshot(st, r: Dictionary, src := "pool") -> Dictionary:
 		"bonus_skill": r["bonus_skill"] if Schedule.truthy(r.get("bonus_skill")) else df["bonus_skill"],
 		"talkie": r.get("talkie"), "speech_line": r.get("speech_line"),
 		"fee": r["fee"] if Schedule.truthy(r.get("fee")) else df["fee"][t], "lead": r.get("lead"),
-		"rival_spec": spec, "opponents": [], "house": false, "source": src, "intel": {}}
+		"rival_spec": spec, "opponents": [], "house": false, "source": src, "intel": {},
+		"gates": r.get("gates", []).duplicate(true)}
 
 
 static func set_probs(e: Dictionary, probs: Array) -> void:
@@ -145,7 +146,7 @@ static func draw(st, tier: String, taken: Dictionary, tags = null) -> Dictionary
 	var seen: Dictionary = st.story["boarded"]
 	var cands := []
 	for r in d.roles.values():
-		if (r["size"] == tier and not r.get("tutorial", false) and in_years(st, r) and not taken.has(r["id"])
+		if (r["size"] == tier and not r.get("tutorial", false) and in_years(st, r) and not taken.has(r["id"]) and not fixed_role(d, r["id"])
 				and seen.get(r["id"], 0) < lim and (tags == null or _shares_tag(r["tags"], tags))):
 			cands.append(r)
 	if cands.is_empty():
@@ -234,22 +235,23 @@ static func compose(st) -> Array:
 	var d = st.d
 	var c := cfg(d)
 	var sv: Dictionary = st.story
-	var n: Dictionary = c["per_board"].duplicate()
-	if st.val("connections") >= c["connections_extra_medium"]:
-		n["medium"] += 1
-	if st.val("connections") >= c["connections_extra_big"]:
-		n["big"] += 1
 	var out := []
 	var taken := {}
-	var tut: bool = int(st.flags.get("tutorial_board", 0)) == 0     # the first board of the game (six-year swap: 1924-03)
-	st.flags["tutorial_board"] = 1
-	for t in ["big", "medium", "small"]:
-		for k in int(n[t]):
-			var e: Dictionary
-			if tut and t == "small" and k == n[t] - 1:
-				e = tutorial(st)
-			else:
-				e = draw(st, t, taken)
+	var sch = schedule_entry(d, st.date())
+	if sch != null:          # fixed boards (user): one big, one medium, one small from roles.json board_schedule
+		for t in ["big", "medium", "small"]:
+			var r: Dictionary = d.roles[sch[t]]
+			var e: Dictionary = tutorial(st) if r.get("tutorial", false) else snapshot(st, r, "fixed")
+			taken[e["id"]] = true
+			out.append(e)
+		if st.val("connections") >= int(c["connections_extra"]):
+			var x = reserve_pick(st, taken)
+			if x != null:
+				taken[x["id"]] = true
+				out.append(x)
+	else:                    # a board month with no fixed entry: one role of each size from the free pool (should not happen)
+		for t in ["big", "medium", "small"]:
+			var e := draw(st, t, taken)
 			taken[e["id"]] = true
 			out.append(e)
 	# extra roles
@@ -275,9 +277,55 @@ static func compose(st) -> Array:
 		taken[e["id"]] = true
 		out.append(e)
 	for e in out:
-		if e["source"] == "pool" or e["source"] == "widow_invest":
+		if e["source"] in ["pool", "widow_invest", "fixed", "reserve"]:
 			sv["boarded"][e["id"]] = sv["boarded"].get(e["id"], 0) + 1
 	return out
+
+
+## The fixed board of this month (roles.json board_schedule), or null.
+static func schedule_entry(d, month: String):
+	for x in d.t["roles"].get("board_schedule", []):
+		if x["month"] == month:
+			return x
+	return null
+
+
+## Whether a role belongs to the fixed boards or the reserve pool (the free draws never take those).
+static func fixed_role(d, rid: String) -> bool:
+	if d.t["roles"].get("reserve_pool", []).has(rid):
+		return true
+	for x in d.t["roles"].get("board_schedule", []):
+		if x["big"] == rid or x["medium"] == rid or x["small"] == rid:
+			return true
+	return false
+
+
+## The connections extra role: the first role of reserve_pool not shown yet whose fame gate and gates the player meets now.
+static func reserve_pick(st, taken: Dictionary):
+	var d = st.d
+	for rid in d.t["roles"].get("reserve_pool", []):
+		if taken.has(rid) or st.story["boarded"].get(rid, 0) > 0:
+			continue
+		var e := snapshot(st, d.roles[rid], "reserve")
+		if eligible(st, e) == "":
+			return e
+	return null
+
+
+## The next fixed board after the last board held (for the "next board" page): {month, roles: [snapshots]} or {} when none is left.
+## It changes only when a board has been held, i.e. after each round of auditions.
+static func next_board(st) -> Dictionary:
+	var d = st.d
+	var last := -1
+	if st.story["board"] != null:
+		last = int(st.story["board"]["month"])
+	for x in d.t["roles"].get("board_schedule", []):
+		if int(d.month_index[x["month"]]) > last:
+			var roles := []
+			for t in ["big", "medium", "small"]:
+				roles.append(snapshot(st, d.roles[x[t]], "fixed"))
+			return {"month": x["month"], "roles": roles}
+	return {}
 
 
 static func assign_talkie(st, entries: Array) -> void:
@@ -324,6 +372,8 @@ static func fame_gate(st, e: Dictionary) -> int:
 static func eligible(st, e: Dictionary) -> String:
 	if st.attr["fame"] < fame_gate(st, e):
 		return "out_of_reach"
+	if not Rules.cond(st, e.get("gates", [])):          # fixed boards (user): the role's minimum off-road attributes
+		return "gates"
 	if e["size"] == "big" and st.flags.has("morals_until") and st.ym <= st.flags["morals_until"]:
 		return "morals"
 	if st.status["long_contract"] and not e["house"]:
