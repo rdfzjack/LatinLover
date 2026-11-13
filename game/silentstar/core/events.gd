@@ -333,12 +333,20 @@ static func period_check(story, st, i: int, entry: String) -> void:
 	var nxt := Film.next_period(st, i)
 	if (ready(st, e) and not Film.is_locked(st, nxt[0], nxt[1]) and nxt[0] < d.months.size()
 			and Rules.prob(st, e["prob"])):
-		fire(story, st, e["id"])
+		_record(story, st, e["id"])
 		Board.swap_role(st, i, story.agent)
 	e = d.events["evt_steal_role"]
 	if ready(st, e) and Rules.prob(st, e["prob"]):
-		fire(story, st, e["id"])
+		_record(story, st, e["id"])
 		Board.steal_role(st, story.agent)
+
+
+## Swap role / steal role are recorded like a fired event (frequency, event log, the result notice of the UI) but show no event
+## dialog: the explanation page of the agent (role_event) replaces it, and the event switch does not stop them (role_events does).
+static func _record(story, st, eid: String) -> void:
+	st.fired[eid] = st.fired.get(eid, 0) + 1
+	st.story["last_fired"][eid] = st.ym
+	story.event_log.append({"id": eid, "month": st.date()})
 
 
 static func period_end(story, st, i: int, entry: String, out: Dictionary) -> void:

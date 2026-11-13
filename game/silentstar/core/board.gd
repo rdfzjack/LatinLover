@@ -515,6 +515,8 @@ static func run(st, agent) -> Array:
 			if can_try(st, i) == "":
 				ok.append(i)
 		if ok.is_empty():
+			if b["tried"].is_empty():
+				agent.view_board(st, b)       # user: the board is still shown, every role greyed out with its reason
 			break
 		var i = agent.pick_role(st, b, ok)
 		if i == null:
@@ -539,8 +541,6 @@ static func one_match(st, agent, role: Dictionary, rival: Dictionary) -> bool:
 ## (the caller checks first).
 static func swap_role(st, i: int, agent) -> bool:
 	var d = st.d
-	if not Traits.with_effect(st, "no_audition").is_empty():   # a status trait forbids auditions
-		return false
 	var c: Dictionary = d.role_cfg["shoot"]["swap_role"]
 	var e := draw(st, c["size"], {})
 	if e["source"] == "pool":
@@ -551,7 +551,11 @@ static func swap_role(st, i: int, agent) -> bool:
 		e["speech_line"] = d.role_cfg["speech_line"][e["size"]]
 	var rv := Audition.unnamed_rival(st, e["size"], null, e["style_probs"])
 	var nxt := Film.next_period(st, i)
-	if not agent.role_event(st, "swap", {"role": e, "rival": rv, "period": nxt}):    # user: explained first, can be declined
+	var blocked := Traits.with_effect(st, "no_audition")      # a status trait forbids auditions: shown, but cannot be taken
+	var info := {"role": e, "rival": rv, "period": nxt}
+	if not blocked.is_empty():
+		info["blocked"] = blocked["id"]
+	if not agent.role_event(st, "swap", info) or not blocked.is_empty():    # user: explained first, can be declined
 		st.inc("count.swap_declined")
 		return false
 	var win := one_match(st, agent, e, rv)

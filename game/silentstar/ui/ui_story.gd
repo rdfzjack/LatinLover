@@ -62,6 +62,7 @@ func after_period(st, i: int, entry: String, out: Dictionary) -> void:
 	var n0: int = films.size()
 	var l0: int = event_log.size()
 	var stolen0 := 0
+	var declined0: int = st.cnt("count.swap_declined")
 	var first_name := ""
 	for f in films:
 		if f["status"] == "stolen":
@@ -76,6 +77,8 @@ func after_period(st, i: int, entry: String, out: Dictionary) -> void:
 		if id == "evt_swap_role":
 			if films.size() > n0:
 				ui.ask("notice", tr("ui.story.period_start.1") % films[films.size() - 1]["roles"]["name"])
+			elif st.cnt("count.swap_declined") > declined0:
+				pass                                  # declined (or blocked by a status trait): nothing to report
 			else:
 				ui.ask("notice", tr("ui.story.period_start.2"))
 		elif id == "evt_steal_role":
@@ -118,6 +121,9 @@ class UiAgent:
 
 	func go_personally(st, role: Dictionary) -> bool:
 		return ui.ask("stunt", role)
+
+	func view_board(st, b: Dictionary) -> void:
+		ui.ask("pick_role", {"board": b, "ok": []})
 
 	func role_event(st, kind: String, info: Dictionary) -> bool:
 		var p := info.duplicate()

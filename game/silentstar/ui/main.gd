@@ -1350,11 +1350,22 @@ func _show_role_event(p: Dictionary) -> void:
 		if per.size() == 2:
 			when = "%s %s" % [str(d.months[clampi(int(per[0]), 0, d.months.size() - 1)]["month"]), [tr("ui.main.role_event.period_0"), tr("ui.main.role_event.period_1"), tr("ui.main.role_event.period_2")][clampi(int(per[1]), 0, 2)]]
 		label(tr("ui.main.role_event.swap_rules") % when)
+	var blocked := str(p.get("blocked", ""))
+	if blocked != "":                          # a status trait forbids auditions: greyed out with the reason, like the board
+		label(tr("ui.board.show_board.17") + nm(blocked) + ": " + str(_trait_body(blocked)), null, Color(1, 0.7, 0.7))
 	var hb := HBoxContainer.new()
 	body.add_child(hb)
-	button(tr("ui.main.role_event.accept_steal") if steal else tr("ui.main.role_event.accept_swap"), func(): reply(true), hb)
+	var acc := button(tr("ui.main.role_event.accept_steal") if steal else tr("ui.main.role_event.accept_swap"), func(): reply(true), hb)
+	acc.disabled = blocked != ""
 	if not steal:                              # user: a steal cannot be declined
 		button(tr("ui.main.role_event.decline_swap"), func(): reply(false), hb)
+
+
+func _trait_body(tid: String) -> String:
+	for x in d.traits:
+		if x["id"] == tid:
+			return str(x.get("body", ""))
+	return ""
 
 
 func _show_option(p: Dictionary) -> void:

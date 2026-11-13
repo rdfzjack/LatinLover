@@ -34,6 +34,10 @@ class Agent:
 	func accept_support(_st, _role: Dictionary) -> bool:
 		return false
 
+	## Board with nothing the player can sign up for: only shown (roles greyed out with the reason).
+	func view_board(_st, _b: Dictionary) -> void:
+		pass
+
 	## Swap role / steal role (GDD 11.1): shown before the audition; returns whether to play it.
 	## kind "swap": declining means no audition. kind "steal": only shown, it cannot be declined (the answer is ignored).
 	## info: {role, rival, period: [month index, period] the swap role would take (swap only)}.
