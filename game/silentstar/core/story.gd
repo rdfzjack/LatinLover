@@ -34,6 +34,16 @@ class Agent:
 	func accept_support(_st, _role: Dictionary) -> bool:
 		return false
 
+	## Board with nothing the player can sign up for: only shown (roles greyed out with the reason).
+	func view_board(_st, _b: Dictionary) -> void:
+		pass
+
+	## Swap role / steal role (GDD 11.1): shown before the audition; returns whether to play it.
+	## kind "swap": declining means no audition. kind "steal": only shown, it cannot be declined (the answer is ignored).
+	## info: {role, rival, period: [month index, period] the swap role would take (swap only)}.
+	func role_event(_st, _kind: String, _info: Dictionary) -> bool:
+		return true
+
 	## When a role that allows stunt_self is won: whether to do it yourself.
 	func go_personally(_st, _role: Dictionary) -> bool:
 		return false
@@ -137,6 +147,18 @@ static func fit_plan(g, plan: Array) -> Array:
 	return out
 
 
+# ---------- event notifications (step 15: the UI shows a dialog; no effect on the game) ----------
+
+## An event is about to be settled (called by Events.fire; triggered events nest).
+func event_begin(_st, _eid: String) -> void:
+	pass
+
+
+## The event is settled: rec is its record {id, month, check?, options?}.
+func event_end(_st, _rec: Dictionary) -> void:
+	pass
+
+
 # ---------- month start ----------
 
 func board(st) -> void:
@@ -205,13 +227,18 @@ func before_period(st, i: int) -> void:
 	Events.drug_period(st, i)
 
 
-func period_start(st, i: int, entry: String) -> void:
+func period_start(st, i: int, _entry: String) -> void:
 	cur_period = i
-	Events.period_start(self, st, i, entry)
 
 
 func period_end(st, i: int, entry: String, out: Dictionary) -> void:
 	Events.period_end(self, st, i, entry, out)
+	after_period(st, i, entry, out)
+
+
+## The checks of GDD 11.1 (swap role, steal role) happen at the END of the period (step 15c; they used to run before it).
+func after_period(st, i: int, entry: String, _out: Dictionary) -> void:
+	Events.period_check(self, st, i, entry)
 
 
 func day(st, dd: int) -> void:

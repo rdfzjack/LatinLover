@@ -5,12 +5,12 @@
    "id": "rival_valen",
    "name": "鲁道夫·瓦伦",
    "present": [
-    "1926-01",
+    "1924-01",
     "1927-08"
    ],
    "stages": [
     {
-     "from": "1926-01",
+     "from": "1924-01",
      "levels": [
       5,
       9,
@@ -27,12 +27,12 @@
    "id": "rival_fanban",
    "name": "道格·范班克",
    "present": [
-    "1926-01",
+    "1924-01",
     "1929-12"
    ],
    "stages": [
     {
-     "from": "1926-01",
+     "from": "1924-01",
      "levels": [
       9,
       5,
@@ -58,12 +58,12 @@
    "id": "rival_jilbo",
    "name": "约翰·吉尔伯",
    "present": [
-    "1926-01",
+    "1924-01",
     "1929-12"
    ],
    "stages": [
     {
-     "from": "1926-01",
+     "from": "1924-01",
      "levels": [
       4,
       7,
@@ -100,12 +100,12 @@
    "id": "rival_nova",
    "name": "拉蒙·诺瓦",
    "present": [
-    "1926-01",
+    "1924-01",
     "1929-12"
    ],
    "stages": [
     {
-     "from": "1926-01",
+     "from": "1924-01",
      "levels": [
       5,
       7,
@@ -141,12 +141,12 @@
    "id": "rival_barry",
    "name": "约翰·巴里",
    "present": [
-    "1926-01",
+    "1924-01",
     "1929-12"
    ],
    "stages": [
     {
-     "from": "1926-01",
+     "from": "1924-01",
      "levels": [
       3,
       7,
@@ -172,12 +172,12 @@
    "id": "rival_channing",
    "name": "朗·钱宁",
    "present": [
-    "1926-01",
+    "1924-01",
     "1929-12"
    ],
    "stages": [
     {
-     "from": "1926-01",
+     "from": "1924-01",
      "levels": [
       6,
       2,
@@ -194,12 +194,12 @@
    "id": "rival_cooper",
    "name": "加里·库普",
    "present": [
-    "1926-01",
+    "1924-01",
     "1929-12"
    ],
    "stages": [
     {
-     "from": "1926-01",
+     "from": "1924-01",
      "levels": [
       4,
       3,
@@ -277,12 +277,12 @@
    "id": "rival_rintin",
    "name": "任丁丁",
    "present": [
-    "1926-01",
+    "1924-01",
     "1929-12"
    ],
    "stages": [
     {
-     "from": "1926-01",
+     "from": "1924-01",
      "levels": [
       7,
       1,
@@ -309,7 +309,7 @@
   }
  ],
  "unnamed": {
-  "note": "main_level = base + number of level_up_months passed + r(random); h in fame = number of half-years since 1926-01 (first half of 1926 is 0); main color = the color with the highest style probability, second color = counter of counter (level main - second_gap), the other two colors level 1",
+  "note": "main_level = base + number of level_up_months passed + r(random); h in fame = number of half-years since the game start 1924-01 (first half of 1924 is 0); main color = the color with the highest style probability, second color = counter of counter (level main - second_gap), the other two colors level 1",
   "tier": [
    {
     "size": "small",
@@ -382,7 +382,7 @@
   ]
  },
  "tutorial": {
-  "note": "Rival for the tutorial role on the first board of 1926-01",
+  "note": "Rival for the tutorial role on the first board of the game",
   "main_level": 2
  }
 }

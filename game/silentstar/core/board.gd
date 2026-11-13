@@ -10,7 +10,7 @@ extends RefCounted
 ##
 ## Random-number order when building a board (copied from the Python side):
 ##   1. Draw roles in the order big, medium, small: the base counts, plus the extra medium/big roles from connections; the second
-##      small slot of 1926-01 holds the tutorial role. Drawing from the pool: index below(sum of weights); if no suitable role is
+##      small slot of the first board holds the tutorial role. Drawing from the pool: index below(sum of weights); if no suitable role is
 ##      in the pool, a placeholder role is generated: main color below(4), wanted skill below(3), tag below(n).
 ##   2. The extra roles are, in order: pending_board (script), the widow-invested medium film, the transition medium film,
 ##      the small film after Valen's death.
@@ -25,6 +25,9 @@ const Rules = preload("res://core/rules.gd")
 const Schedule = preload("res://core/schedule.gd")
 const Audition = preload("res://core/audition.gd")
 const Film = preload("res://core/film.gd")
+const Traits = preload("res://core/traits.gd")
+## The slots of a fixed board in roles.json board_schedule; small2 is the second small role of the 1924-25 boards (user).
+const SLOTS := ["big", "medium", "small", "small2"]
 
 const TIERS := ["small", "medium", "big"]
 const RANK := {"small": 0, "medium": 1, "big": 2}
@@ -62,7 +65,8 @@ static func snapshot(st, r: Dictionary, src := "pool") -> Dictionary:
 		"bonus_skill": r["bonus_skill"] if Schedule.truthy(r.get("bonus_skill")) else df["bonus_skill"],
 		"talkie": r.get("talkie"), "speech_line": r.get("speech_line"),
 		"fee": r["fee"] if Schedule.truthy(r.get("fee")) else df["fee"][t], "lead": r.get("lead"),
-		"rival_spec": spec, "opponents": [], "house": false, "source": src, "intel": {}}
+		"rival_spec": spec, "opponents": [], "house": false, "source": src, "intel": {},
+		"gates": r.get("gates", []).duplicate(true)}
 
 
 static func set_probs(e: Dictionary, probs: Array) -> void:
@@ -145,7 +149,7 @@ static func draw(st, tier: String, taken: Dictionary, tags = null) -> Dictionary
 	var seen: Dictionary = st.story["boarded"]
 	var cands := []
 	for r in d.roles.values():
-		if (r["size"] == tier and not r.get("tutorial", false) and in_years(st, r) and not taken.has(r["id"])
+		if (r["size"] == tier and not r.get("tutorial", false) and in_years(st, r) and not taken.has(r["id"]) and not fixed_role(d, r["id"])
 				and seen.get(r["id"], 0) < lim and (tags == null or _shares_tag(r["tags"], tags))):
 			cands.append(r)
 	if cands.is_empty():
@@ -234,21 +238,25 @@ static func compose(st) -> Array:
 	var d = st.d
 	var c := cfg(d)
 	var sv: Dictionary = st.story
-	var n: Dictionary = c["per_board"].duplicate()
-	if st.val("connections") >= c["connections_extra_medium"]:
-		n["medium"] += 1
-	if st.val("connections") >= c["connections_extra_big"]:
-		n["big"] += 1
 	var out := []
 	var taken := {}
-	var tut: bool = st.ym == 0
-	for t in ["big", "medium", "small"]:
-		for k in int(n[t]):
-			var e: Dictionary
-			if tut and t == "small" and k == n[t] - 1:
-				e = tutorial(st)
-			else:
-				e = draw(st, t, taken)
+	var sch = schedule_entry(d, st.date())
+	if sch != null:          # fixed boards (user): one big, one medium, one small (a second small, small2, on the 1924-25 boards)
+		for t in SLOTS:
+			if not sch.has(t):
+				continue
+			var r: Dictionary = d.roles[sch[t]]
+			var e: Dictionary = tutorial(st) if r.get("tutorial", false) else snapshot(st, r, "fixed")
+			taken[e["id"]] = true
+			out.append(e)
+		if st.val("connections") >= int(c["connections_extra"]):
+			var x = reserve_pick(st, taken)
+			if x != null:
+				taken[x["id"]] = true
+				out.append(x)
+	else:                    # a board month with no fixed entry: one role of each size from the free pool (should not happen)
+		for t in ["big", "medium", "small"]:
+			var e := draw(st, t, taken)
 			taken[e["id"]] = true
 			out.append(e)
 	# extra roles
@@ -274,9 +282,57 @@ static func compose(st) -> Array:
 		taken[e["id"]] = true
 		out.append(e)
 	for e in out:
-		if e["source"] == "pool" or e["source"] == "widow_invest":
+		if e["source"] in ["pool", "widow_invest", "fixed", "reserve"]:
 			sv["boarded"][e["id"]] = sv["boarded"].get(e["id"], 0) + 1
 	return out
+
+
+## The fixed board of this month (roles.json board_schedule), or null.
+static func schedule_entry(d, month: String):
+	for x in d.t["roles"].get("board_schedule", []):
+		if x["month"] == month:
+			return x
+	return null
+
+
+## Whether a role belongs to the fixed boards or the reserve pool (the free draws never take those).
+static func fixed_role(d, rid: String) -> bool:
+	if d.t["roles"].get("reserve_pool", []).has(rid):
+		return true
+	for x in d.t["roles"].get("board_schedule", []):
+		for t in SLOTS:
+			if x.get(t) == rid:
+				return true
+	return false
+
+
+## The connections extra role: the first role of reserve_pool not shown yet whose fame gate and gates the player meets now.
+static func reserve_pick(st, taken: Dictionary):
+	var d = st.d
+	for rid in d.t["roles"].get("reserve_pool", []):
+		if taken.has(rid) or st.story["boarded"].get(rid, 0) > 0:
+			continue
+		var e := snapshot(st, d.roles[rid], "reserve")
+		if eligible(st, e) == "":
+			return e
+	return null
+
+
+## The next fixed board after the last board held (for the "next board" page): {month, roles: [snapshots]} or {} when none is left.
+## It changes only when a board has been held, i.e. after each round of auditions.
+static func next_board(st) -> Dictionary:
+	var d = st.d
+	var last := -1
+	if st.story["board"] != null:
+		last = int(st.story["board"]["month"])
+	for x in d.t["roles"].get("board_schedule", []):
+		if int(d.month_index[x["month"]]) > last:
+			var roles := []
+			for t in SLOTS:
+				if x.has(t):
+					roles.append(snapshot(st, d.roles[x[t]], "fixed"))
+			return {"month": x["month"], "roles": roles}
+	return {}
 
 
 static func assign_talkie(st, entries: Array) -> void:
@@ -321,8 +377,12 @@ static func fame_gate(st, e: Dictionary) -> int:
 ## unsuppressed scandal, flag morals_until = last blocked month index), long contract allows only house roles.
 ## Returns "" or the reason.
 static func eligible(st, e: Dictionary) -> String:
+	if not Traits.with_effect(st, "no_audition").is_empty():   # a status trait forbids auditions (e.g. out of shape, user)
+		return "trait_block"
 	if st.attr["fame"] < fame_gate(st, e):
 		return "out_of_reach"
+	if not Rules.cond(st, e.get("gates", [])):          # fixed boards (user): the role's minimum off-road attributes
+		return "gates"
 	if e["size"] == "big" and st.flags.has("morals_until") and st.ym <= st.flags["morals_until"]:
 		return "morals"
 	if st.status["long_contract"] and not e["house"]:
@@ -433,7 +493,9 @@ static func try_role(st, idx: int, agent) -> Dictionary:
 	if res["result"] == "won" or support:
 		b["won"] = idx
 		var pers: bool = (not support) and Film.can_go_personally(st, e) and agent.go_personally(st, e)
-		res["film"] = Film.new_film(st, e, Film.board_locks(st, e["size"], support), support, pers)["id"]
+		var f: Dictionary = Film.new_film(st, e, Film.board_locks(st, e["size"], support), support, pers)
+		f["aud_lost"] = Film.rounds_lost(res)     # user: the fee follows the audition (3:0 / 3:1 / 3:2)
+		res["film"] = f["id"]
 	res["support"] = support
 	st.inc("count.audition")
 	if res["result"] == "won":
@@ -453,6 +515,8 @@ static func run(st, agent) -> Array:
 			if can_try(st, i) == "":
 				ok.append(i)
 		if ok.is_empty():
+			if b["tried"].is_empty():
+				agent.view_board(st, b)       # user: the board is still shown, every role greyed out with its reason
 			break
 		var i = agent.pick_role(st, b, ok)
 		if i == null:
@@ -486,9 +550,16 @@ static func swap_role(st, i: int, agent) -> bool:
 	if e["talkie"] and e["speech_line"] == null:
 		e["speech_line"] = d.role_cfg["speech_line"][e["size"]]
 	var rv := Audition.unnamed_rival(st, e["size"], null, e["style_probs"])
+	var nxt := Film.next_period(st, i)
+	var blocked := Traits.with_effect(st, "no_audition")      # a status trait forbids auditions: shown, but cannot be taken
+	var info := {"role": e, "rival": rv, "period": nxt}
+	if not blocked.is_empty():
+		info["blocked"] = blocked["id"]
+	if not agent.role_event(st, "swap", info) or not blocked.is_empty():    # user: explained first, can be declined
+		st.inc("count.swap_declined")
+		return false
 	var win := one_match(st, agent, e, rv)
 	if win:
-		var nxt := Film.next_period(st, i)
 		var pers: bool = Film.can_go_personally(st, e) and agent.go_personally(st, e)
 		Film.new_film(st, e, [nxt].slice(0, c["period_count"]), false, pers)
 	return win
@@ -503,6 +574,7 @@ static func steal_role(st, agent) -> bool:
 			break
 	var role: Dictionary = f["roles"]
 	var rv := Audition.unnamed_rival(st, role["size"], null, role["style_probs"])
+	agent.role_event(st, "steal", {"role": role, "rival": rv})    # user: explained first; a steal cannot be declined
 	var win := one_match(st, agent, role, rv)
 	if not win:
 		f["status"] = "stolen"

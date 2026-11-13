@@ -8,7 +8,7 @@ const Jsonx = preload("res://core/jsonx.gd")
 
 const TABLES := ["stats", "skills", "classes", "books", "jobs", "rest", "places", "lifestyle", "street",
 	"origins", "calendar", "habits", "rivals", "roles", "items", "events", "outing", "romance",
-	"npc_schedule", "npc_chains", "annual", "opportunities", "endings"]
+	"npc_schedule", "npc_chains", "annual", "opportunities", "endings", "map", "traits"]
 
 var t := {}
 var ok := true
@@ -36,12 +36,15 @@ var skill_bonus := {}
 var classes := {}
 var class_steps = null
 var books := {}
-var jobs := {}
+var jobs := {}                # enabled jobs only
+var jobs_all := {}            # every row of jobs.json, disabled ones included
 var job_rules := {}
 var rests := {}
 var rest_forced = null
 var places := {}
+var map_locations := []       # map.json locations, in drawing order
 var lifestyles := {}
+var traits := []             # status traits (traits.json), table order
 var street := {}
 var discount = null
 var items := {}
@@ -66,7 +69,11 @@ var chains = null
 var schedule_npc = null
 
 
+## In an exported game the tables are inside the package (res://data/new, copied there by tools/sync_data.sh before exporting);
+## in the repository they are read from data/new/ at the root.
 static func default_dir() -> String:
+	if FileAccess.file_exists("res://data/new/stats.json"):
+		return "res://data/new"
 	return ProjectSettings.globalize_path("res://").path_join("../../data/new").simplify_path()
 
 
@@ -105,19 +112,24 @@ func _init(path := "") -> void:
 		if s.has("display_bonus"):
 			skill_bonus[s["id"]] = s["display_bonus"]
 
-	for c in t["classes"]["classes"]:
-		classes[c["id"]] = c
+	for c in t["classes"]["classes"]:    # disabled rows stay in the table but are not loaded (six-year swap)
+		if not c.get("disabled", false):
+			classes[c["id"]] = c
 	class_steps = t["classes"]["class_steps"]
 	for b in t["books"]["books"]:
 		books[b["id"]] = b
 	for j in t["jobs"]["jobs"]:
-		jobs[j["id"]] = j
+		jobs_all[j["id"]] = j
+		if not j.get("disabled", false):
+			jobs[j["id"]] = j
 	job_rules = t["jobs"]
 	for r in t["rest"]["rests"]:
 		rests[r["id"]] = r
 	rest_forced = t["rest"]["forced"]
 	for p in t["places"]["places"]:
 		places[p["id"]] = p
+	map_locations = t["map"]["locations"]
+	traits = t["traits"]["traits"]
 	for x in t["lifestyle"]["lifestyles"]:
 		lifestyles[x["id"]] = x
 	for e in t["street"]["entries"]:
@@ -147,6 +159,12 @@ func _init(path := "") -> void:
 	for k in tag_families:
 		for x in tag_families[k]:
 			content_tags.append(x)
+	# Switch (user, lover playtest): events.json valen_death false keeps Valen to the end and drops his replacement.
+	if not t["events"].get("valen_death", true):
+		for r in t["rivals"]["named"]:
+			if r["id"] == "rival_valen":
+				r["present"] = [r["present"][0], "1929-12"]
+		t["rivals"]["replace"] = t["rivals"]["replace"].filter(func(x): return x["old"] != "rival_valen")
 	for r in t["rivals"]["named"]:
 		rivals_named[r["id"]] = r
 	for e in t["events"]["events"]:

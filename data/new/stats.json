@@ -84,9 +84,9 @@
  "money": {
   "id": "money",
   "name": "金钱",
-  "init": 500,
+  "init": 250,
   "max": 99999999,
-  "may_be_negative": "Only living costs may push money negative; any other expense you cannot afford cannot be chosen"
+  "may_be_negative": "Never: money stops at 0. A living cost that cannot be paid takes the money to 0; a class that cannot be paid for the whole period wastes the period"
  },
  "roads": [
   {
@@ -291,53 +291,53 @@
   }
  },
  "drug": {
-   "note": "Step 12c c3 round 3 (GDD 5.8.1). The dealer is on the street by a roll at month start (dealer); a dose is a free action before any period (at most one per period). drug_points is the depth of the addiction (0 = not addicted), drug_stage follows it by stage_lines. All numbers are placeholders",
-   "dealer": {
-    "prob_pct": 30,
-    "crime_step": 50,
-    "crime_add_pct": 10,
-    "prob_cap_pct": 60,
-    "addicted_add_pct": 20,
-    "stock": 2,
-    "price": [
-     20,
-     190
-    ],
-    "price_depth_pct": 15,
-    "price_cap_pct": 200,
-    "note": "probability = prob_pct + crime / crime_step x crime_add_pct (cap prob_cap_pct), + addicted_add_pct when addicted; each dose costs r(price) x (100 + price_depth_pct x depth)% (cap price_cap_pct)"
-   },
-   "dose_effect": "fatigue-40",
-   "outcome_weights": {
-    "high": 50,
-    "divine": 30,
-    "side": 20
-   },
-   "divine_gain_mult": 2,
-   "divine_perf_add": 400,
-   "side_perf_add": -500,
-   "side_effect": "stamina-5",
-   "side_fail_pct": 50,
-   "hook_base_pct": 12,
-   "hook_step_pct": 3,
-   "hook_cap_pct": 50,
-   "attack": {
-    "fail_base_pct": 10,
-    "fail_step_pct": 5,
-    "fail_cap_pct": 60,
-    "fatigue_base": 10,
-    "fatigue_step": 5,
-    "depth_drop": 2,
-    "note": "a month without a dose while addicted: every day fails with fail_base_pct + fail_step_pct x depth (cap); at month end fatigue + fatigue_base + fatigue_step x depth and depth - depth_drop"
-   },
-   "stage_lines": [
-    1,
-    3,
-    6
+  "note": "Step 12c c3 round 3 (GDD 5.8.1). The dealer is on the street by a roll at month start (dealer); a dose is a free action before any period (at most one per period). drug_points is the depth of the addiction (0 = not addicted), drug_stage follows it by stage_lines. All numbers are placeholders",
+  "dealer": {
+   "prob_pct": 30,
+   "crime_step": 50,
+   "crime_add_pct": 10,
+   "prob_cap_pct": 60,
+   "addicted_add_pct": 20,
+   "stock": 2,
+   "price": [
+    20,
+    190
    ],
-   "refuse_discipline": 150,
-   "deep_monthly_effect": "stamina-5 looks-3"
+   "price_depth_pct": 15,
+   "price_cap_pct": 200,
+   "note": "probability = prob_pct + crime / crime_step x crime_add_pct (cap prob_cap_pct), + addicted_add_pct when addicted; each dose costs r(price) x (100 + price_depth_pct x depth)% (cap price_cap_pct)"
   },
+  "dose_effect": "fatigue-40",
+  "outcome_weights": {
+   "high": 50,
+   "divine": 30,
+   "side": 20
+  },
+  "divine_gain_mult": 2,
+  "divine_perf_add": 400,
+  "side_perf_add": -500,
+  "side_effect": "stamina-5",
+  "side_fail_pct": 50,
+  "hook_base_pct": 12,
+  "hook_step_pct": 3,
+  "hook_cap_pct": 50,
+  "attack": {
+   "fail_base_pct": 10,
+   "fail_step_pct": 5,
+   "fail_cap_pct": 60,
+   "fatigue_base": 10,
+   "fatigue_step": 5,
+   "depth_drop": 2,
+   "note": "a month without a dose while addicted: every day fails with fail_base_pct + fail_step_pct x depth (cap); at month end fatigue + fatigue_base + fatigue_step x depth and depth - depth_drop"
+  },
+  "stage_lines": [
+   1,
+   3,
+   6
+  ],
+  "refuse_discipline": 150,
+  "deep_monthly_effect": "stamina-5 looks-3"
+ },
  "arrest": {
   "note": "Step 12c. fine = max(fine_min, money x fine_pct%), never more than the money held (not below 0); the next detain_periods periods are void (detention)",
   "fine_min": 200,
@@ -347,5 +347,76 @@
   "raid_note": "search probability of a crime job = prob x (1 + crime / raid_crime_div)",
   "raid_check_add": 20,
   "raid_check_note": "Step 12c c3: when searched, r0(raid_skill displayed) + raid_check_add >= raid_line passes; otherwise arrest"
+ },
+ "scale": {
+  "note": "User: base attributes are read through a 0-100 scale: scale = min(100, value x 10 / div10). div10 is the divisor x10 (stamina 8, education 3, loyalty 2.5, looks 5, discipline 3, crime 4, fatigue 8; placeholders). Skills: scale = displayed value. Fame keeps its own five tiers. Tiers by scale, one set for all: low 0-24, mid 25-49, high 50-74, very_high 75+. Conditions can use scale.<attr> (number) and tier.<attr> (a tier id or 0-3).",
+  "div10": {
+   "stamina": 80,
+   "education": 30,
+   "loyalty": 25,
+   "looks": 50,
+   "discipline": 30,
+   "crime": 40,
+   "fatigue": 80
+  },
+  "tiers": [
+   {
+    "id": "low",
+    "name": "低",
+    "min": 0
+   },
+   {
+    "id": "mid",
+    "name": "中",
+    "min": 25
+   },
+   {
+    "id": "high",
+    "name": "高",
+    "min": 50
+   },
+   {
+    "id": "very_high",
+    "name": "很高",
+    "min": 75
+   }
+  ]
+ },
+ "slack": {
+  "note": "User (settled): after the activity of a class, job or shooting period is picked, roll once: chance% = scale.fatigue - scale.discipline, clamped to 0..cap_pct. On a hit the whole period becomes a rest: home when home_cond holds, else the outing of the highest of by_highest (scale; fame uses min(100, fame x 10 / fame_div10)); ties go to the earlier row. Class and job counters do not grow; the shooting days of that period all fail. The place table is a placeholder.",
+  "cap_pct": 33,
+  "home_cond": [
+   [
+    [
+     "favor.sil",
+     ">=",
+     80
+    ]
+   ]
+  ],
+  "home_entry": "rest_home",
+  "by_highest": [
+   {
+    "stat": "looks",
+    "entry": "rest_outing@place_seaside"
+   },
+   {
+    "stat": "crime",
+    "entry": "rest_outing@place_dock"
+   },
+   {
+    "stat": "stamina",
+    "entry": "rest_outing@place_dock"
+   },
+   {
+    "stat": "education",
+    "entry": "rest_outing@place_downtown"
+   },
+   {
+    "stat": "fame",
+    "entry": "rest_outing@place_studio"
+   }
+  ],
+  "fame_div10": 50
  }
 }

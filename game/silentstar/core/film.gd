@@ -142,6 +142,7 @@ static func shoot(st, i: int, f: Dictionary, days: Array) -> void:
 	var g = st.rng.logic
 	var t: String = f["size"]
 	f["status"] = "shooting"
+	f["attended"] = int(f.get("attended", 0)) + 1      # periods actually shot (a film never shot falls through, skip_shoot)
 	update_status(st)
 	if int(st.status.get("drug_high", 0)) == 2:     # a divine dose on a shooting period (GDD 5.8.1)
 		f["divine"] = 1
@@ -174,6 +175,26 @@ static func shoot(st, i: int, f: Dictionary, days: Array) -> void:
 		finish(st, f)
 
 
+## A shooting period he ran off from (GDD 5.1.1): every shooting day of it counts as a failed day. At the last period, a film he
+## never came to shoot at all falls through (status "skipped": no fee, no release; a small film has only one period); a film
+## with at least one period shot finishes as usual.
+static func skip_shoot(st, i: int, f: Dictionary, days: Array) -> void:
+	f["status"] = "shooting"
+	for dd in days:
+		if not dd[1]:
+			f["shoot_days"] += 1
+			st.inc("count.slack_shoot_days")
+	var last: Array = f["locks"][f["locks"].size() - 1]
+	if last[0] == st.ym and last[1] == i:
+		if int(f.get("attended", 0)) == 0:
+			f["status"] = "skipped"
+			f["skipped_ym"] = st.ym
+			st.inc("count.film_skipped")
+		else:
+			finish(st, f)
+	update_status(st)
+
+
 ## P x1000: 500 + ok_days x 500 / shoot_days + bonus skill x 2 (stunt_self +100), clamped to 500-1200; then each shooting period
 ## on a divine dose adds divine_perf_add once and on a side effect side_perf_add once (stats.drug; both may apply, not clamped).
 static func performance(st, f: Dictionary) -> int:
@@ -192,11 +213,21 @@ static func performance(st, f: Dictionary) -> int:
 	return p
 
 
-## Fee = base x (stunt_self 130%) x (support 40%) x (400+negotiation)/400 x contract coefficient, rounded down at each step.
+## Rounds the rival won in the deciding match of a won audition (0, 1 or 2); 0 when unknown.
+static func rounds_lost(res: Dictionary) -> int:
+	var rs: Array = res.get("rounds", [])
+	if rs.is_empty():
+		return 0
+	return clampi(int(rs[-1]["score_line"][1]), 0, 2)
+
+
+## Fee = base x audition (fee_by_lost_rounds: 3:0 125%, 3:1 100%, 3:2 80%; user) x (stunt_self 130%) x (support 40%) x (400+negotiation)/400 x contract coefficient, rounded down at each step.
 static func fee(st, f: Dictionary) -> int:
 	var d = st.d
 	var c := shoot_cfg(d)
 	var v: int = f["roles"]["fee"]
+	if not f["support"] and c.has("fee_by_lost_rounds"):
+		v = Rules.fdiv(v * int(c["fee_by_lost_rounds"][int(f.get("aud_lost", 1))]), 100)
 	if f["stunt_self"]:
 		v = Rules.fdiv(v * c["stunt_self"]["fee_pct"], 100)
 	if f["support"]:
@@ -235,7 +266,9 @@ static func breach_month(st, ym: int) -> Array:
 				hit = true
 		if hit:
 			f["status"] = "breached"
+			var fb: int = st.attr["fame"]
 			st.attr["fame"] = maxi(0, st.attr["fame"] - Rules.fdiv(st.attr["fame"] * pct, 100))
+			st.fame_note(st.attr["fame"] - fb, "breach", str(f["roles"]["id"]))
 			st.inc("count.breach")
 			out.append(f)
 	update_status(st)
@@ -249,7 +282,9 @@ static func breach_period(st, ym: int, i: int) -> Array:
 	for f in films(st):
 		if _active(f) and _has_lock(f, ym, i):
 			f["status"] = "breached"
+			var fb: int = st.attr["fame"]
 			st.attr["fame"] = maxi(0, st.attr["fame"] - Rules.fdiv(st.attr["fame"] * pct, 100))
+			st.fame_note(st.attr["fame"] - fb, "breach", str(f["roles"]["id"]))
 			st.inc("count.breach")
 			out.append(f)
 	update_status(st)
@@ -328,7 +363,9 @@ static func release_one(st, f: Dictionary) -> Dictionary:
 		fame = Rules.fdiv(fame, 2)
 	fame = Rules.fdiv(fame * k, 100)
 	var money: int = Rules.fdiv(Rules.fdiv(S * c["dividend_mult"], 1000) * k, 100)
+	var fame_before: int = st.attr["fame"]
 	Schedule.add_stat(st, "fame", fame)
+	st.fame_note(st.attr["fame"] - fame_before, "release", str(role["id"]))
 	st.add_money(money)
 	var corr: int = Rules.fdiv(int(c["rep_table"][band][t]) * k, 100)      # may be negative (a poor film or a flop)
 	st.corr[role["road"]] += corr

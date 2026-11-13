@@ -64,11 +64,16 @@ static func fire(story, st, eid: String, depth := 0) -> Dictionary:
 	if depth > MAX_DEPTH:
 		push_error("event trigger chain too deep: %s" % eid)
 		return {}
+	if not st.d.t["events"].get("enabled", true):    # switch (user, lover playtest): every event is off
+		return {}
 	var e: Dictionary = st.d.events[eid]
+	story.event_begin(st, eid)
 	st.fired[eid] = st.fired.get(eid, 0) + 1
 	st.story["last_fired"][eid] = st.ym
 	var rec := {"id": eid, "month": st.date()}
 	var trig := []
+	var ctx_before: Dictionary = st.note_ctx
+	st.note_ctx = {"why": "event", "arg": eid}
 	if Schedule.truthy(e.get("effect")):
 		trig += Rules.apply_effect(st, e["effect"], "event")
 	if Schedule.truthy(e.get("check")):
@@ -100,6 +105,8 @@ static func fire(story, st, eid: String, depth := 0) -> Dictionary:
 			trig += Rules.apply_effect(st, o["success_effect"] if ok else o["fail_effect"], "event")
 		rec["options"] = choice
 	trig += _code(story, st, eid, choice)
+	st.note_ctx = ctx_before
+	story.event_end(st, rec)
 	story.event_log.append(rec)
 	for t in trig:
 		fire(story, st, t, depth + 1)
@@ -109,12 +116,15 @@ static func fire(story, st, eid: String, depth := 0) -> Dictionary:
 # ---------- code events ----------
 
 static func fame_pct(st, pct: int) -> void:
+	var before: int = st.attr["fame"]
 	st.attr["fame"] = maxi(0, st.attr["fame"] + Rules.fdiv(st.attr["fame"] * pct, 100))
+	var c: Dictionary = st.note_ctx if not st.note_ctx.is_empty() else {"why": "effect_event", "arg": ""}
+	st.fame_note(st.attr["fame"] - before, str(c["why"]), str(c["arg"]))
 
 
 ## The events whose logic is code. Returns the ids to trigger (none of them triggers anything for now).
 ## The other `code: true` events only need the effects and flags in the data, read by other modules through the flags:
-##   evt_swap_role / evt_steal_role (period_start), evt_accent (flag), era_valen_death (board reads the flag),
+##   evt_swap_role / evt_steal_role (period_check), evt_accent (flag), era_valen_death (board reads the flag),
 ##   era_talkie (the date is already in the table), job_studio_m1 (the long-contract probability is tiered by favor in evt_contract).
 static func _code(story, st, eid: String, choice) -> Array:
 	match eid:
@@ -311,22 +321,32 @@ static func month_end(story, st) -> void:
 		n += 1
 
 
-# ---------- period start (11.1) ----------
+# ---------- period checks (11.1; run at the end of the period since step 15c) ----------
 
-static func period_start(story, st, i: int, entry: String) -> void:
-	if entry.begins_with("rest_"):
+static func period_check(story, st, i: int, entry: String) -> void:
+	if entry.begins_with("rest_") or entry.begins_with("act_"):
+		return
+	if not st.d.t["events"].get("role_events", st.d.t["events"].get("enabled", true)):    # own switch (user: on while testing the balance)
 		return
 	var d = st.d
 	var e: Dictionary = d.events["evt_swap_role"]
 	var nxt := Film.next_period(st, i)
 	if (ready(st, e) and not Film.is_locked(st, nxt[0], nxt[1]) and nxt[0] < d.months.size()
 			and Rules.prob(st, e["prob"])):
-		fire(story, st, e["id"])
+		_record(story, st, e["id"])
 		Board.swap_role(st, i, story.agent)
 	e = d.events["evt_steal_role"]
 	if ready(st, e) and Rules.prob(st, e["prob"]):
-		fire(story, st, e["id"])
+		_record(story, st, e["id"])
 		Board.steal_role(st, story.agent)
+
+
+## Swap role / steal role are recorded like a fired event (frequency, event log, the result notice of the UI) but show no event
+## dialog: the explanation page of the agent (role_event) replaces it, and the event switch does not stop them (role_events does).
+static func _record(story, st, eid: String) -> void:
+	st.fired[eid] = st.fired.get(eid, 0) + 1
+	st.story["last_fired"][eid] = st.ym
+	story.event_log.append({"id": eid, "month": st.date()})
 
 
 static func period_end(story, st, i: int, entry: String, out: Dictionary) -> void:

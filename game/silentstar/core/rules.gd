@@ -94,6 +94,11 @@ static func apply_effect(st, text, source := "event") -> Array:
 			var old: int = st.attr[n]
 			st.attr[n] = _clampi(_delta(st.attr[n], op, v, pct), rg[0], rg[1])
 			st.track(source, n, st.attr[n] - old)
+			if n == "fame":
+				if st.note_ctx.is_empty():
+					st.fame_note(st.attr[n] - old, "effect_" + source)
+				else:
+					st.fame_note(st.attr[n] - old, str(st.note_ctx["why"]), str(st.note_ctx["arg"]))
 		elif st.skill.has(n):
 			var rg: Array = d.skill_range[n]
 			var old: int = st.skill[n]
@@ -101,7 +106,7 @@ static func apply_effect(st, text, source := "event") -> Array:
 			st.track(source, n, st.skill[n] - old)
 		elif n == "money":
 			var old: int = st.money
-			st.money = mini(_delta(st.money, op, v, pct), d.money_cap)
+			st.money = clampi(_delta(st.money, op, v, pct), 0, d.money_cap)    # six-year swap: money never goes below 0
 			st.track(source, n, st.money - old)
 			if st.money > old:
 				st.src["income"] = st.src.get("income", 0) + st.money - old
@@ -154,10 +159,48 @@ static func remove_item(st, iid: String) -> bool:
 
 # ---------- variables ----------
 
+## Scale 0-100 of a base attribute (min(100, value x 10 / div10), stats.json scale) or a skill (its displayed value).
+static func scale_of(st, name: String) -> int:
+	var sc: Dictionary = st.d.t["stats"]["scale"]
+	if st.skill.has(name):
+		return mini(100, st.val(name))
+	if sc["div10"].has(name):
+		return mini(100, fdiv(maxi(st.val(name), 0) * 10, int(sc["div10"][name])))
+	push_error("no scale for %s" % name)
+	return 0
+
+
+## Tier index 0-3 (low, mid, high, very_high) of the scale.
+static func tier_of(st, name: String) -> int:
+	var s := scale_of(st, name)
+	var k := 0
+	var tiers: Array = st.d.t["stats"]["scale"]["tiers"]
+	for i in tiers.size():
+		if s >= int(tiers[i]["min"]):
+			k = i
+	return k
+
+
+## A tier id ("high") or a number -> tier index.
+static func tier_index(d, v) -> int:
+	if typeof(v) == TYPE_STRING:
+		var tiers: Array = d.t["stats"]["scale"]["tiers"]
+		for i in tiers.size():
+			if tiers[i]["id"] == v:
+				return i
+		push_error("unknown tier %s" % v)
+		return 0
+	return int(v)
+
+
 static func get_var(st, name: String):
 	var d = st.d
 	if st.attr.has(name) or st.skill.has(name):
 		return st.val(name)
+	if name.begins_with("scale."):
+		return scale_of(st, name.substr(6))
+	if name.begins_with("tier."):
+		return tier_of(st, name.substr(5))
 	if st.corr.has(name):
 		return st.rep(name)
 	if name == "money":
@@ -289,6 +332,11 @@ static func test(st, term: Array) -> bool:
 	var a = get_var(st, var_name)
 	if typeof(val) == TYPE_STRING and val.begins_with("@"):
 		val = get_var(st, val.substr(1))
+	elif var_name.begins_with("tier."):           # tier.loyalty >= "high"
+		if typeof(val) == TYPE_ARRAY:
+			val = val.map(func(x): return tier_index(st.d, x))
+		else:
+			val = tier_index(st.d, val)
 	return _cmp(a, op, val)
 
 

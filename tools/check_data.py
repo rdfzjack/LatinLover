@@ -20,7 +20,7 @@ def need(f, d, keys, where=''):
         if k not in d: err(f, f'{where} missing field {k}')
 
 FILES = ['stats','skills','classes','books','jobs','rest','places','lifestyle','street','origins','calendar',
-         'habits','rivals','roles','items','events','outing','romance','npc_schedule','npc_chains','annual','opportunities','endings']
+         'habits','rivals','roles','items','events','outing','romance','npc_schedule','npc_chains','annual','opportunities','endings','map','traits']
 T = {}
 for n in FILES:
     T[n] = load(n + '.json')
@@ -30,7 +30,7 @@ if errs:
     print('\n'.join(errs)); sys.exit(1)
 
 stats, skills, classes, books, jobs, rest, places, life, street, origins, cal_ = (T[n] for n in FILES[:11])
-habits, rivals, roles, items_t, events_t, outing, romance, npc_sched, chains, annual, opps, endings = (T[n] for n in FILES[11:])
+habits, rivals, roles, items_t, events_t, outing, romance, npc_sched, chains, annual, opps, endings, map_t, traits_t = (T[n] for n in FILES[11:])
 ATTRS = [a['id'] for a in stats['attrs']]
 SK = [s['id'] for s in skills['skills']]
 ROADS = [r['id'] for r in stats['roads']]
@@ -59,12 +59,14 @@ def ref_event(f, e):
 DERIVED = {'max_rep','month','year','drug_stage','drug_points','debt_months','grade','top_tag_family','undefined','lowbudget_typed','talkie_count',
            'top_base_attr','top_savvy_skill','max_job_periods','rep_spread','top_road'}
 PREFIX = ('status.','count.','tag.','road_periods.','flag.','duels.')
+SCALED = set(T['stats'].get('scale', {}).get('div10', {}))
 def var_ok(v):
     if v in ATTRS or v in SK or v in ROADS or v in DERIVED or v in ('money','sick_index','reckless_index','date'): return True
     if v.startswith('favor.'): return v.split('.', 1)[1] in NPC
     if v.startswith('job_periods.'): return v.split('.', 1)[1] in JOB_IDS
     if v.startswith('class_periods.'): return v.split('.', 1)[1] in CLASS_IDS
     if v.startswith('road_periods.'): return v.split('.', 1)[1] in ROADS
+    if v.startswith(('scale.', 'tier.')): return v.split('.', 1)[1] in SCALED or v.split('.', 1)[1] in SK
     return v.startswith(PREFIX) and len(v) > 3
 COMP = ('>=','<=','>','<','==','!=','in')
 def check_cond(f, c, where=''):
@@ -224,7 +226,13 @@ for j in jobs['jobs']:
 for m in cal_['months']:
     want = sorted(j['id'] for j in jobs['jobs'] if j['earliest'] == m['month'])
     if sorted(m['job_unlocks']) != want: err('calendar.json', f"{m['month']} job_unlocks does not match jobs.json")
-if not any(j['earliest'] == '1926-01' for j in jobs['jobs']): err(f, 'at least one job must be doable at the start (1926-01)')
+if not any(j['earliest'] == CAL_MONTHS[0] and not j.get('disabled') for j in jobs['jobs']): err(f, f'at least one job must be doable at the start ({CAL_MONTHS[0]})')
+for j in jobs['jobs']:
+    wt = j.get('wage_tiers')
+    if wt is not None and (len(wt) != len(jobs['raise_tiers']) or not all(isinstance(x, int) for x in wt)): err(f, f"{j['id']} wage_tiers must be {len(jobs['raise_tiers'])} integers")
+    for e in j['daily_effect']:
+        for x in e.get('one_of', []):
+            if x not in ATTRS and x not in SK: err(f, f"{j['id']} one_of stat does not exist {x}")
 # rest / places / lifestyle
 f = 'rest.json'
 rest_ids = [r['id'] for r in rest['rests']]
@@ -288,7 +296,7 @@ for qi, q in enumerate(origins['questions']):
 # calendar
 f = 'calendar.json'
 ms = cal_['months']
-if len(ms) != 48: err(f, f'need 48 months, got {len(ms)}')
+if len(ms) != 72: err(f, f'need 72 months (1924-01 to 1929-12), got {len(ms)}')
 for m in ms:
     y, mo = map(int, m['month'].split('-'))
     nd = cal.monthrange(y, mo)[1]
@@ -296,8 +304,9 @@ for m in ms:
     if m['sundays'] != [d for d in range(1, nd+1) if datetime.date(y, mo, d).weekday() == 6]: err(f, f"{m['month']} sundays")
     if m['periods'] != [[1,10],[11,20],[21,nd]]: err(f, f"{m['month']} periods")
     for e in m['era_events']: ref_event(f, e)
-if sum(1 for m in ms if m['board']) != 16: err(f, 'board must be 16 times')
-if sum(1 for m in ms if m['annual']) != 4: err(f, 'annual must be 4 times')
+BS = roles.get('board_schedule', [])
+if sorted(m['month'] for m in ms if m['board']) != sorted(x['month'] for x in BS): err(f, 'the board months must be exactly the months of roles.json board_schedule')
+if sum(1 for m in ms if m['annual']) != 6: err(f, 'annual must be 6 times')
 if sum(1 for m in ms if m['era_events']) != 7: err(f, 'era events must be 7 (GDD 11.3)')
 
 
@@ -550,4 +559,52 @@ if pending_events: notes.append(f'{len(pending_events)} event references wait fo
 for n in notes: print('note: ' + n)
 if errs:
     print('\n'.join(errs)); print(f'failed: {len(errs)} problems'); sys.exit(1)
+# status traits
+f = 'traits.json'
+TR = T['traits']
+seen = set()
+for x in TR['traits']:
+    w = x.get('id')
+    need(f, x, ['id', 'name', 'body', 'cond', 'effects'], w)
+    if w in seen: err(f, f'duplicate id {w}')
+    seen.add(w)
+    check_cond(f, x.get('cond', []), w)
+    for e in x.get('effects', []):
+        if e not in TR['effects_allowed']: err(f, f'{w} effect not allowed: {e} (allowed: {TR["effects_allowed"]})')
+# fixed boards (roles.json board_schedule, reserve_pool, gates)
+f = 'roles.json'
+RD = {r['id']: r for r in roles['roles']}
+for x in roles.get('board_schedule', []):
+    if x['month'] not in CAL_MONTHS: err(f, f"board_schedule month is not in the calendar {x['month']}")
+    for t in ('big', 'medium', 'small', 'small2'):
+        if t == 'small2' and t not in x: continue
+        r = RD.get(x.get(t))
+        if r is None: err(f, f"board_schedule {x['month']} {t} role does not exist {x.get(t)}")
+        elif r['size'] != t.rstrip('2'): err(f, f"board_schedule {x['month']} {t} role {r['id']} is size {r['size']}")
+for rid in roles.get('reserve_pool', []):
+    r = RD.get(rid)
+    if r is None: err(f, f'reserve_pool role does not exist {rid}')
+    elif r['size'] not in ('small', 'medium'): err(f, f'reserve_pool role {rid} must be small or medium')
+for r in roles['roles']:
+    if 'gates' in r: check_cond(f, r['gates'], r['id'] + ' gates')
+if not isinstance(roles['defaults']['board'].get('connections_extra'), int): err(f, 'defaults.board needs the integer connections_extra')
+# map (the places on the map and what each offers)
+f = 'map.json'
+seen = set()
+for L in map_t['locations']:
+    w = L.get('id')
+    need(f, L, ['id','name','hint','pos','size','entries','shops','activities','extra'], w)
+    if w in seen: err(f, f'duplicate id {w}')
+    seen.add(w)
+    for e in L['entries']:
+        base, _, place = e.partition('@')
+        if base not in CLASS_IDS and base not in JOB_IDS and base not in rest_ids: err(f, f'{w} entry does not exist {e}')
+        if place and place not in [p['id'] for p in places['places']]: err(f, f'{w} outing place does not exist {place}')
+    for sh in L['shops']:
+        if sh not in [x['id'] for x in street['entries']]: err(f, f'{w} shop does not exist {sh}')
+    if L['extra'] not in (None, 'home', 'city', 'studio'): err(f, f'{w} extra must be null, home, city or studio')
+on = [j['id'] for j in jobs['jobs'] if not j.get('disabled')] + [c['id'] for c in classes['classes'] if not c.get('disabled')]
+placed = {e for L in map_t['locations'] for e in L['entries']}
+for x in on:
+    if x not in placed: err(f, f'{x} is switched on but on no place of the map')
 print(f'passed: {len(FILES)} tables, {len(JOB_IDS)} jobs, {len(CLASS_IDS)} classes, {len(BOOK_IDS)} books, {len(ms)} months')

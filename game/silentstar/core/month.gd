@@ -19,7 +19,7 @@ const Film = preload("res://core/film.gd")
 ## The parts implemented in step 12. Every method gets the state and may change it. A subclass overrides what it needs.
 class Hooks:
 	extends RefCounted
-	func board(_st) -> void: pass                         # the board in months 1, 4, 7, 10
+	func board(_st) -> void: pass                         # the board in the audition months (board_month)
 	func month_start(_st) -> void: pass                   # before the free actions of the month (write script, send to detox ...)
 	func locked(_st, _i: int):                            # returns the film contract when period i is locked by shooting, else null
 		return null
@@ -40,6 +40,7 @@ class Hooks:
 	func era(_st, _ids) -> void: pass                     # era events
 	func ending(_st) -> void: pass                        # ending resolution in 1929-12
 	func discharge(_st) -> void: pass                     # step 12c: after a month with a sanatorium period (discharge event)
+	func slacked(_st, _i: int, _planned: String, _entry: String) -> void: pass   # he ran off: planned (class, job or "shooting") became entry
 
 
 var d
@@ -47,6 +48,10 @@ var st
 var hooks
 var started := false
 var last := []                 # summary of each period of this month
+# What run_month remembers across its periods (step 15d: a game can be saved before period i and resumed there, see carry()).
+var m_forced := 0              # this month is the forced sanatorium month
+var m_void := 0                # this month's schedule is void
+var m_sanatorium := false      # a sanatorium period already happened this month
 
 
 func _init(data, sd := 0, origin := [0, 0, 0], hk = null, state = null) -> void:
@@ -76,10 +81,15 @@ func start_month() -> void:
 	if st.val("stamina") < 15 and st.lifestyle != "life_fine":
 		st.lifestyle = "life_fine"
 	var life: Dictionary = d.lifestyles[st.lifestyle]
-	st.money -= life["monthly_cost"][st.fame_tier()]      # may go negative
-	if Schedule.truthy(st.month()["board"]):
+	st.money = maxi(0, st.money - life["monthly_cost"][st.fame_tier()])      # six-year swap: money stops at 0
+	if board_month(st):
 		hooks.board(st)
 	hooks.month_start(st)
+
+
+## Fixed boards (user): the 15 audition months are the calendar's `board` months (the months of roles.json board_schedule).
+static func board_month(st) -> bool:
+	return Schedule.truthy(st.month()["board"])
 
 
 ## Changes the lifestyle before scheduling at month start; takes effect when it is charged next month.
@@ -94,13 +104,15 @@ func set_lifestyle(lid: String) -> void:
 
 ## Checks this month's schedule and returns [[period, reason], ...] (period -1 = the whole plan).
 ## Months with a shoot lock, forced sanatorium or void schedule are not checked.
-func plan_errors(plan: Array) -> Array:
-	if st.forced_rest or st.void_next:
+func plan_errors(plan: Array, from_period := 0) -> Array:
+	if from_period == 0 and (st.forced_rest or st.void_next):
+		return []
+	if from_period > 0 and (m_forced or m_void):
 		return []
 	if plan.size() != 3:
 		return [[-1, "need 3 periods"]]
 	var out := []
-	for i in plan.size():
+	for i in range(from_period, plan.size()):
 		if hooks.locked(st, i) != null:
 			continue
 		var r: String = Schedule.validate(st, plan[i])
@@ -109,20 +121,34 @@ func plan_errors(plan: Array) -> Array:
 	return out
 
 
+## What the screen has to keep to resume a month at period i (with the saved state): see run_month(plan, from_period, carry).
+func carry() -> Dictionary:
+	return {"forced": m_forced, "void": m_void, "sanatorium": m_sanatorium}
+
+
 ## Runs the month. Returns the schedule errors when the plan cannot be used (then nothing has run), otherwise [].
-func run_month(plan: Array) -> Array:
+## Resuming a saved month (step 15d): from_period = the period to continue with, carry = what carry() returned when saving; the state
+## is the saved one and the earlier periods are not run again.
+func run_month(plan: Array, from_period := 0, carried := {}) -> Array:
 	if not started:
 		start_month()
-	var errs := plan_errors(plan)
+	if from_period > 0:
+		m_forced = int(carried.get("forced", 0))
+		m_void = int(carried.get("void", 0))
+		m_sanatorium = bool(carried.get("sanatorium", false))
+	var errs := plan_errors(plan, from_period)
 	if not errs.is_empty():
 		return errs
-	var forced: int = st.forced_rest
-	var void_: int = st.void_next
-	st.forced_rest = 0
-	st.void_next = 0
-	last = []
-	var sanatorium := false
-	for i in 3:
+	if from_period == 0:
+		m_forced = st.forced_rest
+		m_void = st.void_next
+		m_sanatorium = false
+		st.forced_rest = 0
+		st.void_next = 0
+		last = []
+	var forced: int = m_forced
+	var void_: int = m_void
+	for i in range(from_period, 3):
 		var days := Schedule.days_of(st, i)
 		if void_:
 			last.append({"schedule": "void"})
@@ -136,6 +162,18 @@ func run_month(plan: Array) -> Array:
 			continue
 		hooks.before_period(st, i)
 		var film = hooks.locked(st, i)
+		var e: String = plan[i] if not forced else _forced_entry(i)
+		if not forced:                       # slacking off (GDD 5.1.1): rolled after the period is picked and after a dose
+			var planned: String = "shooting" if film != null else e
+			if film != null or e.begins_with("class_") or e.begins_with("job_"):
+				var run_to := Schedule.slack_to(st)
+				if run_to != "":
+					st.inc("count.slack")
+					if film != null:
+						Film.skip_shoot(st, i, film, days)
+						film = null
+					hooks.slacked(st, i, planned, run_to)
+					e = run_to
 		if film != null:
 			st.status["shooting_period"] = 1
 			st.status["shoot_this_month"] = 1
@@ -143,15 +181,14 @@ func run_month(plan: Array) -> Array:
 			st.status["shooting_period"] = 0
 			last.append({"schedule": "shooting"})
 			continue
-		var e: String = plan[i] if not forced else _forced_entry(i)
 		if e == "rest_sanatorium":
-			sanatorium = true
+			m_sanatorium = true
 			st.inc("count.void.sanatorium")
 		hooks.period_start(st, i, e)
 		var out := Schedule.run_period(st, i, e, hooks)
 		hooks.period_end(st, i, e, out)
 		last.append(out)
-	if sanatorium:                       # discharge (step 12c): side effects, then the discharge event roll
+	if m_sanatorium:                       # discharge (step 12c): side effects, then the discharge event roll
 		st.inc("count.sanatorium")
 		var f: Dictionary = d.rest_forced[0]
 		if Schedule.truthy(f.get("discharge_effect")):
@@ -186,10 +223,12 @@ func end_month() -> void:
 		var fr: Dictionary = d.t["stats"]["fame_rules"]
 		var f: int = st.attr["fame"]
 		st.attr["fame"] = maxi(0, f - maxi(fr["monthly_decay_min"], Rules.fdiv(f * fr["monthly_decay_pct"], 100)))
+		st.fame_note(st.attr["fame"] - f, "decay")
 	# 4 indices and status
 	st.update_indices()
 	# 5 very sick, collapse
 	if st.status["very_sick"]:
+		st.inc("count.very_sick_months")          # for the phoenix trait (traits.json)
 		st.forced_rest = 1
 		hooks.film_breach(st)
 	st.collapse_months = st.collapse_months + 1 if st.idx["sick_index"] >= 100 else 0

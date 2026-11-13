@@ -1,0 +1,281 @@
+{
+ "note": {
+  "locations": "Places on the map, in drawing order. pos / size are pixels on a 900 x 420 map",
+  "entries": "schedule entries offered there (a class, job or rest id, or rest_outing@<place>); ids that are switched off or unknown are skipped; a job is hidden until its earliest month",
+  "shops": "street.json entries opened from this place (they do not use a period)",
+  "activities": "conditional activities (fight night, horse race, premiere): shown, not playable yet (open: false); interface only",
+  "extra": "home: script writing; city: hospital; studio: shooting periods come here by themselves"
+ },
+ "locations": [
+  {
+   "id": "loc_studio",
+   "name": "片场",
+   "hint": "拍摄、片场打杂、演员培训",
+   "pos": [
+    20,
+    20
+   ],
+   "size": [
+    200,
+    80
+   ],
+   "entries": [
+    "job_runner",
+    "class_l1"
+   ],
+   "shops": [],
+   "activities": [],
+   "extra": "studio"
+  },
+  {
+   "id": "loc_coconut",
+   "name": "Coconut Grove",
+   "hint": "舞女男伴、lounge lizard、楼上房间、舞蹈",
+   "pos": [
+    240,
+    20
+   ],
+   "size": [
+    200,
+    80
+   ],
+   "entries": [
+    "job_l_day",
+    "job_l_night",
+    "job_l_late",
+    "class_l3"
+   ],
+   "shops": [],
+   "activities": [],
+   "extra": null
+  },
+  {
+   "id": "loc_dock",
+   "name": "码头",
+   "hint": "搬货、运私酒",
+   "pos": [
+    460,
+    20
+   ],
+   "size": [
+    200,
+    80
+   ],
+   "entries": [
+    "job_dock1",
+    "job_dock2"
+   ],
+   "shops": [],
+   "activities": [],
+   "extra": null
+  },
+  {
+   "id": "loc_gym",
+   "name": "拳馆",
+   "hint": "格斗术；拳赛夜",
+   "pos": [
+    680,
+    20
+   ],
+   "size": [
+    200,
+    80
+   ],
+   "entries": [
+    "class_h1"
+   ],
+   "shops": [],
+   "activities": [
+    {
+     "id": "activity_fight_night",
+     "name": "拳赛夜",
+     "note": "一年一次，代替收获季的武斗会（还没做）",
+     "open": false
+    }
+   ],
+   "extra": null
+  },
+  {
+   "id": "loc_track",
+   "name": "马场",
+   "hint": "骑术；赛马",
+   "pos": [
+    20,
+    120
+   ],
+   "size": [
+    200,
+    80
+   ],
+   "entries": [
+    "class_h2"
+   ],
+   "shops": [],
+   "activities": [
+    {
+     "id": "activity_horse_race",
+     "name": "赛马",
+     "note": "条件开放（还没做）",
+     "open": false
+    }
+   ],
+   "extra": null
+  },
+  {
+   "id": "loc_montmartre",
+   "name": "Montmartre",
+   "hint": "服务员、收债、下馆子",
+   "pos": [
+    240,
+    120
+   ],
+   "size": [
+    200,
+    80
+   ],
+   "entries": [
+    "job_server",
+    "job_collector"
+   ],
+   "shops": [
+    "restaurant"
+   ],
+   "activities": [],
+   "extra": null
+  },
+  {
+   "id": "loc_home",
+   "name": "家",
+   "hint": "休息（Sil 陪着）、陪 Sil 去教堂、家教、创作赚钱",
+   "pos": [
+    460,
+    120
+   ],
+   "size": [
+    200,
+    80
+   ],
+   "entries": [
+    "rest_home",
+    "job_church_aid",
+    "class_c3",
+    "job_c_money"
+   ],
+   "shops": [],
+   "activities": [],
+   "extra": "home"
+  },
+  {
+   "id": "loc_party",
+   "name": "私宅派对",
+   "hint": "confidante、去沙龙应酬",
+   "pos": [
+    680,
+    120
+   ],
+   "size": [
+    200,
+    80
+   ],
+   "entries": [
+    "job_c_slow",
+    "class_c1"
+   ],
+   "shops": [],
+   "activities": [],
+   "extra": null
+  },
+  {
+   "id": "loc_theater",
+   "name": "剧院",
+   "hint": "慈善；首映礼",
+   "pos": [
+    20,
+    220
+   ],
+   "size": [
+    200,
+    80
+   ],
+   "entries": [
+    "class_yi"
+   ],
+   "shops": [],
+   "activities": [
+    {
+     "id": "activity_premiere",
+     "name": "首映礼",
+     "note": "接口，还没做",
+     "open": false
+    }
+   ],
+   "extra": null
+  },
+  {
+   "id": "loc_church",
+   "name": "教堂",
+   "hint": "教堂帮工、捐钱",
+   "pos": [
+    680,
+    220
+   ],
+   "size": [
+    200,
+    80
+   ],
+   "entries": [
+    "job_church_help"
+   ],
+   "shops": [
+    "church"
+   ],
+   "activities": [],
+   "extra": null
+  },
+  {
+   "id": "loc_city",
+   "name": "进城",
+   "hint": "商店、医院、片厂区、市中心、海滨、码头外出",
+   "pos": [
+    240,
+    220
+   ],
+   "size": [
+    200,
+    80
+   ],
+   "entries": [
+    "rest_outing@place_studio",
+    "rest_outing@place_downtown",
+    "rest_outing@place_seaside",
+    "rest_outing@place_dock"
+   ],
+   "shops": [
+    "clothing_store",
+    "general_store",
+    "pawn"
+   ],
+   "activities": [],
+   "extra": "city"
+  },
+  {
+   "id": "loc_resort",
+   "name": "度假",
+   "hint": "度假村",
+   "pos": [
+    460,
+    220
+   ],
+   "size": [
+    200,
+    80
+   ],
+   "entries": [
+    "rest_outing@place_resort"
+   ],
+   "shops": [],
+   "activities": [],
+   "extra": null
+  }
+ ]
+}

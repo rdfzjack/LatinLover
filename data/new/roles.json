@@ -91,9 +91,9 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 300,
+   "fee": 80,
    "years_active": [
-    1926,
+    1924,
     1929
    ],
    "tutorial": true,
@@ -105,7 +105,7 @@
    "name": "沙漠酋长之子",
    "film_title": "（占位）",
    "size": "big",
-   "fame_gate": 250,
+   "fame_gate": 210,
    "style_probs": [
     15,
     60,
@@ -137,10 +137,19 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 2500,
+   "fee": 1200,
    "years_active": [
-    1926,
+    1924,
     1929
+   ],
+   "gates": [
+    [
+     [
+      "looks",
+      ">=",
+      100
+     ]
+    ]
    ]
   },
   {
@@ -148,7 +157,7 @@
    "name": "剑客",
    "film_title": "（占位）",
    "size": "big",
-   "fame_gate": 250,
+   "fame_gate": 210,
    "style_probs": [
     55,
     25,
@@ -180,10 +189,19 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 2500,
+   "fee": 1200,
    "years_active": [
-    1926,
+    1924,
     1929
+   ],
+   "gates": [
+    [
+     [
+      "stamina",
+      ">=",
+      100
+     ]
+    ]
    ]
   },
   {
@@ -191,7 +209,7 @@
    "name": "沉默的牧场帮工",
    "film_title": "（占位）",
    "size": "medium",
-   "fame_gate": 100,
+   "fame_gate": 130,
    "style_probs": [
     50,
     20,
@@ -215,10 +233,19 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 800,
+   "fee": 300,
    "years_active": [
-    1926,
+    1924,
     1929
+   ],
+   "gates": [
+    [
+     [
+      "stamina",
+      ">=",
+      50
+     ]
+    ]
    ]
   },
   {
@@ -226,7 +253,7 @@
    "name": "赌场老板",
    "film_title": "（占位）",
    "size": "medium",
-   "fame_gate": 100,
+   "fame_gate": 130,
    "style_probs": [
     20,
     15,
@@ -255,10 +282,19 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 800,
+   "fee": 300,
    "years_active": [
-    1926,
+    1924,
     1929
+   ],
+   "gates": [
+    [
+     [
+      "loyalty",
+      ">=",
+      65
+     ]
+    ]
    ]
   },
   {
@@ -266,7 +302,7 @@
    "name": "落魄的钢琴师",
    "film_title": "（占位）",
    "size": "medium",
-   "fame_gate": 100,
+   "fame_gate": 130,
    "style_probs": [
     5,
     35,
@@ -295,10 +331,19 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 800,
+   "fee": 300,
    "years_active": [
-    1926,
+    1924,
     1929
+   ],
+   "gates": [
+    [
+     [
+      "education",
+      ">=",
+      65
+     ]
+    ]
    ]
   },
   {
@@ -306,7 +351,7 @@
    "name": "殉道的修士",
    "film_title": "（占位）",
    "size": "medium",
-   "fame_gate": 100,
+   "fame_gate": 140,
    "style_probs": [
     5,
     20,
@@ -330,10 +375,19 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 800,
+   "fee": 300,
    "years_active": [
-    1926,
+    1924,
     1929
+   ],
+   "gates": [
+    [
+     [
+      "education",
+      ">=",
+      80
+     ]
+    ]
    ]
   },
   {
@@ -365,11 +419,12 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 300,
+   "fee": 80,
    "years_active": [
-    1926,
+    1924,
     1929
-   ]
+   ],
+   "gates": []
   },
   {
    "id": "role_boxer",
@@ -404,11 +459,2163 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
+   "fee": 80,
+   "years_active": [
+    1924,
+    1929
+   ],
+   "gates": []
+  },
+  {
+   "id": "role_ph01",
+   "name": "占位·情人中片1",
+   "film_title": "（占位）",
+   "size": "medium",
+   "fame_gate": 130,
+   "style_probs": [
+    15,
+    55,
+    15,
+    15
+   ],
+   "wants": [
+    {
+     "stat": "grooming",
+     "target": 60
+    }
+   ],
+   "tags": [
+    "exotic_lover"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
    "fee": 300,
    "years_active": [
-    1926,
+    1924,
     1929
+   ],
+   "placeholder": true,
+   "gates": [
+    [
+     [
+      "looks",
+      ">=",
+      50
+     ]
+    ]
    ]
+  },
+  {
+   "id": "role_ph02",
+   "name": "占位·手腕小片2",
+   "film_title": "（占位）",
+   "size": "small",
+   "fame_gate": 0,
+   "style_probs": [
+    15,
+    15,
+    15,
+    55
+   ],
+   "wants": [
+    {
+     "stat": "business",
+     "target": 40
+    }
+   ],
+   "tags": [
+    "crime"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 80,
+   "years_active": [
+    1924,
+    1929
+   ],
+   "placeholder": true,
+   "gates": []
+  },
+  {
+   "id": "role_ph03",
+   "name": "占位·文化大片3",
+   "film_title": "（占位）",
+   "size": "big",
+   "fame_gate": 210,
+   "style_probs": [
+    15,
+    15,
+    55,
+    15
+   ],
+   "wants": [
+    {
+     "stat": "writing",
+     "target": 80
+    }
+   ],
+   "tags": [
+    "religious"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    },
+    {
+     "named_placeholder": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 1200,
+   "years_active": [
+    1924,
+    1929
+   ],
+   "placeholder": true,
+   "gates": [
+    [
+     [
+      "education",
+      ">=",
+      120
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "role_ph04",
+   "name": "占位·手腕大片4",
+   "film_title": "（占位）",
+   "size": "big",
+   "fame_gate": 210,
+   "style_probs": [
+    15,
+    15,
+    15,
+    55
+   ],
+   "wants": [
+    {
+     "stat": "connections",
+     "target": 80
+    }
+   ],
+   "tags": [
+    "noble"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    },
+    {
+     "named_placeholder": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 1200,
+   "years_active": [
+    1924,
+    1929
+   ],
+   "placeholder": true,
+   "gates": [
+    [
+     [
+      "loyalty",
+      ">=",
+      120
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "role_ph05",
+   "name": "占位·情人大片5",
+   "film_title": "（占位）",
+   "size": "big",
+   "fame_gate": 210,
+   "style_probs": [
+    15,
+    55,
+    15,
+    15
+   ],
+   "wants": [
+    {
+     "stat": "physique",
+     "target": 80
+    }
+   ],
+   "tags": [
+    "exotic_lover"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    },
+    {
+     "named_placeholder": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 1200,
+   "years_active": [
+    1924,
+    1929
+   ],
+   "placeholder": true,
+   "gates": [
+    [
+     [
+      "looks",
+      ">=",
+      140
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "role_ph06",
+   "name": "占位·硬汉中片6",
+   "film_title": "（占位）",
+   "size": "medium",
+   "fame_gate": 140,
+   "style_probs": [
+    55,
+    15,
+    15,
+    15
+   ],
+   "wants": [
+    {
+     "stat": "fight",
+     "target": 60
+    }
+   ],
+   "tags": [
+    "horror"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 300,
+   "years_active": [
+    1924,
+    1929
+   ],
+   "placeholder": true,
+   "gates": [
+    [
+     [
+      "stamina",
+      ">=",
+      80
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "role_ph07",
+   "name": "占位·文化小片7",
+   "film_title": "（占位）",
+   "size": "small",
+   "fame_gate": 0,
+   "style_probs": [
+    15,
+    15,
+    55,
+    15
+   ],
+   "wants": [
+    {
+     "stat": "taste",
+     "target": 40
+    }
+   ],
+   "tags": [
+    "arthouse"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 80,
+   "years_active": [
+    1924,
+    1929
+   ],
+   "placeholder": true,
+   "gates": [
+    [
+     [
+      "education",
+      ">=",
+      30
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "role_ph08",
+   "name": "占位·硬汉大片8",
+   "film_title": "（占位）",
+   "size": "big",
+   "fame_gate": 210,
+   "style_probs": [
+    55,
+    15,
+    15,
+    15
+   ],
+   "wants": [
+    {
+     "stat": "nerve",
+     "target": 80
+    }
+   ],
+   "tags": [
+    "western"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    },
+    {
+     "named_placeholder": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 1200,
+   "years_active": [
+    1924,
+    1929
+   ],
+   "placeholder": true,
+   "gates": [
+    [
+     [
+      "stamina",
+      ">=",
+      140
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "role_ph09",
+   "name": "占位·情人中片9",
+   "film_title": "（占位）",
+   "size": "medium",
+   "fame_gate": 140,
+   "style_probs": [
+    15,
+    55,
+    15,
+    15
+   ],
+   "wants": [
+    {
+     "stat": "acting",
+     "target": 60
+    }
+   ],
+   "tags": [
+    "musical"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 300,
+   "years_active": [
+    1924,
+    1929
+   ],
+   "placeholder": true,
+   "gates": [
+    [
+     [
+      "looks",
+      ">=",
+      80
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "role_ph10",
+   "name": "占位·手腕小片10",
+   "film_title": "（占位）",
+   "size": "small",
+   "fame_gate": 0,
+   "style_probs": [
+    15,
+    15,
+    15,
+    55
+   ],
+   "wants": [
+    {
+     "stat": "connections",
+     "target": 40
+    }
+   ],
+   "tags": [
+    "crime"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 80,
+   "years_active": [
+    1924,
+    1929
+   ],
+   "placeholder": true,
+   "gates": [
+    [
+     [
+      "loyalty",
+      ">=",
+      30
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "role_ph11",
+   "name": "占位·文化大片11",
+   "film_title": "（占位）",
+   "size": "big",
+   "fame_gate": 210,
+   "style_probs": [
+    15,
+    15,
+    55,
+    15
+   ],
+   "wants": [
+    {
+     "stat": "speech",
+     "target": 80
+    }
+   ],
+   "tags": [
+    "religious"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    },
+    {
+     "named_placeholder": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 1200,
+   "years_active": [
+    1924,
+    1929
+   ],
+   "placeholder": true,
+   "gates": [
+    [
+     [
+      "education",
+      ">=",
+      140
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "role_ph12",
+   "name": "占位·硬汉小片12",
+   "film_title": "（占位）",
+   "size": "small",
+   "fame_gate": 0,
+   "style_probs": [
+    55,
+    15,
+    15,
+    15
+   ],
+   "wants": [
+    {
+     "stat": "fight",
+     "target": 40
+    }
+   ],
+   "tags": [
+    "action_adventure"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 80,
+   "years_active": [
+    1924,
+    1929
+   ],
+   "placeholder": true,
+   "gates": [
+    [
+     [
+      "stamina",
+      ">=",
+      30
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "role_ph13",
+   "name": "占位·手腕大片13",
+   "film_title": "（占位）",
+   "size": "big",
+   "fame_gate": 210,
+   "style_probs": [
+    15,
+    15,
+    15,
+    55
+   ],
+   "wants": [
+    {
+     "stat": "connections",
+     "target": 80
+    }
+   ],
+   "tags": [
+    "noble"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    },
+    {
+     "named_placeholder": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 1200,
+   "years_active": [
+    1924,
+    1929
+   ],
+   "placeholder": true,
+   "gates": [
+    [
+     [
+      "loyalty",
+      ">=",
+      160
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "role_ph14",
+   "name": "占位·手腕中片14",
+   "film_title": "（占位）",
+   "size": "medium",
+   "fame_gate": 150,
+   "style_probs": [
+    15,
+    15,
+    15,
+    55
+   ],
+   "wants": [
+    {
+     "stat": "business",
+     "target": 60
+    }
+   ],
+   "tags": [
+    "noble"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 300,
+   "years_active": [
+    1924,
+    1929
+   ],
+   "placeholder": true,
+   "gates": [
+    [
+     [
+      "loyalty",
+      ">=",
+      95
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "role_ph15",
+   "name": "占位·情人小片15",
+   "film_title": "（占位）",
+   "size": "small",
+   "fame_gate": 0,
+   "style_probs": [
+    15,
+    55,
+    15,
+    15
+   ],
+   "wants": [
+    {
+     "stat": "acting",
+     "target": 40
+    }
+   ],
+   "tags": [
+    "exotic_lover"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 80,
+   "years_active": [
+    1924,
+    1929
+   ],
+   "placeholder": true,
+   "gates": [
+    [
+     [
+      "looks",
+      ">=",
+      40
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "role_ph16",
+   "name": "占位·情人大片16",
+   "film_title": "（占位）",
+   "size": "big",
+   "fame_gate": 210,
+   "style_probs": [
+    15,
+    55,
+    15,
+    15
+   ],
+   "wants": [
+    {
+     "stat": "grooming",
+     "target": 80
+    }
+   ],
+   "tags": [
+    "musical"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    },
+    {
+     "named_placeholder": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 1200,
+   "years_active": [
+    1924,
+    1929
+   ],
+   "placeholder": true,
+   "gates": [
+    [
+     [
+      "looks",
+      ">=",
+      160
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "role_ph17",
+   "name": "占位·硬汉中片17",
+   "film_title": "（占位）",
+   "size": "medium",
+   "fame_gate": 150,
+   "style_probs": [
+    55,
+    15,
+    15,
+    15
+   ],
+   "wants": [
+    {
+     "stat": "nerve",
+     "target": 60
+    }
+   ],
+   "tags": [
+    "costume"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 300,
+   "years_active": [
+    1924,
+    1929
+   ],
+   "placeholder": true,
+   "gates": [
+    [
+     [
+      "stamina",
+      ">=",
+      95
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "role_ph18",
+   "name": "占位·文化小片18",
+   "film_title": "（占位）",
+   "size": "small",
+   "fame_gate": 0,
+   "style_probs": [
+    15,
+    15,
+    55,
+    15
+   ],
+   "wants": [
+    {
+     "stat": "writing",
+     "target": 40
+    }
+   ],
+   "tags": [
+    "arthouse"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 80,
+   "years_active": [
+    1924,
+    1929
+   ],
+   "placeholder": true,
+   "gates": [
+    [
+     [
+      "education",
+      ">=",
+      40
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "role_ph19",
+   "name": "占位·硬汉大片19",
+   "film_title": "（占位）",
+   "size": "big",
+   "fame_gate": 210,
+   "style_probs": [
+    55,
+    15,
+    15,
+    15
+   ],
+   "wants": [
+    {
+     "stat": "riding",
+     "target": 80
+    }
+   ],
+   "tags": [
+    "horror"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    },
+    {
+     "named_placeholder": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 1200,
+   "years_active": [
+    1924,
+    1929
+   ],
+   "placeholder": true,
+   "gates": [
+    [
+     [
+      "stamina",
+      ">=",
+      160
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "role_ph20",
+   "name": "占位·情人中片20",
+   "film_title": "（占位）",
+   "size": "medium",
+   "fame_gate": 150,
+   "style_probs": [
+    15,
+    55,
+    15,
+    15
+   ],
+   "wants": [
+    {
+     "stat": "physique",
+     "target": 60
+    }
+   ],
+   "tags": [
+    "romance"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 300,
+   "years_active": [
+    1924,
+    1929
+   ],
+   "placeholder": true,
+   "gates": [
+    [
+     [
+      "looks",
+      ">=",
+      95
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "role_ph21",
+   "name": "占位·手腕小片21",
+   "film_title": "（占位）",
+   "size": "small",
+   "fame_gate": 0,
+   "style_probs": [
+    15,
+    15,
+    15,
+    55
+   ],
+   "wants": [
+    {
+     "stat": "negotiation",
+     "target": 40
+    }
+   ],
+   "tags": [
+    "crime"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 80,
+   "years_active": [
+    1924,
+    1929
+   ],
+   "placeholder": true,
+   "gates": [
+    [
+     [
+      "loyalty",
+      ">=",
+      40
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "role_ph22",
+   "name": "占位·文化大片22",
+   "film_title": "（占位）",
+   "size": "big",
+   "fame_gate": 240,
+   "style_probs": [
+    15,
+    15,
+    55,
+    15
+   ],
+   "wants": [
+    {
+     "stat": "taste",
+     "target": 80
+    }
+   ],
+   "tags": [
+    "religious"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    },
+    {
+     "named_placeholder": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 1200,
+   "years_active": [
+    1924,
+    1929
+   ],
+   "placeholder": true,
+   "gates": [
+    [
+     [
+      "education",
+      ">=",
+      180
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "role_ph23",
+   "name": "占位·文化中片23",
+   "film_title": "（占位）",
+   "size": "medium",
+   "fame_gate": 160,
+   "style_probs": [
+    15,
+    15,
+    55,
+    15
+   ],
+   "wants": [
+    {
+     "stat": "speech",
+     "target": 60
+    }
+   ],
+   "tags": [
+    "religious"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 300,
+   "years_active": [
+    1924,
+    1929
+   ],
+   "placeholder": true,
+   "gates": [
+    [
+     [
+      "education",
+      ">=",
+      110
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "role_ph24",
+   "name": "占位·硬汉小片24",
+   "film_title": "（占位）",
+   "size": "small",
+   "fame_gate": 0,
+   "style_probs": [
+    55,
+    15,
+    15,
+    15
+   ],
+   "wants": [
+    {
+     "stat": "fight",
+     "target": 40
+    }
+   ],
+   "tags": [
+    "western"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 80,
+   "years_active": [
+    1924,
+    1929
+   ],
+   "placeholder": true,
+   "gates": [
+    [
+     [
+      "stamina",
+      ">=",
+      50
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "role_ph25",
+   "name": "占位·手腕大片25",
+   "film_title": "（占位）",
+   "size": "big",
+   "fame_gate": 240,
+   "style_probs": [
+    15,
+    15,
+    15,
+    55
+   ],
+   "wants": [
+    {
+     "stat": "connections",
+     "target": 80
+    }
+   ],
+   "tags": [
+    "noble"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    },
+    {
+     "named_placeholder": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 1200,
+   "years_active": [
+    1924,
+    1929
+   ],
+   "placeholder": true,
+   "gates": [
+    [
+     [
+      "loyalty",
+      ">=",
+      180
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "role_ph26",
+   "name": "占位·手腕中片26",
+   "film_title": "（占位）",
+   "size": "medium",
+   "fame_gate": 160,
+   "style_probs": [
+    15,
+    15,
+    15,
+    55
+   ],
+   "wants": [
+    {
+     "stat": "business",
+     "target": 60
+    }
+   ],
+   "tags": [
+    "noble"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 300,
+   "years_active": [
+    1924,
+    1929
+   ],
+   "placeholder": true,
+   "gates": [
+    [
+     [
+      "loyalty",
+      ">=",
+      110
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "role_ph27",
+   "name": "占位·情人小片27",
+   "film_title": "（占位）",
+   "size": "small",
+   "fame_gate": 0,
+   "style_probs": [
+    15,
+    55,
+    15,
+    15
+   ],
+   "wants": [
+    {
+     "stat": "acting",
+     "target": 40
+    }
+   ],
+   "tags": [
+    "musical"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 80,
+   "years_active": [
+    1924,
+    1929
+   ],
+   "placeholder": true,
+   "gates": [
+    [
+     [
+      "looks",
+      ">=",
+      50
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "role_ph28",
+   "name": "占位·情人大片28",
+   "film_title": "（占位）",
+   "size": "big",
+   "fame_gate": 240,
+   "style_probs": [
+    15,
+    55,
+    15,
+    15
+   ],
+   "wants": [
+    {
+     "stat": "grooming",
+     "target": 80
+    }
+   ],
+   "tags": [
+    "romance"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    },
+    {
+     "named_placeholder": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 1200,
+   "years_active": [
+    1924,
+    1929
+   ],
+   "placeholder": true,
+   "gates": [
+    [
+     [
+      "looks",
+      ">=",
+      180
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "role_ph29",
+   "name": "占位·硬汉中片29",
+   "film_title": "（占位）",
+   "size": "medium",
+   "fame_gate": 160,
+   "style_probs": [
+    55,
+    15,
+    15,
+    15
+   ],
+   "wants": [
+    {
+     "stat": "nerve",
+     "target": 60
+    }
+   ],
+   "tags": [
+    "war"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 300,
+   "years_active": [
+    1924,
+    1929
+   ],
+   "placeholder": true,
+   "gates": [
+    [
+     [
+      "stamina",
+      ">=",
+      110
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "role_ph30",
+   "name": "占位·文化小片30",
+   "film_title": "（占位）",
+   "size": "small",
+   "fame_gate": 0,
+   "style_probs": [
+    15,
+    15,
+    55,
+    15
+   ],
+   "wants": [
+    {
+     "stat": "writing",
+     "target": 40
+    }
+   ],
+   "tags": [
+    "arthouse"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 80,
+   "years_active": [
+    1924,
+    1929
+   ],
+   "placeholder": true,
+   "gates": [
+    [
+     [
+      "education",
+      ">=",
+      50
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "role_ph31",
+   "name": "占位·硬汉大片31",
+   "film_title": "（占位）",
+   "size": "big",
+   "fame_gate": 270,
+   "style_probs": [
+    55,
+    15,
+    15,
+    15
+   ],
+   "wants": [
+    {
+     "stat": "riding",
+     "target": 80
+    }
+   ],
+   "tags": [
+    "costume"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    },
+    {
+     "named_placeholder": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 1200,
+   "years_active": [
+    1924,
+    1929
+   ],
+   "placeholder": true,
+   "gates": [
+    [
+     [
+      "stamina",
+      ">=",
+      200
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "role_ph32",
+   "name": "占位·情人中片32",
+   "film_title": "（占位）",
+   "size": "medium",
+   "fame_gate": 170,
+   "style_probs": [
+    15,
+    55,
+    15,
+    15
+   ],
+   "wants": [
+    {
+     "stat": "physique",
+     "target": 60
+    }
+   ],
+   "tags": [
+    "exotic_lover"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 300,
+   "years_active": [
+    1924,
+    1929
+   ],
+   "placeholder": true,
+   "gates": [
+    [
+     [
+      "looks",
+      ">=",
+      125
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "role_ph33",
+   "name": "占位·手腕小片33",
+   "film_title": "（占位）",
+   "size": "small",
+   "fame_gate": 0,
+   "style_probs": [
+    15,
+    15,
+    15,
+    55
+   ],
+   "wants": [
+    {
+     "stat": "negotiation",
+     "target": 40
+    }
+   ],
+   "tags": [
+    "crime"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 80,
+   "years_active": [
+    1924,
+    1929
+   ],
+   "placeholder": true,
+   "gates": [
+    [
+     [
+      "loyalty",
+      ">=",
+      60
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "role_ph34",
+   "name": "占位·文化大片34",
+   "film_title": "（占位）",
+   "size": "big",
+   "fame_gate": 270,
+   "style_probs": [
+    15,
+    15,
+    55,
+    15
+   ],
+   "wants": [
+    {
+     "stat": "taste",
+     "target": 80
+    }
+   ],
+   "tags": [
+    "religious"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    },
+    {
+     "named_placeholder": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 1200,
+   "years_active": [
+    1924,
+    1929
+   ],
+   "placeholder": true,
+   "gates": [
+    [
+     [
+      "education",
+      ">=",
+      200
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "role_ph35",
+   "name": "占位·文化中片35",
+   "film_title": "（占位）",
+   "size": "medium",
+   "fame_gate": 170,
+   "style_probs": [
+    15,
+    15,
+    55,
+    15
+   ],
+   "wants": [
+    {
+     "stat": "speech",
+     "target": 60
+    }
+   ],
+   "tags": [
+    "religious"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 300,
+   "years_active": [
+    1924,
+    1929
+   ],
+   "placeholder": true,
+   "gates": [
+    [
+     [
+      "education",
+      ">=",
+      125
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "role_ph36",
+   "name": "占位·硬汉小片36",
+   "film_title": "（占位）",
+   "size": "small",
+   "fame_gate": 0,
+   "style_probs": [
+    55,
+    15,
+    15,
+    15
+   ],
+   "wants": [
+    {
+     "stat": "fight",
+     "target": 40
+    }
+   ],
+   "tags": [
+    "horror"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 80,
+   "years_active": [
+    1924,
+    1929
+   ],
+   "placeholder": true,
+   "gates": [
+    [
+     [
+      "stamina",
+      ">=",
+      60
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "role_ph37",
+   "name": "占位·硬汉小片37",
+   "film_title": "（占位）",
+   "size": "small",
+   "fame_gate": 0,
+   "style_probs": [
+    55,
+    15,
+    15,
+    15
+   ],
+   "wants": [
+    {
+     "stat": "riding",
+     "target": 40
+    }
+   ],
+   "tags": [
+    "costume"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 80,
+   "years_active": [
+    1924,
+    1929
+   ],
+   "placeholder": true,
+   "gates": []
+  },
+  {
+   "id": "role_ph38",
+   "name": "占位·情人中片38",
+   "film_title": "（占位）",
+   "size": "medium",
+   "fame_gate": 130,
+   "style_probs": [
+    15,
+    55,
+    15,
+    15
+   ],
+   "wants": [
+    {
+     "stat": "physique",
+     "target": 60
+    }
+   ],
+   "tags": [
+    "exotic_lover"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 300,
+   "years_active": [
+    1924,
+    1929
+   ],
+   "placeholder": true,
+   "gates": [
+    [
+     [
+      "looks",
+      ">=",
+      65
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "role_ph39",
+   "name": "占位·文化小片39",
+   "film_title": "（占位）",
+   "size": "small",
+   "fame_gate": 0,
+   "style_probs": [
+    15,
+    15,
+    55,
+    15
+   ],
+   "wants": [
+    {
+     "stat": "writing",
+     "target": 40
+    }
+   ],
+   "tags": [
+    "tragic"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 80,
+   "years_active": [
+    1924,
+    1929
+   ],
+   "placeholder": true,
+   "gates": [
+    [
+     [
+      "education",
+      ">=",
+      30
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "role_ph40",
+   "name": "占位·手腕中片40",
+   "film_title": "（占位）",
+   "size": "medium",
+   "fame_gate": 140,
+   "style_probs": [
+    15,
+    15,
+    15,
+    55
+   ],
+   "wants": [
+    {
+     "stat": "connections",
+     "target": 60
+    }
+   ],
+   "tags": [
+    "comedy"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 300,
+   "years_active": [
+    1924,
+    1929
+   ],
+   "placeholder": true,
+   "gates": [
+    [
+     [
+      "loyalty",
+      ">=",
+      80
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "role_ph41",
+   "name": "占位·硬汉小片41",
+   "film_title": "（占位）",
+   "size": "small",
+   "fame_gate": 0,
+   "style_probs": [
+    55,
+    15,
+    15,
+    15
+   ],
+   "wants": [
+    {
+     "stat": "nerve",
+     "target": 40
+    }
+   ],
+   "tags": [
+    "war"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 80,
+   "years_active": [
+    1924,
+    1929
+   ],
+   "placeholder": true,
+   "gates": [
+    [
+     [
+      "stamina",
+      ">=",
+      40
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "role_ph42",
+   "name": "占位·情人中片42",
+   "film_title": "（占位）",
+   "size": "medium",
+   "fame_gate": 150,
+   "style_probs": [
+    15,
+    55,
+    15,
+    15
+   ],
+   "wants": [
+    {
+     "stat": "acting",
+     "target": 60
+    }
+   ],
+   "tags": [
+    "musical"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 300,
+   "years_active": [
+    1924,
+    1929
+   ],
+   "placeholder": true,
+   "gates": [
+    [
+     [
+      "looks",
+      ">=",
+      95
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "role_ph43",
+   "name": "占位·文化小片43",
+   "film_title": "（占位）",
+   "size": "small",
+   "fame_gate": 0,
+   "style_probs": [
+    15,
+    15,
+    55,
+    15
+   ],
+   "wants": [
+    {
+     "stat": "taste",
+     "target": 40
+    }
+   ],
+   "tags": [
+    "tragic"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 80,
+   "years_active": [
+    1924,
+    1929
+   ],
+   "placeholder": true,
+   "gates": [
+    [
+     [
+      "education",
+      ">=",
+      50
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "role_ph44",
+   "name": "占位·手腕中片44",
+   "film_title": "（占位）",
+   "size": "medium",
+   "fame_gate": 160,
+   "style_probs": [
+    15,
+    15,
+    15,
+    55
+   ],
+   "wants": [
+    {
+     "stat": "business",
+     "target": 60
+    }
+   ],
+   "tags": [
+    "comedy"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 300,
+   "years_active": [
+    1924,
+    1929
+   ],
+   "placeholder": true,
+   "gates": [
+    [
+     [
+      "loyalty",
+      ">=",
+      110
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "role_ph45",
+   "name": "占位·硬汉小片3",
+   "film_title": "（占位）",
+   "size": "small",
+   "fame_gate": 0,
+   "style_probs": [
+    55,
+    15,
+    15,
+    15
+   ],
+   "wants": [
+    {
+     "stat": "fight",
+     "target": 40
+    }
+   ],
+   "tags": [
+    "western"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 80,
+   "years_active": [
+    1924,
+    1929
+   ],
+   "placeholder": true,
+   "gates": []
+  },
+  {
+   "id": "role_ph46",
+   "name": "占位·情人小片3",
+   "film_title": "（占位）",
+   "size": "small",
+   "fame_gate": 0,
+   "style_probs": [
+    15,
+    55,
+    15,
+    15
+   ],
+   "wants": [
+    {
+     "stat": "acting",
+     "target": 40
+    }
+   ],
+   "tags": [
+    "romance"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 80,
+   "years_active": [
+    1924,
+    1929
+   ],
+   "placeholder": true,
+   "gates": []
+  },
+  {
+   "id": "role_ph47",
+   "name": "占位·文化小片3",
+   "film_title": "（占位）",
+   "size": "small",
+   "fame_gate": 0,
+   "style_probs": [
+    15,
+    15,
+    55,
+    15
+   ],
+   "wants": [
+    {
+     "stat": "writing",
+     "target": 40
+    }
+   ],
+   "tags": [
+    "arthouse"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 80,
+   "years_active": [
+    1924,
+    1929
+   ],
+   "placeholder": true,
+   "gates": []
+  },
+  {
+   "id": "role_ph48",
+   "name": "占位·手腕小片3",
+   "film_title": "（占位）",
+   "size": "small",
+   "fame_gate": 0,
+   "style_probs": [
+    15,
+    15,
+    15,
+    55
+   ],
+   "wants": [
+    {
+     "stat": "negotiation",
+     "target": 40
+    }
+   ],
+   "tags": [
+    "crime"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 80,
+   "years_active": [
+    1924,
+    1929
+   ],
+   "placeholder": true,
+   "gates": []
   }
  ],
  "defaults": {
@@ -418,9 +2625,9 @@
    "big": 250
   },
   "fee": {
-   "small": 300,
-   "medium": 800,
-   "big": 2500
+   "small": 80,
+   "medium": 300,
+   "big": 1200
   },
   "speech_line": {
    "small": 30,
@@ -440,8 +2647,6 @@
     "medium": 2,
     "small": 2
    },
-   "connections_extra_medium": 50,
-   "connections_extra_big": 80,
    "audition_tries": 2,
    "same_role_cap": {
     "small": 2,
@@ -466,7 +2671,8 @@
     "exclude_color_connections": 80
    },
    "morals_months": 3,
-   "morals_note": "step 12c: no big film for morals_months months after an arrest or an unsuppressed scandal"
+   "morals_note": "step 12c: no big film for morals_months months after an arrest or an unsuppressed scandal",
+   "connections_extra": 50
   },
   "talkie": {
    "note": "GDD 6.4: 1 role on the 1927-10 board; 30% of roles in 1928; 80% in 1929",
@@ -523,7 +2729,13 @@
    "swap_role": {
     "size": "medium",
     "period_count": 1
-   }
+   },
+   "fee_by_lost_rounds": [
+    125,
+    100,
+    80
+   ],
+   "fee_note": "User (lover playtest): the fee is paid at the end of shooting and set by the audition, not by the release: base x fee_by_lost_rounds[rounds the rival won in the deciding match]% (3:0 125, 3:1 100, 3:2 80); a supporting part is still x40%. Bases small 80 / medium 300 / big 1200 (about one period of the best job of that time per shooting period; the release dividend S x 2 comes on top)"
   },
   "release": {
    "note": "GDD 8. S is an integer scaled x1000: B x P x F x T / 10^6",
@@ -690,6 +2902,114 @@
     "size": "big"
    },
    "main_style": 60
+  },
+  "fame_gate_note": "User (lover playtest): fame formula unchanged; gates set by estimate so a good start can try a medium film from 1925-03 and a big film from 1927 (medium 130/130/140/150/160/170, big 210 to 1927, then 240, 270). Placeholder, to be re-measured"
+ },
+ "board_schedule": [
+  {
+   "month": "1924-03",
+   "big": "role_sheikh_son",
+   "medium": "role_ranch_hand",
+   "small": "role_tutorial",
+   "small2": "role_ph45"
+  },
+  {
+   "month": "1924-09",
+   "big": "role_swordsman",
+   "medium": "role_ph01",
+   "small": "role_ph02",
+   "small2": "role_ph46"
+  },
+  {
+   "month": "1925-03",
+   "big": "role_ph03",
+   "medium": "role_pianist",
+   "small": "role_boxer",
+   "small2": "role_ph47"
+  },
+  {
+   "month": "1925-09",
+   "big": "role_ph04",
+   "medium": "role_casino_owner",
+   "small": "role_stranger",
+   "small2": "role_ph48"
+  },
+  {
+   "month": "1926-03",
+   "big": "role_ph05",
+   "medium": "role_ph06",
+   "small": "role_ph07"
+  },
+  {
+   "month": "1926-07",
+   "big": "role_ph08",
+   "medium": "role_ph09",
+   "small": "role_ph10"
+  },
+  {
+   "month": "1926-11",
+   "big": "role_ph11",
+   "medium": "role_martyr",
+   "small": "role_ph12"
+  },
+  {
+   "month": "1927-03",
+   "big": "role_ph13",
+   "medium": "role_ph14",
+   "small": "role_ph15"
+  },
+  {
+   "month": "1927-07",
+   "big": "role_ph16",
+   "medium": "role_ph17",
+   "small": "role_ph18"
+  },
+  {
+   "month": "1927-11",
+   "big": "role_ph19",
+   "medium": "role_ph20",
+   "small": "role_ph21"
+  },
+  {
+   "month": "1928-03",
+   "big": "role_ph22",
+   "medium": "role_ph23",
+   "small": "role_ph24"
+  },
+  {
+   "month": "1928-07",
+   "big": "role_ph25",
+   "medium": "role_ph26",
+   "small": "role_ph27"
+  },
+  {
+   "month": "1928-11",
+   "big": "role_ph28",
+   "medium": "role_ph29",
+   "small": "role_ph30"
+  },
+  {
+   "month": "1929-03",
+   "big": "role_ph31",
+   "medium": "role_ph32",
+   "small": "role_ph33"
+  },
+  {
+   "month": "1929-07",
+   "big": "role_ph34",
+   "medium": "role_ph35",
+   "small": "role_ph36"
   }
- }
+ ],
+ "reserve_pool": [
+  "role_ph37",
+  "role_ph38",
+  "role_ph39",
+  "role_ph40",
+  "role_ph41",
+  "role_ph42",
+  "role_ph43",
+  "role_ph44"
+ ],
+ "board_note": "Fixed boards (user): board_schedule gives the big, medium and small role of each audition month (15 boards); reserve_pool is drawn in order (the first role not shown yet whose gates the player meets) when connections >= defaults.board.connections_extra. A role can be signed only when fame >= fame_gate and its gates hold (off-road attributes; numbers are placeholders). role_ph* are placeholders for the user to rename and write. User (lover playtest): the 1924-25 boards have a second small role (small2), four roles in all."
 }

@@ -8,7 +8,9 @@ In order:
 3. Content: all checks of tools/check_data.py (fields complete, referenced things exist, conditions and effects well written).
 4. Text: data/locale/text.csv is regenerated from the display fields (tools/extract_text.py); missing Chinese, duplicate or extra keys,
    stray Chinese outside the display fields and stale English are errors.
-5. Playthrough and guard (Godot, from step 12c): every bot plays 30 games; a crash is an error; design/targets.json is checked
+5. Screen text: no Chinese in the string literals of game/silentstar/ui/*.gd; every tr("key") has a row in data/locale/ui.csv
+   (tools/check_ui_text.py).
+6. Playthrough and guard (Godot, from step 12c): every bot plays 30 games; a crash is an error; design/targets.json is checked
    (PASS / FAIL per target, widened by 10%). FAIL lines are printed but do not fail the check. Skipped when Godot is not found.
 """
 import json
@@ -219,25 +221,25 @@ def step_play():
 
 
 def main():
-    print('1/5 checking JSON format...')
+    print('1/6 checking JSON format...')
     problems, tables = step_json()
     if problems:
         print('\n\n'.join(problems))
         print('\nFAILED: fix the format errors above, then run again.')
         return 1
-    print('2/5 checking duplicates and types...')
+    print('2/6 checking duplicates and types...')
     problems = step_dup(tables) + step_types(tables)
     if problems:
         print('\n'.join(problems))
         print('\nFAILED: fix the problems above, then run again.')
         return 1
-    print('3/5 checking content...')
+    print('3/6 checking content...')
     ok, errs, lines = step_content()
     if not ok:
         print('\n'.join(errs))
         print(f'\nFAILED: {len(errs)} content problems. Each line starts with the file name, then which record and what is wrong.')
         return 1
-    print('4/5 checking text.csv...')
+    print('4/6 checking text.csv...')
     import extract_text
     problems, notes = extract_text.sync()
     print('\n'.join(notes))
@@ -245,7 +247,14 @@ def main():
         print('\n'.join(problems))
         print('\nFAILED: fix the problems above, then run again.')
         return 1
-    print('5/5 bot playthrough and guard (Godot, 30 games per bot; takes a few minutes)...')
+    print('5/6 checking the screen text (ui.csv)...')
+    import check_ui_text
+    problems = check_ui_text.check()
+    if problems:
+        print('\n'.join(problems))
+        print('\nFAILED: fix the problems above, then run again.')
+        return 1
+    print('6/6 bot playthrough and guard (Godot, 30 games per bot; takes a few minutes)...')
     problems, guard = step_play()
     if problems is None:
         print('\n'.join(guard))

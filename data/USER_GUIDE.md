@@ -313,9 +313,11 @@ So that adding events does not need a new balance round each time, every event (
 - Over the cap on purpose: add `"budget_note": "why"`. The checker then skips the caps and lists every event with a `budget_note`.
 - Whatever the tiers, the sum of all events is watched in the report (line "from events"): main-road reputation from events ≤ 30 per game, event money within ±10% of all money gained, event fatigue within ±60 a year. When over, cut events, not classes, jobs or fees.
 
-### 7. Add a role (a part on the casting board)
+### 7. Write or add a role (a part on the casting board)
 
-Add to `"roles"` of `roles.json`, copying one of the same size:
+Boards are fixed: each audition month shows the big, medium and small role listed for it in `board_schedule` (see 13). The easiest edit is to **rewrite a placeholder** (`role_ph01` … `role_ph48`, named `占位·…`): change its `name`, `film_title`, `wants`, `tags` and so on, keep its `id`, and it stays on its board. Remove `"placeholder": true` once it is written.
+
+To add a new role instead, add it to `"roles"` of `roles.json` (copy one of the same size), then put its id into a slot of `board_schedule` or into `reserve_pool`. A role in neither list only appears through the extra draws (script, investment, after Valen's death).
 
 ```json
 {
@@ -324,6 +326,7 @@ Add to `"roles"` of `roles.json`, copying one of the same size:
  "film_title": "（占位）",
  "size": "small",
  "fame_gate": 0,
+ "gates": [[["stamina", ">=", 30]]],
  "style_probs": [55, 15, 15, 15],
  "wants": [{"stat": "fight", "target": 40}],
  "tags": ["action_adventure"],
@@ -336,12 +339,26 @@ Add to `"roles"` of `roles.json`, copying one of the same size:
 }
 ```
 
-- `size`: `small`, `medium` or `big`. A big film has two opponents, small and medium one.
+- `name`: the role (a lead even in a small film); `film_title`: the film.
+- `size`: `small`, `medium` or `big`. A big film has two opponents, small and medium one. In `board_schedule` the size must match the slot (`small2` takes a small role).
+- `fee`: the base fee (defaults: small 80, medium 300, big 1200). It is paid when shooting ends, times `defaults.shoot.fee_by_lost_rounds` by the audition score (3:0 125%, 3:1 100%, 3:2 80%); a supporting part is 40%.
+- Sign-up conditions: `fame_gate` (minimum fame) plus `gates`, a condition in the usual format (section 4). Use off-road attributes: tough roles `stamina`, lover `looks`, culture `education`, savvy `loyalty`. `[[["looks", ">=", 80]]]` means looks at least 80; `[[["looks", ">=", 80], ["education", ">=", 40]]]` needs both; `[]` means no extra condition. The player sees every condition with his own number and ✓ / ✗, also on the "下次选片" page.
 - `style_probs`: the four numbers (tough, lover, culture, savvy) add up to 100, each between 5 and 60.
 - `wants`: 1-3 attributes or skills with a target; they shape the release result.
 - `tags`: 1-2 of the 16 film tags (section 2).
 - `opponents`: an unnamed one is `{"unnamed": true, "main_level": n}`, a named one `{"named": "rival_valen"}` (ids in `rivals.json`).
 - `talkie`: `true` always a talkie, `false` never, `null` decided by the year's ratio. With `true`, `speech_line` must be a number.
+- `bonus_skill`: the skill that adds to the shooting performance (usually `acting`); `fee`: the pay (default small 300, medium 800, big 2500).
+- `years_active`: `[first year, last year]`; only used by the extra draws, not by the fixed boards.
+- The fixed boards look like this in `roles.json`:
+
+```json
+"board_schedule": [
+ {"month": "1924-03", "big": "role_sheikh_son", "medium": "role_ranch_hand", "small": "role_tutorial"},
+ ...
+],
+"reserve_pool": ["role_ph37", "role_ph38", ...]
+```
 
 ### 8. Add an opportunity
 
@@ -414,6 +431,26 @@ In effects, `drug_points+1` and `drug_stage=0` work like any other name.
 2. Remove those places, then the thing itself.
 3. Run the check. Anything missed is reported as "does not exist".
 4. If the check says `extra key in text.csv`, run `python3 tools/extract_text.py --prune` to drop the text lines of what you deleted.
+
+### 13. Jobs, classes, books and the calendar (six-year version)
+
+- **Scale and tiers** (`stats.json` `scale`): write event conditions with `tier.<attr>` (`["tier.loyalty", ">=", "high"]`; tiers `low` `mid` `high` `very_high`) or `scale.<attr>` (0-100, `["scale.loyalty", ">=", 60]`), not raw numbers. `div10` holds each base attribute's divisor x10 (stamina 80 means divide by 8); to rebalance, change only these. Status traits may still use raw numbers.
+- **Slacking off** (`stats.json` `slack`): `cap_pct` is the top chance; `home_cond` sends him home; `by_highest` lists where he runs to by the highest scale (ties go to the earlier row); `fame_div10` turns fame into 0-100 for that comparison.
+- **Status traits** (`traits.json`): each row is `{id, name, body, cond, effects}`. The trait shows on the status bar while `cond` holds (same condition syntax as everywhere); `body` is the tooltip. `effects` may only use the names in `effects_allowed`; now that is `no_audition` (no audition at all while the trait is on). Example: `trait_out_of_shape` is on when looks < 60. To add one, copy a row and change `id`, `name`, `body`, `cond`.
+- **Switches** (`events.json`): `"enabled": false` turns every event off (events, outing events, era events); `"valen_death": false` keeps Valen as a rival to the end with no replacement. Both are false now; set to true to bring them back.
+- **Day rolls**: a class day succeeds when stamina/2 + random(0..stamina/2) >= random(0..fatigue). A job's `success_lines` (`[{"stat": ..., "value": ...}]`) are each rolled as stat - random(0..fatigue) >= value; all must hold. On a bad work day only the fatigue of `daily_effect` is applied.
+
+- **Switch something off without deleting it**: add `"disabled": true` to a job, a class or a book. It stays in the table (events and conditions that name it still pass the check) but the game does not offer it, and its job events never fire. Remove the line to switch it back on.
+- **Job wages** (`jobs.json`): `wage_tiers` is the daily wage at each raise tier, five whole numbers in dollars, e.g. `[4, 5, 6, 7, 9]`. The tier is picked by how many periods of that job succeeded: `raise_tiers` → `periods_below` (now 8 / 23 / 45 / 68). A full period with no bad day pays another `full_attendance_bonus_pct` (50%).
+- **Job gates**: `prereq` decides whether a job can be picked, e.g. `[[["stamina", ">=", 80], ["education", ">=", 40]]]` (both needed). `earliest` is the first month it is offered. `success_lines` is no longer used (leave it `[]`).
+- **Bad days**: every class or work day goes bad with probability = fatigue% (`jobs.json` → `bad_day.cap` is the ceiling, 100).
+- **0-or-1 gains**: a range of exactly `[0, 1]` (or `[-1, 0]`) in `daily_effect` or a class `per_level` gives the non-zero value with probability `zero_one_prob` (now `[2, 3]`, in both `jobs.json` and `classes.json`). Any other range `[a, b]` is a plain random number from a to b.
+- **One of two stats**: a `daily_effect` line with `"one_of": ["negotiation", "business"]` puts the gain on one of them, picked at random each day (`stat` must still be one of them).
+- **Class levels**: `classes.json` → `class_steps` `[4, 8, 11]`: up to 4 periods taken is level 1, up to 8 level 2, up to 11 level 3, then level 4. `fee` and every `per_level` have four entries, one per level.
+- **`code`, `site`, `original`** on the new jobs and classes are notes: the placeholder code from the plan, the map place it will belong to, and the original game's job or class. The game does not read them yet.
+- **Fixed boards** (`roles.json`): `board_schedule` lists each audition month with its `big`, `medium` and `small` role id (an optional `small2` adds a second small role; the 1924-25 boards have one); `reserve_pool` is the ordered list of extra roles (small or medium) shown when connections reach `defaults.board.connections_extra`. A role's sign-up conditions are `fame_gate` plus `gates` (a condition, e.g. `[[["looks", ">=", 80]]]`). To change a board, put another role id in its slot; to add a board, add a line here and set `board: true` on that month in `calendar.json` (the checker wants the two to match).
+- **The map** (`map.json`): one record per place, drawn in table order. `entries` are the schedule entries offered there (class, job, `rest_home`, `rest_outing@<place>`); a switched-off id is skipped and a job is hidden until its `earliest` month. `shops` are `street.json` entries opened from there. `activities` are shown greyed out (not playable yet). `extra`: `home` adds script writing, `city` the hospital, `studio` a note that shooting comes here. `pos` and `size` are pixels on a 900 x 320 map. The checker complains when a switched-on class or job is on no place.
+- **Living costs** (`lifestyle.json`): `monthly_cost` has five numbers (one per fame tier); they are all the same now. Money never goes below 0.
 
 ---
 

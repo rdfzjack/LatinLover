@@ -28,7 +28,7 @@ const Events = preload("res://core/events.gd")
 const OLD_CRIME_JOBS := ["job_bootleg", "job_escort", "job_bar"]    # before step 12c; now every job with crime_tier counts (H.is_crime)
 const THRESH := {"big": 0.12, "medium": 0.2, "small": 0.0}      # Choosing a role: do not go if the win-rate estimate is below this line
 const ROAD_PLACE := {"tough": "place_dock", "lover": "place_downtown", "culture": "place_downtown", "savvy": "place_studio"}
-const ROAD_JOBS := {"culture": ["job_news", "job_model_art"]}   # When short of money, first take jobs of the own road
+const ROAD_JOBS := {"culture": ["job_c_money", "job_server"], "tough": ["job_dock2", "job_dock1"], "lover": ["job_l_day"]}   # When short of money, first take jobs of the own road (six-year swap: the tuition jobs of the pattern table)
 
 
 ## Small helpers that Python gets from its standard library.
@@ -606,8 +606,8 @@ class Bot:
 		if fat >= 45 or (fat >= 20 and (fat + df >= 10 + disc or fat + df >= sta + 5)):
 			return rest_entry(g, P, i)
 		# Go to church volunteering when discipline is low
-		if kind == "job" and not crime and disc < 35 and H.can_do_job(st, "job_church", 0):
-			return "job_church"
+		if kind == "job" and not crime and disc < 35 and H.can_do_job(st, "job_church_aid", 0):
+			return "job_church_aid"
 		return want_e
 
 	# ---------- finding work ----------
@@ -705,31 +705,23 @@ class Bot:
 	func want_road(g, P: Dictionary, rd):
 		var st = g.st
 		var sk: Dictionary = st.skill
-		var ed: int = st.val("education")
+		# Six-year swap: the classes and jobs of the pattern table (PLAN progress).
 		if rd == "lover":
-			for sc in [["acting", "class_acting"], ["grooming", "class_etiquette"], ["physique", "class_dance"]]:
+			for sc in [["acting", "class_l1"], ["grooming", "class_l3"]]:
 				if sk[sc[0]] < 100:
 					return sc[1]
+			if sk["physique"] < 100:
+				return job_for(g, P, ["physique"])
 		elif rd == "tough":
-			for sc in [["fight", "class_boxing"], ["riding", "class_riding"]]:
+			for sc in [["fight", "class_h1"], ["riding", "class_h2"], ["nerve", "class_h1"]]:
 				if sk[sc[0]] < 100:
 					return sc[1]
-			if sk["nerve"] < 100:
-				return job_for(g, P, ["nerve"])
 		elif rd == "culture":
-			if sk["writing"] < 100 or ed < 300:
-				return "class_tutor"
-			for s in ["taste", "speech"]:
-				var e = book_entry(g, P, s)
-				if e != null and e != "":
-					return e
+			if sk["writing"] < 100 or sk["speech"] < 100:
+				return "class_c1"
+			if sk["taste"] < 100:
+				return "class_c3"
 		elif rd == "savvy":
-			if ed < 200 and (sk["negotiation"] < 70 or sk["business"] < 70):
-				return "class_tutor"
-			for s in ["negotiation", "business"]:
-				var e2 = book_entry(g, P, s)
-				if e2 != null and e2 != "":
-					return e2
 			var need := []
 			for s in g.d.road_skills["savvy"]:
 				if sk[s] < 100:
@@ -794,9 +786,9 @@ class RoadBot:
 			return "rest_home"
 		var after: int = P["fat"] + delta(g, P, i, e)[0]
 		if after - st.val("discipline") >= 10 or sick_after(g, P, i, e):
-			if no_church or P["fat"] >= 40 or P["fat"] - st.val("stamina") >= -20 or not H.can_do_job(st, "job_church", 0):
+			if no_church or P["fat"] >= 40 or P["fat"] - st.val("stamina") >= -20 or not H.can_do_job(st, "job_church_aid", 0):
 				return rest_or_dock(g, P, i, "rest_home")
-			return "job_church"
+			return "job_church_aid"
 		return e
 
 
@@ -897,9 +889,9 @@ class Crime:
 	func want(g, _P: Dictionary, i: int):
 		var st = g.st
 		# In the first period of each month go to the boxing gym (the gang boss and the thug boss endings need tough 210), the rest of the time do crime jobs
-		if i == 0 and st.skill["fight"] < 100 and st.cnt("job_periods.job_bar") >= 3:
-			return "class_boxing"
-		for jid in ["job_bootleg", "job_bar", "job_dock"]:
+		if i == 0 and st.skill["fight"] < 100:
+			return "class_h1"
+		for jid in ["job_collector", "job_dock2", "job_dock1"]:
 			if H.can_do_job(st, jid):
 				return jid
 		return null
@@ -935,7 +927,7 @@ class BookCulture:
 			var e = book_entry(g, P, skn)
 			if e != null and e != "":
 				return e
-		return "class_tutor" if blocked else null
+		return "class_c3" if blocked else null
 
 
 ## Schedule, auditions and event options all random (uses its own random stream, not the game's).
@@ -990,8 +982,8 @@ const BAD_CRIME_PERIODS := 1  # step 12c c3: once his tier-2 crime job is open, 
                                # month (a steady side income, not a savings line: his cash is then a result, not a setting)
 
 const TUITION_DAYS := 26      # round 4: three periods of class days, for the addict bots' tuition reserve
-const ROAD_CLASSES := {"tough": ["class_boxing", "class_riding"], "lover": ["class_acting", "class_etiquette", "class_dance"],
-	"culture": ["class_tutor"], "savvy": ["class_tutor"]}
+const ROAD_CLASSES := {"tough": ["class_h1", "class_h2"], "lover": ["class_l1", "class_l3"],
+	"culture": ["class_c1", "class_c3"], "savvy": []}
 
 ## Road setup of the pure bots: [second road, origin].
 const ROAD_SETUP := {"tough": ["lover", [0, 0, 3]], "lover": ["tough", [3, 2, 3]], "culture": ["lover", [4, 1, 3]],
