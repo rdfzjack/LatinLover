@@ -191,6 +191,32 @@ static func practice_roll(st) -> bool:
 	return h + st.rng.logic.r0(h) >= line
 
 
+## Slacking off (GDD 5.1.1, stats.json slack): chance% = scale.fatigue - scale.discipline, clamped to 0..cap_pct, rolled once.
+## Returns the rest entry he runs off to, or "" when he stays.
+static func slack_to(st) -> String:
+	var c: Dictionary = st.d.t["stats"]["slack"]
+	var p: int = clampi(Rules.scale_of(st, "fatigue") - Rules.scale_of(st, "discipline"), 0, int(c["cap_pct"]))
+	if p <= 0 or not st.rng.logic.chance(p, 100):
+		return ""
+	if Rules.cond(st, c["home_cond"]):
+		return str(c["home_entry"])
+	var best := ""
+	var top := -1
+	for x in c["by_highest"]:
+		var s: String = x["stat"]
+		var v: int = mini(100, Rules.fdiv(maxi(st.val("fame"), 0) * 10, int(c["fame_div10"]))) if s == "fame" else Rules.scale_of(st, s)
+		if v > top:
+			top = v
+			best = str(x["entry"])
+	return best
+
+
+## The slack chance in percent now (for the screen).
+static func slack_pct(st) -> int:
+	var c: Dictionary = st.d.t["stats"]["slack"]
+	return clampi(Rules.scale_of(st, "fatigue") - Rules.scale_of(st, "discipline"), 0, int(c["cap_pct"]))
+
+
 ## A gain roll: exactly [0,1] or [-1,0] is non-zero with probability zero_one_prob [num, den]; other ranges are r(a, b).
 static func roll(st, rg: Array, zp: Array) -> int:
 	var a: int = rg[0]

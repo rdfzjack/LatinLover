@@ -28,6 +28,8 @@ Variables:
 | `sick_index` `reckless_index` | indices |
 | `favor.sil` `favor.actress` | favor (NPC ids are in `romance.json`) |
 | `job_periods.<job id>` | periods in which the job succeeded |
+| `scale.<attr or skill>` | scale 0-100 (GDD 2.1.1): a base attribute is min(100, value x 10 / `stats.scale.div10`), a skill is its displayed value |
+| `tier.<attr or skill>` | tier of the scale: compare with `low` `mid` `high` `very_high` or 0-3, e.g. `["tier.loyalty", ">=", "high"]` |
 | `class_periods.<class id>` | periods spent in a class |
 | `flag.<id>` | flag, value 1 or 0 |
 | `date` | like `1927-04` |

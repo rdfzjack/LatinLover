@@ -174,6 +174,19 @@ static func shoot(st, i: int, f: Dictionary, days: Array) -> void:
 		finish(st, f)
 
 
+## A shooting period he ran off from (GDD 5.1.1): every shooting day of it counts as a failed day; the last period still finishes the film.
+static func skip_shoot(st, i: int, f: Dictionary, days: Array) -> void:
+	f["status"] = "shooting"
+	update_status(st)
+	for dd in days:
+		if not dd[1]:
+			f["shoot_days"] += 1
+			st.inc("count.slack_shoot_days")
+	var last: Array = f["locks"][f["locks"].size() - 1]
+	if last[0] == st.ym and last[1] == i:
+		finish(st, f)
+
+
 ## P x1000: 500 + ok_days x 500 / shoot_days + bonus skill x 2 (stunt_self +100), clamped to 500-1200; then each shooting period
 ## on a divine dose adds divine_perf_add once and on a side effect side_perf_add once (stats.drug; both may apply, not clamped).
 static func performance(st, f: Dictionary) -> int:

@@ -40,6 +40,7 @@ class Hooks:
 	func era(_st, _ids) -> void: pass                     # era events
 	func ending(_st) -> void: pass                        # ending resolution in 1929-12
 	func discharge(_st) -> void: pass                     # step 12c: after a month with a sanatorium period (discharge event)
+	func slacked(_st, _i: int, _planned: String, _entry: String) -> void: pass   # he ran off: planned (class, job or "shooting") became entry
 
 
 var d
@@ -161,6 +162,18 @@ func run_month(plan: Array, from_period := 0, carried := {}) -> Array:
 			continue
 		hooks.before_period(st, i)
 		var film = hooks.locked(st, i)
+		var e: String = plan[i] if not forced else _forced_entry(i)
+		if not forced:                       # slacking off (GDD 5.1.1): rolled after the period is picked and after a dose
+			var planned: String = "shooting" if film != null else e
+			if film != null or e.begins_with("class_") or e.begins_with("job_"):
+				var run_to := Schedule.slack_to(st)
+				if run_to != "":
+					st.inc("count.slack")
+					if film != null:
+						Film.skip_shoot(st, i, film, days)
+						film = null
+					hooks.slacked(st, i, planned, run_to)
+					e = run_to
 		if film != null:
 			st.status["shooting_period"] = 1
 			st.status["shoot_this_month"] = 1
@@ -168,7 +181,6 @@ func run_month(plan: Array, from_period := 0, carried := {}) -> Array:
 			st.status["shooting_period"] = 0
 			last.append({"schedule": "shooting"})
 			continue
-		var e: String = plan[i] if not forced else _forced_entry(i)
 		if e == "rest_sanatorium":
 			m_sanatorium = true
 			st.inc("count.void.sanatorium")

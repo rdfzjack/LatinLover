@@ -30,6 +30,7 @@
    "board": false,
    "job_unlocks": [
     "job_church_aid",
+    "job_church_help",
     "job_dock1",
     "job_runner",
     "job_server"

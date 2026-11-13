@@ -464,6 +464,9 @@ func refresh_status() -> void:
 	var stock := int(st.flags.get("drug_stock", 0))
 	if stock > 0:
 		flags.append(tr("ui.main.refresh_status.9") % stock)
+	var sp := Schedule.slack_pct(st)
+	if sp > 0:
+		flags.append(tr("ui.main.slack_pct") % sp)
 	var tips := PackedStringArray()
 	for x in Traits.active(st):             # status traits (traits.json)
 		flags.append("[" + nm(x["id"]) + "]")

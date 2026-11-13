@@ -141,7 +141,7 @@
      ]
     },
     {
-     "stat": "speech",
+     "stat": "physique",
      "add": [
       0,
       1
@@ -167,7 +167,7 @@
    "job_period_effect": null,
    "period_random": [],
    "milestones": [],
-   "note": "one of negotiation / business per day; speech 0/1 (user)"
+   "note": "one of negotiation / business per day; physique 0/1 (user, tentative)"
   },
   {
    "id": "job_church_aid",
@@ -220,6 +220,62 @@
    "period_random": [],
    "milestones": [],
    "note": "with Sil; no loyalty (user)"
+  },
+  {
+   "id": "job_church_help",
+   "code": "CH",
+   "name": "教堂帮工（CH）",
+   "site": "site_church_help",
+   "original": "orphanage",
+   "earliest": "1924-01",
+   "prereq": [],
+   "daily_wage": 2,
+   "wage_tiers": [
+    2,
+    3,
+    3,
+    4,
+    5
+   ],
+   "success_lines": [
+    {
+     "stat": "stamina",
+     "value": 20
+    }
+   ],
+   "daily_effect": [
+    {
+     "stat": "loyalty",
+     "add": [
+      0,
+      1
+     ],
+     "one_of": [
+      "loyalty",
+      "education"
+     ]
+    },
+    {
+     "stat": "stamina",
+     "add": [
+      -1,
+      -1
+     ]
+    },
+    {
+     "stat": "fatigue",
+     "add": [
+      3,
+      3
+     ]
+    }
+   ],
+   "exposure": false,
+   "npc": null,
+   "job_period_effect": null,
+   "period_random": [],
+   "milestones": [],
+   "note": "user (tentative): a little loyalty or education (one of the two), stamina -1. Original orphanage: wage 4/5/6/7/9 G, line stamina 20, fatigue +3"
   },
   {
    "id": "job_dock1",
@@ -315,15 +371,15 @@
     {
      "stat": "stamina",
      "add": [
-      3,
-      3
+      2,
+      2
      ]
     },
     {
-     "stat": "looks",
+     "stat": "crime",
      "add": [
-      -1,
-      -1
+      2,
+      2
      ]
     },
     {
@@ -339,7 +395,7 @@
    "job_period_effect": null,
    "period_random": [],
    "milestones": [],
-   "note": "same site, level 2"
+   "note": "same site, level 2; user (tentative): stamina +2, crime +2, no looks loss"
   },
   {
    "id": "job_collector",

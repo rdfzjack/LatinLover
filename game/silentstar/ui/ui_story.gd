@@ -92,6 +92,14 @@ func after_period(st, i: int, entry: String, out: Dictionary) -> void:
 				ui.ask("notice", tr("ui.story.period_start.4") % first_name)
 
 
+## He ran off (GDD 5.1.1): told right after the period was picked, before the period runs.
+func slacked(st, i: int, planned: String, entry: String) -> void:
+	var what: String = tr("ui.story.slack.shooting") if planned == "shooting" else ui.nm(Schedule.parse_entry(planned)[1])
+	var pe := Schedule.parse_entry(entry)
+	var where: String = ui.nm(pe[2]) if pe.size() == 3 and pe[2] != null else ui.nm(pe[1])
+	ui.ask("notice", tr("ui.story.slack.1") % [what, where])
+
+
 func film_period(st, i: int, f, days: Array) -> void:
 	var d0: int = f["shoot_days"]
 	var k0: int = f["ok_days"]

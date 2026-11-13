@@ -212,6 +212,27 @@
    "extra": null
   },
   {
+   "id": "loc_church",
+   "name": "教堂",
+   "hint": "教堂帮工、捐钱",
+   "pos": [
+    680,
+    220
+   ],
+   "size": [
+    200,
+    80
+   ],
+   "entries": [
+    "job_church_help"
+   ],
+   "shops": [
+    "church"
+   ],
+   "activities": [],
+   "extra": null
+  },
+  {
    "id": "loc_city",
    "name": "进城",
    "hint": "商店、医院、片厂区、市中心、海滨、码头外出",
@@ -232,8 +253,7 @@
    "shops": [
     "clothing_store",
     "general_store",
-    "pawn",
-    "church"
+    "pawn"
    ],
    "activities": [],
    "extra": "city"

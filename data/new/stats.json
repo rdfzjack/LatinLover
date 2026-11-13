@@ -347,5 +347,76 @@
   "raid_note": "search probability of a crime job = prob x (1 + crime / raid_crime_div)",
   "raid_check_add": 20,
   "raid_check_note": "Step 12c c3: when searched, r0(raid_skill displayed) + raid_check_add >= raid_line passes; otherwise arrest"
+ },
+ "scale": {
+  "note": "User: base attributes are read through a 0-100 scale: scale = min(100, value x 10 / div10). div10 is the divisor x10 (stamina 8, education 3, loyalty 2.5, looks 5, discipline 3, crime 4, fatigue 8; placeholders). Skills: scale = displayed value. Fame keeps its own five tiers. Tiers by scale, one set for all: low 0-24, mid 25-49, high 50-74, very_high 75+. Conditions can use scale.<attr> (number) and tier.<attr> (a tier id or 0-3).",
+  "div10": {
+   "stamina": 80,
+   "education": 30,
+   "loyalty": 25,
+   "looks": 50,
+   "discipline": 30,
+   "crime": 40,
+   "fatigue": 80
+  },
+  "tiers": [
+   {
+    "id": "low",
+    "name": "低",
+    "min": 0
+   },
+   {
+    "id": "mid",
+    "name": "中",
+    "min": 25
+   },
+   {
+    "id": "high",
+    "name": "高",
+    "min": 50
+   },
+   {
+    "id": "very_high",
+    "name": "很高",
+    "min": 75
+   }
+  ]
+ },
+ "slack": {
+  "note": "User (settled): after the activity of a class, job or shooting period is picked, roll once: chance% = scale.fatigue - scale.discipline, clamped to 0..cap_pct. On a hit the whole period becomes a rest: home when home_cond holds, else the outing of the highest of by_highest (scale; fame uses min(100, fame x 10 / fame_div10)); ties go to the earlier row. Class and job counters do not grow; the shooting days of that period all fail. The place table is a placeholder.",
+  "cap_pct": 33,
+  "home_cond": [
+   [
+    [
+     "favor.sil",
+     ">=",
+     80
+    ]
+   ]
+  ],
+  "home_entry": "rest_home",
+  "by_highest": [
+   {
+    "stat": "looks",
+    "entry": "rest_outing@place_seaside"
+   },
+   {
+    "stat": "crime",
+    "entry": "rest_outing@place_dock"
+   },
+   {
+    "stat": "stamina",
+    "entry": "rest_outing@place_dock"
+   },
+   {
+    "stat": "education",
+    "entry": "rest_outing@place_downtown"
+   },
+   {
+    "stat": "fame",
+    "entry": "rest_outing@place_studio"
+   }
+  ],
+  "fame_div10": 50
  }
 }

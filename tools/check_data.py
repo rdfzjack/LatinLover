@@ -59,12 +59,14 @@ def ref_event(f, e):
 DERIVED = {'max_rep','month','year','drug_stage','drug_points','debt_months','grade','top_tag_family','undefined','lowbudget_typed','talkie_count',
            'top_base_attr','top_savvy_skill','max_job_periods','rep_spread','top_road'}
 PREFIX = ('status.','count.','tag.','road_periods.','flag.','duels.')
+SCALED = set(T['stats'].get('scale', {}).get('div10', {}))
 def var_ok(v):
     if v in ATTRS or v in SK or v in ROADS or v in DERIVED or v in ('money','sick_index','reckless_index','date'): return True
     if v.startswith('favor.'): return v.split('.', 1)[1] in NPC
     if v.startswith('job_periods.'): return v.split('.', 1)[1] in JOB_IDS
     if v.startswith('class_periods.'): return v.split('.', 1)[1] in CLASS_IDS
     if v.startswith('road_periods.'): return v.split('.', 1)[1] in ROADS
+    if v.startswith(('scale.', 'tier.')): return v.split('.', 1)[1] in SCALED or v.split('.', 1)[1] in SK
     return v.startswith(PREFIX) and len(v) > 3
 COMP = ('>=','<=','>','<','==','!=','in')
 def check_cond(f, c, where=''):
