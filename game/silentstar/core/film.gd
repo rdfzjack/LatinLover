@@ -142,6 +142,7 @@ static func shoot(st, i: int, f: Dictionary, days: Array) -> void:
 	var g = st.rng.logic
 	var t: String = f["size"]
 	f["status"] = "shooting"
+	f["attended"] = int(f.get("attended", 0)) + 1      # periods actually shot (a film never shot falls through, skip_shoot)
 	update_status(st)
 	if int(st.status.get("drug_high", 0)) == 2:     # a divine dose on a shooting period (GDD 5.8.1)
 		f["divine"] = 1
@@ -174,17 +175,24 @@ static func shoot(st, i: int, f: Dictionary, days: Array) -> void:
 		finish(st, f)
 
 
-## A shooting period he ran off from (GDD 5.1.1): every shooting day of it counts as a failed day; the last period still finishes the film.
+## A shooting period he ran off from (GDD 5.1.1): every shooting day of it counts as a failed day. At the last period, a film he
+## never came to shoot at all falls through (status "skipped": no fee, no release; a small film has only one period); a film
+## with at least one period shot finishes as usual.
 static func skip_shoot(st, i: int, f: Dictionary, days: Array) -> void:
 	f["status"] = "shooting"
-	update_status(st)
 	for dd in days:
 		if not dd[1]:
 			f["shoot_days"] += 1
 			st.inc("count.slack_shoot_days")
 	var last: Array = f["locks"][f["locks"].size() - 1]
 	if last[0] == st.ym and last[1] == i:
-		finish(st, f)
+		if int(f.get("attended", 0)) == 0:
+			f["status"] = "skipped"
+			f["skipped_ym"] = st.ym
+			st.inc("count.film_skipped")
+		else:
+			finish(st, f)
+	update_status(st)
 
 
 ## P x1000: 500 + ok_days x 500 / shoot_days + bonus skill x 2 (stunt_self +100), clamped to 500-1200; then each shooting period

@@ -97,7 +97,12 @@ func slacked(st, i: int, planned: String, entry: String) -> void:
 	var what: String = tr("ui.story.slack.shooting") if planned == "shooting" else ui.nm(Schedule.parse_entry(planned)[1])
 	var pe := Schedule.parse_entry(entry)
 	var where: String = ui.nm(pe[2]) if pe.size() == 3 and pe[2] != null else ui.nm(pe[1])
-	ui.ask("notice", tr("ui.story.slack.1") % [what, where])
+	var t: String = tr("ui.story.slack.1") % [what, where]
+	if planned == "shooting":
+		for f in st.story["films"]:
+			if f["status"] == "skipped" and int(f.get("skipped_ym", -1)) == st.ym:
+				t += tr("ui.story.slack.film_gone") % str(f["roles"]["name"])
+	ui.ask("notice", t)
 
 
 func film_period(st, i: int, f, days: Array) -> void:

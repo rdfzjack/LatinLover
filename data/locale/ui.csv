@@ -400,6 +400,8 @@ ui.main.role_event.decline_swap,不去,
 ui.main.role_event.accept_steal,应战,
 ui.story.slack.1,他本来要去%s，结果开小差跑了，去了%s。,
 ui.story.slack.shooting,拍戏,
+ui.story.slack.film_gone,"
+《%s》一天都没拍成，这部片黄了：没有片酬，也不会上映。",
 ui.main.slack_pct,开小差 %d%%,
 ui.reason.trait_block,有状态标签不让试镜（例如身材走样：相貌低于 60）,
 ui.reason.no_board_this_month,本月没有选片板,
