@@ -79,7 +79,9 @@ var ev_seen := 0           # how many records of story.event_log were already sh
 var status_label: Label
 var rep_row: HBoxContainer
 var idx_label: Label
-var fame_label: Label        # fame: number on hover with the recent changes (like the reputation labels)
+var fame_label: Label        # fame in the top line: tier and mail; the number and the recent changes on hover
+var head_a: Label            # top line: date and money
+var head_b: Label            # top line: lifestyle
 var rep_log: Array = []      # why the reputation bonus changed: {date, road, delta, why}
 var corr_seen: Dictionary = {}
 var rep_mark := 0            # index in rep_log where this month began
@@ -160,11 +162,20 @@ func _build_frame() -> void:
 	root.add_child(top)
 	status_label = Label.new()
 	status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	status_label.custom_minimum_size = Vector2(0, 52)
+	status_label.custom_minimum_size = Vector2(0, 26)
 	status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	var left := VBoxContainer.new()
 	left.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	top.add_child(left)
+	var head := HBoxContainer.new()
+	left.add_child(head)
+	head_a = Label.new()
+	head.add_child(head_a)
+	fame_label = Label.new()
+	fame_label.mouse_filter = Control.MOUSE_FILTER_STOP
+	head.add_child(fame_label)
+	head_b = Label.new()
+	head.add_child(head_b)
 	left.add_child(status_label)
 	rep_row = HBoxContainer.new()
 	left.add_child(rep_row)
@@ -173,9 +184,6 @@ func _build_frame() -> void:
 		rl.mouse_filter = Control.MOUSE_FILTER_STOP
 		rl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		rep_row.add_child(rl)
-	fame_label = Label.new()
-	fame_label.mouse_filter = Control.MOUSE_FILTER_STOP
-	rep_row.add_child(fame_label)
 	idx_label = Label.new()
 	idx_label.mouse_filter = Control.MOUSE_FILTER_STOP
 	left.add_child(idx_label)
@@ -412,6 +420,10 @@ func _log(text: String) -> void:
 func refresh_status() -> void:
 	if st == null:
 		status_label.text = tr("ui.main.refresh_status.1")
+		head_a.text = ""
+		head_b.text = ""
+		fame_label.text = ""
+		fame_label.tooltip_text = ""
 		for l in rep_row.get_children():
 			l.text = ""
 			l.tooltip_text = ""
@@ -425,8 +437,11 @@ func refresh_status() -> void:
 	var a := PackedStringArray()
 	for k in ["stamina", "education", "loyalty", "looks", "discipline", "crime", "fatigue"]:
 		a.append("%s %d" % [nm(k), st.val(k, b)])
-	status_label.text = tr("ui.main.refresh_status.12") % [
-		st.date(), st.money, tier["name"], mail, nm(st.lifestyle), "  ".join(a)]
+	head_a.text = tr("ui.main.head.1") % [st.date(), st.money]
+	fame_label.text = tr("ui.main.fame_label.1") % [tier["name"], mail]
+	fame_label.tooltip_text = fame_tooltip()
+	head_b.text = tr("ui.main.head.2") % nm(st.lifestyle)
+	status_label.text = "  ".join(a)
 	for k in d.roads.size():
 		var road: String = d.roads[k]
 		var sk := PackedStringArray()
@@ -435,8 +450,6 @@ func refresh_status() -> void:
 		var rl: Label = rep_row.get_child(k)
 		rl.text = tr("ui.main.refresh_status.13") % [nm(road), st.rep(road, b), " ".join(sk)]
 		rl.tooltip_text = rep_tooltip(road)
-	fame_label.text = tr("ui.main.fame_label.1") % [tier["name"], st.attr["fame"]]
-	fame_label.tooltip_text = fame_tooltip()
 	var flags := PackedStringArray()
 	if st.status["very_sick"]:
 		flags.append(tr("ui.main.refresh_status.3"))
