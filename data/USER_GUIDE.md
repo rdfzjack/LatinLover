@@ -313,9 +313,11 @@ So that adding events does not need a new balance round each time, every event (
 - Over the cap on purpose: add `"budget_note": "why"`. The checker then skips the caps and lists every event with a `budget_note`.
 - Whatever the tiers, the sum of all events is watched in the report (line "from events"): main-road reputation from events ≤ 30 per game, event money within ±10% of all money gained, event fatigue within ±60 a year. When over, cut events, not classes, jobs or fees.
 
-### 7. Add a role (a part on the casting board)
+### 7. Write or add a role (a part on the casting board)
 
-Add to `"roles"` of `roles.json`, copying one of the same size:
+Boards are fixed: each audition month shows the big, medium and small role listed for it in `board_schedule` (see 13). The easiest edit is to **rewrite a placeholder** (`role_ph01` … `role_ph44`, named `占位·…`): change its `name`, `film_title`, `wants`, `tags` and so on, keep its `id`, and it stays on its board. Remove `"placeholder": true` once it is written.
+
+To add a new role instead, add it to `"roles"` of `roles.json` (copy one of the same size), then put its id into a slot of `board_schedule` or into `reserve_pool`. A role in neither list only appears through the extra draws (script, investment, after Valen's death).
 
 ```json
 {
@@ -324,6 +326,7 @@ Add to `"roles"` of `roles.json`, copying one of the same size:
  "film_title": "（占位）",
  "size": "small",
  "fame_gate": 0,
+ "gates": [[["stamina", ">=", 30]]],
  "style_probs": [55, 15, 15, 15],
  "wants": [{"stat": "fight", "target": 40}],
  "tags": ["action_adventure"],
@@ -336,12 +339,25 @@ Add to `"roles"` of `roles.json`, copying one of the same size:
 }
 ```
 
-- `size`: `small`, `medium` or `big`. A big film has two opponents, small and medium one.
+- `name`: the role (a lead even in a small film); `film_title`: the film.
+- `size`: `small`, `medium` or `big`. A big film has two opponents, small and medium one. In `board_schedule` the size must match the slot.
+- Sign-up conditions: `fame_gate` (minimum fame) plus `gates`, a condition in the usual format (section 4). Use off-road attributes: tough roles `stamina`, lover `looks`, culture `education`, savvy `loyalty`. `[[["looks", ">=", 80]]]` means looks at least 80; `[[["looks", ">=", 80], ["education", ">=", 40]]]` needs both; `[]` means no extra condition. The player sees every condition with his own number and ✓ / ✗, also on the "下次选片" page.
 - `style_probs`: the four numbers (tough, lover, culture, savvy) add up to 100, each between 5 and 60.
 - `wants`: 1-3 attributes or skills with a target; they shape the release result.
 - `tags`: 1-2 of the 16 film tags (section 2).
 - `opponents`: an unnamed one is `{"unnamed": true, "main_level": n}`, a named one `{"named": "rival_valen"}` (ids in `rivals.json`).
 - `talkie`: `true` always a talkie, `false` never, `null` decided by the year's ratio. With `true`, `speech_line` must be a number.
+- `bonus_skill`: the skill that adds to the shooting performance (usually `acting`); `fee`: the pay (default small 300, medium 800, big 2500).
+- `years_active`: `[first year, last year]`; only used by the extra draws, not by the fixed boards.
+- The fixed boards look like this in `roles.json`:
+
+```json
+"board_schedule": [
+ {"month": "1924-03", "big": "role_sheikh_son", "medium": "role_ranch_hand", "small": "role_tutorial"},
+ ...
+],
+"reserve_pool": ["role_ph37", "role_ph38", ...]
+```
 
 ### 8. Add an opportunity
 
