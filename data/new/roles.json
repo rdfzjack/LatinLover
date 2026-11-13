@@ -91,7 +91,7 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 300,
+   "fee": 80,
    "years_active": [
     1924,
     1929
@@ -105,7 +105,7 @@
    "name": "沙漠酋长之子",
    "film_title": "（占位）",
    "size": "big",
-   "fame_gate": 300,
+   "fame_gate": 210,
    "style_probs": [
     15,
     60,
@@ -137,7 +137,7 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 2500,
+   "fee": 1200,
    "years_active": [
     1924,
     1929
@@ -157,7 +157,7 @@
    "name": "剑客",
    "film_title": "（占位）",
    "size": "big",
-   "fame_gate": 300,
+   "fame_gate": 210,
    "style_probs": [
     55,
     25,
@@ -189,7 +189,7 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 2500,
+   "fee": 1200,
    "years_active": [
     1924,
     1929
@@ -209,7 +209,7 @@
    "name": "沉默的牧场帮工",
    "film_title": "（占位）",
    "size": "medium",
-   "fame_gate": 150,
+   "fame_gate": 130,
    "style_probs": [
     50,
     20,
@@ -233,7 +233,7 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 800,
+   "fee": 300,
    "years_active": [
     1924,
     1929
@@ -253,7 +253,7 @@
    "name": "赌场老板",
    "film_title": "（占位）",
    "size": "medium",
-   "fame_gate": 170,
+   "fame_gate": 130,
    "style_probs": [
     20,
     15,
@@ -282,7 +282,7 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 800,
+   "fee": 300,
    "years_active": [
     1924,
     1929
@@ -302,7 +302,7 @@
    "name": "落魄的钢琴师",
    "film_title": "（占位）",
    "size": "medium",
-   "fame_gate": 170,
+   "fame_gate": 130,
    "style_probs": [
     5,
     35,
@@ -331,7 +331,7 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 800,
+   "fee": 300,
    "years_active": [
     1924,
     1929
@@ -351,7 +351,7 @@
    "name": "殉道的修士",
    "film_title": "（占位）",
    "size": "medium",
-   "fame_gate": 190,
+   "fame_gate": 140,
    "style_probs": [
     5,
     20,
@@ -375,7 +375,7 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 800,
+   "fee": 300,
    "years_active": [
     1924,
     1929
@@ -419,7 +419,7 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 300,
+   "fee": 80,
    "years_active": [
     1924,
     1929
@@ -459,7 +459,7 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 300,
+   "fee": 80,
    "years_active": [
     1924,
     1929
@@ -471,7 +471,7 @@
    "name": "占位·情人中片1",
    "film_title": "（占位）",
    "size": "medium",
-   "fame_gate": 150,
+   "fame_gate": 130,
    "style_probs": [
     15,
     55,
@@ -495,7 +495,7 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 800,
+   "fee": 300,
    "years_active": [
     1924,
     1929
@@ -540,7 +540,7 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 300,
+   "fee": 80,
    "years_active": [
     1924,
     1929
@@ -553,7 +553,7 @@
    "name": "占位·文化大片3",
    "film_title": "（占位）",
    "size": "big",
-   "fame_gate": 330,
+   "fame_gate": 210,
    "style_probs": [
     15,
     15,
@@ -580,7 +580,7 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 2500,
+   "fee": 1200,
    "years_active": [
     1924,
     1929
@@ -601,7 +601,7 @@
    "name": "占位·手腕大片4",
    "film_title": "（占位）",
    "size": "big",
-   "fame_gate": 330,
+   "fame_gate": 210,
    "style_probs": [
     15,
     15,
@@ -628,7 +628,7 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 2500,
+   "fee": 1200,
    "years_active": [
     1924,
     1929
@@ -649,7 +649,7 @@
    "name": "占位·情人大片5",
    "film_title": "（占位）",
    "size": "big",
-   "fame_gate": 360,
+   "fame_gate": 210,
    "style_probs": [
     15,
     55,
@@ -676,7 +676,7 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 2500,
+   "fee": 1200,
    "years_active": [
     1924,
     1929
@@ -697,7 +697,7 @@
    "name": "占位·硬汉中片6",
    "film_title": "（占位）",
    "size": "medium",
-   "fame_gate": 190,
+   "fame_gate": 140,
    "style_probs": [
     55,
     15,
@@ -721,7 +721,7 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 800,
+   "fee": 300,
    "years_active": [
     1924,
     1929
@@ -766,7 +766,7 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 300,
+   "fee": 80,
    "years_active": [
     1924,
     1929
@@ -787,7 +787,7 @@
    "name": "占位·硬汉大片8",
    "film_title": "（占位）",
    "size": "big",
-   "fame_gate": 360,
+   "fame_gate": 210,
    "style_probs": [
     55,
     15,
@@ -814,7 +814,7 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 2500,
+   "fee": 1200,
    "years_active": [
     1924,
     1929
@@ -835,7 +835,7 @@
    "name": "占位·情人中片9",
    "film_title": "（占位）",
    "size": "medium",
-   "fame_gate": 190,
+   "fame_gate": 140,
    "style_probs": [
     15,
     55,
@@ -859,7 +859,7 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 800,
+   "fee": 300,
    "years_active": [
     1924,
     1929
@@ -904,7 +904,7 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 300,
+   "fee": 80,
    "years_active": [
     1924,
     1929
@@ -925,7 +925,7 @@
    "name": "占位·文化大片11",
    "film_title": "（占位）",
    "size": "big",
-   "fame_gate": 360,
+   "fame_gate": 210,
    "style_probs": [
     15,
     15,
@@ -952,7 +952,7 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 2500,
+   "fee": 1200,
    "years_active": [
     1924,
     1929
@@ -997,7 +997,7 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 300,
+   "fee": 80,
    "years_active": [
     1924,
     1929
@@ -1018,7 +1018,7 @@
    "name": "占位·手腕大片13",
    "film_title": "（占位）",
    "size": "big",
-   "fame_gate": 390,
+   "fame_gate": 210,
    "style_probs": [
     15,
     15,
@@ -1045,7 +1045,7 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 2500,
+   "fee": 1200,
    "years_active": [
     1924,
     1929
@@ -1066,7 +1066,7 @@
    "name": "占位·手腕中片14",
    "film_title": "（占位）",
    "size": "medium",
-   "fame_gate": 210,
+   "fame_gate": 150,
    "style_probs": [
     15,
     15,
@@ -1090,7 +1090,7 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 800,
+   "fee": 300,
    "years_active": [
     1924,
     1929
@@ -1135,7 +1135,7 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 300,
+   "fee": 80,
    "years_active": [
     1924,
     1929
@@ -1156,7 +1156,7 @@
    "name": "占位·情人大片16",
    "film_title": "（占位）",
    "size": "big",
-   "fame_gate": 390,
+   "fame_gate": 210,
    "style_probs": [
     15,
     55,
@@ -1183,7 +1183,7 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 2500,
+   "fee": 1200,
    "years_active": [
     1924,
     1929
@@ -1204,7 +1204,7 @@
    "name": "占位·硬汉中片17",
    "film_title": "（占位）",
    "size": "medium",
-   "fame_gate": 210,
+   "fame_gate": 150,
    "style_probs": [
     55,
     15,
@@ -1228,7 +1228,7 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 800,
+   "fee": 300,
    "years_active": [
     1924,
     1929
@@ -1273,7 +1273,7 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 300,
+   "fee": 80,
    "years_active": [
     1924,
     1929
@@ -1294,7 +1294,7 @@
    "name": "占位·硬汉大片19",
    "film_title": "（占位）",
    "size": "big",
-   "fame_gate": 390,
+   "fame_gate": 210,
    "style_probs": [
     55,
     15,
@@ -1321,7 +1321,7 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 2500,
+   "fee": 1200,
    "years_active": [
     1924,
     1929
@@ -1342,7 +1342,7 @@
    "name": "占位·情人中片20",
    "film_title": "（占位）",
    "size": "medium",
-   "fame_gate": 210,
+   "fame_gate": 150,
    "style_probs": [
     15,
     55,
@@ -1366,7 +1366,7 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 800,
+   "fee": 300,
    "years_active": [
     1924,
     1929
@@ -1411,7 +1411,7 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 300,
+   "fee": 80,
    "years_active": [
     1924,
     1929
@@ -1432,7 +1432,7 @@
    "name": "占位·文化大片22",
    "film_title": "（占位）",
    "size": "big",
-   "fame_gate": 420,
+   "fame_gate": 240,
    "style_probs": [
     15,
     15,
@@ -1459,7 +1459,7 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 2500,
+   "fee": 1200,
    "years_active": [
     1924,
     1929
@@ -1480,7 +1480,7 @@
    "name": "占位·文化中片23",
    "film_title": "（占位）",
    "size": "medium",
-   "fame_gate": 230,
+   "fame_gate": 160,
    "style_probs": [
     15,
     15,
@@ -1504,7 +1504,7 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 800,
+   "fee": 300,
    "years_active": [
     1924,
     1929
@@ -1549,7 +1549,7 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 300,
+   "fee": 80,
    "years_active": [
     1924,
     1929
@@ -1570,7 +1570,7 @@
    "name": "占位·手腕大片25",
    "film_title": "（占位）",
    "size": "big",
-   "fame_gate": 420,
+   "fame_gate": 240,
    "style_probs": [
     15,
     15,
@@ -1597,7 +1597,7 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 2500,
+   "fee": 1200,
    "years_active": [
     1924,
     1929
@@ -1618,7 +1618,7 @@
    "name": "占位·手腕中片26",
    "film_title": "（占位）",
    "size": "medium",
-   "fame_gate": 230,
+   "fame_gate": 160,
    "style_probs": [
     15,
     15,
@@ -1642,7 +1642,7 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 800,
+   "fee": 300,
    "years_active": [
     1924,
     1929
@@ -1687,7 +1687,7 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 300,
+   "fee": 80,
    "years_active": [
     1924,
     1929
@@ -1708,7 +1708,7 @@
    "name": "占位·情人大片28",
    "film_title": "（占位）",
    "size": "big",
-   "fame_gate": 420,
+   "fame_gate": 240,
    "style_probs": [
     15,
     55,
@@ -1735,7 +1735,7 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 2500,
+   "fee": 1200,
    "years_active": [
     1924,
     1929
@@ -1756,7 +1756,7 @@
    "name": "占位·硬汉中片29",
    "film_title": "（占位）",
    "size": "medium",
-   "fame_gate": 230,
+   "fame_gate": 160,
    "style_probs": [
     55,
     15,
@@ -1780,7 +1780,7 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 800,
+   "fee": 300,
    "years_active": [
     1924,
     1929
@@ -1825,7 +1825,7 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 300,
+   "fee": 80,
    "years_active": [
     1924,
     1929
@@ -1846,7 +1846,7 @@
    "name": "占位·硬汉大片31",
    "film_title": "（占位）",
    "size": "big",
-   "fame_gate": 450,
+   "fame_gate": 270,
    "style_probs": [
     55,
     15,
@@ -1873,7 +1873,7 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 2500,
+   "fee": 1200,
    "years_active": [
     1924,
     1929
@@ -1894,7 +1894,7 @@
    "name": "占位·情人中片32",
    "film_title": "（占位）",
    "size": "medium",
-   "fame_gate": 250,
+   "fame_gate": 170,
    "style_probs": [
     15,
     55,
@@ -1918,7 +1918,7 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 800,
+   "fee": 300,
    "years_active": [
     1924,
     1929
@@ -1963,7 +1963,7 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 300,
+   "fee": 80,
    "years_active": [
     1924,
     1929
@@ -1984,7 +1984,7 @@
    "name": "占位·文化大片34",
    "film_title": "（占位）",
    "size": "big",
-   "fame_gate": 450,
+   "fame_gate": 270,
    "style_probs": [
     15,
     15,
@@ -2011,7 +2011,7 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 2500,
+   "fee": 1200,
    "years_active": [
     1924,
     1929
@@ -2032,7 +2032,7 @@
    "name": "占位·文化中片35",
    "film_title": "（占位）",
    "size": "medium",
-   "fame_gate": 250,
+   "fame_gate": 170,
    "style_probs": [
     15,
     15,
@@ -2056,7 +2056,7 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 800,
+   "fee": 300,
    "years_active": [
     1924,
     1929
@@ -2101,7 +2101,7 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 300,
+   "fee": 80,
    "years_active": [
     1924,
     1929
@@ -2146,7 +2146,7 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 300,
+   "fee": 80,
    "years_active": [
     1924,
     1929
@@ -2159,7 +2159,7 @@
    "name": "占位·情人中片38",
    "film_title": "（占位）",
    "size": "medium",
-   "fame_gate": 170,
+   "fame_gate": 130,
    "style_probs": [
     15,
     55,
@@ -2183,7 +2183,7 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 800,
+   "fee": 300,
    "years_active": [
     1924,
     1929
@@ -2228,7 +2228,7 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 300,
+   "fee": 80,
    "years_active": [
     1924,
     1929
@@ -2249,7 +2249,7 @@
    "name": "占位·手腕中片40",
    "film_title": "（占位）",
    "size": "medium",
-   "fame_gate": 190,
+   "fame_gate": 140,
    "style_probs": [
     15,
     15,
@@ -2273,7 +2273,7 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 800,
+   "fee": 300,
    "years_active": [
     1924,
     1929
@@ -2318,7 +2318,7 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 300,
+   "fee": 80,
    "years_active": [
     1924,
     1929
@@ -2339,7 +2339,7 @@
    "name": "占位·情人中片42",
    "film_title": "（占位）",
    "size": "medium",
-   "fame_gate": 210,
+   "fame_gate": 150,
    "style_probs": [
     15,
     55,
@@ -2363,7 +2363,7 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 800,
+   "fee": 300,
    "years_active": [
     1924,
     1929
@@ -2408,7 +2408,7 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 300,
+   "fee": 80,
    "years_active": [
     1924,
     1929
@@ -2429,7 +2429,7 @@
    "name": "占位·手腕中片44",
    "film_title": "（占位）",
    "size": "medium",
-   "fame_gate": 230,
+   "fame_gate": 160,
    "style_probs": [
     15,
     15,
@@ -2453,7 +2453,7 @@
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
-   "fee": 800,
+   "fee": 300,
    "years_active": [
     1924,
     1929
@@ -2468,6 +2468,154 @@
      ]
     ]
    ]
+  },
+  {
+   "id": "role_ph45",
+   "name": "占位·硬汉小片3",
+   "film_title": "（占位）",
+   "size": "small",
+   "fame_gate": 0,
+   "style_probs": [
+    55,
+    15,
+    15,
+    15
+   ],
+   "wants": [
+    {
+     "stat": "fight",
+     "target": 40
+    }
+   ],
+   "tags": [
+    "western"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 80,
+   "years_active": [
+    1924,
+    1929
+   ],
+   "placeholder": true,
+   "gates": []
+  },
+  {
+   "id": "role_ph46",
+   "name": "占位·情人小片3",
+   "film_title": "（占位）",
+   "size": "small",
+   "fame_gate": 0,
+   "style_probs": [
+    15,
+    55,
+    15,
+    15
+   ],
+   "wants": [
+    {
+     "stat": "acting",
+     "target": 40
+    }
+   ],
+   "tags": [
+    "romance"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 80,
+   "years_active": [
+    1924,
+    1929
+   ],
+   "placeholder": true,
+   "gates": []
+  },
+  {
+   "id": "role_ph47",
+   "name": "占位·文化小片3",
+   "film_title": "（占位）",
+   "size": "small",
+   "fame_gate": 0,
+   "style_probs": [
+    15,
+    15,
+    55,
+    15
+   ],
+   "wants": [
+    {
+     "stat": "writing",
+     "target": 40
+    }
+   ],
+   "tags": [
+    "arthouse"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 80,
+   "years_active": [
+    1924,
+    1929
+   ],
+   "placeholder": true,
+   "gates": []
+  },
+  {
+   "id": "role_ph48",
+   "name": "占位·手腕小片3",
+   "film_title": "（占位）",
+   "size": "small",
+   "fame_gate": 0,
+   "style_probs": [
+    15,
+    15,
+    15,
+    55
+   ],
+   "wants": [
+    {
+     "stat": "negotiation",
+     "target": 40
+    }
+   ],
+   "tags": [
+    "crime"
+   ],
+   "opponents": [
+    {
+     "unnamed": true
+    }
+   ],
+   "bonus_skill": "acting",
+   "talkie": null,
+   "speech_line": null,
+   "fee": 80,
+   "years_active": [
+    1924,
+    1929
+   ],
+   "placeholder": true,
+   "gates": []
   }
  ],
  "defaults": {
@@ -2477,9 +2625,9 @@
    "big": 250
   },
   "fee": {
-   "small": 300,
-   "medium": 800,
-   "big": 2500
+   "small": 80,
+   "medium": 300,
+   "big": 1200
   },
   "speech_line": {
    "small": 30,
@@ -2581,7 +2729,13 @@
    "swap_role": {
     "size": "medium",
     "period_count": 1
-   }
+   },
+   "fee_by_lost_rounds": [
+    125,
+    100,
+    80
+   ],
+   "fee_note": "User (lover playtest): the fee is paid at the end of shooting and set by the audition, not by the release: base x fee_by_lost_rounds[rounds the rival won in the deciding match]% (3:0 125, 3:1 100, 3:2 80); a supporting part is still x40%. Bases small 80 / medium 300 / big 1200 (about one period of the best job of that time per shooting period; the release dividend S x 2 comes on top)"
   },
   "release": {
    "note": "GDD 8. S is an integer scaled x1000: B x P x F x T / 10^6",
@@ -2748,32 +2902,37 @@
     "size": "big"
    },
    "main_style": 60
-  }
+  },
+  "fame_gate_note": "User (lover playtest): fame formula unchanged; gates set by estimate so a good start can try a medium film from 1925-03 and a big film from 1927 (medium 130/130/140/150/160/170, big 210 to 1927, then 240, 270). Placeholder, to be re-measured"
  },
  "board_schedule": [
   {
    "month": "1924-03",
    "big": "role_sheikh_son",
    "medium": "role_ranch_hand",
-   "small": "role_tutorial"
+   "small": "role_tutorial",
+   "small2": "role_ph45"
   },
   {
    "month": "1924-09",
    "big": "role_swordsman",
    "medium": "role_ph01",
-   "small": "role_ph02"
+   "small": "role_ph02",
+   "small2": "role_ph46"
   },
   {
    "month": "1925-03",
    "big": "role_ph03",
    "medium": "role_pianist",
-   "small": "role_boxer"
+   "small": "role_boxer",
+   "small2": "role_ph47"
   },
   {
    "month": "1925-09",
    "big": "role_ph04",
    "medium": "role_casino_owner",
-   "small": "role_stranger"
+   "small": "role_stranger",
+   "small2": "role_ph48"
   },
   {
    "month": "1926-03",
@@ -2852,5 +3011,5 @@
   "role_ph43",
   "role_ph44"
  ],
- "board_note": "Fixed boards (user): board_schedule gives the big, medium and small role of each audition month (15 boards); reserve_pool is drawn in order (the first role not shown yet whose gates the player meets) when connections >= defaults.board.connections_extra. A role can be signed only when fame >= fame_gate and its gates hold (off-road attributes; numbers are placeholders). role_ph* are placeholders for the user to rename and write."
+ "board_note": "Fixed boards (user): board_schedule gives the big, medium and small role of each audition month (15 boards); reserve_pool is drawn in order (the first role not shown yet whose gates the player meets) when connections >= defaults.board.connections_extra. A role can be signed only when fame >= fame_gate and its gates hold (off-road attributes; numbers are placeholders). role_ph* are placeholders for the user to rename and write. User (lover playtest): the 1924-25 boards have a second small role (small2), four roles in all."
 }

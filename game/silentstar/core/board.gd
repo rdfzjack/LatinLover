@@ -25,6 +25,8 @@ const Rules = preload("res://core/rules.gd")
 const Schedule = preload("res://core/schedule.gd")
 const Audition = preload("res://core/audition.gd")
 const Film = preload("res://core/film.gd")
+## The slots of a fixed board in roles.json board_schedule; small2 is the second small role of the 1924-25 boards (user).
+const SLOTS := ["big", "medium", "small", "small2"]
 
 const TIERS := ["small", "medium", "big"]
 const RANK := {"small": 0, "medium": 1, "big": 2}
@@ -238,8 +240,10 @@ static func compose(st) -> Array:
 	var out := []
 	var taken := {}
 	var sch = schedule_entry(d, st.date())
-	if sch != null:          # fixed boards (user): one big, one medium, one small from roles.json board_schedule
-		for t in ["big", "medium", "small"]:
+	if sch != null:          # fixed boards (user): one big, one medium, one small (a second small, small2, on the 1924-25 boards)
+		for t in SLOTS:
+			if not sch.has(t):
+				continue
 			var r: Dictionary = d.roles[sch[t]]
 			var e: Dictionary = tutorial(st) if r.get("tutorial", false) else snapshot(st, r, "fixed")
 			taken[e["id"]] = true
@@ -295,8 +299,9 @@ static func fixed_role(d, rid: String) -> bool:
 	if d.t["roles"].get("reserve_pool", []).has(rid):
 		return true
 	for x in d.t["roles"].get("board_schedule", []):
-		if x["big"] == rid or x["medium"] == rid or x["small"] == rid:
-			return true
+		for t in SLOTS:
+			if x.get(t) == rid:
+				return true
 	return false
 
 
@@ -322,8 +327,9 @@ static func next_board(st) -> Dictionary:
 	for x in d.t["roles"].get("board_schedule", []):
 		if int(d.month_index[x["month"]]) > last:
 			var roles := []
-			for t in ["big", "medium", "small"]:
-				roles.append(snapshot(st, d.roles[x[t]], "fixed"))
+			for t in SLOTS:
+				if x.has(t):
+					roles.append(snapshot(st, d.roles[x[t]], "fixed"))
 			return {"month": x["month"], "roles": roles}
 	return {}
 
@@ -484,7 +490,9 @@ static func try_role(st, idx: int, agent) -> Dictionary:
 	if res["result"] == "won" or support:
 		b["won"] = idx
 		var pers: bool = (not support) and Film.can_go_personally(st, e) and agent.go_personally(st, e)
-		res["film"] = Film.new_film(st, e, Film.board_locks(st, e["size"], support), support, pers)["id"]
+		var f: Dictionary = Film.new_film(st, e, Film.board_locks(st, e["size"], support), support, pers)
+		f["aud_lost"] = Film.rounds_lost(res)     # user: the fee follows the audition (3:0 / 3:1 / 3:2)
+		res["film"] = f["id"]
 	res["support"] = support
 	st.inc("count.audition")
 	if res["result"] == "won":

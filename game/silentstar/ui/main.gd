@@ -345,7 +345,7 @@ func entry_effect(e: String) -> String:
 				who = "/".join(PackedStringArray(x["one_of"].map(func(s): return nm(s))))
 			gs.append(who + rng_txt(x["add"][0], x["add"][1]))
 		t.append(tr("ui.main.entry_effect.8") + " ".join(gs))
-		t.append(explain.job_text(st.val("fatigue")))
+		t.append(explain.job_text(Schedule.job_lines(st, j), st.val("fatigue")))
 	else:
 		var r: Dictionary = d.rests[iid]
 		if pe[2] != null:
@@ -1027,9 +1027,10 @@ func explain_period(entry: String, out: Dictionary, fatigue: int) -> String:
 	if pe.is_empty():
 		return ""
 	if pe[0] == "job":
-		var t: String = tr("ui.main.explain_period.1") + explain.job_text(fatigue)
+		var jl := Schedule.job_lines(st, d.jobs[pe[1]])
+		var t: String = tr("ui.main.explain_period.1") + explain.job_text(jl, fatigue)
 		if int(out.get("ok_days", 0)) == 0:
-			t += tr("ui.main.explain_period.3") + _worst_reason([], [], fatigue, true)
+			t += tr("ui.main.explain_period.3") + _worst_reason(jl.map(func(x): return x[0]), jl.map(func(x): return int(x[1])), fatigue, true)
 		return t
 	if pe[0] == "class" and out.get("broke", false):
 		return tr("ui.main.entry_effect.16")
@@ -1050,7 +1051,7 @@ func _worst_reason(stats: Array, lines: Array, fatigue: int, job: bool) -> Strin
 		if pl < 0.5:
 			return tr("ui.main.worst_reason.3") % [nm(stats[k]), stat, lines[k], fatigue, explain.pct(pl)]
 	if stats.is_empty() and fatigue >= 30:
-		return tr("ui.main.worst_reason.5") % [fatigue, mini(fatigue, 100)]
+		return tr("ui.main.worst_reason.5") % [fatigue, st.val("stamina")]
 	return tr("ui.main.worst_reason.4")
 
 

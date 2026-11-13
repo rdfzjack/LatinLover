@@ -1,6 +1,6 @@
 extends RefCounted
 ## Explains the dice: why a day of class, work or shooting succeeds or fails, and what the sick index means.
-## Six-year swap: a class or work day goes bad with probability fatigue% (capped at 100); the reckless index is gone (slack_pct is 0).
+## Day rolls as in the original (user): class stamina/2 + r0(stamina/2) >= r0(fatigue); job stat - r0(fatigue) >= line per line.
 ## The formulas are the ones of core/schedule.gd (practice_ok, job_day_ok, extra_fail) and core/film.gd (shoot); they are only
 ## read here, never changed. If the numbers in extra_fail change there, change LOVE_FAIL_PCT here.
 
@@ -21,9 +21,18 @@ func p_line(stat: int, line: int, fatigue: int) -> float:
 	return float(mini(fatigue, room) + 1) / float(fatigue + 1)
 
 
-## P(a class or work day is not bad) = 1 - fatigue% (six-year swap, schedule.gd bad_day).
-func p_practice(_stamina: int, fatigue: int) -> float:
-	return 1.0 - clampi(fatigue, 0, 100) / 100.0
+## P(stamina/2 + r0(stamina/2) >= r0(fatigue)) (schedule.gd practice_roll).
+func p_practice(stamina: int, fatigue: int) -> float:
+	var h := maxi(stamina, 0) / 2
+	var f := maxi(fatigue, 0)
+	var ok := 0.0
+	for b in f + 1:
+		var need := b - h              # r0(h) must be >= need
+		if need <= 0:
+			ok += 1.0
+		elif need <= h:
+			ok += float(h - need + 1) / float(h + 1)
+	return ok / float(f + 1)
 
 
 ## The chance that the day is not thrown away by being in love or being reckless (jobs and shooting only skip when reckless).
@@ -61,14 +70,17 @@ func practice_text(stamina: int, fatigue: int) -> String:
 	return tr("ui.explain.practice_text.1") % [pct(p * p_no_extra_fail(false)), fatigue]
 
 
-## A work day: good unless the bad-day roll hits (fatigue%).
-func job_text(fatigue: int) -> String:
-	var p := p_practice(0, fatigue)
-	var t: String = tr("ui.explain.job_text.1") % [pct(p * p_no_extra_fail(true)), fatigue]
-	var extra := extra_text(true)
-	if extra != "":
-		t += tr("ui.main.entry_effect.14") + extra
-	return t
+## A work day: the success lines of the job (schedule.gd job_day_ok); a bad day only adds fatigue.
+func job_text(lines: Array, fatigue: int) -> String:
+	var t: String
+	if lines.is_empty():
+		t = tr("ui.explain.job_text.1") % pct(p_no_extra_fail(true))
+		var extra := extra_text(true)
+		if extra != "":
+			t += tr("ui.main.entry_effect.14") + extra
+	else:
+		t = work_text(lines, fatigue, true)
+	return t + tr("ui.main.entry_effect.14") + tr("ui.explain.job_text.2")
 
 
 ## Work and shooting: lines = [[stat id, line], ...]. Each line is its own roll: stat - random(0~fatigue) >= line.

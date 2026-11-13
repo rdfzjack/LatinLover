@@ -7,6 +7,9 @@
   "month_end_order": "By the `order` field; at most 2 fire per month, the rest wait",
   "month_end_cap": "see month_end_cap"
  },
+ "enabled": false,
+ "valen_death": false,
+ "switch_note": "User (lover playtest): enabled false turns every event off (events, outing events, era events); valen_death false keeps Valen as a rival to 1929-12 with no replacement. Set both to true to bring them back.",
  "events": [
   {
    "id": "evt_swap_role",

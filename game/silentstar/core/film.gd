@@ -192,11 +192,21 @@ static func performance(st, f: Dictionary) -> int:
 	return p
 
 
-## Fee = base x (stunt_self 130%) x (support 40%) x (400+negotiation)/400 x contract coefficient, rounded down at each step.
+## Rounds the rival won in the deciding match of a won audition (0, 1 or 2); 0 when unknown.
+static func rounds_lost(res: Dictionary) -> int:
+	var rs: Array = res.get("rounds", [])
+	if rs.is_empty():
+		return 0
+	return clampi(int(rs[-1]["score_line"][1]), 0, 2)
+
+
+## Fee = base x audition (fee_by_lost_rounds: 3:0 125%, 3:1 100%, 3:2 80%; user) x (stunt_self 130%) x (support 40%) x (400+negotiation)/400 x contract coefficient, rounded down at each step.
 static func fee(st, f: Dictionary) -> int:
 	var d = st.d
 	var c := shoot_cfg(d)
 	var v: int = f["roles"]["fee"]
+	if not f["support"] and c.has("fee_by_lost_rounds"):
+		v = Rules.fdiv(v * int(c["fee_by_lost_rounds"][int(f.get("aud_lost", 1))]), 100)
 	if f["stunt_self"]:
 		v = Rules.fdiv(v * c["stunt_self"]["fee_pct"], 100)
 	if f["support"]:

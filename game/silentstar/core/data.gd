@@ -157,6 +157,12 @@ func _init(path := "") -> void:
 	for k in tag_families:
 		for x in tag_families[k]:
 			content_tags.append(x)
+	# Switch (user, lover playtest): events.json valen_death false keeps Valen to the end and drops his replacement.
+	if not t["events"].get("valen_death", true):
+		for r in t["rivals"]["named"]:
+			if r["id"] == "rival_valen":
+				r["present"] = [r["present"][0], "1929-12"]
+		t["rivals"]["replace"] = t["rivals"]["replace"].filter(func(x): return x["old"] != "rival_valen")
 	for r in t["rivals"]["named"]:
 		rivals_named[r["id"]] = r
 	for e in t["events"]["events"]:

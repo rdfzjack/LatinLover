@@ -2,7 +2,7 @@
  "note": {
   "daily_wage": "Base amount; multiplied by the raise tier and rounded down; pay only on successful days",
   "raise_tiers": "by the number of periods this job was successful",
-  "daily_effect": "settled whether or not the day succeeds; add:[a,b] means r(a,b)",
+  "daily_effect": "fatigue is added every work day; the other effects only on a good day (user: a bad day gives no pay and changes nothing but fatigue)",
   "job_period_effect": "settled once for each successful period",
   "period_random": "prob [numerator, denominator], once per period",
   "prereq": "a cond, format in data/new/README.md",
@@ -11,7 +11,7 @@
   "raid_prob": "search per successful-or-not period: prob x (1 + crime/100); then raid_skill displayed + r0(20) >= raid_line, failing means arrest",
   "wage_tiers": "Daily wage by raise tier (five tiers, dollars, 2G = $1 rounded up). The tier is picked by how many periods of this job succeeded (raise_tiers.periods_below: 8/23/45/68 = original 10/30/60/90 x 3/4). Jobs without wage_tiers use daily_wage x bonus_pct",
   "zero_one_prob": "A daily_effect range of exactly [0,1] or [-1,0] gives the non-zero value with this probability (six-year run: x4/3 of a 0-or-1 gain)",
-  "bad_day": "Each work day goes bad with probability = fatigue% (capped at 100): no pay that day. success_lines are no longer rolled; attribute gates live in prereq (can the job be picked)",
+  "bad_day": "Original roll (user, lover playtest): each success line is its own roll, displayed stat - r0(fatigue) >= value, all must hold; fatigue of the day is added before the roll. Lines are the original lines mapped to our stats; prereq still decides whether the job can be picked. The bad_day field is no longer used",
   "disabled": "true: the job is switched off (not offered, its events, milestones and NPC schedule never trigger)",
   "one_of": "daily_effect entry with one_of: the gain goes to one of these stats, picked at random each day",
   "site": "map place the job belongs to (placeholder until the user gives the locations); same site = the same place upgraded"
@@ -56,7 +56,12 @@
     0,
     0
    ],
-   "success_lines": [],
+   "success_lines": [
+    {
+     "stat": "stamina",
+     "value": 5
+    }
+   ],
    "daily_effect": [
     {
      "stat": "connections",
@@ -117,7 +122,12 @@
     7,
     9
    ],
-   "success_lines": [],
+   "success_lines": [
+    {
+     "stat": "stamina",
+     "value": 30
+    }
+   ],
    "daily_effect": [
     {
      "stat": "negotiation",
@@ -128,6 +138,13 @@
      "one_of": [
       "negotiation",
       "business"
+     ]
+    },
+    {
+     "stat": "speech",
+     "add": [
+      0,
+      1
      ]
     },
     {
@@ -150,7 +167,7 @@
    "job_period_effect": null,
    "period_random": [],
    "milestones": [],
-   "note": "one of negotiation / business per day"
+   "note": "one of negotiation / business per day; speech 0/1 (user)"
   },
   {
    "id": "job_church_aid",
@@ -168,7 +185,12 @@
     2,
     3
    ],
-   "success_lines": [],
+   "success_lines": [
+    {
+     "stat": "stamina",
+     "value": 10
+    }
+   ],
    "daily_effect": [
     {
      "stat": "discipline",
@@ -223,7 +245,12 @@
     9,
     11
    ],
-   "success_lines": [],
+   "success_lines": [
+    {
+     "stat": "stamina",
+     "value": 30
+    }
+   ],
    "daily_effect": [
     {
      "stat": "stamina",
@@ -278,7 +305,12 @@
     16,
     19
    ],
-   "success_lines": [],
+   "success_lines": [
+    {
+     "stat": "stamina",
+     "value": 80
+    }
+   ],
    "daily_effect": [
     {
      "stat": "stamina",
@@ -338,7 +370,16 @@
     7,
     9
    ],
-   "success_lines": [],
+   "success_lines": [
+    {
+     "stat": "stamina",
+     "value": 80
+    },
+    {
+     "stat": "education",
+     "value": 40
+    }
+   ],
    "daily_effect": [
     {
      "stat": "fight",
@@ -412,7 +453,16 @@
     7,
     9
    ],
-   "success_lines": [],
+   "success_lines": [
+    {
+     "stat": "discipline",
+     "value": 10
+    },
+    {
+     "stat": "stamina",
+     "value": 10
+    }
+   ],
    "daily_effect": [
     {
      "stat": "taste",
@@ -474,7 +524,12 @@
     18,
     21
    ],
-   "success_lines": [],
+   "success_lines": [
+    {
+     "stat": "education",
+     "value": 120
+    }
+   ],
    "daily_effect": [
     {
      "stat": "discipline",
@@ -515,7 +570,7 @@
    "prereq": [
     [
      [
-      "grooming",
+      "physique",
       ">=",
       25
      ]
@@ -529,7 +584,12 @@
     18,
     21
    ],
-   "success_lines": [],
+   "success_lines": [
+    {
+     "stat": "physique",
+     "value": 25
+    }
+   ],
    "daily_effect": [
     {
      "stat": "loyalty",
@@ -582,7 +642,16 @@
     11,
     13
    ],
-   "success_lines": [],
+   "success_lines": [
+    {
+     "stat": "stamina",
+     "value": 60
+    },
+    {
+     "stat": "looks",
+     "value": 50
+    }
+   ],
    "daily_effect": [
     {
      "stat": "business",
@@ -592,7 +661,7 @@
      ]
     },
     {
-     "stat": "physique",
+     "stat": "grooming",
      "add": [
       0,
       1
@@ -618,7 +687,7 @@
    "job_period_effect": null,
    "period_random": [],
    "milestones": [],
-   "note": "lover slow skill (physique)"
+   "note": "lover slow skill (grooming, swapped with physique by the user)"
   },
   {
    "id": "job_l_late",
@@ -644,7 +713,12 @@
     39,
     47
    ],
-   "success_lines": [],
+   "success_lines": [
+    {
+     "stat": "looks",
+     "value": 70
+    }
+   ],
    "daily_effect": [
     {
      "stat": "looks",

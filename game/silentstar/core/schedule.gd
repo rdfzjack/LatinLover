@@ -6,10 +6,10 @@ extends RefCounted
 ## hooks is any object with the methods of month.gd's Hooks (class_chain, book_done, job_period, outing, day).
 ##
 ## Random-number order (copied from the Python side, the reconciliation checks it):
-## - Six-year swap: a day goes bad with probability fatigue% (capped at 100), one chance(min(fatigue, cap), 100) per day; in_love rolls
-##   one more 20%. Success lines and the reckless index are gone; attribute gates only decide whether a job can be picked.
-## - Class, book: fatigue per day from the table (fatigue_per_day). Each class day: the bad-day roll, then on a good day the gains in table order.
-## - Job: each work day first rolls the daily effects in table order (fatigue included), then the bad-day roll.
+## - Day rolls as in the original (user, after the lover playtest): class r0(fatigue) then stamina/2 + r0(stamina/2) >= it;
+##   job: every success line stat - r0(fatigue) >= line (one r0 per line); in_love rolls one more 20%. Gates decide whether a job can be picked.
+## - Class, book: the fee is paid day by day; an unpaid day is skipped. Each paid day: the roll, then on a good day the gains in table order.
+## - Job: each work day first adds the fatigue, then the roll; only a good day gives pay and the other daily effects (in table order).
 ## - A gain range of exactly [0,1] or [-1,0] is one chance(zero_one_prob) (jobs.json / classes.json), not r(a, b).
 
 const Rules = preload("res://core/rules.gd")
@@ -183,10 +183,12 @@ static func extra_fail(st, _job := false, _slack := true) -> bool:
 	return st.status["in_love"] and st.rng.logic.chance(20, 100)
 
 
-## Six-year swap: a day goes bad with probability = fatigue% (capped by jobs.json bad_day.cap).
-static func bad_day(st) -> bool:
-	var f: int = clampi(st.val("fatigue"), 0, int(st.d.job_rules["bad_day"]["cap"]))
-	return f > 0 and st.rng.logic.chance(f, 100)
+## A class day succeeds as in the original (user, after the lover playtest): stamina/2 + r0(stamina/2) >= r0(fatigue).
+## The fatigue roll comes first (original order).
+static func practice_roll(st) -> bool:
+	var line: int = st.rng.logic.r0(maxi(st.val("fatigue"), 0))
+	var h: int = Rules.fdiv(maxi(st.val("stamina"), 0), 2)
+	return h + st.rng.logic.r0(h) >= line
 
 
 ## A gain roll: exactly [0,1] or [-1,0] is non-zero with probability zero_one_prob [num, den]; other ranges are r(a, b).
@@ -216,13 +218,13 @@ static func drug_gain(st, v: int) -> int:
 	return v
 
 
-## A practice day (class, book) is good unless the bad-day roll hits (six-year swap: fatigue%).
+## A practice day (class, book): the original roll (practice_roll), then in love.
 static func practice_ok(st) -> bool:
 	var dg := drug_day(st)
 	if dg != 0:
 		return dg > 0
-	var bad := bad_day(st)
-	return (not extra_fail(st, false)) and not bad
+	var good := practice_roll(st)
+	return (not extra_fail(st, false)) and good
 
 
 ## The success lines including `success_line_mods` (e.g. flag diploma lowers the education line of the newspaper and studio office jobs by 20).
@@ -238,13 +240,17 @@ static func job_lines(st, j: Dictionary) -> Array:
 	return lines
 
 
-## A work day is good unless the bad-day roll hits (six-year swap: fatigue%); the success lines are no longer rolled.
-static func job_day_ok(st, _lines: Array, _slack := true) -> bool:
+## A work day as in the original (user, after the lover playtest): every success line is its own roll,
+## stat (displayed) - r0(fatigue) >= line; all lines must hold. A job without lines always succeeds (then in love).
+static func job_day_ok(st, lines: Array, _slack := true) -> bool:
 	var dg := drug_day(st)
 	if dg != 0:
 		return dg > 0
-	var bad := bad_day(st)
-	return (not extra_fail(st, true)) and not bad
+	var good := true
+	for x in lines:
+		if st.val(x[0]) - st.rng.logic.r0(maxi(st.val("fatigue"), 0)) < int(x[1]):
+			good = false
+	return (not extra_fail(st, true)) and good
 
 
 ## Whether reckless slacking applies on this job: false for a crime job whose tier says reckless_slack false (step 12c c3).
@@ -284,15 +290,13 @@ static func run_class(st, cid: String, days: Array, hooks) -> Dictionary:
 	var zp: Array = st.d.t["classes"].get("zero_one_prob", [1, 2])
 	var went := 0
 	var ok_days := 0
-	var need := 0
-	for dd in days:
-		if not dd[1]:
-			need += fee
-	if st.money < need:              # six-year swap: the fee for the whole period cannot be paid, the period is wasted
-		st.inc("count.broke_class_periods")
-		return {"class_days": 0, "ok_days": 0, "levels": lv, "broke": true}
+	var broke := false
 	for dd in days:
 		if dd[1]:
+			continue
+		if st.money < fee:             # user: the fee is paid day by day; a day that cannot be paid is wasted (no gain, no fatigue)
+			broke = true
+			st.inc("count.broke_class_days")
 			continue
 		went += 1
 		if practice_ok(st):
@@ -317,7 +321,7 @@ static func run_class(st, cid: String, days: Array, hooks) -> Dictionary:
 		var n: int = st.cnt("class_periods." + cid)
 		if ch != null and ch["trigger_periods"].has(n):
 			hooks.class_chain(st, ch["chain"], n)
-	return {"class_days": went, "ok_days": ok_days, "levels": lv}
+	return {"class_days": went, "ok_days": ok_days, "levels": lv, "broke": broke}
 
 
 static func run_book(st, bid: String, days: Array, hooks) -> Dictionary:
@@ -361,14 +365,19 @@ static func run_job(st, jid: String, days: Array, hooks) -> Dictionary:
 		if dd[1]:
 			continue
 		work += 1
-		for e in j["daily_effect"]:
-			var v := roll(st, e["add"], zp)
-			var stat: String = e["stat"]
-			if e.has("one_of"):
-				stat = e["one_of"][g.below(e["one_of"].size())]
-			add_stat(st, stat, v)
-		if job_day_ok(st, lines, slack):
+		for e in j["daily_effect"]:          # fatigue comes first, as in the original (B_STRESS += n before the roll)
+			if e["stat"] == "fatigue":
+				add_stat(st, "fatigue", roll(st, e["add"], zp))
+		if job_day_ok(st, lines, slack):     # user: a bad day gives no pay and changes nothing but fatigue
 			ok_days += 1
+			for e in j["daily_effect"]:
+				if e["stat"] == "fatigue":
+					continue
+				var v := roll(st, e["add"], zp)
+				var stat: String = e["stat"]
+				if e.has("one_of"):
+					stat = e["one_of"][g.below(e["one_of"].size())]
+				add_stat(st, stat, v)
 	var pay := wage * ok_days
 	if work > 0 and ok_days == work:
 		pay = Rules.fdiv(pay * (100 + st.d.job_rules["full_attendance_bonus_pct"]), 100)

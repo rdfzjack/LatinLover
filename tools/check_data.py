@@ -562,10 +562,11 @@ f = 'roles.json'
 RD = {r['id']: r for r in roles['roles']}
 for x in roles.get('board_schedule', []):
     if x['month'] not in CAL_MONTHS: err(f, f"board_schedule month is not in the calendar {x['month']}")
-    for t in ('big', 'medium', 'small'):
+    for t in ('big', 'medium', 'small', 'small2'):
+        if t == 'small2' and t not in x: continue
         r = RD.get(x.get(t))
         if r is None: err(f, f"board_schedule {x['month']} {t} role does not exist {x.get(t)}")
-        elif r['size'] != t: err(f, f"board_schedule {x['month']} {t} role {r['id']} is size {r['size']}")
+        elif r['size'] != t.rstrip('2'): err(f, f"board_schedule {x['month']} {t} role {r['id']} is size {r['size']}")
 for rid in roles.get('reserve_pool', []):
     r = RD.get(rid)
     if r is None: err(f, f'reserve_pool role does not exist {rid}')
