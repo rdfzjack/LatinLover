@@ -326,6 +326,8 @@ static func month_end(story, st) -> void:
 static func period_check(story, st, i: int, entry: String) -> void:
 	if entry.begins_with("rest_") or entry.begins_with("act_"):
 		return
+	if not st.d.t["events"].get("enabled", true):    # switch off: no swap-role or steal-role audition either
+		return
 	var d = st.d
 	var e: Dictionary = d.events["evt_swap_role"]
 	var nxt := Film.next_period(st, i)
