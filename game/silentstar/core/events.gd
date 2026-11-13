@@ -72,6 +72,8 @@ static func fire(story, st, eid: String, depth := 0) -> Dictionary:
 	st.story["last_fired"][eid] = st.ym
 	var rec := {"id": eid, "month": st.date()}
 	var trig := []
+	var ctx_before: Dictionary = st.note_ctx
+	st.note_ctx = {"why": "event", "arg": eid}
 	if Schedule.truthy(e.get("effect")):
 		trig += Rules.apply_effect(st, e["effect"], "event")
 	if Schedule.truthy(e.get("check")):
@@ -103,6 +105,7 @@ static func fire(story, st, eid: String, depth := 0) -> Dictionary:
 			trig += Rules.apply_effect(st, o["success_effect"] if ok else o["fail_effect"], "event")
 		rec["options"] = choice
 	trig += _code(story, st, eid, choice)
+	st.note_ctx = ctx_before
 	story.event_end(st, rec)
 	story.event_log.append(rec)
 	for t in trig:
@@ -113,7 +116,10 @@ static func fire(story, st, eid: String, depth := 0) -> Dictionary:
 # ---------- code events ----------
 
 static func fame_pct(st, pct: int) -> void:
+	var before: int = st.attr["fame"]
 	st.attr["fame"] = maxi(0, st.attr["fame"] + Rules.fdiv(st.attr["fame"] * pct, 100))
+	var c: Dictionary = st.note_ctx if not st.note_ctx.is_empty() else {"why": "effect_event", "arg": ""}
+	st.fame_note(st.attr["fame"] - before, str(c["why"]), str(c["arg"]))
 
 
 ## The events whose logic is code. Returns the ids to trigger (none of them triggers anything for now).

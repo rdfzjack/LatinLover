@@ -94,6 +94,11 @@ static func apply_effect(st, text, source := "event") -> Array:
 			var old: int = st.attr[n]
 			st.attr[n] = _clampi(_delta(st.attr[n], op, v, pct), rg[0], rg[1])
 			st.track(source, n, st.attr[n] - old)
+			if n == "fame":
+				if st.note_ctx.is_empty():
+					st.fame_note(st.attr[n] - old, "effect_" + source)
+				else:
+					st.fame_note(st.attr[n] - old, str(st.note_ctx["why"]), str(st.note_ctx["arg"]))
 		elif st.skill.has(n):
 			var rg: Array = d.skill_range[n]
 			var old: int = st.skill[n]

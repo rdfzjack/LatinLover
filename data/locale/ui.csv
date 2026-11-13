@@ -359,6 +359,31 @@ ui.reason.equipped_items_cannot_be_sold,装备中的不能卖,
 ui.reason.forced_only_when_very_sick,只有重病才会被送去,
 ui.reason.if_broke,钱不够,
 ui.reason.morals,品行条款（出事后一段时间不能接大片）,
+ui.main.fame_label.1,名气：%s（%d）,
+ui.main.fame_tooltip.1,名气 %d（%s）,
+ui.main.fame_tooltip.2,"
+到“%s”要 %d",
+ui.main.fame_tooltip.3,"
+每月来信约 名气/5 封。没有曝光（上映、拍摄、曝光事件）的月份掉 2%%，至少 1。",
+ui.main.fame_tooltip.4,"
+
+还没有变化。",
+ui.main.fame_tooltip.5,"
+
+最近的变化：
+",
+ui.fame_why.release,上映：{x},
+ui.fame_why.decay,没有曝光，自然下降,
+ui.fame_why.breach,拍摄违约：{x},
+ui.fame_why.botched,试镜演砸：{x},
+ui.fame_why.reported,演砸被报道：{x},
+ui.fame_why.event,事件：{x},
+ui.fame_why.effect_event,事件,
+ui.fame_why.effect_origin,开局,
+ui.fame_why.effect_annual,年度大事,
+ui.fame_why.effect_opportunity,机遇,
+ui.fame_why.effect_drug,药,
+ui.fame_why.effect_schedule,日程,
 ui.reason.trait_block,有状态标签不让试镜（例如身材走样：相貌低于 60）,
 ui.reason.no_board_this_month,本月没有选片板,
 "ui.reason.no_such_book,_or_already_finished",这本书没有或已经读完,

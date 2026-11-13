@@ -245,7 +245,9 @@ static func breach_month(st, ym: int) -> Array:
 				hit = true
 		if hit:
 			f["status"] = "breached"
+			var fb: int = st.attr["fame"]
 			st.attr["fame"] = maxi(0, st.attr["fame"] - Rules.fdiv(st.attr["fame"] * pct, 100))
+			st.fame_note(st.attr["fame"] - fb, "breach", str(f["roles"]["id"]))
 			st.inc("count.breach")
 			out.append(f)
 	update_status(st)
@@ -259,7 +261,9 @@ static func breach_period(st, ym: int, i: int) -> Array:
 	for f in films(st):
 		if _active(f) and _has_lock(f, ym, i):
 			f["status"] = "breached"
+			var fb: int = st.attr["fame"]
 			st.attr["fame"] = maxi(0, st.attr["fame"] - Rules.fdiv(st.attr["fame"] * pct, 100))
+			st.fame_note(st.attr["fame"] - fb, "breach", str(f["roles"]["id"]))
 			st.inc("count.breach")
 			out.append(f)
 	update_status(st)
@@ -338,7 +342,9 @@ static func release_one(st, f: Dictionary) -> Dictionary:
 		fame = Rules.fdiv(fame, 2)
 	fame = Rules.fdiv(fame * k, 100)
 	var money: int = Rules.fdiv(Rules.fdiv(S * c["dividend_mult"], 1000) * k, 100)
+	var fame_before: int = st.attr["fame"]
 	Schedule.add_stat(st, "fame", fame)
+	st.fame_note(st.attr["fame"] - fame_before, "release", str(role["id"]))
 	st.add_money(money)
 	var corr: int = Rules.fdiv(int(c["rep_table"][band][t]) * k, 100)      # may be negative (a poor film or a flop)
 	st.corr[role["road"]] += corr

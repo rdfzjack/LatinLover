@@ -79,6 +79,7 @@ var ev_seen := 0           # how many records of story.event_log were already sh
 var status_label: Label
 var rep_row: HBoxContainer
 var idx_label: Label
+var fame_label: Label        # fame: number on hover with the recent changes (like the reputation labels)
 var rep_log: Array = []      # why the reputation bonus changed: {date, road, delta, why}
 var corr_seen: Dictionary = {}
 var rep_mark := 0            # index in rep_log where this month began
@@ -172,6 +173,9 @@ func _build_frame() -> void:
 		rl.mouse_filter = Control.MOUSE_FILTER_STOP
 		rl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		rep_row.add_child(rl)
+	fame_label = Label.new()
+	fame_label.mouse_filter = Control.MOUSE_FILTER_STOP
+	rep_row.add_child(fame_label)
 	idx_label = Label.new()
 	idx_label.mouse_filter = Control.MOUSE_FILTER_STOP
 	left.add_child(idx_label)
@@ -410,6 +414,7 @@ func refresh_status() -> void:
 		status_label.text = tr("ui.main.refresh_status.1")
 		for l in rep_row.get_children():
 			l.text = ""
+			l.tooltip_text = ""
 		idx_label.text = ""
 		return
 	var b: Dictionary = st.bonus()
@@ -430,6 +435,8 @@ func refresh_status() -> void:
 		var rl: Label = rep_row.get_child(k)
 		rl.text = tr("ui.main.refresh_status.13") % [nm(road), st.rep(road, b), " ".join(sk)]
 		rl.tooltip_text = rep_tooltip(road)
+	fame_label.text = tr("ui.main.fame_label.1") % [tier["name"], st.attr["fame"]]
+	fame_label.tooltip_text = fame_tooltip()
 	var flags := PackedStringArray()
 	if st.status["very_sick"]:
 		flags.append(tr("ui.main.refresh_status.3"))
@@ -450,6 +457,38 @@ func refresh_status() -> void:
 		tips.append(nm(x["id"]) + ": " + str(x.get("body", "")))
 	idx_label.text = tr("ui.main.refresh_status.15") % [st.idx["sick_index"], " ".join(flags)]
 	idx_label.tooltip_text = explain.index_text() + ("\n\n" + "\n".join(tips) if tips.size() > 0 else "")
+
+
+## Fame: the number, the tier, the decay rule and the last changes with their reasons (core: State.fame_note, story.fame_log).
+func fame_tooltip() -> String:
+	var f: int = st.attr["fame"]
+	var tiers: Array = d.t["stats"]["fame_tiers"]
+	var i: int = st.fame_tier()
+	var t := tr("ui.main.fame_tooltip.1") % [f, str(tiers[i]["name"])]
+	if i + 1 < tiers.size():
+		t += tr("ui.main.fame_tooltip.2") % [str(tiers[i + 1]["name"]), int(tiers[i + 1]["min"])]
+	t += tr("ui.main.fame_tooltip.3")
+	var flog: Array = st.story.get("fame_log", [])
+	var lines := PackedStringArray()
+	var k := flog.size() - 1
+	while k >= 0 and lines.size() < 10:
+		var e: Dictionary = flog[k]
+		lines.append("%s  %+d  %s" % [str(d.months[clampi(int(e["ym"]), 0, d.months.size() - 1)]["month"]), int(e["delta"]), fame_why(e)])
+		k -= 1
+	if lines.is_empty():
+		t += tr("ui.main.fame_tooltip.4")
+	else:
+		t += tr("ui.main.fame_tooltip.5") + "\n".join(lines)
+	return t
+
+
+func fame_why(e: Dictionary) -> String:
+	var key := "ui.fame_why." + str(e["why"])
+	var text := tr(key)
+	if text == key:
+		text = str(e["why"])
+	var arg := str(e.get("arg", ""))
+	return text.replace("{x}", nm(arg) if arg != "" else "")
 
 
 ## Where a road's reputation comes from: the trained skills, the gear and the table bonus, and the recent changes of the bonus.

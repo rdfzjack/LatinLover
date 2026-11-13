@@ -19,7 +19,7 @@ CJK = re.compile('[⺀-鿿＀-￯　-〿 -⁯×→←−≥≤·—]')
 LITERAL = re.compile(r'"((?:[^"\\\n]|\\.)*)"')
 TR_KEY = re.compile(r'tr\("([^"]+)"\)')
 # keys built at run time ("ui.reason." + id): the rows under these prefixes need no literal use
-DYNAMIC_PREFIXES = ('ui.reason.',)
+DYNAMIC_PREFIXES = ('ui.reason.', 'ui.fame_why.')
 # keys that sit in dictionaries and are passed to tr() later
 KEY_LITERAL = re.compile(r'"(ui\.[a-z_0-9]+(?:\.[a-z_0-9]+)+)"')
 

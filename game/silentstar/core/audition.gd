@@ -404,12 +404,16 @@ static func audition(st, role: Dictionary, player, rivals: Array, probs: Array =
 		final = "won"
 	if final == "botched":
 		var x: Dictionary = res["botched"]
+		var ctx_before: Dictionary = st.note_ctx
+		st.note_ctx = {"why": "botched", "arg": str(role["id"])}
 		Rules.apply_effect(st, x["effect"], "schedule")
 		Rules.apply_effect(st, x["favor"], "schedule")
 		if st.rng.logic.chance(x["report_prob"][0], x["report_prob"][1]):
 			st.exposed = 1
+			st.note_ctx = {"why": "reported", "arg": str(role["id"])}
 			Rules.apply_effect(st, x["report_effect"], "schedule")
 			out["reported"] = true
+		st.note_ctx = ctx_before
 	if out["remembered"]:
 		st.flags["remembered." + role["id"]] = 1
 	out["result"] = final

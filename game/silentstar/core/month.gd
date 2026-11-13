@@ -211,6 +211,7 @@ func end_month() -> void:
 		var fr: Dictionary = d.t["stats"]["fame_rules"]
 		var f: int = st.attr["fame"]
 		st.attr["fame"] = maxi(0, f - maxi(fr["monthly_decay_min"], Rules.fdiv(f * fr["monthly_decay_pct"], 100)))
+		st.fame_note(st.attr["fame"] - f, "decay")
 	# 4 indices and status
 	st.update_indices()
 	# 5 very sick, collapse

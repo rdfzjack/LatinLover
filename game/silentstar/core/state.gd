@@ -55,13 +55,14 @@ var finished := 0              # 1 after the 1929-12 month settlement
 var story := {}                # step 6: board, film contracts, event records, ending (see new_story)
 var debug_log := []            # for debugging, not saved (called log in Python)
 var src := {}                  # not saved: effect totals by source, src[source][name] (Rules.apply_effect); "income" = all money gained
+var note_ctx := {}             # not saved: {why, arg} naming the source of the effects being applied now (fame log)
 
 
 ## The state of step 6, all directly storable in JSON. The fields are explained in new_story of sim/state.py.
 static func new_story() -> Dictionary:
 	return {"board": null, "films": [], "boarded": {}, "pending_board": [], "tipoff": 0, "last_fired": {},
 		"script": {"self_written": 0, "duv_written": 0, "co_written": 0}, "contract_refused": -99, "transition": [0, null],
-		"scandal_cover_year": 0, "leak_year": 0, "seq": 0, "ending": null}
+		"scandal_cover_year": 0, "leak_year": 0, "seq": 0, "ending": null, "fame_log": []}
 
 
 func _init(data) -> void:
@@ -255,6 +256,18 @@ func add_money(n: int) -> void:
 
 
 ## Adds to the per-source totals (report only, not saved).
+## Fame log (shown in the status bar tooltip): story.fame_log = [{ym, delta, why, arg}], the last 40.
+## why: release / decay / breach / botched / event / effect_<source>; arg: a role or event id, or "".
+func fame_note(delta: int, why: String, arg := "") -> void:
+	if delta == 0:
+		return
+	if not story.has("fame_log"):
+		story["fame_log"] = []
+	story["fame_log"].append({"ym": ym, "delta": delta, "why": why, "arg": arg})
+	if story["fame_log"].size() > 40:
+		story["fame_log"] = story["fame_log"].slice(story["fame_log"].size() - 40)
+
+
 func track(source: String, name: String, delta: int) -> void:
 	if delta == 0:
 		return
