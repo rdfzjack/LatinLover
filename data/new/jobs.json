@@ -43,7 +43,7 @@
   {
    "id": "job_runner",
    "code": "S1",
-   "name": "片场打杂跑腿",
+   "name": "片场打杂（S1）",
    "site": "site_studio",
    "original": "housekeeping",
    "earliest": "1924-01",
@@ -104,7 +104,7 @@
   {
    "id": "job_server",
    "code": "S2",
-   "name": "服务员",
+   "name": "服务员（S2）",
    "site": "site_restaurant",
    "original": "inn + restaurant",
    "earliest": "1924-01",
@@ -155,7 +155,7 @@
   {
    "id": "job_church_aid",
    "code": "YI1",
-   "name": "教堂义工",
+   "name": "陪 Sil 去教堂（义1）",
    "site": "site_church",
    "original": "church",
    "earliest": "1924-01",
@@ -202,7 +202,7 @@
   {
    "id": "job_dock1",
    "code": "H-MONEY1-L1",
-   "name": "码头搬货",
+   "name": "码头搬货（H-钱1 一级）",
    "site": "site_dock",
    "original": "farm",
    "earliest": "1924-01",
@@ -257,7 +257,7 @@
   {
    "id": "job_dock2",
    "code": "H-MONEY1-L2",
-   "name": "码头搬货（二级）",
+   "name": "运私酒（H-钱1 二级）",
    "site": "site_dock",
    "original": "construction",
    "earliest": "1925-07",
@@ -312,7 +312,7 @@
   {
    "id": "job_collector",
    "code": "H-WILD",
-   "name": "收债",
+   "name": "收债（H-野）",
    "site": "site_collector",
    "original": "hunting ground",
    "earliest": "1925-07",
@@ -386,7 +386,7 @@
   {
    "id": "job_c_slow",
    "code": "C-SLOW",
-   "name": "工 C-慢",
+   "name": "给贵妇当 confidante（C-慢）",
    "site": "site_c_slow",
    "original": "graveyard",
    "earliest": "1926-04",
@@ -453,7 +453,7 @@
   {
    "id": "job_c_money",
    "code": "C-MONEY",
-   "name": "工 C-钱",
+   "name": "家庭教师（C-钱）",
    "site": "site_c_money",
    "original": "tutor",
    "earliest": "1927-01",
@@ -508,7 +508,7 @@
   {
    "id": "job_l_day",
    "code": "L-DAY",
-   "name": "工 L 白班",
+   "name": "舞女男伴（L 白班）",
    "site": "site_l",
    "original": "beauty salon",
    "earliest": "1924-10",
@@ -556,7 +556,7 @@
   {
    "id": "job_l_night",
    "code": "L-EVE",
-   "name": "工 L 晚班",
+   "name": "lounge lizard（L 晚班）",
    "site": "site_l",
    "original": "hotel bar",
    "earliest": "1927-01",
@@ -623,7 +623,7 @@
   {
    "id": "job_l_late",
    "code": "L-NIGHT",
-   "name": "工 L-夜",
+   "name": "楼上房间陪睡（L-夜）",
    "site": "site_l_late",
    "original": "cabaret",
    "earliest": "1927-10",

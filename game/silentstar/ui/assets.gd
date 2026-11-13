@@ -12,7 +12,7 @@ extends RefCounted
 ##             event_class/<class>        "event_class/month_end"
 ##             ending/<ending id>         "ending/act_legend"
 ##             ending_category/<category>
-##   map       <location id>              "home", "school", "work", "city", "boat" (button picture), "background" (the map)
+##   map       <location id>              the ids of data/new/map.json, e.g. "loc_home" (button picture), "background" (the map)
 ##   portrait  <npc id>                   "duv"
 ##   card      <colour id>                "tough", "lover", "culture", "savvy" (card back / face)
 ## Audio is looked up by the effects node (fx.gd), not here.

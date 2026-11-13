@@ -1212,10 +1212,10 @@ func _uitest_answer(kind: String, payload) -> void:
 			if is_instance_valid(b) and b.get_parent() != null:
 				b.pressed.emit()
 	if kind == "pick_period" and st.ym < 3:
-		for loc in ["home", "school", "work", "city", "boat"]:
-			_show_location(int(payload), loc)
+		for L in d.map_locations:
+			_show_location(int(payload), L["id"])
 			await get_tree().process_frame
-		for shop in ["clothing_store", "general_store", "bookstore", "pawn", "restaurant", "church"]:
+		for shop in ["clothing_store", "general_store", "pawn", "restaurant", "church"]:
 			_show_shop(int(payload), shop)
 			await get_tree().process_frame
 		_show_inventory(int(payload))
@@ -1223,7 +1223,7 @@ func _uitest_answer(kind: String, payload) -> void:
 		if st.ym == 2 and int(payload) == 0:      # the hospital visit: make him sick on purpose and press the last button of the city menu
 			st.idx["sick_index"] = 30
 			st.status["sick"] = 1
-			_show_location(int(payload), "city")
+			_show_location(int(payload), "loc_city")
 			await get_tree().process_frame
 			var hb: Array = []
 			_collect_buttons(body, hb)
@@ -1487,38 +1487,30 @@ func _show_month_start() -> void:
 	_fill_status(sbox)
 
 
-## The places on the map: id -> [name, position, size, hint]. A place groups several schedule entries.
-const LOCATIONS := {
-	"home": ["ui.loc.home.name", Vector2(40, 40), Vector2(200, 90), "ui.loc.home.hint"],
-	"school": ["ui.loc.school.name", Vector2(330, 30), Vector2(240, 90), "ui.loc.school.hint"],
-	"work": ["ui.loc.work.name", Vector2(650, 60), Vector2(200, 90), "ui.loc.work.hint"],
-	"city": ["ui.loc.city.name", Vector2(90, 220), Vector2(240, 90), "ui.loc.city.hint"],
-	"boat": ["ui.loc.boat.name", Vector2(500, 240), Vector2(280, 90), "ui.loc.boat.hint"],
-}
+## The places on the map come from data/new/map.json (user's map table): name, hint, position, size, the schedule entries offered
+## there, the shops opened from there, the activities (shown, not playable yet) and an extra block (home / city / studio).
+func loc_info(loc: String) -> Dictionary:
+	for L in d.map_locations:
+		if L["id"] == loc:
+			return L
+	return {}
 
 
+## The schedule entries of a place: switched-off or unknown ids are skipped; a job is hidden before its earliest month.
 func loc_entries(loc: String) -> Array:
 	var out := []
-	match loc:
-		"home":
-			out.append("rest_home")
-			for b in st.books:
-				out.append(b)
-			if d.classes.has("class_tutor"):
-				out.append("class_tutor")
-		"school":
-			for c in d.classes:
-				if c != "class_tutor":
-					out.append(c)
-		"work":
-			for j in d.jobs:
-				out.append(j)
-		"city":
-			for p in d.places:
-				if p != "place_resort":
-					out.append("rest_outing@" + p)
-		"boat":
-			out.append("rest_outing@place_resort")
+	for e in loc_info(loc).get("entries", []):
+		var pe := Schedule.parse_entry(e)
+		if pe.is_empty():
+			continue
+		if pe[0] == "class" and not d.classes.has(pe[1]):
+			continue
+		if pe[0] == "job":
+			if not d.jobs.has(pe[1]) or st.ym < int(d.month_index[d.jobs[pe[1]]["earliest"]]):
+				continue
+		if pe[0] == "rest" and not d.rests.has(pe[1]):
+			continue
+		out.append(e)
 	return out
 
 
@@ -1531,19 +1523,19 @@ func _show_map(i: int) -> void:
 	heading(tr("ui.main.show_map.1") % [st.date(), [tr("ui.period.early"), tr("ui.period.mid"), tr("ui.period.late")][i], days[0][0], days[days.size() - 1][0]])
 	label(tr("ui.main.show_map.2"))
 	var map := Control.new()
-	map.custom_minimum_size = Vector2(900, 380)
+	map.custom_minimum_size = Vector2(900, 320)
 	body.add_child(map)
 	var bg := ColorRect.new()
 	bg.color = Color(0.16, 0.26, 0.2)
 	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
 	map.add_child(bg)
-	for loc in LOCATIONS:
-		var info: Array = LOCATIONS[loc]
+	for L in d.map_locations:
 		var b := Button.new()
-		b.text = "%s\n%s" % [tr(info[0]), tr(info[3])]
-		b.position = info[1]
-		b.size = info[2]
-		var ll: String = loc
+		b.text = "%s\n%s" % [nm(L["id"]), str(L["hint"])]
+		b.position = Vector2(L["pos"][0], L["pos"][1])
+		b.size = Vector2(L["size"][0], L["size"][1])
+		b.clip_text = true
+		var ll: String = L["id"]
 		b.pressed.connect(func(): _show_location(i, ll))
 		map.add_child(b)
 	button(tr("ui.main.show_map.3"), func(): _show_inventory(i))
@@ -1552,25 +1544,34 @@ func _show_map(i: int) -> void:
 func _show_location(i: int, loc: String) -> void:
 	fx.cue("location_open", {"location": loc})
 	clear_body()
-	var info: Array = LOCATIONS[loc]
-	heading(tr("ui.main.show_location.1") % [st.date(), [tr("ui.period.early"), tr("ui.period.mid"), tr("ui.period.late")][i], tr(info[0])])
+	var info: Dictionary = loc_info(loc)
+	heading(tr("ui.main.show_location.1") % [st.date(), [tr("ui.period.early"), tr("ui.period.mid"), tr("ui.period.late")][i], nm(loc)])
 	button(tr("ui.main.show_location.2"), func(): _show_map(i))
+	if info.get("extra") == "studio":
+		label(tr("ui.main.show_location.8"), null, Color(0.8, 0.8, 0.8))
 	var any := false
 	for e in loc_entries(loc):
 		var why_not: String = Schedule.validate(st, e)
 		if why_not == "" and d.books.has(e) and st.skill[d.books[e]["skills"]] >= int(d.books[e]["skill_cap"]):
 			why_not = "skill at the book cap"      # reading it would only add fatigue
-		var txt := tr("ui.main.show_location.3") % [entry_name(e), entry_effect(e)]
 		if why_not == "":
 			any = true
 			var ee: String = e
 			button(tr("ui.main.show_location.4") + entry_name(e), func(): reply(ee))
 			label(tr("ui.main.show_location.5") + entry_effect(e), null, Color(0.8, 0.9, 1))
-		elif loc != "work" or not why_not.begins_with("not unlocked"):
+		else:
 			label(tr("ui.main.show_location.6") % [entry_name(e), block_reason(e, why_not)], null, Color(1, 0.7, 0.7))
-	if loc == "city":
+	for a in info.get("activities", []):
+		label(tr("ui.main.show_location.9") % [nm(a["id"]), str(a["note"])], null, Color(0.6, 0.6, 0.6))
+	if not info.get("shops", []).is_empty():
+		heading(tr("ui.main.city_extras.1"))
+		for shop in info["shops"]:
+			var sh: String = shop
+			var back: String = loc
+			button(shop_title(shop), func(): _show_shop(i, sh, back))
+	if info.get("extra") == "city":
 		_city_extras(i)
-	elif loc == "home":
+	elif info.get("extra") == "home":
 		_home_extras()
 	elif not any:
 		label(tr("ui.main.show_location.7"))
@@ -1578,10 +1579,6 @@ func _show_location(i: int, loc: String) -> void:
 
 ## The things of the city that do not use a period (shops, pawn shop, restaurant, church) and the hospital, which does.
 func _city_extras(i: int) -> void:
-	heading(tr("ui.main.city_extras.1"))
-	for shop in ["clothing_store", "general_store", "bookstore", "pawn", "restaurant", "church"]:
-		var sh: String = shop
-		button(shop_title(shop), func(): _show_shop(i, sh))
 	heading(tr("ui.main.city_extras.2"))
 	var can: String = Street.hospital_check(st)
 	if can == "":
@@ -1626,11 +1623,11 @@ func _home_extras() -> void:
 		label(tr("ui.main.home_extras.5"), null, Color(0.6, 0.6, 0.6))
 
 
-func _show_shop(i: int, entry: String) -> void:
+func _show_shop(i: int, entry: String, back := "loc_city") -> void:
 	clear_body()
 	var v = ShopView.new()
 	body.add_child(v)
-	v.show_entry(self, entry, func(): _show_location(i, "city"))
+	v.show_entry(self, entry, func(): _show_location(i, back))
 
 
 func _show_inventory(i: int) -> void:

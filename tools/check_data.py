@@ -20,7 +20,7 @@ def need(f, d, keys, where=''):
         if k not in d: err(f, f'{where} missing field {k}')
 
 FILES = ['stats','skills','classes','books','jobs','rest','places','lifestyle','street','origins','calendar',
-         'habits','rivals','roles','items','events','outing','romance','npc_schedule','npc_chains','annual','opportunities','endings']
+         'habits','rivals','roles','items','events','outing','romance','npc_schedule','npc_chains','annual','opportunities','endings','map']
 T = {}
 for n in FILES:
     T[n] = load(n + '.json')
@@ -30,7 +30,7 @@ if errs:
     print('\n'.join(errs)); sys.exit(1)
 
 stats, skills, classes, books, jobs, rest, places, life, street, origins, cal_ = (T[n] for n in FILES[:11])
-habits, rivals, roles, items_t, events_t, outing, romance, npc_sched, chains, annual, opps, endings = (T[n] for n in FILES[11:])
+habits, rivals, roles, items_t, events_t, outing, romance, npc_sched, chains, annual, opps, endings, map_t = (T[n] for n in FILES[11:])
 ATTRS = [a['id'] for a in stats['attrs']]
 SK = [s['id'] for s in skills['skills']]
 ROADS = [r['id'] for r in stats['roads']]
@@ -557,4 +557,23 @@ if pending_events: notes.append(f'{len(pending_events)} event references wait fo
 for n in notes: print('note: ' + n)
 if errs:
     print('\n'.join(errs)); print(f'failed: {len(errs)} problems'); sys.exit(1)
+# map (the places on the map and what each offers)
+f = 'map.json'
+seen = set()
+for L in map_t['locations']:
+    w = L.get('id')
+    need(f, L, ['id','name','hint','pos','size','entries','shops','activities','extra'], w)
+    if w in seen: err(f, f'duplicate id {w}')
+    seen.add(w)
+    for e in L['entries']:
+        base, _, place = e.partition('@')
+        if base not in CLASS_IDS and base not in JOB_IDS and base not in rest_ids: err(f, f'{w} entry does not exist {e}')
+        if place and place not in [p['id'] for p in places['places']]: err(f, f'{w} outing place does not exist {place}')
+    for sh in L['shops']:
+        if sh not in [x['id'] for x in street['entries']]: err(f, f'{w} shop does not exist {sh}')
+    if L['extra'] not in (None, 'home', 'city', 'studio'): err(f, f'{w} extra must be null, home, city or studio')
+on = [j['id'] for j in jobs['jobs'] if not j.get('disabled')] + [c['id'] for c in classes['classes'] if not c.get('disabled')]
+placed = {e for L in map_t['locations'] for e in L['entries']}
+for x in on:
+    if x not in placed: err(f, f'{x} is switched on but on no place of the map')
 print(f'passed: {len(FILES)} tables, {len(JOB_IDS)} jobs, {len(CLASS_IDS)} classes, {len(BOOK_IDS)} books, {len(ms)} months')

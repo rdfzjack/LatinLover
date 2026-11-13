@@ -9,7 +9,7 @@
   {
    "id": "class_h1",
    "code": "H1",
-   "name": "课 H1",
+   "name": "格斗术（H1）",
    "original": "fencing",
    "fee": [
     15,
@@ -66,7 +66,7 @@
   {
    "id": "class_h2",
    "code": "H2",
-   "name": "课 H2",
+   "name": "骑术（H2）",
    "original": "swordsmanship",
    "fee": [
     20,
@@ -123,7 +123,7 @@
   {
    "id": "class_c1",
    "code": "C1",
-   "name": "课 C1",
+   "name": "去沙龙应酬（C1）",
    "original": "magic",
    "fee": [
     30,
@@ -180,7 +180,7 @@
   {
    "id": "class_c3",
    "code": "C3",
-   "name": "课 C3",
+   "name": "家教（C3）",
    "original": "theology",
    "fee": [
     20,
@@ -258,7 +258,7 @@
   {
    "id": "class_yi",
    "code": "YI",
-   "name": "课 义",
+   "name": "慈善（义）",
    "original": "poetry",
    "fee": [
     20,
@@ -357,7 +357,7 @@
   {
    "id": "class_l1",
    "code": "L1",
-   "name": "课 L1",
+   "name": "演员培训（L1）",
    "original": "etiquette",
    "fee": [
     20,
@@ -414,7 +414,7 @@
   {
    "id": "class_l3",
    "code": "L3",
-   "name": "课 L3",
+   "name": "舞蹈（L3）",
    "original": "dance",
    "fee": [
     25,
