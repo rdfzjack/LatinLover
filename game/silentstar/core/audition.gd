@@ -296,7 +296,8 @@ static func play_match(st, my_deck: Array, rival: Dictionary, probs: Array, play
 	while me < need and them < need and not mine.is_empty():
 		var oi := opponent_pick(st, rival["habit"], theirs, field, rnd, my_last, [me, them])
 		var ctx := {"hand": mine.duplicate(true), "rival_hand": theirs.duplicate(true), "style": field, "round": rnd,
-			"score_line": [me, them], "history": hist.duplicate(true), "opponents": rival}
+			"score_line": [me, them], "history": hist.duplicate(true), "opponents": rival,
+			"rival_pick": oi}
 		var mi: int = player.play(st, ctx)
 		var a: Array = mine.pop_at(mi)
 		var b: Array = theirs.pop_at(oi)

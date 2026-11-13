@@ -137,6 +137,18 @@ static func fit_plan(g, plan: Array) -> Array:
 	return out
 
 
+# ---------- event notifications (step 15: the UI shows a dialog; no effect on the game) ----------
+
+## An event is about to be settled (called by Events.fire; triggered events nest).
+func event_begin(_st, _eid: String) -> void:
+	pass
+
+
+## The event is settled: rec is its record {id, month, check?, options?}.
+func event_end(_st, _rec: Dictionary) -> void:
+	pass
+
+
 # ---------- month start ----------
 
 func board(st) -> void:
@@ -205,13 +217,18 @@ func before_period(st, i: int) -> void:
 	Events.drug_period(st, i)
 
 
-func period_start(st, i: int, entry: String) -> void:
+func period_start(st, i: int, _entry: String) -> void:
 	cur_period = i
-	Events.period_start(self, st, i, entry)
 
 
 func period_end(st, i: int, entry: String, out: Dictionary) -> void:
 	Events.period_end(self, st, i, entry, out)
+	after_period(st, i, entry, out)
+
+
+## The checks of GDD 11.1 (swap role, steal role) happen at the END of the period (step 15c; they used to run before it).
+func after_period(st, i: int, entry: String, _out: Dictionary) -> void:
+	Events.period_check(self, st, i, entry)
 
 
 func day(st, dd: int) -> void:

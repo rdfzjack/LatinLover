@@ -65,6 +65,7 @@ static func fire(story, st, eid: String, depth := 0) -> Dictionary:
 		push_error("event trigger chain too deep: %s" % eid)
 		return {}
 	var e: Dictionary = st.d.events[eid]
+	story.event_begin(st, eid)
 	st.fired[eid] = st.fired.get(eid, 0) + 1
 	st.story["last_fired"][eid] = st.ym
 	var rec := {"id": eid, "month": st.date()}
@@ -100,6 +101,7 @@ static func fire(story, st, eid: String, depth := 0) -> Dictionary:
 			trig += Rules.apply_effect(st, o["success_effect"] if ok else o["fail_effect"], "event")
 		rec["options"] = choice
 	trig += _code(story, st, eid, choice)
+	story.event_end(st, rec)
 	story.event_log.append(rec)
 	for t in trig:
 		fire(story, st, t, depth + 1)
@@ -114,7 +116,7 @@ static func fame_pct(st, pct: int) -> void:
 
 ## The events whose logic is code. Returns the ids to trigger (none of them triggers anything for now).
 ## The other `code: true` events only need the effects and flags in the data, read by other modules through the flags:
-##   evt_swap_role / evt_steal_role (period_start), evt_accent (flag), era_valen_death (board reads the flag),
+##   evt_swap_role / evt_steal_role (period_check), evt_accent (flag), era_valen_death (board reads the flag),
 ##   era_talkie (the date is already in the table), job_studio_m1 (the long-contract probability is tiered by favor in evt_contract).
 static func _code(story, st, eid: String, choice) -> Array:
 	match eid:
@@ -311,10 +313,10 @@ static func month_end(story, st) -> void:
 		n += 1
 
 
-# ---------- period start (11.1) ----------
+# ---------- period checks (11.1; run at the end of the period since step 15c) ----------
 
-static func period_start(story, st, i: int, entry: String) -> void:
-	if entry.begins_with("rest_"):
+static func period_check(story, st, i: int, entry: String) -> void:
+	if entry.begins_with("rest_") or entry.begins_with("act_"):
 		return
 	var d = st.d
 	var e: Dictionary = d.events["evt_swap_role"]

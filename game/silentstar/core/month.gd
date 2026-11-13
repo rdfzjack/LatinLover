@@ -47,6 +47,10 @@ var st
 var hooks
 var started := false
 var last := []                 # summary of each period of this month
+# What run_month remembers across its periods (step 15d: a game can be saved before period i and resumed there, see carry()).
+var m_forced := 0              # this month is the forced sanatorium month
+var m_void := 0                # this month's schedule is void
+var m_sanatorium := false      # a sanatorium period already happened this month
 
 
 func _init(data, sd := 0, origin := [0, 0, 0], hk = null, state = null) -> void:
@@ -94,13 +98,15 @@ func set_lifestyle(lid: String) -> void:
 
 ## Checks this month's schedule and returns [[period, reason], ...] (period -1 = the whole plan).
 ## Months with a shoot lock, forced sanatorium or void schedule are not checked.
-func plan_errors(plan: Array) -> Array:
-	if st.forced_rest or st.void_next:
+func plan_errors(plan: Array, from_period := 0) -> Array:
+	if from_period == 0 and (st.forced_rest or st.void_next):
+		return []
+	if from_period > 0 and (m_forced or m_void):
 		return []
 	if plan.size() != 3:
 		return [[-1, "need 3 periods"]]
 	var out := []
-	for i in plan.size():
+	for i in range(from_period, plan.size()):
 		if hooks.locked(st, i) != null:
 			continue
 		var r: String = Schedule.validate(st, plan[i])
@@ -109,20 +115,34 @@ func plan_errors(plan: Array) -> Array:
 	return out
 
 
+## What the screen has to keep to resume a month at period i (with the saved state): see run_month(plan, from_period, carry).
+func carry() -> Dictionary:
+	return {"forced": m_forced, "void": m_void, "sanatorium": m_sanatorium}
+
+
 ## Runs the month. Returns the schedule errors when the plan cannot be used (then nothing has run), otherwise [].
-func run_month(plan: Array) -> Array:
+## Resuming a saved month (step 15d): from_period = the period to continue with, carry = what carry() returned when saving; the state
+## is the saved one and the earlier periods are not run again.
+func run_month(plan: Array, from_period := 0, carried := {}) -> Array:
 	if not started:
 		start_month()
-	var errs := plan_errors(plan)
+	if from_period > 0:
+		m_forced = int(carried.get("forced", 0))
+		m_void = int(carried.get("void", 0))
+		m_sanatorium = bool(carried.get("sanatorium", false))
+	var errs := plan_errors(plan, from_period)
 	if not errs.is_empty():
 		return errs
-	var forced: int = st.forced_rest
-	var void_: int = st.void_next
-	st.forced_rest = 0
-	st.void_next = 0
-	last = []
-	var sanatorium := false
-	for i in 3:
+	if from_period == 0:
+		m_forced = st.forced_rest
+		m_void = st.void_next
+		m_sanatorium = false
+		st.forced_rest = 0
+		st.void_next = 0
+		last = []
+	var forced: int = m_forced
+	var void_: int = m_void
+	for i in range(from_period, 3):
 		var days := Schedule.days_of(st, i)
 		if void_:
 			last.append({"schedule": "void"})
@@ -145,13 +165,13 @@ func run_month(plan: Array) -> Array:
 			continue
 		var e: String = plan[i] if not forced else _forced_entry(i)
 		if e == "rest_sanatorium":
-			sanatorium = true
+			m_sanatorium = true
 			st.inc("count.void.sanatorium")
 		hooks.period_start(st, i, e)
 		var out := Schedule.run_period(st, i, e, hooks)
 		hooks.period_end(st, i, e, out)
 		last.append(out)
-	if sanatorium:                       # discharge (step 12c): side effects, then the discharge event roll
+	if m_sanatorium:                       # discharge (step 12c): side effects, then the discharge event roll
 		st.inc("count.sanatorium")
 		var f: Dictionary = d.rest_forced[0]
 		if Schedule.truthy(f.get("discharge_effect")):
