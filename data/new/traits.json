@@ -1,0 +1,27 @@
+{
+ "note": "Status traits (user): checked against the current state whenever shown or needed; a trait is on while its cond holds. Shown on the status bar with its body as tooltip. effects: what the trait does; only no_audition exists now (cannot sign up for any audition, including the swap-role offer). A new trait is one more row; names and texts are placeholders.",
+ "effects_allowed": ["no_audition"],
+ "traits": [
+  {
+   "id": "trait_out_of_shape",
+   "name": "身材走样",
+   "body": "相貌低于 60。不能试镜，把相貌练回 60 就好了。",
+   "cond": [[["looks", "<", 60]]],
+   "effects": ["no_audition"]
+  },
+  {
+   "id": "trait_phoenix",
+   "name": "不死鸟",
+   "body": "重病过，又活过来了。",
+   "cond": [[["count.very_sick_months", ">=", 1], ["status.very_sick", "==", 0]]],
+   "effects": []
+  },
+  {
+   "id": "trait_low_budget",
+   "name": "低成本演员",
+   "body": "演了太多小片，大片的名气门槛 +50。多演中片、大片能洗掉。",
+   "cond": [[["lowbudget_typed", "==", 1]]],
+   "effects": []
+  }
+ ]
+}

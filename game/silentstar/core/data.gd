@@ -8,7 +8,7 @@ const Jsonx = preload("res://core/jsonx.gd")
 
 const TABLES := ["stats", "skills", "classes", "books", "jobs", "rest", "places", "lifestyle", "street",
 	"origins", "calendar", "habits", "rivals", "roles", "items", "events", "outing", "romance",
-	"npc_schedule", "npc_chains", "annual", "opportunities", "endings", "map"]
+	"npc_schedule", "npc_chains", "annual", "opportunities", "endings", "map", "traits"]
 
 var t := {}
 var ok := true
@@ -44,6 +44,7 @@ var rest_forced = null
 var places := {}
 var map_locations := []       # map.json locations, in drawing order
 var lifestyles := {}
+var traits := []             # status traits (traits.json), table order
 var street := {}
 var discount = null
 var items := {}
@@ -128,6 +129,7 @@ func _init(path := "") -> void:
 	for p in t["places"]["places"]:
 		places[p["id"]] = p
 	map_locations = t["map"]["locations"]
+	traits = t["traits"]["traits"]
 	for x in t["lifestyle"]["lifestyles"]:
 		lifestyles[x["id"]] = x
 	for e in t["street"]["entries"]:

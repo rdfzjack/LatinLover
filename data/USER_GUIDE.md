@@ -434,6 +434,7 @@ In effects, `drug_points+1` and `drug_stage=0` work like any other name.
 
 ### 13. Jobs, classes, books and the calendar (six-year version)
 
+- **Status traits** (`traits.json`): each row is `{id, name, body, cond, effects}`. The trait shows on the status bar while `cond` holds (same condition syntax as everywhere); `body` is the tooltip. `effects` may only use the names in `effects_allowed`; now that is `no_audition` (no audition at all while the trait is on). Example: `trait_out_of_shape` is on when looks < 60. To add one, copy a row and change `id`, `name`, `body`, `cond`.
 - **Switches** (`events.json`): `"enabled": false` turns every event off (events, outing events, era events); `"valen_death": false` keeps Valen as a rival to the end with no replacement. Both are false now; set to true to bring them back.
 - **Day rolls**: a class day succeeds when stamina/2 + random(0..stamina/2) >= random(0..fatigue). A job's `success_lines` (`[{"stat": ..., "value": ...}]`) are each rolled as stat - random(0..fatigue) >= value; all must hold. On a bad work day only the fatigue of `daily_effect` is applied.
 

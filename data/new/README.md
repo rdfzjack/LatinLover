@@ -66,6 +66,7 @@ Fields named `*_formula` hold a formula string interpreted by the code. `code: t
 | `rest.json` | rests: at home (Sil keeps company), outing; the sanatorium is forced only when very sick (`player_choice: false`); `forced` has `discharge_effect` and `discharge_event` | 5.5 |
 | `places.json` | outing places: cost (or by fame tier), fatigue change per day, residents, random table. One more row is one more place | 5.5.1 |
 | `lifestyle.json` | lifestyles | 5.7 |
+| `traits.json` | status traits shown on the status bar: `{id, name, body, cond, effects}`; a trait is on while its cond holds; `effects` only from `effects_allowed` (now `no_audition`) | 2.7 |
 | `street.json` | street entries, shelves, services, discounts | 5.8 |
 | `origins.json` | the three opening questions | 3.2 |
 | `calendar.json` | days of the 48 months, Sundays, board, unlocks, era events | 1, 4 |

@@ -25,6 +25,7 @@ const Rules = preload("res://core/rules.gd")
 const Schedule = preload("res://core/schedule.gd")
 const Audition = preload("res://core/audition.gd")
 const Film = preload("res://core/film.gd")
+const Traits = preload("res://core/traits.gd")
 ## The slots of a fixed board in roles.json board_schedule; small2 is the second small role of the 1924-25 boards (user).
 const SLOTS := ["big", "medium", "small", "small2"]
 
@@ -376,6 +377,8 @@ static func fame_gate(st, e: Dictionary) -> int:
 ## unsuppressed scandal, flag morals_until = last blocked month index), long contract allows only house roles.
 ## Returns "" or the reason.
 static func eligible(st, e: Dictionary) -> String:
+	if not Traits.with_effect(st, "no_audition").is_empty():   # a status trait forbids auditions (e.g. out of shape, user)
+		return "trait_block"
 	if st.attr["fame"] < fame_gate(st, e):
 		return "out_of_reach"
 	if not Rules.cond(st, e.get("gates", [])):          # fixed boards (user): the role's minimum off-road attributes
@@ -536,6 +539,8 @@ static func one_match(st, agent, role: Dictionary, rival: Dictionary) -> bool:
 ## (the caller checks first).
 static func swap_role(st, i: int, agent) -> bool:
 	var d = st.d
+	if not Traits.with_effect(st, "no_audition").is_empty():   # a status trait forbids auditions
+		return false
 	var c: Dictionary = d.role_cfg["shoot"]["swap_role"]
 	var e := draw(st, c["size"], {})
 	if e["source"] == "pool":

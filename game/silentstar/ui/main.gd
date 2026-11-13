@@ -17,6 +17,7 @@ const Street = preload("res://core/street.gd")
 const Board = preload("res://core/board.gd")
 const Events = preload("res://core/events.gd")
 const Film = preload("res://core/film.gd")
+const Traits = preload("res://core/traits.gd")
 const Audition = preload("res://core/audition.gd")
 const Story = preload("res://core/story.gd")
 const State = preload("res://core/state.gd")
@@ -443,8 +444,12 @@ func refresh_status() -> void:
 	var stock := int(st.flags.get("drug_stock", 0))
 	if stock > 0:
 		flags.append(tr("ui.main.refresh_status.9") % stock)
+	var tips := PackedStringArray()
+	for x in Traits.active(st):             # status traits (traits.json)
+		flags.append("[" + nm(x["id"]) + "]")
+		tips.append(nm(x["id"]) + ": " + str(x.get("body", "")))
 	idx_label.text = tr("ui.main.refresh_status.15") % [st.idx["sick_index"], " ".join(flags)]
-	idx_label.tooltip_text = explain.index_text()
+	idx_label.tooltip_text = explain.index_text() + ("\n\n" + "\n".join(tips) if tips.size() > 0 else "")
 
 
 ## Where a road's reputation comes from: the trained skills, the gear and the table bonus, and the recent changes of the bonus.

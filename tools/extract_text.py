@@ -42,6 +42,7 @@ SPEC = [
     ('places.json', ['places'], 'place', ['name'], []),
     ('map.json', ['locations'], 'loc', ['name', 'hint'], [('activities', 'activity', ['name', 'note'])]),
     ('lifestyle.json', ['lifestyles'], 'lifestyle', ['name'], []),
+    ('traits.json', ['traits'], 'trait', ['name', 'body'], []),
     ('street.json', ['entries'], 'street', ['name'], [('services', 'service', ['name'])]),
     ('items.json', ['items'], 'item', ['name'], []),
     ('habits.json', ['habits'], 'habit', ['name'], []),

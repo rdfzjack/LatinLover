@@ -215,6 +215,7 @@ func end_month() -> void:
 	st.update_indices()
 	# 5 very sick, collapse
 	if st.status["very_sick"]:
+		st.inc("count.very_sick_months")          # for the phoenix trait (traits.json)
 		st.forced_rest = 1
 		hooks.film_breach(st)
 	st.collapse_months = st.collapse_months + 1 if st.idx["sick_index"] >= 100 else 0

@@ -20,7 +20,7 @@ def need(f, d, keys, where=''):
         if k not in d: err(f, f'{where} missing field {k}')
 
 FILES = ['stats','skills','classes','books','jobs','rest','places','lifestyle','street','origins','calendar',
-         'habits','rivals','roles','items','events','outing','romance','npc_schedule','npc_chains','annual','opportunities','endings','map']
+         'habits','rivals','roles','items','events','outing','romance','npc_schedule','npc_chains','annual','opportunities','endings','map','traits']
 T = {}
 for n in FILES:
     T[n] = load(n + '.json')
@@ -30,7 +30,7 @@ if errs:
     print('\n'.join(errs)); sys.exit(1)
 
 stats, skills, classes, books, jobs, rest, places, life, street, origins, cal_ = (T[n] for n in FILES[:11])
-habits, rivals, roles, items_t, events_t, outing, romance, npc_sched, chains, annual, opps, endings, map_t = (T[n] for n in FILES[11:])
+habits, rivals, roles, items_t, events_t, outing, romance, npc_sched, chains, annual, opps, endings, map_t, traits_t = (T[n] for n in FILES[11:])
 ATTRS = [a['id'] for a in stats['attrs']]
 SK = [s['id'] for s in skills['skills']]
 ROADS = [r['id'] for r in stats['roads']]
@@ -557,6 +557,18 @@ if pending_events: notes.append(f'{len(pending_events)} event references wait fo
 for n in notes: print('note: ' + n)
 if errs:
     print('\n'.join(errs)); print(f'failed: {len(errs)} problems'); sys.exit(1)
+# status traits
+f = 'traits.json'
+TR = T['traits']
+seen = set()
+for x in TR['traits']:
+    w = x.get('id')
+    need(f, x, ['id', 'name', 'body', 'cond', 'effects'], w)
+    if w in seen: err(f, f'duplicate id {w}')
+    seen.add(w)
+    check_cond(f, x.get('cond', []), w)
+    for e in x.get('effects', []):
+        if e not in TR['effects_allowed']: err(f, f'{w} effect not allowed: {e} (allowed: {TR["effects_allowed"]})')
 # fixed boards (roles.json board_schedule, reserve_pool, gates)
 f = 'roles.json'
 RD = {r['id']: r for r in roles['roles']}
