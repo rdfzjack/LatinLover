@@ -119,6 +119,11 @@ class UiAgent:
 	func go_personally(st, role: Dictionary) -> bool:
 		return ui.ask("stunt", role)
 
+	func role_event(st, kind: String, info: Dictionary) -> bool:
+		var p := info.duplicate()
+		p["kind"] = kind
+		return ui.ask("role_event", p)
+
 	func option(st, ev: Dictionary, avail: Array) -> int:
 		return ui.ask("option", {"event": ev, "avail": avail})
 

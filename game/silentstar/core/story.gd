@@ -34,6 +34,12 @@ class Agent:
 	func accept_support(_st, _role: Dictionary) -> bool:
 		return false
 
+	## Swap role / steal role (GDD 11.1): shown before the audition; returns whether to play it.
+	## kind "swap": declining means no audition. kind "steal": only shown, it cannot be declined (the answer is ignored).
+	## info: {role, rival, period: [month index, period] the swap role would take (swap only)}.
+	func role_event(_st, _kind: String, _info: Dictionary) -> bool:
+		return true
+
 	## When a role that allows stunt_self is won: whether to do it yourself.
 	func go_personally(_st, _role: Dictionary) -> bool:
 		return false

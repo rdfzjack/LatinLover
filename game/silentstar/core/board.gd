@@ -550,9 +550,12 @@ static func swap_role(st, i: int, agent) -> bool:
 	if e["talkie"] and e["speech_line"] == null:
 		e["speech_line"] = d.role_cfg["speech_line"][e["size"]]
 	var rv := Audition.unnamed_rival(st, e["size"], null, e["style_probs"])
+	var nxt := Film.next_period(st, i)
+	if not agent.role_event(st, "swap", {"role": e, "rival": rv, "period": nxt}):    # user: explained first, can be declined
+		st.inc("count.swap_declined")
+		return false
 	var win := one_match(st, agent, e, rv)
 	if win:
-		var nxt := Film.next_period(st, i)
 		var pers: bool = Film.can_go_personally(st, e) and agent.go_personally(st, e)
 		Film.new_film(st, e, [nxt].slice(0, c["period_count"]), false, pers)
 	return win
@@ -567,6 +570,7 @@ static func steal_role(st, agent) -> bool:
 			break
 	var role: Dictionary = f["roles"]
 	var rv := Audition.unnamed_rival(st, role["size"], null, role["style_probs"])
+	agent.role_event(st, "steal", {"role": role, "rival": rv})    # user: explained first; a steal cannot be declined
 	var win := one_match(st, agent, role, rv)
 	if not win:
 		f["status"] = "stolen"

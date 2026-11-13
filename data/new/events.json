@@ -9,7 +9,8 @@
  },
  "enabled": false,
  "valen_death": false,
- "switch_note": "User (lover playtest): enabled false turns every event off (events, outing events, era events); valen_death false keeps Valen as a rival to 1929-12 with no replacement. Set both to true to bring them back.",
+ "role_events": true,
+ "switch_note": "User (lover playtest): enabled false turns every event off (events, outing events, era events); valen_death false keeps Valen as a rival to 1929-12 with no replacement. Set both to true to bring them back. role_events true keeps the swap-role and steal-role auditions on even when enabled is false (user: on while testing the audition balance); they are explained before the audition, a swap can be declined, a steal cannot.",
  "events": [
   {
    "id": "evt_swap_role",

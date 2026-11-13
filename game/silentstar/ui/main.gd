@@ -1181,7 +1181,7 @@ func _auto_answer(kind: String, payload):
 			return 0
 		"pick_role":
 			return payload["ok"][0]
-		"support", "stunt", "suppress":
+		"support", "stunt", "suppress", "role_event":
 			return true
 		"option":
 			return payload["avail"][0]
@@ -1210,6 +1210,7 @@ func _show_request(kind: String, payload) -> void:
 		"deck": _show_deck(payload)
 		"play": _show_play(payload)
 		"support": _yes_no(tr("ui.main.show_request.1"), tr("ui.main.show_request.2"), payload["name"])
+		"role_event": _show_role_event(payload)
 		"stunt": _yes_no(tr("ui.main.show_request.3"), tr("ui.main.show_request.4"), payload["name"])
 		"suppress": _yes_no(tr("ui.main.show_request.5"), tr("ui.main.show_request.6") + (tr("ui.main.show_request.7") if payload == "free" else tr("ui.main.show_request.8")), "")
 		"boost": _yes_no(tr("ui.main.show_request.9"), tr("ui.main.show_request.10") % int(st.flags.get("drug_stock", 0)), "")
@@ -1309,6 +1310,38 @@ func _yes_no(title: String, text: String, extra: String) -> void:
 	body.add_child(hb)
 	button(tr("ui.main.yes_no.1"), func(): reply(true), hb)
 	button(tr("ui.main.yes_no.2"), func(): reply(false), hb)
+
+
+## Swap role / steal role: what happened, which film and role, the rival, what winning, losing and declining mean.
+func _show_role_event(p: Dictionary) -> void:
+	var r: Dictionary = p["role"]
+	var rv: Dictionary = p["rival"]
+	var steal: bool = p["kind"] == "steal"
+	_wait_screen(tr("ui.main.role_event.steal_title") if steal else tr("ui.main.role_event.swap_title"))
+	label(tr("ui.main.role_event.steal_what") if steal else tr("ui.main.role_event.swap_what"))
+	var road := str(r.get("road", ""))
+	label(tr("ui.main.role_event.role") % [str(r.get("film_title", "")), str(r["name"]), size_name(str(r["size"])), nm(road), int(r.get("fee", 0))])
+	var lv: Array = rv.get("levels", [])
+	var top := 0
+	var top_road := ""
+	for k in lv.size():
+		if int(lv[k]) > top:
+			top = int(lv[k])
+			top_road = d.roads[k]
+	label(tr("ui.main.role_event.rival") % [rival_name(rv), nm(top_road), top, int(rv.get("fame", 0)), nm(str(rv.get("habit", "")))])
+	if steal:
+		label(tr("ui.main.role_event.steal_rules"))
+	else:
+		var per: Array = p.get("period", [])
+		var when := ""
+		if per.size() == 2:
+			when = "%s %s" % [str(d.months[clampi(int(per[0]), 0, d.months.size() - 1)]["month"]), [tr("ui.main.role_event.period_0"), tr("ui.main.role_event.period_1"), tr("ui.main.role_event.period_2")][clampi(int(per[1]), 0, 2)]]
+		label(tr("ui.main.role_event.swap_rules") % when)
+	var hb := HBoxContainer.new()
+	body.add_child(hb)
+	button(tr("ui.main.role_event.accept_steal") if steal else tr("ui.main.role_event.accept_swap"), func(): reply(true), hb)
+	if not steal:                              # user: a steal cannot be declined
+		button(tr("ui.main.role_event.decline_swap"), func(): reply(false), hb)
 
 
 func _show_option(p: Dictionary) -> void:
