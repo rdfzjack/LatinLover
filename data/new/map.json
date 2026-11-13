@@ -146,7 +146,7 @@
   {
    "id": "loc_home",
    "name": "家",
-   "hint": "休息（Sil 陪着）、陪 Sil 去教堂、家教",
+   "hint": "休息（Sil 陪着）、陪 Sil 去教堂、家教、创作赚钱",
    "pos": [
     460,
     120
@@ -158,7 +158,8 @@
    "entries": [
     "rest_home",
     "job_church_aid",
-    "class_c3"
+    "class_c3",
+    "job_c_money"
    ],
    "shops": [],
    "activities": [],
@@ -178,8 +179,7 @@
    ],
    "entries": [
     "job_c_slow",
-    "class_c1",
-    "job_c_money"
+    "class_c1"
    ],
    "shops": [],
    "activities": [],
