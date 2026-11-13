@@ -64,7 +64,7 @@ func practice_text(stamina: int, fatigue: int) -> String:
 ## A work day: good unless the bad-day roll hits (fatigue%).
 func job_text(fatigue: int) -> String:
 	var p := p_practice(0, fatigue)
-	var t := tr("ui.explain.job_text.1") % [pct(p * p_no_extra_fail(true)), fatigue]
+	var t: String = tr("ui.explain.job_text.1") % [pct(p * p_no_extra_fail(true)), fatigue]
 	var extra := extra_text(true)
 	if extra != "":
 		t += tr("ui.main.entry_effect.14") + extra

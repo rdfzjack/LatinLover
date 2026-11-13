@@ -66,6 +66,9 @@ var names := {}
 
 var cur_plan: Array = ["rest_home", "rest_home", "rest_home"]   # filled one period at a time by the map
 var month_forced := false
+var boost_pick := -1                     # the period the player chose to take a dose before (map page), -1 = none
+var free_box: VBoxContainer              # the free actions on the page of a place (home: Sil; dealer: buy and use)
+var free_kind := ""
 var cur_period_hint := 0
 var snap := {}             # state at the start of the month (for the settlement summary)
 var last_snap := {}        # state after the previous period (for the playback)
@@ -80,7 +83,6 @@ var corr_seen: Dictionary = {}
 var rep_mark := 0            # index in rep_log where this month began
 var body: VBoxContainer
 var log_box: RichTextLabel
-var street_box: VBoxContainer
 var inv_box: VBoxContainer
 var event_snaps: Array = []   # state at the start of each event being settled (events nest)
 var street_msg: Label
@@ -172,10 +174,6 @@ func _build_frame() -> void:
 	idx_label = Label.new()
 	idx_label.mouse_filter = Control.MOUSE_FILTER_STOP
 	left.add_child(idx_label)
-	var bar := VBoxContainer.new()
-	top.add_child(bar)
-	button(tr("ui.main.build_frame.1"), func(): _open_slots(true), bar)
-	button(tr("ui.main.build_frame.2"), func(): _open_slots(false), bar)
 	var split := HSplitContainer.new()
 	split.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	root.add_child(split)
@@ -380,8 +378,15 @@ func button(text: String, cb: Callable, parent = null) -> Button:
 	var b := Button.new()
 	b.text = text
 	b.pressed.connect(cb)
+	b.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN     # narrow and on the left (user)
 	(parent if parent != null else body).add_child(b)
 	return b
+
+
+## Save and load, under the items button of the map, on the month start and summary pages (user: not in the top bar).
+func save_load_row() -> void:
+	button(tr("ui.main.build_frame.1"), func(): _open_slots(true))
+	button(tr("ui.main.build_frame.2"), func(): _open_slots(false))
 
 
 func heading(text: String, parent = null) -> void:
@@ -693,6 +698,7 @@ func _title() -> void:
 	refresh_status()
 	clear_body()
 	heading(tr("ui.main.refresh_status.1"))
+	button(tr("ui.main.build_frame.2"), func(): _open_slots(false))
 	label(tr("ui.main.title.1"))
 	origin_picks = []
 	for q in d.origins:
@@ -1205,12 +1211,6 @@ func _uitest_answer(kind: String, payload) -> void:
 			print("save: ", save_now("1"))
 			load_slot("1")
 			return
-	if kind == "month_start" and st.ym < 3:
-		var btns: Array = []
-		_collect_buttons(street_box, btns)
-		for b in btns:
-			if is_instance_valid(b) and b.get_parent() != null:
-				b.pressed.emit()
 	if kind == "pick_period" and st.ym < 3:
 		for L in d.map_locations:
 			_show_location(int(payload), L["id"])
@@ -1442,7 +1442,8 @@ func _show_month_start() -> void:
 	var li := 0
 	var k := 0
 	for lid in d.lifestyles:
-		lb.add_item(tr("ui.main.show_month_start.8") % [nm(lid), d.lifestyles[lid]["monthly_cost"][st.fame_tier()]])
+		var eff: String = pretty(d.lifestyles[lid].get("month_end_effect", ""))
+		lb.add_item(tr("ui.main.show_month_start.8") % [nm(lid), d.lifestyles[lid]["monthly_cost"][st.fame_tier()], eff if eff != "" else tr("ui.main.life.1")])
 		lb.set_item_metadata(k, lid)
 		if lid == st.lifestyle:
 			li = k
@@ -1452,16 +1453,10 @@ func _show_month_start() -> void:
 	hb2.add_child(lb)
 	button(tr("ui.main.next_board.1"), func(): _show_next_board(func(): _show_month_start()))
 	button(tr("ui.main.show_month_start.9"), func(): reply(null))
+	save_load_row()
 	var tabs := TabContainer.new()
 	tabs.custom_minimum_size = Vector2(0, 520)
 	body.add_child(tabs)
-	var t2 := ScrollContainer.new()
-	t2.name = tr("ui.main.show_month_start.10")
-	t2.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	tabs.add_child(t2)
-	street_box = VBoxContainer.new()
-	street_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	t2.add_child(street_box)
 	var t_inv := ScrollContainer.new()
 	t_inv.name = tr("ui.main.show_month_start.11")
 	t_inv.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
@@ -1484,7 +1479,7 @@ func _show_month_start() -> void:
 	var sbox := VBoxContainer.new()
 	sbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	t3.add_child(sbox)
-	_fill_street()
+	_fill_inventory()
 	_fill_status(sbox)
 
 
@@ -1530,22 +1525,51 @@ func _show_map(i: int) -> void:
 	bg.color = Color(0.16, 0.26, 0.2)
 	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
 	map.add_child(bg)
-	for L in d.map_locations:
+	var places: Array = d.map_locations.duplicate()
+	if int(st.flags.get("dealer_stock", 0)) > 0:      # the dealer is in town this month (user: an extra place on the map)
+		places.append({"id": "loc_dealer", "pos": [680, 220], "size": [200, 80]})
+	for L in places:
 		var b := Button.new()
-		b.text = "%s\n%s" % [nm(L["id"]), str(L["hint"])]
+		b.text = "%s\n%s" % [nm(L["id"]) if L["id"] != "loc_dealer" else tr("ui.main.dealer.1"), loc_hint(L)]
 		b.position = Vector2(L["pos"][0], L["pos"][1])
 		b.size = Vector2(L["size"][0], L["size"][1])
 		b.clip_text = true
 		var ll: String = L["id"]
 		b.pressed.connect(func(): _show_location(i, ll))
 		map.add_child(b)
+	free_box = null
+	free_kind = ""
+	dose_button(body)
 	button(tr("ui.main.show_map.3"), func(): _show_inventory(i))
 	button(tr("ui.main.next_board.1"), func(): _show_next_board(func(): _show_map(i)))
+	save_load_row()
+
+
+## The line under a place's name on the map: what can be done there now (jobs not open yet are left out, user), then its shops.
+func loc_hint(L: Dictionary) -> String:
+	if L["id"] == "loc_dealer":
+		return tr("ui.main.dealer.2")
+	var parts := PackedStringArray()
+	for e in loc_entries(L["id"]):
+		var pe := Schedule.parse_entry(e)
+		var n: String = nm(pe[2]) if pe[2] != null else nm(pe[1])
+		parts.append(n.split(tr("ui.main.loc_hint.1"))[0])
+	for sh in L.get("shops", []):
+		parts.append(nm(sh))
+	return tr("ui.main.loc_hint.2").join(parts)
 
 
 func _show_location(i: int, loc: String) -> void:
 	fx.cue("location_open", {"location": loc})
 	clear_body()
+	if loc == "loc_dealer":
+		heading(tr("ui.main.fill_street.26"))
+		button(tr("ui.main.show_location.2"), func(): _show_map(i))
+		free_box = VBoxContainer.new()
+		body.add_child(free_box)
+		free_kind = "dealer"
+		_fill_street()
+		return
 	var info: Dictionary = loc_info(loc)
 	heading(tr("ui.main.show_location.1") % [st.date(), [tr("ui.period.early"), tr("ui.period.mid"), tr("ui.period.late")][i], nm(loc)])
 	button(tr("ui.main.show_location.2"), func(): _show_map(i))
@@ -1574,6 +1598,10 @@ func _show_location(i: int, loc: String) -> void:
 	if info.get("extra") == "city":
 		_city_extras(i)
 	elif info.get("extra") == "home":
+		free_box = VBoxContainer.new()
+		body.add_child(free_box)
+		free_kind = "home"
+		_fill_street()
 		_home_extras()
 	elif not any:
 		label(tr("ui.main.show_location.7"))
@@ -1702,25 +1730,44 @@ func _fill_inventory() -> void:
 	v.build(self, Callable(self, "_fill_street"))
 
 
+## The free actions (no period) of the place page that is open (user: no street tab on the month start page any more):
+## home = talk with Sil, detox, news leak; dealer = buy doses and take one before this period.
 func _fill_street() -> void:
 	_fill_inventory()
-	for c in street_box.get_children():
+	if free_box == null or not is_instance_valid(free_box):
+		return
+	for c in free_box.get_children():
 		c.queue_free()
-	var box := street_box
+	var box := free_box
 	street_msg = label("", box, Color(0.6, 1, 0.6))
-	label(tr("ui.main.fill_street.1") % st.money, box)
-	heading(tr("ui.main.fill_street.13"), box)
-	var hint := Street.sil_hint(st)
-	label(tr("ui.main.fill_street.14") + _hint_text(hint), box)
-	if st.drug >= 1:
-		heading(tr("ui.main.fill_street.21"), box)
-		button(tr("ui.main.fill_street.22"), func(): act(g.hooks.send_detox(st), tr("ui.main.fill_street.23")), box)
-	if Schedule.truthy(st.flags.get("leak_news")):
-		button(tr("ui.main.fill_street.24"), func(): act(g.hooks.leak_news(st), tr("ui.main.fill_street.25")), box)
-	if int(st.flags.get("dealer_stock", 0)) > 0:
-		heading(tr("ui.main.fill_street.26"), box)
-		label(tr("ui.main.fill_street.27") % [int(st.flags["dealer_stock"]), int(st.flags["dealer_price"]), int(st.flags.get("drug_stock", 0))], box)
-		button(tr("ui.main.fill_street.28"), func(): act(g.hooks.buy_drug(st, 1), tr("ui.main.fill_street.29")), box)
+	if free_kind == "home":
+		heading(tr("ui.main.fill_street.13"), box)
+		label(tr("ui.main.fill_street.14") + _hint_text(Street.sil_hint(st)), box)
+		if st.drug >= 1:
+			button(tr("ui.main.fill_street.22"), func(): act(g.hooks.send_detox(st), tr("ui.main.fill_street.23")), box)
+		if Schedule.truthy(st.flags.get("leak_news")):
+			button(tr("ui.main.fill_street.24"), func(): act(g.hooks.leak_news(st), tr("ui.main.fill_street.25")), box)
+	elif free_kind == "dealer":
+		label(tr("ui.main.fill_street.1") % st.money, box)
+		label(tr("ui.main.fill_street.27") % [int(st.flags.get("dealer_stock", 0)), int(st.flags.get("dealer_price", 0)), int(st.flags.get("drug_stock", 0))], box)
+		if int(st.flags.get("dealer_stock", 0)) > 0:
+			button(tr("ui.main.fill_street.28"), func(): act(g.hooks.buy_drug(st, 1), tr("ui.main.fill_street.29")), box)
+		dose_button(box)
+
+
+## Take a dose before the period being picked (user: no question before every period; it is chosen on the map).
+func dose_button(box) -> void:
+	var stock := int(st.flags.get("drug_stock", 0))
+	if stock <= 0:
+		return
+	if boost_pick == cur_period_hint:
+		label(tr("ui.main.dose.2"), box, Color(1, 0.85, 0.4))
+	elif Events.boost_reason(st, cur_period_hint) == "":
+		button(tr("ui.main.dose.1") % stock, func():
+			boost_pick = cur_period_hint
+			_fill_street()
+			if free_kind == "":
+				_show_map(cur_period_hint), box)
 
 
 func _hint_text(h: Array) -> String:
@@ -1790,6 +1837,7 @@ func _show_summary() -> void:
 			label(tr("ui.main.show_summary.10") % [f["roles"]["name"], size_name(f["size"]), band_name(str(r.get("band", ""))), int(r["rep_bonus"]), nm(f["roles"]["road"])],
 				null, Color(1, 0.5, 0.5) if int(r["rep_bonus"]) < 0 else Color(0.6, 1, 0.6))
 	button(tr("ui.main.show_summary.7") if st.finished else tr("ui.main.show_summary.9"), func(): reply(null))
+	save_load_row()
 
 
 func _show_ending() -> void:

@@ -1,5 +1,5 @@
 {
- "note": "Charged at the start of the month (same at every fame tier, from the original diets, 2G = $1); money cannot go below 0; month_end_effect applies at month end",
+ "note": "Charged at the start of the month (same at every fame tier, from the original diets, 2G = $1); money cannot go below 0; month_end_effect applies at month end; three diets (user): the thrift diet was dropped",
  "fame_tier_order": [
   "unknown",
   "familiar",
@@ -32,18 +32,6 @@
     40
    ],
    "month_end_effect": "stamina+10"
-  },
-  {
-   "id": "life_thrift",
-   "name": "节俭",
-   "monthly_cost": [
-    5,
-    5,
-    5,
-    5,
-    5
-   ],
-   "month_end_effect": "stamina-5"
   },
   {
    "id": "life_diet",

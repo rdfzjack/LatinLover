@@ -133,9 +133,15 @@ class UiAgent:
 
 	func before_period(story, st, i: int) -> void:
 		# the activity of this period is picked now, one period at a time (run_month reads plan[i] right after this hook)
-		if story.locked(st, i) == null and not ui.month_forced:
+		# a dose: chosen on the map for this period (user: no question before every period); only a shooting period, which has
+		# no map, still asks, and only when he has a dose in hand
+		var picked := false
+		var shooting: bool = story.locked(st, i) != null
+		if not shooting and not ui.month_forced:
 			ui.cur_plan[i] = ui.ask("pick_period", i)
-		if Events.boost_reason(st, i) == "" and ui.ask("boost", i):
+			picked = ui.boost_pick == i
+		ui.boost_pick = -1
+		if Events.boost_reason(st, i) == "" and (picked or (shooting and ui.ask("boost", i))):
 			var why: String = story.boost(st, i)
 			if why != "":
 				ui.note(tr("ui.story.before_period.1") + why)
