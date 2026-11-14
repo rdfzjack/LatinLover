@@ -2,6 +2,92 @@
 
 ## 现在
 
+### 第 2 步第三轮：新的结局判定，每个 50 局（2026-11）
+
+这一轮改了：沙龙审美 0–2/0–2/0–3/0–4；档次取一路声望、名气、四路之和、黑道里最高的一档；总分不再减犯罪。
+
+```
+-- type 1: main road only, stopped when its three skills are trained to 100
+bot              full at (median, p10-p90)   share of 72 months | money then | periods class/job/rest | not full
+full_tough       1927-04 (35-44)                 56%           |    267     | 24/60/25               | 0 of 50
+full_lover       1928-10 (55-59)                 81%           |  10391     | 8/86/58               | 0 of 50
+full_culture     1926-08 (27-36)                 44%           |    296     | 12/54/22               | 0 of 50
+full_savvy       1925-04 (15-18)                 22%           |    859     | 0/35/7               | 0 of 50
+-- type 2: whole games
+bot                    total p50 (p10-p90) | grade S/A/B/C/D % | category % | reps T/L/C/S p50 | top base attr | fame p50 | money p50 | leads s/m/b, support | hit/flop | arrest | collapse
+main_savvy_tough         430 (404-469) | 0/8/92/0/0 | tough 72%, actor 28% | 361/67/62/300 | loyalty 207 (76%) | 243 | 3896 | 9.8/5.3/0.0, 0.6 | 0.0/3.0 | 0.0 | 0%
+main_savvy_lover         506 (492-618) | 2/32/66/0/0 | actor 94%, lover 6% | 0/357/96/326 | loyalty 320 (98%) | 402 | 14837 | 6.2/11.5/0.1, 0.7 | 0.8/3.0 | 0.0 | 0%
+main_savvy_culture       395 (386-411) | 0/2/98/0/0 | culture 82%, actor 18% | 0/132/352/286 | looks 144 (100%) | 243 | 8697 | 10.6/6.6/0.0, 0.8 | 0.0/4.8 | 0.0 | 0%
+main_savvy_savvy         460 (444-586) | 4/36/60/0/0 | actor 92%, savvy 6% | 0/344/102/354 | looks 252 (100%) | 412 | 7021 | 8.1/11.5/0.1, 0.7 | 0.9/2.5 | 0.0 | 0%
+lover_side_first         556 (536-668) | 2/36/62/0/0 | actor 96%, savvy 4% | 0/315/0/346 | loyalty 425 (100%) | 431 | 15859 | 3.5/14.7/0.2, 1.2 | 1.0/4.7 | 0.0 | 0%
+big_only_tough           430 (404-473) | 0/10/90/0/0 | tough 72%, actor 28% | 361/67/62/300 | loyalty 207 (76%) | 243 | 3852 | 9.9/5.3/0.0, 0.6 | 0.0/3.0 | 0.0 | 0%
+big_only_lover           505 (492-617) | 2/28/70/0/0 | actor 94%, lover 6% | 0/357/97/326 | loyalty 323 (98%) | 392 | 14837 | 6.2/11.5/0.0, 0.6 | 0.8/3.0 | 0.0 | 0%
+big_only_culture         395 (386-411) | 0/2/98/0/0 | culture 82%, actor 18% | 0/132/352/286 | looks 144 (100%) | 243 | 8697 | 10.6/6.6/0.0, 0.8 | 0.0/4.8 | 0.0 | 0%
+big_only_savvy           461 (444-581) | 6/30/64/0/0 | actor 92%, savvy 6% | 0/344/102/352 | looks 252 (100%) | 402 | 7021 | 8.1/11.7/0.0, 0.5 | 0.9/2.6 | 0.0 | 0%
+gear_max_tough           422 (399-460) | 0/6/94/0/0 | tough 70%, actor 30% | 355/62/61/308 | loyalty 180 (74%) | 266 | 2676 | 9.5/5.8/0.0, 0.8 | 0.0/3.1 | 0.0 | 0%
+gear_max_lover           507 (491-615) | 0/32/68/0/0 | actor 90%, lover 8% | 0/362/88/320 | loyalty 328 (100%) | 392 | 14766 | 6.1/10.9/0.0, 0.8 | 0.9/2.5 | 0.0 | 0%
+gear_max_culture         398 (388-413) | 0/2/96/2/0 | culture 78%, actor 22% | 0/138/350/282 | looks 144 (100%) | 268 | 9416 | 10.1/7.9/0.0, 0.9 | 0.0/5.3 | 0.0 | 0%
+gear_max_savvy           459 (439-578) | 2/26/72/0/0 | actor 90%, savvy 8% | 0/344/110/356 | looks 251 (100%) | 393 | 6827 | 7.9/11.3/0.1, 0.6 | 0.9/2.3 | 0.0 | 0%
+four_color_stamina       387 (380-428) | 0/6/94/0/0 | savvy 98%, actor 2% | 159/213/178/341 | stamina 349 (100%) | 91 | 556 | 4.6/4.0/0.0, 0.1 | 0.0/1.4 | 0.0 | 0%
+four_color_discipline    621 (507-664) | 8/42/50/0/0 | actor 96%, savvy 4% | 131/332/255/353 | discipline 340 (100%) | 447 | 2516 | 8.2/12.7/0.1, 0.5 | 1.1/2.9 | 0.0 | 0%
+literate_tough           544 (448-557) | 0/66/32/2/0 | dark 66%, tough 34% | 341/88/102/0 | crime 512 (98%) | 182 | 985 | 11.6/2.4/0.0, 0.7 | 0.0/3.2 | 4.1 | 0%
+gambler_lover            478 (251-530) | 0/10/80/10/0 | actor 62%, savvy 20% | 0/299/93/308 | looks 212 (48%) | 328 | 6966 | 4.8/9.9/0.1, 0.9 | 1.6/3.4 | 0.0 | 10%
+gambler_tough            416 (391-452) | 0/4/96/0/0 | tough 82%, actor 18% | 352/82/63/292 | loyalty 183 (66%) | 240 | 2645 | 10.2/4.5/0.0, 0.6 | 0.3/2.7 | 0.0 | 0%
+hoard_baptize_lover      713 (668-803) | 0/34/64/2/0 | actor 86%, lover 10% | 0/351/95/314 | discipline 337 (82%) | 403 | 11378 | 6.0/10.3/0.1, 1.0 | 2.2/3.5 | 0.0 | 0%
+pious_lender             510 (495-530) | 0/0/98/2/0 | tough 100% | 340/84/106/3 | discipline 544 (100%) | 174 | 533 | 12.0/2.1/0.0, 0.5 | 0.0/2.6 | 1.0 | 0%
+sick_beauty              573 (474-592) | 0/74/26/0/0 | actor 62%, dark 38% | 0/293/89/314 | looks 481 (100%) | 328 | 7229 | 4.5/10.8/0.1, 0.6 | 0.4/2.8 | 0.0 | 0%
+flagpole_lover           508 (283-525) | 0/2/72/26/0 | actor 66%, savvy 34% | 2/242/66/304 | loyalty 449 (88%) | 331 | 16158 | 4.2/10.1/0.0, 1.2 | 0.4/3.2 | 0.0 | 0%
+fur_strongman            365 (177-379) | 0/0/88/12/0 | tough 100% | 319/45/55/294 | loyalty 131 (72%) | 128 | 1766 | 8.1/1.4/0.0, 0.0 | 0.0/3.5 | 0.0 | 0%
+-- grade and the axis that gave it (rep / fame / rep_sum / dark)
+main_savvy_tough       B:rep 92%, A:rep 8%
+main_savvy_lover       B:rep 66%, A:rep 20%, A:fame 12%, S:fame 2%
+main_savvy_culture     B:rep 98%, A:rep 2%
+main_savvy_savvy       B:rep 60%, A:fame 26%, A:rep 10%, S:fame 4%
+lover_side_first       B:rep 62%, A:fame 32%, A:rep 4%, S:fame 2%
+big_only_tough         B:rep 90%, A:rep 10%
+big_only_lover         B:rep 70%, A:fame 14%, A:rep 14%, S:fame 2%
+big_only_culture       B:rep 98%, A:rep 2%
+big_only_savvy         B:rep 64%, A:fame 24%, A:rep 6%, S:fame 6%
+gear_max_tough         B:rep 94%, A:rep 6%
+gear_max_lover         B:rep 68%, A:rep 18%, A:fame 14%
+gear_max_culture       B:rep 96%, A:rep 2%, C:rep 2%
+gear_max_savvy         B:rep 72%, A:fame 18%, A:rep 8%, S:fame 2%
+four_color_stamina     B:rep 94%, A:rep_sum 4%, A:rep 2%
+four_color_discipline  B:rep 50%, A:fame 34%, S:fame 6%, A:rep 4%
+literate_tough         A:dark 66%, B:rep 32%, C:rep 2%
+gambler_lover          B:rep 58%, B:fame 14%, B: 8%, C:rep 8%
+gambler_tough          B:rep 96%, A:rep 4%
+hoard_baptize_lover    B:rep 60%, A:rep 26%, A:fame 8%, B:fame 4%
+pious_lender           B:rep 98%, C:rep 2%
+sick_beauty            A:dark 74%, B:dark 14%, B:fame 12%
+flagpole_lover         B:fame 36%, B:rep 36%, C:rep 26%, A:rep 2%
+fur_strongman          B:rep 88%, C:rep 12%
+-- most common endings
+main_savvy_tough       tough_thug 72%, act_action 20%, act_lover 4%, act_lowbudget 4%
+main_savvy_lover       act_voice 50%, act_lover 42%, lover_widow 6%, act_legend 2%
+main_savvy_culture     cult_tabloid 82%, act_lover 8%, act_voice 6%, act_lowbudget 4%
+main_savvy_savvy       act_voice 48%, act_lover 38%, biz_broker 6%, act_legend 4%
+lover_side_first       act_lover 92%, biz_broker 4%, act_action 2%, act_legend 2%
+big_only_tough         tough_thug 72%, act_action 20%, act_lover 4%, act_lowbudget 4%
+big_only_lover         act_voice 48%, act_lover 44%, lover_widow 6%, act_legend 2%
+big_only_culture       cult_tabloid 82%, act_lover 8%, act_voice 6%, act_lowbudget 4%
+big_only_savvy         act_voice 48%, act_lover 36%, act_legend 6%, biz_broker 6%
+gear_max_tough         tough_thug 70%, act_action 24%, act_lowbudget 4%, act_voice 2%
+gear_max_lover         act_voice 50%, act_lover 40%, lover_widow 8%, biz_broker 2%
+gear_max_culture       cult_tabloid 76%, act_lover 10%, act_voice 6%, act_lowbudget 4%
+gear_max_savvy         act_lover 48%, act_voice 40%, biz_broker 8%, act_legend 2%
+four_color_stamina     biz_broker 92%, biz_agent 6%, act_character 2%
+four_color_discipline  act_voice 54%, act_lover 32%, act_legend 8%, biz_broker 4%
+literate_tough         dark_thug_boss 66%, tough_rider 30%, tough_gym 2%, tough_stunt 2%
+gambler_lover          act_lover 38%, act_voice 24%, biz_broker 12%, end_collapse 10%
+gambler_tough          tough_thug 82%, act_action 10%, act_lowbudget 6%, act_character 2%
+hoard_baptize_lover    act_lover 44%, act_voice 40%, lover_widow 10%, act_lowbudget 2%
+pious_lender           tough_rider 94%, tough_stunt 4%, tough_gym 2%
+sick_beauty            act_lover 60%, dark_marry 38%, act_voice 2%
+flagpole_lover         act_lover 66%, biz_boss 26%, biz_broker 8%
+fur_strongman          tough_thug 100%
+```
+
 ### 第 2 步第二轮：每个 50 局（2026-11）
 
 这一轮改了：服务员改回谈吐 0·1（原来谈判或洞悉）；片场打杂改成谈判 0·1 加人缘或洞悉二选一 0·1（原来三项各 0·1）。机器人修了皮草壮汉（攒钱买皮草、化妆箱、奴隶手镯，相貌低时节食、不去码头）和病美人（只在已经生病的月份做楼上房间）。
