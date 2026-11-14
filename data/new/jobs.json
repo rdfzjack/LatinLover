@@ -140,7 +140,7 @@
       1,
       1
      ],
-     "while_below": 150
+     "while_below": 450
     },
     {
      "stat": "stamina",
@@ -162,7 +162,7 @@
    "job_period_effect": null,
    "period_random": [],
    "milestones": [],
-   "note": "User (2026-11): the only job that gives fame: +1 per successful day, only while fame < 150 (no education loss now). Site, open month and success line are placeholders"
+   "note": "User (2026-11): the only job that gives fame: +1 per successful day, only while fame < 450 (test value, user 2026-11) (no education loss now). Site, open month and success line are placeholders"
   },
   {
    "id": "job_server",
