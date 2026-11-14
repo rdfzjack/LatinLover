@@ -31,7 +31,7 @@ ui.audition.show_play.2,本场场风：%s　（%s色的牌 ×%d%%，且不受克
 ui.audition.show_play.3,第 %d 轮：你 %s　对手 %s　→ %d : %d　%s,
 ui.audition.show_play.4,你赢,
 ui.audition.show_play.5,你输,
-ui.audition.show_play.6,对手手里还有 %d 张牌（扣着）：%s,
+ui.audition.show_play.6,对手手里还有 %d 张牌（亮着）：,
 ui.audition.show_play.7,你的手牌，点一张打出去：,
 ui.audition.show_play.8,"%s
 %d 点",

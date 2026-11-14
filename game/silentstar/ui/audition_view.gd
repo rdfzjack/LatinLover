@@ -107,8 +107,15 @@ func show_play(main, ctx: Dictionary) -> void:
 		var v: Array = Audition.effective(d, h[0], h[1], field)
 		m.label(tr("ui.audition.show_play.3") % [n, _card_btn(h[0]), _card_btn(h[1]), v[0], v[1], tr("ui.audition.show_play.4") if h[2] else tr("ui.audition.show_play.5")], self, Color(0.75, 0.75, 0.75))
 		n += 1
-	var rr: int = ctx["rival_hand"].size()
-	m.label(tr("ui.audition.show_play.6") % [rr, "  ".join(PackedStringArray(Array(range(rr)).map(func(_x): return "▮")))], self)
+	# GDD 7.1 step 3: both hands are face up; the rival's remaining cards are shown with color and number
+	var rival_hand: Array = ctx["rival_hand"]
+	m.label(tr("ui.audition.show_play.6") % rival_hand.size(), self)
+	var orow := HBoxContainer.new()
+	add_child(orow)
+	for oc in rival_hand:
+		var ol = m.label(_card_btn(oc), orow)
+		ol.custom_minimum_size = Vector2(130, 0)
+		ol.modulate = COLORS[oc[0]]
 	m.label(tr("ui.audition.show_play.7"), self)
 	var hand: Array = ctx["hand"]
 	var row := HBoxContainer.new()
