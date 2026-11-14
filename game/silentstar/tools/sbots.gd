@@ -19,7 +19,7 @@ const H = Bots.H
 
 ## Main-road training: [skill, entries that train it, best first].
 const ROAD_GOALS := {
-	"tough": [["fight", ["class_h1"]], ["riding", ["class_h2"]], ["nerve", ["class_h1", "job_collector"]]],
+	"tough": [["fight", ["class_h1"]], ["riding", ["class_h2"]], ["nerve", ["class_h1"]]],
 	"lover": [["acting", ["class_l1"]], ["physique", ["class_l3"]], ["grooming", ["job_l_night"]]],
 	"culture": [["writing", ["class_c1"]], ["taste", ["class_c1"]], ["speech", ["job_server", "class_c3", "job_collector"]]],
 	"savvy": [["negotiation", ["job_runner"]], ["rapport", ["job_runner"]], ["insight", ["job_runner"]]],
@@ -394,7 +394,7 @@ class LiterateTough:
 		setup_road("tough", "literate_tough")
 		goal_list = [{"stat": "fight", "to": 100, "via": ["class_h1"]}, {"stat": "discipline", "to": 90, "via": ["job_church_aid"]},
 			{"stat": "education", "to": 150, "via": ["class_c3"]},
-			{"stat": "riding", "to": 100, "via": ["class_h2"]}, {"stat": "nerve", "to": 100, "via": ["job_collector", "class_h1"]},
+			{"stat": "riding", "to": 100, "via": ["class_h2"]}, {"stat": "nerve", "to": 100, "via": ["class_h1"]},
 			{"stat": "speech", "to": 70, "via": ["job_collector", "class_c3"]}]
 		money_jobs = ["job_loan", "job_collector", "job_dock1"]
 
@@ -625,6 +625,17 @@ class FurStrongman:
 		return goal_list
 
 
+## 13. Tough guy who learns speech for the talkies (speech 70) after his road is full, either waiting tables (speech, but fight
+## -0/1 a day) or collecting debts (fight and speech, but looks -1 a day): setup argument "server" or "collector".
+class ToughSpeech:
+	extends MainSavvy
+
+	func setup(rd: String) -> void:
+		super("tough")
+		name = "tough_speech_" + rd
+		goal_list = road_goals("tough") + [{"stat": "speech", "to": 70, "via": ["job_" + rd]}] + road_goals("savvy")
+
+
 ## name -> [class, setup argument]. Type 1 first.
 const TYPE1 := ["full_tough", "full_lover", "full_culture", "full_savvy"]
 static func all_bots() -> Dictionary:
@@ -648,6 +659,8 @@ static func all_bots() -> Dictionary:
 	b["sick_beauty"] = [SickBeauty, "lover"]
 	b["flagpole_lover"] = [Flagpole, "lover"]
 	b["fur_strongman"] = [FurStrongman, "tough"]
+	b["tough_speech_server"] = [ToughSpeech, "server"]
+	b["tough_speech_collector"] = [ToughSpeech, "collector"]
 	return b
 
 

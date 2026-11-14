@@ -492,7 +492,7 @@
    ],
    "daily_effect": [
     {
-     "stat": "nerve",
+     "stat": "fight",
      "add": [
       0,
       1
@@ -539,7 +539,7 @@
    "job_period_effect": null,
    "period_random": [],
    "milestones": [],
-   "note": "User (2026-11): nerve and speech instead of fight (the literate tough guy: speech for the talkie line). The low wage is on purpose, do not raise it."
+   "note": "User (2026-11): fight and speech (fight like the original hunting ground; speech for the literate tough guy and the talkie line). The low wage is on purpose, do not raise it."
   },
   {
    "id": "job_loan",
@@ -719,13 +719,6 @@
    ],
    "daily_effect": [
     {
-     "stat": "writing",
-     "add": [
-      0,
-      1
-     ]
-    },
-    {
      "stat": "discipline",
      "add": [
       1,
@@ -752,7 +745,7 @@
    "job_period_effect": null,
    "period_random": [],
    "milestones": [],
-   "note": "original motherhood +N has no counterpart User (2026-11): writing 0-1 per day; education 120 is the gate and the daily success line (the literacy line); opens 1924-10, held back by the gate."
+   "note": "User (2026-11): pays only, no skill (like the original tutor job), so writing comes only from the salon and the salon cannot be skipped; education 120 is the gate and the daily success line; opens 1924-10, held back by the gate."
   },
   {
    "id": "job_l_day",

@@ -55,6 +55,22 @@ func _init() -> void:
 		print("bot                    total p50 (p10-p90) | grade S/A/B/C/D % | category % | reps T/L/C/S p50 | top base attr | fame p50 | money p50 | leads s/m/b, support | hit/flop | arrest | collapse")
 		for x in t2:
 			print(x)
+		print("-- money over the game, median: all income = film fees + release dividends + the rest (jobs and other) | final speech")
+		for nm in names:
+			if SBots.TYPE1.has(nm):
+				continue
+			var inc := []
+			var fe := []
+			var dv := []
+			var rest := []
+			var sp := []
+			for r in dump[nm]:
+				inc.append(r["income"])
+				fe.append(r["fee"])
+				dv.append(r["dividend"])
+				rest.append(r["income"] - r["fee"] - r["dividend"])
+				sp.append(r["speech"])
+			print("%-22s %6d = fees %6d + dividends %6d + jobs/other %6d | speech %d" % [nm, med(inc), med(fe), med(dv), med(rest), med(sp)])
 		print("-- grade and the axis that gave it (rep / fame / rep_sum / dark)")
 		for nm in names:
 			if SBots.TYPE1.has(nm):
@@ -112,6 +128,17 @@ func play(spec, sd: int, d) -> Dictionary:
 			top = a
 	rec["top_attr"] = top
 	rec["top_attr_v"] = st.val(top)
+	var fee := 0
+	var div := 0
+	for f in st.story["films"]:
+		if f.get("fee") != null:
+			fee += int(f["fee"])
+		if f.get("result") != null:
+			div += int(f["result"].get("dividend", 0))
+	rec["income"] = int(st.src.get("income", 0))
+	rec["fee"] = fee
+	rec["dividend"] = div
+	rec["speech"] = st.skill["speech"]
 	for k in ["count.lead.small", "count.lead.medium", "count.lead.big", "count.support", "count.hit", "count.flop",
 			"count.arrest", "count.hospital", "count.boost", "count.divine", "count.slack"]:
 		rec[k.substr(6)] = c.get(k, 0)
