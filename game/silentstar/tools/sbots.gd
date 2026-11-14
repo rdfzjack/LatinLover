@@ -638,6 +638,49 @@ class ToughSpeech:
 		goal_list = road_goals("tough") + [{"stat": "speech", "to": 70, "via": ["job_" + rd]}] + road_goals("savvy")
 
 
+
+## 14. Education-main writer with lover second (the user's play, 2026-11): tutoring to education 150 (church to discipline 90 first
+## so tutoring sticks), then the culture road, then the lover road. Earns with the fan-magazine column.
+class WriterLover:
+	extends SBot
+
+	func setup(_rd: String) -> void:
+		setup_road("culture", "writer_lover")
+		goal_list = [{"stat": "discipline", "to": 90, "via": ["job_church_aid"]}, {"stat": "education", "to": 150, "via": ["class_c3"]}] \
+			+ road_goals("culture") + road_goals("lover")
+
+
+## 15. Flagpole to big-film fame (the user's play, 2026-11): every period on the flagpole until fame reaches `fame_to`, then
+## tough, savvy and lover trained full in that order. Board picks follow the usual thresholds.
+class FlagpoleBig:
+	extends SBot
+
+	var fame_to := 340
+
+	func setup(rd: String) -> void:
+		fame_to = int(rd)
+		setup_road("tough", "flagpole_big_" + rd)
+		goal_list = road_goals("tough") + road_goals("savvy") + road_goals("lover")
+
+	func choose(g, P: Dictionary, i: int):
+		var st = g.st
+		if st.attr["fame"] < fame_to and H.can_do_job(st, "job_flagpole"):
+			return "job_flagpole"
+		return super(g, P, i)
+
+
+## 16. Crime boss: tough main + savvy, all money from crime jobs (bootlegging, then moneylending; the upstairs rooms when his looks
+## allow), never the church. Measures whether the month-end search and the arrest fire.
+class CrimeBoss:
+	extends MainSavvy
+
+	func setup(rd: String) -> void:
+		super("tough")
+		name = "crime_boss"
+		crime_ok = true
+		money_jobs = ["job_loan", "job_l_late", "job_dock2", "job_collector", "job_dock1"]
+
+
 ## name -> [class, setup argument]. Type 1 first.
 const TYPE1 := ["full_tough", "full_lover", "full_culture", "full_savvy"]
 static func all_bots() -> Dictionary:
@@ -663,6 +706,10 @@ static func all_bots() -> Dictionary:
 	b["fur_strongman"] = [FurStrongman, "tough"]
 	b["tough_speech_server"] = [ToughSpeech, "server"]
 	b["tough_speech_collector"] = [ToughSpeech, "collector"]
+	b["writer_lover"] = [WriterLover, ""]
+	b["flagpole_big_300"] = [FlagpoleBig, "300"]
+	b["flagpole_big_400"] = [FlagpoleBig, "400"]
+	b["crime_boss"] = [CrimeBoss, "tough"]
 	return b
 
 
