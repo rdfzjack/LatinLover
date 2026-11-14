@@ -21,7 +21,7 @@ const H = Bots.H
 const ROAD_GOALS := {
 	"tough": [["fight", ["class_h1"]], ["riding", ["class_h2"]], ["nerve", ["class_h1", "job_collector"]]],
 	"lover": [["acting", ["class_l1"]], ["physique", ["class_l3"]], ["grooming", ["job_l_night"]]],
-	"culture": [["writing", ["class_c1"]], ["taste", ["class_c1"]], ["speech", ["class_c3", "job_collector"]]],
+	"culture": [["writing", ["class_c1"]], ["taste", ["class_c1"]], ["speech", ["job_server", "class_c3", "job_collector"]]],
 	"savvy": [["negotiation", ["job_runner"]], ["rapport", ["job_runner"]], ["insight", ["job_runner"]]],
 }
 ## Jobs to earn with, first doable wins (no crime jobs here).
@@ -47,7 +47,8 @@ class SBot:
 	var gear_reserve := 200        # money kept on top of two months of living costs when buying gear
 	var gear_months := 2
 	var stop_when_full := false    # type-1 bots: the report stops the game when the main road is full
-	var ignore_looks := false      # fur strongman: keeps working the dock (looks fixed with the fur and the acting class)
+	var ignore_looks := false      # fur strongman: no acting class for looks (his outfit set and the diet carry them)
+	var looks_floor := 80          # money jobs that cost looks are avoided while displayed looks are under this
 
 	func _init(sd := 1) -> void:
 		super(sd)
@@ -118,7 +119,7 @@ class SBot:
 	func choose(g, P: Dictionary, i: int):
 		var st = g.st
 		var gs: Array = goals(g, P, i)
-		if st.val("looks") < 62:
+		if st.val("looks") < 62 and not ignore_looks:
 			gs = [{"stat": "looks", "to": st.attr["looks"] + 1, "via": ["class_l1"]}] + gs
 		for gl in gs:
 			if reached(st, gl):
@@ -161,12 +162,12 @@ class SBot:
 	static func is_crime(d, jid: String) -> bool:
 		return Schedule.truthy(d.jobs[jid].get("crime_job"))
 
-	## Money: the bot's own list first, else the best wage minus fatigue. With looks under 80 jobs that cost looks are avoided
+	## Money: the bot's own list first, else the best wage minus fatigue. With looks under looks_floor jobs that cost looks are avoided
 	## (looks under 60 bars auditions).
 	func money_job(g, _P: Dictionary):
 		var st = g.st
 		var d = g.d
-		var low: bool = st.val("looks") < 80 and not ignore_looks
+		var low: bool = st.val("looks") < looks_floor
 		for jid in money_jobs:
 			if H.can_do_job(st, jid) and not (low and costs_looks(d, jid)):
 				return jid
@@ -496,8 +497,10 @@ class HoardBaptize:
 			story.boost(st, i)
 
 
-## 10. Sick beauty: lover main + savvy; diet keeps stamina low; from 1927-10 the upstairs rooms every period he can, kept in the
-## sick state (sick players are never arrested) with the hospital at month start (it can be used any number of times a month).
+## 10. Sick beauty: lover main + savvy; diet keeps stamina low; from 1927-10 he works the upstairs rooms only in months that
+## start in the sick state (the search at month end reads the sick state of the last month end, and sick players are never
+## arrested); in a month that starts healthy he works ordinary jobs without resting so that the month ends sick. The hospital
+## at month start (any number of times a month) keeps the month-end sick index under 85 (90 is the sanatorium).
 class SickBeauty:
 	extends MainSavvy
 
@@ -511,26 +514,31 @@ class SickBeauty:
 	func month_start(story, st) -> void:
 		super(story, st)
 		if st.ym >= LATE_FROM - 3:
-			story_lifestyle(st)
+			st.lifestyle = "life_diet" if st.val("stamina") > 40 else "life_normal"
 		if st.ym >= LATE_FROM:
-			# hospital until three periods of the rooms would end the month at a sick index under 85
 			var guard := 0
-			while Schedule.truthy(st.status["sick"]) and st.val("fatigue") + 3 * 96 - st.val("stamina") >= 85 and guard < 10:
+			while Schedule.truthy(st.status["sick"]) and st.val("fatigue") + 3 * 96 - st.val("stamina") >= 80 and guard < 10:
 				if Street.hospital(st) != "":
 					break
 				st.inc("count.hospital")
 				guard += 1
 
-	func story_lifestyle(st) -> void:
-		var want := "life_diet" if st.val("stamina") > 40 else "life_normal"
-		st.lifestyle = want
-
 	func choose(g, P: Dictionary, i: int):
-		if g.st.ym >= LATE_FROM and H.can_do_job(g.st, "job_l_late", 0):
+		var st = g.st
+		if st.ym >= LATE_FROM and Schedule.truthy(st.status["sick"]) and H.can_do_job(st, "job_l_late", 0):
 			return "job_l_late"
-		return super(g, P, i)
+		var e = super(g, P, i)
+		if e != null and g.d.jobs.has(e) and is_crime(g.d, e):
+			return money_job_safe(g)
+		return e
 
-	## After 1927-10 the only rest rule is the sick index at month end: under 90 (very sick sends him to the sanatorium).
+	func money_job_safe(g):
+		crime_ok = false
+		var e = money_job(g, {})
+		crime_ok = true
+		return e
+
+	## After 1927-10: rest only to keep the month-end sick index under 85; never rest a healthy month (it must end sick).
 	func needs_rest(g, P: Dictionary, i: int, e: String) -> bool:
 		if g.st.ym < LATE_FROM:
 			return super(g, P, i, e)
@@ -556,20 +564,65 @@ class Flagpole:
 		return super(g, P, i)
 
 
-## 12. Fur strongman: tough main + savvy, but the last period of every month at the dock (stamina and money; looks fall to 0);
-## keeps auditioning with a white fur (keep_looks buys it when nothing cheaper reaches looks 60).
+## 12. Fur strongman (the user's recipe): tough main + savvy, the last period of every month at the dock (stamina and money;
+## looks fall to 0). He saves for the white fur, the makeup case (grooming +5 lifts the fur's outfit bonus) and the slave
+## bracelet (looks +20), wears fur and bracelet whenever looks are under 60, and diets while looks are low and stamina is above 60. No acting
+## class for looks; dock work (looks -1 a day) is skipped while displayed looks are under 63, so the diet can lift them.
 class FurStrongman:
 	extends MainSavvy
+
+	const SET := [["fur_white", "clothing_store"], ["makeup_case", "general_store"], ["slave_bracelet", "clothing_store"]]
 
 	func setup(rd: String) -> void:
 		super("tough")
 		name = "fur_strongman"
 		ignore_looks = true
+		looks_floor = 63
+
+	func month_start(_story, st) -> void:
+		# diet (looks +3, stamina -20 a month) while looks need it; always dieting starves him (stamina 0 by autumn 1924)
+		st.lifestyle = "life_diet" if st.val("looks") < 66 and st.val("stamina") > 60 else "life_normal"
+		var all_set := true
+		for x in SET:
+			if st.items.has(x[0]):
+				continue
+			var p: int = Street.price(st, x[1], st.d.items[x[0]]["price"])
+			if st.money - p >= living(st) and Street.buy(st, x[1], x[0]) == "":
+				st.inc("count.fur_set_buy")
+			else:
+				all_set = false
+				break
+		if all_set:
+			buy_gear(st)
+		wear_set(st)
+
+	## Fur as the outfit and the bracelet in an accessory slot whenever looks are under 60 without them.
+	func wear_set(st) -> void:
+		if st.val("looks") >= 60:
+			return
+		if st.items.has("fur_white"):
+			st.equip["outfit"] = "fur_white"
+		if st.items.has("slave_bracelet") and not st.equip["accessory"].has("slave_bracelet"):
+			if st.equip["accessory"].size() >= int(st.d.t["items"]["rules"]["accessory_slots"]):
+				st.equip["accessory"].pop_back()
+			st.equip["accessory"].append("slave_bracelet")
 
 	func choose(g, P: Dictionary, i: int):
-		if i == 2 and H.can_do_job(g.st, "job_dock1"):
+		var st = g.st
+		if i == 2 and H.can_do_job(st, "job_dock1") and st.val("looks") >= 63:
 			return "job_dock1"
 		return super(g, P, i)
+
+	## Saves for the fur first: until he owns it, its price is kept on top of the usual reserve before paying tuition.
+	func reserve(st) -> int:
+		var r: int = super(st)
+		if not st.items.has("fur_white"):
+			r += Street.price(st, "clothing_store", st.d.items["fur_white"]["price"])
+		return r
+
+	## No acting class: the set and the diet carry the looks.
+	func goals(g, P: Dictionary, i: int) -> Array:
+		return goal_list
 
 
 ## name -> [class, setup argument]. Type 1 first.

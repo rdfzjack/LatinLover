@@ -65,13 +65,6 @@
    ],
    "daily_effect": [
     {
-     "stat": "rapport",
-     "add": [
-      0,
-      1
-     ]
-    },
-    {
      "stat": "negotiation",
      "add": [
       0,
@@ -79,10 +72,14 @@
      ]
     },
     {
-     "stat": "insight",
+     "stat": "rapport",
      "add": [
       0,
       1
+     ],
+     "one_of": [
+      "rapport",
+      "insight"
      ]
     },
     {
@@ -112,7 +109,7 @@
    "job_period_effect": null,
    "period_random": [],
    "milestones": [],
-   "note": "savvy road: all three skills from one unpaid job; loyalty -1 and discipline -1 (user, 2026-11: loyalty is whether he is a good person; was -3)"
+   "note": "savvy road from one unpaid job: negotiation 0-1, and one of rapport / insight 0-1 per day (user, 2026-11: savvy matured too fast, slowed a little); loyalty -1 and discipline -1"
   },
   {
    "id": "job_flagpole",
@@ -197,14 +194,10 @@
    ],
    "daily_effect": [
     {
-     "stat": "negotiation",
+     "stat": "speech",
      "add": [
       0,
       1
-     ],
-     "one_of": [
-      "negotiation",
-      "insight"
      ]
     },
     {
@@ -234,7 +227,7 @@
    "job_period_effect": null,
    "period_random": [],
    "milestones": [],
-   "note": "one of negotiation / insight per day; physique 0/1 (user, tentative)"
+   "note": "speech 0-1 again (user, 2026-11: culture matured too slowly); physique 0/1 (user, tentative)"
   },
   {
    "id": "job_church_aid",
