@@ -17,6 +17,7 @@
 | `design/DESIGN_NOTES.md` | GDD 里每个 [推N…] 的理由 | 想改某条规则前 |
 | `design/BALANCE_WORKFLOW.md` | 改哪里、加内容／加系统／调平衡各怎么做、事件预算、护栏 | 改规则或调数值前 |
 | `design/BALANCE_LOG.md` | 历次数值调整和报告 | 调数值前 |
+| `design/BOT_BASELINE.md` | 最新一次全量机器人基线（每个打法的策略、结局、名气曲线、拍片、钱、大片卡在哪） | 调大片门槛、名气前 |
 | `design/CHANGE.md` | 用户早期的修改意见 | 查旧意见时 |
 | `design/IMPL_NOTES.md` | 代码结构、接口、GDD 没写到的实现细节、对账命令 | 改代码时 |
 | `design/GLOSSARY.md` | 中文名 → 英文 id（由 `tools/i18n_map.json` 生成） | 找 id 时 |

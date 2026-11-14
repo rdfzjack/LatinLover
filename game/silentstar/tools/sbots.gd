@@ -21,7 +21,7 @@ const H = Bots.H
 const ROAD_GOALS := {
 	"tough": [["fight", ["class_h1"]], ["riding", ["class_h2"]], ["nerve", ["class_h1", "job_collector"]]],
 	"lover": [["acting", ["class_l1"]], ["physique", ["class_l3"]], ["grooming", ["job_l_night"]]],
-	"culture": [["writing", ["class_c1"]], ["taste", ["class_c1"]], ["speech", ["job_server", "class_c3", "job_collector"]]],
+	"culture": [["writing", ["class_c1"]], ["taste", ["class_c1"]], ["speech", ["job_collector", "class_c3"]]],
 	"savvy": [["negotiation", ["job_runner"]], ["rapport", ["job_runner"]], ["insight", ["job_runner"]]],
 }
 ## Jobs to earn with, first doable wins (no crime jobs here).
@@ -31,6 +31,10 @@ const ROAD_MONEY := {
 }
 ## Opening questions per road (same as bots.gd ROAD_SETUP).
 const ROAD_ORIGIN := {"tough": [0, 0, 3], "lover": [3, 2, 3], "culture": [4, 1, 3], "savvy": [1, 1, 3]}
+## Tough road (2026-11 round): the dock (looks -1 a day) is his only tuition job; under this looks he leaves it. Waiting tables
+## (fight -0/1) is then allowed as his fallback if TOUGH_SERVER.
+const TOUGH_FLOOR := 66
+const TOUGH_SERVER := true
 ## Outfits that lift looks, cheapest first (keep looks >= 60 so he may audition).
 const LOOKS_OUTFITS := ["suit_old", "riding_habit", "suit_custom", "evening_gown", "fur_white"]
 
@@ -49,6 +53,9 @@ class SBot:
 	var stop_when_full := false    # type-1 bots: the report stops the game when the main road is full
 	var ignore_looks := false      # fur strongman: no acting class for looks (his outfit set and the diet carry them)
 	var looks_floor := 80          # money jobs that cost looks are avoided while displayed looks are under this
+	var stamina_floor := 50        # stamina under this: train it back to 80 first (dock, else the dance class); 0 = never
+	var stamina_fix := false
+	var looks_late := false        # tough road: ignore looks (dock freely, no acting class) until the main road is full, then fix them
 
 	func _init(sd := 1) -> void:
 		super(sd)
@@ -78,6 +85,9 @@ class SBot:
 		gear_road = rd
 		place = Bots.ROAD_PLACE[rd]
 		money_jobs = ROAD_MONEY[rd].duplicate()
+		if rd == "tough":
+			looks_floor = TOUGH_FLOOR
+			looks_late = true
 
 	## Goals of this period (subclasses may change them with the date or the state).
 	func goals(_g, _P: Dictionary, _i: int) -> Array:
@@ -119,8 +129,17 @@ class SBot:
 	func choose(g, P: Dictionary, i: int):
 		var st = g.st
 		var gs: Array = goals(g, P, i)
-		if st.val("looks") < 62 and not ignore_looks:
+		if st.val("looks") < 62 and not skip_looks(st):
 			gs = [{"stat": "looks", "to": st.attr["looks"] + 1, "via": ["class_l1"]}] + gs
+		# stamina: the flagpole, the column and the church take 1 a day, and under 30 even the dock is closed, so a real player
+		# trains it back before it traps him at home (needs_rest rests whenever fatigue would pass stamina + 10)
+		if stamina_floor > 0:
+			if st.attr["stamina"] < stamina_floor:
+				stamina_fix = true
+			elif st.attr["stamina"] >= 80:
+				stamina_fix = false
+			if stamina_fix:
+				gs = [{"stat": "stamina", "to": 80, "via": ["job_dock1", "class_l3"]}] + gs
 		for gl in gs:
 			if reached(st, gl):
 				continue
@@ -167,7 +186,7 @@ class SBot:
 	func money_job(g, _P: Dictionary):
 		var st = g.st
 		var d = g.d
-		var low: bool = st.val("looks") < looks_floor
+		var low: bool = st.val("looks") < looks_floor and not skip_looks(st)
 		for jid in money_jobs:
 			if H.can_do_job(st, jid) and not (low and costs_looks(d, jid)):
 				return jid
@@ -177,10 +196,32 @@ class SBot:
 				continue
 			if not H.can_do_job(st, jid) or (low and costs_looks(d, jid)):
 				continue
+			if hurts_goals(st, jid) and not (road == "tough" and TOUGH_SERVER):
+				continue                  # e.g. waiting tables (fight -0/1) would undo the tough road's classes
 			var score: float = Schedule.wage_of(st, jid) - 1.5 * H.job_fat(d.jobs[jid])
 			if best == null or score > best[0]:
 				best = [score, jid]
 		return best[1] if best != null else null
+
+	func skip_looks(st) -> bool:
+		if ignore_looks:
+			return true
+		if not looks_late:
+			return false
+		for sk in st.d.road_skills[road]:
+			if st.skill[sk] < 100:
+				return true
+		return false
+
+	## Whether the job lowers a skill or attribute that is still an unfinished goal.
+	func hurts_goals(st, jid: String) -> bool:
+		for e in st.d.jobs[jid]["daily_effect"]:
+			if int(e["add"][0]) >= 0 and int(e["add"][1]) >= 0:
+				continue
+			for gl in goal_list:
+				if gl["stat"] == e["stat"] and not reached(st, gl):
+					return true
+		return false
 
 	## Slack-off chance % at fatigue f (GDD 5.1.1).
 	func slack_pct(st, f: int) -> int:
@@ -327,6 +368,17 @@ class MainOnly:
 		setup_road(rd, "full_" + rd)
 		goal_list = road_goals(rd)
 		stop_when_full = true
+
+
+## Type 1, tough without caring about looks (dock all the way, no acting class): how fast the road itself trains.
+class MainOnlyNoLooks:
+	extends MainOnly
+
+	func setup(rd: String) -> void:
+		super(rd)
+		name = "full_tough_nolooks"
+		looks_floor = 0
+		ignore_looks = true
 
 
 # ---------- type 2 ----------
@@ -512,6 +564,7 @@ class SickBeauty:
 		super(rd)
 		name = "sick_beauty"
 		crime_ok = true
+		stamina_floor = 0
 
 	func month_start(story, st) -> void:
 		super(story, st)
@@ -656,6 +709,7 @@ class FlagpoleBig:
 	extends SBot
 
 	var fame_to := 340
+	var fame_done := false
 
 	func setup(rd: String) -> void:
 		fame_to = int(rd)
@@ -664,7 +718,9 @@ class FlagpoleBig:
 
 	func choose(g, P: Dictionary, i: int):
 		var st = g.st
-		if st.attr["fame"] < fame_to and H.can_do_job(st, "job_flagpole"):
+		if st.attr["fame"] >= fame_to:
+			fame_done = true
+		if not fame_done and not stamina_fix and st.attr["stamina"] >= stamina_floor and H.can_do_job(st, "job_flagpole"):
 			return "job_flagpole"
 		return super(g, P, i)
 
@@ -682,11 +738,12 @@ class CrimeBoss:
 
 
 ## name -> [class, setup argument]. Type 1 first.
-const TYPE1 := ["full_tough", "full_lover", "full_culture", "full_savvy"]
+const TYPE1 := ["full_tough", "full_tough_nolooks", "full_lover", "full_culture", "full_savvy"]
 static func all_bots() -> Dictionary:
 	var b := {}
 	for rd in ["tough", "lover", "culture", "savvy"]:
 		b["full_" + rd] = [MainOnly, rd]
+	b["full_tough_nolooks"] = [MainOnlyNoLooks, "tough"]
 	for rd in ["tough", "lover", "culture", "savvy"]:
 		b["main_savvy_" + rd] = [MainSavvy, rd]
 	b["lover_side_first"] = [LoverSideFirst, "lover"]
@@ -708,7 +765,7 @@ static func all_bots() -> Dictionary:
 	b["tough_speech_collector"] = [ToughSpeech, "collector"]
 	b["writer_lover"] = [WriterLover, ""]
 	b["flagpole_big_300"] = [FlagpoleBig, "300"]
-	b["flagpole_big_400"] = [FlagpoleBig, "400"]
+	b["flagpole_big_260"] = [FlagpoleBig, "260"]
 	b["crime_boss"] = [CrimeBoss, "tough"]
 	return b
 
