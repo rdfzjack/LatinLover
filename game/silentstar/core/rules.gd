@@ -251,6 +251,12 @@ static func get_var(st, name: String):
 			if best == null or x > best:
 				best = x
 		return best
+	if name == "rep_sum":
+		var b2: Dictionary = st.bonus()
+		var sm := 0
+		for r in d.roads:
+			sm += st.rep(r, b2)
+		return sm
 	if name == "top_road":
 		var b: Dictionary = st.bonus()
 		var best_r = null

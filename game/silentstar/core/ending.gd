@@ -23,12 +23,35 @@ static func register() -> void:
 
 
 static func tier(st) -> String:
-	var lines: Dictionary = st.d.t["endings"]["grade_lines"]
-	var v: int = Rules.get_var(st, "max_rep")
-	for k in GRADES:
-		if v >= lines[k]:
-			return k
-	return "D"
+	return tier_by(st)[0]
+
+
+## S 0 ... C 3, D 4.
+static func _rank(g: String) -> int:
+	var i := GRADES.find(g)
+	return i if i >= 0 else GRADES.size()
+
+
+## [grade, axis id]: the best grade over endings.json grade_axes (user, 2026-11); "D" with "" when no axis reaches C.
+## An axis has var + lines {S, A, B, C} or grades [{cond, grade}] (the first that holds). Ties keep the earlier axis.
+static func tier_by(st) -> Array:
+	var best := ["D", ""]
+	for ax in st.d.t["endings"]["grade_axes"]:
+		var g := "D"
+		if ax.has("lines"):
+			var v: int = Rules.get_var(st, ax["var"])
+			for k in GRADES:
+				if ax["lines"].has(k) and v >= int(ax["lines"][k]):
+					g = k
+					break
+		else:
+			for x in ax["grades"]:
+				if Rules.cond(st, x["cond"]):
+					g = x["grade"]
+					break
+		if _rank(g) < _rank(best[0]):
+			best = [g, ax["id"]]
+	return best
 
 
 ## The tag family with the largest sum of counts; ties follow the table order; null when all are 0.
@@ -134,7 +157,7 @@ static func score(st, rank: String, ch: int, hm: Dictionary) -> int:
 	var base: int = st.attr["fame"]
 	for n in SCORE_ATTRS:
 		base += st.val(n, b)
-	var s: int = Rules.fdiv(base, 6) - st.val("crime", b)
+	var s: int = Rules.fdiv(base, 6)        # user, 2026-11: crime is no longer subtracted
 	s += sc["ending_score"][rank]
 	s += sc["character_tiers"]["score"][str(ch)]
 	if hm["class"] == "special":
@@ -155,7 +178,7 @@ static func judge(st) -> Dictionary:
 	var rank := tier(st)
 	var ch := character(st, eid)
 	var hm := home(st, eid)
-	var res := {"ending": eid, "category": cb[1], "grade": rank, "character": ch, "destiny": hm,
+	var res := {"ending": eid, "category": cb[1], "grade": rank, "grade_by": tier_by(st)[1], "character": ch, "destiny": hm,
 		"top_job": most_job(st), "top_class": most_class(st), "total": score(st, rank, ch, hm)}
 	st.ended = eid
 	st.story["ending"] = res

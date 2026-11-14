@@ -57,7 +57,7 @@ def ref_event(f, e):
     if EVENT_IDS is None: pending_events.add(e)
     elif e not in EVENT_IDS: err(f, f'event does not exist {e}')
 
-DERIVED = {'max_rep','month','year','drug_stage','drug_points','debt_months','grade','top_tag_family','undefined','lowbudget_typed','talkie_count',
+DERIVED = {'max_rep','rep_sum','month','year','drug_stage','drug_points','debt_months','grade','top_tag_family','undefined','lowbudget_typed','talkie_count',
            'top_base_attr','top_savvy_skill','max_job_periods','rep_spread','top_road'}
 PREFIX = ('status.','count.','tag.','road_periods.','flag.','duels.')
 SCALED = set(T['stats'].get('scale', {}).get('div10', {}))
@@ -545,6 +545,17 @@ for o in opps['opportunities']:
 f = 'endings.json'
 for e in endings['forced'] + endings['special']: check_cond(f, e['cond'], e['id'])
 for c in endings['categories']: check_cond(f, c['cond'], c['id'])
+for ax in endings.get('grade_axes', []):
+    w = 'grade_axes ' + str(ax.get('id'))
+    if 'lines' in ax:
+        if not var_ok(ax.get('var', '')): err(f, f'{w} var does not exist {ax.get("var")}')
+        if sorted(ax['lines']) != ['A', 'B', 'C', 'S'] or not all(isinstance(v, int) for v in ax['lines'].values()): err(f, f'{w} lines must be integers for S, A, B, C')
+    elif 'grades' in ax:
+        for x in ax['grades']:
+            check_cond(f, x['cond'], w)
+            if x.get('grade') not in ('S', 'A', 'B', 'C'): err(f, f'{w} grade must be S, A, B or C')
+    else: err(f, f'{w} needs lines (with var) or grades')
+if not endings.get('grade_axes'): err(f, 'grade_axes is missing')
 big = [c['id'] for c in endings['categories']]
 by = {}
 for e in endings['endings']:

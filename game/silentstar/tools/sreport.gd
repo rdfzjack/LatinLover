@@ -55,6 +55,11 @@ func _init() -> void:
 		print("bot                    total p50 (p10-p90) | grade S/A/B/C/D % | category % | reps T/L/C/S p50 | top base attr | fame p50 | money p50 | leads s/m/b, support | hit/flop | arrest | collapse")
 		for x in t2:
 			print(x)
+		print("-- grade and the axis that gave it (rep / fame / rep_sum / dark)")
+		for nm in names:
+			if SBots.TYPE1.has(nm):
+				continue
+			print("%-22s %s" % [nm, top_counts(dump[nm], "grade_by", 4)])
 		print("-- most common endings")
 		for nm in names:
 			if SBots.TYPE1.has(nm):
@@ -94,6 +99,7 @@ func play(spec, sd: int, d) -> Dictionary:
 	rec["ending"] = str(res.get("ending"))
 	rec["category"] = str(res.get("category"))
 	rec["grade"] = str(res.get("grade"))
+	rec["grade_by"] = "%s:%s" % [str(res.get("grade")), str(res.get("grade_by", ""))]
 	rec["total"] = int(res.get("total", 0)) if res.get("total") != null else 0
 	var b: Dictionary = st.bonus()
 	var reps := []
