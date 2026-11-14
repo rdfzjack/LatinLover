@@ -162,7 +162,12 @@ static func unnamed_rival(st, tier: String, main_level = null, probs: Array = []
 			break
 	var h := half_years(st)
 	var lvl: int
-	if main_level == null:
+	var cv: Dictionary = curve_cfg(d)
+	if main_level == null and curve_on(d) and cv["offset"].has(tier):
+		# switch audition_curve (user, 2026-11): the main level follows the player's expected level of the year, plus a random offset by tier
+		var off: Array = cv["offset"][tier]
+		lvl = curve_level(st) + g.r(int(off[0]), int(off[1]))
+	elif main_level == null:
 		var ml: Dictionary = t["main_level"]
 		var ups := 0
 		for m in ml["level_up_months"]:
@@ -185,6 +190,41 @@ static func unnamed_rival(st, tier: String, main_level = null, probs: Array = []
 	var hb: String = habits[g.below(habits.size())]["id"]
 	return {"id": null, "name": "unnamed (%s)" % tier, "levels": lv,
 		"fame": t["fame"]["base"] + t["fame"]["per_half_year"] * h, "habit": hb, "k": t["k"]}
+
+
+## Switch audition_curve (roles.json defaults.audition_curve, user 2026-11). Off = the old rules (fixed gates, unnamed levels by
+## level-up months, named rivals as listed).
+static func curve_cfg(d) -> Dictionary:
+	return d.role_cfg.get("audition_curve", {})
+
+
+static func curve_on(d) -> bool:
+	return curve_cfg(d).get("enabled", false) == true
+
+
+## The player's expected main level this year (user's numbers).
+static func curve_level(st) -> int:
+	var t: Dictionary = curve_cfg(st.d)["player_level"]
+	var y: String = st.date().substr(0, 4)
+	var best := 0
+	for k in t:
+		if String(k) <= y:
+			best = int(t[k])
+	return best
+
+
+## Named rival under the switch: his main color for this role is pulled into [expected level + band], his second color is at least
+## main - side_gap; the rest of his numbers (which color he is strong in, k, habit, fame) stay his own.
+static func curve_named(st, rival: Dictionary, probs: Array) -> void:
+	if not curve_on(st.d):
+		return
+	var cv: Dictionary = curve_cfg(st.d)
+	var p: Array = probs if not probs.is_empty() else [25, 25, 25, 25]
+	var cs := opponent_colors(st.d, rival["levels"], p)
+	var c := curve_level(st)
+	var lv: Array = rival["levels"]
+	lv[cs[0]] = clampi(int(lv[cs[0]]), c + int(cv["named_band"][0]), c + int(cv["named_band"][1]))
+	lv[cs[1]] = maxi(int(lv[cs[1]]), lv[cs[0]] - int(cv["named_side_gap"]))
 
 
 ## Named rival's data for the current month (9.1). From 1927-09 Valen is replaced by Nova or Jilbo (9.3); one is drawn.

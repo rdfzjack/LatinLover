@@ -2903,7 +2903,19 @@
    },
    "main_style": 60
   },
-  "fame_gate_note": "User (lover playtest): fame formula unchanged; gates set by estimate so a good start can try a medium film from 1925-03 and a big film from 1927 (medium 130/130/140/150/160/170, big 210 to 1927, then 240, 270). Placeholder, to be re-measured"
+  "fame_gate_note": "User (lover playtest): fame formula unchanged; gates set by estimate so a good start can try a medium film from 1925-03 and a big film from 1927 (medium 130/130/140/150/160/170, big 210 to 1927, then 240, 270). Placeholder, to be re-measured",
+  "audition_curve": {
+   "note": "Switch (user, 2026-11). enabled true: medium/big fame gates by year from fame_gate below (the per-role fame_gate is ignored); unnamed rivals' main level = player_level of the year + random offset by tier; named rivals keep their own colors, k, habit and fame, but their main color is pulled into player_level + named_band and their second color is at least main - named_side_gap. enabled false: the old rules (per-role gates; unnamed levels by level_up_months in rivals.json; named rivals as listed). All numbers are a first draft to confirm with the user",
+   "enabled": true,
+   "player_level": {"1924": 6, "1925": 7, "1926": 7, "1927": 7, "1928": 8, "1929": 8},
+   "offset": {"small": [-4, -1], "medium": [-2, 0], "big": [-1, 1]},
+   "named_band": [-1, 1],
+   "named_side_gap": 2,
+   "fame_gate": {
+    "medium": {"1924": 130, "1925": 120},
+    "big": {"1924": 260, "1928": 300, "1929": 340}
+   }
+  }
  },
  "board_schedule": [
   {

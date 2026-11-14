@@ -224,10 +224,11 @@ static func make_rivals(st, e: Dictionary) -> void:
 	for o in e["rival_spec"]:
 		if o.get("unnamed", false):
 			out.append(Audition.unnamed_rival(st, e["size"], o.get("main_level"), probs))
-		elif Schedule.truthy(o.get("named")):
-			out.append(Audition.named_rival(st, o["named"]))
 		else:
-			out.append(Audition.named_rival(st, named_for_placeholder(st, e["style_probs"])))
+			var rid: String = o["named"] if Schedule.truthy(o.get("named")) else named_for_placeholder(st, e["style_probs"])
+			var rv := Audition.named_rival(st, rid)
+			Audition.curve_named(st, rv, probs)
+			out.append(rv)
 	e["opponents"] = out
 
 
@@ -368,6 +369,13 @@ static func assign_talkie(st, entries: Array) -> void:
 
 static func fame_gate(st, e: Dictionary) -> int:
 	var g: int = e["fame_gate"]
+	if Audition.curve_on(st.d):          # switch audition_curve (user, 2026-11): fame gates by size and year, not by role
+		var tb: Dictionary = Audition.curve_cfg(st.d)["fame_gate"]
+		if tb.has(e["size"]):
+			var y: String = st.date().substr(0, 4)
+			for k in tb[e["size"]]:
+				if String(k) <= y:
+					g = int(tb[e["size"]][k])
 	if e["size"] == "big" and Film.low_budget(st):
 		g += cfg(st.d)["lowbudget_big_gate_add"]
 	return g
