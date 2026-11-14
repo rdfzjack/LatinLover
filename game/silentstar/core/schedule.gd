@@ -183,11 +183,11 @@ static func extra_fail(st, _job := false, _slack := true) -> bool:
 	return st.status["in_love"] and st.rng.logic.chance(20, 100)
 
 
-## A class day succeeds as in the original (user, after the lover playtest): stamina/2 + r0(stamina/2) >= r0(fatigue).
-## The fatigue roll comes first (original order).
-static func practice_roll(st) -> bool:
+## A class day succeeds as in the original (user, after the lover playtest): stat/2 + r0(stat/2) >= r0(fatigue).
+## The stat is stamina, or the class's success_stat (tutoring: discipline, user). The fatigue roll comes first (original order).
+static func practice_roll(st, stat := "stamina") -> bool:
 	var line: int = st.rng.logic.r0(maxi(st.val("fatigue"), 0))
-	var h: int = Rules.fdiv(maxi(st.val("stamina"), 0), 2)
+	var h: int = Rules.fdiv(maxi(st.val(stat), 0), 2)
 	return h + st.rng.logic.r0(h) >= line
 
 
@@ -245,11 +245,11 @@ static func drug_gain(st, v: int) -> int:
 
 
 ## A practice day (class, book): the original roll (practice_roll), then in love.
-static func practice_ok(st) -> bool:
+static func practice_ok(st, stat := "stamina") -> bool:
 	var dg := drug_day(st)
 	if dg != 0:
 		return dg > 0
-	var good := practice_roll(st)
+	var good := practice_roll(st, stat)
 	return (not extra_fail(st, false)) and good
 
 
@@ -325,7 +325,7 @@ static func run_class(st, cid: String, days: Array, hooks) -> Dictionary:
 			st.inc("count.broke_class_days")
 			continue
 		went += 1
-		if practice_ok(st):
+		if practice_ok(st, c.get("success_stat", "stamina")):
 			ok_days += 1
 			for e in c["gain"]:
 				if e.has("cond") and not Rules.cond(st, e["cond"]):
@@ -403,7 +403,12 @@ static func run_job(st, jid: String, days: Array, hooks) -> Dictionary:
 				var stat: String = e["stat"]
 				if e.has("one_of"):
 					stat = e["one_of"][g.below(e["one_of"].size())]
-				add_stat(st, stat, v)
+				if stat == "fame":            # the flagpole sitter (user): fame from a job shows in the fame log
+					var f0: int = st.attr["fame"]
+					add_stat(st, stat, v)
+					st.fame_note(st.attr["fame"] - f0, "job", jid)
+				else:
+					add_stat(st, stat, v)
 	var pay := wage * ok_days
 	if work > 0 and ok_days == work:
 		pay = Rules.fdiv(pay * (100 + st.d.job_rules["full_attendance_bonus_pct"]), 100)
@@ -417,6 +422,8 @@ static func run_job(st, jid: String, days: Array, hooks) -> Dictionary:
 			st.exposed = 1
 		if truthy(j["job_period_effect"]):
 			Rules.apply_effect(st, j["job_period_effect"], "schedule")
+	if work > 0 and truthy(j.get("crime_job")):    # a crime job worked this month: searched at month end (Events.crime_raid)
+		st.flags["crime_job_month"] = st.ym
 	hooks.job_period(st, jid, good)
 	return {"work_days": work, "ok_days": ok_days, "pay": pay}
 

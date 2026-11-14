@@ -14,7 +14,8 @@
   "bad_day": "Original roll (user, lover playtest): each success line is its own roll, displayed stat - r0(fatigue) >= value, all must hold; fatigue of the day is added before the roll. Lines are the original lines mapped to our stats; prereq still decides whether the job can be picked. The bad_day field is no longer used",
   "disabled": "true: the job is switched off (not offered, its events, milestones and NPC schedule never trigger)",
   "one_of": "daily_effect entry with one_of: the gain goes to one of these stats, picked at random each day",
-  "site": "map place the job belongs to (placeholder until the user gives the locations); same site = the same place upgraded"
+  "site": "map place the job belongs to (placeholder until the user gives the locations); same site = the same place upgraded",
+  "crime_job": "User (2026-11): true = a crime job (moneylending, bootlegging, the upstairs rooms). A month with one worked is searched once at month end (stats.json arrest.raid); crime_tier and raid_* belong to the old switched-off jobs"
  },
  "raise_tiers": [
   {
@@ -64,13 +65,6 @@
    ],
    "daily_effect": [
     {
-     "stat": "connections",
-     "add": [
-      0,
-      1
-     ]
-    },
-    {
      "stat": "negotiation",
      "add": [
       0,
@@ -78,17 +72,28 @@
      ]
     },
     {
-     "stat": "business",
+     "stat": "rapport",
      "add": [
       0,
       1
+     ],
+     "one_of": [
+      "rapport",
+      "insight"
      ]
     },
     {
      "stat": "loyalty",
      "add": [
-      -3,
-      -3
+      -1,
+      -1
+     ]
+    },
+    {
+     "stat": "discipline",
+     "add": [
+      -1,
+      -1
      ]
     },
     {
@@ -104,7 +109,66 @@
    "job_period_effect": null,
    "period_random": [],
    "milestones": [],
-   "note": "savvy road: all three skills from one unpaid job; costs loyalty"
+   "note": "savvy road from one unpaid job: negotiation 0-1, and one of rapport / insight 0-1 per day (user, 2026-11: savvy matured too fast, slowed a little); loyalty -1 and discipline -1"
+  },
+  {
+   "id": "job_flagpole",
+   "code": "FLAGPOLE",
+   "name": "坐旗杆",
+   "site": "site_flagpole",
+   "original": "none (user, 2026-11)",
+   "earliest": "1924-01",
+   "prereq": [],
+   "daily_wage": 6,
+   "wage_tiers": [
+    6,
+    8,
+    9,
+    11,
+    13
+   ],
+   "success_lines": [
+    {
+     "stat": "stamina",
+     "value": 20
+    }
+   ],
+   "daily_effect": [
+    {
+     "stat": "fame",
+     "add": [
+      0,
+      1
+     ]
+    },
+    {
+     "stat": "stamina",
+     "add": [
+      -1,
+      -1
+     ]
+    },
+    {
+     "stat": "education",
+     "add": [
+      -1,
+      -1
+     ]
+    },
+    {
+     "stat": "fatigue",
+     "add": [
+      5,
+      5
+     ]
+    }
+   ],
+   "exposure": false,
+   "npc": null,
+   "job_period_effect": null,
+   "period_random": [],
+   "milestones": [],
+   "note": "User (2026-11, instead of the stable boy): the only job that gives fame; education -1 a day (the illiterate superstar, Duv's pupil). Middle wage, middle fatigue; site, open month, success line and numbers are placeholders"
   },
   {
    "id": "job_server",
@@ -130,18 +194,7 @@
    ],
    "daily_effect": [
     {
-     "stat": "negotiation",
-     "add": [
-      0,
-      1
-     ],
-     "one_of": [
-      "negotiation",
-      "business"
-     ]
-    },
-    {
-     "stat": "physique",
+     "stat": "insight",
      "add": [
       0,
       1
@@ -167,7 +220,7 @@
    "job_period_effect": null,
    "period_random": [],
    "milestones": [],
-   "note": "one of negotiation / business per day; physique 0/1 (user, tentative)"
+   "note": "insight 0-1 only (user, 2026-11), fight -0/1 like the original inn (sweeping 0/1, combat -0/1)"
   },
   {
    "id": "job_church_aid",
@@ -187,7 +240,7 @@
    ],
    "success_lines": [
     {
-     "stat": "stamina",
+     "stat": "loyalty",
      "value": 10
     }
    ],
@@ -395,6 +448,7 @@
    "job_period_effect": null,
    "period_random": [],
    "milestones": [],
+   "crime_job": true,
    "note": "same site, level 2; user (tentative): stamina +2, crime +2, no looks loss"
   },
   {
@@ -438,7 +492,14 @@
    ],
    "daily_effect": [
     {
-     "stat": "fight",
+     "stat": "nerve",
+     "add": [
+      0,
+      1
+     ]
+    },
+    {
+     "stat": "speech",
      "add": [
       0,
       1
@@ -478,7 +539,77 @@
    "job_period_effect": null,
    "period_random": [],
    "milestones": [],
-   "note": ""
+   "note": "User (2026-11): nerve and speech (the literate tough guy; speech for the talkie line). The low wage is on purpose, do not raise it."
+  },
+  {
+   "id": "job_loan",
+   "code": "H-WILD-L2",
+   "name": "放贷（收债 二级）",
+   "site": "site_collector",
+   "original": "none (user, 2026-11)",
+   "earliest": "1927-01",
+   "prereq": [
+    [
+     [
+      "stamina",
+      ">=",
+      80
+     ],
+     [
+      "education",
+      ">=",
+      120
+     ]
+    ]
+   ],
+   "daily_wage": 23,
+   "wage_tiers": [
+    23,
+    27,
+    33,
+    39,
+    47
+   ],
+   "success_lines": [
+    {
+     "stat": "stamina",
+     "value": 80
+    },
+    {
+     "stat": "education",
+     "value": 120
+    }
+   ],
+   "daily_effect": [
+    {
+     "stat": "crime",
+     "add": [
+      3,
+      3
+     ]
+    },
+    {
+     "stat": "loyalty",
+     "add": [
+      -2,
+      -2
+     ]
+    },
+    {
+     "stat": "fatigue",
+     "add": [
+      8,
+      8
+     ]
+    }
+   ],
+   "exposure": false,
+   "npc": null,
+   "job_period_effect": null,
+   "period_random": [],
+   "milestones": [],
+   "crime_job": true,
+   "note": "Same site as debt collecting, level 2 (user). Gates are also the daily success lines. Wage like the upstairs rooms (placeholder); crime +3 is cancelled by the church -3 on purpose (the pious moneylender). Crime job: searched at month end"
   },
   {
    "id": "job_c_slow",
@@ -562,13 +693,13 @@
    "name": "创作赚钱（C-钱）",
    "site": "site_c_money",
    "original": "tutor",
-   "earliest": "1927-01",
+   "earliest": "1924-10",
    "prereq": [
     [
      [
       "education",
       ">=",
-      120
+      90
      ]
     ]
    ],
@@ -582,8 +713,8 @@
    ],
    "success_lines": [
     {
-     "stat": "education",
-     "value": 120
+     "stat": "discipline",
+     "value": 20
     }
    ],
    "daily_effect": [
@@ -614,7 +745,7 @@
    "job_period_effect": null,
    "period_random": [],
    "milestones": [],
-   "note": "original motherhood +N has no counterpart"
+   "note": "User (2026-11): pays only, no skill (like the original tutor job), so writing comes only from the salon and the salon cannot be skipped; gate education 90; the daily success line is discipline 20 (user: writing is down to self-control, not stamina; 20 is a placeholder); opens 1924-10."
   },
   {
    "id": "job_l_day",
@@ -710,7 +841,7 @@
    ],
    "daily_effect": [
     {
-     "stat": "business",
+     "stat": "insight",
      "add": [
       0,
       1
@@ -798,7 +929,7 @@
      ]
     },
     {
-     "stat": "connections",
+     "stat": "rapport",
      "add": [
       -1,
       0
@@ -817,6 +948,7 @@
    "job_period_effect": null,
    "period_random": [],
    "milestones": [],
+   "crime_job": true,
    "note": ""
   },
   {
@@ -840,7 +972,7 @@
      ]
     },
     {
-     "stat": "connections",
+     "stat": "rapport",
      "add": [
       0,
       1
@@ -924,7 +1056,7 @@
       10
      ],
      "event": "job_waiter_r1",
-     "note": "The customer is in the business, connections +2"
+     "note": "The customer is in the insight, rapport +2"
     }
    ],
    "milestones": [
@@ -1241,14 +1373,14 @@
    ],
    "daily_effect": [
     {
-     "stat": "business",
+     "stat": "insight",
      "add": [
       0,
       1
      ]
     },
     {
-     "stat": "connections",
+     "stat": "rapport",
      "add": [
       1,
       1
@@ -1670,7 +1802,7 @@
      ]
     },
     {
-     "stat": "business",
+     "stat": "insight",
      "add": [
       0,
       1
@@ -1942,7 +2074,7 @@
      ]
     },
     {
-     "stat": "connections",
+     "stat": "rapport",
      "add": [
       0,
       1
@@ -2017,7 +2149,7 @@
    ],
    "daily_effect": [
     {
-     "stat": "business",
+     "stat": "insight",
      "add": [
       0,
       1
@@ -2102,7 +2234,7 @@
      ]
     },
     {
-     "stat": "connections",
+     "stat": "rapport",
      "add": [
       0,
       1

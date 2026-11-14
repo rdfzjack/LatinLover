@@ -266,6 +266,7 @@ func job_period(st, jid: String, good: bool) -> void:
 func month_events(st) -> void:
 	cur_period = 3          # an arrest at month end detains the first period of next month
 	Events.drug_month(st)
+	Events.crime_raid(self, st)
 	Events.month_end(self, st)
 
 

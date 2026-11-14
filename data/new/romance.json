@@ -1,11 +1,11 @@
 {
- "note": "favor 0-100; four romance lines; function NPCs hang off the job hooks (5.4)",
+ "note": "favor -100..100 (user, 2026-11: can turn into an enemy); four romance lines; function NPCs hang off the job hooks (5.4)",
  "npcs": [
   {
    "id": "sil",
    "name": "Sil",
    "class": "romance",
-   "favor_init": 0,
+   "favor_init": 30,
    "known_at_start": true,
    "gender": "male",
    "identity": "秘书",
@@ -194,9 +194,42 @@
  ],
  "rules": {
   "favor_range": [
-   0,
+   -100,
    100
   ],
+  "favor_tiers": [
+   {
+    "id": "enemy",
+    "name": "仇人",
+    "min": -100
+   },
+   {
+    "id": "at_odds",
+    "name": "不和",
+    "min": -49
+   },
+   {
+    "id": "known",
+    "name": "认识",
+    "min": -9
+   },
+   {
+    "id": "friendly",
+    "name": "熟",
+    "min": 30
+   },
+   {
+    "id": "close",
+    "name": "交好",
+    "min": 60
+   },
+   {
+    "id": "intimate",
+    "name": "至交",
+    "min": 85
+   }
+  ],
+  "favor_note": "User (2026-11): one \"+\" is about 10 (++ = 20 for big things such as audition and film results, a small one 3, a story beat 15-25). Conditions can write favor_tier.<npc> with a tier id (favor_tier.sil >= \"friendly\"). Most people start at 0; Sil starts high (he has always been in love with him)",
   "loyalty_bonus": {
    "cond": [
     [
@@ -207,7 +240,8 @@
      ]
     ]
    ],
-   "note": "Positive favor gains from events get +1 each time (fixed \"+1 per period\" gains in schedules do not count)"
+   "note": "Positive favor gains from events and opportunities get +pct% (at least +1) with loyalty >= 200 (user, 2026-11, was +1 flat); fixed per-period gains in schedules do not count",
+   "pct": 20
   },
   "love_state": {
    "duration_months": 3,

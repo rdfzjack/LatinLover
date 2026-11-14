@@ -12,10 +12,10 @@ const Schedule = preload("res://core/schedule.gd")
 const IF_BROKE := "if_broke"
 
 
-## Every full 20 of connections displayed value gives 5% off, at most 25%.
+## Every full 20 of rapport displayed value gives 5% off, at most 25%.
 static func discount_pct(st) -> int:
 	var r: Dictionary = st.d.discount
-	return mini(Rules.fdiv(st.val("connections"), r["connections_per"]) * r["cut_pct_per_step"], r["cap_pct"])
+	return mini(Rules.fdiv(st.val("rapport"), r["rapport_per"]) * r["cut_pct_per_step"], r["cap_pct"])
 
 
 ## Discounted price, rounded up; only entries in discount.applies get the discount.
@@ -199,7 +199,7 @@ static func sil_persuade(st) -> String:
 		return "already used this month"
 	_use(st, "sil.persuade")
 	st.attr["fatigue"] = maxi(0, st.attr["fatigue"] - Rules.fdiv(st.favor.get("sil", 0), 2))
-	st.favor["sil"] = mini(100, st.favor.get("sil", 0) + 2)
+	st.favor["sil"] = Rules.favor_clamp(st, st.favor.get("sil", 0) + 2)
 	return ""
 
 

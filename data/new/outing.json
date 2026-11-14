@@ -16,7 +16,7 @@
       ">=",
       30
      ],
-     "success_effect": "connections+3 flag.knows_director=1",
+     "success_effect": "rapport+3 flag.knows_director=1",
      "fail_effect": ""
     }
    ],
@@ -86,9 +86,9 @@
      "text": "赴约",
      "check": {
       "check": "speech",
-      "line": 40
+      "diff": 0
      },
-     "success_effect": "connections+3 business+1",
+     "success_effect": "rapport+3 insight+1",
      "fail_effect": "speech+1"
     }
    ],
@@ -174,9 +174,9 @@
      "text": "帮",
      "check": {
       "check": "fight",
-      "line": 40
+      "diff": 0
      },
-     "success_effect": "loyalty+8 connections+2",
+     "success_effect": "loyalty+8 rapport+2",
      "fail_effect": "loyalty+4 stamina-10 fatigue+10"
     },
     {
@@ -202,7 +202,7 @@
      "text": "做",
      "check": {
       "check": "nerve",
-      "line": 50
+      "diff": 0
      },
      "success_effect": "money+100 crime+8",
      "fail_effect": "trigger.evt_arrest"

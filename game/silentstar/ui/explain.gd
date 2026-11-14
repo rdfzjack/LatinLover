@@ -65,9 +65,10 @@ func extra_text(job: bool) -> String:
 
 
 ## Practice (class, book): one line with the chance per day and what it depends on.
-func practice_text(stamina: int, fatigue: int) -> String:
-	var p := p_practice(stamina, fatigue)
-	return tr("ui.explain.practice_text.1") % [pct(p * p_no_extra_fail(false)), fatigue]
+## stat_name: the stat of the day roll as shown (stamina, or the class's success_stat, e.g. discipline for tutoring).
+func practice_text(value: int, fatigue: int, stat_name: String) -> String:
+	var p := p_practice(value, fatigue)
+	return tr("ui.explain.practice_text.1") % [pct(p * p_no_extra_fail(false)), fatigue, stat_name, stat_name]
 
 
 ## A work day: the success lines of the job (schedule.gd job_day_ok); a bad day only adds fatigue.

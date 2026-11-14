@@ -121,8 +121,8 @@
    "name": "手腕",
    "skills": [
     "negotiation",
-    "connections",
-    "business"
+    "rapport",
+    "insight"
    ]
   }
  ],
@@ -307,9 +307,9 @@
    "price_cap_pct": 200,
    "note": "probability = prob_pct + crime / crime_step x crime_add_pct (cap prob_cap_pct), + addicted_add_pct when addicted; each dose costs r(price) x (100 + price_depth_pct x depth)% (cap price_cap_pct)"
   },
-  "dose_effect": "fatigue-40",
+  "dose_effect": "fatigue-200",
   "outcome_weights": {
-   "high": 50,
+   "none": 50,
    "divine": 30,
    "side": 20
   },
@@ -321,6 +321,7 @@
   "hook_base_pct": 12,
   "hook_step_pct": 3,
   "hook_cap_pct": 50,
+  "hook_note": "User (2026-11): discipline resists the addiction. Each dose not yet addicted: hook_base_pct + doses used so far x hook_step_pct - scale.discipline / 2, clamped to 0..hook_cap_pct. A dose takes fatigue -200 (a portable holiday that does not take a period). The old \"high\" outcome (every day succeeds) is gone: with fatigue cleared nearly every day succeeds anyway; its weight is now \"none\" (no extra effect)",
   "attack": {
    "fail_base_pct": 10,
    "fail_step_pct": 5,
@@ -328,7 +329,9 @@
    "fatigue_base": 10,
    "fatigue_step": 5,
    "depth_drop": 2,
-   "note": "a month without a dose while addicted: every day fails with fail_base_pct + fail_step_pct x depth (cap); at month end fatigue + fatigue_base + fatigue_step x depth and depth - depth_drop"
+   "note": "a month without a dose while addicted: every day fails with fail_base_pct + fail_step_pct x depth (cap); at month end fatigue + fatigue_base + fatigue_step x depth and depth - depth_drop; with discipline at discipline_extra_tier or above, depth drops discipline_extra_drop more (user, 2026-11)",
+   "discipline_extra_drop": 1,
+   "discipline_extra_tier": "mid"
   },
   "stage_lines": [
    1,
@@ -346,7 +349,12 @@
   "raid_crime_div": 70,
   "raid_note": "search probability of a crime job = prob x (1 + crime / raid_crime_div)",
   "raid_check_add": 20,
-  "raid_check_note": "Step 12c c3: when searched, r0(raid_skill displayed) + raid_check_add >= raid_line passes; otherwise arrest"
+  "raid_check_note": "Step 12c c3: when searched, r0(raid_skill displayed) + raid_check_add >= raid_line passes; otherwise arrest",
+  "raid": {
+   "note": "User (2026-11): a month with any crime job worked (jobs.json crime_job) is searched once at month end: chance = min(crime / crime_div, cap_pct%); a hit is an arrest (sick: not arrested). crime_div and cap_pct are placeholders. The detain_periods of an arrest rest like home for fatigue. raid_crime_div / raid_check_add belong to the old per-period search of the switched-off step-12c jobs",
+   "crime_div": 1000,
+   "cap_pct": 30
+  }
  },
  "scale": {
   "note": "User: base attributes are read through a 0-100 scale: scale = min(100, value x 10 / div10). div10 is the divisor x10 (stamina 8, education 3, loyalty 2.5, looks 5, discipline 3, crime 4, fatigue 8; placeholders). Skills: scale = displayed value. Fame keeps its own five tiers. Tiers by scale, one set for all: low 0-24, mid 25-49, high 50-74, very_high 75+. Conditions can use scale.<attr> (number) and tier.<attr> (a tier id or 0-3).",
@@ -382,15 +390,20 @@
    }
   ]
  },
+ "check": {
+  "note": "User (settled): event dice checks are d100. Chance% = scale of the checked skill or base attribute - diff, clamped to min_pct..max_pct (never 100%: then the dice would mean nothing). r1(100) <= chance succeeds. The chance can be computed before the roll (Rules.check_pct). Limits are placeholders.",
+  "min_pct": 5,
+  "max_pct": 95
+ },
  "slack": {
-  "note": "User (settled): after the activity of a class, job or shooting period is picked, roll once: chance% = scale.fatigue - scale.discipline, clamped to 0..cap_pct. On a hit the whole period becomes a rest: home when home_cond holds, else the outing of the highest of by_highest (scale; fame uses min(100, fame x 10 / fame_div10)); ties go to the earlier row. Class and job counters do not grow; the shooting days of that period all fail. The place table is a placeholder.",
+  "note": "User (settled): after the activity of a class, job or shooting period is picked, roll once: chance% = scale.fatigue - scale.discipline, clamped to 0..cap_pct. On a hit the whole period becomes a rest: home when home_cond holds (Sil favor at \"friendly\" or above, user 2026-11), else the outing of the highest of by_highest (scale; fame uses min(100, fame x 10 / fame_div10)); ties go to the earlier row. Class and job counters do not grow; the shooting days of that period all fail. The place table is a placeholder.",
   "cap_pct": 33,
   "home_cond": [
    [
     [
-     "favor.sil",
+     "favor_tier.sil",
      ">=",
-     80
+     "friendly"
     ]
    ]
   ],

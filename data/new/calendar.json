@@ -32,6 +32,7 @@
     "job_church_aid",
     "job_church_help",
     "job_dock1",
+    "job_flagpole",
     "job_runner",
     "job_server"
    ],
@@ -326,6 +327,7 @@
    ],
    "board": false,
    "job_unlocks": [
+    "job_c_money",
     "job_l_day"
    ],
    "era_events": [],
@@ -1223,10 +1225,10 @@
    "board": false,
    "job_unlocks": [
     "job_bootleg",
-    "job_c_money",
     "job_escort",
     "job_fixer",
-    "job_l_night"
+    "job_l_night",
+    "job_loan"
    ],
    "era_events": [],
    "annual": false,

@@ -33,7 +33,7 @@ The full list is `design/GLOSSARY.md`. The ones you meet most:
 | | Chinese → id |
 |---|---|
 | Attributes | 体力 `stamina`, 教育 `education`, 义气 `loyalty`, 相貌 `looks`, 自律 `discipline`, 犯罪 `crime`, 疲劳 `fatigue`, 名气 `fame`; 金钱 `money` |
-| Skills | 打斗 `fight`, 骑马驾驶 `riding`, 胆识 `nerve`, 演技 `acting`, 打扮 `grooming`, 体态 `physique`, 创作 `writing`, 审美 `taste`, 谈吐 `speech`, 谈判 `negotiation`, 人脉 `connections`, 生意 `business` |
+| Skills | 打斗 `fight`, 骑马驾驶 `riding`, 胆识 `nerve`, 演技 `acting`, 打扮 `grooming`, 体态 `physique`, 创作 `writing`, 审美 `taste`, 谈吐 `speech`, 谈判 `negotiation`, 人脉 `rapport`, 生意 `insight` |
 | Roads | 硬汉 `tough`, 情人 `lover`, 文化 `culture`, 手腕 `savvy` |
 | Fame tiers | 无名 `unknown`, 眼熟 `familiar`, 有名 `famous`, 当红 `hot`, 巨星 `superstar` |
 | Places | 片厂区 `place_studio`, 市中心 `place_downtown`, 海滨大道 `place_seaside`, 码头 `place_dock`, 度假村 `place_resort` |
@@ -121,7 +121,7 @@ no condition, always true.
 - Comparators: `>=` `<=` `>` `<` `==` `!=`, and `in` (value is a list, e.g. `["top_road", "in", ["tough", "savvy"]]`).
 - Dates are compared as text: `["date", ">=", "1927-09"]`.
 - A value written `"@variable"` compares with another variable: `["education", ">=", "@looks"]`.
-- Common variables: attributes, skills, `money`, the four road reputations (`tough` ...), `favor.sil`, `flag.xxx`, `date` `year` `month`, `job_periods.job_dock` (periods a job succeeded), `class_periods.class_acting` (periods spent in a class), `count.outing.place_dock` (visits to a place), `status.sick`. The full list is in `data/new/README.md`.
+- Common variables: attributes, skills, `money`, the four road reputations (`tough` ...), `favor.sil` (−100 to 100), `favor_tier.sil` (compare with `enemy` `at_odds` `known` `friendly` `close` `intimate`, e.g. `["favor_tier.sil", ">=", "friendly"]`), `flag.xxx`, `date` `year` `month`, `job_periods.job_dock` (periods a job succeeded), `class_periods.class_acting` (periods spent in a class), `count.outing.place_dock` (visits to a place), `status.sick`. The full list is in `data/new/README.md`.
 
 ### Checks: does an option succeed
 
@@ -131,7 +131,7 @@ Used in event options to choose between `success_effect` and `fail_effect`:
 |---|---|
 | `null` | no check, always succeeds |
 | `["negotiation", ">=", 30]` | succeeds when negotiation is at least 30 (a gate) |
-| `{"check": "fight", "line": 60}` | dice: fight + a random 0..20 must reach 60 |
+| `{"check": "fight", "diff": 20}` | d100 dice: chance = scale of fight (a skill: its displayed value; a base attribute: its 0-100 scale) − 20, kept between 5% and 95% (`stats.json` → `check`); a roll of 1-100 at or below the chance succeeds. Never 100% sure |
 
 ### Probability (how often an event happens)
 
@@ -399,16 +399,11 @@ Two places:
 
 `items` takes item ids, for example `["suit_old"]`; `flags` takes flag names, for example `["smuggling"]`. Do not delete the questions themselves.
 
-### 10. Add a crime job
+### 10. Make a job a crime job
 
-Crime jobs come in two tiers with a fixed shape (`crime_tiers` at the top of `jobs.json`). A job with `crime_tier` must have exactly that tier's daily wage, crime, discipline, stamina and fatigue, number of success lines, and search numbers; only the skills, the success-line stats and the name may differ. That way adding or removing one cannot break the balance. Copy an existing one (`job_numbers` for tier 1, `job_fixer` for tier 2) and change:
+Add `"crime_job": true` to the job (now: `job_loan`, `job_dock2`, `job_l_late`). In a month where he worked any crime job, he is searched once at month end: chance = min(crime / `crime_div`, `cap_pct`%) (`stats.json` → `arrest` → `raid`). A hit is an arrest (not when sick). The arrest has its own switch, `arrest_events` in `events.json`: it stays on while every other event is off. Remove the line to make the job ordinary again.
 
-- `id`, `name` (mark it `"placeholder": true` while the name is temporary), `road` (`tough`, `lover`, `culture`, `savvy`: whose bad-boy bot uses it);
-- the skill in `daily_effect` (one road skill `+0/1`; extra skills allowed, extra attributes not);
-- `success_lines` (tier 1: one attribute at 60; tier 2: two lines, one of them a skill at 30);
-- `raid_skill`: the skill that gets him through a police search (`raid_prob`, `raid_line` must stay as in `crime_tiers`).
-- tier 2 needs `"prereq": [[["job_periods.<the tier-1 job>", ">=", 3]]]` and `earliest` 1927-01 or later; tier 1 must be available by 1926-07.
-- Add the id to `job_unlocks` of its `earliest` month in `calendar.json`.
+(The old switched-off jobs still carry `crime_tier` and `raid_*` from step 12c; they are not offered and their shape rules apply only to them.)
 
 ### 11. Fatigue, drugs, arrest numbers (step 12c)
 
@@ -418,8 +413,8 @@ Crime jobs come in two tiers with a fixed shape (`crime_tiers` at the top of `jo
 | `books.json` each tier and book | `fatigue_per_day` | fatigue per reading day (2); a book must match its tier |
 | `places.json` | `fatigue_per_day` | negative; town places −3, resort −20 |
 | `annual.json` | `attend_effect` | effect of attending the annual event (`fatigue+15`) |
-| `stats.json` → `drug` | `dealer` (probability, stock, price), `dose_effect`, `outcome_weights` (high / divine / side), `divine_gain_mult`, `divine_perf_add`, `side_perf_add`, `side_effect`, `side_fail_pct`, `hook_*_pct`, `attack`, `stage_lines`, `refuse_discipline`, `deep_monthly_effect` | the dealer, the dose and the addiction (GDD 5.8.1); `stage_lines` are the depths for stages 1, 2, 3 |
-| `stats.json` → `arrest` | `fine_min`, `fine_pct`, `detain_periods`, `raid_crime_div` | fine = max(fine_min, money × fine_pct%); periods lost to detention; search probability × (1 + crime / raid_crime_div) |
+| `stats.json` → `drug` | `dealer` (probability, stock, price), `dose_effect`, `outcome_weights` (none / divine / side), `divine_gain_mult`, `divine_perf_add`, `side_perf_add`, `side_effect`, `side_fail_pct`, `hook_*_pct` (minus half the discipline scale), `attack` (`discipline_extra_drop` more at `discipline_extra_tier` or above), `stage_lines`, `refuse_discipline`, `deep_monthly_effect` | the dealer, the dose and the addiction (GDD 5.8.1); `stage_lines` are the depths for stages 1, 2, 3 |
+| `stats.json` → `arrest` | `fine_min`, `fine_pct`, `detain_periods`, `raid` (`crime_div`, `cap_pct`) | fine = max(fine_min, money × fine_pct%); periods lost to detention (they rest like home for fatigue); month-end search chance min(crime / crime_div, cap_pct%) |
 | `roles.json` → `defaults.board` | `morals_months` | months without big films after an arrest or a scandal |
 | `rest.json` → `forced` | `discharge_effect`, `discharge_event` | what leaving the sanatorium does |
 
@@ -438,17 +433,17 @@ In effects, `drug_points+1` and `drug_stage=0` work like any other name.
 - **Slacking off** (`stats.json` `slack`): `cap_pct` is the top chance; `home_cond` sends him home; `by_highest` lists where he runs to by the highest scale (ties go to the earlier row); `fame_div10` turns fame into 0-100 for that comparison.
 - **Status traits** (`traits.json`): each row is `{id, name, body, cond, effects}`. The trait shows on the status bar while `cond` holds (same condition syntax as everywhere); `body` is the tooltip. `effects` may only use the names in `effects_allowed`; now that is `no_audition` (no audition at all while the trait is on). Example: `trait_out_of_shape` is on when looks < 60. To add one, copy a row and change `id`, `name`, `body`, `cond`.
 - **Switches** (`events.json`): `"enabled": false` turns every event off (events, outing events, era events); `"valen_death": false` keeps Valen as a rival to the end with no replacement. Both are false now; set to true to bring them back.
-- **Day rolls**: a class day succeeds when stamina/2 + random(0..stamina/2) >= random(0..fatigue). A job's `success_lines` (`[{"stat": ..., "value": ...}]`) are each rolled as stat - random(0..fatigue) >= value; all must hold. On a bad work day only the fatigue of `daily_effect` is applied.
+- **Day rolls**: a class day succeeds when stamina/2 + random(0..stamina/2) >= random(0..fatigue); a class with `"success_stat": "discipline"` (tutoring) uses that stat instead of stamina. A job's `success_lines` (`[{"stat": ..., "value": ...}]`) are each rolled as stat - random(0..fatigue) >= value; all must hold. On a bad work day only the fatigue of `daily_effect` is applied.
 
 - **Switch something off without deleting it**: add `"disabled": true` to a job, a class or a book. It stays in the table (events and conditions that name it still pass the check) but the game does not offer it, and its job events never fire. Remove the line to switch it back on.
 - **Job wages** (`jobs.json`): `wage_tiers` is the daily wage at each raise tier, five whole numbers in dollars, e.g. `[4, 5, 6, 7, 9]`. The tier is picked by how many periods of that job succeeded: `raise_tiers` → `periods_below` (now 8 / 23 / 45 / 68). A full period with no bad day pays another `full_attendance_bonus_pct` (50%).
 - **Job gates**: `prereq` decides whether a job can be picked, e.g. `[[["stamina", ">=", 80], ["education", ">=", 40]]]` (both needed). `earliest` is the first month it is offered. `success_lines` is no longer used (leave it `[]`).
 - **Bad days**: every class or work day goes bad with probability = fatigue% (`jobs.json` → `bad_day.cap` is the ceiling, 100).
 - **0-or-1 gains**: a range of exactly `[0, 1]` (or `[-1, 0]`) in `daily_effect` or a class `per_level` gives the non-zero value with probability `zero_one_prob` (now `[2, 3]`, in both `jobs.json` and `classes.json`). Any other range `[a, b]` is a plain random number from a to b.
-- **One of two stats**: a `daily_effect` line with `"one_of": ["negotiation", "business"]` puts the gain on one of them, picked at random each day (`stat` must still be one of them).
+- **One of two stats**: a `daily_effect` line with `"one_of": ["negotiation", "insight"]` puts the gain on one of them, picked at random each day (`stat` must still be one of them).
 - **Class levels**: `classes.json` → `class_steps` `[4, 8, 11]`: up to 4 periods taken is level 1, up to 8 level 2, up to 11 level 3, then level 4. `fee` and every `per_level` have four entries, one per level.
 - **`code`, `site`, `original`** on the new jobs and classes are notes: the placeholder code from the plan, the map place it will belong to, and the original game's job or class. The game does not read them yet.
-- **Fixed boards** (`roles.json`): `board_schedule` lists each audition month with its `big`, `medium` and `small` role id (an optional `small2` adds a second small role; the 1924-25 boards have one); `reserve_pool` is the ordered list of extra roles (small or medium) shown when connections reach `defaults.board.connections_extra`. A role's sign-up conditions are `fame_gate` plus `gates` (a condition, e.g. `[[["looks", ">=", 80]]]`). To change a board, put another role id in its slot; to add a board, add a line here and set `board: true` on that month in `calendar.json` (the checker wants the two to match).
+- **Fixed boards** (`roles.json`): `board_schedule` lists each audition month with its `big`, `medium` and `small` role id (an optional `small2` adds a second small role; the 1924-25 boards have one); `reserve_pool` is the ordered list of extra roles (small or medium) shown when rapport reach `defaults.board.rapport_extra`. A role's sign-up conditions are `fame_gate` plus `gates` (a condition, e.g. `[[["looks", ">=", 80]]]`). To change a board, put another role id in its slot; to add a board, add a line here and set `board: true` on that month in `calendar.json` (the checker wants the two to match).
 - **The map** (`map.json`): one record per place, drawn in table order. `entries` are the schedule entries offered there (class, job, `rest_home`, `rest_outing@<place>`); a switched-off id is skipped and a job is hidden until its `earliest` month. `shops` are `street.json` entries opened from there. `activities` are shown greyed out (not playable yet). `extra`: `home` adds script writing, `city` the hospital, `studio` a note that shooting comes here. `pos` and `size` are pixels on a 900 x 320 map. The checker complains when a switched-on class or job is on no place.
 - **Living costs** (`lifestyle.json`): `monthly_cost` has five numbers (one per fame tier); they are all the same now. Money never goes below 0.
 

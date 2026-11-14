@@ -23,7 +23,7 @@
    "name": "前辈的装备·手腕",
    "class": "accessory",
    "price": 0,
-   "effect": "negotiation+10 connections+5",
+   "effect": "negotiation+10 rapport+5",
    "slot": "accessory",
    "sellable": false,
    "note": "Given at senior-approval tier 200; class and skill are placeholders (GDD only says \"+10 to one skill of the road, +5 to another\")"
@@ -162,7 +162,7 @@
    "name": "社交名录",
    "class": "held",
    "price": 30,
-   "effect": "connections+5",
+   "effect": "rapport+5",
    "slot": null,
    "sellable": true
   },
@@ -199,7 +199,7 @@
    "name": "跑车",
    "class": "held",
    "price": 1500,
-   "effect": "riding+5 connections+5",
+   "effect": "riding+5 rapport+5",
    "slot": null,
    "sellable": true,
    "exclusive_group": "car"
@@ -209,7 +209,7 @@
    "name": "进口豪车",
    "class": "held",
    "price": 6000,
-   "effect": "riding+8 connections+10 looks+20",
+   "effect": "riding+8 rapport+10 looks+20",
    "slot": null,
    "sellable": true,
    "exclusive_group": "car"

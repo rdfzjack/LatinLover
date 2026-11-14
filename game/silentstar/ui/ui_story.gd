@@ -24,6 +24,8 @@ func board(st) -> void:
 			if Board.can_try(st, i) == "":
 				ok.append(i)
 		if ok.is_empty():
+			if b["tried"].is_empty():
+				agent.view_board(st, b)       # user: the board is still shown, every role greyed out with its reason (same as Board.run)
 			break
 		var pick = agent.pick_role(st, b, ok)
 		if pick == null:

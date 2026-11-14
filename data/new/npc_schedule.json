@@ -1,5 +1,5 @@
 {
- "note": "An NPC is present this period when place, year and month match and the cond holds (5.5.2). Once the player has met someone at a place, the schedule book records that entry; with connections >= schedule_full_view_line every known NPC is shown",
+ "note": "An NPC is present this period when place, year and month match and the cond holds (5.5.2). Once the player has met someone at a place, the schedule book records that entry; with rapport >= schedule_full_view_line every known NPC is shown",
  "schedule_full_view_line": 40,
  "schedule": [
   {

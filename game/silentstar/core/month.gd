@@ -157,6 +157,8 @@ func run_month(plan: Array, from_period := 0, carried := {}) -> Array:
 		if st.void_periods.has(ab):          # detention (step 12c): this period is void; a shoot locked here breaches
 			st.void_periods.erase(ab)
 			Film.breach_period(st, st.ym, i)
+			for dd in days:                  # user: detention rests like home for fatigue (no Sil favor, not an outing)
+				Schedule.add_stat(st, "fatigue", d.rests["rest_home"]["fatigue_per_day"])
 			st.inc("count.void.detained")
 			last.append({"schedule": "detained"})
 			continue
@@ -243,7 +245,7 @@ func end_month() -> void:
 	if st.status["in_love"]:
 		st.romance_months += 1
 		for n in rr["lines"]:
-			st.favor[n] = maxi(0, st.favor.get(n, 0) + rr["monthly_favor"])
+			st.favor[n] = Rules.favor_clamp(st, st.favor.get(n, 0) + rr["monthly_favor"])
 		if st.romance_months >= rr["duration_months"] and st.highest_base() != "looks":
 			st.status["in_love"] = 0
 			st.romance_months = 0

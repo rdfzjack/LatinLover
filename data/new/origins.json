@@ -17,7 +17,7 @@
     },
     {
      "text": "走私",
-     "effect": "riding+5 negotiation+5 business+5 crime+30",
+     "effect": "riding+5 negotiation+5 insight+5 crime+30",
      "tag_counts": {},
      "flags": [
       "smuggling"
@@ -73,7 +73,7 @@
     },
     {
      "text": "演技派",
-     "effect": "acting+20 speech+5 writing+5 fame-20",
+     "effect": "acting+20 speech+5 writing+5",
      "tag_counts": {
       "tragic": 1,
       "arthouse": 1
@@ -83,7 +83,7 @@
     },
     {
      "text": "大众情人",
-     "effect": "physique+10 grooming+10 looks+10 fame+20",
+     "effect": "physique+10 grooming+10 looks+10",
      "tag_counts": {
       "romance": 1,
       "exotic_lover": 1
@@ -93,7 +93,7 @@
     },
     {
      "text": "色情电影",
-     "effect": "looks+20 physique+10 fame+30 crime+20",
+     "effect": "looks+20 physique+10 crime+20",
      "tag_counts": {
       "underground": 1,
       "romance": 1
@@ -128,7 +128,7 @@
     },
     {
      "text": "一个欠他人情的人",
-     "effect": "connections+10",
+     "effect": "rapport+10",
      "tag_counts": {},
      "flags": [
       "owed_favor"

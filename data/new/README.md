@@ -24,9 +24,10 @@ Variables:
 | Form | Meaning |
 |---|---|
 | `stamina` `education` ... `fame` `money` | base attributes |
-| `fight` ... `business` | skill displayed values |
+| `fight` ... `insight` | skill displayed values |
 | `sick_index` `reckless_index` | indices |
-| `favor.sil` `favor.actress` | favor (NPC ids are in `romance.json`) |
+| `favor.sil` `favor.actress` | favor, −100 to 100 (NPC ids are in `romance.json`) |
+| `favor_tier.<npc>` | favor tier: compare with `enemy` `at_odds` `known` `friendly` `close` `intimate` or 0-5 (`romance.json` rules.favor_tiers) |
 | `job_periods.<job id>` | periods in which the job succeeded |
 | `scale.<attr or skill>` | scale 0-100 (GDD 2.1.1): a base attribute is min(100, value x 10 / `stats.scale.div10`), a skill is its displayed value |
 | `tier.<attr or skill>` | tier of the scale: compare with `low` `mid` `high` `very_high` or 0-3, e.g. `["tier.loyalty", ">=", "high"]` |
@@ -52,6 +53,10 @@ Every event (`events.json`, `outing.json`) has a `tier`: `small`, `medium`, `lar
 
 Fields named `*_formula` hold a formula string interpreted by the code. `code: true` on an event means the logic is complex: the data only gives cond, prob and simple effects and the code implements the rest following the `note`.
 
+## Checks
+
+An event option's `check`: `null` always succeeds; a gate `[variable, comparator, value]`; or a d100 dice check `{"check": skill or base attribute, "diff": n}`: chance = scale − diff, clamped to `stats.json` check.min_pct..max_pct; `r1(100) <= chance` succeeds (`Rules.check_pct` gives the chance before the roll).
+
 ## Probability
 
 `prob` of an event: `null` always; `[numerator, denominator]`; a tiered list `[{cond, value}]` takes the first whose cond holds (the last tier has an empty cond); `{numerator: variable, denominator: n, max: [p, q]}` (scandal exposure).
@@ -60,11 +65,11 @@ Fields named `*_formula` hold a formula string interpreted by the code. `code: t
 
 | File | Content | GDD |
 |---|---|---|
-| `stats.json` | attributes, money, roads, levels, fame tiers, indices, hidden values; `drug` (boost action, drug stages) and `arrest` (fine, detention, search scaling), step 12c | 2, 5.8, 11.2 |
+| `stats.json` | attributes, money, roads, levels, fame tiers, indices, hidden values; `scale`; `check` (d100 dice limits); `drug` (boost action, drug stages) and `arrest` (fine, detention, `raid`: the month-end crime-job search) | 2, 5.8, 11.0, 11.2 |
 | `skills.json` | the 12 skills | 2.2 |
-| `classes.json` | the 6 classes; `fatigue_per_day` per class | 5.3.1 |
+| `classes.json` | the classes; `fatigue_per_day` per class; optional `success_stat` (the stat of the day roll instead of stamina) | 5.3.1 |
 | `books.json` | book tiers and the book list; `fatigue_per_day` (a book matches its tier) | 5.3.2 |
-| `jobs.json` | the 17 jobs, with unlocks, raises and hooks; crime jobs carry `crime_tier`, `road`, `raid_prob`, `raid_line`, `raid_skill` and must match `crime_tiers` | 5.4, 5.4.1 |
+| `jobs.json` | the 17 jobs, with unlocks, raises and hooks; `crime_job: true` marks a crime job (searched at month end); the old switched-off jobs carry `crime_tier` and `raid_*` | 5.4, 5.4.1 |
 | `rest.json` | rests: at home (Sil keeps company), outing; the sanatorium is forced only when very sick (`player_choice: false`); `forced` has `discharge_effect` and `discharge_event` | 5.5 |
 | `places.json` | outing places: cost (or by fame tier), fatigue change per day, residents, random table. One more row is one more place | 5.5.1 |
 | `lifestyle.json` | lifestyles | 5.7 |

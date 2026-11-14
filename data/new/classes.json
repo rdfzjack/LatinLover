@@ -154,11 +154,15 @@
      ]
     },
     {
-     "stat": "speech",
+     "stat": "taste",
      "per_level": [
       [
        0,
-       3
+       2
+      ],
+      [
+       0,
+       2
       ],
       [
        0,
@@ -167,10 +171,6 @@
       [
        0,
        4
-      ],
-      [
-       0,
-       5
       ]
      ]
     }
@@ -194,11 +194,11 @@
      "per_level": [
       [
        1,
-       1
+       2
       ],
       [
        1,
-       1
+       2
       ],
       [
        1,
@@ -215,24 +215,24 @@
      "per_level": [
       [
        1,
-       3
+       1
       ],
       [
        1,
-       3
+       1
       ],
       [
        1,
-       4
+       1
       ],
       [
        1,
-       5
+       1
       ]
      ]
     },
     {
-     "stat": "taste",
+     "stat": "speech",
      "per_level": [
       [
        0,
@@ -253,6 +253,7 @@
      ]
     }
    ],
+   "success_stat": "discipline",
    "fatigue_per_day": 1
   },
   {
@@ -873,7 +874,7 @@
   3
  ],
  "zero_one_note": "A per_level range of exactly [0,1] gives +1 with this probability (six-year run: x4/3 of a 0-or-1 gain)",
- "bad_day_note": "Original roll (user): a class day succeeds when stamina/2 + r0(stamina/2) >= r0(fatigue); a bad day gives no gains, the fee is still paid. The fee is paid day by day; a day that cannot be paid is skipped (no gain, no fatigue)",
+ "bad_day_note": "Original roll (user): a class day succeeds when stat/2 + r0(stat/2) >= r0(fatigue); stat is stamina, or success_stat when the class has one (tutoring: discipline, user: a tutor does not care about stamina, a pupil who cannot hold himself never learns); a bad day gives no gains, the fee is still paid. The fee is paid day by day; a day that cannot be paid is skipped (no gain, no fatigue)",
  "disabled_note": "disabled: true = switched off (not offered)",
  "range_note": "User (lover playtest): the x4/3 gains are cut back to the original tops: every 4 became 3, 5 became 4, 7 became 5. Grooming and physique swapped (dance trains physique). Charity no longer gives looks."
 }

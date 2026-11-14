@@ -117,26 +117,26 @@
    "fixed_use": "Film fee x(1+negotiation/400); event checks"
   },
   {
-   "id": "connections",
-   "name": "人脉",
+   "id": "rapport",
+   "name": "人缘",
    "road": "savvy",
    "train_range": [
     0,
     100
    ],
    "init": 10,
-   "fixed_use": "Audition intel; the board shows extra roles; street discounts; NPC schedule"
+   "fixed_use": "Likeable: the board shows an extra role (>= 50); street discounts; NPC schedule"
   },
   {
-   "id": "business",
-   "name": "生意",
+   "id": "insight",
+   "name": "洞悉",
    "road": "savvy",
    "train_range": [
     0,
     100
    ],
    "init": 0,
-   "fixed_use": "To be filled in once the user updates the job types"
+   "fixed_use": "Reads people: shows a rival's habit and main-color count (>= 60); rules out one style before the build (>= 80)"
   }
  ]
 }

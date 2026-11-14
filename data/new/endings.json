@@ -187,13 +187,153 @@
   }
  ],
  "category_note": "Take the first that matches; ties on top_road go by tough, lover, culture, savvy",
- "grade_lines": {
-  "S": 451,
-  "A": 381,
-  "B": 311,
-  "C": 211,
-  "D": 0
- },
+ "grade_axes": [
+  {
+   "id": "rep",
+   "var": "max_rep",
+   "lines": {
+    "S": 451,
+    "A": 381,
+    "B": 311,
+    "C": 211
+   }
+  },
+  {
+   "id": "fame",
+   "var": "fame",
+   "lines": {
+    "S": 600,
+    "A": 450,
+    "B": 300,
+    "C": 150
+   }
+  },
+  {
+   "id": "rep_sum",
+   "var": "rep_sum",
+   "lines": {
+    "S": 1300,
+    "A": 1100,
+    "B": 900,
+    "C": 700
+   }
+  },
+  {
+   "id": "dark",
+   "grades": [
+    {
+     "cond": [
+      [
+       [
+        "crime",
+        ">=",
+        500
+       ],
+       [
+        "tough",
+        ">=",
+        300
+       ],
+       [
+        "savvy",
+        ">=",
+        200
+       ]
+      ]
+     ],
+     "grade": "S"
+    },
+    {
+     "cond": [
+      [
+       [
+        "discipline",
+        "==",
+        0
+       ],
+       [
+        "crime",
+        ">=",
+        100
+       ],
+       [
+        "max_rep",
+        ">=",
+        311
+       ]
+      ],
+      [
+       [
+        "discipline",
+        "<",
+        30
+       ],
+       [
+        "crime",
+        ">=",
+        250
+       ],
+       [
+        "max_rep",
+        ">=",
+        311
+       ]
+      ],
+      [
+       [
+        "crime",
+        ">=",
+        400
+       ],
+       [
+        "max_rep",
+        ">=",
+        311
+       ]
+      ]
+     ],
+     "grade": "A"
+    },
+    {
+     "cond": [
+      [
+       [
+        "discipline",
+        "==",
+        0
+       ],
+       [
+        "crime",
+        ">=",
+        100
+       ]
+      ],
+      [
+       [
+        "discipline",
+        "<",
+        30
+       ],
+       [
+        "crime",
+        ">=",
+        250
+       ]
+      ],
+      [
+       [
+        "crime",
+        ">=",
+        400
+       ]
+      ]
+     ],
+     "grade": "B"
+    }
+   ]
+  }
+ ],
+ "grade_note": "User (2026-11): the grade is the best of several axes, so a star, an all-rounder and a crime boss each have a way to S. rep: highest road reputation; fame; rep_sum: the four reputations added; dark: the underworld-emperor condition is S, a dark-category state with highest reputation >= 311 is A, any other dark-category state is B (the conds are copies of special end_underworld and category dark). Below every C line: D. The ending record keeps grade_by (the axis that gave the grade)",
  "tag_families": {
   "lover_family": [
    "romance",
@@ -1014,7 +1154,7 @@
      [
       "top_savvy_skill",
       "==",
-      "business"
+      "insight"
      ]
     ]
    ],
@@ -1234,7 +1374,7 @@
       200
      ],
      [
-      "connections",
+      "rapport",
       ">=",
       70
      ]
@@ -1324,7 +1464,7 @@
   "stacking": "The destiny is played after the career ending"
  },
  "scoring": {
-  "total": "(stamina+education+loyalty+looks+discipline+fame)/6 - crime + ending_score + character_score + destiny_score",
+  "total": "(stamina+education+loyalty+looks+discipline+fame)/6 + ending_score + character_score + destiny_score (user, 2026-11: crime is no longer subtracted; the ending category and the character score carry it)",
   "ending_score": {
    "S": 500,
    "A": 400,

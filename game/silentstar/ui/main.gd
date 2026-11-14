@@ -333,7 +333,8 @@ func entry_effect(e: String) -> String:
 			gs.append(nm(x["stat"]) + rng_txt(pl[0], pl[1]))
 		t.append(tr("ui.main.entry_effect.1"))
 		t.append(tr("ui.main.entry_effect.2") + " ".join(gs))
-		t.append(explain.practice_text(st.val("stamina"), st.val("fatigue")))
+		var ss: String = c.get("success_stat", "stamina")
+		t.append(explain.practice_text(st.val(ss), st.val("fatigue"), nm(ss)))
 		t.append(tr("ui.main.entry_effect.3") % int(c.get("fatigue_per_day", 1)))
 		t.append(tr("ui.main.entry_effect.4") % [int(c["fee"][lv - 1]), lv])
 		if st.money < int(c["fee"][lv - 1]) * Schedule.days_of(st, cur_period_hint).filter(func(x): return not x[1]).size():
@@ -342,7 +343,7 @@ func entry_effect(e: String) -> String:
 		var b: Dictionary = d.books[iid]
 		t.append(tr("ui.main.entry_effect.1"))
 		t.append(tr("ui.main.entry_effect.5") % [nm(b["skills"]), rng_txt(b["gain"][0], b["gain"][1])])
-		t.append(explain.practice_text(st.val("stamina"), st.val("fatigue")))
+		t.append(explain.practice_text(st.val("stamina"), st.val("fatigue"), nm("stamina")))
 		t.append(tr("ui.main.entry_effect.3") % int(b.get("fatigue_per_day", 1)))
 		if st.books.has(iid):
 			t.append(tr("ui.main.entry_effect.6") % int(st.books[iid]))
@@ -1095,7 +1096,8 @@ func explain_period(entry: String, out: Dictionary, fatigue: int) -> String:
 	if pe[0] == "class" and out.get("broke", false):
 		return tr("ui.main.entry_effect.16")
 	if pe[0] == "class" or pe[0] == "book":
-		return tr("ui.main.explain_period.1") + explain.practice_text(st.val("stamina"), fatigue)
+		var ss: String = d.classes[pe[1]].get("success_stat", "stamina") if pe[0] == "class" else "stamina"
+		return tr("ui.main.explain_period.1") + explain.practice_text(st.val(ss), fatigue, nm(ss))
 	return ""
 
 
@@ -1196,7 +1198,7 @@ func _auto_answer(kind: String, payload):
 		"play":
 			return 0
 		"pick_role":
-			return payload["ok"][0]
+			return payload["ok"][0] if not payload["ok"].is_empty() else null
 		"support", "stunt", "suppress", "role_event":
 			return true
 		"option":
@@ -1623,16 +1625,23 @@ func _show_map(i: int) -> void:
 	var days := Schedule.days_of(st, i)
 	heading(tr("ui.main.show_map.1") % [st.date(), [tr("ui.period.early"), tr("ui.period.mid"), tr("ui.period.late")][i], days[0][0], days[days.size() - 1][0]])
 	label(tr("ui.main.show_map.2"))
+	var places: Array = d.map_locations.duplicate()
+	if int(st.flags.get("dealer_stock", 0)) > 0:      # the dealer is in town this month (user: an extra place on the map)
+		# his own row under the grid, so he never covers a place of map.json (he used to sit on the church)
+		var low := 0
+		for L in places:
+			low = maxi(low, int(L["pos"][1]) + int(L["size"][1]))
+		places.append({"id": "loc_dealer", "pos": [20, low + 20], "size": [200, 80]})
+	var bottom := 0
+	for L in places:
+		bottom = maxi(bottom, int(L["pos"][1]) + int(L["size"][1]))
 	var map := Control.new()
-	map.custom_minimum_size = Vector2(900, 320)
+	map.custom_minimum_size = Vector2(900, maxi(320, bottom + 20))
 	body.add_child(map)
 	var bg := ColorRect.new()
 	bg.color = Color(0.16, 0.26, 0.2)
 	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
 	map.add_child(bg)
-	var places: Array = d.map_locations.duplicate()
-	if int(st.flags.get("dealer_stock", 0)) > 0:      # the dealer is in town this month (user: an extra place on the map)
-		places.append({"id": "loc_dealer", "pos": [680, 220], "size": [200, 80]})
 	for L in places:
 		var b := Button.new()
 		b.text = "%s\n%s" % [nm(L["id"]) if L["id"] != "loc_dealer" else tr("ui.main.dealer.1"), loc_hint(L)]
