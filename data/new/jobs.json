@@ -137,19 +137,13 @@
     {
      "stat": "fame",
      "add": [
-      0,
+      1,
       1
-     ]
+     ],
+     "while_below": 150
     },
     {
      "stat": "stamina",
-     "add": [
-      -1,
-      -1
-     ]
-    },
-    {
-     "stat": "education",
      "add": [
       -1,
       -1
@@ -168,7 +162,7 @@
    "job_period_effect": null,
    "period_random": [],
    "milestones": [],
-   "note": "User (2026-11, instead of the stable boy): the only job that gives fame; education -1 a day (the illiterate superstar, Duv's pupil). Middle wage, middle fatigue; site, open month, success line and numbers are placeholders"
+   "note": "User (2026-11): the only job that gives fame: +1 per successful day, only while fame < 150 (no education loss now). Site, open month and success line are placeholders"
   },
   {
    "id": "job_server",
@@ -248,15 +242,15 @@
     {
      "stat": "discipline",
      "add": [
-      4,
-      4
+      3,
+      3
      ]
     },
     {
      "stat": "crime",
      "add": [
-      -3,
-      -3
+      -2,
+      -2
      ]
     },
     {
@@ -406,13 +400,13 @@
      ]
     ]
    ],
-   "daily_wage": 9,
+   "daily_wage": 12,
    "wage_tiers": [
-    9,
-    11,
-    13,
-    16,
-    19
+    12,
+    14,
+    17,
+    21,
+    25
    ],
    "success_lines": [
     {
@@ -424,22 +418,22 @@
     {
      "stat": "stamina",
      "add": [
-      2,
-      2
+      1,
+      1
      ]
     },
     {
      "stat": "crime",
      "add": [
-      2,
-      2
+      3,
+      3
      ]
     },
     {
      "stat": "fatigue",
      "add": [
-      3,
-      3
+      5,
+      5
      ]
     }
    ],
@@ -449,7 +443,7 @@
    "period_random": [],
    "milestones": [],
    "crime_job": true,
-   "note": "same site, level 2; user (tentative): stamina +2, crime +2, no looks loss"
+   "note": "same site, level 2; user (2026-11 balance): wage 12-25, stamina +1, crime +3, fatigue +5, no looks loss"
   },
   {
    "id": "job_collector",
@@ -609,7 +603,7 @@
    "period_random": [],
    "milestones": [],
    "crime_job": true,
-   "note": "Same site as debt collecting, level 2 (user). Gates are also the daily success lines. Wage like the upstairs rooms (placeholder); crime +3 is cancelled by the church -3 on purpose (the pious moneylender). Crime job: searched at month end"
+   "note": "Same site as debt collecting, level 2 (user). Gates are also the daily success lines. Wage like the upstairs rooms (placeholder); crime +3 is mostly offset by the church -2 on purpose (the pious moneylender). Crime job: searched at month end"
   },
   {
    "id": "job_c_slow",
@@ -666,13 +660,6 @@
      ]
     },
     {
-     "stat": "looks",
-     "add": [
-      -1,
-      -1
-     ]
-    },
-    {
      "stat": "fatigue",
      "add": [
       5,
@@ -690,7 +677,7 @@
   {
    "id": "job_c_money",
    "code": "C-MONEY",
-   "name": "创作赚钱（C-钱）",
+   "name": "给影迷杂志写专栏（C-钱）",
    "site": "site_c_money",
    "original": "tutor",
    "earliest": "1924-10",
@@ -729,23 +716,23 @@
      "stat": "stamina",
      "add": [
       -1,
-      -1
+      0
      ]
     },
     {
      "stat": "fatigue",
      "add": [
-      7,
-      7
+      4,
+      4
      ]
     }
    ],
-   "exposure": false,
+   "exposure": true,
    "npc": null,
    "job_period_effect": null,
    "period_random": [],
    "milestones": [],
-   "note": "User (2026-11): pays only, no skill (like the original tutor job), so writing comes only from the salon and the salon cannot be skipped; gate education 90; the daily success line is discipline 20 (user: writing is down to self-control, not stamina; 20 is a placeholder); opens 1924-10."
+   "note": "User (2026-11): pays only, no skill (like the original tutor job), so writing comes only from the salon and the salon cannot be skipped; gate education 90; the daily success line is discipline 20 (user: writing is down to self-control, not stamina; 20 is a placeholder); opens 1924-10. Balance (user, 2026-11): fatigue +4, stamina -0/1, a month with a successful day counts as exposure (no fame decay). Name is a placeholder."
   },
   {
    "id": "job_l_day",

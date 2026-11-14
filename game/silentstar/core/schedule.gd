@@ -399,6 +399,8 @@ static func run_job(st, jid: String, days: Array, hooks) -> Dictionary:
 			for e in j["daily_effect"]:
 				if e["stat"] == "fatigue":
 					continue
+				if e.has("while_below") and st.attr[e["stat"]] >= int(e["while_below"]):
+					continue                  # e.g. the flagpole's fame only counts while fame < 150
 				var v := roll(st, e["add"], zp)
 				var stat: String = e["stat"]
 				if e.has("one_of"):
