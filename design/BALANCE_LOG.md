@@ -2,6 +2,68 @@
 
 ## 现在
 
+### 第 2 步第二轮：每个 50 局（2026-11）
+
+这一轮改了：服务员改回谈吐 0·1（原来谈判或洞悉）；片场打杂改成谈判 0·1 加人缘或洞悉二选一 0·1（原来三项各 0·1）。机器人修了皮草壮汉（攒钱买皮草、化妆箱、奴隶手镯，相貌低时节食、不去码头）和病美人（只在已经生病的月份做楼上房间）。
+
+```
+-- type 1: main road only, stopped when its three skills are trained to 100
+bot              full at (median, p10-p90)   share of 72 months | money then | periods class/job/rest | not full
+full_tough       1927-04 (35-44)                 56%           |    267     | 24/60/25               | 0 of 50
+full_lover       1928-10 (55-59)                 81%           |  10391     | 8/86/58               | 0 of 50
+full_culture     1926-02 (24-28)                 36%           |    327     | 9/44/18               | 0 of 50
+full_savvy       1925-04 (15-18)                 22%           |    859     | 0/35/7               | 0 of 50
+-- type 2: whole games
+bot                    total p50 (p10-p90) | grade S/A/B/C/D % | category % | reps T/L/C/S p50 | top base attr | fame p50 | money p50 | leads s/m/b, support | hit/flop | arrest | collapse
+main_savvy_tough         420 (394-459) | 0/8/92/0/0 | tough 72%, actor 28% | 361/67/62/300 | loyalty 207 (76%) | 243 | 3896 | 9.8/5.3/0.0, 0.6 | 0.0/3.0 | 0.0 | 0%
+main_savvy_lover         496 (482-601) | 0/22/78/0/0 | actor 94%, lover 6% | 0/357/96/326 | loyalty 320 (98%) | 402 | 14837 | 6.2/11.5/0.1, 0.7 | 0.8/3.0 | 0.0 | 0%
+main_savvy_culture       391 (377-405) | 0/0/100/0/0 | culture 76%, actor 24% | 0/128/356/290 | looks 144 (100%) | 280 | 10558 | 8.9/8.9/0.0, 0.6 | 0.0/5.6 | 0.0 | 0%
+main_savvy_savvy         420 (404-538) | 0/14/86/0/0 | actor 92%, savvy 6% | 0/344/102/354 | looks 252 (100%) | 412 | 7021 | 8.1/11.5/0.1, 0.7 | 0.9/2.5 | 0.0 | 0%
+lover_side_first         543 (526-558) | 0/6/94/0/0 | actor 96%, savvy 4% | 0/315/0/346 | loyalty 425 (100%) | 431 | 15859 | 3.5/14.7/0.2, 1.2 | 1.0/4.7 | 0.0 | 0%
+big_only_tough           420 (394-463) | 0/10/90/0/0 | tough 72%, actor 28% | 361/67/62/300 | loyalty 207 (76%) | 243 | 3852 | 9.9/5.3/0.0, 0.6 | 0.0/3.0 | 0.0 | 0%
+big_only_lover           495 (482-599) | 0/16/84/0/0 | actor 94%, lover 6% | 0/357/97/326 | loyalty 323 (98%) | 392 | 14837 | 6.2/11.5/0.0, 0.6 | 0.8/3.0 | 0.0 | 0%
+big_only_culture         391 (377-405) | 0/0/100/0/0 | culture 76%, actor 24% | 0/128/356/290 | looks 144 (100%) | 280 | 10558 | 8.9/8.9/0.0, 0.6 | 0.0/5.6 | 0.0 | 0%
+big_only_savvy           421 (404-527) | 0/12/88/0/0 | actor 92%, savvy 6% | 0/344/102/352 | looks 252 (100%) | 402 | 7021 | 8.1/11.7/0.0, 0.5 | 0.9/2.6 | 0.0 | 0%
+gear_max_tough           412 (389-450) | 0/6/94/0/0 | tough 70%, actor 30% | 355/62/61/308 | loyalty 180 (74%) | 266 | 2676 | 9.5/5.8/0.0, 0.8 | 0.0/3.1 | 0.0 | 0%
+gear_max_lover           497 (481-597) | 0/18/82/0/0 | actor 90%, lover 8% | 0/362/88/320 | loyalty 328 (100%) | 392 | 14766 | 6.1/10.9/0.0, 0.8 | 0.9/2.5 | 0.0 | 0%
+gear_max_culture         391 (382-401) | 0/2/98/0/0 | culture 64%, actor 36% | 0/121/356/290 | looks 144 (100%) | 281 | 11052 | 9.1/9.3/0.0, 0.7 | 0.0/5.9 | 0.0 | 0%
+gear_max_savvy           419 (399-454) | 0/10/90/0/0 | actor 90%, savvy 8% | 0/344/110/356 | looks 251 (100%) | 393 | 6827 | 7.9/11.3/0.1, 0.6 | 0.9/2.3 | 0.0 | 0%
+four_color_stamina       347 (340-388) | 0/2/98/0/0 | savvy 98%, actor 2% | 159/213/191/341 | stamina 349 (100%) | 91 | 556 | 4.6/4.0/0.0, 0.1 | 0.0/1.4 | 0.0 | 0%
+four_color_discipline    528 (507-647) | 2/6/92/0/0 | actor 96%, savvy 4% | 131/332/285/353 | discipline 340 (100%) | 449 | 2516 | 8.2/12.6/0.1, 0.5 | 1.2/2.9 | 0.0 | 0%
+literate_tough           -50 (-188-153) | 0/0/98/2/0 | dark 66%, tough 34% | 341/88/102/0 | crime 512 (98%) | 182 | 985 | 11.6/2.4/0.0, 0.7 | 0.0/3.2 | 4.1 | 0%
+gambler_lover            451 (241-502) | 0/4/72/24/0 | actor 62%, savvy 20% | 0/299/93/308 | looks 212 (48%) | 328 | 6966 | 4.8/9.9/0.1, 0.9 | 1.6/3.4 | 0.0 | 10%
+gambler_tough            406 (381-442) | 0/4/96/0/0 | tough 82%, actor 18% | 352/82/63/292 | loyalty 183 (66%) | 240 | 2645 | 10.2/4.5/0.0, 0.6 | 0.3/2.7 | 0.0 | 0%
+hoard_baptize_lover      700 (662-798) | 0/26/68/6/0 | actor 86%, lover 10% | 0/351/95/314 | discipline 337 (82%) | 403 | 11378 | 6.0/10.3/0.1, 1.0 | 2.2/3.5 | 0.0 | 0%
+pious_lender             445 (376-480) | 0/0/98/2/0 | tough 100% | 340/84/106/3 | discipline 544 (100%) | 174 | 533 | 12.0/2.1/0.0, 0.5 | 0.0/2.6 | 1.0 | 0%
+sick_beauty              226 (40-274) | 0/0/74/26/0 | actor 62%, dark 38% | 0/293/89/314 | looks 481 (100%) | 328 | 7229 | 4.5/10.8/0.1, 0.6 | 0.4/2.8 | 0.0 | 0%
+flagpole_lover           310 (273-513) | 0/2/36/62/0 | actor 66%, savvy 34% | 2/242/66/304 | loyalty 449 (88%) | 331 | 16158 | 4.2/10.1/0.0, 1.2 | 0.4/3.2 | 0.0 | 0%
+fur_strongman            355 (167-369) | 0/0/88/12/0 | tough 100% | 319/45/55/294 | loyalty 131 (72%) | 128 | 1766 | 8.1/1.4/0.0, 0.0 | 0.0/3.5 | 0.0 | 0%
+-- most common endings
+main_savvy_tough       tough_thug 72%, act_action 20%, act_lover 4%, act_lowbudget 4%
+main_savvy_lover       act_voice 52%, act_lover 42%, lover_widow 6%
+main_savvy_culture     cult_tabloid 76%, act_lover 18%, act_voice 6%
+main_savvy_savvy       act_voice 50%, act_lover 40%, biz_broker 6%, act_action 2%
+lover_side_first       act_lover 94%, biz_broker 4%, act_action 2%
+big_only_tough         tough_thug 72%, act_action 20%, act_lover 4%, act_lowbudget 4%
+big_only_lover         act_voice 50%, act_lover 44%, lover_widow 6%
+big_only_culture       cult_tabloid 76%, act_lover 18%, act_voice 6%
+big_only_savvy         act_voice 52%, act_lover 38%, biz_broker 6%, act_action 2%
+gear_max_tough         tough_thug 70%, act_action 24%, act_lowbudget 4%, act_voice 2%
+gear_max_lover         act_voice 50%, act_lover 40%, lover_widow 8%, biz_broker 2%
+gear_max_culture       cult_tabloid 64%, act_lover 22%, act_voice 14%
+gear_max_savvy         act_lover 50%, act_voice 40%, biz_broker 8%, lover_widow 2%
+four_color_stamina     biz_broker 96%, act_character 2%, biz_agent 2%
+four_color_discipline  act_voice 58%, act_lover 34%, biz_broker 4%, act_action 2%
+literate_tough         dark_thug_boss 66%, tough_rider 30%, tough_gym 2%, tough_stunt 2%
+gambler_lover          act_lover 26%, act_voice 22%, act_second 14%, biz_broker 12%
+gambler_tough          tough_thug 82%, act_action 10%, act_lowbudget 6%, act_character 2%
+hoard_baptize_lover    act_lover 42%, act_voice 38%, lover_widow 10%, act_second 4%
+pious_lender           tough_rider 94%, tough_stunt 4%, tough_gym 2%
+sick_beauty            act_lover 50%, dark_marry 38%, act_second 12%
+flagpole_lover         act_second 36%, act_lover 30%, biz_boss 26%, biz_broker 8%
+fur_strongman          tough_thug 100%
+```
+
 ### 第 2 步：找 S 的机器人，每个 50 局（2026-11，第一批规则改完之后）
 
 机器人在 `game/silentstar/tools/sbots.gd`，报告 `tools/sreport.gd`（`--n=50`）。结论写在 PLAN 的“进度”。原始输出：
