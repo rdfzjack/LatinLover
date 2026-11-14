@@ -19,7 +19,7 @@ const H = Bots.H
 
 ## Main-road training: [skill, entries that train it, best first].
 const ROAD_GOALS := {
-	"tough": [["fight", ["class_h1"]], ["riding", ["class_h2"]], ["nerve", ["class_h1"]]],
+	"tough": [["fight", ["class_h1"]], ["riding", ["class_h2"]], ["nerve", ["class_h1", "job_collector"]]],
 	"lover": [["acting", ["class_l1"]], ["physique", ["class_l3"]], ["grooming", ["job_l_night"]]],
 	"culture": [["writing", ["class_c1"]], ["taste", ["class_c1"]], ["speech", ["job_server", "class_c3", "job_collector"]]],
 	"savvy": [["negotiation", ["job_runner"]], ["rapport", ["job_runner"]], ["insight", ["job_runner"]]],

@@ -492,7 +492,7 @@
    ],
    "daily_effect": [
     {
-     "stat": "fight",
+     "stat": "nerve",
      "add": [
       0,
       1
@@ -539,7 +539,7 @@
    "job_period_effect": null,
    "period_random": [],
    "milestones": [],
-   "note": "User (2026-11): fight and speech (fight like the original hunting ground; speech for the literate tough guy and the talkie line). The low wage is on purpose, do not raise it."
+   "note": "User (2026-11): nerve and speech (the literate tough guy; speech for the talkie line). The low wage is on purpose, do not raise it."
   },
   {
    "id": "job_loan",
