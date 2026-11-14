@@ -119,9 +119,10 @@ static func apply_effect(st, text, source := "event") -> Array:
 		elif head == "favor":
 			var cur: int = st.favor.get(k, 0)
 			var nv := _delta(cur, op, v, pct)
-			if (source == "event" or source == "opportunity") and nv > cur and st.val("loyalty") >= 200:
-				nv += 1
-			st.favor[k] = _clampi(nv, 0, 100)
+			var lb: Dictionary = d.t["romance"]["rules"]["loyalty_bonus"]
+			if (source == "event" or source == "opportunity") and nv > cur and cond(st, lb["cond"]):
+				nv += maxi(1, fdiv((nv - cur) * int(lb["pct"]), 100))    # GDD 10.1, user 2026-11: +20%
+			st.favor[k] = favor_clamp(st, nv)
 		elif head == "rep_bonus":
 			var old: int = st.corr[k]
 			st.corr[k] = _delta(st.corr[k], op, v, pct)
@@ -179,6 +180,35 @@ static func tier_of(st, name: String) -> int:
 		if s >= int(tiers[i]["min"]):
 			k = i
 	return k
+
+
+## Favor clamped to romance.json rules.favor_range (-100..100, user 2026-11).
+static func favor_clamp(st, v: int) -> int:
+	var rg: Array = st.d.t["romance"]["rules"]["favor_range"]
+	return _clampi(v, int(rg[0]), int(rg[1]))
+
+
+## Favor tier index 0-5 (enemy, at_odds, known, friendly, close, intimate; romance.json rules.favor_tiers).
+static func favor_tier_of(st, npc: String) -> int:
+	var v: int = st.favor.get(npc, 0)
+	var k := 0
+	var tiers: Array = st.d.t["romance"]["rules"]["favor_tiers"]
+	for i in tiers.size():
+		if v >= int(tiers[i]["min"]):
+			k = i
+	return k
+
+
+## A favor tier id ("friendly") or a number -> favor tier index.
+static func favor_tier_index(d, v) -> int:
+	if typeof(v) == TYPE_STRING:
+		var tiers: Array = d.t["romance"]["rules"]["favor_tiers"]
+		for i in tiers.size():
+			if tiers[i]["id"] == v:
+				return i
+		push_error("unknown favor tier %s" % v)
+		return 0
+	return int(v)
 
 
 ## A tier id ("high") or a number -> tier index.
@@ -272,6 +302,8 @@ static func get_var(st, name: String):
 	var k: String = hr[1]
 	if head == "favor":
 		return st.favor.get(k, 0)
+	if head == "favor_tier":
+		return favor_tier_of(st, k)
 	if head == "flag":
 		return st.flags.get(k, 0)
 	if head == "status":
@@ -332,6 +364,11 @@ static func test(st, term: Array) -> bool:
 	var a = get_var(st, var_name)
 	if typeof(val) == TYPE_STRING and val.begins_with("@"):
 		val = get_var(st, val.substr(1))
+	elif var_name.begins_with("favor_tier."):     # favor_tier.sil >= "friendly"
+		if typeof(val) == TYPE_ARRAY:
+			val = val.map(func(x): return favor_tier_index(st.d, x))
+		else:
+			val = favor_tier_index(st.d, val)
 	elif var_name.begins_with("tier."):           # tier.loyalty >= "high"
 		if typeof(val) == TYPE_ARRAY:
 			val = val.map(func(x): return tier_index(st.d, x))
@@ -357,14 +394,21 @@ static func cond(st, c) -> bool:
 
 # ---------- checks (GDD 11.0) ----------
 
-## A gate [variable, comparator, value], or a dice check {check: skill, line: n}
-## (displayed skill value + r0(20) >= n). null always succeeds.
+## A gate [variable, comparator, value], or a d100 dice check {check: skill or attribute, diff: n}:
+## success chance = scale - diff, clamped to stats.json check.min_pct..max_pct (never 100%); r1(100) <= chance succeeds.
+## null always succeeds.
 static func check(st, c) -> bool:
 	if c == null:
 		return true
 	if typeof(c) == TYPE_DICTIONARY:
-		return st.val(c["check"]) + st.rng.logic.r0(20) >= c["line"]
+		return st.rng.logic.r1(100) <= check_pct(st, c)
 	return test(st, c)
+
+
+## Success chance in % of a d100 dice check, known before the roll (for showing it): scale - diff, clamped.
+static func check_pct(st, c: Dictionary) -> int:
+	var lim: Dictionary = st.d.t["stats"]["check"]
+	return clampi(scale_of(st, c["check"]) - int(c["diff"]), int(lim["min_pct"]), int(lim["max_pct"]))
 
 
 # ---------- probabilities ----------

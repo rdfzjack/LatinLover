@@ -247,6 +247,16 @@ Bots (`tools/bots.gd`):
 
 Report (`tools/report.gd`) new arguments: `--random-options`, `--coverage` (fires per game of every event, options picked, events never fired), `--guard=design/targets.json` (PASS / FAIL / SKIP per target; exit code 2 when a target fails), `--widen=<percent>`. New sections: "from events" (one line per bot) and "step 12c strategies" (one line per strategy bot, one per strategy as the mean over its roads, and the grade-mean difference to the disciplined line). The guard's metrics are `bot_metrics` / `strategy_metrics` / `extra_metrics`. `tools/check.py` step 5 runs it with `--n=30 --no-buy --widen=10` (needs Godot on the PATH or `GODOT`).
 
+**2026-11 rules round** (design/TODO_RULES.md part A):
+- `Rules.check`: a dice check is `{check, diff}`, one `r1(100)` against `Rules.check_pct` (scale − diff, clamped by `stats.check`); `H.check_p` in the bots reads the same function.
+- Skills `connections` → `rapport`, `business` → `insight` everywhere (data keys `rapport_extra`, `rapport_per`, `habit_insight`, `exclude_color_insight`); `board.gd` reads insight for the two audition intel lines.
+- `Schedule.practice_roll(st, stat)` / `practice_ok(st, stat)`: classes pass `success_stat` (default stamina).
+- `run_job`: a `crime_job` worked sets `flag.crime_job_month = ym`; a `fame` gain from a job is written to the fame log (`why` "job", arg the job id).
+- `Events.crime_raid` (called by `Story.month_events` after `drug_month`, before `month_end`): one `chance(min(crime*100, cap*div), 100*div)`; a hit counts `count.raid`, then `_record` + `_arrest` unless sick. Switch `events.arrest_events`. Detention periods in `month.gd` add the home-rest fatigue per day.
+- Drugs: the outcome roll is `r0(none + divine + side - 1)` (exact weights; before it was one wider); `drug_high` is now only 2 (divine). Hook chance subtracts `scale.discipline / 2`; the month without a dose drops `discipline_extra_drop` more at `discipline_extra_tier` or above.
+- Favor: `Rules.favor_clamp` (`romance.rules.favor_range`, −100..100), `favor_tier_of` / `favor_tier_index`, variable `favor_tier.<npc>`; the loyalty bonus is `+max(1, gain × pct%)`.
+- Random-number order added: month end rolls the crime search (one `chance`) after the drug month and before the month-end events, only in a month with a crime job.
+
 **When exporting**: the data tables live outside the project, so `data/new/` must be copied into the project before export (handled in step 13).
 
 ## Text and translations (step 9c-2)

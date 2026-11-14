@@ -1014,7 +1014,7 @@
      [
       "top_savvy_skill",
       "==",
-      "business"
+      "insight"
      ]
     ]
    ],
@@ -1234,7 +1234,7 @@
       200
      ],
      [
-      "connections",
+      "rapport",
       ">=",
       70
      ]

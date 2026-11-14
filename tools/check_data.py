@@ -33,6 +33,7 @@ stats, skills, classes, books, jobs, rest, places, life, street, origins, cal_ =
 habits, rivals, roles, items_t, events_t, outing, romance, npc_sched, chains, annual, opps, endings, map_t, traits_t = (T[n] for n in FILES[11:])
 ATTRS = [a['id'] for a in stats['attrs']]
 SK = [s['id'] for s in skills['skills']]
+ATTR_SCALE = list(stats['scale']['div10'].keys())
 ROADS = [r['id'] for r in stats['roads']]
 CLASS_IDS = [c['id'] for c in classes['classes']]
 JOB_IDS = [j['id'] for j in jobs['jobs']]
@@ -62,7 +63,7 @@ PREFIX = ('status.','count.','tag.','road_periods.','flag.','duels.')
 SCALED = set(T['stats'].get('scale', {}).get('div10', {}))
 def var_ok(v):
     if v in ATTRS or v in SK or v in ROADS or v in DERIVED or v in ('money','sick_index','reckless_index','date'): return True
-    if v.startswith('favor.'): return v.split('.', 1)[1] in NPC
+    if v.startswith(('favor.', 'favor_tier.')): return v.split('.', 1)[1] in NPC
     if v.startswith('job_periods.'): return v.split('.', 1)[1] in JOB_IDS
     if v.startswith('class_periods.'): return v.split('.', 1)[1] in CLASS_IDS
     if v.startswith('road_periods.'): return v.split('.', 1)[1] in ROADS
@@ -126,15 +127,18 @@ for k in ('prob_pct', 'crime_step', 'crime_add_pct', 'prob_cap_pct', 'addicted_a
     if not isinstance(dr.get('dealer', {}).get(k), int): err(f, f'drug.dealer is missing the integer field {k}')
 pr = dr.get('dealer', {}).get('price')
 if not (isinstance(pr, list) and len(pr) == 2 and pr[0] <= pr[1]): err(f, 'drug.dealer.price must be [low, high]')
-for k in ('fail_base_pct', 'fail_step_pct', 'fail_cap_pct', 'fatigue_base', 'fatigue_step', 'depth_drop'):
+for k in ('fail_base_pct', 'fail_step_pct', 'fail_cap_pct', 'fatigue_base', 'fatigue_step', 'depth_drop', 'discipline_extra_drop'):
     if not isinstance(dr.get('attack', {}).get(k), int): err(f, f'drug.attack is missing the integer field {k}')
 ow = dr.get('outcome_weights', {})
-if sorted(ow) != ['divine', 'high', 'side'] or not all(isinstance(v, int) and v >= 0 for v in ow.values()):
-    err(f, 'drug.outcome_weights must have the integer weights high, divine, side')
+if sorted(ow) != ['divine', 'none', 'side'] or not all(isinstance(v, int) and v >= 0 for v in ow.values()):
+    err(f, 'drug.outcome_weights must have the integer weights none, divine, side')
 if not (isinstance(dr.get('stage_lines'), list) and len(dr['stage_lines']) == 3 and dr['stage_lines'] == sorted(dr['stage_lines'])):
     err(f, 'drug stage_lines must be 3 increasing numbers (stages 1, 2, 3)')
 for k in ('fine_min', 'fine_pct', 'detain_periods', 'raid_crime_div'):
     if not isinstance(stats.get('arrest', {}).get(k), int): err(f, f'arrest is missing the integer field {k}')
+for k in ('crime_div', 'cap_pct'):
+    if not isinstance(stats.get('arrest', {}).get('raid', {}).get(k), int): err(f, f'arrest.raid is missing the integer field {k}')
+if dr.get('attack', {}).get('discipline_extra_tier') not in [t['id'] for t in stats['scale']['tiers']]: err(f, 'drug.attack.discipline_extra_tier must be a tier id of scale.tiers')
 # skills
 f = 'skills.json'
 if len(SK) != 12 or len(set(SK)) != 12: err(f, 'skills must have 12 entries with unique ids')
@@ -148,6 +152,7 @@ f = 'classes.json'
 for c in classes['classes']:
     need(f, c, ['id','name','fee','gain'], c.get('id'))
     if len(c['fee']) != 4: err(f, f"{c['id']} fee must have 4 tiers")
+    if c.get('success_stat') is not None and c['success_stat'] not in ATTRS + SK: err(f, f"{c['id']} success_stat must be a base attribute or a skill")
     for e in c['gain']:
         if e['stat'] not in SK and e['stat'] not in ATTRS: err(f, f"{c['id']} gain stat does not exist {e['stat']}")
         if len(e['per_level']) != 4 or not all(is_range(r) for r in e['per_level']): err(f, f"{c['id']} {e['stat']} per_level format")
@@ -169,7 +174,7 @@ for b in books['books']:
     if not (isinstance(b.get('fatigue_per_day'), int) and b['fatigue_per_day'] >= 0): err(f, f"{b['id']} fatigue_per_day must be an integer >= 0")
 if len(set(BOOK_IDS)) != len(BOOK_IDS): err(f, 'duplicate id')
 if not BOOK_IDS: err(f, 'need at least one book')
-for s in ('fight','riding','nerve','physique','connections'):
+for s in ('fight','riding','nerve','physique','rapport'):
     if any(b['skills'] == s for b in books['books']): err(f, f'{s} must not have books')
 # jobs
 f = 'jobs.json'
@@ -407,7 +412,7 @@ def check_prob(w, p):
 def check_check(w, c):
     if c is None: return
     if isinstance(c, dict):
-        if c['check'] not in SK or not isinstance(c['line'], int): err(f, f'{w} dice check')
+        if (c['check'] not in SK and c['check'] not in ATTR_SCALE) or not isinstance(c.get('diff'), int) or 'line' in c: err(f, f'{w} dice check: write {{"check": skill or base attribute, "diff": n}}')
     elif isinstance(c, list):
         check_cond(f, [[c]], w + ' check')
 for e in events_t['events']:
@@ -587,7 +592,7 @@ for rid in roles.get('reserve_pool', []):
     elif r['size'] not in ('small', 'medium'): err(f, f'reserve_pool role {rid} must be small or medium')
 for r in roles['roles']:
     if 'gates' in r: check_cond(f, r['gates'], r['id'] + ' gates')
-if not isinstance(roles['defaults']['board'].get('connections_extra'), int): err(f, 'defaults.board needs the integer connections_extra')
+if not isinstance(roles['defaults']['board'].get('rapport_extra'), int): err(f, 'defaults.board needs the integer rapport_extra')
 # map (the places on the map and what each offers)
 f = 'map.json'
 seen = set()

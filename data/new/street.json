@@ -1,6 +1,6 @@
 {
  "discount": {
-  "connections_per": 20,
+  "rapport_per": 20,
   "cut_pct_per_step": 5,
   "cap_pct": 25,
   "rounding": "rounded up after the discount",

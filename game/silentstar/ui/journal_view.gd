@@ -9,9 +9,9 @@ func build(m) -> void:
 	var d = m.d
 	var st = m.st
 	m.heading(tr("ui.journal.build.1"), self)
-	var full: bool = st.val("connections") >= int(d.t["npc_schedule"]["schedule_full_view_line"])
+	var full: bool = st.val("rapport") >= int(d.t["npc_schedule"]["schedule_full_view_line"])
 	m.label(tr("ui.journal.build.2") % [
-		int(d.t["npc_schedule"]["schedule_full_view_line"]), st.val("connections")], self)
+		int(d.t["npc_schedule"]["schedule_full_view_line"]), st.val("rapport")], self)
 	var shown := 0
 	for s in d.schedule_npc:
 		var npc: String = s["npc"]

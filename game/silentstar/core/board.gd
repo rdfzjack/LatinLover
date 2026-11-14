@@ -9,7 +9,7 @@ extends RefCounted
 ## whether tags / style / habit are shown, the excluded color, and why the role cannot be signed (null = it can).
 ##
 ## Random-number order when building a board (copied from the Python side):
-##   1. Draw roles in the order big, medium, small: the base counts, plus the extra medium/big roles from connections; the second
+##   1. Draw roles in the order big, medium, small: the base counts, plus the extra medium/big roles from rapport; the second
 ##      small slot of the first board holds the tutorial role. Drawing from the pool: index below(sum of weights); if no suitable role is
 ##      in the pool, a placeholder role is generated: main color below(4), wanted skill below(3), tag below(n).
 ##   2. The extra roles are, in order: pending_board (script), the widow-invested medium film, the transition medium film,
@@ -249,7 +249,7 @@ static func compose(st) -> Array:
 			var e: Dictionary = tutorial(st) if r.get("tutorial", false) else snapshot(st, r, "fixed")
 			taken[e["id"]] = true
 			out.append(e)
-		if st.val("connections") >= int(c["connections_extra"]):
+		if st.val("rapport") >= int(c["rapport_extra"]):
 			var x = reserve_pick(st, taken)
 			if x != null:
 				taken[x["id"]] = true
@@ -306,7 +306,7 @@ static func fixed_role(d, rid: String) -> bool:
 	return false
 
 
-## The connections extra role: the first role of reserve_pool not shown yet whose fame gate and gates the player meets now.
+## The rapport extra role: the first role of reserve_pool not shown yet whose fame gate and gates the player meets now.
 static func reserve_pick(st, taken: Dictionary):
 	var d = st.d
 	for rid in d.t["roles"].get("reserve_pool", []):
@@ -424,10 +424,10 @@ static func make(st) -> Dictionary:
 		e["intel"]["tags"] = st.val("taste") >= ic["tag_taste"]
 		var hb := []
 		for rv in e["opponents"]:
-			hb.append(st.val("connections") >= ic["habit_connections"] or
+			hb.append(st.val("insight") >= ic["habit_insight"] or
 				(rv["id"] != null and st.cnt("duels." + rv["id"]) >= ic["habit_duels"]))
 		e["intel"]["habit"] = hb
-		if st.val("connections") >= ic["exclude_color_connections"]:
+		if st.val("insight") >= ic["exclude_color_insight"]:
 			var p: Array = e["style_probs"]
 			var lo := 0
 			for x in 4:

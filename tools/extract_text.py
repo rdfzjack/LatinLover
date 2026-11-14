@@ -34,6 +34,7 @@ SPEC = [
     ('stats.json', ['fame_tiers'], 'fame', ['name'], []),
     ('stats.json', ['hidden'], 'hidden', ['name'], []),
     ('stats.json', ['scale', 'tiers'], 'scale_tier', ['name'], []),
+    ('romance.json', ['rules', 'favor_tiers'], 'favor_tier', ['name'], []),
     ('skills.json', ['skills'], 'skill', ['name'], []),
     ('classes.json', ['classes'], 'class', ['name'], []),
     ('books.json', ['tiers'], 'book_tier', ['name'], []),

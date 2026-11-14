@@ -124,7 +124,7 @@
   {
    "id": "loc_montmartre",
    "name": "Montmartre",
-   "hint": "服务员、收债、下馆子",
+   "hint": "服务员、收债、放贷、下馆子",
    "pos": [
     240,
     120
@@ -135,7 +135,8 @@
    ],
    "entries": [
     "job_server",
-    "job_collector"
+    "job_collector",
+    "job_loan"
    ],
    "shops": [
     "restaurant"
@@ -235,7 +236,7 @@
   {
    "id": "loc_city",
    "name": "进城",
-   "hint": "商店、医院、片厂区、市中心、海滨、码头外出",
+   "hint": "坐旗杆（地点占位）、商店、医院、片厂区、市中心、海滨、码头外出",
    "pos": [
     240,
     220
@@ -245,6 +246,7 @@
     80
    ],
    "entries": [
+    "job_flagpole",
     "rest_outing@place_studio",
     "rest_outing@place_downtown",
     "rest_outing@place_seaside",

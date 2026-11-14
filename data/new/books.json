@@ -237,7 +237,7 @@
   {
    "id": "book_shengyi_1",
    "name": "生意入门",
-   "skills": "business",
+   "skills": "insight",
    "tier": 1,
    "education_gate": 100,
    "skill_cap": 40,
@@ -254,7 +254,7 @@
   {
    "id": "book_shengyi_2",
    "name": "生意进阶",
-   "skills": "business",
+   "skills": "insight",
    "tier": 2,
    "education_gate": 200,
    "skill_cap": 70,

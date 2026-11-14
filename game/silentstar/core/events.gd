@@ -494,7 +494,27 @@ static func job_period(story, st, jid: String, good: bool) -> void:
 			fire(story, st, eid)
 
 
-## Crime-job search (step 12c): once per period, probability raid_prob x (1 + crime / raid_crime_div); then
+## Crime-job search (user, 2026-11): in a month with a crime job (jobs.json crime_job) worked, roll once at month end:
+## chance = min(crime / crime_div, cap_pct%) (stats.json arrest.raid); a hit is an arrest. Its own switch events.arrest_events
+## (like role_events) keeps it on while every other event is off. Recorded like a fired event, no event dialog.
+static func crime_raid(story, st) -> void:
+	var ev: Dictionary = st.d.t["events"]
+	if not ev.get("arrest_events", ev.get("enabled", true)):
+		return
+	if int(st.flags.get("crime_job_month", -1)) != st.ym:
+		return
+	var r: Dictionary = st.d.t["stats"]["arrest"]["raid"]
+	var div: int = int(r["crime_div"])
+	if not st.rng.logic.chance(mini(maxi(st.val("crime"), 0) * 100, int(r["cap_pct"]) * div), 100 * div):
+		return
+	st.inc("count.raid")
+	if st.status["sick"]:      # a sick player is not arrested (GDD 10)
+		return
+	_record(story, st, "evt_arrest")
+	_arrest(story, st)
+
+
+## Old crime-job search (step 12c, only the switched-off jobs with raid_prob): once per period, probability raid_prob x (1 + crime / raid_crime_div); then
 ## r0(raid_skill displayed) + raid_check_add >= raid_line (step 12c c3), failing means arrest (the detention takes the next periods).
 static func raid(story, st, j: Dictionary) -> void:
 	var div: int = st.d.t["stats"]["arrest"]["raid_crime_div"]
@@ -572,10 +592,10 @@ static func boost(st, i: int) -> String:
 	st.month_used["boost"] = st.month_used.get("boost", 0) + 1
 	Rules.apply_effect(st, dr["dose_effect"], "drug")
 	var w: Dictionary = dr["outcome_weights"]
-	var roll: int = g.r0(w["high"] + w["divine"] + w["side"])
-	if roll < w["high"]:
-		st.status["drug_high"] = 1
-	elif roll < w["high"] + w["divine"]:
+	var roll: int = g.r0(w["none"] + w["divine"] + w["side"] - 1)
+	if roll < w["none"]:
+		pass                                       # no extra effect (user, 2026-11: the old "high" outcome is gone)
+	elif roll < w["none"] + w["divine"]:
 		st.status["drug_high"] = 2
 		st.inc("count.divine")
 	else:
@@ -587,7 +607,8 @@ static func boost(st, i: int) -> String:
 	st.inc("count.boost")
 	if st.drug_points > 0:
 		st.drug_points += 1
-	elif g.chance(mini(dr["hook_base_pct"] + dr["hook_step_pct"] * life, dr["hook_cap_pct"]), 100):
+	elif g.chance(clampi(dr["hook_base_pct"] + dr["hook_step_pct"] * life - Rules.fdiv(Rules.scale_of(st, "discipline"), 2),
+			0, dr["hook_cap_pct"]), 100):       # discipline resists the addiction (user, 2026-11)
 		st.drug_points = 1
 		st.inc("count.hooked")
 	st.drug = st.drug_stage_of(st.drug_points)
@@ -628,7 +649,10 @@ static func drug_month(st) -> void:
 		Schedule.add_stat(st, "fatigue", at["fatigue_base"] + at["fatigue_step"] * st.drug_points)
 		st.inc("count.attack_months")
 		st.flags["drug_known"] = 1
-		st.drug_points = maxi(0, st.drug_points - at["depth_drop"])
+		var drop: int = at["depth_drop"]
+		if Rules.tier_of(st, "discipline") >= Rules.tier_index(st.d, at["discipline_extra_tier"]):
+			drop += int(at["discipline_extra_drop"])    # user, 2026-11: discipline helps him off it
+		st.drug_points = maxi(0, st.drug_points - drop)
 		if st.drug_points == 0:
 			st.flags["drug_known"] = 0
 			st.inc("count.clean")

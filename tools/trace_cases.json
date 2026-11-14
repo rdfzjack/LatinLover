@@ -79,7 +79,7 @@
    }
   ]
  },
- "var": ["stamina", "education", "loyalty", "looks", "discipline", "crime", "fatigue", "fame", "fight", "riding", "nerve", "acting", "grooming", "physique", "writing", "taste", "speech", "negotiation", "connections", "business", "tough", "lover", "culture", "savvy", "money", "sick_index", "reckless_index", "date", "month", "year", "max_rep", "top_road", "rep_spread", "drug_stage", "debt_months", "top_base_attr", "top_savvy_skill", "max_job_periods", "favor.sil", "favor.actress", "favor.duv", "flag.test", "flag.none", "status.in_love", "status.sick", "status.wrap_up", "tag.romance", "count.stunt_self", "class_periods.class_acting", "job_periods.job_dock"],
+ "var": ["stamina", "education", "loyalty", "looks", "discipline", "crime", "fatigue", "fame", "fight", "riding", "nerve", "acting", "grooming", "physique", "writing", "taste", "speech", "negotiation", "rapport", "insight", "tough", "lover", "culture", "savvy", "money", "sick_index", "reckless_index", "date", "month", "year", "max_rep", "top_road", "rep_spread", "drug_stage", "debt_months", "top_base_attr", "top_savvy_skill", "max_job_periods", "favor.sil", "favor.actress", "favor.duv", "flag.test", "flag.none", "status.in_love", "status.sick", "status.wrap_up", "tag.romance", "count.stunt_self", "class_periods.class_acting", "job_periods.job_dock"],
  "cond": [
   [],
   [

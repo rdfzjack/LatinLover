@@ -525,7 +525,7 @@
    ],
    "wants": [
     {
-     "stat": "business",
+     "stat": "insight",
      "target": 40
     }
    ],
@@ -610,7 +610,7 @@
    ],
    "wants": [
     {
-     "stat": "connections",
+     "stat": "rapport",
      "target": 80
     }
    ],
@@ -889,7 +889,7 @@
    ],
    "wants": [
     {
-     "stat": "connections",
+     "stat": "rapport",
      "target": 40
     }
    ],
@@ -1027,7 +1027,7 @@
    ],
    "wants": [
     {
-     "stat": "connections",
+     "stat": "rapport",
      "target": 80
     }
    ],
@@ -1075,7 +1075,7 @@
    ],
    "wants": [
     {
-     "stat": "business",
+     "stat": "insight",
      "target": 60
     }
    ],
@@ -1579,7 +1579,7 @@
    ],
    "wants": [
     {
-     "stat": "connections",
+     "stat": "rapport",
      "target": 80
     }
    ],
@@ -1627,7 +1627,7 @@
    ],
    "wants": [
     {
-     "stat": "business",
+     "stat": "insight",
      "target": 60
     }
    ],
@@ -2258,7 +2258,7 @@
    ],
    "wants": [
     {
-     "stat": "connections",
+     "stat": "rapport",
      "target": 60
     }
    ],
@@ -2438,7 +2438,7 @@
    ],
    "wants": [
     {
-     "stat": "business",
+     "stat": "insight",
      "target": 60
     }
    ],
@@ -2667,12 +2667,12 @@
    "intel": {
     "tag_taste": 50,
     "habit_duels": 2,
-    "habit_connections": 60,
-    "exclude_color_connections": 80
+    "habit_insight": 60,
+    "exclude_color_insight": 80
    },
    "morals_months": 3,
    "morals_note": "step 12c: no big film for morals_months months after an arrest or an unsuppressed scandal",
-   "connections_extra": 50
+   "rapport_extra": 50
   },
   "talkie": {
    "note": "GDD 6.4: 1 role on the 1927-10 board; 30% of roles in 1928; 80% in 1929",
@@ -3011,5 +3011,5 @@
   "role_ph43",
   "role_ph44"
  ],
- "board_note": "Fixed boards (user): board_schedule gives the big, medium and small role of each audition month (15 boards); reserve_pool is drawn in order (the first role not shown yet whose gates the player meets) when connections >= defaults.board.connections_extra. A role can be signed only when fame >= fame_gate and its gates hold (off-road attributes; numbers are placeholders). role_ph* are placeholders for the user to rename and write. User (lover playtest): the 1924-25 boards have a second small role (small2), four roles in all."
+ "board_note": "Fixed boards (user): board_schedule gives the big, medium and small role of each audition month (15 boards); reserve_pool is drawn in order (the first role not shown yet whose gates the player meets) when rapport >= defaults.board.rapport_extra. A role can be signed only when fame >= fame_gate and its gates hold (off-road attributes; numbers are placeholders). role_ph* are placeholders for the user to rename and write. User (lover playtest): the 1924-25 boards have a second small role (small2), four roles in all."
 }

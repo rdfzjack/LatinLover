@@ -131,13 +131,12 @@ class H:
 	static func resort_cost(st, i: int) -> int:
 		return Schedule.place_cost(st, "place_resort") * alldays(st, i)
 
-	## Probability that a check passes (GDD 11.0): a gate is 0 or 1; a dice check is displayed + r0(20) >= line.
+	## Probability that a check passes (GDD 11.0): a gate is 0 or 1; a d100 dice check is Rules.check_pct.
 	static func check_p(st, c) -> float:
 		if c == null:
 			return 1.0
 		if typeof(c) == TYPE_DICTIONARY:
-			var need: int = int(c["line"]) - st.val(c["check"])
-			return clampf(float(21 - maxi(0, need)) / 21.0, 0.0, 1.0)
+			return Rules.check_pct(st, c) / 100.0
 		return 1.0 if Rules.test(st, c) else 0.0
 
 	static func est_of(d) -> Est:

@@ -45,7 +45,7 @@
     ],
     [
      [
-      "connections",
+      "rapport",
       ">=",
       60
      ]
@@ -57,7 +57,7 @@
    "cond": [
     [
      [
-      "connections",
+      "rapport",
       ">=",
       80
      ]
