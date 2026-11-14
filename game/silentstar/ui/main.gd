@@ -1198,7 +1198,7 @@ func _auto_answer(kind: String, payload):
 		"play":
 			return 0
 		"pick_role":
-			return payload["ok"][0]
+			return payload["ok"][0] if not payload["ok"].is_empty() else null
 		"support", "stunt", "suppress", "role_event":
 			return true
 		"option":
