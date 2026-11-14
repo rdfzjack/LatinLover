@@ -257,6 +257,8 @@ Report (`tools/report.gd`) new arguments: `--random-options`, `--coverage` (fire
 - Favor: `Rules.favor_clamp` (`romance.rules.favor_range`, −100..100), `favor_tier_of` / `favor_tier_index`, variable `favor_tier.<npc>`; the loyalty bonus is `+max(1, gain × pct%)`.
 - Random-number order added: month end rolls the crime search (one `chance`) after the drug month and before the month-end events, only in a month with a crime job.
 
+**Strategy bots (step 2, 2026-11)**: `tools/sbots.gd` builds on `bots.gd`'s `Bot` (auditions, event options) with a plain goal list (`{stat, to, via}`), rest by the slack-off chance, money jobs that avoid looks loss when looks < 80, an acting class when looks < 62, and a full search of the 56 five-card color mixes for every audition (cached in the `Est` cache). `tools/sreport.gd` runs them (`--n`, `--bots`, `--out`); type-1 bots (`full_<road>`) stop when the main road is trained to 100. `bots.gd` is unchanged and still feeds `check.py` and `report.gd`.
+
 **When exporting**: the data tables live outside the project, so `data/new/` must be copied into the project before export (handled in step 13).
 
 ## Text and translations (step 9c-2)
