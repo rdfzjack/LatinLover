@@ -201,13 +201,6 @@
      ]
     },
     {
-     "stat": "physique",
-     "add": [
-      0,
-      1
-     ]
-    },
-    {
      "stat": "fight",
      "add": [
       -1,
@@ -227,7 +220,7 @@
    "job_period_effect": null,
    "period_random": [],
    "milestones": [],
-   "note": "speech 0-1 again (user, 2026-11: culture matured too slowly); physique 0/1 (user, tentative)"
+   "note": "speech 0-1 only (user, 2026-11), fight -0/1 like the original inn (sweeping 0/1, combat -0/1)"
   },
   {
    "id": "job_church_aid",
