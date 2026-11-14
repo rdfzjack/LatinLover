@@ -194,7 +194,7 @@
    ],
    "daily_effect": [
     {
-     "stat": "speech",
+     "stat": "insight",
      "add": [
       0,
       1
@@ -220,7 +220,7 @@
    "job_period_effect": null,
    "period_random": [],
    "milestones": [],
-   "note": "speech 0-1 only (user, 2026-11), fight -0/1 like the original inn (sweeping 0/1, combat -0/1)"
+   "note": "insight 0-1 only (user, 2026-11), fight -0/1 like the original inn (sweeping 0/1, combat -0/1)"
   },
   {
    "id": "job_church_aid",
@@ -699,7 +699,7 @@
      [
       "education",
       ">=",
-      120
+      90
      ]
     ]
    ],
@@ -713,8 +713,8 @@
    ],
    "success_lines": [
     {
-     "stat": "education",
-     "value": 120
+     "stat": "discipline",
+     "value": 20
     }
    ],
    "daily_effect": [
@@ -745,7 +745,7 @@
    "job_period_effect": null,
    "period_random": [],
    "milestones": [],
-   "note": "User (2026-11): pays only, no skill (like the original tutor job), so writing comes only from the salon and the salon cannot be skipped; education 120 is the gate and the daily success line; opens 1924-10, held back by the gate."
+   "note": "User (2026-11): pays only, no skill (like the original tutor job), so writing comes only from the salon and the salon cannot be skipped; gate education 90; the daily success line is discipline 20 (user: writing is down to self-control, not stamina; 20 is a placeholder); opens 1924-10."
   },
   {
    "id": "job_l_day",
