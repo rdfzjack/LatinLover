@@ -312,7 +312,7 @@
 | 演员培训（L1） | 礼仪 | 20/25/30/35 | 演技 1/1–3/1–3/3–4；相貌 1/1–3/1–3/1–4 |
 | 舞蹈（L3） | 舞蹈 | 25/35/45/55 | 体态 0·1/1/1–3/1–3；相貌 0·1/0·1/0–3/1–3；体力 1 [用：打扮和体态对调] |
 
-### 5.3 打工（12 种）[用]
+### 5.3 打工（14 种）[用]
 
 - 日薪五档按这个工成功过的旬数（一旬里有一天好就算）：<8、<23、<45、<68、之后（原版 10/30/60/90 × 3/4）[原]。整旬没有坏日子再 +50% [原]。
 - 同一个地点可以升级（码头一级 → 二级），不为升级开新工 [用]。
@@ -980,14 +980,14 @@ T: 标签熟悉 = 1 + 0.03 × min(该角色各标签已有计数之和, 5)
 | 项 | 决定 | 来源 |
 |---|---|---|
 | 规则存放 | 全部写进 JSON 数据表，代码只解释数据 | [推N47] |
-| 表 | `stats` `skills` `classes` `books` `jobs` `rest` `places` `lifestyle` `street` `npc_schedule` `npc_chains` `roles` `rivals` `habits` `events` `outing` `annual` `opportunities` `romance` `items` `endings` `origins` `calendar` | |
+| 表 | `stats` `skills` `classes` `books` `jobs` `rest` `places` `lifestyle` `street` `npc_schedule` `npc_chains` `roles` `rivals` `habits` `events` `outing` `annual` `opportunities` `romance` `items` `endings` `origins` `calendar` `traits` `map` | |
 | 条件和效果 | 条件：`[[["属性","比较符",值],…],…]`，外层是或、每组内是与；可以引用属性、技能、好感、计数器、旗标、日期。效果：一行文字，同物品语法。完整语法见 `data/new/README.md` | [原 IF 语义、物品小语言] |
-| 判定 | 门槛和掷骰两种，见 11.0 | [推N50] |
+| 判定 | 门槛和 d100 掷骰两种，见 11.0 | [推N50][用] |
 | 随机数 | PCG32；两个独立流：逻辑流、表现流；动画只用表现流 | [推N47] |
 | 存档 | JSON，含两个随机流的状态、所有计数器、旗标、已触发事件表、每本书的剩余点数 | [推N47] |
 | 整数 | 全部用整数运算，倍率用百分比整数（130、150、70）再除 100，向零截断；金钱不出现小数 | [原][用] |
 | 试镜比较 | 有效点数按 ×100 的整数比较，避免浮点 | [推N47] |
-| 试算器 | 批量试算在 Godot 里跑（`game/silentstar/tools/report.gd`） | |
+| 试算器 | 批量试算在 Godot 里跑：`tools/report.gd`（旧机器人，护栏），`tools/sreport.gd`（找强打法的机器人 `tools/sbots.gd`） | |
 
 ---
 
