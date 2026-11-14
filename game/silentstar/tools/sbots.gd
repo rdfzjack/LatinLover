@@ -263,6 +263,8 @@ class SBot:
 
 	# ---------- auditions: every five-card color mix ----------
 	func pick_role(st, b: Dictionary, ok: Array):
+		if b["tried"].is_empty():
+			note_big(st, b, ok)          # report only: what happened to the big role of this board (bots.gd)
 		var by := {}
 		for i in ok:
 			var sz: String = b["roles"][i]["size"]

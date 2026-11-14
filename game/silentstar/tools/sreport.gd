@@ -71,6 +71,15 @@ func _init() -> void:
 				rest.append(r["income"] - r["fee"] - r["dividend"])
 				sp.append(r["speech"])
 			print("%-22s %6d = fees %6d + dividends %6d + jobs/other %6d | speech %d" % [nm, med(inc), med(fe), med(dv), med(rest), med(sp)])
+		print("-- the big role at each board, total over all games: fame_gate = fame too low, try = signed up, low_p = win chance under the line, other_* = other reasons")
+		for nm in names:
+			if SBots.TYPE1.has(nm):
+				continue
+			var tot := {}
+			for r in dump[nm]:
+				for k in r.get("big", {}):
+					tot[k] = tot.get(k, 0) + r["big"][k]
+			print("%-22s %s" % [nm, str(tot)])
 		print("-- grade and the axis that gave it (rep / fame / rep_sum / dark)")
 		for nm in names:
 			if SBots.TYPE1.has(nm):
@@ -139,6 +148,11 @@ func play(spec, sd: int, d) -> Dictionary:
 	rec["fee"] = fee
 	rec["dividend"] = div
 	rec["speech"] = st.skill["speech"]
+	var big := {}
+	for k in bot.extra:
+		if String(k).begins_with("big_") and k != "big_gate_gap":
+			big[k] = bot.extra[k]
+	rec["big"] = big
 	for k in ["count.lead.small", "count.lead.medium", "count.lead.big", "count.support", "count.hit", "count.flop",
 			"count.arrest", "count.hospital", "count.boost", "count.divine", "count.slack"]:
 		rec[k.substr(6)] = c.get(k, 0)
