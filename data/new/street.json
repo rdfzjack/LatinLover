@@ -108,8 +108,8 @@
     {
      "id": "donation",
      "name": "捐款",
-     "price": 100,
-     "effect": "crime-10",
+     "price": 400,
+     "effect": "crime-100",
      "limit": {
       "range": "month",
       "times": 1
