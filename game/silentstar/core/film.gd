@@ -307,7 +307,7 @@ static func fit(st, role: Dictionary) -> int:
 
 
 ## Tag familiarity T x1000 = 1000 + 30 x min(sum of the role's tag counts, 5); small films get the maximum when one of
-## the role's tags is typed or lowbudget is typed. Returns [T, whether the untyped x0.9 applies].
+## the role's tags is typed or lowbudget is typed. Returns [T, whether he is typecast in another tag (recorded only; the x0.9 is dropped, user 2026-11)].
 static func familiarity(st, role: Dictionary, tier: String) -> Array:
 	var c := rel_cfg(st.d)
 	var tf: Dictionary = c["tag_familiarity"]
@@ -344,8 +344,7 @@ static func release_one(st, f: Dictionary) -> Dictionary:
 	var T: int = tf[0]
 	var off: bool = tf[1]
 	var S: int = Rules.fdiv(B * P * F * T, 1000000)       # S x1000
-	if off:
-		S = Rules.fdiv(S * c["untyped_pct"], 100)
+	# user (2026-11): the untyped x0.9 is dropped for now; `off` only goes into the record
 	var accent := false                  # user (2026-11): no talkie penalty on release; speech is a sign-up gate (Board.eligible)
 	if Schedule.truthy(role.get("talkie")):
 		st.inc("count.talkie_count")

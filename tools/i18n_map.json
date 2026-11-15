@@ -269,7 +269,6 @@
   "每个": "per_tag",
   "上限个数": "cap_count",
   "定型线": "typed_line",
-  "非定型百分比": "untyped_pct",
   "分红倍数": "dividend_mult",
   "大卖百分比": "hit_pct",
   "扑街百分比": "flop_pct",
