@@ -104,13 +104,27 @@ func play(spec, sd: int, d) -> Dictionary:
 	var full := -1
 	var fame_y := []
 	var lb_months := 0
+	var dd := {"cls_days": 0, "cls_ok": 0, "job_days": 0, "job_ok": 0}
+	var sta_y := []
+	var disc_y := []
+	var fat_y := []
 	while not st.finished:
 		if Film.low_budget(st) == 1:
 			lb_months += 1
 		g.start_month()
 		g.run_month(Story.fit_plan(g, bot.plan(g)))
+		for o in g.last:
+			if o.has("class_days"):
+				dd["cls_days"] += int(o["class_days"])
+				dd["cls_ok"] += int(o["ok_days"])
+			elif o.has("work_days"):
+				dd["job_days"] += int(o["work_days"])
+				dd["job_ok"] += int(o["ok_days"])
 		if st.ym % 12 == 0 or st.finished:
 			fame_y.append(st.attr["fame"])
+			sta_y.append(st.val("stamina"))
+			disc_y.append(st.val("discipline"))
+			fat_y.append(st.val("fatigue"))
 		if bot.stop_when_full and main_full(st, bot.road):
 			full = st.ym
 			break
@@ -126,6 +140,10 @@ func play(spec, sd: int, d) -> Dictionary:
 			per["rest"] += c[k]
 	rec["periods"] = per
 	rec["fame_y"] = fame_y
+	rec["stamina_y"] = sta_y
+	rec["disc_y"] = disc_y
+	rec["fat_y"] = fat_y
+	rec["days"] = dd
 	rec["lowbudget_months"] = lb_months
 	rec["traits"] = str(st.get("traits")) if "traits" in st else ""
 	var full_roads := []
