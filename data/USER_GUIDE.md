@@ -347,7 +347,7 @@ To add a new role instead, add it to `"roles"` of `roles.json` (copy one of the 
 - `wants`: 1-3 attributes or skills with a target; they shape the release result.
 - `tags`: 1-2 of the 16 film tags (section 2).
 - `opponents`: an unnamed one is `{"unnamed": true, "main_level": n}`, a named one `{"named": "rival_valen"}` (ids in `rivals.json`).
-- `talkie`: `true` always a talkie, `false` never, `null` decided by the year's ratio. With `true`, `speech_line` must be a number.
+- `talkie`: `true` always a talkie, `false` never, `null` decided by the year's ratio. With `true`, `speech_line` must be a number. A talkie needs speech >= its line to sign up (default `defaults.speech_line`: small 30, medium 50, big 70); there is no penalty on release.
 - `bonus_skill`: the skill that adds to the shooting performance (usually `acting`); `fee`: the pay (default small 300, medium 800, big 2500).
 - `years_active`: `[first year, last year]`; only used by the extra draws, not by the fixed boards.
 - The fixed boards look like this in `roles.json`:

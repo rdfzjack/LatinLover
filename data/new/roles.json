@@ -2784,7 +2784,6 @@
    "hit_pct": 155,
    "fail_pct": 100,
    "flop_pct": 70,
-   "talkie_penalty_pct": 60,
    "radio_speech_line_cut": 10,
    "lowbudget": {
     "delta": {

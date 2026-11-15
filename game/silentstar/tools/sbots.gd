@@ -41,9 +41,10 @@ const LINES := [210, 280, 999]
 ## Off-road attribute gates of the boards (GDD 6.1) and how a bot trains each, best first.
 const ATTR_VIA := {"looks": ["class_l1", "class_l3"], "education": ["class_c3", "class_yi"],
 	"loyalty": ["class_yi", "job_l_day", "job_c_slow"], "stamina": ["job_dock1", "class_l3"]}
-const ATTR_RATE := 12
-## Speech for the talkies (big films' speech line 70, GDD 6.4, 8.3): tutoring (also education and discipline), else collecting.
-const SPEECH70 := {"stat": "speech", "to": 70, "via": ["class_c3", "job_collector"]}          # a period of training adds about this much to one of these attributes (rough, for the prep check)
+const ATTR_RATE := 12          # a period of training adds about this much to one of these attributes (rough, for the prep check)
+## Speech for the talkies (a talkie needs speech >= its line to sign up, big 70, GDD 6.4): tutoring (also education and
+## discipline), else collecting.
+const SPEECH_TALKIE := {"stat": "speech", "to": 70, "via": ["class_c3", "job_collector"]}
 ## Outfits that lift looks, cheapest first (keep looks >= 60 so he may audition).
 const LOOKS_OUTFITS := ["suit_old", "riding_habit", "suit_custom", "evening_gown", "fur_white"]
 
@@ -916,19 +917,6 @@ class NewBot:
 		super(rd, nm)
 		looks_late = false
 
-	## A big talkie with speech under its line scores x0.6 (GDD 8.3): poor or flop for sure, so he does not sign it.
-	## (The board shows which roles are talkies.)
-	func pick_role(st, b: Dictionary, ok: Array):
-		var keep := []
-		for i in ok:
-			var e: Dictionary = b["roles"][i]
-			if e["size"] == "big" and e.get("talkie") and e.get("speech_line") != null and st.val("speech") < int(e["speech_line"]):
-				continue
-			keep.append(i)
-		if b["tried"].is_empty() and keep.size() < ok.size():
-			extra["big_talkie"] = extra.get("big_talkie", 0) + 1
-		return super(st, b, keep)
-
 	func stam_target(st) -> int:
 		return mini(stam_cap, 100 + 12 * st.ym)
 
@@ -1000,7 +988,7 @@ class NewSLT:
 	func setup(_rd: String) -> void:
 		setup_road("lover", "new_slt")
 		goal_list = staged(["savvy"], [280]) + [{"stat": "physique", "to": 35, "via": ["class_l3"]}] \
-			+ staged(["lover", "savvy", "tough"], [210, 280]) + [SPEECH70] + staged(["lover", "savvy", "tough"], [999])
+			+ staged(["lover", "savvy", "tough"], [210, 280]) + [SPEECH_TALKIE] + staged(["lover", "savvy", "tough"], [999])
 		money_jobs = ["job_l_day", "job_dock1", "job_server"]
 		stam_engine = ["class_l3", "job_dock1"]
 
@@ -1030,7 +1018,7 @@ class CleanTough:
 		looks_floor = 999
 		looks_guard = 999
 		goal_list = staged(["savvy"], [280]) + [{"stat": "physique", "to": 30, "via": ["class_l3"]}] \
-			+ staged(["tough", "savvy", "lover"], [210, 280]) + [SPEECH70] + staged(["tough", "savvy", "lover"], [999])
+			+ staged(["tough", "savvy", "lover"], [210, 280]) + [SPEECH_TALKIE] + staged(["tough", "savvy", "lover"], [999])
 		money_jobs = ["job_l_day", "job_server"]
 		stam_engine = ["class_l3"]
 

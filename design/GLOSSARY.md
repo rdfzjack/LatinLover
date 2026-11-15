@@ -752,7 +752,6 @@ names; look them up here. Source tags in notes: `[orig ...]` original game, `[in
 | 分红倍数 | `dividend_mult` | field |
 | 大卖百分比 | `hit_pct` | field |
 | 扑街百分比 | `flop_pct` | field |
-| 有声罚百分比 | `talkie_penalty_pct` | field |
 | 电台谈吐线减 | `radio_speech_line_cut` | field |
 | 低成本 | `lowbudget` | field |
 | 增减 | `delta` | field |

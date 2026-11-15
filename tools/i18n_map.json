@@ -273,7 +273,6 @@
   "分红倍数": "dividend_mult",
   "大卖百分比": "hit_pct",
   "扑街百分比": "flop_pct",
-  "有声罚百分比": "talkie_penalty_pct",
   "电台谈吐线减": "radio_speech_line_cut",
   "低成本": "lowbudget",
   "增减": "delta",

@@ -346,13 +346,9 @@ static func release_one(st, f: Dictionary) -> Dictionary:
 	var S: int = Rules.fdiv(B * P * F * T, 1000000)       # S x1000
 	if off:
 		S = Rules.fdiv(S * c["untyped_pct"], 100)
-	var accent := false
+	var accent := false                  # user (2026-11): no talkie penalty on release; speech is a sign-up gate (Board.eligible)
 	if Schedule.truthy(role.get("talkie")):
 		st.inc("count.talkie_count")
-		if st.val("speech") < talk_line(st, role):
-			S = Rules.fdiv(S * c["talkie_penalty_pct"], 100)
-			accent = true
-			st.flags["accent_pending"] = 1
 	# four bands by X = S / B (GDD 8): hit >= hit_pct, normal >= fail_pct, poor >= flop_pct, flop below
 	var hit: bool = S >= B * c["hit_pct"] * 10
 	var flop: bool = S < B * c["flop_pct"] * 10
