@@ -366,7 +366,12 @@ class SBot:
 			return true
 		if P["fat"] + df - st.val("stamina") >= 0:
 			return true
-		return success_p(g, e, P["fat"] + df / 2) < succ_line
+		# low expected success: rest when fatigue is the reason (rested, the period would clear the line); a job whose line his
+		# stat barely clears is worked anyway (resting would not help)
+		var line: float = succ_line if not e.begins_with("job_") else succ_line - 0.2
+		if success_p(g, e, P["fat"] + df / 2) >= line:
+			return false
+		return success_p(g, e, df / 2) >= line
 
 	## Expected chance that a day of this entry succeeds at fatigue f (GDD 5.1; the bot sees its stats and fatigue, not the dice).
 	func success_p(g, e: String, f: int) -> float:
@@ -875,6 +880,165 @@ class CrimeBoss:
 		money_jobs = ["job_loan", "job_l_late", "job_dock2", "job_collector", "job_dock1"]
 
 
+# ---------- new bots (2026-11): each road with its own engine for stamina and money ----------
+
+## Common to the new bots:
+## - fine lifestyle from the first month (stamina +10 a month) as the floor, not the engine;
+## - stamina follows a curve min(cap, 100 + 12 x month index): under it (minus 10) the bot trains stamina with its road's engine
+##   first (dance for the lover, the dock or collecting for the others, bootlegging for the crime roads). A job that costs stamina
+##   (flagpole, column) pushes him under the curve, so the next periods pay it back;
+## - discipline kept where the slack-off chance stays 0 up to fatigue = half the stamina cap (church with Sil), unless disc_on is off;
+## - rest by expected success (needs_rest with new_rules); the next board read ahead (prep_goal);
+## - fame: when the next board's big role is short of fame by 40 or less, the first period of the month on the flagpole.
+class NewBot:
+	extends SBot
+
+	var stam_cap := 300
+	var stam_engine := ["class_l3", "job_dock1"]
+	var fame_keep := true
+	var looks_guard := 72          # jobs that cost looks are not used as the stamina engine under this
+
+	func _init(sd := 1) -> void:
+		super(sd)
+		new_rules = true
+		looks_floor = 72
+
+	func stam_target(st) -> int:
+		return mini(stam_cap, 100 + 12 * st.ym)
+
+	func disc_to() -> int:
+		return stam_cap * 3 / 16 + 12
+
+	func set_life(st) -> void:
+		st.lifestyle = "life_fine" if st.money >= 100 and st.val("stamina") < stam_cap + 50 else "life_normal"
+
+	func pre_goals(g, _P: Dictionary, i: int) -> Array:
+		var st = g.st
+		var gs := []
+		if st.val("looks") < 62 and not skip_looks(st):
+			gs.append({"stat": "looks", "to": st.attr["looks"] + 1, "via": ["class_l1"]})
+		var t := stam_target(st)
+		if st.val("stamina") < t - 10:
+			gs.append({"stat": "stamina", "to": t, "via": engine(st)})
+		# the studio runner takes loyalty 1 a day; under 20 the church with Sil (loyalty line 10) closes
+		var disc_low: bool = want_disc(st) and st.val("discipline") < disc_to() - 10
+		if disc_low and st.val("loyalty") < 20:
+			gs.append({"stat": "loyalty", "to": 25, "via": ["job_l_day", "class_yi", "job_church_help"]})
+		if disc_low:
+			gs.append({"stat": "discipline", "to": disc_to(), "via": ["job_church_aid"]})
+		if prep_on:
+			var pg = prep_goal(st, i)
+			if pg != null:
+				gs.append(pg)
+		return gs
+
+	func engine(st) -> Array:
+		var out := []
+		for e in stam_engine:
+			if st.d.jobs.has(e) and costs_looks(st.d, e) and st.val("looks") < looks_guard and not skip_looks(st):
+				continue
+			out.append(e)
+		return out
+
+	func attr_via(a: String) -> Array:
+		return stam_engine if a == "stamina" else ATTR_VIA[a]
+
+	## Own money jobs first, but only those that a rested day would pass (a stat barely over the line makes bad days).
+	func money_job(g, P: Dictionary):
+		var st = g.st
+		var low: bool = st.val("looks") < looks_floor and not skip_looks(st)
+		for jid in money_jobs:
+			if H.can_do_job(st, jid) and not (low and costs_looks(g.d, jid)) and success_p(g, jid, H.job_fat(g.d.jobs[jid]) * 5) >= succ_line:
+				return jid
+		return super(g, P)
+
+	func choose(g, P: Dictionary, i: int):
+		var st = g.st
+		if fame_keep and i == 0 and H.can_do_job(st, "job_flagpole"):
+			var nb: Dictionary = Board.next_board(st)
+			if not nb.is_empty():
+				for e in nb["roles"]:
+					if e["size"] == "big":
+						var gap: int = gate_at(st, e, nb["month"]) - st.attr["fame"]
+						if gap > 0 and gap <= 40:
+							return "job_flagpole"
+		return super(g, P, i)
+
+
+## N1. Savvy, lover, tough (lover first). Dance is the stamina engine (it also trains physique and looks); money from the escort
+## job (physique 25; loyalty +1 a day, which pays back the studio runner's loyalty -1 for the savvy gates), the dock while looks
+## are high. Grooming from the lounge from 1927 (its education -2 costs this road nothing).
+class NewSLT:
+	extends NewBot
+
+	func setup(_rd: String) -> void:
+		setup_road("lover", "new_slt")
+		goal_list = staged(["savvy"], [280]) + [{"stat": "physique", "to": 35, "via": ["class_l3"]}] \
+			+ staged(["lover", "savvy", "tough"])
+		money_jobs = ["job_l_day", "job_dock1", "job_server"]
+		stam_engine = ["class_l3", "job_dock1"]
+
+
+## N2. Culture, tough, savvy (not lover: the lounge, the only grooming source, takes education -2 a day, and culture's gates are
+## education). Tutoring first to education 90 (the column opens; tutoring and the column both add discipline, so the church is
+## rarely needed). Money from the column (counts as exposure: no fame decay); collecting is the stamina engine and trains speech
+## and nerve at once (looks -1 a day: not used under looks 72).
+class NewCTS:
+	extends NewBot
+
+	func setup(_rd: String) -> void:
+		setup_road("culture", "new_cts")
+		goal_list = [{"stat": "education", "to": 90, "via": ["class_c3"]}] + staged(["culture", "tough", "savvy"])
+		money_jobs = ["job_c_money", "job_collector", "job_dock1"]
+		stam_engine = ["job_collector", "job_dock1", "class_l3"]
+
+
+## N3. Tough without crime, looks always >= 60: no job that costs looks (dock, collecting). Stamina from dance (also looks and
+## physique); money from the escort job (physique 25 first), else waiting tables. Tough, savvy, lover.
+class CleanTough:
+	extends NewBot
+
+	func setup(_rd: String) -> void:
+		setup_road("tough", "clean_tough")
+		looks_late = false
+		looks_floor = 999
+		looks_guard = 999
+		goal_list = staged(["savvy"], [280]) + [{"stat": "physique", "to": 30, "via": ["class_l3"]}] \
+			+ staged(["tough", "savvy", "lover"])
+		money_jobs = ["job_l_day", "job_server"]
+		stam_engine = ["class_l3"]
+
+
+## N4. Crime boss, new rules: tough and savvy; money from crime (the upstairs rooms when looks allow, bootlegging, collecting,
+## the dock); bootlegging (stamina +1 a day, no looks) is also the stamina engine. Never the church. Stamina cap 400 (his jobs
+## carry fatigue +5 to +12 a day).
+class CrimeBossNew:
+	extends NewBot
+
+	func setup(_rd: String) -> void:
+		setup_road("tough", "crime_boss_new")
+		crime_ok = true
+		disc_on = false
+		stam_cap = 400
+		goal_list = staged(["tough", "savvy"])
+		money_jobs = ["job_l_late", "job_dock2", "job_collector", "job_dock1"]
+		stam_engine = ["job_dock2", "job_dock1"]
+
+
+## N5. Literate tough, new: tough to level 6, then tutoring to education 120 (the moneylending gate) while bootlegging pays the
+## tuition, then tough and savvy staged; money from moneylending once open (1927-01), else bootlegging, the dock.
+class LiterateToughNew:
+	extends NewBot
+
+	func setup(_rd: String) -> void:
+		setup_road("tough", "literate_tough_new")
+		stam_cap = 400
+		goal_list = staged(["tough"], [210]) + [{"stat": "education", "to": 120, "via": ["class_c3"]}] + staged(["tough", "savvy"])
+		money_jobs = ["job_loan", "job_dock2", "job_dock1"]
+		stam_engine = ["job_dock2", "job_dock1"]
+
+
+
 ## name -> [class, setup argument]. Type 1 first.
 const TYPE1 := ["full_tough", "full_tough_nolooks", "full_lover", "full_culture", "full_savvy"]
 static func all_bots() -> Dictionary:
@@ -900,6 +1064,11 @@ static func all_bots() -> Dictionary:
 	b["flagpole_big_300"] = [FlagpoleBig, "300"]
 	b["flagpole_big_260"] = [FlagpoleBig, "260"]
 	b["crime_boss"] = [CrimeBoss, "tough"]
+	b["new_slt"] = [NewSLT, ""]
+	b["new_cts"] = [NewCTS, ""]
+	b["clean_tough"] = [CleanTough, ""]
+	b["crime_boss_new"] = [CrimeBossNew, ""]
+	b["literate_tough_new"] = [LiterateToughNew, ""]
 	return b
 
 
