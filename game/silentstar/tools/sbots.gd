@@ -917,6 +917,19 @@ class NewBot:
 		super(rd, nm)
 		looks_late = false
 
+	## A big role whose wants he plainly misses (the board shows them with his own numbers) ends poor or flop: fit under 0.85
+	## with P at most 1.2 is under X 1.0. He does not sign it.
+	func pick_role(st, b: Dictionary, ok: Array):
+		var keep := []
+		for i in ok:
+			var e: Dictionary = b["roles"][i]
+			if e["size"] == "big" and Film.fit(st, e) < 850:
+				continue
+			keep.append(i)
+		if b["tried"].is_empty() and keep.size() < ok.size():
+			extra["big_low_fit"] = extra.get("big_low_fit", 0) + 1
+		return super(st, b, keep)
+
 	func stam_target(st) -> int:
 		return mini(stam_cap, 100 + 12 * st.ym)
 
