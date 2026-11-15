@@ -1,8 +1,8 @@
 extends RefCounted
 ## Save slots. A slot is a file user://save_<slot>.json = {"meta": {...}, "save": <the string of State.dumps()>}.
-## Slot "auto" is written after every settled month; slots "1".."3" are written by the player between two months.
+## Slot "auto" is written after every settled month; slots "1".."10" are written by the player between two months.
 
-const SLOTS := ["auto", "1", "2", "3"]
+const SLOTS := ["auto", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
 
 
 static func path(slot: String) -> String:
