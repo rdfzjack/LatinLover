@@ -349,7 +349,10 @@ static func release_one(st, f: Dictionary) -> Dictionary:
 	if Schedule.truthy(role.get("talkie")):
 		st.inc("count.talkie_count")
 	# four bands by X = S / B (GDD 8): hit >= hit_pct, normal >= fail_pct, poor >= flop_pct, flop below
-	var hit: bool = S >= B * c["hit_pct"] * 10
+	var hp = c["hit_pct"]                # a number, or by size (user 2026-11: big 140, small and medium 150)
+	if typeof(hp) == TYPE_DICTIONARY:
+		hp = hp[t]
+	var hit: bool = S >= B * int(hp) * 10
 	var flop: bool = S < B * c["flop_pct"] * 10
 	var band := "hit" if hit else ("flop" if flop else ("normal" if S >= B * c["fail_pct"] * 10 else "poor"))
 	var k: int = d.t["habits"]["audition"]["result"]["narrow_loss"]["release_pct"] if f["support"] else 100
