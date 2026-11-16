@@ -187,7 +187,7 @@ static func morals(st) -> void:
 	st.flags["morals_until"] = st.ym + Board.cfg(st.d)["morals_months"]
 
 
-## Scandal exposure: the newspaper line can suppress it (free once a year / pay 200); villain + crime >= 3: fame +10%,
+## Scandal exposure: the newspaper line can suppress it (free once a year / pay 200); crime tag count >= 3: fame +10%,
 ## otherwise -15% (doubled after an official warning, halved with loyalty >= 200).
 static func _scandal(story, st) -> void:
 	var y: int = Rules.fdiv(st.ym, 12)
@@ -204,7 +204,7 @@ static func _scandal(story, st) -> void:
 	st.exposed = 1
 	st.inc("count.scandal")
 	morals(st)
-	if st.tags.get("villain", 0) + st.tags.get("crime", 0) >= 3:
+	if st.tags.get("crime", 0) >= 3:
 		fame_pct(st, 10)
 		return
 	var pct := 15
@@ -351,6 +351,10 @@ static func _record(story, st, eid: String) -> void:
 
 static func period_end(story, st, i: int, entry: String, out: Dictionary) -> void:
 	var d = st.d
+	if entry.begins_with("rest_home"):
+		meet(st, "sil")                    # user (2026-11): Sil is in the people list only after the first time the player is at home with him
+	if entry == "class_tutor":
+		meet(st, "duv")
 	if entry == "class_tutor" and Schedule.truthy(out.get("class_days")):
 		var e: Dictionary = d.events["outing_duv_script"]
 		if ready(st, e):
@@ -369,11 +373,7 @@ static func period_end(story, st, i: int, entry: String, out: Dictionary) -> voi
 # ---------- outings (5.5.2) ----------
 
 static func meet(st, npc: String) -> void:
-	if not st.known.has(npc):
-		st.known.append(npc)
-		var order: Dictionary = st.d.npc_order
-		st.known.sort_custom(func(a, b): return order[a] < order[b])    # table order
-	st.inc("count.met." + npc)
+	st.meet(npc)
 
 
 static func present(st, place: String, i: int) -> Array:

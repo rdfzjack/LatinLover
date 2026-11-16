@@ -61,6 +61,8 @@ func show_board(m, p: Dictionary) -> void:
 					s += tr("ui.board.show_board.12") + m.nm(o["habit"]) + tr("ui.board.show_board.13")
 				on.append(s)
 			m.label(tr("ui.board.show_board.14") + tr("ui.board.show_board.15").join(on), box)
+		if str(r.get("heroine", "")) != "":
+			m.label(tr("ui.board.show_board.19") % m.nm(r["heroine"]), box)
 		if ok.has(i):
 			var ii: int = i
 			m.button(tr("ui.board.show_board.16"), func(): picked.emit(ii), box)

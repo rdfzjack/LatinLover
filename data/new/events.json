@@ -1307,7 +1307,7 @@
    "freq": null,
    "effect": "flag.valen_dead=1",
    "code": true,
-   "note": "Funeral scene. Valen is removed from the rival table; from then on boards get +1 role with the \"exotic_lover\" or \"romance\" tag (until the end of 1928)",
+   "note": "Funeral scene. Valen is removed from the rival table; from then on boards get +1 role with the \"exotic\" or \"romance\" tag (until the end of 1928)",
    "source": "[user][inferred N61]",
    "body": null,
    "tier": "large"
@@ -1736,9 +1736,9 @@
    "cond": [],
    "prob": null,
    "freq": null,
-   "effect": "flag.stunt_line_50=1 weight.western+1 weight.action_adventure+1",
+   "effect": "flag.stunt_line_50=1 weight.western+1 weight.adventure+1",
    "code": false,
-   "note": "The \"stunt_self\" nerve line drops from 60 to 50; roles with the western and action_adventure tags get +1 board weight",
+   "note": "The \"stunt_self\" nerve line drops from 60 to 50; roles with the western and adventure tags get +1 board weight",
    "source": "[user] stunt double hook",
    "body": null,
    "tier": "medium"
@@ -1766,9 +1766,9 @@
    "cond": [],
    "prob": null,
    "freq": null,
-   "effect": "fame+15 weight.romance+1 weight.exotic_lover+1",
+   "effect": "fame+15 weight.romance+1 weight.exotic+1",
    "code": false,
-   "note": "Cover story (fame +15); roles with the romance and exotic_lover tags get +1 board weight",
+   "note": "Cover story (fame +15); roles with the romance and exotic tags get +1 board weight",
    "source": "[user] pinup model hook",
    "body": null,
    "tier": "medium"

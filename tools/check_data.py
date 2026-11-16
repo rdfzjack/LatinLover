@@ -40,6 +40,7 @@ JOB_IDS = [j['id'] for j in jobs['jobs']]
 BOOK_IDS = [b['id'] for b in books['books']]
 CAL_MONTHS = [m['month'] for m in cal_['months']]
 TAGS = [t['id'] for t in roles['tags']]
+SPECIAL_TAGS = [t['id'] for t in roles.get('special_tags', [])]
 
 # registries
 NPC = {n['id'] for n in romance['npcs']}
@@ -88,7 +89,7 @@ def eff_name_ok(n):
     if n in ATTRS or n in SK or n in ('money','drug_stage','drug_points','debt_months'): return True
     if n.startswith('favor.'): return n.split('.', 1)[1] in NPC
     if n.startswith('rep_bonus.'): return n.split('.', 1)[1] in ROADS
-    if n.startswith('weight.'): return n.split('.', 1)[1] in TAGS
+    if n.startswith('weight.'): return n.split('.', 1)[1] in TAGS + SPECIAL_TAGS
     if n.startswith('item.'): return n.split('.', 1)[1] in ITEM_NAMES
     return n.startswith(('status.','flag.')) and len(n) > 3
 def parse_effect(f, s, where=''):
@@ -287,7 +288,7 @@ for qi, q in enumerate(origins['questions']):
     for o in q['options']:
         eff = parse_effect(f, o['effect'], o['text'])
         for t, n in o['tag_counts'].items():
-            if t not in TAGS: err(f, f'{o["text"]} tag does not exist {t}')
+            if t not in TAGS + SPECIAL_TAGS: err(f, f'{o["text"]} tag does not exist {t}')
         for it in o['items']: ref_item(f, it)
         base = sum((-v if k == 'crime' else v) for k, v in eff.items() if k in ATTR_SET and k not in ('fame','fatigue'))
         skl = sum(v for k, v in eff.items() if k in SK)
@@ -335,7 +336,7 @@ if not rivals['named']: err(f, 'need at least one named rival')
 # roles
 f = 'roles.json'
 for t in roles['tags']: need(f, t, ['id','name'], t.get('id'))
-if len(TAGS) != 16 or len(set(TAGS)) != 16: err(f, 'tags must have 16 entries with unique ids')
+if len(TAGS) != 13 or len(set(TAGS)) != 13: err(f, 'tags must have 13 entries with unique ids')
 ROLE_IDS = [r['id'] for r in roles['roles']]
 if len(set(ROLE_IDS)) != len(ROLE_IDS): err(f, 'duplicate id')
 for r in roles['roles']:
@@ -351,7 +352,8 @@ for r in roles['roles']:
         if k['stat'] not in ATTRS and k['stat'] not in SK: err(f, f"{w} wants stat does not exist {k['stat']}")
     for t in r['tags']:
         if t not in TAGS: err(f, f'{w} tags {t}')
-    if not 1 <= len(r['tags']) <= 2: err(f, f'{w} tags must have 1-2 entries')
+    lo, hi = {'small': (1, 1), 'medium': (2, 2), 'big': (2, 3)}[r['size']]
+    if not lo <= len(r['tags']) <= hi: err(f, f'{w} tags must have {lo}-{hi} entries ({r["size"]})')
     if r['bonus_skill'] not in SK: err(f, f'{w} bonus_skill')
     need_opp = 2 if r['size'] == 'big' and not r.get('tutorial') else 1
     if len(r['opponents']) != need_opp: err(f, f'{w} opponents must number {need_opp}')
@@ -566,7 +568,7 @@ for e in endings['endings']:
     if e['category'] not in big: err(f, f"{e['id']} category does not exist")
     by.setdefault(e['category'], []).append(e)
 fam_tags = [t for v in endings['tag_families'].values() for t in v]
-if sorted(fam_tags) != sorted(TAGS): err(f, 'tag_families must cover exactly the 16 content tags')
+if sorted(fam_tags) != sorted(TAGS): err(f, 'tag_families must cover exactly the 13 content tags')
 for b in big:
     lst = sorted(by.get(b, []), key=lambda x: x['order'])
     if not lst: err(f, f'{b} has no endings'); continue

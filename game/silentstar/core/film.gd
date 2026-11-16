@@ -39,6 +39,16 @@ static func typecast_tags(st) -> Array:
 	return out
 
 
+## Whether one of the role's tags is typed (count >= typed_line): +10 percentage points of the main color at its audition,
+## tag familiarity T at its maximum, and +typed_fame_pct of the fame the film earns (user, 2026-11).
+static func role_typed(st, role: Dictionary) -> bool:
+	var tc := typecast_tags(st)
+	for t in role["tags"]:
+		if tc.has(t):
+			return true
+	return false
+
+
 ## Low-budget typed: lowbudget count >= 4 (released when the count drops to 3 or below, so no extra state is kept). Returns 0/1.
 static func low_budget(st) -> int:
 	return 1 if st.cnt("count.lowbudget") >= rel_cfg(st.d)["lowbudget"]["typed_line"] else 0
@@ -118,7 +128,7 @@ static func update_status(st) -> void:
 	st.status["has_pending_role"] = v
 
 
-## stunt_self: the role has any of the western, action_adventure, war tags and nerve >= 60 (50 after 4 periods of stunt double).
+## stunt_self: the role has any of the western, adventure, war tags and nerve >= 60 (50 after 4 periods of stunt double).
 static func can_go_personally(st, role: Dictionary) -> bool:
 	var c: Dictionary = shoot_cfg(st.d)["stunt_self"]
 	var hit := false
@@ -360,6 +370,8 @@ static func release_one(st, f: Dictionary) -> Dictionary:
 	if flop:
 		fame = Rules.fdiv(fame, 2)
 	fame = Rules.fdiv(fame * k, 100)
+	if role_typed(st, role):
+		fame = Rules.fdiv(fame * (100 + int(c["typed_fame_pct"])), 100)
 	var money: int = Rules.fdiv(Rules.fdiv(S * c["dividend_mult"], 1000) * k, 100)
 	var fame_before: int = st.attr["fame"]
 	Schedule.add_stat(st, "fame", fame)
@@ -382,7 +394,7 @@ static func release_one(st, f: Dictionary) -> Dictionary:
 		if f.get("divine", 0) and not f["support"]:      # the "divine" achievement: a lead shot on a divine dose is a hit
 			st.inc("count.divine_hit")
 			st.flags["divine_star"] = 1
-		if role["tags"].has("romance") or role["tags"].has("exotic_lover"):
+		if role["tags"].has("romance") or role["tags"].has("exotic"):
 			st.inc("count.romance_hits")
 	if flop:
 		st.inc("count.flop")

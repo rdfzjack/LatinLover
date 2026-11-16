@@ -57,6 +57,7 @@ SPEC = [
     ('rivals.json', ['named'], 'rival', ['name'], []),
     ('roles.json', ['roles'], 'role', ['name', 'film_title'], []),
     ('roles.json', ['tags'], 'tag', ['name'], []),
+    ('roles.json', ['special_tags'], 'tag', ['name'], []),
     ('endings.json', ['forced'], 'ending', ['name', 'body'], []),
     ('endings.json', ['special'], 'ending', ['name', 'body'], []),
     ('endings.json', ['categories'], 'ending_category', ['name'], []),
