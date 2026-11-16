@@ -1592,8 +1592,16 @@ func _show_month_start() -> void:
 	var sbox := VBoxContainer.new()
 	sbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	t3.add_child(sbox)
+	var t4 := ScrollContainer.new()
+	t4.name = tr("ui.main.show_month_start.13")
+	t4.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	tabs.add_child(t4)
+	var pbox := VBoxContainer.new()
+	pbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	t4.add_child(pbox)
 	_fill_inventory()
 	_fill_status(sbox)
+	_fill_people(pbox)
 
 
 ## The places on the map come from data/new/map.json (user's map table): name, hint, position, size, the schedule entries offered
@@ -1903,6 +1911,20 @@ func _hint_text(h: Array) -> String:
 	return tr("ui.main.hint_text.4") + nm(h[1])
 
 
+# ---------- people tab (user, 2026-11) ----------
+
+## Everyone the player has met (st.known), with favor and its tier. People not met yet are not listed.
+func _fill_people(box: VBoxContainer) -> void:
+	heading(tr("ui.main.fill_status.2"), box)
+	if st.known.is_empty():
+		label(tr("ui.main.fill_people.2"), box)
+		return
+	var tiers: Array = d.t["romance"]["rules"]["favor_tiers"]
+	for n in st.known:
+		var idn := str(d.npcs[n].get("identity", ""))
+		label(tr("ui.main.fill_people.1") % [nm(n), idn, int(st.favor.get(n, 0)), str(tiers[Rules.favor_tier_of(st, n)]["name"])], box)
+
+
 # ---------- status tab ----------
 
 func _fill_status(box: VBoxContainer) -> void:
@@ -1915,9 +1937,6 @@ func _fill_status(box: VBoxContainer) -> void:
 		for s in d.road_skills[r]:
 			t.append("%s %d" % [nm(s), st.val(s, b)])
 		label(tr("ui.main.fill_status.1") % [nm(r), st.rep(r, b), tr("ui.common.wide_space").join(t)], box)
-	heading(tr("ui.main.fill_status.2"), box)
-	for n in st.known:
-		label(tr("ui.main.fill_status.3") % [nm(n), st.favor.get(n, 0)], box)
 	heading(tr("ui.main.fill_status.4"), box)
 	var any := false
 	for f in st.story["films"]:
