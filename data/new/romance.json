@@ -234,7 +234,8 @@
    ],
    "attackable": false,
    "road": "lover",
-   "road2": "tough"
+   "road2": "tough",
+   "personality": "easygoing"
   },
   {
    "id": "doug",
@@ -255,7 +256,8 @@
    ],
    "attackable": false,
    "road": "tough",
-   "road2": "savvy"
+   "road2": "savvy",
+   "personality": "admirer"
   },
   {
    "id": "gilbert",
@@ -276,7 +278,8 @@
    ],
    "attackable": true,
    "road": "lover",
-   "road2": "culture"
+   "road2": "culture",
+   "personality": "strict"
   },
   {
    "id": "novaro",
@@ -298,7 +301,8 @@
    ],
    "attackable": true,
    "road": "lover",
-   "road2": null
+   "road2": null,
+   "personality": "strict"
   },
   {
    "id": "cooper",
@@ -319,7 +323,8 @@
    ],
    "attackable": true,
    "road": "tough",
-   "road2": null
+   "road2": null,
+   "personality": "strict"
   },
   {
    "id": "barry",
@@ -340,7 +345,8 @@
    ],
    "attackable": false,
    "road": "culture",
-   "road2": "lover"
+   "road2": "lover",
+   "personality": "playful"
   },
   {
    "id": "lloyd",
@@ -361,7 +367,8 @@
    ],
    "attackable": false,
    "road": "savvy",
-   "road2": "tough"
+   "road2": "tough",
+   "personality": "admirer"
   },
   {
    "id": "jolson",
@@ -381,7 +388,8 @@
    ],
    "attackable": false,
    "road": "savvy",
-   "road2": "culture"
+   "road2": "culture",
+   "personality": "playful"
   },
   {
    "id": "stoneface",
@@ -402,7 +410,8 @@
    ],
    "attackable": false,
    "road": "tough",
-   "road2": "culture"
+   "road2": "culture",
+   "personality": "grudge"
   },
   {
    "id": "ex",
@@ -422,7 +431,8 @@
    ],
    "attackable": false,
    "road": "culture",
-   "road2": "lover"
+   "road2": "lover",
+   "personality": "easygoing"
   },
   {
    "id": "veidt",
@@ -443,7 +453,8 @@
    ],
    "attackable": false,
    "road": "lover",
-   "road2": "savvy"
+   "road2": "savvy",
+   "personality": "admirer"
   },
   {
    "id": "fakevon",
@@ -453,7 +464,7 @@
    "known_at_start": false,
    "gender": "male",
    "identity": "山寨贵族",
-   "actor": true,
+   "actor": false,
    "tags": [
     "crime",
     "history"
@@ -505,7 +516,8 @@
    },
    "attackable": true,
    "road": "lover",
-   "road2": "savvy"
+   "road2": "savvy",
+   "personality": "playful"
   },
   {
    "id": "iceberg",
@@ -532,7 +544,8 @@
    },
    "attackable": true,
    "road": "lover",
-   "road2": "culture"
+   "road2": "culture",
+   "personality": "strict"
   },
   {
    "id": "saint",
@@ -559,7 +572,8 @@
    },
    "attackable": true,
    "road": "tough",
-   "road2": "culture"
+   "road2": "culture",
+   "personality": "easygoing"
   },
   {
    "id": "vamp",
@@ -585,7 +599,8 @@
    },
    "attackable": true,
    "road": "lover",
-   "road2": "tough"
+   "road2": "tough",
+   "personality": "grudge"
   },
   {
    "id": "aviator",
@@ -602,7 +617,7 @@
     "comedy"
    ],
    "present": [
-    "1927-01",
+    "1924-01",
     "1929-12"
    ],
    "heroine_weights": {
@@ -612,7 +627,8 @@
    },
    "attackable": true,
    "road": "tough",
-   "road2": "savvy"
+   "road2": "savvy",
+   "personality": "playful"
   },
   {
    "id": "sweetheart",
@@ -639,7 +655,8 @@
    },
    "attackable": true,
    "road": "savvy",
-   "road2": "culture"
+   "road2": "culture",
+   "personality": "snob"
   },
   {
    "id": "diva",
@@ -666,7 +683,8 @@
    },
    "attackable": true,
    "road": "lover",
-   "road2": "savvy"
+   "road2": "savvy",
+   "personality": "snob"
   }
  ],
  "rules": {
@@ -731,6 +749,91 @@
     "fourth"
    ]
   },
-  "destiny_priority": "When several hold, the one with the highest favor; ties go by sil, duv, actress, fourth"
+  "destiny_priority": "When several hold, the one with the highest favor; ties go by sil, duv, actress, fourth",
+  "personality": {
+   "note": "User (2026-11): one step \"+\" is 5 favor, \"++\" is 10. Each step count below is multiplied by step. coop_*: the heroine after a released film; serious = shooting success days >= serious_pct% of the shooting days, no side effect (running off and side effects count as not serious). win_* / lose_*: the audition match against the star (3:0 clean, 3:1 mid, 3:2 close; lose_zero = shut out 0:3). hit / flop: any film of the player released as a hit or a flop, for everyone who has a type. Which person has which type (`personality` on the npc row) is a placeholder",
+   "step": 5,
+   "serious_pct": 70,
+   "types": [
+    {
+     "id": "strict",
+     "name": "较真",
+     "coop_serious": 2,
+     "coop_sloppy": -2,
+     "win_clean": 1,
+     "win_mid": 1,
+     "win_close": 0,
+     "lose_zero": -1,
+     "lose": 0,
+     "hit": 0,
+     "flop": 0
+    },
+    {
+     "id": "easygoing",
+     "name": "随和",
+     "coop_serious": 1,
+     "coop_sloppy": 1,
+     "win_clean": 0,
+     "win_mid": 0,
+     "win_close": 0,
+     "lose_zero": 0,
+     "lose": 0,
+     "hit": 0,
+     "flop": 0
+    },
+    {
+     "id": "playful",
+     "name": "玩咖",
+     "coop_serious": -1,
+     "coop_sloppy": 2,
+     "win_clean": 0,
+     "win_mid": 0,
+     "win_close": 0,
+     "lose_zero": 0,
+     "lose": 0,
+     "hit": 0,
+     "flop": 1
+    },
+    {
+     "id": "grudge",
+     "name": "记仇",
+     "coop_serious": 1,
+     "coop_sloppy": 0,
+     "win_clean": -2,
+     "win_mid": -2,
+     "win_close": -2,
+     "lose_zero": 1,
+     "lose": 1,
+     "hit": 0,
+     "flop": 0
+    },
+    {
+     "id": "admirer",
+     "name": "慕强",
+     "coop_serious": 1,
+     "coop_sloppy": -1,
+     "win_clean": 2,
+     "win_mid": 2,
+     "win_close": 2,
+     "lose_zero": -1,
+     "lose": -1,
+     "hit": 1,
+     "flop": 0
+    },
+    {
+     "id": "snob",
+     "name": "势利",
+     "coop_serious": 0,
+     "coop_sloppy": 0,
+     "win_clean": 1,
+     "win_mid": 1,
+     "win_close": 1,
+     "lose_zero": -1,
+     "lose": -1,
+     "hit": 2,
+     "flop": -2
+    }
+   ]
+  }
  }
 }

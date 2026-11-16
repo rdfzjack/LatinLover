@@ -241,6 +241,8 @@ static func make_rivals(st, e: Dictionary) -> void:
 			out.append(rv)
 	e["opponents"] = out
 	make_heroine(st, e)
+	if str(e["heroine"]) != "":
+		st.meet(e["heroine"])             # she is on the board card from the moment the board is shown, so the player has met her (user, 2026-11)
 
 
 ## The heroine of a role (user, 2026-11): "" none, "unnamed" an unnamed actress (nobody to show), "draw" one of the attainable
@@ -548,8 +550,6 @@ static func try_role(st, idx: int, agent) -> Dictionary:
 	var b: Dictionary = board(st)
 	var e: Dictionary = b["roles"][idx]
 	b["tried"].append(idx)
-	if str(e.get("heroine", "")) != "":
-		st.meet(e["heroine"])             # she is met at the audition (user, 2026-11)
 	var res := Audition.audition(st, e, agent, e["opponents"], e["style_probs"])
 	var support := false
 	if res["result"] == "narrow_loss" and agent.accept_support(st, e):

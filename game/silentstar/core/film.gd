@@ -13,6 +13,7 @@ extends RefCounted
 
 const Rules = preload("res://core/rules.gd")
 const Schedule = preload("res://core/schedule.gd")
+const Personality = preload("res://core/personality.gd")
 
 
 static func shoot_cfg(d) -> Dictionary:
@@ -385,7 +386,7 @@ static func release_one(st, f: Dictionary) -> Dictionary:
 		st.count["count.lowbudget"] = maxi(0, st.cnt("count.lowbudget") + c["lowbudget"]["delta"][t])
 		st.inc("count.lead." + t)
 		if Schedule.truthy(role.get("lead")):
-			Rules.apply_effect(st, "favor.%s+%d" % [role["lead"], c["lead_favor"]], "event")
+			Personality.after_film(st, f, str(role["lead"]))      # the heroine: serious or not, by her type (user, 2026-11)
 	else:
 		st.inc("count.support")
 	st.inc("count.release")
@@ -398,6 +399,7 @@ static func release_one(st, f: Dictionary) -> Dictionary:
 			st.inc("count.romance_hits")
 	if flop:
 		st.inc("count.flop")
+	Personality.after_release(st, band)
 	st.exposed = 1
 	f["status"] = "released"
 	f["result"] = {"S": S, "B": B, "P": P, "F": F, "T": T, "untyped": off, "accent": accent, "hit": hit,

@@ -14,6 +14,7 @@ extends RefCounted
 ## All functions are static; st is an instance of core/state.gd, d is core/data.gd.
 
 const Rules = preload("res://core/rules.gd")
+const Personality = preload("res://core/personality.gd")
 
 const COLORS := 4
 
@@ -489,6 +490,7 @@ static func audition(st, role: Dictionary, player, rivals: Array, probs: Array =
 			return {}
 		var m := play_match(st, build_deck(ctx["levels"], colors), rv, probs, player)
 		out["rounds"].append(m)
+		Personality.after_match(st, str(rv.get("npc", "")), m["score_line"])
 		if rv["id"] != null:
 			st.inc("duels." + rv["id"])
 		var kind := classify(d, m["score_line"])

@@ -503,43 +503,6 @@
      8
     ]
    }
-  },
-  {
-   "id": "rival_fakevon",
-   "name": "假冯",
-   "present": [
-    "1924-01",
-    "1929-12"
-   ],
-   "stages": [
-    {
-     "from": "1924-01",
-     "levels": [
-      2,
-      3,
-      6,
-      7
-     ],
-     "fame": 450
-    }
-   ],
-   "habit": "habit_score",
-   "k": 3,
-   "npc": "fakevon",
-   "weights": {
-    "early": [
-     6,
-     3
-    ],
-    "mid": [
-     6,
-     3
-    ],
-    "late": [
-     5,
-     3
-    ]
-   }
   }
  ],
  "replace": [
