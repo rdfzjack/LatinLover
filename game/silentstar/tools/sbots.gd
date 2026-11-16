@@ -15,13 +15,14 @@ const Street = preload("res://core/street.gd")
 const Audition = preload("res://core/audition.gd")
 const Events = preload("res://core/events.gd")
 const Film = preload("res://core/film.gd")
+const Board = preload("res://core/board.gd")
 const H = Bots.H
 
 ## Main-road training: [skill, entries that train it, best first].
 const ROAD_GOALS := {
 	"tough": [["fight", ["class_h1"]], ["riding", ["class_h2"]], ["nerve", ["class_h1", "job_collector"]]],
 	"lover": [["acting", ["class_l1"]], ["physique", ["class_l3"]], ["grooming", ["job_l_night"]]],
-	"culture": [["writing", ["class_c1"]], ["taste", ["class_c1"]], ["speech", ["job_server", "class_c3", "job_collector"]]],
+	"culture": [["writing", ["class_c1"]], ["taste", ["class_c1"]], ["speech", ["job_collector", "class_c3"]]],
 	"savvy": [["negotiation", ["job_runner"]], ["rapport", ["job_runner"]], ["insight", ["job_runner"]]],
 }
 ## Jobs to earn with, first doable wins (no crime jobs here).
@@ -31,6 +32,19 @@ const ROAD_MONEY := {
 }
 ## Opening questions per road (same as bots.gd ROAD_SETUP).
 const ROAD_ORIGIN := {"tough": [0, 0, 3], "lover": [3, 2, 3], "culture": [4, 1, 3], "savvy": [1, 1, 3]}
+## Tough road (2026-11 round): the dock (looks -1 a day) is his only tuition job; under this looks he leaves it. Waiting tables
+## (fight -0/1) is then allowed as his fallback if TOUGH_SERVER.
+const TOUGH_FLOOR := 66
+const TOUGH_SERVER := true
+## Level lines of the staged goal list (GDD 2.4): level 6 = 210, level 7 = 280; 999 = the three skills trained to 100.
+const LINES := [210, 280, 999]
+## Off-road attribute gates of the boards (GDD 6.1) and how a bot trains each, best first.
+const ATTR_VIA := {"looks": ["class_l1", "class_l3"], "education": ["class_c3", "class_yi"],
+	"loyalty": ["class_yi", "job_l_day", "job_c_slow"], "stamina": ["job_dock1", "class_l3"]}
+const ATTR_RATE := 12          # a period of training adds about this much to one of these attributes (rough, for the prep check)
+## Speech for the talkies (a talkie needs speech >= its line to sign up, big 70, GDD 6.4): tutoring (also education and
+## discipline), else collecting.
+const SPEECH_TALKIE := {"stat": "speech", "to": 70, "via": ["class_c3", "job_collector"]}
 ## Outfits that lift looks, cheapest first (keep looks >= 60 so he may audition).
 const LOOKS_OUTFITS := ["suit_old", "riding_habit", "suit_custom", "evening_gown", "fur_white"]
 
@@ -49,6 +63,19 @@ class SBot:
 	var stop_when_full := false    # type-1 bots: the report stops the game when the main road is full
 	var ignore_looks := false      # fur strongman: no acting class for looks (his outfit set and the diet carry them)
 	var looks_floor := 80          # money jobs that cost looks are avoided while displayed looks are under this
+	var stamina_floor := 50        # stamina under this: train it back to 80 first (dock, else the dance class); 0 = never
+	var stamina_fix := false
+	var looks_late := false        # tough road: ignore looks (dock freely, no acting class) until the main road is full, then fix them
+	# rules of the new bots (2026-11, closer to a skilled player); the older bots keep new_rules false and play as before
+	var new_rules := false
+	var stam_to := 300             # stamina target: the fine lifestyle while under it; in the opening year also trained (dock / dance)
+	var stam_open_until := 12      # the opening phase: trained stamina only before this month index (1925-01)
+	var stam_via := ["job_dock1", "class_l3"]
+	var disc_on := true            # keep discipline high enough that the slack-off chance stays at 0 (church with Sil)
+	var succ_line := 0.9           # rest when the expected success of this period is under this
+	var prep_on := true            # read the next board and train a missing off-road gate of its big / medium role
+	var prep_fame_slack := 20      # ... when fame is within this of that role's fame gate
+	var prep_periods := 8          # ... and the gap can be closed in this many periods
 
 	func _init(sd := 1) -> void:
 		super(sd)
@@ -58,6 +85,17 @@ class SBot:
 		var out := []
 		for x in ROAD_GOALS[rd]:
 			out.append({"stat": x[0], "to": cap, "via": x[1]})
+		return out
+
+	## Staged goal list: every road in `roads` to level 6 (rep 210), then all to level 7 (280), then all full.
+	## `lines` per road may be cut short (e.g. savvy only to 210).
+	static func staged(roads: Array, lines := LINES, caps := {}) -> Array:
+		var out := []
+		for ln in lines:
+			for rd in roads:
+				if caps.has(rd) and int(caps[rd]) < int(ln):
+					continue
+				out.append({"road": rd, "rep": ln})
 		return out
 
 	## The 56 non-decreasing color lists of five cards.
@@ -78,12 +116,21 @@ class SBot:
 		gear_road = rd
 		place = Bots.ROAD_PLACE[rd]
 		money_jobs = ROAD_MONEY[rd].duplicate()
+		if rd == "tough":
+			looks_floor = TOUGH_FLOOR
+			looks_late = true
 
 	## Goals of this period (subclasses may change them with the date or the state).
 	func goals(_g, _P: Dictionary, _i: int) -> Array:
 		return goal_list
 
 	func reached(st, gl: Dictionary) -> bool:
+		if gl.has("road"):
+			var full := true
+			for x in ROAD_GOALS[gl["road"]]:
+				if st.skill[x[0]] < 100:
+					full = false
+			return full or (int(gl["rep"]) < 999 and st.rep(gl["road"]) >= int(gl["rep"]))
 		var s: String = gl["stat"]
 		var v: int = st.skill[s] if st.skill.has(s) else st.attr[s]
 		return v >= int(gl["to"])
@@ -115,22 +162,116 @@ class SBot:
 		return e
 
 	## The entry of this period before the rest check: the first doable goal, or a money job.
-	## Looks under 62 (after outfits) come first: under 60 he cannot audition, so a real player fixes it with the acting class.
+	## Before the bot's own goals: looks under 62 (under 60 he cannot audition), stamina under the floor, the opening stamina target,
+	## discipline for a zero slack-off chance, and the off-road gate of the next board's big or medium role.
 	func choose(g, P: Dictionary, i: int):
 		var st = g.st
-		var gs: Array = goals(g, P, i)
-		if st.val("looks") < 62 and not ignore_looks:
-			gs = [{"stat": "looks", "to": st.attr["looks"] + 1, "via": ["class_l1"]}] + gs
+		var gs: Array = pre_goals(g, P, i) + goals(g, P, i)
 		for gl in gs:
 			if reached(st, gl):
 				continue
-			for e in gl["via"]:
+			for e in via_of(st, gl):
 				var r := usable(g, P, i, e)
 				if r == "ok":
 					return e
 				if r == "broke":
 					return money_job(g, P)
 		return money_job(g, P)
+
+	## Entries that train a goal: a road goal trains its lowest unfinished skill first.
+	func via_of(st, gl: Dictionary) -> Array:
+		if not gl.has("road"):
+			return gl["via"]
+		var xs: Array = ROAD_GOALS[gl["road"]].duplicate()
+		xs.sort_custom(func(a, b): return st.skill[a[0]] < st.skill[b[0]])
+		var out := []
+		for x in xs:
+			if st.skill[x[0]] < 100:
+				for e in x[1]:
+					if not out.has(e):
+						out.append(e)
+		return out
+
+	func pre_goals(g, P: Dictionary, i: int) -> Array:
+		var st = g.st
+		var gs := []
+		# stamina: the flagpole, the column and the church take 1 a day, and under 30 even the dock is closed
+		if stamina_floor > 0:
+			if st.attr["stamina"] < stamina_floor:
+				stamina_fix = true
+			elif st.attr["stamina"] >= 80:
+				stamina_fix = false
+			if stamina_fix:
+				gs.append({"stat": "stamina", "to": 80, "via": ["job_dock1", "class_l3"]})
+		if st.val("looks") < 62 and not skip_looks(st):
+			gs.append({"stat": "looks", "to": st.attr["looks"] + 1, "via": ["class_l1"]})
+		if not new_rules:
+			return gs
+		if stam_to > 0 and st.ym < stam_open_until:
+			gs.append({"stat": "stamina", "to": stam_to, "via": stam_via})
+		if want_disc(st) and st.val("discipline") < disc_to() - 10:
+			gs.append({"stat": "discipline", "to": disc_to(), "via": ["job_church_aid"]})
+		if prep_on:
+			var pg = prep_goal(st, i)
+			if pg != null:
+				gs.append(pg)
+		return gs
+
+	## Discipline that keeps the slack-off chance at 0 up to fatigue = half the stamina target (scale fatigue = scale discipline).
+	func disc_to() -> int:
+		var s := maxi(stam_to, 160)
+		return s * 3 / 16 + 12
+
+	func want_disc(_st) -> bool:
+		return disc_on
+
+	## The fame gate of a role at the board of `month` (the next-board page shows it; GDD 6.1, 9.0, 8.4).
+	static func gate_at(st, e: Dictionary, month: String) -> int:
+		var g: int = int(e["fame_gate"])
+		if Audition.curve_on(st.d):
+			var tb: Dictionary = Audition.curve_cfg(st.d)["fame_gate"]
+			if tb.has(e["size"]):
+				var y := month.substr(0, 4)
+				for k in tb[e["size"]]:
+					if String(k) <= y:
+						g = int(tb[e["size"]][k])
+		if e["size"] == "big" and Film.low_budget(st):
+			g += int(Board.cfg(st.d)["lowbudget_big_gate_add"])
+		return g
+
+	## The next board's big (then medium) role: when fame is about there and its off-road gate is short by what a few periods can
+	## train before the board, a goal for that attribute.
+	func prep_goal(st, i: int):
+		var nb: Dictionary = Board.next_board(st)
+		if nb.is_empty():
+			return null
+		var left: int = (int(st.d.month_index[nb["month"]]) - st.ym) * 3 - i
+		if left <= 0:
+			return null
+		for sz in ["big", "medium"]:
+			for e in nb["roles"]:
+				if e["size"] != sz or not prep_size(sz):
+					continue
+				if st.attr["fame"] + fame_room(st, left) < gate_at(st, e, nb["month"]):
+					continue
+				for cl in e["gates"]:
+					for c in cl:
+						var a: String = c[0]
+						var need: int = int(c[2])
+						var gap: int = need - st.val(a)
+						if gap > 0 and ATTR_VIA.has(a) and gap <= ATTR_RATE * mini(left, prep_periods):
+							return {"stat": a, "to": st.attr[a] + gap + 3, "via": attr_via(a)}
+		return null
+
+	func prep_size(_sz: String) -> bool:
+		return true
+
+	## How much fame the bot expects to add before the board (flagpole bots add more).
+	func fame_room(_st, _left: int) -> int:
+		return prep_fame_slack
+
+	func attr_via(a: String) -> Array:
+		return stam_via if a == "stamina" else ATTR_VIA[a]
 
 	func reserve(st) -> int:
 		return living(st) * 2 + 50
@@ -167,7 +308,7 @@ class SBot:
 	func money_job(g, _P: Dictionary):
 		var st = g.st
 		var d = g.d
-		var low: bool = st.val("looks") < looks_floor
+		var low: bool = st.val("looks") < looks_floor and not skip_looks(st)
 		for jid in money_jobs:
 			if H.can_do_job(st, jid) and not (low and costs_looks(d, jid)):
 				return jid
@@ -177,10 +318,36 @@ class SBot:
 				continue
 			if not H.can_do_job(st, jid) or (low and costs_looks(d, jid)):
 				continue
+			if hurts_goals(st, jid) and not (road == "tough" and TOUGH_SERVER):
+				continue                  # e.g. waiting tables (fight -0/1) would undo the tough road's classes
 			var score: float = Schedule.wage_of(st, jid) - 1.5 * H.job_fat(d.jobs[jid])
 			if best == null or score > best[0]:
 				best = [score, jid]
 		return best[1] if best != null else null
+
+	func skip_looks(st) -> bool:
+		if ignore_looks:
+			return true
+		if not looks_late:
+			return false
+		for sk in st.d.road_skills[road]:
+			if st.skill[sk] < 100:
+				return true
+		return false
+
+	## Whether the job lowers a skill or attribute that is still an unfinished goal.
+	func hurts_goals(st, jid: String) -> bool:
+		for e in st.d.jobs[jid]["daily_effect"]:
+			if int(e["add"][0]) >= 0 and int(e["add"][1]) >= 0:
+				continue
+			for gl in goal_list:
+				if gl.has("road"):
+					for x in ROAD_GOALS[gl["road"]]:
+						if x[0] == e["stat"] and st.skill[x[0]] < 100:
+							return true
+				elif gl["stat"] == e["stat"] and not reached(st, gl):
+					return true
+		return false
 
 	## Slack-off chance % at fatigue f (GDD 5.1.1).
 	func slack_pct(st, f: int) -> int:
@@ -188,12 +355,47 @@ class SBot:
 		var sf: int = mini(100, Rules.fdiv(maxi(f, 0) * 10, div))
 		return clampi(sf - Rules.scale_of(st, "discipline"), 0, int(st.d.t["stats"]["slack"]["cap_pct"]))
 
+	## Rest (2026-11): the slack-off chance at the start of the period >= slack_line %, or the period would bring him near the sick
+	## line (fatigue - stamina >= 0; sick at 10), or its expected daily success is under succ_line.
 	func needs_rest(g, P: Dictionary, i: int, e: String) -> bool:
 		if e.begins_with("rest_"):
 			return false
 		var st = g.st
-		var after: int = maxi(0, P["fat"] + delta(g, P, i, e)[0])
-		return slack_pct(st, after) >= slack_line or after - st.val("stamina") >= 10
+		if not new_rules:
+			var after: int = maxi(0, P["fat"] + delta(g, P, i, e)[0])
+			return slack_pct(st, after) >= slack_line or after - st.val("stamina") >= 10
+		var df: int = delta(g, P, i, e)[0]
+		if slack_pct(st, P["fat"]) >= slack_line:
+			return true
+		if P["fat"] + df - st.val("stamina") >= 0:
+			return true
+		# low expected success: rest when fatigue is the reason (rested, the period would clear the line); a job whose line his
+		# stat barely clears is worked anyway (resting would not help)
+		var line: float = succ_line if not e.begins_with("job_") else succ_line - 0.2
+		if success_p(g, e, P["fat"] + df / 2) >= line:
+			return false
+		return success_p(g, e, df / 2) >= line
+
+	## Expected chance that a day of this entry succeeds at fatigue f (GDD 5.1; the bot sees its stats and fatigue, not the dice).
+	func success_p(g, e: String, f: int) -> float:
+		var st = g.st
+		var d = g.d
+		var pe: Array = Schedule.parse_entry(e)
+		f = maxi(f, 0)
+		if pe[0] == "class":
+			var h: float = maxf(st.val(str(d.classes[pe[1]].get("success_stat", "stamina"))), 0) / 2.0
+			if f <= h:
+				return 1.0
+			var t := 0.0
+			for k in 11:
+				t += minf(1.0, (h + h * k / 10.0 + 1.0) / (f + 1.0))
+			return t / 11.0
+		if pe[0] == "job":
+			var p := 1.0
+			for kv in Schedule.job_lines(st, d.jobs[pe[1]]):
+				p *= clampf((st.val(kv[0]) - int(kv[1]) + 1.0) / (f + 1.0), 0.0, 1.0)
+			return p
+		return 1.0
 
 	func rest(g, P: Dictionary, i: int) -> String:
 		var st = g.st
@@ -204,8 +406,15 @@ class SBot:
 
 	# ---------- month start: gear, looks ----------
 	func month_start(_story, st) -> void:
+		set_life(st)
 		buy_gear(st)
 		keep_looks(st)
+
+	## The fine lifestyle (stamina +10 a month for 40 a month) while stamina is under the target and he can afford it.
+	func set_life(st) -> void:
+		if not new_rules or stam_to <= 0:
+			return
+		st.lifestyle = "life_fine" if st.val("stamina") < stam_to and st.money >= 200 else "life_normal"
 
 	## Bot.month_start with a configurable reserve.
 	func buy_gear(st) -> void:
@@ -329,6 +538,17 @@ class MainOnly:
 		stop_when_full = true
 
 
+## Type 1, tough without caring about looks (dock all the way, no acting class): how fast the road itself trains.
+class MainOnlyNoLooks:
+	extends MainOnly
+
+	func setup(rd: String) -> void:
+		super(rd)
+		name = "full_tough_nolooks"
+		looks_floor = 0
+		ignore_looks = true
+
+
 # ---------- type 2 ----------
 
 ## 1. Main road, then savvy (the user's own play). Savvy main: then lover.
@@ -347,16 +567,6 @@ class LoverSideFirst:
 	func setup(_rd: String) -> void:
 		setup_road("lover", "lover_side_first")
 		goal_list = road_goals("savvy") + road_goals("lover")
-
-
-## 3. Like 1, but signs up for a big film only with a good chance.
-class BigOnly:
-	extends MainSavvy
-
-	func setup(rd: String) -> void:
-		super(rd)
-		name = "big_only_" + rd
-		thresh = {"big": 0.4, "medium": 0.2, "small": 0.0}
 
 
 ## 4. Like 1, but spends all money above one month of living costs on the road's gear.
@@ -512,6 +722,7 @@ class SickBeauty:
 		super(rd)
 		name = "sick_beauty"
 		crime_ok = true
+		stamina_floor = 0
 
 	func month_start(story, st) -> void:
 		super(story, st)
@@ -627,42 +838,290 @@ class FurStrongman:
 		return goal_list
 
 
-## 13. Tough guy who learns speech for the talkies (speech 70) after his road is full, either waiting tables (speech, but fight
-## -0/1 a day) or collecting debts (fight and speech, but looks -1 a day): setup argument "server" or "collector".
-class ToughSpeech:
+## 14. Education-main writer with lover second (the user's play, 2026-11): tutoring to education 150 (church to discipline 90 first
+## so tutoring sticks), then the culture road, then the lover road. Earns with the fan-magazine column.
+class WriterLover:
+	extends SBot
+
+	func setup(_rd: String) -> void:
+		setup_road("culture", "writer_lover")
+		goal_list = [{"stat": "discipline", "to": 90, "via": ["job_church_aid"]}, {"stat": "education", "to": 150, "via": ["class_c3"]}] \
+			+ road_goals("culture") + road_goals("lover")
+
+
+## 15. Flagpole to big-film fame (the user's play, 2026-11): every period on the flagpole until fame reaches `fame_to`, then
+## tough, savvy and lover trained full in that order. Board picks follow the usual thresholds.
+class FlagpoleBig:
+	extends SBot
+
+	var fame_to := 340
+	var fame_done := false
+
+	func setup(rd: String) -> void:
+		fame_to = int(rd)
+		setup_road("tough", "flagpole_big_" + rd)
+		goal_list = road_goals("tough") + road_goals("savvy") + road_goals("lover")
+
+	func choose(g, P: Dictionary, i: int):
+		var st = g.st
+		if st.attr["fame"] >= fame_to:
+			fame_done = true
+		if not fame_done and not stamina_fix and st.attr["stamina"] >= stamina_floor and H.can_do_job(st, "job_flagpole"):
+			return "job_flagpole"
+		return super(g, P, i)
+
+
+## 16. Crime boss: tough main + savvy, all money from crime jobs (bootlegging, then moneylending; the upstairs rooms when his looks
+## allow), never the church. Measures whether the month-end search and the arrest fire.
+class CrimeBoss:
 	extends MainSavvy
 
 	func setup(rd: String) -> void:
 		super("tough")
-		name = "tough_speech_" + rd
-		goal_list = road_goals("tough") + [{"stat": "speech", "to": 70, "via": ["job_" + rd]}] + road_goals("savvy")
+		name = "crime_boss"
+		crime_ok = true
+		money_jobs = ["job_loan", "job_l_late", "job_dock2", "job_collector", "job_dock1"]
+
+
+# ---------- new bots (2026-11): each road with its own engine for stamina and money ----------
+
+## Common to the new bots:
+## - fine lifestyle from the first month (stamina +10 a month) as the floor, not the engine;
+## - stamina follows a curve min(cap, 100 + 12 x month index): under it (minus 10) the bot trains stamina with its road's engine
+##   first (dance for the lover, the dock or collecting for the others, bootlegging for the crime roads). A job that costs stamina
+##   (flagpole, column) pushes him under the curve, so the next periods pay it back;
+## - discipline kept where the slack-off chance stays 0 up to fatigue = half the stamina cap (church with Sil), unless disc_on is off;
+## - rest by expected success (needs_rest with new_rules); the next board read ahead (prep_goal);
+## - fame: when the next board's big role is short of fame by 40 or less, the first period of the month on the flagpole.
+class NewBot:
+	extends SBot
+
+	var stam_cap := 300
+	var stam_engine := ["class_l3", "job_dock1"]
+	var fame_keep := true
+	var looks_guard := 72          # jobs that cost looks are not used as the stamina engine under this
+	var banned := []               # entries this road does not use (e.g. the lounge for culture: education -2 a day)
+
+	func usable(g, P: Dictionary, i: int, e: String) -> String:
+		if banned.has(e):
+			return "no"
+		return super(g, P, i, e)
+
+	func _init(sd := 1) -> void:
+		super(sd)
+		new_rules = true
+		looks_floor = 72
+
+	## Looks are always kept >= 60 (under 60 no audition at all), also on the tough road.
+	func setup_road(rd: String, nm: String) -> void:
+		super(rd, nm)
+		looks_late = false
+
+	## A big role whose wants he plainly misses (the board shows them with his own numbers) ends poor or flop: fit under 0.85
+	## with P at most 1.2 is under X 1.0. He does not sign it.
+	func pick_role(st, b: Dictionary, ok: Array):
+		var keep := []
+		for i in ok:
+			var e: Dictionary = b["roles"][i]
+			if e["size"] == "big" and Film.fit(st, e) < 850:
+				continue
+			keep.append(i)
+		if b["tried"].is_empty() and keep.size() < ok.size():
+			extra["big_low_fit"] = extra.get("big_low_fit", 0) + 1
+		return super(st, b, keep)
+
+	func stam_target(st) -> int:
+		return mini(stam_cap, 100 + 12 * st.ym)
+
+	func disc_to() -> int:
+		return stam_cap * 3 / 16 + 12
+
+	func set_life(st) -> void:
+		st.lifestyle = "life_fine" if st.money >= 100 and st.val("stamina") < stam_cap + 50 else "life_normal"
+
+	func pre_goals(g, _P: Dictionary, i: int) -> Array:
+		var st = g.st
+		var gs := []
+		if st.val("looks") < 62 and not skip_looks(st):
+			gs.append({"stat": "looks", "to": st.attr["looks"] + 1, "via": ["class_l1"]})
+		var t := stam_target(st)
+		if st.val("stamina") < t - 10:
+			gs.append({"stat": "stamina", "to": t, "via": engine(st)})
+		# the studio runner takes loyalty 1 a day; under 20 the church with Sil (loyalty line 10) closes
+		var disc_low: bool = want_disc(st) and st.val("discipline") < disc_to() - 10
+		if disc_low and st.val("loyalty") < 20:
+			gs.append({"stat": "loyalty", "to": 25, "via": ["job_l_day", "class_yi", "job_church_help"]})
+		if disc_low:
+			gs.append({"stat": "discipline", "to": disc_to(), "via": ["job_church_aid"]})
+		if prep_on:
+			var pg = prep_goal(st, i)
+			if pg != null:
+				gs.append(pg)
+		return gs
+
+	func engine(st) -> Array:
+		var out := []
+		for e in stam_engine:
+			if st.d.jobs.has(e) and costs_looks(st.d, e) and st.val("looks") < looks_guard and not skip_looks(st):
+				continue
+			out.append(e)
+		return out
+
+	func attr_via(a: String) -> Array:
+		return stam_engine if a == "stamina" else ATTR_VIA[a]
+
+	## Own money jobs first, but only those that a rested day would pass (a stat barely over the line makes bad days).
+	func money_job(g, P: Dictionary):
+		var st = g.st
+		var low: bool = st.val("looks") < looks_floor and not skip_looks(st)
+		for jid in money_jobs:
+			if H.can_do_job(st, jid) and not (low and costs_looks(g.d, jid)) and success_p(g, jid, H.job_fat(g.d.jobs[jid]) * 5) >= succ_line:
+				return jid
+		return super(g, P)
+
+	func choose(g, P: Dictionary, i: int):
+		var st = g.st
+		if fame_keep and i == 0 and H.can_do_job(st, "job_flagpole"):
+			var nb: Dictionary = Board.next_board(st)
+			if not nb.is_empty():
+				for e in nb["roles"]:
+					if e["size"] == "big":
+						var gap: int = gate_at(st, e, nb["month"]) - st.attr["fame"]
+						if gap > 0 and gap <= 40:
+							return "job_flagpole"
+		return super(g, P, i)
+
+
+## N1. Savvy, lover, tough (lover first). Dance is the stamina engine (it also trains physique and looks); money from the escort
+## job (physique 25; loyalty +1 a day, which pays back the studio runner's loyalty -1 for the savvy gates), the dock while looks
+## are high. Grooming from the lounge from 1927 (its education -2 costs this road nothing).
+class NewSLT:
+	extends NewBot
+
+	func setup(_rd: String) -> void:
+		setup_road("lover", "new_slt")
+		goal_list = staged(["savvy"], [280]) + [{"stat": "physique", "to": 35, "via": ["class_l3"]}] \
+			+ staged(["lover", "savvy", "tough"], [210, 280]) + [SPEECH_TALKIE] + staged(["lover", "savvy", "tough"], [999])
+		money_jobs = ["job_l_day", "job_dock1", "job_server"]
+		stam_engine = ["class_l3", "job_dock1"]
+
+
+## N2. Culture, tough, savvy (not lover: the lounge, the only grooming source, takes education -2 a day, and culture's gates are
+## education). Tutoring first to education 90 (the column opens; tutoring and the column both add discipline, so the church is
+## rarely needed). Money from the column (counts as exposure: no fame decay); collecting is the stamina engine and trains speech
+## and nerve at once (looks -1 a day: not used under looks 72).
+class NewCTS:
+	extends NewBot
+
+	func setup(_rd: String) -> void:
+		setup_road("culture", "new_cts")
+		goal_list = [{"stat": "education", "to": 90, "via": ["class_c3"]}] + staged(["culture", "tough", "savvy"])
+		money_jobs = ["job_c_money", "job_collector", "job_dock1"]
+		stam_engine = ["job_collector", "job_dock1", "class_l3"]
+
+
+## N3. Tough without crime, looks always >= 60: no job that costs looks (dock, collecting). Stamina from dance (also looks and
+## physique); money from the escort job (physique 25 first), else waiting tables. Tough, savvy, lover.
+class CleanTough:
+	extends NewBot
+
+	func setup(_rd: String) -> void:
+		setup_road("tough", "clean_tough")
+		looks_late = false
+		looks_floor = 999
+		looks_guard = 999
+		goal_list = staged(["savvy"], [280]) + [{"stat": "physique", "to": 30, "via": ["class_l3"]}] \
+			+ staged(["tough", "savvy", "lover"], [210, 280]) + [SPEECH_TALKIE] + staged(["tough", "savvy", "lover"], [999])
+		money_jobs = ["job_l_day", "job_server"]
+		stam_engine = ["class_l3"]
+
+
+## N6. Culture, lover, savvy (the user's play): tutoring to education 90, then culture, lover and savvy staged. Lover only by acting
+## and physique: the lounge (grooming, education -2 a day) is never used. The first period of every month on the column when
+## nothing is locked (a good day counts as exposure: no fame decay that month); stamina taken by the column is paid back by
+## dance and the fine lifestyle. Acting is the bonus skill of the films (P), so this road's releases lift fame.
+class NewCL:
+	extends NewBot
+
+	func setup(_rd: String) -> void:
+		setup_road("culture", "new_cl")
+		goal_list = [{"stat": "education", "to": 90, "via": ["class_c3"]}] + staged(["culture", "lover", "savvy"])
+		money_jobs = ["job_c_money", "job_l_day", "job_dock1"]
+		stam_engine = ["class_l3", "job_dock1"]
+		banned = ["job_l_night"]
+
+	func choose(g, P: Dictionary, i: int):
+		var st = g.st
+		if not P.get("col", false) and H.can_do_job(st, "job_c_money") and not stamina_low(st):
+			P["col"] = true
+			return "job_c_money"
+		return super(g, P, i)
+
+	func stamina_low(st) -> bool:
+		return st.val("stamina") < stam_target(st) - 30
+
+
+## N4. Crime boss, new rules: tough and savvy; money from crime (the upstairs rooms when looks allow, bootlegging, collecting,
+## the dock); bootlegging (stamina +1 a day, no looks) is also the stamina engine. Never the church. Stamina cap 400 (his jobs
+## carry fatigue +5 to +12 a day).
+class CrimeBossNew:
+	extends NewBot
+
+	func setup(_rd: String) -> void:
+		setup_road("tough", "crime_boss_new")
+		crime_ok = true
+		disc_on = false
+		stam_cap = 400
+		goal_list = staged(["tough", "savvy"])
+		money_jobs = ["job_l_late", "job_dock2", "job_collector", "job_dock1"]
+		stam_engine = ["job_dock2", "job_dock1"]
+
+
+## N5. Literate tough, new: tough to level 6, then tutoring to education 120 (the moneylending gate) while bootlegging pays the
+## tuition, then tough and savvy staged; money from moneylending once open (1927-01), else bootlegging, the dock.
+class LiterateToughNew:
+	extends NewBot
+
+	func setup(_rd: String) -> void:
+		setup_road("tough", "literate_tough_new")
+		stam_cap = 400
+		goal_list = staged(["tough"], [210]) + [{"stat": "education", "to": 120, "via": ["class_c3"]}] + staged(["tough", "savvy"])
+		money_jobs = ["job_loan", "job_dock2", "job_dock1"]
+		stam_engine = ["job_dock2", "job_dock1"]
+
 
 
 ## name -> [class, setup argument]. Type 1 first.
-const TYPE1 := ["full_tough", "full_lover", "full_culture", "full_savvy"]
+const TYPE1 := ["full_tough", "full_tough_nolooks", "full_lover", "full_culture", "full_savvy"]
 static func all_bots() -> Dictionary:
 	var b := {}
 	for rd in ["tough", "lover", "culture", "savvy"]:
 		b["full_" + rd] = [MainOnly, rd]
+	b["full_tough_nolooks"] = [MainOnlyNoLooks, "tough"]
 	for rd in ["tough", "lover", "culture", "savvy"]:
 		b["main_savvy_" + rd] = [MainSavvy, rd]
 	b["lover_side_first"] = [LoverSideFirst, "lover"]
-	for rd in ["tough", "lover", "culture", "savvy"]:
-		b["big_only_" + rd] = [BigOnly, rd]
 	for rd in ["tough", "lover", "culture", "savvy"]:
 		b["gear_max_" + rd] = [GearMax, rd]
 	b["four_color_stamina"] = [FourColor, "stamina"]
 	b["four_color_discipline"] = [FourColor, "discipline"]
 	b["literate_tough"] = [LiterateTough, "tough"]
 	b["gambler_lover"] = [Gambler, "lover"]
-	b["gambler_tough"] = [Gambler, "tough"]
 	b["hoard_baptize_lover"] = [HoardBaptize, "lover"]
 	b["pious_lender"] = [PiousLender, "tough"]
 	b["sick_beauty"] = [SickBeauty, "lover"]
 	b["flagpole_lover"] = [Flagpole, "lover"]
 	b["fur_strongman"] = [FurStrongman, "tough"]
-	b["tough_speech_server"] = [ToughSpeech, "server"]
-	b["tough_speech_collector"] = [ToughSpeech, "collector"]
+	b["writer_lover"] = [WriterLover, ""]
+	b["flagpole_big_300"] = [FlagpoleBig, "300"]
+	b["flagpole_big_260"] = [FlagpoleBig, "260"]
+	b["crime_boss"] = [CrimeBoss, "tough"]
+	b["new_slt"] = [NewSLT, ""]
+	b["new_cts"] = [NewCTS, ""]
+	b["new_cl"] = [NewCL, ""]
+	b["clean_tough"] = [CleanTough, ""]
+	b["crime_boss_new"] = [CrimeBossNew, ""]
+	b["literate_tough_new"] = [LiterateToughNew, ""]
 	return b
 
 

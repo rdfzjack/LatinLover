@@ -41,8 +41,7 @@
     "social_register",
     "car_ford",
     "car_sports",
-    "car_luxury",
-    "tonic"
+    "car_luxury"
    ],
    "services": [],
    "note": "Buy held items and consumables; any item can be sold at half price, equipped items cannot be sold"
@@ -109,8 +108,8 @@
     {
      "id": "donation",
      "name": "捐款",
-     "price": 100,
-     "effect": "crime-10",
+     "price": 400,
+     "effect": "crime-100",
      "limit": {
       "range": "month",
       "times": 1

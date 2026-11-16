@@ -175,7 +175,7 @@ static func _arrest(story, st) -> void:
 	else:
 		st.exposed = 1
 	st.inc("count.arrest")
-	var start: int = st.ym * 3 + story.cur_period + 1
+	var start: int = st.ym * 3 + mini(story.cur_period + 1, 3)    # month end (cur_period 3) = first period of next month
 	for k in a["detain_periods"]:
 		if not st.void_periods.has(start + k):
 			st.void_periods.append(start + k)

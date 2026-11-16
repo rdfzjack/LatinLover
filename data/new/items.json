@@ -186,15 +186,6 @@
    "sellable": true
   },
   {
-   "id": "tonic",
-   "name": "补药",
-   "class": "consumable",
-   "price": 1,
-   "effect": "stamina+2",
-   "slot": null,
-   "sellable": true
-  },
-  {
    "id": "car_sports",
    "name": "跑车",
    "class": "held",

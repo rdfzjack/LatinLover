@@ -435,10 +435,12 @@ static func audition(st, role: Dictionary, player, rivals: Array, probs: Array =
 			final = kind
 			out["remembered"] = kind == "remembered"
 			if kind != "won" and kind != "remembered":
+				if rivals.size() > 1 and kind == "narrow_loss":
+					final = "lost"            # user (2026-11): a big film lost in the first match has no supporting part
 				break
-		else:    # Second match of a big film: you only get the role by winning; a loss always counts as narrow_loss
+		else:    # Second match of a big film: settled by its own score; only 2:3 (narrow_loss) offers the supporting part
 			if kind != "won" and kind != "remembered":
-				final = "narrow_loss"
+				final = kind
 			out["remembered"] = out["remembered"] and (kind == "won" or kind == "remembered")
 	if final == "remembered":
 		final = "won"

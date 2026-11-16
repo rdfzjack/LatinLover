@@ -2755,15 +2755,14 @@
     "cap_count": 5
    },
    "typed_line": 3,
-   "untyped_pct": 90,
    "fame_pct": 30,
    "dividend_mult": 2,
-   "rep_table_note": "Step 12c c3 round 5 (GDD 8): X = S / B; hit X >= hit_pct%, normal X >= fail_pct%, poor X >= flop_pct%, flop below; the reputation change of the film's road by band and size (support x release_pct)",
+   "rep_table_note": "Step 12c c3 round 5 (GDD 8): X = S / B; hit X >= hit_pct% (a number, or by size), normal X >= fail_pct%, poor X >= flop_pct%, flop below; the reputation change of the film's road by band and size (support x release_pct)",
    "rep_table": {
     "hit": {
      "small": 10,
      "medium": 20,
-     "big": 64
+     "big": 40
     },
     "normal": {
      "small": 4,
@@ -2778,13 +2777,16 @@
     "flop": {
      "small": -10,
      "medium": -20,
-     "big": -64
+     "big": -40
     }
    },
-   "hit_pct": 155,
+   "hit_pct": {
+    "small": 150,
+    "medium": 150,
+    "big": 140
+   },
    "fail_pct": 100,
    "flop_pct": 70,
-   "talkie_penalty_pct": 60,
    "radio_speech_line_cut": 10,
    "lowbudget": {
     "delta": {

@@ -1535,6 +1535,12 @@ func _show_month_start() -> void:
 		era.append(tr("ui.main.show_month_start.4"))
 	if st.void_next:
 		era.append(tr("ui.main.show_month_start.5"))
+	var held := 0
+	for i in 3:
+		if st.void_periods.has(st.ym * 3 + i):
+			held += 1
+	if held > 0:
+		era.append(tr("ui.main.show_month_start.14") % held)
 	if not era.is_empty():
 		label(tr("ui.common.wide_space") + tr("ui.main.entry_effect.11").join(era))
 	label(tr("ui.main.show_month_start.6"))

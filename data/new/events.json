@@ -147,7 +147,7 @@
    "freq": null,
    "effect": "",
    "code": true,
-   "note": "Detained: fine max(200, 30% of money) (never below 0), the next 2 periods are void (they rest like home for fatigue), crime +20, exposure, no big film for 3 months. With loyalty >=150 someone bails him out: fine halved, no exposure, loyalty -30. Only from the month-end search of a month with a crime job worked (stats.json arrest.raid); own switch events.arrest_events",
+   "note": "Detained: fine max(200, 30% of money) (never below 0), the next 3 periods are void (an arrest at month end takes the whole next month; they rest like home for fatigue), crime +20, exposure, no big film for 3 months. With loyalty >=150 someone bails him out: fine halved, no exposure, loyalty -30. Only from the month-end search of a month with a crime job worked (stats.json arrest.raid); own switch events.arrest_events",
    "source": "[orig EVENT045]",
    "body": null,
    "order": 2,

@@ -11,6 +11,7 @@ const Data = preload("res://core/data.gd")
 const Rules = preload("res://core/rules.gd")
 const Story = preload("res://core/story.gd")
 const SBots = preload("res://tools/sbots.gd")
+const Film = preload("res://core/film.gd")
 
 const BASE := ["stamina", "education", "loyalty", "looks", "discipline", "crime"]
 
@@ -101,9 +102,29 @@ func play(spec, sd: int, d) -> Dictionary:
 	var g = Story.new_game(d, sd, bot.origin, bot)
 	var st = g.st
 	var full := -1
+	var fame_y := []
+	var lb_months := 0
+	var dd := {"cls_days": 0, "cls_ok": 0, "job_days": 0, "job_ok": 0}
+	var sta_y := []
+	var disc_y := []
+	var fat_y := []
 	while not st.finished:
+		if Film.low_budget(st) == 1:
+			lb_months += 1
 		g.start_month()
 		g.run_month(Story.fit_plan(g, bot.plan(g)))
+		for o in g.last:
+			if o.has("class_days"):
+				dd["cls_days"] += int(o["class_days"])
+				dd["cls_ok"] += int(o["ok_days"])
+			elif o.has("work_days"):
+				dd["job_days"] += int(o["work_days"])
+				dd["job_ok"] += int(o["ok_days"])
+		if st.ym % 12 == 0 or st.finished:
+			fame_y.append(st.attr["fame"])
+			sta_y.append(st.val("stamina"))
+			disc_y.append(st.val("discipline"))
+			fat_y.append(st.val("fatigue"))
 		if bot.stop_when_full and main_full(st, bot.road):
 			full = st.ym
 			break
@@ -118,6 +139,29 @@ func play(spec, sd: int, d) -> Dictionary:
 		elif k.begins_with("count.period.rest_"):
 			per["rest"] += c[k]
 	rec["periods"] = per
+	rec["fame_y"] = fame_y
+	rec["stamina_y"] = sta_y
+	rec["disc_y"] = disc_y
+	rec["fat_y"] = fat_y
+	rec["days"] = dd
+	rec["lowbudget_months"] = lb_months
+	rec["traits"] = str(st.get("traits")) if "traits" in st else ""
+	var full_roads := []
+	for rd in d.roads:
+		if main_full(st, rd):
+			full_roads.append(rd)
+	rec["roads_full"] = full_roads
+	rec["skills"] = st.skill.duplicate()
+	var bv := {}
+	for a in BASE:
+		bv[a] = st.val(a)
+	rec["base"] = bv
+	rec["gear_spend"] = int(st.cnt("count.gear_spend"))
+	rec["films"] = []
+	for f in st.story.get("films", []):
+		var rs = f.get("result")
+		rec["films"].append({"size": f.get("size"), "support": f.get("support"), "road": f.get("roles", {}).get("road"),
+			"ym": int(rs.get("month", -1)) if rs != null else -1, "fee": f.get("fee"), "band": rs.get("band") if rs != null else null})
 	if bot.stop_when_full:
 		return rec
 	var res: Dictionary = st.story["ending"]

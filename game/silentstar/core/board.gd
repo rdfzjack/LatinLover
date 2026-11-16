@@ -391,6 +391,8 @@ static func eligible(st, e: Dictionary) -> String:
 		return "out_of_reach"
 	if not Rules.cond(st, e.get("gates", [])):          # fixed boards (user): the role's minimum off-road attributes
 		return "gates"
+	if Schedule.truthy(e.get("talkie")) and e.get("speech_line") != null and st.val("speech") < Film.talk_line(st, e):
+		return "speech"                                  # user (2026-11): a talkie needs speech to sign up (GDD 6.4)
 	if e["size"] == "big" and st.flags.has("morals_until") and st.ym <= st.flags["morals_until"]:
 		return "morals"
 	if st.status["long_contract"] and not e["house"]:

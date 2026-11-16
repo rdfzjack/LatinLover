@@ -377,7 +377,9 @@ if 'release' in df:
     for band in ('hit', 'normal', 'poor', 'flop'):
         for size in ('small', 'medium', 'big'):
             if not isinstance(rl.get('rep_table', {}).get(band, {}).get(size), int): err(f, f'release rep_table needs an integer {band}.{size}')
-    if not (rl.get('flop_pct', 0) <= rl.get('fail_pct', -1) <= rl.get('hit_pct', 0)): err(f, 'release needs flop_pct <= fail_pct <= hit_pct')
+    hp = rl.get('hit_pct', 0)
+    hps = list(hp.values()) if isinstance(hp, dict) else [hp]
+    if not all(rl.get('flop_pct', 0) <= rl.get('fail_pct', -1) <= h for h in hps): err(f, 'release needs flop_pct <= fail_pct <= hit_pct')
 if 'shoot' in df:
     for t in df['shoot']['stunt_self']['tags']:
         if t not in TAGS: err(f, f'stunt_self tags {t}')

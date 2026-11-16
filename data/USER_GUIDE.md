@@ -347,7 +347,7 @@ To add a new role instead, add it to `"roles"` of `roles.json` (copy one of the 
 - `wants`: 1-3 attributes or skills with a target; they shape the release result.
 - `tags`: 1-2 of the 16 film tags (section 2).
 - `opponents`: an unnamed one is `{"unnamed": true, "main_level": n}`, a named one `{"named": "rival_valen"}` (ids in `rivals.json`).
-- `talkie`: `true` always a talkie, `false` never, `null` decided by the year's ratio. With `true`, `speech_line` must be a number.
+- `talkie`: `true` always a talkie, `false` never, `null` decided by the year's ratio. With `true`, `speech_line` must be a number. A talkie needs speech >= its line to sign up (default `defaults.speech_line`: small 30, medium 50, big 70); there is no penalty on release.
 - `bonus_skill`: the skill that adds to the shooting performance (usually `acting`); `fee`: the pay (default small 300, medium 800, big 2500).
 - `years_active`: `[first year, last year]`; only used by the extra draws, not by the fixed boards.
 - The fixed boards look like this in `roles.json`:
@@ -441,6 +441,7 @@ In effects, `drug_points+1` and `drug_stage=0` work like any other name.
 - **Bad days**: every class or work day goes bad with probability = fatigue% (`jobs.json` → `bad_day.cap` is the ceiling, 100).
 - **0-or-1 gains**: a range of exactly `[0, 1]` (or `[-1, 0]`) in `daily_effect` or a class `per_level` gives the non-zero value with probability `zero_one_prob` (now `[2, 3]`, in both `jobs.json` and `classes.json`). Any other range `[a, b]` is a plain random number from a to b.
 - **One of two stats**: a `daily_effect` line with `"one_of": ["negotiation", "insight"]` puts the gain on one of them, picked at random each day (`stat` must still be one of them).
+- **Capped gain**: a `daily_effect` line with `"while_below": 150` is skipped on a day when that stat is already >= 150 (the flagpole's fame).
 - **Class levels**: `classes.json` → `class_steps` `[4, 8, 11]`: up to 4 periods taken is level 1, up to 8 level 2, up to 11 level 3, then level 4. `fee` and every `per_level` have four entries, one per level.
 - **`code`, `site`, `original`** on the new jobs and classes are notes: the placeholder code from the plan, the map place it will belong to, and the original game's job or class. The game does not read them yet.
 - **Fixed boards** (`roles.json`): `board_schedule` lists each audition month with its `big`, `medium` and `small` role id (an optional `small2` adds a second small role; the 1924-25 boards have one); `reserve_pool` is the ordered list of extra roles (small or medium) shown when rapport reach `defaults.board.rapport_extra`. A role's sign-up conditions are `fame_gate` plus `gates` (a condition, e.g. `[[["looks", ">=", 80]]]`). To change a board, put another role id in its slot; to add a board, add a line here and set `board: true` on that month in `calendar.json` (the checker wants the two to match).

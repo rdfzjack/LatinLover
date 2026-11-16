@@ -31,7 +31,8 @@ func show_board(m, p: Dictionary) -> void:
 		m.heading(title, box)
 		var line: String = tr("ui.board.show_board.5") % str(r["fee"]) + tr("ui.common.wide_space") + m.gates_text(Board.fame_gate(st, r), r.get("gates", []))
 		if r.get("talkie") != null and r["talkie"]:
-			line += tr("ui.board.show_board.6")
+			var sl: int = Board.Film.talk_line(st, r)
+			line += tr("ui.board.show_board.6") % [sl, st.val("speech"), "✓" if st.val("speech") >= sl else "✗"]
 		m.label(line, box)
 		var w := PackedStringArray()
 		for x in r["wants"]:
