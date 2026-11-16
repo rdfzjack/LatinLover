@@ -70,7 +70,7 @@
    "name": "酋长",
    "film_title": "《酋长》",
    "size": "big",
-   "fame_gate": 250,
+   "fame_gate": 210,
    "style_probs": [
     15,
     55,
@@ -124,7 +124,7 @@
    "name": "贪婪",
    "film_title": "《贪婪》",
    "size": "medium",
-   "fame_gate": 100,
+   "fame_gate": 130,
    "style_probs": [
     15,
     15,
@@ -155,7 +155,15 @@
     1924,
     1929
    ],
-   "gates": [],
+   "gates": [
+    [
+     [
+      "loyalty",
+      ">=",
+      50
+     ]
+    ]
+   ],
    "board": 1
   },
   {
@@ -236,7 +244,7 @@
    "name": "叛舰喋血记",
    "film_title": "《叛舰喋血记》",
    "size": "big",
-   "fame_gate": 250,
+   "fame_gate": 210,
    "style_probs": [
     15,
     15,
@@ -274,7 +282,15 @@
     1924,
     1929
    ],
-   "gates": [],
+   "gates": [
+    [
+     [
+      "loyalty",
+      ">=",
+      100
+     ]
+    ]
+   ],
    "board": 2
   },
   {
@@ -282,7 +298,7 @@
    "name": "第42街",
    "film_title": "《第42街》",
    "size": "medium",
-   "fame_gate": 100,
+   "fame_gate": 130,
    "style_probs": [
     15,
     15,
@@ -317,7 +333,15 @@
     1924,
     1929
    ],
-   "gates": [],
+   "gates": [
+    [
+     [
+      "education",
+      ">=",
+      50
+     ]
+    ]
+   ],
    "board": 2
   },
   {
@@ -401,7 +425,7 @@
    "name": "宾虚",
    "film_title": "《宾虚》",
    "size": "big",
-   "fame_gate": 250,
+   "fame_gate": 210,
    "style_probs": [
     15,
     15,
@@ -439,7 +463,15 @@
     1924,
     1929
    ],
-   "gates": [],
+   "gates": [
+    [
+     [
+      "education",
+      ">=",
+      120
+     ]
+    ]
+   ],
    "board": 3
   },
   {
@@ -447,7 +479,7 @@
    "name": "大阅兵",
    "film_title": "《大阅兵》",
    "size": "medium",
-   "fame_gate": 100,
+   "fame_gate": 130,
    "style_probs": [
     55,
     15,
@@ -478,7 +510,15 @@
     1924,
     1929
    ],
-   "gates": [],
+   "gates": [
+    [
+     [
+      "stamina",
+      ">=",
+      65
+     ]
+    ]
+   ],
    "board": 3
   },
   {
@@ -562,7 +602,7 @@
    "name": "亚利桑那奇侠",
    "film_title": "《亚利桑那奇侠》",
    "size": "big",
-   "fame_gate": 250,
+   "fame_gate": 210,
    "style_probs": [
     55,
     15,
@@ -600,7 +640,15 @@
     1924,
     1929
    ],
-   "gates": [],
+   "gates": [
+    [
+     [
+      "stamina",
+      ">=",
+      120
+     ]
+    ]
+   ],
    "board": 4
   },
   {
@@ -608,7 +656,7 @@
    "name": "波希米亚人",
    "film_title": "《波希米亚人》",
    "size": "medium",
-   "fame_gate": 100,
+   "fame_gate": 130,
    "style_probs": [
     15,
     55,
@@ -643,7 +691,15 @@
     1924,
     1929
    ],
-   "gates": [],
+   "gates": [
+    [
+     [
+      "looks",
+      ">=",
+      65
+     ]
+    ]
+   ],
    "board": 4
   },
   {
@@ -727,7 +783,7 @@
    "name": "肉与魔",
    "film_title": "《肉与魔》",
    "size": "big",
-   "fame_gate": 250,
+   "fame_gate": 210,
    "style_probs": [
     15,
     55,
@@ -765,7 +821,15 @@
     1924,
     1929
    ],
-   "gates": [],
+   "gates": [
+    [
+     [
+      "looks",
+      ">=",
+      140
+     ]
+    ]
+   ],
    "board": 5
   },
   {
@@ -773,7 +837,7 @@
    "name": "航海家",
    "film_title": "《航海家》",
    "size": "medium",
-   "fame_gate": 100,
+   "fame_gate": 140,
    "style_probs": [
     15,
     15,
@@ -804,7 +868,15 @@
     1924,
     1929
    ],
-   "gates": [],
+   "gates": [
+    [
+     [
+      "loyalty",
+      ">=",
+      80
+     ]
+    ]
+   ],
    "board": 5
   },
   {
@@ -842,7 +914,15 @@
     1924,
     1929
    ],
-   "gates": [],
+   "gates": [
+    [
+     [
+      "stamina",
+      ">=",
+      30
+     ]
+    ]
+   ],
    "board": 5
   },
   {
@@ -880,7 +960,15 @@
     1924,
     1929
    ],
-   "gates": [],
+   "gates": [
+    [
+     [
+      "education",
+      ">=",
+      30
+     ]
+    ]
+   ],
    "board": 5
   },
   {
@@ -888,7 +976,7 @@
    "name": "安全至下",
    "film_title": "《安全至下》",
    "size": "big",
-   "fame_gate": 250,
+   "fame_gate": 210,
    "style_probs": [
     15,
     15,
@@ -926,7 +1014,15 @@
     1924,
     1929
    ],
-   "gates": [],
+   "gates": [
+    [
+     [
+      "loyalty",
+      ">=",
+      140
+     ]
+    ]
+   ],
    "board": 6
   },
   {
@@ -934,7 +1030,7 @@
    "name": "红字",
    "film_title": "《红字》",
    "size": "medium",
-   "fame_gate": 100,
+   "fame_gate": 140,
    "style_probs": [
     15,
     15,
@@ -969,7 +1065,15 @@
     1924,
     1929
    ],
-   "gates": [],
+   "gates": [
+    [
+     [
+      "education",
+      ">=",
+      80
+     ]
+    ]
+   ],
    "board": 6
   },
   {
@@ -1007,7 +1111,15 @@
     1924,
     1929
    ],
-   "gates": [],
+   "gates": [
+    [
+     [
+      "stamina",
+      ">=",
+      30
+     ]
+    ]
+   ],
    "board": 6
   },
   {
@@ -1045,7 +1157,15 @@
     1924,
     1929
    ],
-   "gates": [],
+   "gates": [
+    [
+     [
+      "looks",
+      ">=",
+      30
+     ]
+    ]
+   ],
    "board": 6
   },
   {
@@ -1053,7 +1173,7 @@
    "name": "风流公子布鲁梅尔",
    "film_title": "《风流公子布鲁梅尔》",
    "size": "big",
-   "fame_gate": 250,
+   "fame_gate": 210,
    "style_probs": [
     15,
     15,
@@ -1091,7 +1211,15 @@
     1924,
     1929
    ],
-   "gates": [],
+   "gates": [
+    [
+     [
+      "education",
+      ">=",
+      140
+     ]
+    ]
+   ],
    "board": 7
   },
   {
@@ -1099,7 +1227,7 @@
    "name": "启示录四骑士",
    "film_title": "《启示录四骑士》",
    "size": "medium",
-   "fame_gate": 100,
+   "fame_gate": 140,
    "style_probs": [
     55,
     15,
@@ -1130,7 +1258,15 @@
     1924,
     1929
    ],
-   "gates": [],
+   "gates": [
+    [
+     [
+      "stamina",
+      ">=",
+      80
+     ]
+    ]
+   ],
    "board": 7
   },
   {
@@ -1168,7 +1304,15 @@
     1924,
     1929
    ],
-   "gates": [],
+   "gates": [
+    [
+     [
+      "looks",
+      ">=",
+      30
+     ]
+    ]
+   ],
    "board": 7
   },
   {
@@ -1206,7 +1350,15 @@
     1924,
     1929
    ],
-   "gates": [],
+   "gates": [
+    [
+     [
+      "loyalty",
+      ">=",
+      30
+     ]
+    ]
+   ],
    "board": 7
   },
   {
@@ -1214,7 +1366,7 @@
    "name": "消失的地平线",
    "film_title": "《消失的地平线》",
    "size": "big",
-   "fame_gate": 250,
+   "fame_gate": 210,
    "style_probs": [
     55,
     15,
@@ -1253,7 +1405,15 @@
     1924,
     1929
    ],
-   "gates": [],
+   "gates": [
+    [
+     [
+      "stamina",
+      ">=",
+      160
+     ]
+    ]
+   ],
    "board": 8
   },
   {
@@ -1261,7 +1421,7 @@
    "name": "白雪公主",
    "film_title": "《白雪公主》",
    "size": "medium",
-   "fame_gate": 100,
+   "fame_gate": 150,
    "style_probs": [
     15,
     55,
@@ -1296,7 +1456,15 @@
     1924,
     1929
    ],
-   "gates": [],
+   "gates": [
+    [
+     [
+      "looks",
+      ">=",
+      95
+     ]
+    ]
+   ],
    "board": 8
   },
   {
@@ -1304,7 +1472,7 @@
    "name": "淘金记",
    "film_title": "《淘金记》",
    "size": "medium",
-   "fame_gate": 100,
+   "fame_gate": 150,
    "style_probs": [
     15,
     15,
@@ -1339,7 +1507,15 @@
     1924,
     1929
    ],
-   "gates": [],
+   "gates": [
+    [
+     [
+      "loyalty",
+      ">=",
+      95
+     ]
+    ]
+   ],
    "board": 8
   },
   {
@@ -1377,7 +1553,15 @@
     1924,
     1929
    ],
-   "gates": [],
+   "gates": [
+    [
+     [
+      "education",
+      ">=",
+      40
+     ]
+    ]
+   ],
    "board": 8
   },
   {
@@ -1385,7 +1569,7 @@
    "name": "风流寡妇",
    "film_title": "《风流寡妇》",
    "size": "big",
-   "fame_gate": 250,
+   "fame_gate": 210,
    "style_probs": [
     15,
     55,
@@ -1423,7 +1607,15 @@
     1924,
     1929
    ],
-   "gates": [],
+   "gates": [
+    [
+     [
+      "looks",
+      ">=",
+      160
+     ]
+    ]
+   ],
    "board": 9
   },
   {
@@ -1431,7 +1623,7 @@
    "name": "西线无战事",
    "film_title": "《西线无战事》",
    "size": "medium",
-   "fame_gate": 100,
+   "fame_gate": 150,
    "style_probs": [
     15,
     15,
@@ -1462,7 +1654,15 @@
     1924,
     1929
    ],
-   "gates": [],
+   "gates": [
+    [
+     [
+      "education",
+      ">=",
+      95
+     ]
+    ]
+   ],
    "board": 9
   },
   {
@@ -1470,7 +1670,7 @@
    "name": "风",
    "film_title": "《风》",
    "size": "medium",
-   "fame_gate": 100,
+   "fame_gate": 150,
    "style_probs": [
     55,
     15,
@@ -1501,7 +1701,15 @@
     1924,
     1929
    ],
-   "gates": [],
+   "gates": [
+    [
+     [
+      "stamina",
+      ">=",
+      95
+     ]
+    ]
+   ],
    "board": 9
   },
   {
@@ -1539,7 +1747,15 @@
     1924,
     1929
    ],
-   "gates": [],
+   "gates": [
+    [
+     [
+      "loyalty",
+      ">=",
+      40
+     ]
+    ]
+   ],
    "board": 9
   },
   {
@@ -1547,7 +1763,7 @@
    "name": "一夜风流",
    "film_title": "《一夜风流》",
    "size": "big",
-   "fame_gate": 250,
+   "fame_gate": 210,
    "style_probs": [
     15,
     15,
@@ -1585,7 +1801,15 @@
     1924,
     1929
    ],
-   "gates": [],
+   "gates": [
+    [
+     [
+      "loyalty",
+      ">=",
+      160
+     ]
+    ]
+   ],
    "board": 10
   },
   {
@@ -1593,7 +1817,7 @@
    "name": "两个阿拉伯骑士",
    "film_title": "《两个阿拉伯骑士》",
    "size": "medium",
-   "fame_gate": 100,
+   "fame_gate": 150,
    "style_probs": [
     15,
     55,
@@ -1628,7 +1852,15 @@
     1924,
     1929
    ],
-   "gates": [],
+   "gates": [
+    [
+     [
+      "looks",
+      ">=",
+      95
+     ]
+    ]
+   ],
    "board": 10
   },
   {
@@ -1636,7 +1868,7 @@
    "name": "万王之王",
    "film_title": "《万王之王》",
    "size": "medium",
-   "fame_gate": 100,
+   "fame_gate": 150,
    "style_probs": [
     15,
     15,
@@ -1671,7 +1903,15 @@
     1924,
     1929
    ],
-   "gates": [],
+   "gates": [
+    [
+     [
+      "education",
+      ">=",
+      95
+     ]
+    ]
+   ],
    "board": 10
   },
   {
@@ -1709,7 +1949,15 @@
     1924,
     1929
    ],
-   "gates": [],
+   "gates": [
+    [
+     [
+      "stamina",
+      ">=",
+      40
+     ]
+    ]
+   ],
    "board": 10
   },
   {
@@ -1717,7 +1965,7 @@
    "name": "大饭店",
    "film_title": "《大饭店》",
    "size": "big",
-   "fame_gate": 250,
+   "fame_gate": 240,
    "style_probs": [
     15,
     15,
@@ -1755,7 +2003,15 @@
     1924,
     1929
    ],
-   "gates": [],
+   "gates": [
+    [
+     [
+      "education",
+      ">=",
+      180
+     ]
+    ]
+   ],
    "board": 11
   },
   {
@@ -1763,7 +2019,7 @@
    "name": "德古拉",
    "film_title": "《德古拉》",
    "size": "medium",
-   "fame_gate": 100,
+   "fame_gate": 160,
    "style_probs": [
     15,
     15,
@@ -1794,7 +2050,15 @@
     1924,
     1929
    ],
-   "gates": [],
+   "gates": [
+    [
+     [
+      "loyalty",
+      ">=",
+      110
+     ]
+    ]
+   ],
    "board": 11
   },
   {
@@ -1802,7 +2066,7 @@
    "name": "三个教父",
    "film_title": "《三个教父》",
    "size": "medium",
-   "fame_gate": 100,
+   "fame_gate": 160,
    "style_probs": [
     55,
     15,
@@ -1833,7 +2097,15 @@
     1924,
     1929
    ],
-   "gates": [],
+   "gates": [
+    [
+     [
+      "stamina",
+      ">=",
+      110
+     ]
+    ]
+   ],
    "board": 11
   },
   {
@@ -1871,7 +2143,15 @@
     1924,
     1929
    ],
-   "gates": [],
+   "gates": [
+    [
+     [
+      "looks",
+      ">=",
+      50
+     ]
+    ]
+   ],
    "board": 11
   },
   {
@@ -1879,7 +2159,7 @@
    "name": "双翼",
    "film_title": "《双翼》",
    "size": "big",
-   "fame_gate": 250,
+   "fame_gate": 240,
    "style_probs": [
     55,
     15,
@@ -1917,7 +2197,15 @@
     1924,
     1929
    ],
-   "gates": [],
+   "gates": [
+    [
+     [
+      "stamina",
+      ">=",
+      180
+     ]
+    ]
+   ],
    "board": 12
   },
   {
@@ -1925,7 +2213,7 @@
    "name": "军中红粉",
    "film_title": "《军中红粉》",
    "size": "medium",
-   "fame_gate": 100,
+   "fame_gate": 160,
    "style_probs": [
     15,
     55,
@@ -1960,7 +2248,15 @@
     1924,
     1929
    ],
-   "gates": [],
+   "gates": [
+    [
+     [
+      "looks",
+      ">=",
+      110
+     ]
+    ]
+   ],
    "board": 12
   },
   {
@@ -1968,7 +2264,7 @@
    "name": "纽约之光",
    "film_title": "《纽约之光》",
    "size": "medium",
-   "fame_gate": 100,
+   "fame_gate": 160,
    "style_probs": [
     15,
     15,
@@ -2003,7 +2299,15 @@
     1924,
     1929
    ],
-   "gates": [],
+   "gates": [
+    [
+     [
+      "loyalty",
+      ">=",
+      110
+     ]
+    ]
+   ],
    "board": 12
   },
   {
@@ -2041,7 +2345,15 @@
     1924,
     1929
    ],
-   "gates": [],
+   "gates": [
+    [
+     [
+      "education",
+      ">=",
+      50
+     ]
+    ]
+   ],
    "board": 12
   },
   {
@@ -2049,7 +2361,7 @@
    "name": "乱世佳人",
    "film_title": "《乱世佳人》",
    "size": "big",
-   "fame_gate": 250,
+   "fame_gate": 240,
    "style_probs": [
     15,
     55,
@@ -2088,7 +2400,15 @@
     1924,
     1929
    ],
-   "gates": [],
+   "gates": [
+    [
+     [
+      "looks",
+      ">=",
+      180
+     ]
+    ]
+   ],
    "board": 13
   },
   {
@@ -2096,7 +2416,7 @@
    "name": "弗兰肯斯坦",
    "film_title": "《弗兰肯斯坦》",
    "size": "medium",
-   "fame_gate": 100,
+   "fame_gate": 160,
    "style_probs": [
     15,
     15,
@@ -2127,7 +2447,15 @@
     1924,
     1929
    ],
-   "gates": [],
+   "gates": [
+    [
+     [
+      "education",
+      ">=",
+      110
+     ]
+    ]
+   ],
    "board": 13
   },
   {
@@ -2135,7 +2463,7 @@
    "name": "国民公敌",
    "film_title": "《国民公敌》",
    "size": "medium",
-   "fame_gate": 100,
+   "fame_gate": 160,
    "style_probs": [
     55,
     15,
@@ -2166,7 +2494,15 @@
     1924,
     1929
    ],
-   "gates": [],
+   "gates": [
+    [
+     [
+      "stamina",
+      ">=",
+      110
+     ]
+    ]
+   ],
    "board": 13
   },
   {
@@ -2204,7 +2540,15 @@
     1924,
     1929
    ],
-   "gates": [],
+   "gates": [
+    [
+     [
+      "loyalty",
+      ">=",
+      50
+     ]
+    ]
+   ],
    "board": 13
   },
   {
@@ -2212,7 +2556,7 @@
    "name": "愚蠢的妻子",
    "film_title": "《愚蠢的妻子》",
    "size": "big",
-   "fame_gate": 250,
+   "fame_gate": 270,
    "style_probs": [
     15,
     15,
@@ -2250,7 +2594,15 @@
     1924,
     1929
    ],
-   "gates": [],
+   "gates": [
+    [
+     [
+      "loyalty",
+      ">=",
+      200
+     ]
+    ]
+   ],
    "board": 14
   },
   {
@@ -2258,7 +2610,7 @@
    "name": "最后的命令",
    "film_title": "《最后的命令》",
    "size": "medium",
-   "fame_gate": 100,
+   "fame_gate": 170,
    "style_probs": [
     15,
     55,
@@ -2293,7 +2645,15 @@
     1924,
     1929
    ],
-   "gates": [],
+   "gates": [
+    [
+     [
+      "looks",
+      ">=",
+      125
+     ]
+    ]
+   ],
    "board": 14
   },
   {
@@ -2301,7 +2661,7 @@
    "name": "璇宫艳史",
    "film_title": "《璇宫艳史》",
    "size": "medium",
-   "fame_gate": 100,
+   "fame_gate": 170,
    "style_probs": [
     15,
     15,
@@ -2336,7 +2696,15 @@
     1924,
     1929
    ],
-   "gates": [],
+   "gates": [
+    [
+     [
+      "education",
+      ">=",
+      125
+     ]
+    ]
+   ],
    "board": 14
   },
   {
@@ -2374,7 +2742,15 @@
     1924,
     1929
    ],
-   "gates": [],
+   "gates": [
+    [
+     [
+      "stamina",
+      ">=",
+      60
+     ]
+    ]
+   ],
    "board": 14
   },
   {
@@ -2382,7 +2758,7 @@
    "name": "罪与罚",
    "film_title": "《罪与罚》",
    "size": "big",
-   "fame_gate": 250,
+   "fame_gate": 270,
    "style_probs": [
     15,
     15,
@@ -2421,7 +2797,15 @@
     1924,
     1929
    ],
-   "gates": [],
+   "gates": [
+    [
+     [
+      "education",
+      ">=",
+      200
+     ]
+    ]
+   ],
    "board": 15
   },
   {
@@ -2429,7 +2813,7 @@
    "name": "罗宾汉历险记",
    "film_title": "《罗宾汉历险记》",
    "size": "medium",
-   "fame_gate": 100,
+   "fame_gate": 170,
    "style_probs": [
     55,
     15,
@@ -2460,7 +2844,15 @@
     1924,
     1929
    ],
-   "gates": [],
+   "gates": [
+    [
+     [
+      "stamina",
+      ">=",
+      125
+     ]
+    ]
+   ],
    "board": 15
   },
   {
@@ -2468,7 +2860,7 @@
    "name": "它",
    "film_title": "《它》",
    "size": "medium",
-   "fame_gate": 100,
+   "fame_gate": 170,
    "style_probs": [
     15,
     55,
@@ -2499,7 +2891,15 @@
     1924,
     1929
    ],
-   "gates": [],
+   "gates": [
+    [
+     [
+      "looks",
+      ">=",
+      125
+     ]
+    ]
+   ],
    "board": 15
   },
   {
@@ -2537,7 +2937,15 @@
     1924,
     1929
    ],
-   "gates": [],
+   "gates": [
+    [
+     [
+      "loyalty",
+      ">=",
+      60
+     ]
+    ]
+   ],
    "board": 15
   }
  ],
@@ -2828,7 +3236,7 @@
   },
   "fame_gate_note": "User (lover playtest): fame formula unchanged; gates set by estimate so a good start can try a medium film from 1925-03 and a big film from 1927 (medium 130/130/140/150/160/170, big 210 to 1927, then 240, 270). Placeholder, to be re-measured",
   "audition_curve": {
-   "note": "Switch (user, 2026-11). enabled true: medium/big fame gates by year from fame_gate below (the per-role fame_gate is ignored); unnamed rivals' main level = player_level of the year + random offset by tier; named rivals keep their own colors, k, habit and fame, but their main color is pulled into player_level + named_band and their second color is at least main - named_side_gap. enabled false: the old rules (per-role gates; unnamed levels by level_up_months in rivals.json; named rivals as listed). All numbers are a first draft to confirm with the user",
+   "note": "Switch (user, 2026-11). enabled true: medium/big fame gates by year from fame_gate below (the per-role fame_gate is ignored); unnamed rivals' main level = player_level of the year + random offset by tier; named rivals keep their own colors, k, habit and fame, but their main color is pulled into player_level + named_band and their second color is at least main - named_side_gap. enabled false: the old rules (per-role gates; unnamed levels by level_up_months in rivals.json; named rivals as listed). All numbers are a first draft to confirm with the user | User (2026-11): the fame gates are the per-role values again (medium 130/130/140/150/160/170 by board year, big 210 to 1927, 240, 270; sign-up attribute gates by road and year); the year table is kept in fame_gate_curve_unused and `fame_gate` is empty so it does nothing",
    "enabled": true,
    "player_level": {
     "1924": 6,
@@ -2857,7 +3265,14 @@
     1
    ],
    "named_side_gap": 2,
-   "fame_gate": {
+   "fame_gate": {},
+   "fixed_offset": {
+    "small": -3,
+    "medium": -1,
+    "big": 0
+   },
+   "fixed_offset_note": "Unnamed rivals (small, medium, big first match): level = player_level of the year + this fixed offset, no random (the midpoint of `offset`, rounded down). Fame is base + per_half_year as before",
+   "fame_gate_curve_unused": {
     "medium": {
      "1924": 130,
      "1925": 120
@@ -2867,13 +3282,7 @@
      "1928": 300,
      "1929": 340
     }
-   },
-   "fixed_offset": {
-    "small": -3,
-    "medium": -1,
-    "big": 0
-   },
-   "fixed_offset_note": "Unnamed rivals (small, medium, big first match): level = player_level of the year + this fixed offset, no random (the midpoint of `offset`, rounded down). Fame is base + per_half_year as before"
+   }
   },
   "typed_audition_pts": 10,
   "audition_opponent": {
