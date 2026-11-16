@@ -375,6 +375,12 @@ static func period_end(story, st, i: int, entry: String, out: Dictionary) -> voi
 
 # ---------- outings (5.5.2) ----------
 
+## Met at a place: the schedule book (journal) records that entry of his schedule.
+static func meet_at(st, npc: String, place: String) -> void:
+	meet(st, npc)
+	st.inc("count.met_at.%s.%s" % [npc, place])
+
+
 static func meet(st, npc: String) -> void:
 	st.meet(npc)
 
@@ -434,7 +440,7 @@ static func outing(story, st, place: String):
 	var d = st.d
 	var people := present(st, place, story.cur_period)
 	for npc in people:
-		meet(st, npc)
+		meet_at(st, npc, place)
 	var eid = null
 	for npc in people:
 		eid = npc_event(st, npc)
@@ -486,6 +492,9 @@ static func job_period(story, st, jid: String, good: bool) -> void:
 	var j: Dictionary = d.jobs[jid]
 	if good and Schedule.truthy(j["npc"]):
 		meet(st, j["npc"])
+		for sc in d.schedule_npc:                # the job is where he is: every place of his schedule is recorded
+			if sc["npc"] == j["npc"]:
+				st.inc("count.met_at.%s.%s" % [j["npc"], sc["place"]])
 	for r in j["period_random"]:
 		if st.rng.logic.chance(r["prob"][0], r["prob"][1]):
 			fire(story, st, r["event"])

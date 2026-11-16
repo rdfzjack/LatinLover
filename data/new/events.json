@@ -750,7 +750,7 @@
      "fail_effect": ""
     },
     {
-     "text": "人脉",
+     "text": "人缘",
      "check": null,
      "success_effect": "rapport+5",
      "fail_effect": ""
@@ -1445,7 +1445,7 @@
   },
   {
    "id": "job_waiter_r1",
-   "name": "客人是圈内人，人脉 +2",
+   "name": "客人是圈内人，人缘 +2",
    "class": "job",
    "timing": "during_job",
    "cond": [],

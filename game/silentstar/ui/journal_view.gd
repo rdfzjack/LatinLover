@@ -15,7 +15,7 @@ func build(m) -> void:
 	var shown := 0
 	for s in d.schedule_npc:
 		var npc: String = s["npc"]
-		var met: bool = st.cnt("count.met." + npc) > 0
+		var met: bool = st.cnt("count.met_at.%s.%s" % [npc, s["place"]]) > 0     # met at this place (user, 2026-11)
 		if not (met or (full and st.known.has(npc))):
 			continue
 		shown += 1
