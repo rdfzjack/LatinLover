@@ -324,7 +324,7 @@
    "attackable": true,
    "road": "tough",
    "road2": null,
-   "personality": "strict"
+   "personality": "masochist"
   },
   {
    "id": "barry",
@@ -545,7 +545,7 @@
    "attackable": true,
    "road": "lover",
    "road2": "culture",
-   "personality": "strict"
+   "personality": "easygoing"
   },
   {
    "id": "saint",
@@ -573,7 +573,7 @@
    "attackable": true,
    "road": "tough",
    "road2": "culture",
-   "personality": "easygoing"
+   "personality": "masochist"
   },
   {
    "id": "vamp",
@@ -763,6 +763,19 @@
      "win_clean": 1,
      "win_mid": 1,
      "win_close": 0,
+     "lose_zero": -1,
+     "lose": 0,
+     "hit": 0,
+     "flop": 0
+    },
+    {
+     "id": "masochist",
+     "name": "M",
+     "coop_serious": 2,
+     "coop_sloppy": -2,
+     "win_clean": 2,
+     "win_mid": 2,
+     "win_close": 2,
      "lose_zero": -1,
      "lose": 0,
      "hit": 0,
