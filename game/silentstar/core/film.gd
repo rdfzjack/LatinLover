@@ -154,6 +154,8 @@ static func shoot(st, i: int, f: Dictionary, days: Array) -> void:
 	var t: String = f["size"]
 	f["status"] = "shooting"
 	f["attended"] = int(f.get("attended", 0)) + 1      # periods actually shot (a film never shot falls through, skip_shoot)
+	if int(f["attended"]) == 1 and str(f["roles"].get("heroine", "")) != "":
+		st.meet(f["roles"]["heroine"])      # user (2026-11): the heroine is met when the film starts shooting (the co-star mini game, C5, is still to do)
 	update_status(st)
 	if int(st.status.get("drug_high", 0)) == 2:     # a divine dose on a shooting period (GDD 5.8.1)
 		f["divine"] = 1

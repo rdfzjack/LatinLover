@@ -241,8 +241,7 @@ static func make_rivals(st, e: Dictionary) -> void:
 			out.append(rv)
 	e["opponents"] = out
 	make_heroine(st, e)
-	if str(e["heroine"]) != "":
-		st.meet(e["heroine"])             # she is on the board card from the moment the board is shown, so the player has met her (user, 2026-11)
+	# The heroine is shown on the board card but not met there: the player meets her when the film starts shooting (Film.shoot_period)
 
 
 ## The heroine of a role (user, 2026-11): "" none, "unnamed" an unnamed actress (nobody to show), "draw" one of the attainable
