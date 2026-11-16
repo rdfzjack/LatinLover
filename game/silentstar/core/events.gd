@@ -355,9 +355,10 @@ static func period_end(story, st, i: int, entry: String, out: Dictionary) -> voi
 	var base: String = pe[1] if not pe.is_empty() else entry
 	if base == "rest_home":
 		meet(st, "sil")                    # user (2026-11): Sil is in the people list only after the first time the player is at home with him
-	if base == "class_tutor":
+	var tutoring: bool = base == "class_tutor" or base == "class_c3"     # class_c3 is the tutoring on the map (home)
+	if tutoring:
 		meet(st, "duv")
-	if base == "class_tutor" and Schedule.truthy(out.get("class_days")):
+	if tutoring and Schedule.truthy(out.get("class_days")):
 		var e: Dictionary = d.events["outing_duv_script"]
 		if ready(st, e):
 			fire(story, st, e["id"])

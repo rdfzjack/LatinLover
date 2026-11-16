@@ -1618,7 +1618,7 @@ func _show_month_start() -> void:
 	sbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	t3.add_child(sbox)
 	var t4 := ScrollContainer.new()
-	t4.name = tr("ui.main.show_month_start.13")
+	t4.name = tr("ui.main.show_people.1")
 	t4.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	tabs.add_child(t4)
 	var pbox := VBoxContainer.new()
@@ -1694,7 +1694,7 @@ func _show_map(i: int) -> void:
 	free_kind = ""
 	dose_button(body)
 	button(tr("ui.main.show_map.3"), func(): _show_inventory(i))
-	button(tr("ui.main.show_month_start.13"), func(): _show_people(i))
+	button(tr("ui.main.show_people.1"), func(): _show_people(i))
 	button(tr("ui.main.next_board.1"), func(): _show_next_board(func(): _show_map(i)))
 	save_load_row()
 

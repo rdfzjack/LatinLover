@@ -254,7 +254,18 @@
     }
    ],
    "success_stat": "discipline",
-   "fatigue_per_day": 1
+   "fatigue_per_day": 1,
+   "period_effect": "favor.duv+2",
+   "story_chain": {
+    "npc": "duv",
+    "chain": "chain_duv_class",
+    "trigger_periods": [
+     1,
+     4,
+     7,
+     10
+    ]
+   }
   },
   {
    "id": "class_yi",
