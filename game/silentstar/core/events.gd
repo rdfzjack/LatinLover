@@ -351,11 +351,13 @@ static func _record(story, st, eid: String) -> void:
 
 static func period_end(story, st, i: int, entry: String, out: Dictionary) -> void:
 	var d = st.d
-	if entry.begins_with("rest_home"):
+	var pe := Schedule.parse_entry(entry)       # the entry can carry a place ("class_tutor@place_x"): compare the base
+	var base: String = pe[1] if not pe.is_empty() else entry
+	if base == "rest_home":
 		meet(st, "sil")                    # user (2026-11): Sil is in the people list only after the first time the player is at home with him
-	if entry == "class_tutor":
+	if base == "class_tutor":
 		meet(st, "duv")
-	if entry == "class_tutor" and Schedule.truthy(out.get("class_days")):
+	if base == "class_tutor" and Schedule.truthy(out.get("class_days")):
 		var e: Dictionary = d.events["outing_duv_script"]
 		if ready(st, e):
 			fire(story, st, e["id"])

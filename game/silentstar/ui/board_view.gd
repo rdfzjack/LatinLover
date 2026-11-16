@@ -44,6 +44,8 @@ func show_board(m, p: Dictionary) -> void:
 			for x in r["tags"]:
 				tg.append(m.nm(x))
 			m.label(tr("ui.board.show_board.9") + " ".join(tg), box)
+		if r["road"] != null:
+			m.label(tr("ui.board.show_board.20") % m.nm(r["road"]), box)
 		if r["style_probs"] != null:
 			var sp := PackedStringArray()
 			for c in 4:

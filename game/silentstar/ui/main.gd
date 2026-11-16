@@ -1669,6 +1669,7 @@ func _show_map(i: int) -> void:
 	free_kind = ""
 	dose_button(body)
 	button(tr("ui.main.show_map.3"), func(): _show_inventory(i))
+	button(tr("ui.main.show_month_start.13"), func(): _show_people(i))
 	button(tr("ui.main.next_board.1"), func(): _show_next_board(func(): _show_map(i)))
 	save_load_row()
 
@@ -1815,6 +1816,14 @@ func _show_next_board(back: Callable) -> void:
 	label(tr("ui.main.next_board.6"), null, Color(0.7, 0.7, 0.7))
 
 
+func _show_people(i: int) -> void:
+	clear_body()
+	button(tr("ui.main.show_location.2"), func(): _show_map(i))
+	var box := VBoxContainer.new()
+	body.add_child(box)
+	_fill_people(box)
+
+
 func _show_inventory(i: int) -> void:
 	clear_body()
 	button(tr("ui.main.show_location.2"), func(): _show_map(i))
@@ -1942,14 +1951,14 @@ func _fill_status(box: VBoxContainer) -> void:
 	for f in st.story["films"]:
 		if f["status"] == "to_shoot" or f["status"] == "shooting" or f["status"] == "wrapped":
 			any = true
-			label(tr("ui.main.fill_status.5") % [f["roles"]["name"], size_name(f["size"]), f["status"], str(f["release"])], box)
+			label(tr("ui.main.fill_status.5") % [tr("ui.main.fill_status.11") % [f["roles"]["name"], nm(f["roles"]["road"])], size_name(f["size"]), f["status"], str(f["release"])], box)
 	if not any:
 		label(tr("ui.main.fill_status.6"), box)
 	heading(tr("ui.main.fill_status.7"), box)
 	for f in st.story["films"]:
 		if f["status"] == "released":
 			var r = f["result"]
-			label(tr("ui.main.fill_status.8") % [f["roles"]["name"], size_name(f["size"]), tr("ui.main.fill_status.9") if r != null and r.get("hit", false) else tr("ui.main.fill_status.7")], box)
+			label(tr("ui.main.fill_status.8") % [tr("ui.main.fill_status.11") % [f["roles"]["name"], nm(f["roles"]["road"])], size_name(f["size"]), tr("ui.main.fill_status.9") if r != null and r.get("hit", false) else tr("ui.main.fill_status.7")], box)
 
 
 # ================= month summary and ending =================
