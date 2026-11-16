@@ -219,6 +219,8 @@ static func performance(st, f: Dictionary) -> int:
 		p += c["stunt_self"]["perf_add"]
 	p = maxi(c["perf_min"], mini(c["perf_max"], p))
 	var dr: Dictionary = st.d.t["stats"]["drug"]
+	if f.has("costar"):         # the co-star mini game (core/costar.gd), after the clamp
+		p += int(f["costar"]["bonus"])
 	if f.get("divine", 0):      # a divine dose on a shooting period goes above the usual top (GDD 5.8.1)
 		p += int(dr["divine_perf_add"])
 	if f.get("side", 0):        # a side effect on a shooting period (GDD 5.8.1)

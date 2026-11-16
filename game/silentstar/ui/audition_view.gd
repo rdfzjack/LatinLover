@@ -174,3 +174,123 @@ func _reveal(ctx: Dictionary, mi: int) -> void:
 	if me >= need or them >= need:
 		m.label(tr("ui.audition.reveal.10") + (tr("ui.audition.reveal.11") if me >= need else tr("ui.audition.reveal.12")), self, Color(1, 0.85, 0.4))
 	m.button(tr("ui.audition.reveal.13"), func(): play_done.emit(mi), self)
+
+
+# ---------------- the co-star mini game (core/costar.gd) ----------------
+
+func _her_row(cards: Array, parent: Node) -> void:
+	var row := HBoxContainer.new()
+	parent.add_child(row)
+	for oc in cards:
+		var ol = m.label(_card_btn(oc), row)
+		ol.custom_minimum_size = Vector2(130, 0)
+		ol.modulate = COLORS[oc[0]]
+
+
+func show_costar_deck(main, ctx: Dictionary) -> void:
+	m = main
+	d = m.d
+	st = m.st
+	m.heading(tr("ui.audition.costar_deck.1") % [m.nm(ctx["heroine"]), ctx["roles"]["name"]], self)
+	m.label(tr("ui.audition.costar_deck.2"), self, Color(1, 0.85, 0.4))
+	m.label(tr("ui.audition.costar_deck.3"), self)
+	m.label(tr("ui.audition.costar_deck.4") % m.nm(ctx["heroine"]), self)
+	_her_row(ctx["her_hand"], self)
+	var lv: Array = ctx["levels"]
+	var t := PackedStringArray()
+	for c in 4:
+		t.append("%s Lv%d" % [m.nm(d.roads[c]), lv[c]])
+	m.label(tr("ui.audition.show_deck.5") + tr("ui.common.wide_space").join(t), self)
+	var def := []
+	for k in ctx["her_hand"]:
+		def.append(k[0])
+	var row := HBoxContainer.new()
+	add_child(row)
+	var obs: Array = []
+	var cards: Array = []
+	for k in 5:
+		var col := VBoxContainer.new()
+		col.custom_minimum_size = Vector2(150, 0)
+		row.add_child(col)
+		var ob := OptionButton.new()
+		for c in 4:
+			ob.add_item(m.nm(d.roads[c]))
+		ob.select(def[k])
+		col.add_child(ob)
+		var face := Label.new()
+		face.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		face.add_theme_font_size_override("font_size", 26)
+		col.add_child(face)
+		obs.append(ob)
+		cards.append(face)
+	var refresh := func():
+		var cols := []
+		for ob in obs:
+			cols.append(ob.selected)
+		var deck: Array = Audition.build_deck(lv, cols)
+		for k in 5:
+			cards[k].text = "%d" % deck[k][1]
+			cards[k].modulate = COLORS[deck[k][0]]
+	for ob in obs:
+		ob.item_selected.connect(func(_i): refresh.call())
+	refresh.call()
+	m.button(tr("ui.audition.show_deck.9"), func():
+		var cols := []
+		for ob in obs:
+			cols.append(ob.selected)
+		deck_done.emit(cols), self)
+
+
+func show_costar_play(main, ctx: Dictionary) -> void:
+	m = main
+	d = m.d
+	st = m.st
+	var r: int = int(ctx["round"])
+	m.heading(tr("ui.audition.costar_play.1") % [m.nm(ctx["heroine"]), r + 1, int(ctx["total_rounds"]), int(ctx["score"])], self)
+	m.label(tr("ui.audition.costar_deck.3"), self, Color(1, 0.85, 0.4))
+	for h in ctx["history"]:
+		m.label(tr("ui.audition.costar_play.2") % [_card_btn(h[0]), _card_btn(h[1]), int(h[2])], self, Color(0.75, 0.75, 0.75))
+	m.label(tr("ui.audition.costar_play.3") % m.nm(ctx["heroine"]), self)
+	var her: Array = ctx["her_card"]
+	var hl = m.label(_card_btn(her), self)
+	hl.add_theme_font_size_override("font_size", 26)
+	hl.modulate = COLORS[her[0]]
+	var left: Array = ctx["her_hand"]
+	if not left.is_empty():
+		m.label(tr("ui.audition.costar_play.4") % left.size(), self)
+		_her_row(left, self)
+	m.label(tr("ui.audition.show_play.7"), self)
+	var hand: Array = ctx["hand"]
+	var row := HBoxContainer.new()
+	add_child(row)
+	var btns: Array = []
+	for i in hand.size():
+		var c: Array = hand[i]
+		var b := Button.new()
+		b.text = tr("ui.audition.show_play.8") % [m.nm(d.roads[c[0]]), c[1]]
+		b.custom_minimum_size = Vector2(130, 90)
+		b.modulate = COLORS[c[0]]
+		var ii: int = i
+		b.pressed.connect(func():
+			m.fx.cue("card_play", {"card": c})
+			for x in btns:
+				x.disabled = true
+			_costar_reveal(ctx, ii))
+		row.add_child(b)
+		btns.append(b)
+
+
+func _costar_reveal(ctx: Dictionary, mi: int) -> void:
+	var Costar = preload("res://core/costar.gd")
+	var mine: Array = ctx["hand"][mi]
+	var her: Array = ctx["her_card"]
+	var s: int = Costar.round_score(her, mine)
+	m.heading(tr("ui.audition.reveal.1"), self)
+	var same_c: bool = mine[0] == her[0]
+	var same_p: bool = mine[1] == her[1]
+	var txt := tr("ui.audition.costar_play.5") % [_card_btn(mine), _card_btn(her), tr("ui.audition.costar_play.6") if same_c else tr("ui.audition.costar_play.7"), tr("ui.audition.costar_play.8") if same_p else tr("ui.audition.costar_play.9"), s]
+	m.label(txt, self, Color(0.6, 1, 0.6) if s > 0 else Color(1, 0.6, 0.6))
+	var total: int = int(ctx["score"]) + s
+	if int(ctx["round"]) + 1 >= int(ctx["total_rounds"]):
+		m.label(tr("ui.audition.costar_play.10") % [total, total * int(ctx["per_point"]), total], self, Color(1, 0.85, 0.4))
+	m.button(tr("ui.audition.reveal.13"), func(): play_done.emit(mi), self)

@@ -1197,6 +1197,13 @@ func _auto_answer(kind: String, payload):
 			return [order[0], order[0], order[0], order[1], order[1]]
 		"play":
 			return 0
+		"costar_deck":
+			var cs := []
+			for k in payload["her_hand"]:
+				cs.append(k[0])
+			return cs
+		"costar_play":
+			return 0
 		"pick_role":
 			return payload["ok"][0] if not payload["ok"].is_empty() else null
 		"support", "stunt", "suppress", "role_event":
@@ -1227,6 +1234,8 @@ func _show_request(kind: String, payload) -> void:
 		"pick_role": _show_board(payload)
 		"deck": _show_deck(payload)
 		"play": _show_play(payload)
+		"costar_deck": _show_costar_deck(payload)
+		"costar_play": _show_costar_play(payload)
 		"support": _yes_no(tr("ui.main.show_request.1"), tr("ui.main.show_request.2"), payload["name"])
 		"role_event": _show_role_event(payload)
 		"stunt": _yes_no(tr("ui.main.show_request.3"), tr("ui.main.show_request.4"), payload["name"])
@@ -1508,6 +1517,22 @@ func _show_deck(ctx: Dictionary) -> void:
 	body.add_child(v)
 	v.deck_done.connect(func(cols): reply(cols))
 	v.show_deck(self, ctx)
+
+
+func _show_costar_deck(ctx: Dictionary) -> void:
+	clear_body()
+	var v = preload("res://ui/audition.tscn").instantiate()
+	body.add_child(v)
+	v.deck_done.connect(func(cols): reply(cols))
+	v.show_costar_deck(self, ctx)
+
+
+func _show_costar_play(ctx: Dictionary) -> void:
+	clear_body()
+	var v = preload("res://ui/audition.tscn").instantiate()
+	body.add_child(v)
+	v.play_done.connect(func(i): reply(i))
+	v.show_costar_play(self, ctx)
 
 
 func _show_play(ctx: Dictionary) -> void:

@@ -2898,7 +2898,15 @@
    "note": "Medium film heroine \"draw\" (user, 2026-11): every attainable actress present this month goes in one pool, no road or rotation; weight = her weights[phase] (> 0 whenever present), plus tag_bonus when any of her tags is one of the role's tags. Big films have a fixed heroine or none; small films none",
    "tag_bonus": 3
   },
-  "special_tags_note": "Special production tags are counted apart (st.tags.underground, count.lowbudget); they do not use the regular tag slots of a role and are not among the 13 regular tags"
+  "special_tags_note": "Special production tags are counted apart (st.tags.underground, count.lowbudget); they do not use the regular tag slots of a role and are not among the 13 regular tags",
+  "costar": {
+   "note": "Co-star mini game (user, 2026-11): once per film, first shooting period, only with a named heroine. She holds main_cards cards of her main road and the rest of her second road (levels of the year, second_gap lower); 3 rounds; a round scores 1 for the same color, 1 for the same number, x2 when both. P + score x per_point after the clamp (max 12 x 15 = 180, about +0.18); her favor + score x favor_per_point. Numbers are placeholders",
+   "rounds": 3,
+   "main_cards": 3,
+   "second_gap": 2,
+   "per_point": 15,
+   "favor_per_point": 1
+  }
  },
  "board_schedule": [
   {

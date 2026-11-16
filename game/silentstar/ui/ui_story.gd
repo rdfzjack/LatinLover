@@ -128,6 +128,12 @@ class UiAgent:
 	func play(st, ctx) -> int:
 		return ui.ask("play", ctx)
 
+	func costar_deck(st, ctx) -> Array:
+		return ui.ask("costar_deck", ctx)
+
+	func costar_play(st, ctx) -> int:
+		return ui.ask("costar_play", ctx)
+
 	func pick_role(st, b: Dictionary, ok: Array):
 		return ui.ask("pick_role", {"board": b, "ok": ok})
 
