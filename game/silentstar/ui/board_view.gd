@@ -65,6 +65,8 @@ func show_board(m, p: Dictionary) -> void:
 			m.label(tr("ui.board.show_board.14") + tr("ui.board.show_board.15").join(on), box)
 		if str(r.get("heroine", "")) != "":
 			m.label(tr("ui.board.show_board.19") % m.nm(r["heroine"]), box)
+		elif str(r.get("heroine_spec", "")) == "duo":
+			m.label(tr("ui.board.show_board.21"), box)
 		if ok.has(i):
 			var ii: int = i
 			m.button(tr("ui.board.show_board.16"), func(): picked.emit(ii), box)

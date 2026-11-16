@@ -1,5 +1,5 @@
 {
- "note": "FILM_BOARD.csv (user, 2026-11): 15 fixed boards of 4 roles, one of each road per board; each role belongs to exactly one road (its highest style probability, main 55 / others 15 placeholder). Wants, style numbers are placeholders. 1 tag small, 2 tags medium, 2-3 tags big. opponents: `draw` = the two-step opponent draw (defaults.audition_opponent), `named` = the fixed star of the big second match. heroine: \"\" none, \"unnamed\", \"draw\" (medium pool, defaults.heroine) or an npc id",
+ "note": "FILM_BOARD.csv (user, 2026-11): 15 fixed boards of 4 roles, one of each road per board; each role belongs to exactly one road (its highest style probability, main 55 / others 15 placeholder). Wants, style numbers are placeholders. 1 tag small, 2 tags medium, 2-3 tags big. opponents: `draw` = the two-step opponent draw (defaults.audition_opponent), `named` = the fixed star of the big second match. heroine: \"\" none, \"unnamed\", \"draw\" (medium pool, defaults.heroine) or an npc id | heroine \"duo\" = two male leads (user, 2026-11): no heroine; the co-star mini game is played with the opponent of the deciding match (the player is the lead when he wins the audition, the opponent is the lead when the player takes the part after a 2:3), only when that opponent is a named star. Every medium film draws a heroine and an opponent",
  "tags": [
   {
    "id": "western",
@@ -146,7 +146,7 @@
      "draw": true
     }
    ],
-   "heroine": "",
+   "heroine": "draw",
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
@@ -682,7 +682,7 @@
      "draw": true
     }
    ],
-   "heroine": "unnamed",
+   "heroine": "draw",
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
@@ -1645,7 +1645,7 @@
      "draw": true
     }
    ],
-   "heroine": "unnamed",
+   "heroine": "draw",
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
@@ -1843,7 +1843,7 @@
      "draw": true
     }
    ],
-   "heroine": "",
+   "heroine": "duo",
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
@@ -1894,7 +1894,7 @@
      "draw": true
     }
    ],
-   "heroine": "unnamed",
+   "heroine": "draw",
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
@@ -2188,7 +2188,7 @@
      "named": "rival_cooper"
     }
    ],
-   "heroine": "",
+   "heroine": "duo",
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
@@ -2239,7 +2239,7 @@
      "draw": true
     }
    ],
-   "heroine": "unnamed",
+   "heroine": "draw",
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
@@ -2290,7 +2290,7 @@
      "draw": true
     }
    ],
-   "heroine": "unnamed",
+   "heroine": "draw",
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
@@ -2485,7 +2485,7 @@
      "draw": true
     }
    ],
-   "heroine": "unnamed",
+   "heroine": "draw",
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
@@ -2835,7 +2835,7 @@
      "draw": true
     }
    ],
-   "heroine": "unnamed",
+   "heroine": "draw",
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,
@@ -2882,7 +2882,7 @@
      "draw": true
     }
    ],
-   "heroine": "unnamed",
+   "heroine": "draw",
    "bonus_skill": "acting",
    "talkie": null,
    "speech_line": null,

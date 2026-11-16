@@ -192,6 +192,7 @@ func show_costar_deck(main, ctx: Dictionary) -> void:
 	d = m.d
 	st = m.st
 	m.heading(tr("ui.audition.costar_deck.1") % [m.nm(ctx["heroine"]), ctx["roles"]["name"]], self)
+	m.label(tr("ui.audition.costar_deck.5") if ctx["you_lead"] else tr("ui.audition.costar_deck.6"), self)
 	m.label(tr("ui.audition.costar_deck.2"), self, Color(1, 0.85, 0.4))
 	m.label(tr("ui.audition.costar_deck.3"), self)
 	m.label(tr("ui.audition.costar_deck.4") % m.nm(ctx["heroine"]), self)

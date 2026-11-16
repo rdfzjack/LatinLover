@@ -251,7 +251,7 @@ static func make_heroine(st, e: Dictionary) -> void:
 	var d = st.d
 	var spec: String = str(e.get("heroine_spec", ""))
 	e["heroine"] = ""
-	if spec == "" or spec == "unnamed":
+	if spec == "" or spec == "unnamed" or spec == "duo":       # "duo": two male leads, the partner is decided by the audition (try_role)
 		return
 	if spec != "draw":
 		e["heroine"] = spec
@@ -558,6 +558,10 @@ static func try_role(st, idx: int, agent) -> Dictionary:
 		var pers: bool = (not support) and Film.can_go_personally(st, e) and agent.go_personally(st, e)
 		var f: Dictionary = Film.new_film(st, e, Film.board_locks(st, e["size"], support), support, pers)
 		f["aud_lost"] = Film.rounds_lost(res)     # user: the fee follows the audition (3:0 / 3:1 / 3:2)
+		if str(e.get("heroine_spec", "")) == "duo" and not e["opponents"].is_empty():
+			var deciding: Dictionary = e["opponents"][e["opponents"].size() - 1]
+			if str(deciding.get("npc", "")) != "":        # two male leads: the partner is the opponent of the deciding match (user, 2026-11)
+				f["partner"] = str(deciding["npc"])
 		res["film"] = f["id"]
 	res["support"] = support
 	st.inc("count.audition")

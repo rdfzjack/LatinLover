@@ -40,6 +40,14 @@ static func typecast_tags(st) -> Array:
 	return out
 
 
+## The one the player plays the co-star mini game with and who is rated for the cooperation: the heroine, or in a two-male-lead
+## film the opponent of the deciding match (set when the part is won). "" when there is none.
+static func partner(f: Dictionary) -> String:
+	if f.has("partner"):
+		return str(f["partner"])
+	return str(f["roles"].get("heroine", ""))
+
+
 ## Whether one of the role's tags is typed (count >= typed_line): +10 percentage points of the main color at its audition,
 ## tag familiarity T at its maximum, and +typed_fame_pct of the fame the film earns (user, 2026-11).
 static func role_typed(st, role: Dictionary) -> bool:
@@ -154,8 +162,8 @@ static func shoot(st, i: int, f: Dictionary, days: Array) -> void:
 	var t: String = f["size"]
 	f["status"] = "shooting"
 	f["attended"] = int(f.get("attended", 0)) + 1      # periods actually shot (a film never shot falls through, skip_shoot)
-	if int(f["attended"]) == 1 and str(f["roles"].get("heroine", "")) != "":
-		st.meet(f["roles"]["heroine"])      # user (2026-11): the heroine is met when the film starts shooting (the co-star mini game, C5, is still to do)
+	if int(f["attended"]) == 1 and partner(f) != "":
+		st.meet(partner(f))      # user (2026-11): the heroine is met when the film starts shooting (the co-star mini game, C5, is still to do)
 	update_status(st)
 	if int(st.status.get("drug_high", 0)) == 2:     # a divine dose on a shooting period (GDD 5.8.1)
 		f["divine"] = 1
@@ -389,10 +397,10 @@ static func release_one(st, f: Dictionary) -> Dictionary:
 	if not f["support"]:
 		st.count["count.lowbudget"] = maxi(0, st.cnt("count.lowbudget") + c["lowbudget"]["delta"][t])
 		st.inc("count.lead." + t)
-		if Schedule.truthy(role.get("lead")):
-			Personality.after_film(st, f, str(role["lead"]))      # the heroine: serious or not, by her type (user, 2026-11)
 	else:
 		st.inc("count.support")
+	if partner(f) != "":
+		Personality.after_film(st, f, partner(f))      # the co-star (heroine, or the other lead): serious or not, by the type (user, 2026-11)
 	st.inc("count.release")
 	if hit:
 		st.inc("count.hit")

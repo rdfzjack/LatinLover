@@ -8,6 +8,7 @@ extends RefCounted
 
 const Audition = preload("res://core/audition.gd")
 const Rules = preload("res://core/rules.gd")
+const Film = preload("res://core/film.gd")
 
 
 static func cfg(d) -> Dictionary:
@@ -41,14 +42,14 @@ static func round_score(a: Array, b: Array) -> int:
 ## Plays the mini game for film f once. Returns {score, bonus, rounds} or {} when the film has no named heroine or it was played already.
 static func play(st, f: Dictionary, agent) -> Dictionary:
 	var role: Dictionary = f["roles"]
-	var hid := str(role.get("heroine", ""))
+	var hid: String = Film.partner(f)
 	if hid == "" or f.has("costar") or not st.d.npcs.has(hid):
 		return {}
 	var d = st.d
 	var c := cfg(d)
 	var her := her_hand(st, hid)
 	var levels: Array = Audition.player_levels(st)
-	var ctx := {"costar": true, "roles": role, "heroine": hid, "rounds": 0, "levels": levels, "her_hand": her.duplicate(true)}
+	var ctx := {"costar": true, "roles": role, "heroine": hid, "you_lead": not f["support"], "rounds": 0, "levels": levels, "her_hand": her.duplicate(true)}
 	var cols: Array = agent.costar_deck(st, ctx)
 	var bad: bool = cols.size() != 5
 	for x in cols:
@@ -64,7 +65,7 @@ static func play(st, f: Dictionary, agent) -> Dictionary:
 	var score := 0
 	for r in int(c["rounds"]):
 		var hc: Array = left.pop_at(st.rng.logic.below(left.size()))
-		var ctx2 := {"costar": true, "roles": role, "heroine": hid, "round": r, "hand": mine.duplicate(true), "her_card": hc,
+		var ctx2 := {"costar": true, "roles": role, "heroine": hid, "you_lead": not f["support"], "round": r, "hand": mine.duplicate(true), "her_card": hc,
 			"her_hand": left.duplicate(true), "history": hist.duplicate(true), "score": score, "total_rounds": int(c["rounds"]),
 			"per_point": int(c["per_point"])}
 		var mi: int = agent.costar_play(st, ctx2)
