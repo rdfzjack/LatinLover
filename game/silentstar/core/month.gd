@@ -14,6 +14,7 @@ const State = preload("res://core/state.gd")
 const Rules = preload("res://core/rules.gd")
 const Schedule = preload("res://core/schedule.gd")
 const Film = preload("res://core/film.gd")
+const Record = preload("res://core/record.gd")
 
 
 ## The parts implemented in step 12. Every method gets the state and may change it. A subclass overrides what it needs.
@@ -82,6 +83,7 @@ func start_month() -> void:
 		st.lifestyle = "life_fine"
 	var life: Dictionary = d.lifestyles[st.lifestyle]
 	st.money = maxi(0, st.money - life["monthly_cost"][st.fame_tier()])      # six-year swap: money stops at 0
+	Record.month(st, board_month(st))     # play record (user, 2026-11): off unless the UI started one
 	if board_month(st):
 		hooks.board(st)
 	hooks.month_start(st)
@@ -238,6 +240,7 @@ func end_month() -> void:
 		st.ended = "end_collapse"
 		st.finished = 1
 		hooks.ending(st)
+		Record.ending(st)
 		started = false
 		return
 	# 6 in_love timer
@@ -260,6 +263,7 @@ func end_month() -> void:
 		hooks.era(st, m["era_events"])
 	if Schedule.truthy(m["ending_check"]):
 		hooks.ending(st)
+		Record.ending(st)
 		st.finished = 1
 	started = false
 	if not st.finished:

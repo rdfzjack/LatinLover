@@ -22,6 +22,7 @@ const Audition = preload("res://core/audition.gd")
 const Story = preload("res://core/story.gd")
 const State = preload("res://core/state.gd")
 const UiStory = preload("res://ui/ui_story.gd")
+const Record = preload("res://core/record.gd")
 const Fx = preload("res://ui/fx.gd")
 const Explain = preload("res://ui/explain.gd")
 const Assets = preload("res://ui/assets.gd")
@@ -823,6 +824,7 @@ func _start_game(seed_n: int, origin: Array, start_vals := {}) -> void:
 		else:
 			st.skill[k] = start_vals[k]
 	st.update_indices()
+	Record.start(st)            # play record file (user, 2026-11), user://records/
 	_run_thread()
 
 
@@ -870,6 +872,9 @@ func load_slot(slot: String) -> void:
 	fx.cue("load", {"slot": slot})
 	g = m
 	st = g.st
+	if not Record.on(st):
+		Record.start(st)        # a save from before the record existed: start a file now
+	Record.note(st, "读档 " + slot_name(slot))
 	var phase: String = str(meta.get("phase", "between"))
 	rep_log = meta.get("rep_log", [])
 	rep_mark = rep_log.size()

@@ -15,6 +15,7 @@ extends RefCounted
 
 const Rules = preload("res://core/rules.gd")
 const Personality = preload("res://core/personality.gd")
+const Record = preload("res://core/record.gd")
 
 const COLORS := 4
 
@@ -515,6 +516,8 @@ static func audition(st, role: Dictionary, player, rivals: Array, probs: Array =
 		if rv["id"] != null:
 			st.inc("duels." + rv["id"])
 		var kind := classify(d, m["score_line"])
+		var hk = role.get("intel", {}).get("habit", [])
+		Record.match(st, role, rv, m, n, hk is Array and n < hk.size() and bool(hk[n]), "板", kind)
 		if n == 0:
 			final = kind
 			out["remembered"] = kind == "remembered"

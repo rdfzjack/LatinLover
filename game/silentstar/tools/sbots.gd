@@ -1090,6 +1090,52 @@ class LiterateToughNew:
 		stam_engine = ["job_dock2", "job_dock1"]
 
 
+## N7. New four-color, one road at a time (the user's four-color, new rules): savvy to 280 first, then lover, tough and culture one
+## after another; a class is left after 8 periods (about level 2), like the old four-color.
+class NewFourColorSeq:
+	extends NewBot
+
+	func setup(_rd: String) -> void:
+		setup_road("savvy", "new_four_color_seq")
+		class_cap = 8
+		goal_list = staged(["savvy"], [280]) + road_goals("lover") + road_goals("tough") + road_goals("culture")
+		money_jobs = ["job_l_day", "job_server", "job_dock1"]
+		stam_engine = ["class_l3", "job_dock1"]
+
+
+## N8. New four-color, three roads together: savvy to 280 first, then lover, tough and culture pushed together by the level lines.
+class NewFourColorPar:
+	extends NewBot
+
+	func setup(_rd: String) -> void:
+		setup_road("savvy", "new_four_color_par")
+		goal_list = staged(["savvy"], [280]) + staged(["lover", "tough", "culture"], [210, 280]) + [SPEECH_TALKIE] \
+			+ staged(["lover", "tough", "culture"], [999])
+		money_jobs = ["job_l_day", "job_server", "job_dock1"]
+		stam_engine = ["class_l3", "job_dock1"]
+
+
+## N9. New main road + savvy second (the user's own play, new rules): the main road and savvy pushed together by the level lines.
+## Culture tutors to education 90 first (its gates are education; the column opens) and never takes the lounge.
+class NewMainSavvy:
+	extends NewBot
+
+	func setup(rd: String) -> void:
+		setup_road(rd, "new_main_savvy_" + rd)
+		goal_list = staged([rd, "savvy"])
+		if rd == "tough":
+			money_jobs = ["job_dock1", "job_server"]
+			stam_engine = ["job_dock1", "class_l3"]
+		elif rd == "lover":
+			money_jobs = ["job_l_day", "job_dock1", "job_server"]
+			stam_engine = ["class_l3", "job_dock1"]
+		else:
+			goal_list = [{"stat": "education", "to": 90, "via": ["class_c3"]}] + goal_list
+			money_jobs = ["job_c_money", "job_l_day", "job_dock1"]
+			stam_engine = ["class_l3", "job_dock1"]
+			banned = ["job_l_night"]
+
+
 
 ## name -> [class, setup argument]. Type 1 first.
 const TYPE1 := ["full_tough", "full_tough_nolooks", "full_lover", "full_culture", "full_savvy"]
@@ -1122,6 +1168,10 @@ static func all_bots() -> Dictionary:
 	b["clean_tough"] = [CleanTough, ""]
 	b["crime_boss_new"] = [CrimeBossNew, ""]
 	b["literate_tough_new"] = [LiterateToughNew, ""]
+	b["new_four_color_seq"] = [NewFourColorSeq, ""]
+	b["new_four_color_par"] = [NewFourColorPar, ""]
+	for rd in ["tough", "lover", "culture"]:
+		b["new_main_savvy_" + rd] = [NewMainSavvy, rd]
 	return b
 
 

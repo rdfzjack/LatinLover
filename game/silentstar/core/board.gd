@@ -26,6 +26,7 @@ const Schedule = preload("res://core/schedule.gd")
 const Audition = preload("res://core/audition.gd")
 const Film = preload("res://core/film.gd")
 const Traits = preload("res://core/traits.gd")
+const Record = preload("res://core/record.gd")
 ## The slots of a fixed board in roles.json board_schedule: four roles, one of each road. Boards 1-7 have two small films (small2), boards 8-15 two medium films (medium2) (user, FILM_BOARD).
 const SLOTS := ["big", "medium", "medium2", "small", "small2"]
 
@@ -518,6 +519,7 @@ static func make(st) -> Dictionary:
 		var why := eligible(st, e)
 		e["intel"]["eligible"] = why if why != "" else null
 	st.story["board"] = {"month": st.ym, "roles": entries, "tried": [], "won": null}
+	Record.board(st, st.story["board"])
 	return st.story["board"]
 
 
@@ -596,10 +598,12 @@ static func run(st, agent) -> Array:
 # ---------- auditions outside the board (11.1) ----------
 
 ## A single match (swap role, steal role). Returns true when the player wins.
-static func one_match(st, agent, role: Dictionary, rival: Dictionary) -> bool:
+static func one_match(st, agent, role: Dictionary, rival: Dictionary, src := "") -> bool:
 	var ctx := {"roles": role, "rounds": 0, "opponents": rival, "levels": Audition.player_levels(st)}
 	var colors: Array = agent.deck(st, ctx)
 	var m := Audition.play_match(st, Audition.build_deck(ctx["levels"], colors), rival, role["style_probs"], agent)
+	var known: bool = st.val("insight") >= cfg(st.d)["intel"]["habit_insight"] or (rival["id"] != null and st.cnt("duels." + rival["id"]) >= cfg(st.d)["intel"]["habit_duels"])
+	Record.match(st, role, rival, m, 0, known, src, Audition.classify(st.d, m["score_line"]))
 	if rival["id"] != null:
 		st.inc("duels." + rival["id"])
 	return m["score_line"][0] >= Audition.cfg(st.d)["rounds_to_win"]
@@ -626,7 +630,7 @@ static func swap_role(st, i: int, agent) -> bool:
 	if not agent.role_event(st, "swap", info) or not blocked.is_empty():    # user: explained first, can be declined
 		st.inc("count.swap_declined")
 		return false
-	var win := one_match(st, agent, e, rv)
+	var win := one_match(st, agent, e, rv, "换角")
 	if win:
 		var pers: bool = Film.can_go_personally(st, e) and agent.go_personally(st, e)
 		Film.new_film(st, e, [nxt].slice(0, c["period_count"]), false, pers)
@@ -643,7 +647,7 @@ static func steal_role(st, agent) -> bool:
 	var role: Dictionary = f["roles"]
 	var rv := Audition.unnamed_rival(st, role["size"], null, role["style_probs"])
 	agent.role_event(st, "steal", {"role": role, "rival": rv})    # user: explained first; a steal cannot be declined
-	var win := one_match(st, agent, role, rv)
+	var win := one_match(st, agent, role, rv, "抢角")
 	if not win:
 		f["status"] = "stolen"
 		Film.update_status(st)
