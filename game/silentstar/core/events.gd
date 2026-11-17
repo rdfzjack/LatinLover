@@ -186,6 +186,21 @@ static func _arrest(story, st) -> void:
 		if not st.void_periods.has(start + k):
 			st.void_periods.append(start + k)
 	morals(st)
+	contract_arrest(story, st)
+
+
+## Morals clause of the long contract (user, 2026-11): crime alone does not matter; the first arrest under contract is a warning,
+## the second breaks the contract (fame -10%, the contract ends; the studio is not offered again).
+static func contract_arrest(story, st) -> void:
+	if not st.status["long_contract"]:
+		return
+	st.inc("count.contract_arrest")
+	if st.cnt("count.contract_arrest") < 2:
+		_record(story, st, "evt_contract_warning")
+		return
+	_record(story, st, "evt_contract_breach")
+	fame_pct(st, -10)
+	st.status["long_contract"] = 0
 
 
 ## Morals clause (step 12c): no big film on the next morals_months boards.
@@ -319,8 +334,8 @@ static func month_end(story, st) -> void:
 			continue
 		if not ready(st, e):
 			continue
-		if e["id"] == "evt_contract":      # replaced by the studio offer at month start (Npcline.studio_offer; user, 2026-11)
-			continue
+		if e["id"] == "evt_contract" or e["id"] == "evt_terminate":
+			continue      # user (2026-11): signing is the studio offer (Npcline.studio_offer); breaking it is the second arrest (contract_arrest)
 		if not Rules.prob(st, e.get("prob")):
 			continue
 		fire(story, st, e["id"])

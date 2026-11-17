@@ -154,6 +154,38 @@
    "tier": "bad"
   },
   {
+   "id": "evt_contract_warning",
+   "name": "片厂警告",
+   "class": "job",
+   "timing": "during_job",
+   "cond": [],
+   "prob": null,
+   "freq": null,
+   "effect": "",
+   "code": true,
+   "note": "Morals clause (user, 2026-11): the first arrest while under contract is a warning; no other effect. Recorded by code from the arrest (Events._arrest), no dialog",
+   "source": "[user]",
+   "body": null,
+   "order": 2,
+   "tier": "bad"
+  },
+  {
+   "id": "evt_contract_breach",
+   "name": "违约解约",
+   "class": "job",
+   "timing": "during_job",
+   "cond": [],
+   "prob": null,
+   "freq": null,
+   "effect": "",
+   "code": true,
+   "note": "Morals clause (user, 2026-11): the second arrest while under contract breaks it: fame -10%, the long contract ends. Recorded by code from the arrest (Events._arrest), no dialog",
+   "source": "[user]",
+   "body": null,
+   "order": 2,
+   "tier": "bad"
+  },
+  {
    "id": "evt_scandal",
    "name": "丑闻曝光",
    "class": "month_end",
