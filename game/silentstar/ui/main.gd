@@ -1197,6 +1197,13 @@ func _auto_answer(kind: String, payload):
 			return [order[0], order[0], order[0], order[1], order[1]]
 		"play":
 			return 0
+		"costar_deck":
+			var cs := []
+			for k in payload["her_hand"]:
+				cs.append(k[0])
+			return cs
+		"costar_play":
+			return 0
 		"pick_role":
 			return payload["ok"][0] if not payload["ok"].is_empty() else null
 		"support", "stunt", "suppress", "role_event":
@@ -1227,6 +1234,8 @@ func _show_request(kind: String, payload) -> void:
 		"pick_role": _show_board(payload)
 		"deck": _show_deck(payload)
 		"play": _show_play(payload)
+		"costar_deck": _show_costar_deck(payload)
+		"costar_play": _show_costar_play(payload)
 		"support": _yes_no(tr("ui.main.show_request.1"), tr("ui.main.show_request.2"), payload["name"])
 		"role_event": _show_role_event(payload)
 		"stunt": _yes_no(tr("ui.main.show_request.3"), tr("ui.main.show_request.4"), payload["name"])
@@ -1510,6 +1519,22 @@ func _show_deck(ctx: Dictionary) -> void:
 	v.show_deck(self, ctx)
 
 
+func _show_costar_deck(ctx: Dictionary) -> void:
+	clear_body()
+	var v = preload("res://ui/audition.tscn").instantiate()
+	body.add_child(v)
+	v.deck_done.connect(func(cols): reply(cols))
+	v.show_costar_deck(self, ctx)
+
+
+func _show_costar_play(ctx: Dictionary) -> void:
+	clear_body()
+	var v = preload("res://ui/audition.tscn").instantiate()
+	body.add_child(v)
+	v.play_done.connect(func(i): reply(i))
+	v.show_costar_play(self, ctx)
+
+
 func _show_play(ctx: Dictionary) -> void:
 	clear_body()
 	var v = preload("res://ui/audition.tscn").instantiate()
@@ -1592,8 +1617,16 @@ func _show_month_start() -> void:
 	var sbox := VBoxContainer.new()
 	sbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	t3.add_child(sbox)
+	var t4 := ScrollContainer.new()
+	t4.name = tr("ui.main.show_people.1")
+	t4.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	tabs.add_child(t4)
+	var pbox := VBoxContainer.new()
+	pbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	t4.add_child(pbox)
 	_fill_inventory()
 	_fill_status(sbox)
+	_fill_people(pbox)
 
 
 ## The places on the map come from data/new/map.json (user's map table): name, hint, position, size, the schedule entries offered
@@ -1661,6 +1694,7 @@ func _show_map(i: int) -> void:
 	free_kind = ""
 	dose_button(body)
 	button(tr("ui.main.show_map.3"), func(): _show_inventory(i))
+	button(tr("ui.main.show_people.1"), func(): _show_people(i))
 	button(tr("ui.main.next_board.1"), func(): _show_next_board(func(): _show_map(i)))
 	save_load_row()
 
@@ -1807,6 +1841,14 @@ func _show_next_board(back: Callable) -> void:
 	label(tr("ui.main.next_board.6"), null, Color(0.7, 0.7, 0.7))
 
 
+func _show_people(i: int) -> void:
+	clear_body()
+	button(tr("ui.main.show_location.2"), func(): _show_map(i))
+	var box := VBoxContainer.new()
+	body.add_child(box)
+	_fill_people(box)
+
+
 func _show_inventory(i: int) -> void:
 	clear_body()
 	button(tr("ui.main.show_location.2"), func(): _show_map(i))
@@ -1903,6 +1945,20 @@ func _hint_text(h: Array) -> String:
 	return tr("ui.main.hint_text.4") + nm(h[1])
 
 
+# ---------- people tab (user, 2026-11) ----------
+
+## Everyone the player has met (st.known), with favor and its tier. People not met yet are not listed.
+func _fill_people(box: VBoxContainer) -> void:
+	heading(tr("ui.main.fill_status.2"), box)
+	if st.known.is_empty():
+		label(tr("ui.main.fill_people.2"), box)
+		return
+	var tiers: Array = d.t["romance"]["rules"]["favor_tiers"]
+	for n in st.known:
+		var idn := str(d.npcs[n].get("identity", ""))
+		label(tr("ui.main.fill_people.1") % [nm(n), idn, int(st.favor.get(n, 0)), str(tiers[Rules.favor_tier_of(st, n)]["name"])], box)
+
+
 # ---------- status tab ----------
 
 func _fill_status(box: VBoxContainer) -> void:
@@ -1915,22 +1971,19 @@ func _fill_status(box: VBoxContainer) -> void:
 		for s in d.road_skills[r]:
 			t.append("%s %d" % [nm(s), st.val(s, b)])
 		label(tr("ui.main.fill_status.1") % [nm(r), st.rep(r, b), tr("ui.common.wide_space").join(t)], box)
-	heading(tr("ui.main.fill_status.2"), box)
-	for n in st.known:
-		label(tr("ui.main.fill_status.3") % [nm(n), st.favor.get(n, 0)], box)
 	heading(tr("ui.main.fill_status.4"), box)
 	var any := false
 	for f in st.story["films"]:
 		if f["status"] == "to_shoot" or f["status"] == "shooting" or f["status"] == "wrapped":
 			any = true
-			label(tr("ui.main.fill_status.5") % [f["roles"]["name"], size_name(f["size"]), f["status"], str(f["release"])], box)
+			label(tr("ui.main.fill_status.5") % [tr("ui.main.fill_status.11") % [f["roles"]["name"], nm(f["roles"]["road"])], size_name(f["size"]), f["status"], str(f["release"])], box)
 	if not any:
 		label(tr("ui.main.fill_status.6"), box)
 	heading(tr("ui.main.fill_status.7"), box)
 	for f in st.story["films"]:
 		if f["status"] == "released":
 			var r = f["result"]
-			label(tr("ui.main.fill_status.8") % [f["roles"]["name"], size_name(f["size"]), tr("ui.main.fill_status.9") if r != null and r.get("hit", false) else tr("ui.main.fill_status.7")], box)
+			label(tr("ui.main.fill_status.8") % [tr("ui.main.fill_status.11") % [f["roles"]["name"], nm(f["roles"]["road"])], size_name(f["size"]), tr("ui.main.fill_status.9") if r != null and r.get("hit", false) else tr("ui.main.fill_status.7")], box)
 
 
 # ================= month summary and ending =================

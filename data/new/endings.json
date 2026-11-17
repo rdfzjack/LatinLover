@@ -337,32 +337,29 @@
  "tag_families": {
   "lover_family": [
    "romance",
-   "exotic_lover",
+   "exotic",
    "musical"
   ],
   "action_family": [
    "western",
-   "action_adventure",
+   "adventure",
    "war",
-   "costume"
+   "history"
   ],
   "persona_family": [
-   "villain",
    "crime",
-   "horror"
+   "thriller"
   ],
   "art_family": [
    "arthouse",
    "tragic",
-   "religious",
-   "underground"
+   "religious"
   ],
   "comedy_noble_family": [
-   "comedy",
-   "noble"
+   "comedy"
   ]
  },
- "tag_families_note": "Top tag family = the family with the largest sum of tag counts; ties follow the order of this table",
+ "tag_families_note": "Top tag family = the family with the largest sum of tag counts; ties follow the order of this table (2026-11: 13 regular tags; villain, noble, horror removed, underground is a special production tag, costume merged into history)",
  "endings": [
   {
    "id": "act_legend",

@@ -1730,7 +1730,7 @@
        ]
       ]
      ],
-     "note": "The \"stunt_self\" nerve line drops from 60 to 50; roles with the western and action_adventure tags get +1 board weight"
+     "note": "The \"stunt_self\" nerve line drops from 60 to 50; roles with the western and adventure tags get +1 board weight"
     }
    ],
    "disabled": true
@@ -1885,7 +1885,7 @@
        ]
       ]
      ],
-     "note": "Cover story (fame +15); roles with the romance and exotic_lover tags get +1 board weight"
+     "note": "Cover story (fame +15); roles with the romance and exotic tags get +1 board weight"
     }
    ],
    "disabled": true

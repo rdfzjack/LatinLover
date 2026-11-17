@@ -187,7 +187,7 @@ static func morals(st) -> void:
 	st.flags["morals_until"] = st.ym + Board.cfg(st.d)["morals_months"]
 
 
-## Scandal exposure: the newspaper line can suppress it (free once a year / pay 200); villain + crime >= 3: fame +10%,
+## Scandal exposure: the newspaper line can suppress it (free once a year / pay 200); crime tag count >= 3: fame +10%,
 ## otherwise -15% (doubled after an official warning, halved with loyalty >= 200).
 static func _scandal(story, st) -> void:
 	var y: int = Rules.fdiv(st.ym, 12)
@@ -204,7 +204,7 @@ static func _scandal(story, st) -> void:
 	st.exposed = 1
 	st.inc("count.scandal")
 	morals(st)
-	if st.tags.get("villain", 0) + st.tags.get("crime", 0) >= 3:
+	if st.tags.get("crime", 0) >= 3:
 		fame_pct(st, 10)
 		return
 	var pct := 15
@@ -351,7 +351,14 @@ static func _record(story, st, eid: String) -> void:
 
 static func period_end(story, st, i: int, entry: String, out: Dictionary) -> void:
 	var d = st.d
-	if entry == "class_tutor" and Schedule.truthy(out.get("class_days")):
+	var pe := Schedule.parse_entry(entry)       # the entry can carry a place ("class_tutor@place_x"): compare the base
+	var base: String = pe[1] if not pe.is_empty() else entry
+	if base == "rest_home":
+		meet(st, "sil")                    # user (2026-11): Sil is in the people list only after the first time the player is at home with him
+	var tutoring: bool = base == "class_tutor" or base == "class_c3"     # class_c3 is the tutoring on the map (home)
+	if tutoring:
+		meet(st, "duv")
+	if tutoring and Schedule.truthy(out.get("class_days")):
 		var e: Dictionary = d.events["outing_duv_script"]
 		if ready(st, e):
 			fire(story, st, e["id"])
@@ -368,12 +375,14 @@ static func period_end(story, st, i: int, entry: String, out: Dictionary) -> voi
 
 # ---------- outings (5.5.2) ----------
 
+## Met at a place: the schedule book (journal) records that entry of his schedule.
+static func meet_at(st, npc: String, place: String) -> void:
+	meet(st, npc)
+	st.inc("count.met_at.%s.%s" % [npc, place])
+
+
 static func meet(st, npc: String) -> void:
-	if not st.known.has(npc):
-		st.known.append(npc)
-		var order: Dictionary = st.d.npc_order
-		st.known.sort_custom(func(a, b): return order[a] < order[b])    # table order
-	st.inc("count.met." + npc)
+	st.meet(npc)
 
 
 static func present(st, place: String, i: int) -> Array:
@@ -431,7 +440,7 @@ static func outing(story, st, place: String):
 	var d = st.d
 	var people := present(st, place, story.cur_period)
 	for npc in people:
-		meet(st, npc)
+		meet_at(st, npc, place)
 	var eid = null
 	for npc in people:
 		eid = npc_event(st, npc)
@@ -483,6 +492,9 @@ static func job_period(story, st, jid: String, good: bool) -> void:
 	var j: Dictionary = d.jobs[jid]
 	if good and Schedule.truthy(j["npc"]):
 		meet(st, j["npc"])
+		for sc in d.schedule_npc:                # the job is where he is: every place of his schedule is recorded
+			if sc["npc"] == j["npc"]:
+				st.inc("count.met_at.%s.%s" % [j["npc"], sc["place"]])
 	for r in j["period_random"]:
 		if st.rng.logic.chance(r["prob"][0], r["prob"][1]):
 			fire(story, st, r["event"])

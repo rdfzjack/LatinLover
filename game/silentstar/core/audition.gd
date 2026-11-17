@@ -14,6 +14,7 @@ extends RefCounted
 ## All functions are static; st is an instance of core/state.gd, d is core/data.gd.
 
 const Rules = preload("res://core/rules.gd")
+const Personality = preload("res://core/personality.gd")
 
 const COLORS := 4
 
@@ -165,8 +166,11 @@ static func unnamed_rival(st, tier: String, main_level = null, probs: Array = []
 	var cv: Dictionary = curve_cfg(d)
 	if main_level == null and curve_on(d) and cv["offset"].has(tier):
 		# switch audition_curve (user, 2026-11): the main level follows the player's expected level of the year, plus a random offset by tier
-		var off: Array = cv["offset"][tier]
-		lvl = curve_level(st) + g.r(int(off[0]), int(off[1]))
+		if cv.has("fixed_offset"):         # user (2026-11): standard unnamed rivals, no random swing
+			lvl = curve_level(st) + int(cv["fixed_offset"][tier])
+		else:
+			var off: Array = cv["offset"][tier]
+			lvl = curve_level(st) + g.r(int(off[0]), int(off[1]))
 	elif main_level == null:
 		var ml: Dictionary = t["main_level"]
 		var ups := 0
@@ -246,7 +250,61 @@ static func named_rival(st, rid_in: String) -> Dictionary:
 		if date >= s["from"]:
 			lv = s["levels"]
 			fame = s.get("fame", fame)
-	return {"id": rid, "name": r["name"], "levels": lv.duplicate(), "fame": fame, "habit": r["habit"], "k": r["k"]}
+	return {"id": rid, "name": r["name"], "levels": lv.duplicate(), "fame": fame, "habit": r["habit"], "k": r["k"],
+		"npc": r.get("npc", "")}
+
+
+## The weight phase of this month: early (1924-25), mid (1926-27) or late (1928-29); roles.json defaults.audition_opponent.phases.
+static func phase(st) -> String:
+	var out := "early"
+	for x in st.d.role_cfg["audition_opponent"]["phases"]:
+		if st.date() >= x[1]:
+			out = x[0]
+	return out
+
+
+## One of the role's tags is typed (count >= release.typed_line). Same test as film.gd role_typed (film.gd loads this file, not the other way round).
+static func role_typed(st, role: Dictionary) -> bool:
+	var line: int = st.d.role_cfg["release"]["typed_line"]
+	for t in role["tags"]:
+		if st.d.content_tags.has(t) and st.tags.get(t, 0) >= line:
+			return true
+	return false
+
+
+## The opponent of a medium film or of the first match of a big film (user, 2026-11): a flat named_pct chance of a named star,
+## otherwise an unnamed rival of the standard level. Named: the stars present this month except `exclude`, weighted by
+## the phase weights of rivals.json (index 0 = medium, 1 = big first match); a weight of 0 keeps a star out.
+static func draw_opponent(st, tier: String, exclude: Array, probs: Array) -> Dictionary:
+	var d = st.d
+	var g = st.rng.logic
+	var cfg: Dictionary = d.role_cfg["audition_opponent"]
+	if not g.chance(cfg["named_pct"], 100):
+		return unnamed_rival(st, tier, null, probs)
+	var ph := phase(st)
+	var col := 0 if tier == "medium" else 1
+	var ids := []
+	var ws := []
+	var tot := 0
+	for x in d.t["rivals"]["named"]:
+		var rid: String = x["id"]
+		if x.get("easter_egg", false) or exclude.has(rid) or not rival_present(st, rid):
+			continue
+		var w: int = int(x["weights"][ph][col])
+		if w > 0:
+			ids.append(rid)
+			ws.append(w)
+			tot += w
+	if ids.is_empty():
+		return unnamed_rival(st, tier, null, probs)
+	var v: int = g.below(tot)
+	for k in ids.size():
+		if v < ws[k]:
+			var rv := named_rival(st, ids[k])
+			curve_named(st, rv, probs)
+			return rv
+		v -= ws[k]
+	return unnamed_rival(st, tier, null, probs)
 
 
 static func rival_present(st, rid: String) -> bool:
@@ -412,11 +470,15 @@ static func audition(st, role: Dictionary, player, rivals: Array, probs: Array =
 	var d = st.d
 	if probs.is_empty():
 		probs = role["style_probs"]
+	if role_typed(st, role):       # typed tag (user, 2026-11): the player's main color +10 percentage points at the audition
+		probs = remembered_probs(probs, player_main(st), int(d.role_cfg["typed_audition_pts"]))
 	var res: Dictionary = cfg(d)["result"]
 	var out := {"roles": role["id"], "rounds": [], "remembered": false}
 	var final := ""
 	for n in rivals.size():
 		var rv: Dictionary = rivals[n]
+		if str(rv.get("npc", "")) != "":
+			st.meet(rv["npc"])            # a named star is met at the audition (user, 2026-11)
 		var ctx := {"roles": role, "rounds": n, "opponents": rv, "levels": player_levels(st)}
 		var colors: Array = player.deck(st, ctx)
 		var bad: bool = colors.size() != cfg(d)["cards"]
@@ -428,6 +490,7 @@ static func audition(st, role: Dictionary, player, rivals: Array, probs: Array =
 			return {}
 		var m := play_match(st, build_deck(ctx["levels"], colors), rv, probs, player)
 		out["rounds"].append(m)
+		Personality.after_match(st, str(rv.get("npc", "")), m["score_line"])
 		if rv["id"] != null:
 			st.inc("duels." + rv["id"])
 		var kind := classify(d, m["score_line"])

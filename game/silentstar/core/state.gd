@@ -83,6 +83,17 @@ func _init(data) -> void:
 	story = new_story()
 
 
+## The player meets someone: he or she goes into the people list (`known`, in table order) and the meeting is counted.
+## A person never met is not shown (user, 2026-11, Sil and Duv included).
+func meet(npc: String) -> void:
+	if not d.npcs.has(npc):
+		return
+	if not known.has(npc):
+		known.append(npc)
+		known.sort_custom(func(a, b): return d.npc_order[a] < d.npc_order[b])
+	inc("count.met." + npc)
+
+
 # ---------- origin ----------
 
 ## origin: which option was picked for each opening question (counting from 0). Python's State.new.

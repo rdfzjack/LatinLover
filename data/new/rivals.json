@@ -3,7 +3,7 @@
  "named": [
   {
    "id": "rival_valen",
-   "name": "鲁道夫·瓦伦",
+   "name": "瓦伦",
    "present": [
     "1924-01",
     "1927-08"
@@ -21,11 +21,26 @@
     }
    ],
    "habit": "habit_finish",
-   "k": 5
+   "k": 5,
+   "npc": "valen",
+   "weights": {
+    "early": [
+     3,
+     9
+    ],
+    "mid": [
+     3,
+     9
+    ],
+    "late": [
+     1,
+     1
+    ]
+   }
   },
   {
    "id": "rival_fanban",
-   "name": "道格·范班克",
+   "name": "范班克",
    "present": [
     "1924-01",
     "1929-12"
@@ -52,11 +67,26 @@
     }
    ],
    "habit": "habit_lead",
-   "k": 4
+   "k": 4,
+   "npc": "doug",
+   "weights": {
+    "early": [
+     3,
+     9
+    ],
+    "mid": [
+     3,
+     9
+    ],
+    "late": [
+     3,
+     9
+    ]
+   }
   },
   {
    "id": "rival_jilbo",
-   "name": "约翰·吉尔伯",
+   "name": "吉尔伯",
    "present": [
     "1924-01",
     "1929-12"
@@ -94,11 +124,26 @@
     }
    ],
    "habit": "habit_score",
-   "k": 4
+   "k": 4,
+   "npc": "gilbert",
+   "weights": {
+    "early": [
+     3,
+     8
+    ],
+    "mid": [
+     3,
+     8
+    ],
+    "late": [
+     6,
+     3
+    ]
+   }
   },
   {
    "id": "rival_nova",
-   "name": "拉蒙·诺瓦",
+   "name": "诺瓦",
    "present": [
     "1924-01",
     "1929-12"
@@ -135,64 +180,26 @@
     }
    ],
    "habit": "habit_follow",
-   "k": 3
-  },
-  {
-   "id": "rival_barry",
-   "name": "约翰·巴里",
-   "present": [
-    "1924-01",
-    "1929-12"
-   ],
-   "stages": [
-    {
-     "from": "1924-01",
-     "levels": [
-      3,
-      7,
-      8,
-      4
-     ],
-     "fame": 600
-    },
-    {
-     "from": "1929-01",
-     "levels": [
-      3,
-      7,
-      9,
-      4
-     ]
-    }
-   ],
-   "habit": "habit_finish",
-   "k": 3
-  },
-  {
-   "id": "rival_channing",
-   "name": "朗·钱宁",
-   "present": [
-    "1924-01",
-    "1929-12"
-   ],
-   "stages": [
-    {
-     "from": "1924-01",
-     "levels": [
-      6,
-      2,
-      7,
-      3
-     ],
-     "fame": 550
-    }
-   ],
-   "habit": "habit_random",
-   "k": 4
+   "k": 3,
+   "npc": "novaro",
+   "weights": {
+    "early": [
+     7,
+     3
+    ],
+    "mid": [
+     5,
+     5
+    ],
+    "late": [
+     3,
+     8
+    ]
+   }
   },
   {
    "id": "rival_cooper",
-   "name": "加里·库普",
+   "name": "库普",
    "present": [
     "1924-01",
     "1929-12"
@@ -240,11 +247,109 @@
     }
    ],
    "habit": "habit_lead",
-   "k": 5
+   "k": 5,
+   "npc": "cooper",
+   "weights": {
+    "early": [
+     8,
+     2
+    ],
+    "mid": [
+     6,
+     4
+    ],
+    "late": [
+     3,
+     9
+    ]
+   }
+  },
+  {
+   "id": "rival_barry",
+   "name": "巴里",
+   "present": [
+    "1924-01",
+    "1929-12"
+   ],
+   "stages": [
+    {
+     "from": "1924-01",
+     "levels": [
+      3,
+      7,
+      8,
+      4
+     ],
+     "fame": 600
+    },
+    {
+     "from": "1929-01",
+     "levels": [
+      3,
+      7,
+      9,
+      4
+     ]
+    }
+   ],
+   "habit": "habit_finish",
+   "k": 3,
+   "npc": "barry",
+   "weights": {
+    "early": [
+     4,
+     8
+    ],
+    "mid": [
+     4,
+     8
+    ],
+    "late": [
+     4,
+     8
+    ]
+   }
+  },
+  {
+   "id": "rival_lloyd",
+   "name": "劳埃德",
+   "present": [
+    "1924-01",
+    "1929-12"
+   ],
+   "stages": [
+    {
+     "from": "1924-01",
+     "levels": [
+      4,
+      4,
+      3,
+      7
+     ],
+     "fame": 450
+    }
+   ],
+   "habit": "habit_follow",
+   "k": 4,
+   "npc": "lloyd",
+   "weights": {
+    "early": [
+     7,
+     3
+    ],
+    "mid": [
+     6,
+     4
+    ],
+    "late": [
+     6,
+     4
+    ]
+   }
   },
   {
    "id": "rival_jolson",
-   "name": "艾尔·乔森",
+   "name": "乔森",
    "present": [
     "1927-10",
     "1929-12"
@@ -271,11 +376,26 @@
     }
    ],
    "habit": "habit_open",
-   "k": 4
+   "k": 4,
+   "npc": "jolson",
+   "weights": {
+    "early": [
+     1,
+     1
+    ],
+    "mid": [
+     5,
+     5
+    ],
+    "late": [
+     4,
+     7
+    ]
+   }
   },
   {
-   "id": "rival_rintin",
-   "name": "任丁丁",
+   "id": "rival_stoneface",
+   "name": "石头脸",
    "present": [
     "1924-01",
     "1929-12"
@@ -285,17 +405,104 @@
      "from": "1924-01",
      "levels": [
       7,
-      1,
-      1,
-      1
+      3,
+      4,
+      2
      ],
      "fame": 500
     }
    ],
    "habit": "habit_random",
-   "k": 5,
-   "note": "Easter egg: appears in a single role only; takes no part in the annual ranking or unnamed-rival replacement",
-   "easter_egg": true
+   "k": 3,
+   "npc": "stoneface",
+   "weights": {
+    "early": [
+     7,
+     3
+    ],
+    "mid": [
+     6,
+     4
+    ],
+    "late": [
+     5,
+     3
+    ]
+   }
+  },
+  {
+   "id": "rival_ex",
+   "name": "前任",
+   "present": [
+    "1927-01",
+    "1929-12"
+   ],
+   "stages": [
+    {
+     "from": "1927-01",
+     "levels": [
+      2,
+      6,
+      6,
+      3
+     ],
+     "fame": 400
+    }
+   ],
+   "habit": "habit_follow",
+   "k": 4,
+   "npc": "ex",
+   "weights": {
+    "early": [
+     1,
+     1
+    ],
+    "mid": [
+     7,
+     3
+    ],
+    "late": [
+     6,
+     4
+    ]
+   }
+  },
+  {
+   "id": "rival_veidt",
+   "name": "法伊特型",
+   "present": [
+    "1927-01",
+    "1929-12"
+   ],
+   "stages": [
+    {
+     "from": "1927-01",
+     "levels": [
+      3,
+      7,
+      3,
+      6
+     ],
+     "fame": 550
+    }
+   ],
+   "habit": "habit_lead",
+   "k": 4,
+   "npc": "veidt",
+   "weights": {
+    "early": [
+     1,
+     1
+    ],
+    "mid": [
+     3,
+     8
+    ],
+    "late": [
+     3,
+     8
+    ]
+   }
   }
  ],
  "replace": [
@@ -384,5 +591,6 @@
  "tutorial": {
   "note": "Rival for the tutorial role on the first board of the game",
   "main_level": 2
- }
+ },
+ "weights_note": "weights[phase] = [medium_weight, large_prelim_weight]; phases early 1924-25, mid 1926-27, late 1928-29 (placeholders; superstars low for medium and high for the big first match, newcomers the other way)"
 }

@@ -39,7 +39,7 @@ The full list is `design/GLOSSARY.md`. The ones you meet most:
 | Places | 片厂区 `place_studio`, 市中心 `place_downtown`, 海滨大道 `place_seaside`, 码头 `place_dock`, 度假村 `place_resort` |
 | Street | 服装店 `clothing_store`, 杂货店 `general_store`, 书店 `bookstore`, 餐厅 `restaurant`, 教堂 `church`, 医院 `hospital` |
 | NPCs | Sil `sil`, Duv `duv`, 女明星 `actress`, 第四人 `fourth`, 同乡工头 `foreman`, 神父 `priest`, 画家 `painter`, 酒吧老板 `bar_owner`, 片厂老板 `studio_boss`, 编辑 `editor`, 富婆 `rich_widow`, 动作片导演 `action_director` |
-| Film tags | `action_adventure` `exotic_lover` `costume` `western` `crime` `villain` `arthouse` `tragic` `religious` `romance` `war` `musical` `horror` `underground` `comedy` `noble` (the Chinese names are the `name`s in `roles.json` → `tags`) |
+| Film tags | 13 regular tags: `western` `adventure` `war` `history` `religious` `romance` `exotic` `musical` `comedy` `tragic` `arthouse` `crime` `thriller` (the Chinese names are the `name`s in `roles.json` → `tags`); special production tags `underground` and `lowbudget` are in `special_tags` and counted apart |
 | Prefixes | `favor.<npc>` `flag.<name>` `item.<id>` `status.<name>` `rep_bonus.<road>` `weight.<tag>` `tag.<tag>` `count.<name>` `class_periods.<class>` `job_periods.<job>` `road_periods.<road>` `duels.<rival>` `trigger.<event>` |
 
 ---
@@ -346,7 +346,7 @@ To add a new role instead, add it to `"roles"` of `roles.json` (copy one of the 
 - `style_probs`: the four numbers (tough, lover, culture, savvy) add up to 100, each between 5 and 60.
 - `wants`: 1-3 attributes or skills with a target; they shape the release result.
 - `tags`: 1-2 of the 16 film tags (section 2).
-- `opponents`: an unnamed one is `{"unnamed": true, "main_level": n}`, a named one `{"named": "rival_valen"}` (ids in `rivals.json`).
+- `opponents`: an unnamed one is `{"unnamed": true, "main_level": n}`, a named one `{"named": "rival_valen"}` (ids in `rivals.json`); `{"draw": true}` is the two-step draw of a medium film or a big film's first match (50% a named star by phase weights, else unnamed). `heroine`: `""` none, `"unnamed"`, `"draw"` (7-actress pool, weights in `romance.json` → `heroine_weights`) or an npc id.
 - `talkie`: `true` always a talkie, `false` never, `null` decided by the year's ratio. With `true`, `speech_line` must be a number. A talkie needs speech >= its line to sign up (default `defaults.speech_line`: small 30, medium 50, big 70); there is no penalty on release.
 - `bonus_skill`: the skill that adds to the shooting performance (usually `acting`); `fee`: the pay (default small 300, medium 800, big 2500).
 - `years_active`: `[first year, last year]`; only used by the extra draws, not by the fixed boards.
@@ -444,7 +444,7 @@ In effects, `drug_points+1` and `drug_stage=0` work like any other name.
 - **Capped gain**: a `daily_effect` line with `"while_below": 150` is skipped on a day when that stat is already >= 150 (the flagpole's fame).
 - **Class levels**: `classes.json` → `class_steps` `[4, 8, 11]`: up to 4 periods taken is level 1, up to 8 level 2, up to 11 level 3, then level 4. `fee` and every `per_level` have four entries, one per level.
 - **`code`, `site`, `original`** on the new jobs and classes are notes: the placeholder code from the plan, the map place it will belong to, and the original game's job or class. The game does not read them yet.
-- **Fixed boards** (`roles.json`): `board_schedule` lists each audition month with its `big`, `medium` and `small` role id (an optional `small2` adds a second small role; the 1924-25 boards have one); `reserve_pool` is the ordered list of extra roles (small or medium) shown when rapport reach `defaults.board.rapport_extra`. A role's sign-up conditions are `fame_gate` plus `gates` (a condition, e.g. `[[["looks", ">=", 80]]]`). To change a board, put another role id in its slot; to add a board, add a line here and set `board: true` on that month in `calendar.json` (the checker wants the two to match).
+- **Fixed boards** (`roles.json`): `board_schedule` lists each audition month with its `big`, `medium` and `small` role id (each board has four roles, one per road: `small2` is the second small role of boards 1-7, `medium2` the second medium role of boards 8-15); `reserve_pool` is the ordered list of extra roles (small or medium) shown when rapport reach `defaults.board.rapport_extra`. A role's sign-up conditions are `fame_gate` plus `gates` (a condition, e.g. `[[["looks", ">=", 80]]]`). To change a board, put another role id in its slot; to add a board, add a line here and set `board: true` on that month in `calendar.json` (the checker wants the two to match).
 - **The map** (`map.json`): one record per place, drawn in table order. `entries` are the schedule entries offered there (class, job, `rest_home`, `rest_outing@<place>`); a switched-off id is skipped and a job is hidden until its `earliest` month. `shops` are `street.json` entries opened from there. `activities` are shown greyed out (not playable yet). `extra`: `home` adds script writing, `city` the hospital, `studio` a note that shooting comes here. `pos` and `size` are pixels on a 900 x 320 map. The checker complains when a switched-on class or job is on no place.
 - **Living costs** (`lifestyle.json`): `monthly_cost` has five numbers (one per fame tier); they are all the same now. Money never goes below 0.
 

@@ -26,8 +26,8 @@ const Schedule = preload("res://core/schedule.gd")
 const Audition = preload("res://core/audition.gd")
 const Film = preload("res://core/film.gd")
 const Traits = preload("res://core/traits.gd")
-## The slots of a fixed board in roles.json board_schedule; small2 is the second small role of the 1924-25 boards (user).
-const SLOTS := ["big", "medium", "small", "small2"]
+## The slots of a fixed board in roles.json board_schedule: four roles, one of each road. Boards 1-7 have two small films (small2), boards 8-15 two medium films (medium2) (user, FILM_BOARD).
+const SLOTS := ["big", "medium", "medium2", "small", "small2"]
 
 const TIERS := ["small", "medium", "big"]
 const RANK := {"small": 0, "medium": 1, "big": 2}
@@ -65,6 +65,7 @@ static func snapshot(st, r: Dictionary, src := "pool") -> Dictionary:
 		"bonus_skill": r["bonus_skill"] if Schedule.truthy(r.get("bonus_skill")) else df["bonus_skill"],
 		"talkie": r.get("talkie"), "speech_line": r.get("speech_line"),
 		"fee": r["fee"] if Schedule.truthy(r.get("fee")) else df["fee"][t], "lead": r.get("lead"),
+		"heroine_spec": r.get("heroine", ""), "heroine": "",
 		"rival_spec": spec, "opponents": [], "house": false, "source": src, "intel": {},
 		"gates": r.get("gates", []).duplicate(true)}
 
@@ -221,15 +222,67 @@ static func named_for_placeholder(st, probs: Array) -> String:
 static func make_rivals(st, e: Dictionary) -> void:
 	var out := []
 	var probs: Array = e["style_probs"] if e["style_probs"] != null else []
+	var fixed := []           # the stars fixed on this role (and whom they may be replaced by): the drawn opponent is never one of them
+	for o in e["rival_spec"]:
+		if Schedule.truthy(o.get("named")):
+			fixed.append(o["named"])
+			for x in st.d.t["rivals"]["replace"]:
+				if x["old"] == o["named"] and st.date() >= x["from"]:
+					fixed.append_array(x["new"])
 	for o in e["rival_spec"]:
 		if o.get("unnamed", false):
 			out.append(Audition.unnamed_rival(st, e["size"], o.get("main_level"), probs))
+		elif o.get("draw", false):
+			out.append(Audition.draw_opponent(st, e["size"], fixed, probs))
 		else:
 			var rid: String = o["named"] if Schedule.truthy(o.get("named")) else named_for_placeholder(st, e["style_probs"])
 			var rv := Audition.named_rival(st, rid)
 			Audition.curve_named(st, rv, probs)
 			out.append(rv)
 	e["opponents"] = out
+	make_heroine(st, e)
+	# The heroine is shown on the board card but not met there: the player meets her when the film starts shooting (Film.shoot_period)
+
+
+## The heroine of a role (user, 2026-11): "" none, "unnamed" an unnamed actress (nobody to show), "draw" one of the attainable
+## actresses present this month, or a fixed npc id. The drawn one is chosen with the 7-actress pool of FILM_BOARD (no road, no rotation):
+## weight = her base weight of the phase, plus roles.json defaults.heroine.tag_bonus when one of her tags is one of the role's.
+static func make_heroine(st, e: Dictionary) -> void:
+	var d = st.d
+	var spec: String = str(e.get("heroine_spec", ""))
+	e["heroine"] = ""
+	if spec == "" or spec == "unnamed" or spec == "duo":       # "duo": two male leads, the partner is decided by the audition (try_role)
+		return
+	if spec != "draw":
+		e["heroine"] = spec
+		e["lead"] = spec
+		return
+	var ph := Audition.phase(st)
+	var ids := []
+	var ws := []
+	var tot := 0
+	for nid in d.npcs:
+		var n: Dictionary = d.npcs[nid]
+		if not n.has("heroine_weights") or not (n["present"][0] <= st.date() and st.date() <= n["present"][1]):
+			continue
+		var w: int = int(n["heroine_weights"][ph])
+		for t in n.get("tags", []):
+			if e["tags"].has(t):
+				w += int(d.role_cfg["heroine"]["tag_bonus"])
+				break
+		if w > 0:
+			ids.append(nid)
+			ws.append(w)
+			tot += w
+	if ids.is_empty():
+		return
+	var v: int = st.rng.logic.below(tot)
+	for k in ids.size():
+		if v < ws[k]:
+			e["heroine"] = ids[k]
+			e["lead"] = ids[k]
+			return
+		v -= ws[k]
 
 
 # ---------- building the board ----------
@@ -505,6 +558,10 @@ static func try_role(st, idx: int, agent) -> Dictionary:
 		var pers: bool = (not support) and Film.can_go_personally(st, e) and agent.go_personally(st, e)
 		var f: Dictionary = Film.new_film(st, e, Film.board_locks(st, e["size"], support), support, pers)
 		f["aud_lost"] = Film.rounds_lost(res)     # user: the fee follows the audition (3:0 / 3:1 / 3:2)
+		if str(e.get("heroine_spec", "")) == "duo" and not e["opponents"].is_empty():
+			var deciding: Dictionary = e["opponents"][e["opponents"].size() - 1]
+			if str(deciding.get("npc", "")) != "":        # two male leads: the partner is the opponent of the deciding match (user, 2026-11)
+				f["partner"] = str(deciding["npc"])
 		res["film"] = f["id"]
 	res["support"] = support
 	st.inc("count.audition")

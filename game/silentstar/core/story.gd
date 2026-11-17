@@ -17,6 +17,7 @@ const Schedule = preload("res://core/schedule.gd")
 const Audition = preload("res://core/audition.gd")
 const Board = preload("res://core/board.gd")
 const Film = preload("res://core/film.gd")
+const Costar = preload("res://core/costar.gd")
 const Events = preload("res://core/events.gd")
 const Ending = preload("res://core/ending.gd")
 
@@ -37,6 +38,24 @@ class Agent:
 	## Board with nothing the player can sign up for: only shown (roles greyed out with the reason).
 	func view_board(_st, _b: Dictionary) -> void:
 		pass
+
+	## Co-star mini game (core/costar.gd): the 5 colors for the cards; ctx has her face-up hand (her_hand). Default: the colors of her hand.
+	func costar_deck(_st, ctx) -> Array:
+		var out := []
+		for k in ctx["her_hand"]:
+			out.append(k[0])
+		return out
+
+	## One round: the index of the card to answer her card (ctx["her_card"]). Default: the card that scores the most.
+	func costar_play(_st, ctx) -> int:
+		var best := 0
+		var bs := -1
+		for i in ctx["hand"].size():
+			var s := Costar.round_score(ctx["her_card"], ctx["hand"][i])
+			if s > bs:
+				bs = s
+				best = i
+		return best
 
 	## Swap role / steal role (GDD 11.1): shown before the audition; returns whether to play it.
 	## kind "swap": declining means no audition. kind "steal": only shown, it cannot be declined (the answer is ignored).
@@ -213,6 +232,8 @@ func locked(st, i: int):
 
 
 func film_period(st, i: int, f, days: Array) -> void:
+	if int(f.get("attended", 0)) == 0:
+		Costar.play(st, f, agent)           # the co-star mini game, once, before the first shooting period is settled
 	Film.shoot(st, i, f, days)
 
 

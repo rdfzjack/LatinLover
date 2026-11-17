@@ -65,7 +65,7 @@
      "text": "硬汉派",
      "effect": "fight+10 riding+10 nerve+10",
      "tag_counts": {
-      "action_adventure": 1,
+      "adventure": 1,
       "western": 1
      },
      "flags": [],
@@ -86,7 +86,7 @@
      "effect": "physique+10 grooming+10 looks+10",
      "tag_counts": {
       "romance": 1,
-      "exotic_lover": 1
+      "exotic": 1
      },
      "flags": [],
      "items": []

@@ -44,6 +44,8 @@ func show_board(m, p: Dictionary) -> void:
 			for x in r["tags"]:
 				tg.append(m.nm(x))
 			m.label(tr("ui.board.show_board.9") + " ".join(tg), box)
+		if r["road"] != null:
+			m.label(tr("ui.board.show_board.20") % m.nm(r["road"]), box)
 		if r["style_probs"] != null:
 			var sp := PackedStringArray()
 			for c in 4:
@@ -61,6 +63,10 @@ func show_board(m, p: Dictionary) -> void:
 					s += tr("ui.board.show_board.12") + m.nm(o["habit"]) + tr("ui.board.show_board.13")
 				on.append(s)
 			m.label(tr("ui.board.show_board.14") + tr("ui.board.show_board.15").join(on), box)
+		if str(r.get("heroine", "")) != "":
+			m.label(tr("ui.board.show_board.19") % m.nm(r["heroine"]), box)
+		elif str(r.get("heroine_spec", "")) == "duo":
+			m.label(tr("ui.board.show_board.21"), box)
 		if ok.has(i):
 			var ii: int = i
 			m.button(tr("ui.board.show_board.16"), func(): picked.emit(ii), box)

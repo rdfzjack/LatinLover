@@ -1,12 +1,12 @@
 {
- "note": "favor -100..100 (user, 2026-11: can turn into an enemy); four romance lines; function NPCs hang off the job hooks (5.4)",
+ "note": "favor -100..100 (user, 2026-11: can turn into an enemy); four romance lines; function NPCs hang off the job hooks (5.4) | User (2026-11): every person starts at favor 20 and appears in the people list only after the player has met him or her (known_at_start is false for everyone, Sil and Duv included); the 21 people of NPC.csv are in `profile`; `actor` false = not an actor (Sil, Duv, the widow, the young studio boss), not drawn as stars | User (2026-11): every person starts at favor 20 and appears in the people list only after the player has met him or her (known_at_start is false for everyone, Sil and Duv included); the 23 people of the NPC table of the user (design/NPC_ROSTER.csv) are rows here (road, road2, tags, present, heroine_weights, attackable); `actor` false = not an actor (Sil, Duv, the widow, the young studio boss), not drawn as stars",
  "npcs": [
   {
    "id": "sil",
    "name": "Sil",
    "class": "romance",
-   "favor_init": 30,
-   "known_at_start": true,
+   "favor_init": 20,
+   "known_at_start": false,
    "gender": "male",
    "identity": "秘书",
    "favor_sources": "+2 per period resting at home; +2 when he persuades; +3 on New Year and birthday; +2 after a botched audition; +10 for the withdrawal story",
@@ -29,13 +29,18 @@
      ]
     ]
    ],
-   "original": "Butler (the feeling condition replaced by discipline) [inferred N42]"
+   "original": "Butler (the feeling condition replaced by discipline) [inferred N42]",
+   "actor": false,
+   "tags": [],
+   "attackable": true,
+   "road": null,
+   "road2": null
   },
   {
    "id": "duv",
    "name": "Duv",
    "class": "romance",
-   "favor_init": 0,
+   "favor_init": 20,
    "known_at_start": false,
    "gender": "male",
    "identity": "家教",
@@ -73,14 +78,19 @@
      300
     ],
     "effect": "favor.duv+5"
-   }
+   },
+   "actor": false,
+   "tags": [],
+   "attackable": true,
+   "road": null,
+   "road2": null
   },
   {
    "id": "actress",
    "name": "女明星",
    "class": "romance",
-   "favor_init": 0,
-   "known_at_start": true,
+   "favor_init": 20,
+   "known_at_start": false,
    "gender": "female",
    "identity": "同行，好友，出身也穷（名字占位）",
    "favor_sources": "+8 per co-starring film (roles mark lead=actress in their data); star assistant, bodyguard; studio-area chain events; +3 on birthday",
@@ -113,83 +123,568 @@
      ]
     ]
    ],
-   "original": "Prince"
+   "original": "Prince",
+   "actor": false
   },
   {
    "id": "fourth",
    "name": "第四人",
    "class": "romance",
-   "favor_init": 0,
+   "favor_init": 20,
    "known_at_start": false,
    "gender": "female",
    "identity": null,
    "favor_sources": "Hook left blank (the rich widow is a function NPC; the user decides whether she becomes the fourth)",
    "destiny_cond": null,
-   "placeholder": true
+   "placeholder": true,
+   "actor": false
   },
   {
    "id": "foreman",
    "name": "同乡工头",
    "class": "function",
-   "favor_init": 0,
+   "favor_init": 20,
    "known_at_start": false,
-   "met_via": "job_dock"
+   "met_via": "job_dock",
+   "actor": false
   },
   {
    "id": "priest",
    "name": "神父",
    "class": "function",
-   "favor_init": 0,
+   "favor_init": 20,
    "known_at_start": false,
-   "met_via": "job_church"
+   "met_via": "job_church",
+   "actor": false
   },
   {
    "id": "painter",
    "name": "画家",
    "class": "function",
-   "favor_init": 0,
+   "favor_init": 20,
    "known_at_start": false,
-   "met_via": "job_model_art"
+   "met_via": "job_model_art",
+   "actor": false
   },
   {
    "id": "bar_owner",
    "name": "酒吧老板",
    "class": "function",
-   "favor_init": 0,
+   "favor_init": 20,
    "known_at_start": false,
-   "met_via": "job_bar"
+   "met_via": "job_bar",
+   "actor": false
   },
   {
    "id": "studio_boss",
    "name": "片厂老板",
    "class": "function",
-   "favor_init": 0,
+   "favor_init": 20,
    "known_at_start": false,
-   "met_via": "job_studio"
+   "met_via": "job_studio",
+   "actor": false
   },
   {
    "id": "editor",
    "name": "编辑",
    "class": "function",
-   "favor_init": 0,
+   "favor_init": 20,
    "known_at_start": false,
-   "met_via": "job_news"
+   "met_via": "job_news",
+   "actor": false
   },
   {
    "id": "rich_widow",
    "name": "富婆",
    "class": "function",
-   "favor_init": 0,
+   "favor_init": 20,
    "known_at_start": false,
-   "met_via": "job_ballroom"
+   "met_via": "job_ballroom",
+   "actor": false,
+   "tags": [],
+   "attackable": false,
+   "road": null,
+   "road2": null
   },
   {
    "id": "action_director",
    "name": "动作片导演",
    "class": "function",
-   "favor_init": 0,
+   "favor_init": 20,
    "known_at_start": false,
-   "met_via": "job_stunt"
+   "met_via": "job_stunt",
+   "actor": false
+  },
+  {
+   "id": "valen",
+   "name": "瓦伦",
+   "class": "star",
+   "favor_init": 20,
+   "known_at_start": false,
+   "gender": "male",
+   "identity": "美貌纸老虎",
+   "actor": true,
+   "tags": [
+    "romance",
+    "exotic"
+   ],
+   "present": [
+    "1924-01",
+    "1927-08"
+   ],
+   "attackable": false,
+   "road": "lover",
+   "road2": "tough",
+   "personality": "easygoing"
+  },
+  {
+   "id": "doug",
+   "name": "范班克",
+   "class": "star",
+   "favor_init": 20,
+   "known_at_start": false,
+   "gender": "male",
+   "identity": "阳光直男",
+   "actor": true,
+   "tags": [
+    "adventure",
+    "history"
+   ],
+   "present": [
+    "1924-01",
+    "1929-12"
+   ],
+   "attackable": false,
+   "road": "tough",
+   "road2": "savvy",
+   "personality": "admirer"
+  },
+  {
+   "id": "gilbert",
+   "name": "吉尔伯",
+   "class": "star",
+   "favor_init": 20,
+   "known_at_start": false,
+   "gender": "male",
+   "identity": "忧郁醉鬼",
+   "actor": true,
+   "tags": [
+    "romance",
+    "arthouse"
+   ],
+   "present": [
+    "1924-01",
+    "1929-12"
+   ],
+   "attackable": true,
+   "road": "lover",
+   "road2": "culture",
+   "personality": "strict"
+  },
+  {
+   "id": "novaro",
+   "name": "诺瓦",
+   "class": "star",
+   "favor_init": 20,
+   "known_at_start": false,
+   "gender": "male",
+   "identity": "禁欲男",
+   "actor": true,
+   "tags": [
+    "romance",
+    "exotic",
+    "religious"
+   ],
+   "present": [
+    "1924-01",
+    "1929-12"
+   ],
+   "attackable": true,
+   "road": "lover",
+   "road2": null,
+   "personality": "strict"
+  },
+  {
+   "id": "cooper",
+   "name": "库普",
+   "class": "star",
+   "favor_init": 20,
+   "known_at_start": false,
+   "gender": "male",
+   "identity": "闷葫芦牛仔",
+   "actor": true,
+   "tags": [
+    "western",
+    "war"
+   ],
+   "present": [
+    "1924-01",
+    "1929-12"
+   ],
+   "attackable": true,
+   "road": "tough",
+   "road2": null,
+   "personality": "masochist"
+  },
+  {
+   "id": "barry",
+   "name": "巴里",
+   "class": "star",
+   "favor_init": 20,
+   "known_at_start": false,
+   "gender": "male",
+   "identity": "老酒鬼",
+   "actor": true,
+   "tags": [
+    "tragic",
+    "arthouse"
+   ],
+   "present": [
+    "1924-01",
+    "1929-12"
+   ],
+   "attackable": false,
+   "road": "culture",
+   "road2": "lover",
+   "personality": "playful"
+  },
+  {
+   "id": "lloyd",
+   "name": "劳埃德",
+   "class": "star",
+   "favor_init": 20,
+   "known_at_start": false,
+   "gender": "male",
+   "identity": "眼镜卷王",
+   "actor": true,
+   "tags": [
+    "comedy",
+    "adventure"
+   ],
+   "present": [
+    "1924-01",
+    "1929-12"
+   ],
+   "attackable": false,
+   "road": "savvy",
+   "road2": "tough",
+   "personality": "admirer"
+  },
+  {
+   "id": "jolson",
+   "name": "乔森",
+   "class": "star",
+   "favor_init": 20,
+   "known_at_start": false,
+   "gender": "male",
+   "identity": "麦霸",
+   "actor": true,
+   "tags": [
+    "musical"
+   ],
+   "present": [
+    "1927-10",
+    "1929-12"
+   ],
+   "attackable": false,
+   "road": "savvy",
+   "road2": "culture",
+   "personality": "playful"
+  },
+  {
+   "id": "stoneface",
+   "name": "石头脸",
+   "class": "star",
+   "favor_init": 20,
+   "known_at_start": false,
+   "gender": "male",
+   "identity": "不死面瘫",
+   "actor": true,
+   "tags": [
+    "comedy",
+    "adventure"
+   ],
+   "present": [
+    "1924-01",
+    "1929-12"
+   ],
+   "attackable": false,
+   "road": "tough",
+   "road2": "culture",
+   "personality": "grudge"
+  },
+  {
+   "id": "ex",
+   "name": "前任",
+   "class": "star",
+   "favor_init": 20,
+   "known_at_start": false,
+   "gender": "male",
+   "identity": "体面前任",
+   "actor": true,
+   "tags": [
+    "romance"
+   ],
+   "present": [
+    "1927-01",
+    "1929-12"
+   ],
+   "attackable": false,
+   "road": "culture",
+   "road2": "lover",
+   "personality": "easygoing"
+  },
+  {
+   "id": "veidt",
+   "name": "法伊特型",
+   "class": "star",
+   "favor_init": 20,
+   "known_at_start": false,
+   "gender": "male",
+   "identity": "斯文败类",
+   "actor": true,
+   "tags": [
+    "tragic",
+    "thriller"
+   ],
+   "present": [
+    "1927-01",
+    "1929-12"
+   ],
+   "attackable": false,
+   "road": "lover",
+   "road2": "savvy",
+   "personality": "admirer"
+  },
+  {
+   "id": "fakevon",
+   "name": "假冯",
+   "class": "star",
+   "favor_init": 20,
+   "known_at_start": false,
+   "gender": "male",
+   "identity": "山寨贵族",
+   "actor": false,
+   "tags": [
+    "crime",
+    "history"
+   ],
+   "present": [
+    "1924-01",
+    "1929-12"
+   ],
+   "attackable": false,
+   "road": null,
+   "road2": null
+  },
+  {
+   "id": "boyboss",
+   "name": "少年老板",
+   "class": "star",
+   "favor_init": 20,
+   "known_at_start": false,
+   "gender": "male",
+   "identity": "病秧子资本家",
+   "actor": false,
+   "tags": [],
+   "attackable": false,
+   "road": null,
+   "road2": null
+  },
+  {
+   "id": "dancequeen",
+   "name": "舞池女王",
+   "class": "star",
+   "favor_init": 20,
+   "known_at_start": false,
+   "gender": "female",
+   "identity": "嘴硬辣妹",
+   "actor": true,
+   "tags": [
+    "musical",
+    "romance",
+    "comedy"
+   ],
+   "present": [
+    "1924-01",
+    "1927-12"
+   ],
+   "heroine_weights": {
+    "early": 6,
+    "mid": 6,
+    "late": 1
+   },
+   "attackable": true,
+   "road": "lover",
+   "road2": "savvy",
+   "personality": "playful"
+  },
+  {
+   "id": "iceberg",
+   "name": "冰山",
+   "class": "star",
+   "favor_init": 20,
+   "known_at_start": false,
+   "gender": "female",
+   "identity": "高冷社恐",
+   "actor": true,
+   "tags": [
+    "romance",
+    "tragic",
+    "arthouse"
+   ],
+   "present": [
+    "1925-01",
+    "1929-12"
+   ],
+   "heroine_weights": {
+    "early": 4,
+    "mid": 6,
+    "late": 7
+   },
+   "attackable": true,
+   "road": "lover",
+   "road2": "culture",
+   "personality": "easygoing"
+  },
+  {
+   "id": "saint",
+   "name": "苦行圣女",
+   "class": "star",
+   "favor_init": 20,
+   "known_at_start": false,
+   "gender": "female",
+   "identity": "抖M圣女",
+   "actor": true,
+   "tags": [
+    "tragic",
+    "religious",
+    "history"
+   ],
+   "present": [
+    "1924-01",
+    "1929-12"
+   ],
+   "heroine_weights": {
+    "early": 6,
+    "mid": 5,
+    "late": 4
+   },
+   "attackable": true,
+   "road": "tough",
+   "road2": "culture",
+   "personality": "masochist"
+  },
+  {
+   "id": "vamp",
+   "name": "蛇蝎名伶",
+   "class": "star",
+   "favor_init": 20,
+   "known_at_start": false,
+   "gender": "female",
+   "identity": "戏精未亡人",
+   "actor": true,
+   "tags": [
+    "romance",
+    "exotic"
+   ],
+   "present": [
+    "1924-01",
+    "1929-12"
+   ],
+   "heroine_weights": {
+    "early": 5,
+    "mid": 5,
+    "late": 3
+   },
+   "attackable": true,
+   "road": "lover",
+   "road2": "tough",
+   "personality": "grudge"
+  },
+  {
+   "id": "aviator",
+   "name": "飞行女郎",
+   "class": "star",
+   "favor_init": 20,
+   "known_at_start": false,
+   "gender": "female",
+   "identity": "翻车飞行员",
+   "actor": true,
+   "tags": [
+    "adventure",
+    "war",
+    "comedy"
+   ],
+   "present": [
+    "1924-01",
+    "1929-12"
+   ],
+   "heroine_weights": {
+    "early": 1,
+    "mid": 3,
+    "late": 5
+   },
+   "attackable": true,
+   "road": "tough",
+   "road2": "savvy",
+   "personality": "playful"
+  },
+  {
+   "id": "sweetheart",
+   "name": "皮克福德型",
+   "class": "star",
+   "favor_init": 20,
+   "known_at_start": false,
+   "gender": "female",
+   "identity": "黑心甜心",
+   "actor": true,
+   "tags": [
+    "arthouse",
+    "comedy",
+    "tragic"
+   ],
+   "present": [
+    "1924-01",
+    "1929-12"
+   ],
+   "heroine_weights": {
+    "early": 5,
+    "mid": 5,
+    "late": 5
+   },
+   "attackable": true,
+   "road": "savvy",
+   "road2": "culture",
+   "personality": "snob"
+  },
+  {
+   "id": "diva",
+   "name": "斯万森型",
+   "class": "star",
+   "favor_init": 20,
+   "known_at_start": false,
+   "gender": "female",
+   "identity": "败家女王",
+   "actor": true,
+   "tags": [
+    "romance",
+    "comedy",
+    "history"
+   ],
+   "present": [
+    "1924-01",
+    "1929-12"
+   ],
+   "heroine_weights": {
+    "early": 4,
+    "mid": 6,
+    "late": 6
+   },
+   "attackable": true,
+   "road": "lover",
+   "road2": "savvy",
+   "personality": "snob"
   }
  ],
  "rules": {
@@ -254,6 +749,104 @@
     "fourth"
    ]
   },
-  "destiny_priority": "When several hold, the one with the highest favor; ties go by sil, duv, actress, fourth"
+  "destiny_priority": "When several hold, the one with the highest favor; ties go by sil, duv, actress, fourth",
+  "personality": {
+   "note": "User (2026-11): one step \"+\" is 5 favor, \"++\" is 10. Each step count below is multiplied by step. coop_*: the heroine after a released film; serious = shooting success days >= serious_pct% of the shooting days, no side effect (running off and side effects count as not serious). win_* / lose_*: the audition match against the star (3:0 clean, 3:1 mid, 3:2 close; lose_zero = shut out 0:3). hit / flop: any film of the player released as a hit or a flop, for everyone who has a type. Which person has which type (`personality` on the npc row) is a placeholder",
+   "step": 5,
+   "serious_pct": 70,
+   "types": [
+    {
+     "id": "strict",
+     "name": "较真",
+     "coop_serious": 2,
+     "coop_sloppy": -2,
+     "win_clean": 1,
+     "win_mid": 1,
+     "win_close": 0,
+     "lose_zero": -1,
+     "lose": 0,
+     "hit": 0,
+     "flop": 0
+    },
+    {
+     "id": "masochist",
+     "name": "M",
+     "coop_serious": 2,
+     "coop_sloppy": -2,
+     "win_clean": 2,
+     "win_mid": 2,
+     "win_close": 2,
+     "lose_zero": -1,
+     "lose": 0,
+     "hit": 0,
+     "flop": 0
+    },
+    {
+     "id": "easygoing",
+     "name": "随和",
+     "coop_serious": 1,
+     "coop_sloppy": 1,
+     "win_clean": 0,
+     "win_mid": 0,
+     "win_close": 0,
+     "lose_zero": 0,
+     "lose": 0,
+     "hit": 0,
+     "flop": 0
+    },
+    {
+     "id": "playful",
+     "name": "玩咖",
+     "coop_serious": -1,
+     "coop_sloppy": 2,
+     "win_clean": 0,
+     "win_mid": 0,
+     "win_close": 0,
+     "lose_zero": 0,
+     "lose": 0,
+     "hit": 0,
+     "flop": 1
+    },
+    {
+     "id": "grudge",
+     "name": "记仇",
+     "coop_serious": 1,
+     "coop_sloppy": 0,
+     "win_clean": -2,
+     "win_mid": -2,
+     "win_close": -2,
+     "lose_zero": 1,
+     "lose": 1,
+     "hit": 0,
+     "flop": 0
+    },
+    {
+     "id": "admirer",
+     "name": "慕强",
+     "coop_serious": 1,
+     "coop_sloppy": -1,
+     "win_clean": 2,
+     "win_mid": 2,
+     "win_close": 2,
+     "lose_zero": -1,
+     "lose": -1,
+     "hit": 1,
+     "flop": 0
+    },
+    {
+     "id": "snob",
+     "name": "势利",
+     "coop_serious": 0,
+     "coop_sloppy": 0,
+     "win_clean": 1,
+     "win_mid": 1,
+     "win_close": 1,
+     "lose_zero": -1,
+     "lose": -1,
+     "hit": 2,
+     "flop": -2
+    }
+   ]
+  }
  }
 }
