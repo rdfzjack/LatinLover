@@ -238,7 +238,7 @@ static func make_rivals(st, e: Dictionary) -> void:
 		else:
 			var rid: String = o["named"] if Schedule.truthy(o.get("named")) else named_for_placeholder(st, e["style_probs"])
 			var rv := Audition.named_rival(st, rid)
-			Audition.curve_named(st, rv, probs)
+			Audition.curve_named(st, rv, probs, e["size"])
 			out.append(rv)
 	e["opponents"] = out
 	make_heroine(st, e)

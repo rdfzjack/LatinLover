@@ -143,6 +143,8 @@ static func opponent_colors(d, levels: Array, probs: Array) -> Array:
 
 
 static func opponent_deck(d, rival: Dictionary, probs: Array) -> Array:
+	if rival.has("cards"):          # a standard unnamed deck (roles.json defaults.unnamed_decks): the five cards are fixed
+		return rival["cards"].duplicate(true)
 	var cs := opponent_colors(d, rival["levels"], probs)
 	return deck_of(rival["levels"], cs[0], rival["k"], cs[1])
 
@@ -193,8 +195,69 @@ static func unnamed_rival(st, tier: String, main_level = null, probs: Array = []
 	lv[guard_color(d, main)] = maxi(1, lvl - t["second_gap"])
 	var habits: Array = d.t["habits"]["habits"]
 	var hb: String = habits[g.below(habits.size())]["id"]
-	return {"id": null, "name": "unnamed (%s)" % tier, "levels": lv,
+	var out := {"id": null, "name": "unnamed (%s)" % tier, "levels": lv,
 		"fame": t["fame"]["base"] + t["fame"]["per_half_year"] * h, "habit": hb, "k": t["k"]}
+	var sd = standard_deck(st, tier, main) if main_level == null else null
+	if sd != null:
+		out["cards"] = sd
+		var lv2 := [0, 0, 0, 0]
+		var k := 0
+		for c in sd:
+			lv2[c[0]] = maxi(lv2[c[0]], int(c[1]))
+			if c[0] == main:
+				k += 1
+		out["levels"] = lv2
+		out["k"] = k
+	return out
+
+
+## The level of the standard unnamed deck of this size this year (null when the table is off or has no entry).
+static func standard_level(st, tier: String):
+	var cfg: Dictionary = st.d.role_cfg.get("unnamed_decks", {})
+	if tier == "" or not cfg.get("enabled", false) or not cfg.has(tier):
+		return null
+	var y: String = st.date().substr(0, 4)
+	var row = null
+	for k in cfg[tier]:
+		if String(k) <= y:
+			row = cfg[tier][k]
+	return null if row == null else int(row["level"])
+
+
+## Standard unnamed decks (user, 2026-11; roles.json defaults.unnamed_decks): for each size and year a shape and a level, chosen by
+## the standard difficulty (the win rate of the reference players of that year, GDD 9.2). Colors are placed from the film's main
+## color f: guard = the color that counters f's counter, counter = the color that counters f, victim = the color f counters (guard is also the color two steps away, so four colors need the victim).
+## Returns the five cards [[color, points], ...] or null when the table has no entry (then the old rule applies).
+static func standard_deck(st, tier: String, f: int):
+	var cfg: Dictionary = st.d.role_cfg.get("unnamed_decks", {})
+	if not cfg.get("enabled", false) or not cfg.has(tier):
+		return null
+	var y: String = st.date().substr(0, 4)
+	var row = null
+	for k in cfg[tier]:
+		if String(k) <= y:
+			row = cfg[tier][k]
+	if row == null:
+		return null
+	var bt := beats(st.d)
+	var counter: int = bt.find(f)
+	var parts: Array = []
+	for p in cfg["shapes"][row["shape"]]:
+		var c: int = f
+		match String(p[0]):
+			"guard":
+				c = guard_color(st.d, f)
+			"counter":
+				c = counter
+			"victim":
+				c = bt[f]
+		parts.append([c, int(p[1]), int(p[2])])
+	var L: int = int(row["level"])
+	var out := []
+	for p in parts:
+		for i in p[2]:
+			out.append([p[0], maxi(0, L + p[1] - i)])
+	return out
 
 
 ## Switch audition_curve (roles.json defaults.audition_curve, user 2026-11). Off = the old rules (fixed gates, unnamed levels by
@@ -220,12 +283,15 @@ static func curve_level(st) -> int:
 
 ## Named rival under the switch: his main color for this role is pulled into [expected level + band], his second color is at least
 ## main - side_gap; the rest of his numbers (which color he is strong in, k, habit, fame) stay his own.
-static func curve_named(st, rival: Dictionary, probs: Array) -> void:
+static func curve_named(st, rival: Dictionary, probs: Array, tier := "") -> void:
 	if not curve_on(st.d):
 		return
 	var cv: Dictionary = curve_cfg(st.d)
 	var p: Array = probs if not probs.is_empty() else [25, 25, 25, 25]
 	var c := curve_level(st)
+	var sl = standard_level(st, tier)
+	if sl != null:            # user (2026-11): named stars sit around the standard unnamed deck of the same size (one level either way)
+		c = int(sl)
 	var lv: Array = rival["levels"]
 	# every color is capped at the top of the band first (2026-11 fix): capping only the strongest color let his second color,
 	# left above the cap, become the main color of the deck (Fanban 9/5/3/8 played savvy 8 in a tough film)
@@ -326,7 +392,7 @@ static func draw_opponent(st, tier: String, exclude: Array, probs: Array) -> Dic
 	for k in ids.size():
 		if v < ws[k]:
 			var rv := named_rival(st, ids[k])
-			curve_named(st, rv, probs)
+			curve_named(st, rv, probs, tier)
 			return rv
 		v -= ws[k]
 	return unnamed_rival(st, tier, null, probs)

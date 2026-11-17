@@ -299,7 +299,7 @@ class Est:
 	## Best deck against a rival: [win rate, color list]. Candidates = mono, or main color 4/3 cards plus one second color.
 	func best(levels: Array, rival: Dictionary, probs: Array, fame_me: int) -> Array:
 		var fame_hi: bool = fame_me > rival["fame"]
-		var key := "%s|%s|%d|%s|%s" % [str(levels), str(rival["levels"]), rival["k"], str(probs), str(fame_hi)]
+		var key := "%s|%s|%d|%s|%s" % [str(levels), str(rival["levels"]) + str(rival.get("cards", "")), rival["k"], str(probs), str(fame_hi)]
 		var r = cache.get(key)
 		if r == null:
 			var theirs: Array = Audition.opponent_deck(d_ref.get_ref(), rival, probs)

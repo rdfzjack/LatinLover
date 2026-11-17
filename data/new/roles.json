@@ -3284,6 +3284,21 @@
     }
    }
   },
+  "unnamed_decks": {
+   "note": "Standard unnamed decks (user, 2026-11): each size and year has a shape and a level, chosen by the standard difficulty = the win rate of that year's reference players (eight new bots, 20 games each, road levels at the March board, the five highest cards, films of all four roads, no habit read, a tie counted half). Targets: small about 85%, medium about 50%, big first match about 30%. 1924 has no data: one level under 1925 by estimate. A shape part is [color, start offset from the level, number of cards]; main = the film's road, guard = counter of its counter, counter = the color that beats it, victim = the color it beats. enabled false = the old rule (audition_curve)",
+   "enabled": true,
+   "shapes": {
+    "mono": [["main", 0, 5]],
+    "three_two_guard": [["main", 0, 3], ["guard", -2, 2]],
+    "three_two_counter": [["main", 0, 3], ["counter", -1, 2]],
+    "three_one_one": [["main", 0, 3], ["guard", -1, 1], ["counter", -1, 1]],
+    "two_two_one": [["main", 0, 2], ["guard", -1, 2], ["counter", -1, 1]],
+    "four_color": [["main", 0, 2], ["guard", -1, 1], ["counter", -1, 1], ["victim", -1, 1]]
+   },
+   "small": {"1924": {"shape": "four_color", "level": 2}, "1925": {"shape": "four_color", "level": 3}, "1926": {"shape": "three_two_guard", "level": 4}, "1927": {"shape": "four_color", "level": 4}, "1928": {"shape": "three_two_guard", "level": 5}, "1929": {"shape": "four_color", "level": 5}},
+   "medium": {"1924": {"shape": "three_two_counter", "level": 3}, "1925": {"shape": "three_two_counter", "level": 4}, "1926": {"shape": "three_two_guard", "level": 5}, "1927": {"shape": "four_color", "level": 5}, "1928": {"shape": "two_two_one", "level": 6}, "1929": {"shape": "mono", "level": 7}},
+   "big": {"1924": {"shape": "three_two_guard", "level": 4}, "1925": {"shape": "three_two_guard", "level": 5}, "1926": {"shape": "two_two_one", "level": 5}, "1927": {"shape": "two_two_one", "level": 6}, "1928": {"shape": "three_two_guard", "level": 7}, "1929": {"shape": "four_color", "level": 7}}
+  },
   "typed_audition_pts": 10,
   "audition_opponent": {
    "note": "Medium films and the first match of a big film (user, 2026-11): roll named_pct for a named male star, else an unnamed rival. Named: the stars present this month (the big film leaves out its second-match star), weight = the star's weights[phase][0] for medium, [1] for a big first match; phases early 1924-25, mid 1926-27, late 1928-29. The second match of a big film is the fixed star on the role.",

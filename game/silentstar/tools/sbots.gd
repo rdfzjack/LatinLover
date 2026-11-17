@@ -509,7 +509,7 @@ class SBot:
 		var d = st.d
 		var est = H.est_of(d)
 		var fame_hi: bool = st.attr["fame"] > rival["fame"]
-		var key := "full|%s|%s|%d|%s|%s" % [str(levels), str(rival["levels"]), rival["k"], str(probs), str(fame_hi)]
+		var key := "full|%s|%s|%d|%s|%s" % [str(levels), str(rival["levels"]) + str(rival.get("cards", "")), rival["k"], str(probs), str(fame_hi)]
 		if est.cache.has(key):
 			return est.cache[key]
 		var theirs: Array = Audition.opponent_deck(d, rival, probs)
