@@ -298,12 +298,13 @@ func _ending(d) -> void:
 	ok(Npcline.rumors(st, "end_x").is_empty(), "a broken line has no rumor")
 	# the studio offer
 	var g2 = Story.new_game(d, 1)
-	g2.st.attr["fame"] = 200
+	var sign: int = int(d.t["npc_events"]["sign_fame"])
+	g2.st.attr["fame"] = sign - 1
 	Npcline.studio_offer(g2.hooks, g2.st)
-	ok(g2.st.story.get("studio") == null and not g2.st.story.has("studio_asked"), "no studio offer under fame 300")
-	g2.st.attr["fame"] = 320
+	ok(g2.st.story.get("studio") == null and not g2.st.story.has("studio_asked"), "no studio offer under the sign fame")
+	g2.st.attr["fame"] = sign
 	Npcline.studio_offer(g2.hooks, g2.st)
-	ok(g2.st.story.has("studio_asked"), "the offer is made at fame 300 (the default agent says not now)")
+	ok(g2.st.story.has("studio_asked") and g2.st.status["long_contract"] == 0, "the offer is made at the sign fame (the default agent says not now: no contract)")
 
 
 class NoParty:

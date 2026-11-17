@@ -319,7 +319,7 @@ static func month_end(story, st) -> void:
 			continue
 		if not ready(st, e):
 			continue
-		if e["id"] == "evt_contract" and st.ym - st.story["contract_refused"] < d.contract["long_contract"]["refuse_months"]:
+		if e["id"] == "evt_contract":      # replaced by the studio offer at month start (Npcline.studio_offer; user, 2026-11)
 			continue
 		if not Rules.prob(st, e.get("prob")):
 			continue

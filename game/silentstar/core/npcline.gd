@@ -485,6 +485,8 @@ static func studio_offer(story, st) -> void:
 	var pick: int = story.agent.choose_studio(st, c["studios"])
 	if pick >= 0 and pick < c["studios"].size():
 		st.story["studio"] = c["studios"][pick]["id"]
+		# signing with a studio is the long contract (user, 2026-11: not an event): monthly pay, house roles, morals clause
+		Rules.apply_effect(st, "status.long_contract=1 flag.long_contract=1", "event")
 
 
 # ---------- ending rumors (结算传闻) ----------
