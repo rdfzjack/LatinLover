@@ -44,11 +44,9 @@ static func after_film(st, f: Dictionary, npc: String) -> void:
 	shift(st, npc, "coop_serious" if serious else "coop_sloppy")
 
 
-## Everyone with a type whom the player has met reacts to a hit or a flop of the player's film. People not met yet do not
-## (user, 2026-11: everyone is at 20 when first met; a snob's favor had dropped to 0 from flops before the first meeting).
+## Everyone with a type reacts to a hit or a flop of the player's film.
 static func after_release(st, band: String) -> void:
 	if band != "hit" and band != "flop":
 		return
 	for n in st.d.npcs:
-		if st.known.has(n):
-			shift(st, n, band)
+		shift(st, n, band)
