@@ -166,7 +166,10 @@ def main():
         elif sect.startswith('年度聚会'):
             events.append(event(f'yearend_{npc}_1', npc, 'yearEnd', f'{zh} · 年度聚会', body, os_))
         elif sect.startswith('越线'):
-            events.append(event(f'cross_{npc}', npc, 'crossLine', f'{zh} · 越线', body, os_, beat=1))
+            ce = event(f'cross_{npc}', npc, 'crossLine', f'{zh} · 越线', body, os_, beat=1)
+            ce['once'] = False      # offered again after 'stay'; the condition closes it once the line is active, broken or favor < 60
+            ce['cond'] = [[['line.' + npc, '==', 'none'], ['favor.' + npc, '>=', 60]]]
+            events.append(ce)
         elif sect.startswith('线内拍'):
             m = re.match(r'第 (\d) 拍 · (.+)$', label)
             if not m: print('unknown beat', npc, label); continue

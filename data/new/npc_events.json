@@ -274,9 +274,22 @@
    "npc": "novaro",
    "type": "crossLine",
    "body": "《宾虚》杀青派对，他第一次喝酒，喝醉了，把这辈子的歉都向你道了一遍。",
-   "cond": [],
+   "cond": [
+    [
+     [
+      "line.novaro",
+      "==",
+      "none"
+     ],
+     [
+      "favor.novaro",
+      ">=",
+      60
+     ]
+    ]
+   ],
    "freq": null,
-   "once": true,
+   "once": false,
    "effect": "",
    "options": [
     {
@@ -720,9 +733,22 @@
    "npc": "cooper",
    "type": "crossLine",
    "body": "补拍到半夜，一场爆破戏他替你当了替身，被炸得满脸黑。你把他拖回化妆间，顺手摸走了他的钱包。他看见了，只说：“……拿吧。”",
-   "cond": [],
+   "cond": [
+    [
+     [
+      "line.cooper",
+      "==",
+      "none"
+     ],
+     [
+      "favor.cooper",
+      ">=",
+      60
+     ]
+    ]
+   ],
    "freq": null,
-   "once": true,
+   "once": false,
    "effect": "",
    "options": [
     {
@@ -1123,9 +1149,22 @@
    "npc": "sweetheart",
    "type": "crossLine",
    "body": "范班克请你去家里的健身房当陪练，按次付钱。练完他去冲澡，甜心把你领到了客房门口：“你今晚住这儿。”",
-   "cond": [],
+   "cond": [
+    [
+     [
+      "line.sweetheart",
+      "==",
+      "none"
+     ],
+     [
+      "favor.sweetheart",
+      ">=",
+      60
+     ]
+    ]
+   ],
    "freq": null,
-   "once": true,
+   "once": false,
    "effect": "",
    "options": [
     {
@@ -1528,9 +1567,22 @@
    "npc": "vamp",
    "type": "crossLine",
    "body": "瓦伦在世版：派对上小咪和瓦伦用土话聊天，她认定两人在骂她，把小咪拖回房间“审问”。 瓦伦已死版：她听见小咪在派对角落讲土话，语气和瓦伦一模一样，把他拖回房间“审问”。",
-   "cond": [],
+   "cond": [
+    [
+     [
+      "line.vamp",
+      "==",
+      "none"
+     ],
+     [
+      "favor.vamp",
+      ">=",
+      60
+     ]
+    ]
+   ],
    "freq": null,
-   "once": true,
+   "once": false,
    "effect": "",
    "options": [
     {
@@ -1941,9 +1993,22 @@
    "npc": "dancequeen",
    "type": "crossLine",
    "body": "你们俩在夜总会都是按支收费的舞伴，当晚抢同一个阔太太，抢到最后阔太太谁也没要，两个人一起被赶了出来，坐在后门台阶上分一支烟。",
-   "cond": [],
+   "cond": [
+    [
+     [
+      "line.dancequeen",
+      "==",
+      "none"
+     ],
+     [
+      "favor.dancequeen",
+      ">=",
+      60
+     ]
+    ]
+   ],
    "freq": null,
-   "once": true,
+   "once": false,
    "effect": "",
    "options": [
     {
@@ -2355,9 +2420,22 @@
    "npc": "diva",
    "type": "crossLine",
    "body": "她带你去一场晚宴当配饰，让你一整晚站在她身后。散场时她说：“配饰要收回卧室保管。”侯爵在前面替她开车门。",
-   "cond": [],
+   "cond": [
+    [
+     [
+      "line.diva",
+      "==",
+      "none"
+     ],
+     [
+      "favor.diva",
+      ">=",
+      60
+     ]
+    ]
+   ],
    "freq": null,
-   "once": true,
+   "once": false,
    "effect": "",
    "options": [
     {
@@ -2757,9 +2835,22 @@
    "npc": "iceberg",
    "type": "crossLine",
    "body": "她一句话没说，跟着你上了码头的阁楼，坐在你唯一的椅子上。你不知道该干什么，用土话骂了一句楼下的老鼠。她笑了，起身把门锁上。",
-   "cond": [],
+   "cond": [
+    [
+     [
+      "line.iceberg",
+      "==",
+      "none"
+     ],
+     [
+      "favor.iceberg",
+      ">=",
+      60
+     ]
+    ]
+   ],
    "freq": null,
-   "once": true,
+   "once": false,
    "effect": "",
    "options": [
     {
@@ -3200,9 +3291,22 @@
    "npc": "gilbert",
    "type": "crossLine",
    "body": "你们在夜总会喝到天亮，他喝醉了，突然单膝跪下向你求婚。他每次喝醉都求婚，醒了就忘。",
-   "cond": [],
+   "cond": [
+    [
+     [
+      "line.gilbert",
+      "==",
+      "none"
+     ],
+     [
+      "favor.gilbert",
+      ">=",
+      60
+     ]
+    ]
+   ],
    "freq": null,
-   "once": true,
+   "once": false,
    "effect": "",
    "options": [
     {
@@ -3602,9 +3706,22 @@
    "npc": "saint",
    "type": "crossLine",
    "body": "她已经付钱“研究”了你好几次。这天晚上她拿着本子来你住的地方，说：“还剩最后一种罪，我没研究过。”",
-   "cond": [],
+   "cond": [
+    [
+     [
+      "line.saint",
+      "==",
+      "none"
+     ],
+     [
+      "favor.saint",
+      ">=",
+      60
+     ]
+    ]
+   ],
    "freq": null,
-   "once": true,
+   "once": false,
    "effect": "",
    "options": [
     {
@@ -3933,9 +4050,22 @@
    "npc": "aviator",
    "type": "crossLine",
    "body": "她在机库里连夜检修飞机，你来偷油，被她当场抓住。她没报警，反而说：“赌一把，你今晚敢不敢睡在我飞机里。”",
-   "cond": [],
+   "cond": [
+    [
+     [
+      "line.aviator",
+      "==",
+      "none"
+     ],
+     [
+      "favor.aviator",
+      ">=",
+      60
+     ]
+    ]
+   ],
    "freq": null,
-   "once": true,
+   "once": false,
    "effect": "",
    "options": [
     {

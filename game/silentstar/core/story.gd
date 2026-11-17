@@ -253,6 +253,7 @@ func film_breach(st) -> void:
 func before_period(st, i: int) -> void:
 	cur_period = i
 	st.status["drug_high"] = 0
+	Npcline.beat_period(self, st, i)        # the next beat of an active line (anchored beats ignore the occupied months)
 	Npcline.party_period(self, st, i)
 	agent.before_period(self, st, i)
 	Events.drug_period(st, i)

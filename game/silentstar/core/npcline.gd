@@ -76,7 +76,8 @@ static func period_end(story, st, i: int, entry: String) -> void:
 	var r: Dictionary = hits[0][3]
 	npc_state(st, r["npc"])["enc"][stage] = true
 	st.meet(r["npc"])
-	Events.fire(story, st, r["event"])
+	if not contact_cross(story, st, r["npc"]):
+		Events.fire(story, st, r["event"])
 
 
 # ---------- film dialogue (rival and co-star small talk) ----------
@@ -100,12 +101,14 @@ static func after_auditions(story, st, results: Array) -> void:
 			if npc == "" or not npc_has_text(st, npc):
 				continue
 			var won: bool = m["score_line"][0] > m["score_line"][1]
+			if contact_cross(story, st, npc):
+				continue
 			fire_first(story, st, ["film_%s_%s" % [npc, "rival_lose" if won else "rival_win"]])
 
 
 ## After the co-star mini game of film f: the partner's small talk (women: the first of two not seen yet).
 static func costar(story, st, npc: String) -> void:
-	if npc_has_text(st, npc):
+	if npc_has_text(st, npc) and not contact_cross(story, st, npc):
 		fire_first(story, st, ["film_%s_costar_1" % npc, "film_%s_costar_2" % npc, "film_%s_costar" % npc])
 
 
@@ -203,6 +206,8 @@ static func party_period(story, st, i: int) -> void:
 	var texts := []
 	for n in range(1, 7):
 		texts.append("party_%s_%d" % [who, n])
+	if contact_cross(story, st, who):
+		return
 	if not fire_first(story, st, texts):
 		Events.fire(story, st, "party_generic")
 
@@ -236,5 +241,128 @@ static func year_end(story, st) -> void:
 	var texts := []
 	for n in range(1, 7):
 		texts.append("yearend_%s_%d" % [npc, n])
+	if contact_cross(story, st, npc, true):
+		return
 	if not fire_first(story, st, texts):
 		Events.fire(story, st, "yearend_generic")
+
+
+# ---------- crossing the line (越线) and the beats of a line ----------
+
+const BEATS := [2, 3, 4, 5]
+const COOLDOWN_MONTHS := 2
+
+
+static func ym_of(date: String) -> int:
+	return (int(date.substr(0, 4)) - 1924) * 12 + int(date.substr(5, 2)) - 1
+
+
+## The option of an NPC event has a `line` action (events.gd calls this after the option's effects).
+static func apply_line(st, e: Dictionary, o: Dictionary) -> void:
+	var npc := str(e.get("npc", ""))
+	if npc == "":
+		return
+	var ns := npc_state(st, npc)
+	match str(o["line"]):
+		"active":
+			ns["line"] = "active"
+			ns["beat"] = 1
+			ns["start_ym"] = st.ym
+			ns["last_ym"] = st.ym
+			ns["played"] = [e["id"]]
+			st.inc("count.line_started")
+		"botched":
+			st.favor[npc] = mini(st.favor.get(npc, 0), 59)     # back under 60: has to be raised again
+		"end":
+			ns["line"] = "finished"
+
+
+## A contact with an NPC (encounter, party, year-end party, co-star): with favor >= 60 and no line yet, the line-crossing event
+## replaces the normal text. Not in an occupied month, except at the year-end party. Returns whether it fired.
+static func contact_cross(story, st, npc: String, year_end := false) -> bool:
+	if not _switch_on(st) or (blocked_month(st, st.ym) and not year_end):
+		return false
+	var eid := "cross_" + npc
+	if not st.d.events.has(eid) or not Events.ready(st, st.d.events[eid]):
+		return false
+	Events.fire(story, st, eid)
+	return true
+
+
+static func _beat_event(st, npc: String, n: int):
+	var eid := "beat_%s_%d" % [npc, n]
+	return st.d.events.get(eid)
+
+
+## Before period i: the next beat of a line that is active. An anchored beat (a date in its `anchor`) comes in that month whatever
+## the cooldown and whatever the occupied months, and the beats before it that were not played are dropped; a beat whose anchor has
+## passed before the line began is skipped. Other beats come 2 months after the last beat, not in an occupied month. One beat per
+## period; with several lines the one that began first goes first. Then the default death of the dance queen (1927-10).
+static func beat_period(story, st, i: int) -> void:
+	if not _switch_on(st):
+		return
+	var lines := []
+	for npc in st.story["npc"]:
+		var ns: Dictionary = st.story["npc"][npc]
+		if ns["line"] == "active":
+			lines.append([ns.get("start_ym", 0), npc])
+	lines.sort()
+	for x in lines:
+		var npc: String = x[1]
+		var ns: Dictionary = st.story["npc"][npc]
+		var played: Array = ns.get("played", [])
+		var due = null
+		for n in BEATS:                           # an anchored beat whose month is now: it comes, the unplayed beats before it are dropped
+			var e = _beat_event(st, npc, n)
+			if e != null and e.has("anchor") and not played.has(e["id"]) and ym_of(str(e["anchor"])) == st.ym:
+				due = e
+				for m in range(2, n):
+					var b = _beat_event(st, npc, m)
+					if b != null and not played.has(b["id"]):
+						played.append(b["id"])
+				break
+		for n in BEATS:
+			if due != null:
+				break
+			var e = _beat_event(st, npc, n)
+			if e == null or played.has(e["id"]):
+				continue
+			if e.has("anchor"):
+				if ym_of(str(e["anchor"])) < st.ym:
+					played.append(e["id"])        # the date has passed: skipped
+					continue
+				break                             # an anchored beat waits for its month and holds back the later beats
+			if st.ym - ns.get("last_ym", st.ym) >= COOLDOWN_MONTHS and not blocked_month(st, st.ym):
+				due = e
+			break
+		ns["played"] = played
+		if due != null:
+			_play_beat(story, st, npc, ns, due)
+			break
+	_default_deaths(st)
+
+
+static func _play_beat(story, st, npc: String, ns: Dictionary, e: Dictionary) -> void:
+	ns["played"].append(e["id"])
+	ns["beat"] = maxi(ns.get("beat", 1), int(e["beat"]))
+	ns["last_ym"] = st.ym
+	Events.fire(story, st, e["id"])
+	if ns["line"] == "active":
+		var left := false
+		for n in BEATS:
+			var b = _beat_event(st, npc, n)
+			if b != null and not ns["played"].has(b["id"]) and not (b.has("anchor") and ym_of(str(b["anchor"])) < st.ym):
+				left = true
+		if not left:
+			ns["line"] = "finished"
+
+
+## Players who are not in her line (or whose line is not active) lose the dance queen at the point of death, 1927-10; she
+## is only news for them. Saving her is possible only through her line (flag dance.saved).
+static func _default_deaths(st) -> void:
+	if st.ym < ym_of("1927-10") or st.flags.get("dance.dead", 0) > 0 or st.flags.get("dance.saved", 0) > 0:
+		return
+	var ns := npc_state(st, "dancequeen")
+	if ns["line"] == "active" and not ns.get("played", []).has("beat_dancequeen_5"):
+		return
+	st.flags["dance.dead"] = 1

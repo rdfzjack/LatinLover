@@ -22,6 +22,7 @@ func _init() -> void:
 	_film_talk(d)
 	_party(d)
 	_year_end(d)
+	_line(d)
 	print("npc_test: %d failure(s)" % fails)
 	quit(1 if fails > 0 else 0)
 
@@ -156,3 +157,51 @@ func _year_end(d) -> void:
 	_go_to(g2, 1928, 12)
 	Npcline.year_end(g2.hooks, g2.st)
 	ok(g2.st.fired.get("yearend_dancequeen_1", 0) == 0, "the dance queen is gone by 1928")
+
+
+func _line(d) -> void:
+	var g = Story.new_game(d, 1)
+	var st = g.st
+	_go_to(g, 1925, 4)
+	st.favor["cooper"] = 59
+	ok(not Npcline.contact_cross(g.hooks, st, "cooper"), "no line-crossing event under favor 60")
+	st.favor["cooper"] = 60
+	ok(Npcline.contact_cross(g.hooks, st, "cooper"), "favor 60 offers the line-crossing event")
+	var ns := Npcline.npc_state(st, "cooper")
+	ok(ns["line"] == "active" and ns["beat"] == 1, "the first option (cross) starts the line at beat 1")
+	ok(not Npcline.contact_cross(g.hooks, st, "cooper"), "the crossing event is not offered again in an active line")
+	Npcline.beat_period(g.hooks, st, 0)
+	ok(not st.fired.has("beat_cooper_2"), "no beat in the month of crossing")
+	_go_to(g, 1925, 6)
+	Npcline.beat_period(g.hooks, st, 0)
+	ok(st.fired.get("beat_cooper_2", 0) == 1, "beat 2 comes two months after")
+	Npcline.beat_period(g.hooks, st, 1)
+	ok(not st.fired.has("beat_cooper_3"), "one beat per period / cooldown again")
+	_go_to(g, 1925, 8)
+	Npcline.beat_period(g.hooks, st, 0)
+	ok(not st.fired.has("beat_cooper_3"), "no beat in an occupied month (August)")
+	_go_to(g, 1925, 10)
+	Npcline.beat_period(g.hooks, st, 0)
+	ok(st.fired.get("beat_cooper_3", 0) == 1, "beat 3 after the cooldown in a free month")
+	# anchored beat: the dance queen's death point 1927-10 comes in a board-free month regardless of cooldown, earlier beats are dropped
+	var g2 = Story.new_game(d, 1)
+	var s2 = g2.st
+	_go_to(g2, 1926, 5)
+	s2.favor["dancequeen"] = 70
+	Npcline.contact_cross(g2.hooks, s2, "dancequeen")
+	_go_to(g2, 1927, 10)
+	Npcline.beat_period(g2.hooks, s2, 0)
+	ok(s2.fired.get("beat_dancequeen_5", 0) == 1 and not s2.fired.has("beat_dancequeen_2"), "the anchored beat comes in its month; unplayed earlier beats are dropped")
+	# no line: she dies by default at the death point
+	var g3 = Story.new_game(d, 1)
+	_go_to(g3, 1927, 10)
+	Npcline.beat_period(g3.hooks, g3.st, 0)
+	ok(g3.st.flags.get("dance.dead", 0) == 1, "the dance queen dies in 1927-10 without a line")
+	# a botched crossing puts favor under 60
+	var g4 = Story.new_game(d, 1)
+	_go_to(g4, 1925, 4)
+	g4.st.favor["cooper"] = 80
+	var e: Dictionary = g4.st.d.events["cross_cooper"]
+	Rules.apply_effect(g4.st, e["options"][2]["success_effect"], "event")
+	Npcline.apply_line(g4.st, e, e["options"][2])
+	ok(g4.st.favor["cooper"] < 60 and Npcline.npc_state(g4.st, "cooper")["line"] == "none", "a botched crossing sends favor under 60 and starts nothing")
