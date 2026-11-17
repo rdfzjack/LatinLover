@@ -478,10 +478,6 @@
     {
      "stat": "stamina",
      "value": 80
-    },
-    {
-     "stat": "education",
-     "value": 40
     }
    ],
    "daily_effect": [
