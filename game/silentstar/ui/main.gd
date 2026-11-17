@@ -284,6 +284,9 @@ func entry_name(e: String) -> String:
 	if kind == "job":
 		return tr("ui.main.entry_name.3") + s
 	if pe[2] != null:
+		var who := Schedule.companion_of(e)
+		if who != "":
+			return tr("ui.main.entry_name.8") % [nm(pe[2]), str(d.npcs[who]["name"]), Schedule.place_cost(st, pe[2], who)]
 		return tr("ui.main.entry_name.4") + nm(pe[2]) + tr("ui.main.entry_name.5") % Schedule.place_cost(st, pe[2])
 	return s
 
@@ -1662,6 +1665,9 @@ func loc_entries(loc: String) -> Array:
 		if pe[0] == "rest" and not d.rests.has(pe[1]):
 			continue
 		out.append(e)
+		if pe[0] == "rest" and pe[2] != null:       # the resort takes a companion (favor 60+): one more button per person
+			for who in Schedule.companions(st, pe[2]):
+				out.append("%s+%s" % [e, who])
 	return out
 
 
@@ -1714,6 +1720,8 @@ func loc_hint(L: Dictionary) -> String:
 		return tr("ui.main.dealer.2")
 	var parts := PackedStringArray()
 	for e in loc_entries(L["id"]):
+		if Schedule.companion_of(e) != "":
+			continue
 		var pe := Schedule.parse_entry(e)
 		var n: String = nm(pe[2]) if pe[2] != null else nm(pe[1])
 		parts.append(n.split(tr("ui.main.loc_hint.1"))[0])

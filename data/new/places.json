@@ -108,6 +108,10 @@
   {
    "id": "place_resort",
    "name": "度假村",
+   "companion": {
+    "favor": 60,
+    "cost_mult": 2
+   },
    "cost_by_fame_tier": [
     6,
     8,

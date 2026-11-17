@@ -25,6 +25,7 @@ func _init() -> void:
 	_line(d)
 	_showdown(d)
 	_ending(d)
+	_mail_vacation(d)
 	print("npc_test: %d failure(s)" % fails)
 	quit(1 if fails > 0 else 0)
 
@@ -295,3 +296,49 @@ func _ending(d) -> void:
 	g2.st.attr["fame"] = 320
 	Npcline.studio_offer(g2.hooks, g2.st)
 	ok(g2.st.story.has("studio_asked"), "the offer is made at fame 300 (the default agent says not now)")
+
+
+class NoParty:
+	extends Story.SimpleAgent
+
+	func party_invite(_st, _day: int) -> bool:
+		return false
+
+
+func _mail_vacation(d) -> void:
+	var g = Story.new_game(d, 3)
+	var st = g.st
+	_go_to(g, 1925, 2)
+	Npcline.party_plan(st)
+	Npcline.mail(g.hooks, st)
+	ok(st.story["party"]["invited"] and not st.story["party"]["declined"], "the default agent accepts the invitation")
+	var g2 = Story.new_game(d, 3, [0, 0, 0], NoParty.new())
+	var s2 = g2.st
+	_go_to(g2, 1925, 2)
+	Npcline.party_plan(s2)
+	Npcline.mail(g2.hooks, s2)
+	var day: int = s2.story["party"]["day"]
+	var per := 0
+	for i in 3:
+		for dd in Schedule.days_of(s2, i):
+			if dd[0] == day:
+				per = i
+	Npcline.party_period(g2.hooks, s2, per)
+	ok(s2.story["party"]["declined"] and not s2.story["party"]["done"], "a declined invitation: no party")
+	# vacation with a companion
+	var g3 = Story.new_game(d, 1)
+	var s3 = g3.st
+	_go_to(g3, 1925, 6)
+	s3.money = 1000
+	s3.known.append("iceberg")
+	s3.favor["iceberg"] = 50
+	ok(Schedule.validate(s3, "rest_outing@place_resort+iceberg") != "", "favor under 60: he or she cannot come")
+	s3.favor["iceberg"] = 60
+	ok(Schedule.validate(s3, "rest_outing@place_resort+iceberg") == "", "favor 60: can come along")
+	ok(Schedule.validate(s3, "rest_outing@place_dock+iceberg") != "", "only the resort takes a companion")
+	ok(Schedule.parse_entry("rest_outing@place_resort+iceberg")[2] == "place_resort", "the entry still names the place")
+	ok(Schedule.place_cost(s3, "place_resort", "iceberg") == 2 * Schedule.place_cost(s3, "place_resort"), "the cost doubles with a companion")
+	var m0: int = s3.money
+	Schedule.run_period(s3, 0, "rest_outing@place_resort+iceberg", g3.hooks)
+	ok(m0 - s3.money >= 2 * Schedule.place_cost(s3, "place_resort") * 5, "the period costs double")
+	ok(s3.cnt("count.vacation_with.iceberg") == 1, "the trip is counted")

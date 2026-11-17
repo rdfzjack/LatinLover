@@ -154,6 +154,12 @@ class UiAgent:
 	func option(st, ev: Dictionary, avail: Array) -> int:
 		return ui.ask("option", {"event": ev, "avail": avail})
 
+	## The invitation in the mail: go to the party or not.
+	func party_invite(_st, day: int) -> bool:
+		var opts := [{"text": tr("ui.story.party_invite.3")}, {"text": tr("ui.story.party_invite.4")}]
+		var r: int = ui.ask("option", {"event": {"name": tr("ui.story.party_invite.1"), "body": tr("ui.story.party_invite.2") % day, "options": opts}, "avail": [0, 1]})
+		return r == 0
+
 	## Fame 300: the four studios, shown with the option screen; the last option is "not now".
 	func choose_studio(_st, studios: Array) -> int:
 		var opts := []

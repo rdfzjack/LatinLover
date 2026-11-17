@@ -31,6 +31,32 @@ static func truthy(v) -> bool:
 	return true
 
 
+## The companion of an outing entry ("rest_outing@place_resort+iceberg" -> "iceberg"), or "".
+static func companion_of(e: String) -> String:
+	var j := e.find("+")
+	return e.substr(j + 1) if j >= 0 else ""
+
+
+## Who can come along to this place: known people (stars and the romance lines) with favor at or above the place's `companion.favor`,
+## who are around this month. [] when the place takes nobody.
+static func companions(st, place: String) -> Array:
+	var d = st.d
+	var c = d.places[place].get("companion")
+	var out := []
+	if c == null:
+		return out
+	for n in st.known:
+		var row: Dictionary = d.npcs[n]
+		if not (row["class"] in ["star", "romance"]) or st.favor.get(n, 0) < int(c["favor"]):
+			continue
+		if row.has("present") and not (row["present"][0] <= st.date() and st.date() <= row["present"][1]):
+			continue
+		if n == "dancequeen" and st.flags.get("dance.dead", 0) > 0:
+			continue
+		out.append(n)
+	return out
+
+
 ## "rest_outing@place_dock" -> ["rest", "rest_outing", "place_dock"]; returns [] for an unknown entry.
 ## Entries "act_<name>" (step 15b: hospital visit, writing a script) use up a period and do nothing by themselves: the screen performs the
 ## action when it is picked. They are never in options(), so the bots never choose them.
@@ -41,6 +67,9 @@ static func parse_entry(e: String) -> Array:
 	if i >= 0:
 		base = e.substr(0, i)
 		place = e.substr(i + 1)
+		var j := place.find("+")        # "rest_outing@place_resort+iceberg": a companion (see companion_of)
+		if j >= 0:
+			place = place.substr(0, j)
 	var kind := base.split("_")[0]
 	if not (kind in ["class", "book", "job", "rest", "act"]):
 		return []
@@ -139,6 +168,9 @@ static func validate(st, e: String) -> String:
 	if iid == "rest_outing":
 		if place == null or not d.places.has(place):
 			return "an outing needs a place"
+		var who := companion_of(e)
+		if who != "" and not companions(st, place).has(who):
+			return "he or she cannot come along"
 	elif place != null:
 		return "only an outing takes a place"
 	return ""
@@ -168,11 +200,12 @@ static func options(st) -> Array:
 
 
 ## Cost of one outing day: the place's cost, or cost_by_fame_tier (resort).
-static func place_cost(st, place: String) -> int:
+static func place_cost(st, place: String, companion := "") -> int:
 	var p: Dictionary = st.d.places[place]
-	if p.has("cost_by_fame_tier"):
-		return p["cost_by_fame_tier"][st.fame_tier()]
-	return p["cost"]
+	var c: int = p["cost_by_fame_tier"][st.fame_tier()] if p.has("cost_by_fame_tier") else p["cost"]
+	if companion != "" and p.has("companion"):
+		c *= int(p["companion"]["cost_mult"])      # with a companion the day costs double; the effects are the same for now
+	return c
 
 
 # ---------- checks ----------
@@ -430,14 +463,14 @@ static func run_job(st, jid: String, days: Array, hooks) -> Dictionary:
 	return {"work_days": work, "ok_days": ok_days, "pay": pay}
 
 
-static func run_rest(st, rid: String, place, days: Array, hooks) -> Dictionary:
+static func run_rest(st, rid: String, place, days: Array, hooks, companion := "") -> Dictionary:
 	var d = st.d
 	var r: Dictionary = d.rests[rid]
 	var spent := 0
 	var mid := days.size() / 2
 	for k in days.size():
 		if rid == "rest_outing":
-			var cost := place_cost(st, place)
+			var cost := place_cost(st, place, companion)
 			if st.money >= cost:
 				st.money -= cost
 				spent += cost
@@ -446,6 +479,8 @@ static func run_rest(st, rid: String, place, days: Array, hooks) -> Dictionary:
 				add_stat(st, "fatigue", d.rests["rest_home"]["fatigue_per_day"])
 			if k == mid - 1:
 				st.inc("count.outing." + place)
+				if companion != "":
+					st.inc("count.vacation_with." + companion)
 				hooks.outing(st, place)
 		elif rid == "rest_sanatorium":
 			if st.money >= r["cost"]:
@@ -482,7 +517,7 @@ static func run_period(st, i: int, e: String, hooks) -> Dictionary:
 	elif kind == "job":
 		out = run_job(st, iid, days, hooks)
 	else:
-		out = run_rest(st, iid, place, days, hooks)
+		out = run_rest(st, iid, place, days, hooks, companion_of(e))
 	for dd in days:      # Per-day events such as birthdays: checked in order after this period is settled
 		hooks.day(st, dd[0])
 	out["schedule"] = e

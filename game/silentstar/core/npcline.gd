@@ -132,6 +132,16 @@ static func party_plan(st) -> void:
 	st.story["party"] = {"ym": st.ym, "day": sundays[st.rng.dice.below(sundays.size())], "done": false}
 
 
+## Month start, the mail: for now the only letter is the party invitation of this month; the player answers yes or no.
+## Declined: the party does not happen. (The letter pool, the number of letters and who reads them are not built yet.)
+static func mail(story, st) -> void:
+	var p = st.story.get("party")
+	if p == null or p["ym"] != st.ym:
+		return
+	p["invited"] = true
+	p["declined"] = not story.agent.party_invite(st, int(p["day"]))
+
+
 ## Named stars of the next board (fixed in the board table): their weight at the party is doubled.
 static func next_board_cast(st) -> Array:
 	var d = st.d
@@ -159,7 +169,7 @@ static func next_board_cast(st) -> Array:
 ## ones on the next board count double), both get favor and are met; the player talks to one of them.
 static func party_period(story, st, i: int) -> void:
 	var p = st.story.get("party")
-	if p == null or p["done"] or p["ym"] != st.ym or st.status.get("sick", 0):
+	if p == null or p["done"] or p["ym"] != st.ym or st.status.get("sick", 0) or p.get("declined", false):
 		return
 	var hit := false
 	for dd in Schedule.days_of(st, i):
