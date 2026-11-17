@@ -154,6 +154,18 @@ class UiAgent:
 	func option(st, ev: Dictionary, avail: Array) -> int:
 		return ui.ask("option", {"event": ev, "avail": avail})
 
+	## Fame 300: the four studios, shown with the option screen; the last option is "not now".
+	func choose_studio(_st, studios: Array) -> int:
+		var opts := []
+		var avail := []
+		for k in studios.size():
+			opts.append({"text": str(studios[k]["name"])})
+			avail.append(k)
+		opts.append({"text": tr("ui.story.choose_studio.3")})
+		avail.append(studios.size())
+		var r: int = ui.ask("option", {"event": {"name": tr("ui.story.choose_studio.1"), "body": tr("ui.story.choose_studio.2"), "options": opts}, "avail": avail})
+		return r if r < studios.size() else -1
+
 	## Party and year-end party: whom to talk to (npc ids); shown with the option screen.
 	func party_guest(st, guests: Array) -> int:
 		var opts := []

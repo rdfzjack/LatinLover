@@ -22,12 +22,8 @@ func build(m) -> void:
 	m.label(tr("ui.ending.build.3") + m.nm(e.get("category")), self)
 	if e.has("character"):
 		m.label(tr("ui.ending.build.4") + str(e["character"]), self)
-	if e.has("destiny"):
-		var dst: Dictionary = e["destiny"]
-		var t := tr("ui.ending.build.5") + (tr("ui.ending.build.6") if dst.get("good", false) else tr("ui.ending.build.7"))
-		if dst.get("target") != null:
-			t += tr("ui.ending.build.8") + m.nm(dst["target"]) + tr("ui.board.show_board.13")
-		m.label(t, self)
+	for x in e.get("rumors", []):
+		m.label(str(x), self)
 	for x in d.t["endings"].get("endings", []):
 		if x["id"] == e["ending"] and x.get("content") != null:
 			m.label(str(x["content"]), self)

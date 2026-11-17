@@ -8,7 +8,7 @@ const Jsonx = preload("res://core/jsonx.gd")
 
 const TABLES := ["stats", "skills", "classes", "books", "jobs", "rest", "places", "lifestyle", "street",
 	"origins", "calendar", "habits", "rivals", "roles", "items", "events", "outing", "romance",
-	"npc_schedule", "npc_chains", "annual", "opportunities", "endings", "map", "traits", "npc_events", "npc_encounters"]
+	"npc_schedule", "npc_chains", "annual", "opportunities", "endings", "map", "traits", "npc_events", "npc_encounters", "npc_lines"]
 
 var t := {}
 var ok := true

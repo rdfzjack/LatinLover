@@ -68,6 +68,10 @@ class Agent:
 	func go_personally(_st, _role: Dictionary) -> bool:
 		return false
 
+	## Fame 300: which studio to sign with (index into the list of {id, name}); -1 = not now.
+	func choose_studio(_st, _studios: Array) -> int:
+		return -1
+
 	## Weekend party / year-end party: whom to talk to among these npc ids; returns the index. Default: the first.
 	func party_guest(_st, _guests: Array) -> int:
 		return 0
@@ -194,6 +198,7 @@ func board(st) -> void:
 
 func month_start(st) -> void:
 	Npcline.party_plan(st)                          # the party of the month before a board (dice stream)
+	Npcline.studio_offer(self, st)                  # fame 300: pick one of the four studios
 	Events.dealer_month(st)
 	agent.month_start(self, st)
 

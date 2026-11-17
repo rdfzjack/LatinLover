@@ -24,6 +24,7 @@ func _init() -> void:
 	_year_end(d)
 	_line(d)
 	_showdown(d)
+	_ending(d)
 	print("npc_test: %d failure(s)" % fails)
 	quit(1 if fails > 0 else 0)
 
@@ -270,3 +271,27 @@ func _showdown(d) -> void:
 	_go_to(g6, 1926, 4)
 	Npcline.beat_period(g6.hooks, g6.st, 0)
 	ok(Npcline.npc_state(g6.st, "cooper")["line"] == "active" and g6.st.fired.get("back_cooper", 0) == 1, "after the year the line thaws with the 'why are you back' line")
+
+
+func _ending(d) -> void:
+	var g = Story.new_game(d, 1)
+	var st = g.st
+	_go_to(g, 1925, 4)
+	_start(g, "novaro")
+	st.flags["nova.soldConfession"] = 1
+	var r: Array = Npcline.rumors(st, "end_x")
+	ok(r.size() == 1 and str(r[0]).find("忏悔录") >= 0, "a flag override replaces the tier rumor")
+	st.flags.erase("nova.soldConfession")
+	r = Npcline.rumors(st, "end_x")
+	ok(r.size() == 1, "one rumor per live line (%s)" % str(r))
+	ok(Npcline.rumor_tier(st, "end_underworld") == "crime", "the underworld ending is the crime emperor tier")
+	Npcline.npc_state(st, "novaro")["line"] = "broken"
+	ok(Npcline.rumors(st, "end_x").is_empty(), "a broken line has no rumor")
+	# the studio offer
+	var g2 = Story.new_game(d, 1)
+	g2.st.attr["fame"] = 200
+	Npcline.studio_offer(g2.hooks, g2.st)
+	ok(g2.st.story.get("studio") == null and not g2.st.story.has("studio_asked"), "no studio offer under fame 300")
+	g2.st.attr["fame"] = 320
+	Npcline.studio_offer(g2.hooks, g2.st)
+	ok(g2.st.story.has("studio_asked"), "the offer is made at fame 300 (the default agent says not now)")

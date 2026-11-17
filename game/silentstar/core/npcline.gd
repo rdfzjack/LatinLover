@@ -268,6 +268,8 @@ static func apply_line(st, e: Dictionary, o: Dictionary) -> void:
 			npc_state(st, str(e["new"]))["line"] = "broken"
 		"drop_inc":                                   # showdown: the player picks the new one
 			npc_state(st, str(e["inc"]))["line"] = "broken"
+		"both":                                       # both go on: remembered for the ending rumor
+			st.story["fights"] = st.story.get("fights", []) + [[str(e["inc"]), str(e["new"])]]
 		"both_break":                                 # both go on, except the special pair where both end
 			npc_state(st, str(e["new"]))["line"] = "broken"
 			npc_state(st, str(e["inc"]))["line"] = "broken"
@@ -460,3 +462,75 @@ static func thaw(story, st) -> bool:
 				Events.fire(story, st, "back_" + npc)
 			return true
 	return false
+
+
+# ---------- studio ----------
+
+## Month start: with fame >= sign_fame and no studio yet the player may sign with one of the four (declined: asked again later).
+static func studio_offer(story, st) -> void:
+	var c: Dictionary = st.d.t["npc_events"]
+	if not _switch_on(st) or st.story.get("studio") != null or st.attr["fame"] < int(c["sign_fame"]):
+		return
+	if st.ym < int(st.story.get("studio_asked", -99)) + int(c["reoffer_months"]):
+		return
+	st.story["studio_asked"] = st.ym
+	var pick: int = story.agent.choose_studio(st, c["studios"])
+	if pick >= 0 and pick < c["studios"].size():
+		st.story["studio"] = c["studios"][pick]["id"]
+
+
+# ---------- ending rumors (结算传闻) ----------
+
+## The tier of the rumors: crime emperor (the underworld ending), hot (fame tier "hot" or more), flop (has won a role), back to the dock.
+static func rumor_tier(st, eid: String) -> String:
+	if eid == "end_underworld":
+		return "crime"
+	if st.fame_tier() >= 3:
+		return "hot"
+	if st.cnt("count.audition_won") > 0:
+		return "flop"
+	return "dock"
+
+
+## One rumor per line that is active or finished (a broken line says nothing), in the order the lines began.
+## Flag overrides first, then the tier text, then a sentence for each variant flag; a prefix when two lines went on after a fight.
+static func rumors(st, eid: String) -> Array:
+	var d = st.d
+	var tier := rumor_tier(st, eid)
+	var rows: Array = d.t["npc_lines"]["rumors"]
+	var live := []
+	for npc in st.story["npc"]:
+		var ns: Dictionary = st.story["npc"][npc]
+		if ns["line"] == "active" or ns["line"] == "finished":
+			live.append([ns.get("start_ym", 0), npc])
+	live.sort()
+	var out := []
+	for x in live:
+		var npc: String = x[1]
+		var text := ""
+		for r in rows:
+			if r["npc"] == npc and r["kind"] == "override":
+				var all := true
+				for f in r["flags"]:
+					if st.flags.get(f, 0) <= 0:
+						all = false
+				if all:
+					text = r["text"]
+					break
+		if text == "":
+			for r in rows:
+				if r["npc"] == npc and r["kind"] == "tier" and r["tier"] == tier:
+					text = r["text"]
+		for r in rows:
+			if r["npc"] == npc and r["kind"] == "variant" and st.flags.get(r["flag"], 0) > 0:
+				text += r["text"]
+		var prefix := ""
+		for fgt in st.story.get("fights", []):
+			var other: String = fgt[1] if fgt[0] == npc else (fgt[0] if fgt[1] == npc else "")
+			if other != "" and live.any(func(y): return y[1] == other):
+				for r in rows:
+					if r["kind"] == "fight":
+						prefix = str(r["text"]).replace("{inc}", str(d.npcs[fgt[0]]["name"])).replace("{new}", str(d.npcs[fgt[1]]["name"]))
+		if text != "":
+			out.append(prefix + text)
+	return out

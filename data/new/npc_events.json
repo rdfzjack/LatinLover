@@ -9,6 +9,26 @@
   50
  ],
  "frozen_months": 12,
+ "sign_fame": 300,
+ "reoffer_months": 6,
+ "studios": [
+  {
+   "id": "snow",
+   "name": "雪山"
+  },
+  {
+   "id": "lion",
+   "name": "金狮"
+  },
+  {
+   "id": "united",
+   "name": "联艺"
+  },
+  {
+   "id": "newvoice",
+   "name": "新声"
+  }
+ ],
  "events": [
   {
    "id": "film_novaro_rival_win",

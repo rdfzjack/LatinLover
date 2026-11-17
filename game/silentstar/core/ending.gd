@@ -1,5 +1,5 @@
 extends RefCounted
-## Ending resolution (GDD 15): forced -> special -> category -> grade -> ending table -> character tier -> destiny -> comment and
+## Ending resolution (GDD 15): forced -> special -> category -> grade -> ending table -> character tier -> rumors of the lines -> comment and
 ## total score. Data is in endings.json. Port of sim/ending.py.
 ##
 ## register() adds the derived variables the ending conditions need to Rules.extra_vars: grade, top_tag_family, undefined,
@@ -129,29 +129,7 @@ static func character(st, eid: String) -> int:
 	return t["scoring"]["character_tiers"]["default_tier"]
 
 
-## Destiny: of the four romance lines the one meeting its condition with the highest favor (ties go to the table order);
-## otherwise the three ordinary destiny modes. In the Imperial screen idol run the Sil line is broken.
-## Returns {class: special/ordinary, target or mode, good}.
-static func home(st, eid: String) -> Dictionary:
-	var d = st.d
-	var best = null
-	for n in d.romance_lines:
-		var c = d.npcs[n].get("destiny_cond")
-		if c == null or c.is_empty() or (n == "sil" and eid == "end_idol"):
-			continue
-		if Rules.cond(st, c) and (best == null or st.favor.get(n, 0) > st.favor.get(best, 0)):
-			best = n
-	if best != null:
-		return {"class": "special", "target": best, "good": true}
-	for m in d.t["endings"]["destiny"]["ordinary"]["mode"]:
-		if Rules.cond(st, m["cond"]):
-			var line: Array = m["good_destiny_line"]
-			return {"class": "ordinary", "mode": m["mode"], "good": st.val(line[0]) >= line[1]}
-	push_error("no ordinary destiny mode holds")
-	return {}
-
-
-static func score(st, rank: String, ch: int, hm: Dictionary) -> int:
+static func score(st, rank: String, ch: int) -> int:
 	var sc: Dictionary = st.d.t["endings"]["scoring"]
 	var b: Dictionary = st.bonus()
 	var base: int = st.attr["fame"]
@@ -160,11 +138,7 @@ static func score(st, rank: String, ch: int, hm: Dictionary) -> int:
 	var s: int = Rules.fdiv(base, 6)        # user, 2026-11: crime is no longer subtracted
 	s += sc["ending_score"][rank]
 	s += sc["character_tiers"]["score"][str(ch)]
-	if hm["class"] == "special":
-		s += sc["destiny_score"]["special"]
-	else:
-		s += sc["destiny_score"]["ordinary_good" if hm["good"] else "ordinary"]
-	return s
+	return s        # user, 2026-11: the destiny (rumors of the lines) is not scored
 
 
 ## Ending resolution after the 1929-12 month end (or on a collapse). The result is written to st.story["ending"] and st.ended.
@@ -177,9 +151,9 @@ static func judge(st) -> Dictionary:
 	var eid: String = cb[0]
 	var rank := tier(st)
 	var ch := character(st, eid)
-	var hm := home(st, eid)
-	var res := {"ending": eid, "category": cb[1], "grade": rank, "grade_by": tier_by(st)[1], "character": ch, "destiny": hm,
-		"top_job": most_job(st), "top_class": most_class(st), "total": score(st, rank, ch, hm)}
+	var rum: Array = load("res://core/npcline.gd").rumors(st, eid)
+	var res := {"ending": eid, "category": cb[1], "grade": rank, "grade_by": tier_by(st)[1], "character": ch, "rumors": rum,
+		"top_job": most_job(st), "top_class": most_class(st), "total": score(st, rank, ch)}
 	st.ended = eid
 	st.story["ending"] = res
 	return res

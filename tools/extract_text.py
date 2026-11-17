@@ -53,6 +53,8 @@ SPEC = [
     ('events.json', ['events'], 'event', ['name', 'body'], [('options', 'option', ['text'])]),
     ('outing.json', ['events'], 'event', ['name', 'body'], [('options', 'option', ['text'])]),
     ('npc_events.json', ['events'], 'event', ['name', 'body'], [('options', 'option', ['text', 'result'])]),
+    ('npc_events.json', ['studios'], 'studio', ['name'], []),
+    ('npc_lines.json', ['rumors'], 'rumor', ['text'], []),
     ('opportunities.json', ['opportunities'], 'opp', ['name'], []),
     ('annual.json', ['occasions'], 'annual', ['name'], []),
     ('romance.json', ['npcs'], 'npc', ['name', 'identity'], []),
