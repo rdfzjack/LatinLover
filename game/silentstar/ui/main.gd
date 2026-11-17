@@ -605,7 +605,7 @@ func rep_drop_lines(before: Dictionary, after: Dictionary, added: Array) -> Pack
 
 func snapshot() -> Dictionary:
 	var b: Dictionary = st.bonus()
-	var s := {"money": st.money, "attr": {}, "skill": {}, "rep": {}}
+	var s := {"money": st.money, "attr": {}, "skill": {}, "rep": {}, "favor": st.favor.duplicate()}
 	for k in d.attrs:
 		s["attr"][k] = st.val(k, b)
 	for k in d.skills:
@@ -641,6 +641,9 @@ func diff_lines(a: Dictionary, b: Dictionary) -> PackedStringArray:
 	for k in b["rep"]:
 		if a["rep"][k] != b["rep"][k]:
 			out.append(tr("ui.main.diff_lines.3") % [nm(k), a["rep"][k], b["rep"][k], b["rep"][k] - a["rep"][k]])
+	for k in b.get("favor", {}):       # favor of the people the player knows
+		if st.known.has(k) and a.get("favor", {}).get(k, b["favor"][k]) != b["favor"][k]:
+			out.append(tr("ui.main.diff_lines.4") % [str(d.npcs[k]["name"]), b["favor"][k] - a["favor"][k]])
 	return out
 
 
@@ -1388,6 +1391,8 @@ func _trait_body(tid: String) -> String:
 func _show_option(p: Dictionary) -> void:
 	var ev: Dictionary = p["event"]
 	_wait_screen(tr("ui.main.show_option.1") + str(ev["name"]))
+	if ev.get("npc_event", false):      # NPC events: the picture comes with the scene, not after the pick
+		add_cg("cg", ["event/" + str(ev["id"]), "event_class/" + str(ev.get("type", ""))], str(ev["name"]))
 	if ev.get("body") != null:
 		label(str(ev["body"]))
 	label(tr("ui.main.show_option.2"))
@@ -1429,15 +1434,16 @@ func event_ended(rec: Dictionary) -> void:
 	var ry: int = st.story.get("renyang_hint", 0)
 	st.story["renyang_hint"] = 0
 	var payload := {"id": rec["id"], "name": str(ev["name"]), "class": str(ev.get("class", "")), "body": ev.get("body"),
-		"picked": picked, "result": result, "renyang": ry, "check": check, "lines": diff_lines(before, snapshot()), "rep_lines": rep_drop_lines(before, snapshot(), log_corr(str(ev["name"])))}
+		"picked": picked, "result": result, "renyang": ry, "cg_shown": bool(ev.get("npc_event", false)) and rec.get("options") != null, "check": check, "lines": diff_lines(before, snapshot()), "rep_lines": rep_drop_lines(before, snapshot(), log_corr(str(ev["name"])))}
 	ask("event", payload)
 
 
 func _show_event(p: Dictionary) -> void:
 	clear_body()
 	heading(str(p["name"]))
-	add_cg("cg", ["event/" + str(p["id"]), "event_class/" + str(p["class"])], str(p["name"]))
-	if p["body"] != null:
+	if not p.get("cg_shown", false):
+		add_cg("cg", ["event/" + str(p["id"]), "event_class/" + str(p["class"])], str(p["name"]))
+	if p["body"] != null and not p.get("cg_shown", false):     # the scene was already shown with the choices
 		label(str(p["body"]))
 	if str(p["picked"]) != "":
 		label(tr("ui.main.show_event.1") + str(p["picked"]))
@@ -1449,7 +1455,7 @@ func _show_event(p: Dictionary) -> void:
 		label(tr("ui.main.show_event.2") + str(p["check"]))
 	for x in p.get("rep_lines", []):
 		label(x, null, Color(1, 0.5, 0.5))
-	if p["lines"].is_empty():
+	if p["lines"].is_empty() and int(p.get("renyang", 0)) == 0:
 		label(tr("ui.main.show_event.3"))
 	else:
 		for x in p["lines"]:

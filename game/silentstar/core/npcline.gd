@@ -166,7 +166,7 @@ static func next_board_cast(st) -> Array:
 
 
 ## Before period i: the party, when its Sunday falls in this period and he is not sick. Two stars are drawn (the dice stream; the
-## ones on the next board count double), both get favor and are met; the player talks to one of them.
+## ones on the next board count double); the player talks to one of them. No base favor: only the option picked changes it.
 static func party_period(story, st, i: int) -> void:
 	var p = st.story.get("party")
 	if p == null or p["done"] or p["ym"] != st.ym or st.status.get("sick", 0) or p.get("declined", false):
@@ -207,12 +207,10 @@ static func party_period(story, st, i: int) -> void:
 			v -= ws[k]
 	if guests.is_empty():
 		return
-	for g in guests:
-		st.meet(g)
-		Rules.apply_effect(st, "favor.%s+5" % g, "event")
 	st.story["last_party"] = {"ym": st.ym, "guests": guests}
 	var pick: int = story.agent.party_guest(st, guests)
 	var who: String = guests[clampi(pick, 0, guests.size() - 1)]
+	st.meet(who)      # only the one talked to is met and only his or her option changes favor; the other guest is not met at all
 	var texts := []
 	for n in range(1, 7):
 		texts.append("party_%s_%d" % [who, n])

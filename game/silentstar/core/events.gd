@@ -104,7 +104,8 @@ static func fire(story, st, eid: String, depth := 0) -> Dictionary:
 			var o: Dictionary = opts[choice]
 			var ck = o.get("check") if Schedule.truthy(o.get("check")) else null
 			var ok := Rules.check(st, ck)
-			rec["check"] = ok
+			if ck != null:          # an option without a check is not a check: no "check: success" line
+				rec["check"] = ok
 			trig += Rules.apply_effect(st, o["success_effect"] if ok else o["fail_effect"], "event")
 			if o.has("line"):      # NPC events: cross the line, stay, botch, end (core/npcline.gd)
 				load("res://core/npcline.gd").apply_line(st, e, o)

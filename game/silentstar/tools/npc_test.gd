@@ -7,6 +7,7 @@ const Data = preload("res://core/data.gd")
 const Story = preload("res://core/story.gd")
 const Npcline = preload("res://core/npcline.gd")
 const Rules = preload("res://core/rules.gd")
+const Events = preload("res://core/events.gd")
 const Schedule = preload("res://core/schedule.gd")
 const State = preload("res://core/state.gd")
 
@@ -18,6 +19,7 @@ func _init() -> void:
 	var d = Data.new(root.path_join("data/new"))
 	_dice(d)
 	_blocked(d)
+	_no_check(d)
 	_encounter(d)
 	_film_talk(d)
 	_party(d)
@@ -68,6 +70,12 @@ func _blocked(d) -> void:
 	ok(Npcline.blocked_month(g.st, g.st.ym), "December is blocked")
 	_go_to(g, 1925, 4)
 	ok(not Npcline.blocked_month(g.st, g.st.ym), "1925-04 is free")
+
+
+func _no_check(d) -> void:
+	var g = Story.new_game(d, 1)
+	var rec: Dictionary = Events.fire(g.hooks, g.st, "enc_cooper_early")
+	ok(rec.has("options") and not rec.has("check"), "an option without a check leaves no check result")
 
 
 func _encounter(d) -> void:
@@ -135,12 +143,10 @@ func _party(d) -> void:
 	ok(st.story["party"]["done"], "the party happens in its period")
 	var gs: Array = st.story["last_party"]["guests"]
 	ok(gs.size() == 2 and gs[0] != gs[1], "two different guests")
-	var up := 0
-	for x in gs:
-		if st.favor[x] > fav0[x]:
-			up += 1
-		ok(st.known.has(x), "%s is met at the party" % x)
-	ok(up == 2, "both guests like you more after the party")
+	ok(st.known.has(gs[0]), "the guest talked to (the first, by the default agent) is met")
+	ok(not st.known.has(gs[1]), "the other guest is not met")
+	ok(st.favor[gs[1]] == fav0[gs[1]], "no favor for the one not talked to")
+	ok(st.favor[gs[0]] == fav0[gs[0]] or st.fired.has("party_" + gs[0] + "_1"), "no base favor: only an option of his or her text changes it")
 	_go_to(g, 1925, 5)
 	Npcline.party_plan(st)
 	ok(not st.story.has("party"), "no party before a month without a board")
