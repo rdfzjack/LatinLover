@@ -23,6 +23,7 @@ func _init() -> void:
 	_party(d)
 	_year_end(d)
 	_line(d)
+	_showdown(d)
 	print("npc_test: %d failure(s)" % fails)
 	quit(1 if fails > 0 else 0)
 
@@ -205,3 +206,67 @@ func _line(d) -> void:
 	Rules.apply_effect(g4.st, e["options"][2]["success_effect"], "event")
 	Npcline.apply_line(g4.st, e, e["options"][2])
 	ok(g4.st.favor["cooper"] < 60 and Npcline.npc_state(g4.st, "cooper")["line"] == "none", "a botched crossing sends favor under 60 and starts nothing")
+
+
+func _start(g, npc: String, favor := 70) -> void:
+	g.st.favor[npc] = favor
+	Npcline.contact_cross(g.hooks, g.st, npc)
+
+
+func _showdown(d) -> void:
+	var g = Story.new_game(d, 1)
+	var st = g.st
+	_go_to(g, 1925, 4)
+	_start(g, "cooper")
+	_start(g, "sweetheart")
+	ok(st.fired.get("showdown_cooper_sweetheart", 0) == 1, "a second line with an 'accept' incumbent plays the showdown")
+	ok(Npcline.npc_state(st, "sweetheart")["line"] == "broken" and Npcline.npc_state(st, "cooper")["line"] == "active", "the first option picks the incumbent: the new line breaks")
+	# three lines: everybody at once, the 'reject' type is found out
+	var g2 = Story.new_game(d, 1)
+	var s2 = g2.st
+	_go_to(g2, 1925, 4)
+	_start(g2, "cooper")
+	_start(g2, "vamp")                     # vamp is a reject type: cooper is an accept incumbent, so a showdown plays and breaks vamp's line
+	_go_to(g2, 1925, 6)
+	var g3 = Story.new_game(d, 2)
+	var s3 = g3.st
+	_go_to(g3, 1925, 4)
+	_start(g3, "vamp")
+	ok(not s3.fired.has("showdown_vamp_cooper"), "a 'reject' line alone: no showdown")
+	_start(g3, "cooper")
+	ok(not s3.fired.has("showdown_all") and Npcline.npc_state(s3, "vamp")["line"] == "active", "a reject incumbent does not find out at once")
+	_start(g3, "iceberg")
+	ok(s3.fired.get("showdown_all", 0) == 1, "three active lines: the all-hands showdown")
+	ok(Npcline.npc_state(s3, "vamp")["line"] == "broken", "the all-hands showdown breaks the 'reject' line")
+	# exposure by roll
+	var g4 = Story.new_game(d, 5)
+	var s4 = g4.st
+	_go_to(g4, 1925, 4)
+	s4.attr["fame"] = 900
+	_start(g4, "vamp")
+	_start(g4, "dancequeen")
+	var n := 0
+	while Npcline.npc_state(s4, "vamp")["line"] == "active" and n < 200:
+		Npcline.exposure_roll(g4.hooks, s4, "vamp")
+		n += 1
+	ok(Npcline.npc_state(s4, "vamp")["line"] == "broken" and s4.fired.get("found_vamp", 0) == 1, "a 'reject' line is found out by the exposure roll (%d rolls)" % n)
+	# special pair iceberg x gilbert: gilbert's line breaks at once
+	var g5 = Story.new_game(d, 1)
+	_go_to(g5, 1926, 4)
+	_start(g5, "iceberg")
+	_start(g5, "gilbert")
+	ok(Npcline.npc_state(g5.st, "gilbert")["line"] == "broken" and Npcline.npc_state(g5.st, "iceberg")["line"] == "active", "iceberg x gilbert: gilbert breaks")
+	# running away freezes both for a year, then 'why are you back'
+	var g6 = Story.new_game(d, 1)
+	_go_to(g6, 1925, 4)
+	var e: Dictionary = g6.st.d.events["showdown_cooper_sweetheart"]
+	_start(g6, "cooper")
+	Npcline.npc_state(g6.st, "sweetheart")["line"] = "active"
+	Npcline.apply_line(g6.st, e, e["options"][3])
+	ok(Npcline.npc_state(g6.st, "cooper")["line"] == "frozen" and Npcline.npc_state(g6.st, "sweetheart")["line"] == "frozen", "running away freezes both lines")
+	_go_to(g6, 1926, 3)
+	Npcline.beat_period(g6.hooks, g6.st, 0)
+	ok(Npcline.npc_state(g6.st, "cooper")["line"] == "frozen", "still frozen before the year is over")
+	_go_to(g6, 1926, 4)
+	Npcline.beat_period(g6.hooks, g6.st, 0)
+	ok(Npcline.npc_state(g6.st, "cooper")["line"] == "active" and g6.st.fired.get("back_cooper", 0) == 1, "after the year the line thaws with the 'why are you back' line")

@@ -264,6 +264,18 @@ static func apply_line(st, e: Dictionary, o: Dictionary) -> void:
 		return
 	var ns := npc_state(st, npc)
 	match str(o["line"]):
+		"drop_new":                                   # showdown: the player picks the one already there
+			npc_state(st, str(e["new"]))["line"] = "broken"
+		"drop_inc":                                   # showdown: the player picks the new one
+			npc_state(st, str(e["inc"]))["line"] = "broken"
+		"both_break":                                 # both go on, except the special pair where both end
+			npc_state(st, str(e["new"]))["line"] = "broken"
+			npc_state(st, str(e["inc"]))["line"] = "broken"
+		"run":                                        # both lines freeze for a year
+			for k in [str(e["inc"]), str(e["new"])]:
+				var x := npc_state(st, k)
+				x["line"] = "frozen"
+				x["frozen_until"] = st.ym + int(st.d.t["npc_events"].get("frozen_months", 12))
 		"active":
 			ns["line"] = "active"
 			ns["beat"] = 1
@@ -271,6 +283,7 @@ static func apply_line(st, e: Dictionary, o: Dictionary) -> void:
 			ns["last_ym"] = st.ym
 			ns["played"] = [e["id"]]
 			st.inc("count.line_started")
+			st.story["pending_showdown"] = npc          # run after the crossing event is shown (contact_cross)
 		"botched":
 			st.favor[npc] = mini(st.favor.get(npc, 0), 59)     # back under 60: has to be raised again
 		"end":
@@ -286,6 +299,10 @@ static func contact_cross(story, st, npc: String, year_end := false) -> bool:
 	if not st.d.events.has(eid) or not Events.ready(st, st.d.events[eid]):
 		return false
 	Events.fire(story, st, eid)
+	var p = st.story.get("pending_showdown")
+	if p != null:
+		st.story.erase("pending_showdown")
+		showdown(story, st, str(p))
 	return true
 
 
@@ -300,6 +317,8 @@ static func _beat_event(st, npc: String, n: int):
 ## period; with several lines the one that began first goes first. Then the default death of the dance queen (1927-10).
 static func beat_period(story, st, i: int) -> void:
 	if not _switch_on(st):
+		return
+	if thaw(story, st):
 		return
 	var lines := []
 	for npc in st.story["npc"]:
@@ -347,6 +366,7 @@ static func _play_beat(story, st, npc: String, ns: Dictionary, e: Dictionary) ->
 	ns["beat"] = maxi(ns.get("beat", 1), int(e["beat"]))
 	ns["last_ym"] = st.ym
 	Events.fire(story, st, e["id"])
+	exposure_roll(story, st, npc)
 	if ns["line"] == "active":
 		var left := false
 		for n in BEATS:
@@ -366,3 +386,77 @@ static func _default_deaths(st) -> void:
 	if ns["line"] == "active" and not ns.get("played", []).has("beat_dancequeen_5"):
 		return
 	st.flags["dance.dead"] = 1
+
+
+# ---------- showdown (修罗场), exposure, thawing ----------
+
+static func active_lines(st) -> Array:
+	var out := []
+	for npc in st.story["npc"]:
+		var ns: Dictionary = st.story["npc"][npc]
+		if ns["line"] == "active":
+			out.append([ns.get("start_ym", 0), npc])
+	out.sort()
+	return out
+
+
+static func _multi(st, npc: String) -> String:
+	return str(st.d.npcs[npc].get("multi", "accept"))
+
+
+## A new line has just begun. Only the 'accept' types find out on the spot; the 'reject' ones are found out by a roll later
+## (exposure). With 3 or more active lines everybody is there at once.
+static func showdown(story, st, new: String) -> void:
+	var act := active_lines(st)
+	if act.size() < 2:
+		return
+	if act.size() >= 3:
+		Events.fire(story, st, "showdown_all")
+		for x in act:
+			if _multi(st, x[1]) in ["reject", "reject_soft"]:
+				_found(story, st, x[1], false)
+		return
+	var inc: String = act[0][1] if act[0][1] != new else act[1][1]
+	if not _multi(st, inc) in ["accept", "accept_conditional"]:
+		return                  # the others are all 'reject' types: nothing happens, the player is doing it behind their back
+	var eid := "showdown_%s_%s" % [inc, new]
+	if st.d.events.has(eid):
+		Events.fire(story, st, eid)
+
+
+## A 'reject' NPC finds out: the line breaks ('reject_soft' would only cost favor).
+static func _found(story, st, npc: String, show := true) -> void:
+	if show and st.d.events.has("found_" + npc):
+		Events.fire(story, st, "found_" + npc)
+	if _multi(st, npc) == "reject_soft":
+		Rules.apply_effect(st, "favor.%s-30" % npc, "event")
+	else:
+		npc_state(st, npc)["line"] = "broken"
+
+
+## After a beat of a 'reject' NPC while the player has other active lines: one roll by the fame tier whether he or she finds out.
+static func exposure_roll(story, st, npc: String) -> void:
+	if not _multi(st, npc) in ["reject", "reject_soft"] or npc_state(st, npc)["line"] != "active":
+		return
+	var others := 0
+	for x in active_lines(st):
+		if x[1] != npc:
+			others += 1
+	if others == 0:
+		return
+	var pct: int = int(st.d.t["npc_events"]["expose_pct"][st.fame_tier()])
+	if st.rng.dice.below(100) < pct:
+		_found(story, st, npc)
+
+
+## A frozen line thaws after its year: the "why are you back" line, then the line goes on (the cooldown starts again).
+static func thaw(story, st) -> bool:
+	for npc in st.story["npc"]:
+		var ns: Dictionary = st.story["npc"][npc]
+		if ns["line"] == "frozen" and st.ym >= int(ns.get("frozen_until", 0)):
+			ns["line"] = "active"
+			ns["last_ym"] = st.ym
+			if st.d.events.has("back_" + npc):
+				Events.fire(story, st, "back_" + npc)
+			return true
+	return false

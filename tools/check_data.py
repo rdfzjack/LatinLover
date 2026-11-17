@@ -648,7 +648,7 @@ if nev and nenc:
             if not o.get('text'): err(f, f"{e['id']} an option has no text")
             if o.get('cond'): check_cond(f, o['cond'], e['id'])
             if o.get('success_effect'): parse_effect(f, o['success_effect'], e['id'])
-            if o.get('line') not in (None, 'active', 'stay', 'botched', 'end'): err(f, f"{e['id']} unknown line action {o.get('line')}")
+            if o.get('line') not in (None, 'active', 'stay', 'botched', 'end', 'drop_new', 'drop_inc', 'both', 'both_break', 'run'): err(f, f"{e['id']} unknown line action {o.get('line')}")
     LOCS = {L['id']: L for L in map_t['locations']}
     for r in nenc['encounters']:
         w = f"{r['npc']} {r['loc']} {r['stage']}"

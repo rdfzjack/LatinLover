@@ -263,6 +263,7 @@
   },
   {
    "id": "gilbert",
+   "multi": "reject",
    "studio": "lion",
    "name": "吉尔伯",
    "class": "star",
@@ -286,6 +287,7 @@
   },
   {
    "id": "novaro",
+   "multi": "accept",
    "studio": "snow",
    "name": "诺瓦",
    "class": "star",
@@ -310,6 +312,7 @@
   },
   {
    "id": "cooper",
+   "multi": "accept",
    "studio": "snow",
    "name": "库普",
    "class": "star",
@@ -506,6 +509,7 @@
   },
   {
    "id": "dancequeen",
+   "multi": "accept",
    "studio": "united",
    "name": "舞池女王",
    "class": "star",
@@ -535,6 +539,7 @@
   },
   {
    "id": "iceberg",
+   "multi": "accept",
    "studio": "lion",
    "name": "冰山",
    "class": "star",
@@ -564,6 +569,7 @@
   },
   {
    "id": "saint",
+   "multi": "accept",
    "studio": "lion",
    "name": "苦行圣女",
    "class": "star",
@@ -593,6 +599,7 @@
   },
   {
    "id": "vamp",
+   "multi": "reject",
    "studio": "snow",
    "name": "蛇蝎名伶",
    "class": "star",
@@ -621,6 +628,7 @@
   },
   {
    "id": "aviator",
+   "multi": "accept",
    "studio": "newvoice",
    "name": "飞行女郎",
    "class": "star",
@@ -650,6 +658,7 @@
   },
   {
    "id": "sweetheart",
+   "multi": "accept",
    "studio": "united",
    "name": "皮克福德型",
    "class": "star",
@@ -679,6 +688,7 @@
   },
   {
    "id": "diva",
+   "multi": "accept_conditional",
    "studio": "snow",
    "name": "斯万森型",
    "class": "star",
