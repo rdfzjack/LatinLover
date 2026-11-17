@@ -225,9 +225,13 @@ static func curve_named(st, rival: Dictionary, probs: Array) -> void:
 		return
 	var cv: Dictionary = curve_cfg(st.d)
 	var p: Array = probs if not probs.is_empty() else [25, 25, 25, 25]
-	var cs := opponent_colors(st.d, rival["levels"], p)
 	var c := curve_level(st)
 	var lv: Array = rival["levels"]
+	# every color is capped at the top of the band first (2026-11 fix): capping only the strongest color let his second color,
+	# left above the cap, become the main color of the deck (Fanban 9/5/3/8 played savvy 8 in a tough film)
+	for x in lv.size():
+		lv[x] = mini(int(lv[x]), c + int(cv["named_band"][1]))
+	var cs := opponent_colors(st.d, lv, p)
 	lv[cs[0]] = clampi(int(lv[cs[0]]), c + int(cv["named_band"][0]), c + int(cv["named_band"][1]))
 	lv[cs[1]] = maxi(int(lv[cs[1]]), lv[cs[0]] - int(cv["named_side_gap"]))
 
