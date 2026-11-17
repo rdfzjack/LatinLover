@@ -3239,9 +3239,9 @@
    "note": "Switch (user, 2026-11). enabled true: medium/big fame gates by year from fame_gate below (the per-role fame_gate is ignored); unnamed rivals' main level = player_level of the year + random offset by tier; named rivals keep their own colors, k, habit and fame, but their main color is pulled into player_level + named_band and their second color is at least main - named_side_gap. enabled false: the old rules (per-role gates; unnamed levels by level_up_months in rivals.json; named rivals as listed). All numbers are a first draft to confirm with the user | User (2026-11): the fame gates are the per-role values again (medium 130/130/140/150/160/170 by board year, big 210 to 1927, 240, 270; sign-up attribute gates by road and year); the year table is kept in fame_gate_curve_unused and `fame_gate` is empty so it does nothing",
    "enabled": true,
    "player_level": {
-    "1924": 6,
-    "1925": 7,
-    "1926": 7,
+    "1924": 5,
+    "1925": 6,
+    "1926": 6,
     "1927": 7,
     "1928": 8,
     "1929": 8
