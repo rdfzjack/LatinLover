@@ -1,0 +1,420 @@
+{
+ "note": "Encounters: an NPC is at a map location (the class / job entries listed on that location in map.json; `entry` narrows it to one entry) in the given years, months and period (slot). They pop after the class or job of that period is settled (core/npcline.gd). One per NPC per stage (early 1924-25, mid 1926-27, late 1928-29). No encounters in August, December or board months; the months here are already free ones. loc_party is the salon (the mansion), loc_theater is the charity place (the theater).",
+ "encounters": [
+  {
+   "npc": "novaro",
+   "loc": "loc_church",
+   "slot": "early",
+   "stage": "early",
+   "years": [
+    1924
+   ],
+   "months": [
+    1,
+    2
+   ],
+   "event": "enc_novaro_early"
+  },
+  {
+   "npc": "novaro",
+   "loc": "loc_church",
+   "slot": "early",
+   "stage": "mid",
+   "years": [
+    1926
+   ],
+   "months": [
+    1,
+    2
+   ],
+   "event": "enc_novaro_mid"
+  },
+  {
+   "npc": "novaro",
+   "loc": "loc_church",
+   "slot": "early",
+   "stage": "late",
+   "years": [
+    1928
+   ],
+   "months": [
+    1,
+    2
+   ],
+   "event": "enc_novaro_late"
+  },
+  {
+   "npc": "dancequeen",
+   "loc": "loc_coconut",
+   "slot": "mid",
+   "stage": "early",
+   "years": [
+    1925
+   ],
+   "months": [
+    1,
+    2
+   ],
+   "event": "enc_dancequeen_early"
+  },
+  {
+   "npc": "dancequeen",
+   "loc": "loc_coconut",
+   "slot": "mid",
+   "stage": "mid",
+   "years": [
+    1927
+   ],
+   "months": [
+    1,
+    2
+   ],
+   "event": "enc_dancequeen_mid"
+  },
+  {
+   "npc": "dancequeen",
+   "loc": "loc_coconut",
+   "slot": "mid",
+   "stage": "late",
+   "years": [
+    1929
+   ],
+   "months": [
+    1,
+    2
+   ],
+   "event": "enc_dancequeen_late",
+   "cond": [
+    [
+     [
+      "flag.dance.saved",
+      ">=",
+      1
+     ]
+    ]
+   ]
+  },
+  {
+   "npc": "iceberg",
+   "loc": "loc_dock",
+   "slot": "late",
+   "stage": "early",
+   "years": [
+    1925
+   ],
+   "months": [
+    1,
+    2
+   ],
+   "event": "enc_iceberg_early"
+  },
+  {
+   "npc": "iceberg",
+   "loc": "loc_dock",
+   "slot": "late",
+   "stage": "mid",
+   "years": [
+    1927
+   ],
+   "months": [
+    1,
+    2
+   ],
+   "event": "enc_iceberg_mid"
+  },
+  {
+   "npc": "iceberg",
+   "loc": "loc_dock",
+   "slot": "late",
+   "stage": "late",
+   "years": [
+    1928
+   ],
+   "months": [
+    1,
+    2
+   ],
+   "event": "enc_iceberg_late"
+  },
+  {
+   "npc": "cooper",
+   "loc": "loc_studio",
+   "slot": "early",
+   "stage": "early",
+   "years": [
+    1925
+   ],
+   "months": [
+    4,
+    5
+   ],
+   "event": "enc_cooper_early"
+  },
+  {
+   "npc": "cooper",
+   "loc": "loc_studio",
+   "slot": "early",
+   "stage": "mid",
+   "years": [
+    1926
+   ],
+   "months": [
+    4,
+    5
+   ],
+   "event": "enc_cooper_mid"
+  },
+  {
+   "npc": "cooper",
+   "loc": "loc_studio",
+   "slot": "early",
+   "stage": "late",
+   "years": [
+    1928
+   ],
+   "months": [
+    4,
+    5
+   ],
+   "event": "enc_cooper_late"
+  },
+  {
+   "npc": "sweetheart",
+   "loc": "loc_gym",
+   "slot": "mid",
+   "stage": "early",
+   "years": [
+    1924
+   ],
+   "months": [
+    4,
+    5
+   ],
+   "event": "enc_sweetheart_early"
+  },
+  {
+   "npc": "sweetheart",
+   "loc": "loc_gym",
+   "slot": "mid",
+   "stage": "mid",
+   "years": [
+    1927
+   ],
+   "months": [
+    4,
+    5
+   ],
+   "event": "enc_sweetheart_mid"
+  },
+  {
+   "npc": "sweetheart",
+   "loc": "loc_gym",
+   "slot": "mid",
+   "stage": "late",
+   "years": [
+    1929
+   ],
+   "months": [
+    4,
+    5
+   ],
+   "event": "enc_sweetheart_late"
+  },
+  {
+   "npc": "diva",
+   "loc": "loc_dock",
+   "slot": "late",
+   "stage": "early",
+   "years": [
+    1925
+   ],
+   "months": [
+    4,
+    5
+   ],
+   "event": "enc_diva_early"
+  },
+  {
+   "npc": "diva",
+   "loc": "loc_party",
+   "slot": "late",
+   "stage": "mid",
+   "years": [
+    1926
+   ],
+   "months": [
+    4,
+    5
+   ],
+   "event": "enc_diva_mid"
+  },
+  {
+   "npc": "diva",
+   "loc": "loc_studio",
+   "slot": "late",
+   "stage": "late",
+   "years": [
+    1928
+   ],
+   "months": [
+    4,
+    5
+   ],
+   "event": "enc_diva_late"
+  },
+  {
+   "npc": "vamp",
+   "loc": "loc_party",
+   "slot": "mid",
+   "stage": "early",
+   "years": [
+    1924
+   ],
+   "months": [
+    6,
+    7
+   ],
+   "event": "enc_vamp_early"
+  },
+  {
+   "npc": "vamp",
+   "loc": "loc_church",
+   "slot": "mid",
+   "stage": "mid",
+   "years": [
+    1927
+   ],
+   "months": [
+    9
+   ],
+   "event": "enc_vamp_mid"
+  },
+  {
+   "npc": "vamp",
+   "loc": "loc_home",
+   "slot": "mid",
+   "stage": "late",
+   "years": [
+    1929
+   ],
+   "months": [
+    6,
+    9
+   ],
+   "event": "enc_vamp_late",
+   "entry": "class_c3"
+  },
+  {
+   "npc": "aviator",
+   "loc": "loc_city",
+   "slot": "late",
+   "stage": "mid",
+   "years": [
+    1927
+   ],
+   "months": [
+    6,
+    9
+   ],
+   "event": "enc_aviator_mid",
+   "entry": "job_flagpole"
+  },
+  {
+   "npc": "aviator",
+   "loc": "loc_dock",
+   "slot": "late",
+   "stage": "late",
+   "years": [
+    1928
+   ],
+   "months": [
+    6,
+    9
+   ],
+   "event": "enc_aviator_late"
+  },
+  {
+   "npc": "saint",
+   "loc": "loc_dock",
+   "slot": "early",
+   "stage": "early",
+   "years": [
+    1924
+   ],
+   "months": [
+    10,
+    11
+   ],
+   "event": "enc_saint_early"
+  },
+  {
+   "npc": "saint",
+   "loc": "loc_theater",
+   "slot": "early",
+   "stage": "mid",
+   "years": [
+    1926
+   ],
+   "months": [
+    10
+   ],
+   "event": "enc_saint_mid"
+  },
+  {
+   "npc": "saint",
+   "loc": "loc_theater",
+   "slot": "early",
+   "stage": "late",
+   "years": [
+    1929
+   ],
+   "months": [
+    11
+   ],
+   "event": "enc_saint_late"
+  },
+  {
+   "npc": "gilbert",
+   "loc": "loc_coconut",
+   "slot": "late",
+   "stage": "early",
+   "years": [
+    1925
+   ],
+   "months": [
+    10,
+    11
+   ],
+   "event": "enc_gilbert_early"
+  },
+  {
+   "npc": "gilbert",
+   "loc": "loc_coconut",
+   "slot": "late",
+   "stage": "mid",
+   "years": [
+    1926
+   ],
+   "months": [
+    9,
+    10
+   ],
+   "event": "enc_gilbert_mid"
+  },
+  {
+   "npc": "gilbert",
+   "loc": "loc_coconut",
+   "slot": "late",
+   "stage": "late",
+   "years": [
+    1929
+   ],
+   "months": [
+    9,
+    10,
+    11
+   ],
+   "event": "enc_gilbert_late"
+  }
+ ]
+}

@@ -62,7 +62,8 @@ var note_ctx := {}             # not saved: {why, arg} naming the source of the 
 static func new_story() -> Dictionary:
 	return {"board": null, "films": [], "boarded": {}, "pending_board": [], "tipoff": 0, "last_fired": {},
 		"script": {"self_written": 0, "duv_written": 0, "co_written": 0}, "contract_refused": -99, "transition": [0, null],
-		"scandal_cover_year": 0, "leak_year": 0, "seq": 0, "ending": null, "fame_log": []}
+		"scandal_cover_year": 0, "leak_year": 0, "seq": 0, "ending": null, "fame_log": [],
+		"npc": {}, "renyang": 0, "renyang_hint": 0}
 
 
 func _init(data) -> void:

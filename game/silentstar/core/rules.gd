@@ -141,6 +141,12 @@ static func apply_effect(st, text, source := "event") -> Array:
 			st.status[k] = nv
 		elif head == "flag":
 			st.flags[k] = _delta(st.flags.get(k, 0), op, v, pct)
+		elif n == "renyang":    # hidden value (NPC events): the UI only hints "+" or "-", never the number
+			var old_ry: int = st.story.get("renyang", 0)
+			var new_ry := _delta(old_ry, op, v, pct)
+			st.story["renyang"] = new_ry
+			if new_ry != old_ry:
+				st.story["renyang_hint"] = 1 if new_ry > old_ry else -1    # read and cleared by the UI
 		else:
 			push_error("unknown effect name: %s" % n)
 	return trig
@@ -312,6 +318,12 @@ static func get_var(st, name: String):
 		return favor_tier_of(st, k)
 	if head == "flag":
 		return st.flags.get(k, 0)
+	if name == "renyang":
+		return st.story.get("renyang", 0)
+	if head == "line":       # state of an NPC line: none / active / frozen / broken / finished
+		return st.story.get("npc", {}).get(k, {}).get("line", "none")
+	if head == "beat":       # beats played in an NPC line
+		return st.story.get("npc", {}).get(k, {}).get("beat", 0)
 	if head == "status":
 		if k == "wrap_up":
 			return 1 if st.month().get("wrap_up", false) else 0

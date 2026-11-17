@@ -20,6 +20,7 @@ const Film = preload("res://core/film.gd")
 const Costar = preload("res://core/costar.gd")
 const Events = preload("res://core/events.gd")
 const Ending = preload("res://core/ending.gd")
+const Npcline = preload("res://core/npcline.gd")
 
 
 ## The decisions the player has to make. The UI and bots implement these methods; see SimpleAgent for the defaults.
@@ -254,6 +255,7 @@ func period_start(st, i: int, _entry: String) -> void:
 
 func period_end(st, i: int, entry: String, out: Dictionary) -> void:
 	Events.period_end(self, st, i, entry, out)
+	Npcline.period_end(self, st, i, entry)      # encounters on the map location of this class or job
 	after_period(st, i, entry, out)
 
 

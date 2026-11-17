@@ -69,6 +69,8 @@ def var_ok(v):
     if v.startswith('class_periods.'): return v.split('.', 1)[1] in CLASS_IDS
     if v.startswith('road_periods.'): return v.split('.', 1)[1] in ROADS
     if v.startswith(('scale.', 'tier.')): return v.split('.', 1)[1] in SCALED or v.split('.', 1)[1] in SK
+    if v == 'renyang': return True
+    if v.startswith(('line.', 'beat.')): return v.split('.', 1)[1] in NPC
     return v.startswith(PREFIX) and len(v) > 3
 COMP = ('>=','<=','>','<','==','!=','in')
 def check_cond(f, c, where=''):
@@ -86,7 +88,7 @@ def check_cond(f, c, where=''):
             elif not isinstance(t[2], (int, str)): err(f, f'{where} cond value {t[2]}')
 EFF = re.compile(r'^(.+?)([+\-=])(\d+)(%?)$')
 def eff_name_ok(n):
-    if n in ATTRS or n in SK or n in ('money','drug_stage','drug_points','debt_months'): return True
+    if n in ATTRS or n in SK or n in ('money','drug_stage','drug_points','debt_months','renyang'): return True
     if n.startswith('favor.'): return n.split('.', 1)[1] in NPC
     if n.startswith('rep_bonus.'): return n.split('.', 1)[1] in ROADS
     if n.startswith('weight.'): return n.split('.', 1)[1] in TAGS + SPECIAL_TAGS
@@ -627,4 +629,40 @@ on = [j['id'] for j in jobs['jobs'] if not j.get('disabled')] + [c['id'] for c i
 placed = {e for L in map_t['locations'] for e in L['entries']}
 for x in on:
     if x not in placed: err(f, f'{x} is switched on but on no place of the map')
+# NPC events (npc_events.json, npc_encounters.json, npc_lines.json): see core/npcline.gd
+f = 'npc_events.json'
+nev, nenc = load('npc_events.json'), load('npc_encounters.json')
+for tbl, fn in ((nev, f), (nenc, 'npc_encounters.json')):
+    if tbl is None: err(fn, 'file does not exist')
+    else: no_float(tbl, fn)
+if nev and nenc:
+    nids = set()
+    for e in nev['events']:
+        if e['id'] in nids or e['id'] in EVENT_IDS: err(f, f"event id is not unique {e['id']}")
+        nids.add(e['id'])
+        if e['npc'] not in NPC: err(f, f"{e['id']} NPC does not exist {e['npc']}")
+        if not e.get('body'): err(f, f"{e['id']} has no body text")
+        if e.get('cond'): check_cond(f, e['cond'], e['id'])
+        if e.get('effect'): parse_effect(f, e['effect'], e['id'])
+        for o in e['options']:
+            if not o.get('text'): err(f, f"{e['id']} an option has no text")
+            if o.get('cond'): check_cond(f, o['cond'], e['id'])
+            if o.get('success_effect'): parse_effect(f, o['success_effect'], e['id'])
+            if o.get('line') not in (None, 'active', 'stay', 'botched', 'end'): err(f, f"{e['id']} unknown line action {o.get('line')}")
+    LOCS = {L['id']: L for L in map_t['locations']}
+    for r in nenc['encounters']:
+        w = f"{r['npc']} {r['loc']} {r['stage']}"
+        if r['npc'] not in NPC: err('npc_encounters.json', f'NPC does not exist {w}')
+        if r['loc'] not in LOCS: err('npc_encounters.json', f'location does not exist {w}')
+        elif r.get('entry') and r['entry'] not in LOCS[r['loc']]['entries']: err('npc_encounters.json', f'entry is not on that location {w}')
+        if r['event'] not in nids: err('npc_encounters.json', f"event does not exist {r['event']}")
+        if r['slot'] not in ('early', 'mid', 'late') or r['stage'] not in ('early', 'mid', 'late'): err('npc_encounters.json', f'slot or stage {w}')
+        for m in r['months']:
+            if not 1 <= m <= 12: err('npc_encounters.json', f'month {w}')
+        for y in r['years']:
+            if not 1924 <= y <= 1929: err('npc_encounters.json', f'year {w}')
+            mi = {m['month']: m for m in ms}
+            for m in r['months']:
+                if m in (8, 12) or mi[f'{y}-{m:02d}']['board']: err('npc_encounters.json', f'{w} {y}-{m:02d} is an occupied month (August, December or a board month)')
+        if r.get('cond'): check_cond('npc_encounters.json', r['cond'], w)
 print(f'passed: {len(FILES)} tables, {len(JOB_IDS)} jobs, {len(CLASS_IDS)} classes, {len(BOOK_IDS)} books, {len(ms)} months')

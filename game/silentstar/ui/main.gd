@@ -1420,8 +1420,13 @@ func event_ended(rec: Dictionary) -> void:
 	var check := ""
 	if rec.get("check") != null:
 		check = tr("ui.main.new_events.3") if rec["check"] else tr("ui.main.new_events.4")
+	var result := ""    # NPC events: what happens after the pick (npc_events.json option "result"), and the hidden "renyang" hint
+	if rec.get("options") != null:
+		result = str(ev["options"][rec["options"]].get("result", ""))
+	var ry: int = st.story.get("renyang_hint", 0)
+	st.story["renyang_hint"] = 0
 	var payload := {"id": rec["id"], "name": str(ev["name"]), "class": str(ev.get("class", "")), "body": ev.get("body"),
-		"picked": picked, "check": check, "lines": diff_lines(before, snapshot()), "rep_lines": rep_drop_lines(before, snapshot(), log_corr(str(ev["name"])))}
+		"picked": picked, "result": result, "renyang": ry, "check": check, "lines": diff_lines(before, snapshot()), "rep_lines": rep_drop_lines(before, snapshot(), log_corr(str(ev["name"])))}
 	ask("event", payload)
 
 
@@ -1433,6 +1438,10 @@ func _show_event(p: Dictionary) -> void:
 		label(str(p["body"]))
 	if str(p["picked"]) != "":
 		label(tr("ui.main.show_event.1") + str(p["picked"]))
+	if str(p.get("result", "")) != "":
+		label(str(p["result"]))
+	if int(p.get("renyang", 0)) != 0:
+		label(tr("ui.main.show_event.5") if int(p["renyang"]) > 0 else tr("ui.main.show_event.6"), null, Color(0.7, 0.7, 0.7))
 	if str(p["check"]) != "":
 		label(tr("ui.main.show_event.2") + str(p["check"]))
 	for x in p.get("rep_lines", []):

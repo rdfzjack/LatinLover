@@ -8,7 +8,7 @@ const Jsonx = preload("res://core/jsonx.gd")
 
 const TABLES := ["stats", "skills", "classes", "books", "jobs", "rest", "places", "lifestyle", "street",
 	"origins", "calendar", "habits", "rivals", "roles", "items", "events", "outing", "romance",
-	"npc_schedule", "npc_chains", "annual", "opportunities", "endings", "map", "traits"]
+	"npc_schedule", "npc_chains", "annual", "opportunities", "endings", "map", "traits", "npc_events", "npc_encounters"]
 
 var t := {}
 var ok := true
@@ -66,6 +66,8 @@ var rivals_named := {}
 var events := {}
 var opps := []
 var chains = null
+var encounters := []            # npc_encounters.json rows: an NPC shows up at a map location (core/npcline.gd)
+var entry_loc := {}            # schedule entry (class / job id) -> map location id
 var schedule_npc = null
 
 
@@ -174,6 +176,14 @@ func _init(path := "") -> void:
 	opps = t["opportunities"]["opportunities"]
 	chains = t["npc_chains"]["chains"]
 	schedule_npc = t["npc_schedule"]["schedule"]
+	# NPC events (design: special event system): texts with options, run by the same executor; encounters hang on map entries.
+	for e in t["npc_events"]["events"]:
+		e["npc_event"] = true
+		events[e["id"]] = e
+	encounters = t["npc_encounters"]["encounters"]
+	for l in t["map"]["locations"]:
+		for en in l["entries"]:
+			entry_loc[en] = l["id"]
 
 
 ## The road a class counts for in road_periods: the road of the first skill in its gain list

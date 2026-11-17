@@ -52,6 +52,7 @@ SPEC = [
     ('origins.json', ['questions'], 'origin', ['question'], [('options', 'option', ['text'])]),
     ('events.json', ['events'], 'event', ['name', 'body'], [('options', 'option', ['text'])]),
     ('outing.json', ['events'], 'event', ['name', 'body'], [('options', 'option', ['text'])]),
+    ('npc_events.json', ['events'], 'event', ['name', 'body'], [('options', 'option', ['text', 'result'])]),
     ('opportunities.json', ['opportunities'], 'opp', ['name'], []),
     ('annual.json', ['occasions'], 'annual', ['name'], []),
     ('romance.json', ['npcs'], 'npc', ['name', 'identity'], []),
@@ -64,7 +65,7 @@ SPEC = [
     ('endings.json', ['categories'], 'ending_category', ['name'], []),
     ('endings.json', ['endings'], 'ending', ['name', 'content', 'body'], []),
 ]
-OPTIONAL = {'body', 'identity', 'content'}      # may be missing or null (body until the story is written); the other fields must hold text
+OPTIONAL = {'body', 'identity', 'content', 'result'}      # may be missing or null (body until the story is written); the other fields must hold text
 
 
 def _load(name):

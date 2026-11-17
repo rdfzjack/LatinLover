@@ -128,9 +128,12 @@ class PCG32:
 		return s
 
 
-## Two streams: logic (rules) and show (presentation). Derived from the same seed with different sequence numbers.
+## Three streams: logic (rules), show (presentation) and dice (NPC events: party draws, d100 checks, exposure rolls).
+## Derived from the same seed with different sequence numbers. The dice stream is separate so that adding or changing
+## dice does not shift the logic stream (auditions, schedules ...). All three are saved.
 var logic: PCG32
 var show: PCG32
+var dice: PCG32
 
 
 func _init(sd := 0, empty := false) -> void:
@@ -138,14 +141,19 @@ func _init(sd := 0, empty := false) -> void:
 		return
 	logic = PCG32.new(sd, 1)
 	show = PCG32.new(sd, 2)
+	dice = PCG32.new(sd, 3)
 
 
 func dump() -> Dictionary:
-	return {"logic": logic.dump(), "show": show.dump()}
+	return {"logic": logic.dump(), "show": show.dump(), "dice": dice.dump()}
 
 
 static func load_from(d: Dictionary):
 	var g = load("res://core/rng.gd").new(0, true)
 	g.logic = PCG32.load_from(d["logic"])
 	g.show = PCG32.load_from(d["show"])
+	if d.has("dice"):
+		g.dice = PCG32.load_from(d["dice"])
+	else:    # a save from before the dice stream: derive it from the logic state (same save, same result)
+		g.dice = PCG32.new(g.logic.lo ^ g.logic.hi, 3)
 	return g

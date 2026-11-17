@@ -64,9 +64,12 @@ static func fire(story, st, eid: String, depth := 0) -> Dictionary:
 	if depth > MAX_DEPTH:
 		push_error("event trigger chain too deep: %s" % eid)
 		return {}
-	if not st.d.t["events"].get("enabled", true):    # switch (user, lover playtest): every event is off
-		return {}
 	var e: Dictionary = st.d.events[eid]
+	if e.get("npc_event", false):                    # NPC events have their own switch (npc_events.json), like role_events
+		if not st.d.t["npc_events"].get("enabled", true):
+			return {}
+	elif not st.d.t["events"].get("enabled", true):  # switch (user, lover playtest): every event is off
+		return {}
 	story.event_begin(st, eid)
 	st.fired[eid] = st.fired.get(eid, 0) + 1
 	st.story["last_fired"][eid] = st.ym
