@@ -3288,6 +3288,10 @@
   "audition_opponent": {
    "note": "Medium films and the first match of a big film (user, 2026-11): roll named_pct for a named male star, else an unnamed rival. Named: the stars present this month (the big film leaves out its second-match star), weight = the star's weights[phase][0] for medium, [1] for a big first match; phases early 1924-25, mid 1926-27, late 1928-29. The second match of a big film is the fixed star on the role.",
    "named_pct": 50,
+   "road_mult": {
+    "main": 3,
+    "side": 2
+   },
    "phases": [
     [
      "early",
@@ -3305,7 +3309,11 @@
   },
   "heroine": {
    "note": "Medium film heroine \"draw\" (user, 2026-11): every attainable actress present this month goes in one pool, no road or rotation; weight = her weights[phase] (> 0 whenever present), plus tag_bonus when any of her tags is one of the role's tags. Big films have a fixed heroine or none; small films none",
-   "tag_bonus": 3
+   "tag_bonus": 3,
+   "road_mult": {
+    "main": 3,
+    "side": 2
+   }
   },
   "special_tags_note": "Special production tags are counted apart (st.tags.underground, count.lowbudget); they do not use the regular tag slots of a role and are not among the 13 regular tags",
   "costar": {

@@ -7,6 +7,7 @@ const Data = preload("res://core/data.gd")
 const Story = preload("res://core/story.gd")
 const Npcline = preload("res://core/npcline.gd")
 const Rules = preload("res://core/rules.gd")
+const Audition = preload("res://core/audition.gd")
 const Events = preload("res://core/events.gd")
 const Schedule = preload("res://core/schedule.gd")
 const State = preload("res://core/state.gd")
@@ -28,6 +29,7 @@ func _init() -> void:
 	_showdown(d)
 	_ending(d)
 	_mail_vacation(d)
+	_road_weight(d)
 	print("npc_test: %d failure(s)" % fails)
 	quit(1 if fails > 0 else 0)
 
@@ -348,3 +350,11 @@ func _mail_vacation(d) -> void:
 	Schedule.run_period(s3, 0, "rest_outing@place_resort+iceberg", g3.hooks)
 	ok(m0 - s3.money >= 2 * Schedule.place_cost(s3, "place_resort") * 5, "the period costs double")
 	ok(s3.cnt("count.vacation_with.iceberg") == 1, "the trip is counted")
+
+
+func _road_weight(d) -> void:
+	var c := {"main": 3, "side": 2}
+	ok(Audition.road_mult(d, "lloyd", "savvy", c) == 3, "a star whose main road is the film's road: x3")
+	ok(Audition.road_mult(d, "valen", "tough", c) == 2, "the side road: x2")
+	ok(Audition.road_mult(d, "novaro", "savvy", c) == 1, "a lover star in a savvy film: x1")
+	ok(Audition.road_mult(d, "novaro", null, c) == 1 and Audition.road_mult(d, "nobody", "savvy", c) == 1, "no road or unknown person: x1")

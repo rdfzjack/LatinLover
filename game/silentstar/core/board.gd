@@ -270,6 +270,7 @@ static func make_heroine(st, e: Dictionary) -> void:
 			if e["tags"].has(t):
 				w += int(d.role_cfg["heroine"]["tag_bonus"])
 				break
+		w *= Audition.road_mult(d, nid, e["road"], d.role_cfg["heroine"]["road_mult"])     # her road matches the film's (user, 2026-11)
 		if w > 0:
 			ids.append(nid)
 			ws.append(w)

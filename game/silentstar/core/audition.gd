@@ -275,6 +275,19 @@ static func role_typed(st, role: Dictionary) -> bool:
 ## The opponent of a medium film or of the first match of a big film (user, 2026-11): a flat named_pct chance of a named star,
 ## otherwise an unnamed rival of the standard level. Named: the stars present this month except `exclude`, weighted by
 ## the phase weights of rivals.json (index 0 = medium, 1 = big first match); a weight of 0 keeps a star out.
+## Weight multiplier of a person for a film of this road: his or her main road (romance.json `road`) matches: main, the side road
+## (`road2`): side, otherwise 1. An unknown road (a film without style) or person gives 1.
+static func road_mult(d, npc: String, road, c: Dictionary) -> int:
+	if road == null or road == "" or not d.npcs.has(npc):
+		return 1
+	var n: Dictionary = d.npcs[npc]
+	if n.get("road") == road:
+		return int(c["main"])
+	if n.get("road2") == road:
+		return int(c["side"])
+	return 1
+
+
 static func draw_opponent(st, tier: String, exclude: Array, probs: Array) -> Dictionary:
 	var d = st.d
 	var g = st.rng.logic
@@ -283,6 +296,13 @@ static func draw_opponent(st, tier: String, exclude: Array, probs: Array) -> Dic
 		return unnamed_rival(st, tier, null, probs)
 	var ph := phase(st)
 	var col := 0 if tier == "medium" else 1
+	var road := ""          # the film's road (its main color): a star of that road is drawn more often (user, 2026-11)
+	if probs.size() == 4:
+		var m := 0
+		for c in 4:
+			if probs[c] > probs[m]:
+				m = c
+		road = d.roads[m]
 	var ids := []
 	var ws := []
 	var tot := 0
@@ -290,7 +310,7 @@ static func draw_opponent(st, tier: String, exclude: Array, probs: Array) -> Dic
 		var rid: String = x["id"]
 		if x.get("easter_egg", false) or exclude.has(rid) or not rival_present(st, rid):
 			continue
-		var w: int = int(x["weights"][ph][col])
+		var w: int = int(x["weights"][ph][col]) * road_mult(d, str(x.get("npc", "")), road, cfg["road_mult"])
 		if w > 0:
 			ids.append(rid)
 			ws.append(w)
