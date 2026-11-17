@@ -489,6 +489,7 @@ static func audition(st, role: Dictionary, player, rivals: Array, probs: Array =
 			push_error("bad deck: %s" % str(colors))
 			return {}
 		var m := play_match(st, build_deck(ctx["levels"], colors), rv, probs, player)
+		m["npc"] = str(rv.get("npc", ""))      # for the NPC small talk after the audition (core/npcline.gd)
 		out["rounds"].append(m)
 		Personality.after_match(st, str(rv.get("npc", "")), m["score_line"])
 		if rv["id"] != null:

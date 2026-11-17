@@ -68,6 +68,10 @@ class Agent:
 	func go_personally(_st, _role: Dictionary) -> bool:
 		return false
 
+	## Weekend party / year-end party: whom to talk to among these npc ids; returns the index. Default: the first.
+	func party_guest(_st, _guests: Array) -> int:
+		return 0
+
 	## Event option: avail is the list of pickable option indexes; returns one of them.
 	func option(_st, _ev: Dictionary, avail: Array) -> int:
 		return avail[0]
@@ -183,10 +187,13 @@ func event_end(_st, _rec: Dictionary) -> void:
 
 func board(st) -> void:
 	Board.make(st)
-	boards.append({"month": st.date(), "audition": Board.run(st, agent)})
+	var results: Array = Board.run(st, agent)
+	boards.append({"month": st.date(), "audition": results})
+	Npcline.after_auditions(self, st, results)      # small talk with the named stars of the auditions
 
 
 func month_start(st) -> void:
+	Npcline.party_plan(st)                          # the party of the month before a board (dice stream)
 	Events.dealer_month(st)
 	agent.month_start(self, st)
 
@@ -234,7 +241,8 @@ func locked(st, i: int):
 
 func film_period(st, i: int, f, days: Array) -> void:
 	if int(f.get("attended", 0)) == 0:
-		Costar.play(st, f, agent)           # the co-star mini game, once, before the first shooting period is settled
+		if not Costar.play(st, f, agent).is_empty():    # the co-star mini game, once, before the first shooting period is settled
+			Npcline.costar(self, st, Film.partner(f))
 	Film.shoot(st, i, f, days)
 
 
@@ -245,6 +253,7 @@ func film_breach(st) -> void:
 func before_period(st, i: int) -> void:
 	cur_period = i
 	st.status["drug_high"] = 0
+	Npcline.party_period(self, st, i)
 	agent.before_period(self, st, i)
 	Events.drug_period(st, i)
 
@@ -307,6 +316,7 @@ func rival_growth(_st) -> void:
 
 
 func annual(st) -> void:
+	Npcline.year_end(self, st)          # the Christmas party, then the 12-31 placeholder occasions
 	Events.annual(self, st)
 
 

@@ -67,7 +67,8 @@ var events := {}
 var opps := []
 var chains = null
 var encounters := []            # npc_encounters.json rows: an NPC shows up at a map location (core/npcline.gd)
-var entry_loc := {}            # schedule entry (class / job id) -> map location id
+var entry_loc := {}
+var npc_with_text := {}        # npc id -> true when npc_events.json has events for him            # schedule entry (class / job id) -> map location id
 var schedule_npc = null
 
 
@@ -180,6 +181,8 @@ func _init(path := "") -> void:
 	for e in t["npc_events"]["events"]:
 		e["npc_event"] = true
 		events[e["id"]] = e
+		if e.get("npc") != null:
+			npc_with_text[e["npc"]] = true
 	encounters = t["npc_encounters"]["encounters"]
 	for l in t["map"]["locations"]:
 		for en in l["entries"]:

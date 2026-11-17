@@ -640,7 +640,7 @@ if nev and nenc:
     for e in nev['events']:
         if e['id'] in nids or e['id'] in EVENT_IDS: err(f, f"event id is not unique {e['id']}")
         nids.add(e['id'])
-        if e['npc'] not in NPC: err(f, f"{e['id']} NPC does not exist {e['npc']}")
+        if e['npc'] is not None and e['npc'] not in NPC: err(f, f"{e['id']} NPC does not exist {e['npc']}")
         if not e.get('body'): err(f, f"{e['id']} has no body text")
         if e.get('cond'): check_cond(f, e['cond'], e['id'])
         if e.get('effect'): parse_effect(f, e['effect'], e['id'])

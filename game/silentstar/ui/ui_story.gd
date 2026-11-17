@@ -154,6 +154,15 @@ class UiAgent:
 	func option(st, ev: Dictionary, avail: Array) -> int:
 		return ui.ask("option", {"event": ev, "avail": avail})
 
+	## Party and year-end party: whom to talk to (npc ids); shown with the option screen.
+	func party_guest(st, guests: Array) -> int:
+		var opts := []
+		var avail := []
+		for k in guests.size():
+			opts.append({"text": str(st.d.npcs[guests[k]]["name"])})
+			avail.append(k)
+		return ui.ask("option", {"event": {"name": tr("ui.story.party_guest.1"), "body": tr("ui.story.party_guest.2"), "options": opts}, "avail": avail})
+
 	func annual(st, opts: Array):
 		return ui.ask("annual", opts)
 

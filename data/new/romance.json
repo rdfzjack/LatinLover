@@ -217,6 +217,7 @@
   },
   {
    "id": "valen",
+   "studio": "snow",
    "name": "瓦伦",
    "class": "star",
    "favor_init": 20,
@@ -239,6 +240,7 @@
   },
   {
    "id": "doug",
+   "studio": "united",
    "name": "范班克",
    "class": "star",
    "favor_init": 20,
@@ -261,6 +263,7 @@
   },
   {
    "id": "gilbert",
+   "studio": "lion",
    "name": "吉尔伯",
    "class": "star",
    "favor_init": 20,
@@ -283,6 +286,7 @@
   },
   {
    "id": "novaro",
+   "studio": "snow",
    "name": "诺瓦",
    "class": "star",
    "favor_init": 20,
@@ -306,6 +310,7 @@
   },
   {
    "id": "cooper",
+   "studio": "snow",
    "name": "库普",
    "class": "star",
    "favor_init": 20,
@@ -328,6 +333,7 @@
   },
   {
    "id": "barry",
+   "studio": "lion",
    "name": "巴里",
    "class": "star",
    "favor_init": 20,
@@ -350,6 +356,7 @@
   },
   {
    "id": "lloyd",
+   "studio": "united",
    "name": "劳埃德",
    "class": "star",
    "favor_init": 20,
@@ -372,6 +379,7 @@
   },
   {
    "id": "jolson",
+   "studio": "newvoice",
    "name": "乔森",
    "class": "star",
    "favor_init": 20,
@@ -393,6 +401,7 @@
   },
   {
    "id": "stoneface",
+   "studio": "united",
    "name": "石头脸",
    "class": "star",
    "favor_init": 20,
@@ -415,6 +424,7 @@
   },
   {
    "id": "ex",
+   "studio": "newvoice",
    "name": "前任",
    "class": "star",
    "favor_init": 20,
@@ -436,6 +446,7 @@
   },
   {
    "id": "veidt",
+   "studio": "newvoice",
    "name": "法伊特型",
    "class": "star",
    "favor_init": 20,
@@ -458,6 +469,7 @@
   },
   {
    "id": "fakevon",
+   "studio": "newvoice",
    "name": "假冯",
    "class": "star",
    "favor_init": 20,
@@ -479,6 +491,7 @@
   },
   {
    "id": "boyboss",
+   "studio": "lion",
    "name": "少年老板",
    "class": "star",
    "favor_init": 20,
@@ -493,6 +506,7 @@
   },
   {
    "id": "dancequeen",
+   "studio": "united",
    "name": "舞池女王",
    "class": "star",
    "favor_init": 20,
@@ -521,6 +535,7 @@
   },
   {
    "id": "iceberg",
+   "studio": "lion",
    "name": "冰山",
    "class": "star",
    "favor_init": 20,
@@ -549,6 +564,7 @@
   },
   {
    "id": "saint",
+   "studio": "lion",
    "name": "苦行圣女",
    "class": "star",
    "favor_init": 20,
@@ -577,6 +593,7 @@
   },
   {
    "id": "vamp",
+   "studio": "snow",
    "name": "蛇蝎名伶",
    "class": "star",
    "favor_init": 20,
@@ -604,6 +621,7 @@
   },
   {
    "id": "aviator",
+   "studio": "newvoice",
    "name": "飞行女郎",
    "class": "star",
    "favor_init": 20,
@@ -632,6 +650,7 @@
   },
   {
    "id": "sweetheart",
+   "studio": "united",
    "name": "皮克福德型",
    "class": "star",
    "favor_init": 20,
@@ -660,6 +679,7 @@
   },
   {
    "id": "diva",
+   "studio": "snow",
    "name": "斯万森型",
    "class": "star",
    "favor_init": 20,

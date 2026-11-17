@@ -4095,6 +4095,30 @@
     }
    ],
    "beat": 5
+  },
+  {
+   "id": "party_generic",
+   "name": "派对 · 寒暄",
+   "npc": null,
+   "type": "party",
+   "body": "你们寒暄了几句，没聊出什么特别的。",
+   "cond": [],
+   "freq": null,
+   "once": true,
+   "effect": "",
+   "options": []
+  },
+  {
+   "id": "yearend_generic",
+   "name": "年度聚会 · 寒暄",
+   "npc": null,
+   "type": "yearEnd",
+   "body": "你们碰了碰杯，说了几句新年的话。",
+   "cond": [],
+   "freq": null,
+   "once": true,
+   "effect": "",
+   "options": []
   }
  ]
 }
