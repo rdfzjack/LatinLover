@@ -933,6 +933,30 @@ class NewBot:
 	func stam_target(st) -> int:
 		return mini(stam_cap, 100 + 12 * st.ym)
 
+	## Roads on the same level line take turns, one period each (2026-11): with the plain list the first road of a line blocked
+	## the others until it got there, and the first one was often stuck on its slow skill (nerve, grooming, taste) for years.
+	func goals(g, P: Dictionary, i: int) -> Array:
+		var gl: Array = super(g, P, i)
+		var st = g.st
+		var k := 0
+		while k < gl.size() and reached(st, gl[k]):
+			k += 1
+		if k >= gl.size() or not gl[k].has("road"):
+			return gl
+		var line: int = int(gl[k]["rep"])
+		var j := k
+		while j < gl.size() and gl[j].has("road") and int(gl[j]["rep"]) == line:
+			j += 1
+		var block := []
+		for x in gl.slice(k, j):
+			if not reached(st, x):
+				block.append(x)
+		if block.size() < 2:
+			return gl
+		var turn: int = (st.ym * 3 + i) % block.size()
+		var rot: Array = block.slice(turn) + block.slice(0, turn)
+		return gl.slice(0, k) + rot + gl.slice(j)
+
 	func disc_to() -> int:
 		return stam_cap * 3 / 16 + 12
 
@@ -1016,7 +1040,7 @@ class NewCTS:
 	func setup(_rd: String) -> void:
 		setup_road("culture", "new_cts")
 		goal_list = [{"stat": "education", "to": 90, "via": ["class_c3"]}] + staged(["culture", "tough", "savvy"])
-		money_jobs = ["job_c_money", "job_collector", "job_dock1"]
+		money_jobs = ["job_c_money", "job_l_day", "job_collector", "job_dock1", "job_server"]     # escort and waiting tables: money before the column opens (2026-11)
 		stam_engine = ["job_collector", "job_dock1", "class_l3"]
 
 
