@@ -265,6 +265,8 @@ static func fee(st, f: Dictionary) -> int:
 
 static func finish(st, f: Dictionary) -> void:
 	f["perf"] = performance(st, f)
+	if partner(f) != "":
+		Personality.after_film(st, f, partner(f))      # the co-star, serious or not by the type: settled when shooting ends, not at the release (user, 2026-11)
 	f["fee"] = fee(st, f)
 	st.add_money(f["fee"])
 	f["status"] = "to_release"
@@ -426,7 +428,7 @@ static func release_one(st, f: Dictionary) -> Dictionary:
 	else:
 		st.inc("count.support")
 	if partner(f) != "" and hit:
-		Personality.after_hit(st, partner(f))      # user (2026-11): only a hit moves the co-star's favor (+10, a good match); otherwise nothing
+		Personality.after_hit(st, partner(f))      # user (2026-11): a hit is a good match, +10 to the co-star; the release changes nothing else between them
 	st.inc("count.release")
 	if hit:
 		st.inc("count.hit")
