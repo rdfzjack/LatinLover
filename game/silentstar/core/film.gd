@@ -425,8 +425,8 @@ static func release_one(st, f: Dictionary) -> Dictionary:
 		st.inc("count.lead." + t)
 	else:
 		st.inc("count.support")
-	if partner(f) != "":
-		Personality.after_film(st, f, partner(f))      # the co-star (heroine, or the other lead): serious or not, by the type (user, 2026-11)
+	if partner(f) != "" and hit:
+		Personality.after_hit(st, partner(f))      # user (2026-11): only a hit moves the co-star's favor (+10, a good match); otherwise nothing
 	st.inc("count.release")
 	if hit:
 		st.inc("count.hit")

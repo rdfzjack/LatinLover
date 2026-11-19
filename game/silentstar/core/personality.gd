@@ -44,6 +44,13 @@ static func after_film(st, f: Dictionary, npc: String) -> void:
 	shift(st, npc, "coop_serious" if serious else "coop_sloppy")
 
 
+## The co-star of a hit (user 2026-11): +coop_hit favor, whatever the type. A normal, poor or flopped film changes nothing.
+static func after_hit(st, npc: String) -> void:
+	var n: int = int(cfg(st.d).get("coop_hit", 0))
+	if n != 0:
+		Rules.apply_effect(st, "favor.%s%+d" % [npc, n], "personality")
+
+
 ## Everyone with a type reacts to a hit or a flop of the player's film, scaled by the film's size (user 2026-11:
 ## release_pct small 0, medium 50, big 100; half a step rounds away from zero, so "+" is 3 and "++" is 5 on a medium film).
 static func after_release(st, band: String, size := "big") -> void:

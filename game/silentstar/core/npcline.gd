@@ -76,6 +76,7 @@ static func period_end(story, st, i: int, entry: String) -> void:
 	var r: Dictionary = hits[0][3]
 	npc_state(st, r["npc"])["enc"][stage] = true
 	st.meet(r["npc"])
+	base_favor(st, r["npc"], "encounter")
 	if not contact_cross(story, st, r["npc"]):
 		Events.fire(story, st, r["event"])
 
@@ -110,6 +111,14 @@ static func after_auditions(story, st, results: Array) -> void:
 static func costar(story, st, npc: String) -> void:
 	if npc_has_text(st, npc) and not contact_cross(story, st, npc):
 		fire_first(story, st, ["film_%s_costar_1" % npc, "film_%s_costar_2" % npc, "film_%s_costar" % npc])
+
+
+## The base favor of a contact (user 2026-11, npc_events.json base_favor): encounter 4, party talk 3, year-end talk 10,
+## on top of what the option gives. Not an event's favor, so no loyalty bonus.
+static func base_favor(st, npc: String, kind: String) -> void:
+	var n: int = int(st.d.t["npc_events"].get("base_favor", {}).get(kind, 0))
+	if n != 0:
+		Rules.apply_effect(st, "favor.%s%+d" % [npc, n], "npc_base")
 
 
 static func npc_has_text(st, npc: String) -> bool:
@@ -189,7 +198,15 @@ static func party_period(story, st, i: int) -> void:
 		if nid == "dancequeen" and st.flags.get("dance.dead", 0) > 0:
 			continue
 		ids.append(nid)
-		ws.append(2 if boost.has(nid) else 1)
+		# user (2026-11): people he knows come a little more often, never for sure: 1, +1 met, +1 at "friendly" (favor >= 30),
+		# then x2 when on the next board
+		var pw: Dictionary = d.t["npc_events"].get("party_weight", {})
+		var w := 1
+		if st.known.has(nid):
+			w += int(pw.get("known", 0))
+			if st.favor.get(nid, 0) >= int(pw.get("friendly_line", 30)):
+				w += int(pw.get("friendly", 0))
+		ws.append(w * (2 if boost.has(nid) else 1))
 	var guests := []
 	for _k in 2:
 		var tot := 0
@@ -211,6 +228,7 @@ static func party_period(story, st, i: int) -> void:
 	var pick: int = story.agent.party_guest(st, guests)
 	var who: String = guests[clampi(pick, 0, guests.size() - 1)]
 	st.meet(who)      # only the one talked to is met and only his or her option changes favor; the other guest is not met at all
+	base_favor(st, who, "party")
 	var texts := []
 	for n in range(1, 7):
 		texts.append("party_%s_%d" % [who, n])
@@ -246,6 +264,7 @@ static func year_end(story, st) -> void:
 	var pick: int = story.agent.party_guest(st, who)
 	var npc: String = who[clampi(pick, 0, who.size() - 1)]
 	st.meet(npc)
+	base_favor(st, npc, "yearend")
 	var texts := []
 	for n in range(1, 7):
 		texts.append("yearend_%s_%d" % [npc, n])

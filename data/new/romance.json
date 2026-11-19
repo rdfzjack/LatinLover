@@ -788,6 +788,8 @@
     "medium": 50,
     "big": 100
    },
+   "coop_hit": 10,
+   "coop_hit_note": "User (2026-11): the co-star of a hit gets +10 favor (a good match); otherwise the release changes nothing between them. coop_serious / coop_sloppy of the types are no longer used",
    "release_pct_note": "User (2026-11): a small film's hit or flop moves nobody's favor; a medium film half (rounded away from zero: + 3, ++ 5); a big film in full",
    "serious_pct": 70,
    "types": [

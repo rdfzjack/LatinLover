@@ -11,6 +11,18 @@
  "frozen_months": 12,
  "sign_fame": 140,
  "reoffer_months": 6,
+ "base_favor": {
+  "encounter": 4,
+  "party": 3,
+  "yearend": 10
+ },
+ "base_favor_note": "User (2026-11): favor of a contact on top of the option: encounter +4, party talk +3 (also the generic small talk), year-end talk +10. The year-end list is unchanged (the studio limits whom you can chase)",
+ "party_weight": {
+  "known": 1,
+  "friendly": 1,
+  "friendly_line": 30
+ },
+ "party_weight_note": "User (2026-11): party draw weight 1, +1 if met, +1 more at favor >= 30, then x2 when on the next board; a little more often, never for sure",
  "studios": [
   {
    "id": "snow",
