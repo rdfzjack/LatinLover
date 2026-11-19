@@ -11,7 +11,7 @@
  "valen_death": false,
  "role_events": true,
  "arrest_events": true,
- "switch_note": "User (lover playtest): enabled false turns every event off (events, outing events, era events); valen_death false keeps Valen as a rival to 1929-12 with no replacement. Set both to true to bring them back. role_events true keeps the swap-role and steal-role auditions on even when enabled is false (user: on while testing the audition balance); they are explained before the audition, a swap can be declined, a steal cannot. arrest_events true keeps the crime-job search and the arrest on even when enabled is false (user, 2026-11: needed to test the crime-job play).",
+ "switch_note": "User (lover playtest): enabled false turns every event off (events, outing events, era events); valen_death false keeps Valen as a rival to 1929-12 with no replacement. Set both to true to bring them back. role_events true keeps the swap-role and steal-role auditions on even when enabled is false (user: on while testing the audition balance); they are explained before the audition, a swap can be declined, a steal cannot. arrest_events true keeps the crime-job search and the arrest on even when enabled is false (user, 2026-11: needed to test the crime-job play). mentor_events true keeps the four mentor events (evt_mentor_*, their `switch` field) on even when enabled is false (user, 2026-11).",
  "events": [
   {
    "id": "evt_swap_role",
@@ -338,6 +338,954 @@
     }
    ],
    "tier": "large"
+  },
+  {
+   "id": "evt_mentor_tough",
+   "name": "前辈的指点·硬汉",
+   "class": "month_end",
+   "timing": "month_end",
+   "cond": [
+    [
+     [
+      "train_sum.tough",
+      ">=",
+      250
+     ],
+     [
+      "train.fight",
+      "<",
+      100
+     ]
+    ],
+    [
+     [
+      "train_sum.tough",
+      ">=",
+      250
+     ],
+     [
+      "train.riding",
+      "<",
+      100
+     ]
+    ],
+    [
+     [
+      "train_sum.tough",
+      ">=",
+      250
+     ],
+     [
+      "train.nerve",
+      "<",
+      100
+     ]
+    ]
+   ],
+   "prob": null,
+   "freq": "once_per_game",
+   "effect": "",
+   "code": false,
+   "switch": "mentor_events",
+   "note": "User (2026-11): once per road, when the road's three skills (training values) add up to 250 and one is not full: +15 to any one skill the player picks, any road (training capped at 100). Placeholder packaging: an older actor's advice",
+   "source": "[orig EVENT015, repackaged]",
+   "body": "一位老演员看过你最近的戏，请你喝了一杯，把他压箱底的东西讲给你听。（占位）",
+   "order": 9,
+   "options": [
+    {
+     "text": "打斗 +15",
+     "cond": [
+      [
+       [
+        "train.fight",
+        "<",
+        100
+       ]
+      ]
+     ],
+     "check": null,
+     "success_effect": "fight+15",
+     "fail_effect": ""
+    },
+    {
+     "text": "骑马驾驶 +15",
+     "cond": [
+      [
+       [
+        "train.riding",
+        "<",
+        100
+       ]
+      ]
+     ],
+     "check": null,
+     "success_effect": "riding+15",
+     "fail_effect": ""
+    },
+    {
+     "text": "胆识 +15",
+     "cond": [
+      [
+       [
+        "train.nerve",
+        "<",
+        100
+       ]
+      ]
+     ],
+     "check": null,
+     "success_effect": "nerve+15",
+     "fail_effect": ""
+    },
+    {
+     "text": "演技 +15",
+     "cond": [
+      [
+       [
+        "train.acting",
+        "<",
+        100
+       ]
+      ]
+     ],
+     "check": null,
+     "success_effect": "acting+15",
+     "fail_effect": ""
+    },
+    {
+     "text": "打扮 +15",
+     "cond": [
+      [
+       [
+        "train.grooming",
+        "<",
+        100
+       ]
+      ]
+     ],
+     "check": null,
+     "success_effect": "grooming+15",
+     "fail_effect": ""
+    },
+    {
+     "text": "体态 +15",
+     "cond": [
+      [
+       [
+        "train.physique",
+        "<",
+        100
+       ]
+      ]
+     ],
+     "check": null,
+     "success_effect": "physique+15",
+     "fail_effect": ""
+    },
+    {
+     "text": "创作 +15",
+     "cond": [
+      [
+       [
+        "train.writing",
+        "<",
+        100
+       ]
+      ]
+     ],
+     "check": null,
+     "success_effect": "writing+15",
+     "fail_effect": ""
+    },
+    {
+     "text": "审美 +15",
+     "cond": [
+      [
+       [
+        "train.taste",
+        "<",
+        100
+       ]
+      ]
+     ],
+     "check": null,
+     "success_effect": "taste+15",
+     "fail_effect": ""
+    },
+    {
+     "text": "谈吐 +15",
+     "cond": [
+      [
+       [
+        "train.speech",
+        "<",
+        100
+       ]
+      ]
+     ],
+     "check": null,
+     "success_effect": "speech+15",
+     "fail_effect": ""
+    },
+    {
+     "text": "谈判 +15",
+     "cond": [
+      [
+       [
+        "train.negotiation",
+        "<",
+        100
+       ]
+      ]
+     ],
+     "check": null,
+     "success_effect": "negotiation+15",
+     "fail_effect": ""
+    },
+    {
+     "text": "人缘 +15",
+     "cond": [
+      [
+       [
+        "train.rapport",
+        "<",
+        100
+       ]
+      ]
+     ],
+     "check": null,
+     "success_effect": "rapport+15",
+     "fail_effect": ""
+    },
+    {
+     "text": "洞悉 +15",
+     "cond": [
+      [
+       [
+        "train.insight",
+        "<",
+        100
+       ]
+      ]
+     ],
+     "check": null,
+     "success_effect": "insight+15",
+     "fail_effect": ""
+    }
+   ],
+   "tier": "medium",
+   "budget_note": "User (2026-11): the mentor gives +15 to one skill, once per road"
+  },
+  {
+   "id": "evt_mentor_lover",
+   "name": "前辈的指点·情人",
+   "class": "month_end",
+   "timing": "month_end",
+   "cond": [
+    [
+     [
+      "train_sum.lover",
+      ">=",
+      250
+     ],
+     [
+      "train.acting",
+      "<",
+      100
+     ]
+    ],
+    [
+     [
+      "train_sum.lover",
+      ">=",
+      250
+     ],
+     [
+      "train.grooming",
+      "<",
+      100
+     ]
+    ],
+    [
+     [
+      "train_sum.lover",
+      ">=",
+      250
+     ],
+     [
+      "train.physique",
+      "<",
+      100
+     ]
+    ]
+   ],
+   "prob": null,
+   "freq": "once_per_game",
+   "effect": "",
+   "code": false,
+   "switch": "mentor_events",
+   "note": "User (2026-11): once per road, when the road's three skills (training values) add up to 250 and one is not full: +15 to any one skill the player picks, any road (training capped at 100). Placeholder packaging: an older actor's advice",
+   "source": "[orig EVENT015, repackaged]",
+   "body": "一位老演员看过你最近的戏，请你喝了一杯，把他压箱底的东西讲给你听。（占位）",
+   "order": 9,
+   "options": [
+    {
+     "text": "打斗 +15",
+     "cond": [
+      [
+       [
+        "train.fight",
+        "<",
+        100
+       ]
+      ]
+     ],
+     "check": null,
+     "success_effect": "fight+15",
+     "fail_effect": ""
+    },
+    {
+     "text": "骑马驾驶 +15",
+     "cond": [
+      [
+       [
+        "train.riding",
+        "<",
+        100
+       ]
+      ]
+     ],
+     "check": null,
+     "success_effect": "riding+15",
+     "fail_effect": ""
+    },
+    {
+     "text": "胆识 +15",
+     "cond": [
+      [
+       [
+        "train.nerve",
+        "<",
+        100
+       ]
+      ]
+     ],
+     "check": null,
+     "success_effect": "nerve+15",
+     "fail_effect": ""
+    },
+    {
+     "text": "演技 +15",
+     "cond": [
+      [
+       [
+        "train.acting",
+        "<",
+        100
+       ]
+      ]
+     ],
+     "check": null,
+     "success_effect": "acting+15",
+     "fail_effect": ""
+    },
+    {
+     "text": "打扮 +15",
+     "cond": [
+      [
+       [
+        "train.grooming",
+        "<",
+        100
+       ]
+      ]
+     ],
+     "check": null,
+     "success_effect": "grooming+15",
+     "fail_effect": ""
+    },
+    {
+     "text": "体态 +15",
+     "cond": [
+      [
+       [
+        "train.physique",
+        "<",
+        100
+       ]
+      ]
+     ],
+     "check": null,
+     "success_effect": "physique+15",
+     "fail_effect": ""
+    },
+    {
+     "text": "创作 +15",
+     "cond": [
+      [
+       [
+        "train.writing",
+        "<",
+        100
+       ]
+      ]
+     ],
+     "check": null,
+     "success_effect": "writing+15",
+     "fail_effect": ""
+    },
+    {
+     "text": "审美 +15",
+     "cond": [
+      [
+       [
+        "train.taste",
+        "<",
+        100
+       ]
+      ]
+     ],
+     "check": null,
+     "success_effect": "taste+15",
+     "fail_effect": ""
+    },
+    {
+     "text": "谈吐 +15",
+     "cond": [
+      [
+       [
+        "train.speech",
+        "<",
+        100
+       ]
+      ]
+     ],
+     "check": null,
+     "success_effect": "speech+15",
+     "fail_effect": ""
+    },
+    {
+     "text": "谈判 +15",
+     "cond": [
+      [
+       [
+        "train.negotiation",
+        "<",
+        100
+       ]
+      ]
+     ],
+     "check": null,
+     "success_effect": "negotiation+15",
+     "fail_effect": ""
+    },
+    {
+     "text": "人缘 +15",
+     "cond": [
+      [
+       [
+        "train.rapport",
+        "<",
+        100
+       ]
+      ]
+     ],
+     "check": null,
+     "success_effect": "rapport+15",
+     "fail_effect": ""
+    },
+    {
+     "text": "洞悉 +15",
+     "cond": [
+      [
+       [
+        "train.insight",
+        "<",
+        100
+       ]
+      ]
+     ],
+     "check": null,
+     "success_effect": "insight+15",
+     "fail_effect": ""
+    }
+   ],
+   "tier": "medium",
+   "budget_note": "User (2026-11): the mentor gives +15 to one skill, once per road"
+  },
+  {
+   "id": "evt_mentor_culture",
+   "name": "前辈的指点·文化",
+   "class": "month_end",
+   "timing": "month_end",
+   "cond": [
+    [
+     [
+      "train_sum.culture",
+      ">=",
+      250
+     ],
+     [
+      "train.writing",
+      "<",
+      100
+     ]
+    ],
+    [
+     [
+      "train_sum.culture",
+      ">=",
+      250
+     ],
+     [
+      "train.taste",
+      "<",
+      100
+     ]
+    ],
+    [
+     [
+      "train_sum.culture",
+      ">=",
+      250
+     ],
+     [
+      "train.speech",
+      "<",
+      100
+     ]
+    ]
+   ],
+   "prob": null,
+   "freq": "once_per_game",
+   "effect": "",
+   "code": false,
+   "switch": "mentor_events",
+   "note": "User (2026-11): once per road, when the road's three skills (training values) add up to 250 and one is not full: +15 to any one skill the player picks, any road (training capped at 100). Placeholder packaging: an older actor's advice",
+   "source": "[orig EVENT015, repackaged]",
+   "body": "一位老演员看过你最近的戏，请你喝了一杯，把他压箱底的东西讲给你听。（占位）",
+   "order": 9,
+   "options": [
+    {
+     "text": "打斗 +15",
+     "cond": [
+      [
+       [
+        "train.fight",
+        "<",
+        100
+       ]
+      ]
+     ],
+     "check": null,
+     "success_effect": "fight+15",
+     "fail_effect": ""
+    },
+    {
+     "text": "骑马驾驶 +15",
+     "cond": [
+      [
+       [
+        "train.riding",
+        "<",
+        100
+       ]
+      ]
+     ],
+     "check": null,
+     "success_effect": "riding+15",
+     "fail_effect": ""
+    },
+    {
+     "text": "胆识 +15",
+     "cond": [
+      [
+       [
+        "train.nerve",
+        "<",
+        100
+       ]
+      ]
+     ],
+     "check": null,
+     "success_effect": "nerve+15",
+     "fail_effect": ""
+    },
+    {
+     "text": "演技 +15",
+     "cond": [
+      [
+       [
+        "train.acting",
+        "<",
+        100
+       ]
+      ]
+     ],
+     "check": null,
+     "success_effect": "acting+15",
+     "fail_effect": ""
+    },
+    {
+     "text": "打扮 +15",
+     "cond": [
+      [
+       [
+        "train.grooming",
+        "<",
+        100
+       ]
+      ]
+     ],
+     "check": null,
+     "success_effect": "grooming+15",
+     "fail_effect": ""
+    },
+    {
+     "text": "体态 +15",
+     "cond": [
+      [
+       [
+        "train.physique",
+        "<",
+        100
+       ]
+      ]
+     ],
+     "check": null,
+     "success_effect": "physique+15",
+     "fail_effect": ""
+    },
+    {
+     "text": "创作 +15",
+     "cond": [
+      [
+       [
+        "train.writing",
+        "<",
+        100
+       ]
+      ]
+     ],
+     "check": null,
+     "success_effect": "writing+15",
+     "fail_effect": ""
+    },
+    {
+     "text": "审美 +15",
+     "cond": [
+      [
+       [
+        "train.taste",
+        "<",
+        100
+       ]
+      ]
+     ],
+     "check": null,
+     "success_effect": "taste+15",
+     "fail_effect": ""
+    },
+    {
+     "text": "谈吐 +15",
+     "cond": [
+      [
+       [
+        "train.speech",
+        "<",
+        100
+       ]
+      ]
+     ],
+     "check": null,
+     "success_effect": "speech+15",
+     "fail_effect": ""
+    },
+    {
+     "text": "谈判 +15",
+     "cond": [
+      [
+       [
+        "train.negotiation",
+        "<",
+        100
+       ]
+      ]
+     ],
+     "check": null,
+     "success_effect": "negotiation+15",
+     "fail_effect": ""
+    },
+    {
+     "text": "人缘 +15",
+     "cond": [
+      [
+       [
+        "train.rapport",
+        "<",
+        100
+       ]
+      ]
+     ],
+     "check": null,
+     "success_effect": "rapport+15",
+     "fail_effect": ""
+    },
+    {
+     "text": "洞悉 +15",
+     "cond": [
+      [
+       [
+        "train.insight",
+        "<",
+        100
+       ]
+      ]
+     ],
+     "check": null,
+     "success_effect": "insight+15",
+     "fail_effect": ""
+    }
+   ],
+   "tier": "medium",
+   "budget_note": "User (2026-11): the mentor gives +15 to one skill, once per road"
+  },
+  {
+   "id": "evt_mentor_savvy",
+   "name": "前辈的指点·手腕",
+   "class": "month_end",
+   "timing": "month_end",
+   "cond": [
+    [
+     [
+      "train_sum.savvy",
+      ">=",
+      250
+     ],
+     [
+      "train.negotiation",
+      "<",
+      100
+     ]
+    ],
+    [
+     [
+      "train_sum.savvy",
+      ">=",
+      250
+     ],
+     [
+      "train.rapport",
+      "<",
+      100
+     ]
+    ],
+    [
+     [
+      "train_sum.savvy",
+      ">=",
+      250
+     ],
+     [
+      "train.insight",
+      "<",
+      100
+     ]
+    ]
+   ],
+   "prob": null,
+   "freq": "once_per_game",
+   "effect": "",
+   "code": false,
+   "switch": "mentor_events",
+   "note": "User (2026-11): once per road, when the road's three skills (training values) add up to 250 and one is not full: +15 to any one skill the player picks, any road (training capped at 100). Placeholder packaging: an older actor's advice",
+   "source": "[orig EVENT015, repackaged]",
+   "body": "一位老演员看过你最近的戏，请你喝了一杯，把他压箱底的东西讲给你听。（占位）",
+   "order": 9,
+   "options": [
+    {
+     "text": "打斗 +15",
+     "cond": [
+      [
+       [
+        "train.fight",
+        "<",
+        100
+       ]
+      ]
+     ],
+     "check": null,
+     "success_effect": "fight+15",
+     "fail_effect": ""
+    },
+    {
+     "text": "骑马驾驶 +15",
+     "cond": [
+      [
+       [
+        "train.riding",
+        "<",
+        100
+       ]
+      ]
+     ],
+     "check": null,
+     "success_effect": "riding+15",
+     "fail_effect": ""
+    },
+    {
+     "text": "胆识 +15",
+     "cond": [
+      [
+       [
+        "train.nerve",
+        "<",
+        100
+       ]
+      ]
+     ],
+     "check": null,
+     "success_effect": "nerve+15",
+     "fail_effect": ""
+    },
+    {
+     "text": "演技 +15",
+     "cond": [
+      [
+       [
+        "train.acting",
+        "<",
+        100
+       ]
+      ]
+     ],
+     "check": null,
+     "success_effect": "acting+15",
+     "fail_effect": ""
+    },
+    {
+     "text": "打扮 +15",
+     "cond": [
+      [
+       [
+        "train.grooming",
+        "<",
+        100
+       ]
+      ]
+     ],
+     "check": null,
+     "success_effect": "grooming+15",
+     "fail_effect": ""
+    },
+    {
+     "text": "体态 +15",
+     "cond": [
+      [
+       [
+        "train.physique",
+        "<",
+        100
+       ]
+      ]
+     ],
+     "check": null,
+     "success_effect": "physique+15",
+     "fail_effect": ""
+    },
+    {
+     "text": "创作 +15",
+     "cond": [
+      [
+       [
+        "train.writing",
+        "<",
+        100
+       ]
+      ]
+     ],
+     "check": null,
+     "success_effect": "writing+15",
+     "fail_effect": ""
+    },
+    {
+     "text": "审美 +15",
+     "cond": [
+      [
+       [
+        "train.taste",
+        "<",
+        100
+       ]
+      ]
+     ],
+     "check": null,
+     "success_effect": "taste+15",
+     "fail_effect": ""
+    },
+    {
+     "text": "谈吐 +15",
+     "cond": [
+      [
+       [
+        "train.speech",
+        "<",
+        100
+       ]
+      ]
+     ],
+     "check": null,
+     "success_effect": "speech+15",
+     "fail_effect": ""
+    },
+    {
+     "text": "谈判 +15",
+     "cond": [
+      [
+       [
+        "train.negotiation",
+        "<",
+        100
+       ]
+      ]
+     ],
+     "check": null,
+     "success_effect": "negotiation+15",
+     "fail_effect": ""
+    },
+    {
+     "text": "人缘 +15",
+     "cond": [
+      [
+       [
+        "train.rapport",
+        "<",
+        100
+       ]
+      ]
+     ],
+     "check": null,
+     "success_effect": "rapport+15",
+     "fail_effect": ""
+    },
+    {
+     "text": "洞悉 +15",
+     "cond": [
+      [
+       [
+        "train.insight",
+        "<",
+        100
+       ]
+      ]
+     ],
+     "check": null,
+     "success_effect": "insight+15",
+     "fail_effect": ""
+    }
+   ],
+   "tier": "medium",
+   "budget_note": "User (2026-11): the mentor gives +15 to one skill, once per road"
   },
   {
    "id": "evt_senior_yinghan_1",
@@ -2047,5 +2995,6 @@
    "placeholder": true
   }
  ],
- "month_end_cap": 2
+ "month_end_cap": 2,
+ "mentor_events": true
 }

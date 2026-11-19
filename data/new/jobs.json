@@ -400,13 +400,13 @@
      ]
     ]
    ],
-   "daily_wage": 12,
+   "daily_wage": 11,
    "wage_tiers": [
-    12,
-    14,
-    17,
-    21,
-    25
+    11,
+    13,
+    16,
+    20,
+    24
    ],
    "success_lines": [
     {
@@ -425,8 +425,8 @@
     {
      "stat": "crime",
      "add": [
-      3,
-      3
+      2,
+      2
      ]
     },
     {
@@ -443,7 +443,7 @@
    "period_random": [],
    "milestones": [],
    "crime_job": true,
-   "note": "same site, level 2; user (2026-11 balance): wage 12-25, stamina +1, crime +3, fatigue +5, no looks loss"
+   "note": "same site, level 2; user (2026-11 balance): wage 12-25, stamina +1, crime +3, fatigue +5, no looks loss; user (2026-11): crime +3 -> +2, wage -1 per day on every tier (11-24)"
   },
   {
    "id": "job_collector",

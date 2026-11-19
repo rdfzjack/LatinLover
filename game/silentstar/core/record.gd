@@ -11,7 +11,7 @@ const WHY := {"trait_block": "状态不能试镜", "out_of_reach": "名气不够
 const RESULT := {"remembered": "胜(被记住)", "won": "胜", "narrow_loss": "惜败", "lost": "负", "botched": "演砸"}
 const ATTRS := {"stamina": "体", "education": "教", "loyalty": "义", "looks": "貌", "discipline": "律", "crime": "罪", "fatigue": "疲"}
 const ROAD := ["硬", "情", "文", "手"]
-const HEADER := "# 试镜和练度记录。月=月初（只在选片月和某路等级变化时记）：硬/情/文/手 声望/等级，名=名气，体教义貌律罪疲=基础属性，洞=洞悉。板=选片板：大中小+路、可报或原因、对手（无名或名字+四路等级 硬/情/文/手，k=主色张数）。试=一场试镜：来源 片 第几场|对手|习惯(知道/不知道)|名气 我:他|我的牌|他的牌|风=场风|每轮(>赢 <输 =平，平局写名气判的结果)|比分 结果。牌=路首字+点数。"
+const HEADER := "# 试镜和练度记录。月=月初（只在选片月和某路等级变化时记）：硬/情/文/手 声望/等级，名=名气，体教义貌律罪疲=基础属性，洞=洞悉。板=选片板：大中小+路、可报或原因、对手（无名或名字+四路等级 硬/情/文/手，k=主色张数）。试=一场试镜：来源 片 第几场|对手|习惯(知道/不知道)|名气 我:他|我的牌|他的牌|风=场风|每轮(>赢 <输 =平，平局写名气判的结果)|比分 结果。牌=路首字+点数。映=上映：片(配=配角)|片名|表现P 契合F 标签T 运气|得分X 结果|名气 声望变化。"
 
 
 ## audition.gd preloads this file, so this one loads it at run time (no preload cycle).
@@ -122,6 +122,19 @@ static func match(st, role: Dictionary, rv: Dictionary, m: Dictionary, n: int, k
 		"%s(%s)" % [habit_name(st, str(rv["habit"])), "知道" if known else "不知道"],
 		"名%d:%d" % [st.attr["fame"], int(rv["fame"])], "我" + hand(m["my_cards"]), "他" + hand(m["rival_cards"]),
 		"风" + ROAD[int(m["style"])], " ".join(rounds), "%d:%d %s" % [sl[0], sl[1], str(RESULT.get(result, result))]]))
+
+
+## One released film (user 2026-11): the parts of the box-office score, to check the release odds against real play.
+const BAND := {"hit": "大卖", "normal": "正常", "poor": "不行", "flop": "惨败"}
+static func release(st, f: Dictionary) -> void:
+	if not on(st):
+		return
+	var r: Dictionary = f["result"]
+	var B: int = int(r["B"])
+	write(st, "|".join(["映", st.date(), role_text(st, f["roles"]) + ("配" if f["support"] else ""), str(f["roles"].get("name", "")),
+		"P%.2f F%.2f T%.2f 运%d%%" % [int(r["P"]) / 1000.0, int(r["F"]) / 1000.0, int(r["T"]) / 1000.0, int(r.get("luck", 100))],
+		"X%.2f %s" % [int(r["S"]) / (B * 1000.0), str(BAND.get(str(r["band"]), r["band"]))],
+		"名%+d 声%+d" % [int(r["fame"]), int(r["rep_bonus"])]]))
 
 
 static func note(st, text: String) -> void:

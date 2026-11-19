@@ -68,7 +68,7 @@ static func snapshot(st, r: Dictionary, src := "pool") -> Dictionary:
 		"fee": r["fee"] if Schedule.truthy(r.get("fee")) else df["fee"][t], "lead": r.get("lead"),
 		"heroine_spec": r.get("heroine", ""), "heroine": "",
 		"rival_spec": spec, "opponents": [], "house": false, "source": src, "intel": {},
-		"gates": r.get("gates", []).duplicate(true)}
+		"gates": r.get("gates", []).duplicate(true), "board_ym": st.ym}      # the month it was on a board (release targets by year, user 2026-11)
 
 
 static func set_probs(e: Dictionary, probs: Array) -> void:

@@ -39,8 +39,13 @@ static func _use(st, key: String) -> void:
 ## What is on the shelf of that entry this month. The bookstore filters books by their on_shelf date.
 static func shelf(st, entry: String) -> Array:
 	var e: Dictionary = st.d.street[entry]
-	if entry != "bookstore":
-		return e["shelf"].duplicate()
+	if entry != "bookstore":      # an item with on_shelf (late-game gear, user 2026-11) is sold from that month on
+		var out0 := []
+		for iid in e["shelf"]:
+			var s = st.d.items.get(iid, {}).get("on_shelf")
+			if s == null or st.ym >= st.d.month_index[s]:
+				out0.append(iid)
+		return out0
 	var out := []
 	for b in e["shelf"]:
 		if Schedule.book_on_shelf(st, b):

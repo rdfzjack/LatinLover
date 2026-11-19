@@ -41,7 +41,19 @@
     "social_register",
     "car_ford",
     "car_sports",
-    "car_luxury"
+    "car_luxury",
+    "late_fight",
+    "late_riding",
+    "late_nerve",
+    "late_acting",
+    "late_grooming",
+    "late_physique",
+    "late_writing",
+    "late_taste",
+    "late_speech",
+    "late_negotiation",
+    "late_rapport",
+    "late_insight"
    ],
    "services": [],
    "note": "Buy held items and consumables; any item can be sold at half price, equipped items cannot be sold"

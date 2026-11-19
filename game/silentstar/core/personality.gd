@@ -44,9 +44,17 @@ static func after_film(st, f: Dictionary, npc: String) -> void:
 	shift(st, npc, "coop_serious" if serious else "coop_sloppy")
 
 
-## Everyone with a type reacts to a hit or a flop of the player's film.
-static func after_release(st, band: String) -> void:
+## Everyone with a type reacts to a hit or a flop of the player's film, scaled by the film's size (user 2026-11:
+## release_pct small 0, medium 50, big 100; half a step rounds away from zero, so "+" is 3 and "++" is 5 on a medium film).
+static func after_release(st, band: String, size := "big") -> void:
 	if band != "hit" and band != "flop":
 		return
+	var pct: int = int(cfg(st.d).get("release_pct", {}).get(size, 100))
+	if pct <= 0:
+		return
 	for n in st.d.npcs:
-		shift(st, n, band)
+		var k := steps(st.d, n, band) * int(cfg(st.d)["step"])
+		if k == 0:
+			continue
+		var v: int = Rules.fdiv(absi(k) * pct + 99, 100)
+		Rules.apply_effect(st, "favor.%s%+d" % [n, v if k > 0 else -v], "personality")

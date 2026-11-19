@@ -923,7 +923,7 @@ class NewBot:
 		var keep := []
 		for i in ok:
 			var e: Dictionary = b["roles"][i]
-			if e["size"] == "big" and Film.fit(st, e) < 850:
+			if e["size"] == "big" and Film.fit(st, e) < 1000:
 				continue
 			keep.append(i)
 		if b["tried"].is_empty() and keep.size() < ok.size():

@@ -70,6 +70,8 @@ def var_ok(v):
     if v.startswith('road_periods.'): return v.split('.', 1)[1] in ROADS
     if v.startswith(('scale.', 'tier.')): return v.split('.', 1)[1] in SCALED or v.split('.', 1)[1] in SK
     if v == 'renyang': return True
+    if v.startswith('train.'): return v.split('.', 1)[1] in SK
+    if v.startswith('train_sum.'): return v.split('.', 1)[1] in ROADS
     if v.startswith(('line.', 'beat.')): return v.split('.', 1)[1] in NPC
     return v.startswith(PREFIX) and len(v) > 3
 COMP = ('>=','<=','>','<','==','!=','in')

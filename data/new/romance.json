@@ -783,6 +783,12 @@
   "personality": {
    "note": "User (2026-11): one step \"+\" is 5 favor, \"++\" is 10. Each step count below is multiplied by step. coop_*: the heroine after a released film; serious = shooting success days >= serious_pct% of the shooting days, no side effect (running off and side effects count as not serious). win_* / lose_*: the audition match against the star (3:0 clean, 3:1 mid, 3:2 close; lose_zero = shut out 0:3). hit / flop: any film of the player released as a hit or a flop, for everyone who has a type. Which person has which type (`personality` on the npc row) is a placeholder",
    "step": 5,
+   "release_pct": {
+    "small": 0,
+    "medium": 50,
+    "big": 100
+   },
+   "release_pct_note": "User (2026-11): a small film's hit or flop moves nobody's favor; a medium film half (rounded away from zero: + 3, ++ 5); a big film in full",
    "serious_pct": 70,
    "types": [
     {

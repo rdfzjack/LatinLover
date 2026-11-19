@@ -59,16 +59,23 @@ static func ready(st, e: Dictionary) -> bool:
 
 # ---------- trigger ----------
 
+## Whether the event's switch is on: NPC events have npc_events.json enabled; an event with a `switch` field reads that
+## key of events.json (mentor_events, user 2026-11); every other event the master switch (user, lover playtest: all off).
+static func switch_on(st, e: Dictionary) -> bool:
+	if e.get("npc_event", false):
+		return st.d.t["npc_events"].get("enabled", true)
+	if e.has("switch"):
+		return st.d.t["events"].get(str(e["switch"]), true)
+	return st.d.t["events"].get("enabled", true)
+
+
 ## Fires one event and settles it. Returns the record {id, month, check?, options?} (also appended to story.event_log).
 static func fire(story, st, eid: String, depth := 0) -> Dictionary:
 	if depth > MAX_DEPTH:
 		push_error("event trigger chain too deep: %s" % eid)
 		return {}
 	var e: Dictionary = st.d.events[eid]
-	if e.get("npc_event", false):                    # NPC events have their own switch (npc_events.json), like role_events
-		if not st.d.t["npc_events"].get("enabled", true):
-			return {}
-	elif not st.d.t["events"].get("enabled", true):  # switch (user, lover playtest): every event is off
+	if not switch_on(st, e):
 		return {}
 	story.event_begin(st, eid)
 	st.fired[eid] = st.fired.get(eid, 0) + 1
@@ -322,6 +329,8 @@ static func month_end(story, st) -> void:
 		if ke[0] == "opportunity":
 			if Schedule.truthy(st.fired.get(e["story"])) or not Rules.cond(st, e["cond"]):
 				continue
+			if not switch_on(st, st.d.events[e["story"]]):    # opportunities are off with the event switch (GDD 0); before this their effect still applied, every month
+				continue
 			if not Rules.prob(st, e["monthly_prob"]):
 				continue
 			fire(story, st, e["story"])
@@ -332,7 +341,7 @@ static func month_end(story, st) -> void:
 				Film.breach_month(st, st.ym + 1)
 			n += 1
 			continue
-		if not ready(st, e):
+		if not switch_on(st, e) or not ready(st, e):     # a switched-off event does not use up the month's cap
 			continue
 		if e["id"] == "evt_contract" or e["id"] == "evt_terminate":
 			continue      # user (2026-11): signing is the studio offer (Npcline.studio_offer); breaking it is the second arrest (contract_arrest)

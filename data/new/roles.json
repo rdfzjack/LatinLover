@@ -70,7 +70,7 @@
    "name": "酋长",
    "film_title": "《酋长》",
    "size": "big",
-   "fame_gate": 210,
+   "fame_gate": 190,
    "style_probs": [
     15,
     55,
@@ -124,7 +124,7 @@
    "name": "贪婪",
    "film_title": "《贪婪》",
    "size": "medium",
-   "fame_gate": 130,
+   "fame_gate": 110,
    "style_probs": [
     15,
     15,
@@ -244,7 +244,7 @@
    "name": "叛舰喋血记",
    "film_title": "《叛舰喋血记》",
    "size": "big",
-   "fame_gate": 210,
+   "fame_gate": 190,
    "style_probs": [
     15,
     15,
@@ -298,7 +298,7 @@
    "name": "第42街",
    "film_title": "《第42街》",
    "size": "medium",
-   "fame_gate": 130,
+   "fame_gate": 110,
    "style_probs": [
     15,
     15,
@@ -425,7 +425,7 @@
    "name": "宾虚",
    "film_title": "《宾虚》",
    "size": "big",
-   "fame_gate": 210,
+   "fame_gate": 190,
    "style_probs": [
     15,
     15,
@@ -479,7 +479,7 @@
    "name": "大阅兵",
    "film_title": "《大阅兵》",
    "size": "medium",
-   "fame_gate": 130,
+   "fame_gate": 110,
    "style_probs": [
     55,
     15,
@@ -602,7 +602,7 @@
    "name": "亚利桑那奇侠",
    "film_title": "《亚利桑那奇侠》",
    "size": "big",
-   "fame_gate": 210,
+   "fame_gate": 190,
    "style_probs": [
     55,
     15,
@@ -656,7 +656,7 @@
    "name": "波希米亚人",
    "film_title": "《波希米亚人》",
    "size": "medium",
-   "fame_gate": 130,
+   "fame_gate": 110,
    "style_probs": [
     15,
     55,
@@ -783,7 +783,7 @@
    "name": "肉与魔",
    "film_title": "《肉与魔》",
    "size": "big",
-   "fame_gate": 210,
+   "fame_gate": 190,
    "style_probs": [
     15,
     55,
@@ -837,7 +837,7 @@
    "name": "航海家",
    "film_title": "《航海家》",
    "size": "medium",
-   "fame_gate": 140,
+   "fame_gate": 120,
    "style_probs": [
     15,
     15,
@@ -976,7 +976,7 @@
    "name": "安全至下",
    "film_title": "《安全至下》",
    "size": "big",
-   "fame_gate": 210,
+   "fame_gate": 190,
    "style_probs": [
     15,
     15,
@@ -1030,7 +1030,7 @@
    "name": "红字",
    "film_title": "《红字》",
    "size": "medium",
-   "fame_gate": 140,
+   "fame_gate": 120,
    "style_probs": [
     15,
     15,
@@ -1173,7 +1173,7 @@
    "name": "风流公子布鲁梅尔",
    "film_title": "《风流公子布鲁梅尔》",
    "size": "big",
-   "fame_gate": 210,
+   "fame_gate": 190,
    "style_probs": [
     15,
     15,
@@ -1227,7 +1227,7 @@
    "name": "启示录四骑士",
    "film_title": "《启示录四骑士》",
    "size": "medium",
-   "fame_gate": 140,
+   "fame_gate": 120,
    "style_probs": [
     55,
     15,
@@ -1366,7 +1366,7 @@
    "name": "消失的地平线",
    "film_title": "《消失的地平线》",
    "size": "big",
-   "fame_gate": 210,
+   "fame_gate": 190,
    "style_probs": [
     55,
     15,
@@ -1421,7 +1421,7 @@
    "name": "白雪公主",
    "film_title": "《白雪公主》",
    "size": "medium",
-   "fame_gate": 150,
+   "fame_gate": 130,
    "style_probs": [
     15,
     55,
@@ -1472,7 +1472,7 @@
    "name": "淘金记",
    "film_title": "《淘金记》",
    "size": "medium",
-   "fame_gate": 150,
+   "fame_gate": 130,
    "style_probs": [
     15,
     15,
@@ -1569,7 +1569,7 @@
    "name": "风流寡妇",
    "film_title": "《风流寡妇》",
    "size": "big",
-   "fame_gate": 210,
+   "fame_gate": 190,
    "style_probs": [
     15,
     55,
@@ -1623,7 +1623,7 @@
    "name": "西线无战事",
    "film_title": "《西线无战事》",
    "size": "medium",
-   "fame_gate": 150,
+   "fame_gate": 130,
    "style_probs": [
     15,
     15,
@@ -1670,7 +1670,7 @@
    "name": "风",
    "film_title": "《风》",
    "size": "medium",
-   "fame_gate": 150,
+   "fame_gate": 130,
    "style_probs": [
     55,
     15,
@@ -1763,7 +1763,7 @@
    "name": "一夜风流",
    "film_title": "《一夜风流》",
    "size": "big",
-   "fame_gate": 210,
+   "fame_gate": 190,
    "style_probs": [
     15,
     15,
@@ -1817,7 +1817,7 @@
    "name": "两个阿拉伯骑士",
    "film_title": "《两个阿拉伯骑士》",
    "size": "medium",
-   "fame_gate": 150,
+   "fame_gate": 130,
    "style_probs": [
     15,
     55,
@@ -1868,7 +1868,7 @@
    "name": "万王之王",
    "film_title": "《万王之王》",
    "size": "medium",
-   "fame_gate": 150,
+   "fame_gate": 130,
    "style_probs": [
     15,
     15,
@@ -1965,7 +1965,7 @@
    "name": "大饭店",
    "film_title": "《大饭店》",
    "size": "big",
-   "fame_gate": 240,
+   "fame_gate": 220,
    "style_probs": [
     15,
     15,
@@ -2019,7 +2019,7 @@
    "name": "德古拉",
    "film_title": "《德古拉》",
    "size": "medium",
-   "fame_gate": 160,
+   "fame_gate": 140,
    "style_probs": [
     15,
     15,
@@ -2066,7 +2066,7 @@
    "name": "三个教父",
    "film_title": "《三个教父》",
    "size": "medium",
-   "fame_gate": 160,
+   "fame_gate": 140,
    "style_probs": [
     55,
     15,
@@ -2159,7 +2159,7 @@
    "name": "双翼",
    "film_title": "《双翼》",
    "size": "big",
-   "fame_gate": 240,
+   "fame_gate": 220,
    "style_probs": [
     55,
     15,
@@ -2213,7 +2213,7 @@
    "name": "军中红粉",
    "film_title": "《军中红粉》",
    "size": "medium",
-   "fame_gate": 160,
+   "fame_gate": 140,
    "style_probs": [
     15,
     55,
@@ -2264,7 +2264,7 @@
    "name": "纽约之光",
    "film_title": "《纽约之光》",
    "size": "medium",
-   "fame_gate": 160,
+   "fame_gate": 140,
    "style_probs": [
     15,
     15,
@@ -2361,7 +2361,7 @@
    "name": "乱世佳人",
    "film_title": "《乱世佳人》",
    "size": "big",
-   "fame_gate": 240,
+   "fame_gate": 220,
    "style_probs": [
     15,
     55,
@@ -2416,7 +2416,7 @@
    "name": "弗兰肯斯坦",
    "film_title": "《弗兰肯斯坦》",
    "size": "medium",
-   "fame_gate": 160,
+   "fame_gate": 140,
    "style_probs": [
     15,
     15,
@@ -2463,7 +2463,7 @@
    "name": "国民公敌",
    "film_title": "《国民公敌》",
    "size": "medium",
-   "fame_gate": 160,
+   "fame_gate": 140,
    "style_probs": [
     55,
     15,
@@ -2556,7 +2556,7 @@
    "name": "愚蠢的妻子",
    "film_title": "《愚蠢的妻子》",
    "size": "big",
-   "fame_gate": 270,
+   "fame_gate": 250,
    "style_probs": [
     15,
     15,
@@ -2610,7 +2610,7 @@
    "name": "最后的命令",
    "film_title": "《最后的命令》",
    "size": "medium",
-   "fame_gate": 170,
+   "fame_gate": 150,
    "style_probs": [
     15,
     55,
@@ -2661,7 +2661,7 @@
    "name": "璇宫艳史",
    "film_title": "《璇宫艳史》",
    "size": "medium",
-   "fame_gate": 170,
+   "fame_gate": 150,
    "style_probs": [
     15,
     15,
@@ -2758,7 +2758,7 @@
    "name": "罪与罚",
    "film_title": "《罪与罚》",
    "size": "big",
-   "fame_gate": 270,
+   "fame_gate": 250,
    "style_probs": [
     15,
     15,
@@ -2813,7 +2813,7 @@
    "name": "罗宾汉历险记",
    "film_title": "《罗宾汉历险记》",
    "size": "medium",
-   "fame_gate": 170,
+   "fame_gate": 150,
    "style_probs": [
     55,
     15,
@@ -2860,7 +2860,7 @@
    "name": "它",
    "film_title": "《它》",
    "size": "medium",
-   "fame_gate": 170,
+   "fame_gate": 150,
    "style_probs": [
     15,
     55,
@@ -3077,16 +3077,32 @@
     "big": 250
    },
    "fit": {
-    "floor": 600,
-    "coef": 400,
-    "item_cap_pct": 150
+    "note": "User (2026-11): F x1000 = floor + coef x average(min(value/target, item_cap_pct%)), so 0.8 (nothing) to 1.2 (125% of the target or more). Skill wants use skill_target instead of the role's own target: that year's ordinary main-road skill average (the board's year; PLAN 普通玩家估计) x size_pct%. Base-attribute wants keep the role's target",
+    "floor": 800,
+    "coef": 320,
+    "item_cap_pct": 125,
+    "skill_target": {
+     "by_year": {"1924": 25, "1925": 40, "1926": 50, "1927": 70, "1928": 90, "1929": 95},
+     "first_board": 15,
+     "size_pct": {"small": 80, "medium": 100, "big": 110}
+    }
+   },
+   "luck": {
+    "note": "User (2026-11): box-office luck, S x r(lo, hi)% on the logic stream (saved, so a reload gives the same result)",
+    "small": [80, 120],
+    "medium": [80, 120],
+    "big": [70, 130]
    },
    "tag_familiarity": {
     "per_tag": 30,
     "cap_count": 5
    },
    "typed_line": 4,
-   "fame_pct": 30,
+   "fame_pct": {
+    "small": 40,
+    "medium": 30,
+    "big": 30
+   },
    "dividend_mult": 2,
    "rep_table_note": "Step 12c c3 round 5 (GDD 8): X = S / B; hit X >= hit_pct% (a number, or by size), normal X >= fail_pct%, poor X >= flop_pct%, flop below; the reputation change of the film's road by band and size (support x release_pct)",
    "rep_table": {
@@ -3112,11 +3128,11 @@
     }
    },
    "hit_pct": {
-    "small": 150,
-    "medium": 150,
-    "big": 140
+    "small": 145,
+    "medium": 145,
+    "big": 145
    },
-   "fail_pct": 100,
+   "fail_pct": 90,
    "flop_pct": 70,
    "radio_speech_line_cut": 10,
    "lowbudget": {

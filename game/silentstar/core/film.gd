@@ -14,6 +14,7 @@ extends RefCounted
 const Rules = preload("res://core/rules.gd")
 const Schedule = preload("res://core/schedule.gd")
 const Personality = preload("res://core/personality.gd")
+const Record = preload("res://core/record.gd")
 
 
 static func shoot_cfg(d) -> Dictionary:
@@ -316,17 +317,34 @@ static func breach_period(st, ym: int, i: int) -> Array:
 
 # ---------- release ----------
 
-## Fit F x1000 = 600 + 400 x average(min(value/target, 1.5)).
+## Fit F x1000 = floor + coef x average(min(value/target, item_cap_pct%)) (user 2026-11: 800 + 320 x min(r, 1.25), 0.8 to 1.2).
 static func fit(st, role: Dictionary) -> int:
 	var c: Dictionary = rel_cfg(st.d)["fit"]
 	var b: Dictionary = st.bonus()
 	var tot := 0
 	var n := 0
 	for k in role["wants"]:
-		tot += mini(Rules.fdiv(st.val(k["stat"], b) * 1000, k["target"]), c["item_cap_pct"] * 10)
+		tot += mini(Rules.fdiv(st.val(k["stat"], b) * 1000, maxi(1, want_target(st, role, k))), c["item_cap_pct"] * 10)
 		n += 1
 	var avg: int = Rules.fdiv(tot, n) if n else 1000
 	return c["floor"] + Rules.fdiv(c["coef"] * avg, 1000)
+
+
+## The target of one want (user 2026-11): a skill uses that year's ordinary main-road skill average (fit.skill_target, by the
+## year of the month the role was on a board; the first board has its own number) x the size percent; a base attribute keeps the role's target.
+static func want_target(st, role: Dictionary, k: Dictionary) -> int:
+	var c: Dictionary = rel_cfg(st.d)["fit"]
+	var stt = c.get("skill_target")
+	if stt == null or not st.d.skills.has(str(k["stat"])):
+		return int(k["target"])
+	var sched: Array = st.d.t["roles"]["board_schedule"]
+	var ym: int = int(role.get("board_ym", st.ym))       # the month the role was on a board (a save from before: the release month)
+	var base: int
+	if stt.has("first_board") and not sched.is_empty() and ym == int(st.d.month_index[str(sched[0]["month"])]):
+		base = int(stt["first_board"])
+	else:
+		base = int(stt["by_year"].get(str(1924 + Rules.fdiv(ym, 12)), k["target"]))
+	return maxi(1, Rules.fdiv(base * int(stt["size_pct"].get(str(role["size"]), 100)), 100))
 
 
 ## Tag familiarity T x1000 = 1000 + 30 x min(sum of the role's tag counts, 5); small films get the maximum when one of
@@ -367,6 +385,11 @@ static func release_one(st, f: Dictionary) -> Dictionary:
 	var T: int = tf[0]
 	var off: bool = tf[1]
 	var S: int = Rules.fdiv(B * P * F * T, 1000000)       # S x1000
+	var luck := 100
+	if c.has("luck"):      # box-office luck (user 2026-11), on the logic stream so a reload gives the same result
+		var lr: Array = c["luck"][t]
+		luck = st.rng.logic.r(int(lr[0]), int(lr[1]))
+		S = Rules.fdiv(S * luck, 100)
 	# user (2026-11): the untyped x0.9 is dropped for now; `off` only goes into the record
 	var accent := false                  # user (2026-11): no talkie penalty on release; speech is a sign-up gate (Board.eligible)
 	if Schedule.truthy(role.get("talkie")):
@@ -379,7 +402,10 @@ static func release_one(st, f: Dictionary) -> Dictionary:
 	var flop: bool = S < B * c["flop_pct"] * 10
 	var band := "hit" if hit else ("flop" if flop else ("normal" if S >= B * c["fail_pct"] * 10 else "poor"))
 	var k: int = d.t["habits"]["audition"]["result"]["narrow_loss"]["release_pct"] if f["support"] else 100
-	var fame: int = Rules.fdiv(S * c["fame_pct"], 100000)
+	var fp = c["fame_pct"]               # a number, or by size (user 2026-11: small 40, medium and big 30)
+	if typeof(fp) == TYPE_DICTIONARY:
+		fp = fp[t]
+	var fame: int = Rules.fdiv(S * int(fp), 100000)
 	if flop:
 		fame = Rules.fdiv(fame, 2)
 	fame = Rules.fdiv(fame * k, 100)
@@ -411,11 +437,12 @@ static func release_one(st, f: Dictionary) -> Dictionary:
 			st.inc("count.romance_hits")
 	if flop:
 		st.inc("count.flop")
-	Personality.after_release(st, band)
+	Personality.after_release(st, band, t)
 	st.exposed = 1
 	f["status"] = "released"
-	f["result"] = {"S": S, "B": B, "P": P, "F": F, "T": T, "untyped": off, "accent": accent, "hit": hit,
+	f["result"] = {"S": S, "B": B, "P": P, "F": F, "T": T, "luck": luck, "untyped": off, "accent": accent, "hit": hit,
 		"flop": flop, "band": band, "fame": fame, "dividend": money, "rep_bonus": corr, "month": st.ym}
+	Record.release(st, f)
 	return f["result"]
 
 

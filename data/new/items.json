@@ -213,6 +213,138 @@
    "effect": "riding+5 looks+10",
    "slot": "outfit",
    "sellable": true
+  },
+  {
+   "id": "late_fight",
+   "name": "冠军拳手的旧拳套",
+   "class": "held",
+   "price": 1500,
+   "effect": "fight+15",
+   "slot": null,
+   "sellable": true,
+   "on_shelf": "1928-01",
+   "note": "User (2026-11): late-game gear, limited by price only: three per road (+15 each, +45 to the road), on the shelf from 1928-01. Names and numbers are placeholders"
+  },
+  {
+   "id": "late_riding",
+   "name": "特技车手的护目镜",
+   "class": "held",
+   "price": 1500,
+   "effect": "riding+15",
+   "slot": null,
+   "sellable": true,
+   "on_shelf": "1928-01",
+   "note": "User (2026-11): late-game gear, limited by price only: three per road (+15 each, +45 to the road), on the shelf from 1928-01. Names and numbers are placeholders"
+  },
+  {
+   "id": "late_nerve",
+   "name": "战地记者的打火机",
+   "class": "held",
+   "price": 1500,
+   "effect": "nerve+15",
+   "slot": null,
+   "sellable": true,
+   "on_shelf": "1928-01",
+   "note": "User (2026-11): late-game gear, limited by price only: three per road (+15 each, +45 to the road), on the shelf from 1928-01. Names and numbers are placeholders"
+  },
+  {
+   "id": "late_acting",
+   "name": "名伶的剧本批注",
+   "class": "held",
+   "price": 1500,
+   "effect": "acting+15",
+   "slot": null,
+   "sellable": true,
+   "on_shelf": "1928-01",
+   "note": "User (2026-11): late-game gear, limited by price only: three per road (+15 each, +45 to the road), on the shelf from 1928-01. Names and numbers are placeholders"
+  },
+  {
+   "id": "late_grooming",
+   "name": "巴黎来的化妆师名片",
+   "class": "held",
+   "price": 1500,
+   "effect": "grooming+15",
+   "slot": null,
+   "sellable": true,
+   "on_shelf": "1928-01",
+   "note": "User (2026-11): late-game gear, limited by price only: three per road (+15 each, +45 to the road), on the shelf from 1928-01. Names and numbers are placeholders"
+  },
+  {
+   "id": "late_physique",
+   "name": "舞蹈大师的手杖",
+   "class": "held",
+   "price": 1500,
+   "effect": "physique+15",
+   "slot": null,
+   "sellable": true,
+   "on_shelf": "1928-01",
+   "note": "User (2026-11): late-game gear, limited by price only: three per road (+15 each, +45 to the road), on the shelf from 1928-01. Names and numbers are placeholders"
+  },
+  {
+   "id": "late_writing",
+   "name": "名作家的钢笔",
+   "class": "held",
+   "price": 1500,
+   "effect": "writing+15",
+   "slot": null,
+   "sellable": true,
+   "on_shelf": "1928-01",
+   "note": "User (2026-11): late-game gear, limited by price only: three per road (+15 each, +45 to the road), on the shelf from 1928-01. Names and numbers are placeholders"
+  },
+  {
+   "id": "late_taste",
+   "name": "画廊老板的藏画",
+   "class": "held",
+   "price": 1500,
+   "effect": "taste+15",
+   "slot": null,
+   "sellable": true,
+   "on_shelf": "1928-01",
+   "note": "User (2026-11): late-game gear, limited by price only: three per road (+15 each, +45 to the road), on the shelf from 1928-01. Names and numbers are placeholders"
+  },
+  {
+   "id": "late_speech",
+   "name": "广播电台的试音唱片",
+   "class": "held",
+   "price": 1500,
+   "effect": "speech+15",
+   "slot": null,
+   "sellable": true,
+   "on_shelf": "1928-01",
+   "note": "User (2026-11): late-game gear, limited by price only: three per road (+15 each, +45 to the road), on the shelf from 1928-01. Names and numbers are placeholders"
+  },
+  {
+   "id": "late_negotiation",
+   "name": "律师事务所的名片夹",
+   "class": "held",
+   "price": 1500,
+   "effect": "negotiation+15",
+   "slot": null,
+   "sellable": true,
+   "on_shelf": "1928-01",
+   "note": "User (2026-11): late-game gear, limited by price only: three per road (+15 each, +45 to the road), on the shelf from 1928-01. Names and numbers are placeholders"
+  },
+  {
+   "id": "late_rapport",
+   "name": "俱乐部的终身会员卡",
+   "class": "held",
+   "price": 1500,
+   "effect": "rapport+15",
+   "slot": null,
+   "sellable": true,
+   "on_shelf": "1928-01",
+   "note": "User (2026-11): late-game gear, limited by price only: three per road (+15 each, +45 to the road), on the shelf from 1928-01. Names and numbers are placeholders"
+  },
+  {
+   "id": "late_insight",
+   "name": "私家侦探的笔记本",
+   "class": "held",
+   "price": 1500,
+   "effect": "insight+15",
+   "slot": null,
+   "sellable": true,
+   "on_shelf": "1928-01",
+   "note": "User (2026-11): late-game gear, limited by price only: three per road (+15 each, +45 to the road), on the shelf from 1928-01. Names and numbers are placeholders"
   }
  ]
 }

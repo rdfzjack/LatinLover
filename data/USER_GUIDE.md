@@ -169,6 +169,7 @@ Copy a record in the `"items": [ ... ]` list of `items.json`:
 - `class`: `outfit` (the single outfit slot), `accessory` (two accessory slots), `held` (works by being held, no slot), `consumable` (used up), `book`.
 - `slot`: `"outfit"` for outfits, `"accessory"` for accessories, `null` for the rest.
 - A held item may carry `"exclusive_group": "car"`: only the dearest of a group counts (cars, for example).
+- `"on_shelf": "1928-01"` (optional): the shop sells it only from that month on (the late-game gear uses it).
 - **To sell it in a shop**: add `"walking_cane"` to the `"shelf"` list of the shop in `street.json` (`clothing_store`, `general_store`).
 - Rows with equal value are ordered by row: a new item goes at the end of `items.json`, and in a tie the older row wins.
 
@@ -297,6 +298,8 @@ Add to `"events"` of `events.json`:
 - You can give it `"options"` as in item 4.
 - Write `"code": false`. An event with `true` has part of its logic in code; ask the model before editing those.
 
+An event may carry `"switch": "<key>"`: it then follows that key of `events.json` instead of the master `enabled` (the mentor events use `mentor_events`).
+
 ### Event budget: `tier`
 
 So that adding events does not need a new balance round each time, every event (in `events.json` and `outing.json`) has a `tier`, and every possible outcome of it (each option's success and failure, each branch, the plain effect) must stay inside that tier's caps:
@@ -316,6 +319,8 @@ So that adding events does not need a new balance round each time, every event (
 ### 7. Write or add a role (a part on the casting board)
 
 Boards are fixed: each audition month shows the big, medium and small role listed for it in `board_schedule` (see 13). The easiest edit is to **rewrite a placeholder** (`role_ph01` … `role_ph48`, named `占位·…`): change its `name`, `film_title`, `wants`, `tags` and so on, keep its `id`, and it stays on its board. Remove `"placeholder": true` once it is written.
+
+**Release numbers** are in `defaults.release` of `roles.json`: `fit` (floor, coef, item_cap_pct; `skill_target` gives the skill targets by year and the size percents, so a role's own `target` is used only for base attributes), `luck` (the box-office luck range by size), `hit_pct` / `fail_pct` / `flop_pct` (the band lines), `fame_pct` (a number or by size).
 
 To add a new role instead, add it to `"roles"` of `roles.json` (copy one of the same size), then put its id into a slot of `board_schedule` or into `reserve_pool`. A role in neither list only appears through the extra draws (script, investment, after Valen's death).
 

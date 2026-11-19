@@ -235,6 +235,13 @@ static func get_var(st, name: String):
 		return st.val(name)
 	if name.begins_with("scale."):
 		return scale_of(st, name.substr(6))
+	if name.begins_with("train."):           # a skill's training value, without gear (user 2026-11: the mentor event)
+		return st.skill[name.substr(6)]
+	if name.begins_with("train_sum."):       # a road's three training values added up
+		var tsum := 0
+		for k in d.road_skills[name.substr(10)]:
+			tsum += st.skill[k]
+		return tsum
 	if name.begins_with("tier."):
 		return tier_of(st, name.substr(5))
 	if st.corr.has(name):
