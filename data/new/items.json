@@ -223,29 +223,32 @@
    "slot": null,
    "sellable": true,
    "on_shelf": "1928-01",
-   "note": "User (2026-11): late-game gear, limited by price only: three per road (+15 each, +45 to the road), on the shelf from 1928-01. Names and numbers are placeholders"
+   "note": "User (2026-11): late-game gear, entry tier (入门款, $1500; entry anyone can buy, mid needs saving, high needs crime money); +15 to fight, one per skill, on the shelf from 1928-01; a second copy does not count (exclusive_group). Names are placeholders",
+   "exclusive_group": "late_fight"
   },
   {
    "id": "late_riding",
    "name": "特技车手的护目镜",
    "class": "held",
-   "price": 1500,
+   "price": 3000,
    "effect": "riding+15",
    "slot": null,
    "sellable": true,
    "on_shelf": "1928-01",
-   "note": "User (2026-11): late-game gear, limited by price only: three per road (+15 each, +45 to the road), on the shelf from 1928-01. Names and numbers are placeholders"
+   "note": "User (2026-11): late-game gear, mid tier (中级款, $3000; entry anyone can buy, mid needs saving, high needs crime money); +15 to riding, one per skill, on the shelf from 1928-01; a second copy does not count (exclusive_group). Names are placeholders",
+   "exclusive_group": "late_riding"
   },
   {
    "id": "late_nerve",
    "name": "战地记者的打火机",
    "class": "held",
-   "price": 1500,
+   "price": 6000,
    "effect": "nerve+15",
    "slot": null,
    "sellable": true,
    "on_shelf": "1928-01",
-   "note": "User (2026-11): late-game gear, limited by price only: three per road (+15 each, +45 to the road), on the shelf from 1928-01. Names and numbers are placeholders"
+   "note": "User (2026-11): late-game gear, high tier (高级款, $6000; entry anyone can buy, mid needs saving, high needs crime money); +15 to nerve, one per skill, on the shelf from 1928-01; a second copy does not count (exclusive_group). Names are placeholders",
+   "exclusive_group": "late_nerve"
   },
   {
    "id": "late_acting",
@@ -256,29 +259,32 @@
    "slot": null,
    "sellable": true,
    "on_shelf": "1928-01",
-   "note": "User (2026-11): late-game gear, limited by price only: three per road (+15 each, +45 to the road), on the shelf from 1928-01. Names and numbers are placeholders"
+   "note": "User (2026-11): late-game gear, entry tier (入门款, $1500; entry anyone can buy, mid needs saving, high needs crime money); +15 to acting, one per skill, on the shelf from 1928-01; a second copy does not count (exclusive_group). Names are placeholders",
+   "exclusive_group": "late_acting"
   },
   {
    "id": "late_grooming",
    "name": "巴黎来的化妆师名片",
    "class": "held",
-   "price": 1500,
+   "price": 6000,
    "effect": "grooming+15",
    "slot": null,
    "sellable": true,
    "on_shelf": "1928-01",
-   "note": "User (2026-11): late-game gear, limited by price only: three per road (+15 each, +45 to the road), on the shelf from 1928-01. Names and numbers are placeholders"
+   "note": "User (2026-11): late-game gear, high tier (高级款, $6000; entry anyone can buy, mid needs saving, high needs crime money); +15 to grooming, one per skill, on the shelf from 1928-01; a second copy does not count (exclusive_group). Names are placeholders",
+   "exclusive_group": "late_grooming"
   },
   {
    "id": "late_physique",
    "name": "舞蹈大师的手杖",
    "class": "held",
-   "price": 1500,
+   "price": 3000,
    "effect": "physique+15",
    "slot": null,
    "sellable": true,
    "on_shelf": "1928-01",
-   "note": "User (2026-11): late-game gear, limited by price only: three per road (+15 each, +45 to the road), on the shelf from 1928-01. Names and numbers are placeholders"
+   "note": "User (2026-11): late-game gear, mid tier (中级款, $3000; entry anyone can buy, mid needs saving, high needs crime money); +15 to physique, one per skill, on the shelf from 1928-01; a second copy does not count (exclusive_group). Names are placeholders",
+   "exclusive_group": "late_physique"
   },
   {
    "id": "late_writing",
@@ -289,29 +295,32 @@
    "slot": null,
    "sellable": true,
    "on_shelf": "1928-01",
-   "note": "User (2026-11): late-game gear, limited by price only: three per road (+15 each, +45 to the road), on the shelf from 1928-01. Names and numbers are placeholders"
+   "note": "User (2026-11): late-game gear, entry tier (入门款, $1500; entry anyone can buy, mid needs saving, high needs crime money); +15 to writing, one per skill, on the shelf from 1928-01; a second copy does not count (exclusive_group). Names are placeholders",
+   "exclusive_group": "late_writing"
   },
   {
    "id": "late_taste",
    "name": "画廊老板的藏画",
    "class": "held",
-   "price": 1500,
+   "price": 3000,
    "effect": "taste+15",
    "slot": null,
    "sellable": true,
    "on_shelf": "1928-01",
-   "note": "User (2026-11): late-game gear, limited by price only: three per road (+15 each, +45 to the road), on the shelf from 1928-01. Names and numbers are placeholders"
+   "note": "User (2026-11): late-game gear, mid tier (中级款, $3000; entry anyone can buy, mid needs saving, high needs crime money); +15 to taste, one per skill, on the shelf from 1928-01; a second copy does not count (exclusive_group). Names are placeholders",
+   "exclusive_group": "late_taste"
   },
   {
    "id": "late_speech",
    "name": "广播电台的试音唱片",
    "class": "held",
-   "price": 1500,
+   "price": 6000,
    "effect": "speech+15",
    "slot": null,
    "sellable": true,
    "on_shelf": "1928-01",
-   "note": "User (2026-11): late-game gear, limited by price only: three per road (+15 each, +45 to the road), on the shelf from 1928-01. Names and numbers are placeholders"
+   "note": "User (2026-11): late-game gear, high tier (高级款, $6000; entry anyone can buy, mid needs saving, high needs crime money); +15 to speech, one per skill, on the shelf from 1928-01; a second copy does not count (exclusive_group). Names are placeholders",
+   "exclusive_group": "late_speech"
   },
   {
    "id": "late_negotiation",
@@ -322,29 +331,32 @@
    "slot": null,
    "sellable": true,
    "on_shelf": "1928-01",
-   "note": "User (2026-11): late-game gear, limited by price only: three per road (+15 each, +45 to the road), on the shelf from 1928-01. Names and numbers are placeholders"
+   "note": "User (2026-11): late-game gear, entry tier (入门款, $1500; entry anyone can buy, mid needs saving, high needs crime money); +15 to negotiation, one per skill, on the shelf from 1928-01; a second copy does not count (exclusive_group). Names are placeholders",
+   "exclusive_group": "late_negotiation"
   },
   {
    "id": "late_rapport",
    "name": "俱乐部的终身会员卡",
    "class": "held",
-   "price": 1500,
+   "price": 3000,
    "effect": "rapport+15",
    "slot": null,
    "sellable": true,
    "on_shelf": "1928-01",
-   "note": "User (2026-11): late-game gear, limited by price only: three per road (+15 each, +45 to the road), on the shelf from 1928-01. Names and numbers are placeholders"
+   "note": "User (2026-11): late-game gear, mid tier (中级款, $3000; entry anyone can buy, mid needs saving, high needs crime money); +15 to rapport, one per skill, on the shelf from 1928-01; a second copy does not count (exclusive_group). Names are placeholders",
+   "exclusive_group": "late_rapport"
   },
   {
    "id": "late_insight",
    "name": "私家侦探的笔记本",
    "class": "held",
-   "price": 1500,
+   "price": 6000,
    "effect": "insight+15",
    "slot": null,
    "sellable": true,
    "on_shelf": "1928-01",
-   "note": "User (2026-11): late-game gear, limited by price only: three per road (+15 each, +45 to the road), on the shelf from 1928-01. Names and numbers are placeholders"
+   "note": "User (2026-11): late-game gear, high tier (高级款, $6000; entry anyone can buy, mid needs saving, high needs crime money); +15 to insight, one per skill, on the shelf from 1928-01; a second copy does not count (exclusive_group). Names are placeholders",
+   "exclusive_group": "late_insight"
   }
  ]
 }

@@ -459,8 +459,35 @@ static func run_job(st, jid: String, days: Array, hooks) -> Dictionary:
 			Rules.apply_effect(st, j["job_period_effect"], "schedule")
 	if work > 0 and truthy(j.get("crime_job")):    # a crime job worked this month: searched at month end (Events.crime_raid)
 		st.flags["crime_job_month"] = st.ym
+	var out := {"work_days": work, "ok_days": ok_days, "pay": pay}
+	if good and j.has("hijack"):
+		hijack(st, j["hijack"], out)
 	hooks.job_period(st, jid, good)
-	return {"work_days": work, "ok_days": ok_days, "pay": pay}
+	return out
+
+
+## Hijacked on the road (bootlegging, user 2026-11): in a period with a good day, prob of a hijack; a d100 fight check with
+## chance = pct_min + (pct_max - pct_min) x fight scale / 100 (fight 0: 10%, fight 100: 90%). Won: + win_pay_pct% of the
+## period's pay. Lost: the period's pay is gone and lose_effect applies. out gets "hijack": "won" / "lost" for the report.
+static func hijack(st, h: Dictionary, out: Dictionary) -> void:
+	var g = st.rng.logic
+	if not g.chance(int(h["prob"][0]), int(h["prob"][1])):
+		return
+	st.inc("count.hijack")
+	var pct: int = int(h["pct_min"]) + Rules.fdiv((int(h["pct_max"]) - int(h["pct_min"])) * Rules.scale_of(st, str(h["check"])), 100)
+	var pay: int = int(out["pay"])
+	if g.r1(100) <= pct:
+		var bonus: int = Rules.fdiv(pay * int(h["win_pay_pct"]), 100)
+		st.add_money(bonus)
+		out["pay"] = pay + bonus
+		out["hijack"] = "won"
+		st.inc("count.hijack_won")
+	else:
+		st.add_money(-mini(pay, st.money))
+		out["pay"] = 0
+		out["hijack"] = "lost"
+		Rules.apply_effect(st, str(h["lose_effect"]), "schedule")
+	out["hijack_pct"] = pct
 
 
 static func run_rest(st, rid: String, place, days: Array, hooks, companion := "") -> Dictionary:

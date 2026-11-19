@@ -1054,6 +1054,9 @@ func period_done(_st, i: int, entry: String, out: Dictionary) -> void:
 			rep.append(tr("ui.main.period_done.6") % [int(out["class_days"]), int(out["ok_days"])])
 		elif out.has("work_days"):
 			rep.append(tr("ui.main.period_done.7") % [int(out["work_days"]), int(out["ok_days"]), int(out["pay"])])
+			if out.has("hijack"):      # bootlegging hijack (user 2026-11)
+				var hk: String = tr("ui.main.period_done.hijack_won") if out["hijack"] == "won" else tr("ui.main.period_done.hijack_lost")
+				rep.append(hk % int(out.get("hijack_pct", 0)))
 		elif out.has("ok_days"):
 			var bk: Dictionary = d.books[entry]
 			var workdays := 0

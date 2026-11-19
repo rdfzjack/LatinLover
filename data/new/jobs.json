@@ -443,7 +443,19 @@
    "period_random": [],
    "milestones": [],
    "crime_job": true,
-   "note": "same site, level 2; user (2026-11 balance): wage 12-25, stamina +1, crime +3, fatigue +5, no looks loss; user (2026-11): crime +3 -> +2, wage -1 per day on every tier (11-24)"
+   "note": "same site, level 2; user (2026-11 balance): wage 12-25, stamina +1, crime +3, fatigue +5, no looks loss; user (2026-11): crime +3 -> +2, wage -1 per day on every tier (11-24)",
+   "hijack": {
+    "prob": [
+     1,
+     3
+    ],
+    "check": "fight",
+    "pct_min": 10,
+    "pct_max": 90,
+    "win_pay_pct": 50,
+    "lose_effect": "stamina-10 fatigue+10",
+    "note": "User (2026-11): a hijack in 1/3 of the bootlegging periods (with a good day); a d100 fight check, fight 0: 10%, fight 100: 90% (linear, fight scale = displayed fight). Won: +50% of the period's pay; lost: the period's pay is gone, stamina -10, fatigue +10. Win bonus and loss are placeholders"
+   }
   },
   {
    "id": "job_collector",
