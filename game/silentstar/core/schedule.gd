@@ -461,33 +461,33 @@ static func run_job(st, jid: String, days: Array, hooks) -> Dictionary:
 		st.flags["crime_job_month"] = st.ym
 	var out := {"work_days": work, "ok_days": ok_days, "pay": pay}
 	if good and j.has("hijack"):
-		hijack(st, j["hijack"], out)
+		hijack(st, j["hijack"], out, hooks)
 	hooks.job_period(st, jid, good)
 	return out
 
 
-## Hijacked on the road (bootlegging, user 2026-11): in a period with a good day, prob of a hijack; a d100 fight check with
-## chance = pct_min + (pct_max - pct_min) x fight scale / 100 (fight 0: 10%, fight 100: 90%). Won: + win_pay_pct% of the
-## period's pay. Lost: the period's pay is gone and lose_effect applies. out gets "hijack": "won" / "lost" for the report.
-static func hijack(st, h: Dictionary, out: Dictionary) -> void:
-	var g = st.rng.logic
+## Hijacked on the road (bootlegging, user 2026-11): in a period with a good day, prob (dice stream) of a hijack, then the
+## settled d100 check (GDD 11.0): chance = fight scale - diff, clamped 5-95, shown before the roll; the roll is on the dice
+## stream. Won: the pay as usual. Lost: no pay this period (fatigue and the rest as usual). out gets "hijack" for the report.
+static func hijack(st, h: Dictionary, out: Dictionary, hooks) -> void:
+	var g = st.rng.dice
 	if not g.chance(int(h["prob"][0]), int(h["prob"][1])):
 		return
 	st.inc("count.hijack")
-	var pct: int = int(h["pct_min"]) + Rules.fdiv((int(h["pct_max"]) - int(h["pct_min"])) * Rules.scale_of(st, str(h["check"])), 100)
-	var pay: int = int(out["pay"])
-	if g.r1(100) <= pct:
-		var bonus: int = Rules.fdiv(pay * int(h["win_pay_pct"]), 100)
-		st.add_money(bonus)
-		out["pay"] = pay + bonus
+	var ck := {"check": str(h["check"]), "diff": int(h["diff"])}
+	var pct: int = Rules.check_pct(st, ck)
+	var roll: int = g.r1(100)
+	var ok := roll <= pct
+	if ok:
 		out["hijack"] = "won"
 		st.inc("count.hijack_won")
 	else:
-		st.add_money(-mini(pay, st.money))
+		st.add_money(-mini(int(out["pay"]), st.money))
 		out["pay"] = 0
 		out["hijack"] = "lost"
-		Rules.apply_effect(st, str(h["lose_effect"]), "schedule")
 	out["hijack_pct"] = pct
+	hooks.dice(st, {"kind": "hijack", "skill": ck["check"], "scale": Rules.scale_of(st, ck["check"]), "diff": ck["diff"],
+		"pct": pct, "roll": roll, "ok": ok})
 
 
 static func run_rest(st, rid: String, place, days: Array, hooks, companion := "") -> Dictionary:

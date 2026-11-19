@@ -304,6 +304,12 @@ func job_period(st, jid: String, good: bool) -> void:
 	Events.job_period(self, st, jid, good)
 
 
+## A d100 roll the player sees (user 2026-11: the bootlegging hijack). The roll is already made on the dice stream; the UI
+## (UiStory) shows the chance first, a button to roll, then the number and the result. Bots and scripts see nothing.
+func dice(_st, _info: Dictionary) -> void:
+	pass
+
+
 # ---------- month end, settlement ----------
 
 func month_events(st) -> void:

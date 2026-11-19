@@ -450,11 +450,8 @@
      3
     ],
     "check": "fight",
-    "pct_min": 10,
-    "pct_max": 90,
-    "win_pay_pct": 50,
-    "lose_effect": "stamina-10 fatigue+10",
-    "note": "User (2026-11): a hijack in 1/3 of the bootlegging periods (with a good day); a d100 fight check, fight 0: 10%, fight 100: 90% (linear, fight scale = displayed fight). Won: +50% of the period's pay; lost: the period's pay is gone, stamina -10, fatigue +10. Win bonus and loss are placeholders"
+    "diff": 10,
+    "note": "User (2026-11): a hijack in 1/3 of the bootlegging periods with a good day (dice stream); the settled d100 check (GDD 11.0, stats.json check): chance = fight scale - diff, clamped 5-95, shown before the roll, the player presses to roll. Fight 100: 90%, fight 0: 5%. Won: the pay as usual; lost: no pay this period, everything else as usual"
    }
   },
   {

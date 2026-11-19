@@ -107,6 +107,15 @@ func slacked(st, i: int, planned: String, entry: String) -> void:
 	ui.ask("notice", t)
 
 
+## A d100 roll the player sees (the bootlegging hijack): the chance first, a button to roll, then the number and the result.
+func dice(_st, info: Dictionary) -> void:
+	var sk: String = ui.nm(str(info["skill"]))
+	var body: String = tr("ui.story.dice.hijack_body") % [sk, int(info["scale"]), int(info["diff"]), int(info["pct"])]
+	ui.ask("option", {"event": {"name": tr("ui.story.dice.hijack_title"), "body": body, "options": [{"text": tr("ui.story.dice.roll")}]}, "avail": [0]})
+	var res: String = tr("ui.story.dice.hijack_won") if info["ok"] else tr("ui.story.dice.hijack_lost")
+	ui.ask("notice", tr("ui.story.dice.result") % [int(info["roll"]), int(info["pct"])] + res)
+
+
 func film_period(st, i: int, f, days: Array) -> void:
 	var d0: int = f["shoot_days"]
 	var k0: int = f["ok_days"]

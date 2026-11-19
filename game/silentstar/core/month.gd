@@ -34,6 +34,7 @@ class Hooks:
 	func class_chain(_st, _chain, _n: int) -> void: pass  # Duv's story in tutoring (period n)
 	func book_done(_st, _bid: String) -> void: pass       # finish-reading event
 	func job_period(_st, _jid: String, _good: bool) -> void: pass        # job hook: period_random, milestones
+	func dice(_st, _info: Dictionary) -> void: pass       # a d100 roll the player sees (bootlegging hijack): the UI shows the chance, a roll button, the result
 	func month_events(_st) -> void: pass                  # month-end events (11.2)
 	func release(_st) -> void: pass                       # release settlement (8)
 	func rival_growth(_st) -> void: pass                  # rival table swap in October
