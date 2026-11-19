@@ -561,9 +561,11 @@ static func try_role(st, idx: int, agent) -> Dictionary:
 		var pers: bool = (not support) and Film.can_go_personally(st, e) and agent.go_personally(st, e)
 		var f: Dictionary = Film.new_film(st, e, Film.board_locks(st, e["size"], support), support, pers)
 		f["aud_lost"] = Film.rounds_lost(res)     # user: the fee follows the audition (3:0 / 3:1 / 3:2)
-		if str(e.get("heroine_spec", "")) == "duo" and not e["opponents"].is_empty():
+		if (str(e.get("heroine_spec", "")) == "duo" or support) and not e["opponents"].is_empty():
 			var deciding: Dictionary = e["opponents"][e["opponents"].size() - 1]
-			if str(deciding.get("npc", "")) != "":        # two male leads: the partner is the opponent of the deciding match (user, 2026-11)
+			# two male leads, or a supporting part after a 2:3 loss (user, 2026-11): the partner is the named star of the deciding
+			# match (co-star game, co-op favor, hit +10 with him); an unnamed rival leaves the heroine as the partner
+			if str(deciding.get("npc", "")) != "":
 				f["partner"] = str(deciding["npc"])
 		res["film"] = f["id"]
 	res["support"] = support
