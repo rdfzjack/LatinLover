@@ -3087,6 +3087,10 @@
      "size_pct": {"small": 80, "medium": 100, "big": 110}
     }
    },
+   "support_lead": {
+    "note": "User (2026-11): a supporting part's film is judged by its lead: F from the lead's level on the film's road / that year's standard level of the size (Film.lead_fit), T fixed here, P is the player's own (shooting days and the co-star game with the lead). Luck as usual",
+    "T": 1030
+   },
    "luck": {
     "note": "User (2026-11): box-office luck, S x r(lo, hi)% on the logic stream (saved, so a reload gives the same result)",
     "small": [80, 120],

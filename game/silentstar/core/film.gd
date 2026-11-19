@@ -332,6 +332,14 @@ static func fit(st, role: Dictionary) -> int:
 	return c["floor"] + Rules.fdiv(c["coef"] * avg, 1000)
 
 
+## The lead's fit when the player has the supporting part (user 2026-11): r = the lead's level on the film's road / the standard
+## level of this size that year (an unnamed lead is the standard, r = 1); F = floor + coef x min(r, item_cap_pct%).
+static func lead_fit(st, lead: Dictionary) -> int:
+	var c: Dictionary = rel_cfg(st.d)["fit"]
+	var r: int = Rules.fdiv(int(lead["level"]) * 1000, maxi(1, int(lead["std"])))
+	return c["floor"] + Rules.fdiv(c["coef"] * mini(r, c["item_cap_pct"] * 10), 1000)
+
+
 ## The target of one want (user 2026-11): a skill uses that year's ordinary main-road skill average (fit.skill_target, by the
 ## year of the month the role was on a board; the first board has its own number) x the size percent; a base attribute keeps the role's target.
 static func want_target(st, role: Dictionary, k: Dictionary) -> int:
@@ -386,6 +394,9 @@ static func release_one(st, f: Dictionary) -> Dictionary:
 	var tf := familiarity(st, role, t)
 	var T: int = tf[0]
 	var off: bool = tf[1]
+	if f["support"] and f.has("lead"):       # a supporting part (user 2026-11): the fit is the lead's, the tags are not his; P stays yours
+		F = lead_fit(st, f["lead"])
+		T = int(c["support_lead"]["T"])
 	var S: int = Rules.fdiv(B * P * F * T, 1000000)       # S x1000
 	var luck := 100
 	if c.has("luck"):      # box-office luck (user 2026-11), on the logic stream so a reload gives the same result
@@ -439,7 +450,8 @@ static func release_one(st, f: Dictionary) -> Dictionary:
 			st.inc("count.romance_hits")
 	if flop:
 		st.inc("count.flop")
-	Personality.after_release(st, band, t)
+	if not f["support"]:
+		Personality.after_release(st, band, t)    # everyone's reaction to the player's film; a supporting part's film is the lead's (user 2026-11)
 	st.exposed = 1
 	f["status"] = "released"
 	f["result"] = {"S": S, "B": B, "P": P, "F": F, "T": T, "luck": luck, "untyped": off, "accent": accent, "hit": hit,

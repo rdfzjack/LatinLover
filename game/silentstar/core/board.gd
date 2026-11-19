@@ -561,6 +561,12 @@ static func try_role(st, idx: int, agent) -> Dictionary:
 		var pers: bool = (not support) and Film.can_go_personally(st, e) and agent.go_personally(st, e)
 		var f: Dictionary = Film.new_film(st, e, Film.board_locks(st, e["size"], support), support, pers)
 		f["aud_lost"] = Film.rounds_lost(res)     # user: the fee follows the audition (3:0 / 3:1 / 3:2)
+		if support and not e["opponents"].is_empty():      # user (2026-11): a supporting part's film is judged by its lead's fit
+			var lead: Dictionary = e["opponents"][e["opponents"].size() - 1]
+			var ri: int = st.d.roads.find(str(e["road"]))
+			var lv: int = int(lead["levels"][ri]) if ri >= 0 else 0
+			var sl = Audition.standard_level(st, str(e["size"]))
+			f["lead"] = {"npc": str(lead.get("npc", "")), "level": lv, "std": int(sl) if sl != null else lv}
 		if (str(e.get("heroine_spec", "")) == "duo" or support) and not e["opponents"].is_empty():
 			var deciding: Dictionary = e["opponents"][e["opponents"].size() - 1]
 			# two male leads, or a supporting part after a 2:3 loss (user, 2026-11): the partner is the named star of the deciding
